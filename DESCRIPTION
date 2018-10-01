@@ -1,4 +1,4 @@
-Package: BGGM (the)
+Package: BGGM 
 Type: Package
 Title: What the Package Does (Title Case)
 Version: 0.1.0
@@ -7,5 +7,7 @@ Maintainer: The package maintainer <yourself@somewhere.net>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: What license is it under?
+Depends: rjags
 Encoding: UTF-8
 LazyData: true
+RoxygenNote: 6.0.1
