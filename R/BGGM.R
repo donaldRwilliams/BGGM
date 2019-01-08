@@ -9,8 +9,9 @@
 #' @export
 #'
 #' @examples
+#' fit <- BGGM(X)
 
-BGGM <- function(x, chains = 2, iter = 1000, burnin = 100 ){
+BGGM <- function(x, chains = 2, iter = 1000, burnin = 100){
   x <- as.matrix(x)
   ## model
   mod = "model{

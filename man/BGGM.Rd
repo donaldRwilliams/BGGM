@@ -18,3 +18,6 @@ BGGM(x, chains = 2, iter = 1000, burnin = 100)
 \description{
 Title
 }
+\examples{
+fit <- BGGM(X)
+}
