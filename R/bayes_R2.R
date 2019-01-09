@@ -20,7 +20,6 @@ bayes_R2 <- function(fit, newdata = NULL, selected, ci_width = .95, samples = 50
     dat <- scale(as.matrix(test), scale = F)
   }
 
-
   # lists for storate
   summary_r2 <- post_samples <- list()
 
@@ -33,7 +32,7 @@ bayes_R2 <- function(fit, newdata = NULL, selected, ci_width = .95, samples = 50
     # selected betas for row (outcome)
     row_select <- selected[i, -i]
 
-    #
+    # here no edges were selected
     if(sum(row_select) == 0){
       summary_r2[[i]] <- 0
       post_samples[[i]] <- 0
