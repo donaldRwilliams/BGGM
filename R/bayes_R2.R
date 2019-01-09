@@ -12,17 +12,20 @@
 #' @examples
 bayes_R2 <- function(fit, newdata = NULL, selected, ci_width = .95, samples = 500){
 
-  # ensure data is scaled
+  # ensure data is centered
   dat <- scale(fit$dat, scale = F)
 
+  # new data
   if(!is.null(newdata)) {
     dat <- scale(as.matrix(test), scale = F)
   }
-  # list for storate
+
+
+  # lists for storate
   summary_r2 <- post_samples <- list()
 
   # compute regression coefficients
-  betas <- BGGM:::inverse_2_beta(fit, samples = 500)$betas
+  betas <- BGGM:::inverse_2_beta(fit, samples = samples)$betas
 
   # predicted values for each regression model
   for(i in 1:fit$p){

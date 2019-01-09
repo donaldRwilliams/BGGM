@@ -16,7 +16,7 @@ beta_summary <- function(x, node, ci_width, samples){
   # samples: number of posterior samples
 
   # convert inverse to beta
-  x <- inverse_2_beta(x, samples = samples)
+  x <- BGGM:::inverse_2_beta(x, samples = samples)
 
   # stop if not the correct class
   if(class(x) != "inverse_2_beta"){
