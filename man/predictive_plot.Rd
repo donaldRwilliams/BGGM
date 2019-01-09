@@ -2,7 +2,7 @@
 % Please edit documentation in R/predictive_plot.R
 \name{predictive_plot}
 \alias{predictive_plot}
-\title{Title}
+\title{predictive plot}
 \usage{
 predictive_plot(x, size, color)
 }
@@ -14,7 +14,10 @@ predictive_plot(x, size, color)
 \item{color}{color of points}
 }
 \description{
-Title
+plots measures of predictive accuracy (in and out of sample)
+}
+\note{
+The error bars correspond to what was specificed in the function \code{bayes_R2}
 }
 \examples{
 

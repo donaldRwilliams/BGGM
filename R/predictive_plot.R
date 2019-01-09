@@ -1,4 +1,6 @@
-#' Title
+#' predictive plot
+#'
+#' @description plots measures of predictive accuracy (in and out of sample)
 #'
 #' @param x object of class \code{bayes_R2} or \code{predictive error}
 #' @param size size of the points
