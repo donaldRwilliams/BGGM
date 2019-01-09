@@ -7,6 +7,8 @@
 #' @return
 #' @export
 #'
+#'@note The error bars correspond to what was specificed in the function \code{bayes_R2}
+#'
 #' @examples
 #'
 #' # X is the data matrix of dimensions n by p
