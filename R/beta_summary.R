@@ -1,19 +1,15 @@
 #' Title
 #'
-#' @param x
-#' @param node
-#' @param ci_width
-#' @param samples
+#' @param x object \code{bayes_estimate}
+#' @param node  which nodes to summarize
+#' @param ci_width credible interval
+#' @param samples number of posterior samples
 #'
 #' @return
 #' @export
 #'
 #' @examples
 beta_summary <- function(x, node, ci_width, samples){
-  # x: object "bayes_estimate"
-  # node: which nodes to summarize
-  # ci_width: credible interval probability
-  # samples: number of posterior samples
 
   # convert inverse to beta
   x <- BGGM:::inverse_2_beta(x, samples = samples)

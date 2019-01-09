@@ -7,7 +7,13 @@
 beta_summary(x, node, ci_width, samples)
 }
 \arguments{
-\item{samples}{}
+\item{x}{object \code{bayes_estimate}}
+
+\item{node}{which nodes to summarize}
+
+\item{ci_width}{credible interval}
+
+\item{samples}{number of posterior samples}
 }
 \description{
 Title
