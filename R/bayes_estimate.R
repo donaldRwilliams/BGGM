@@ -66,7 +66,7 @@ mcmc_samples <- rjags::coda.samples(model =  jags_model,variable.names = c("cov_
                                     n.iter = iter, data = data_list)
 
 parcor_mat <- matrix(0, ncol = ncol(x), ncol(x))
-inv_mat <- prob_mat <- parcor_mat
+inv_mat <-  parcor_mat
 
 # posterior samples
 df_samps <- do.call(rbind.data.frame, mcmc_samples)
@@ -76,14 +76,15 @@ parcor_mat[] <- colMeans(df_samps[,  grep("pcors", colnames(df_samps))])
 diag(parcor_mat) <- 0
 
 
-prob_mat[] <- apply(df_samps[,  grep("pcors", colnames(df_samps))], 2,
-                    FUN = function(x) min(mean(x > 0), mean(x < 0)))
-
 
 inv_mat[]   <- colMeans(df_samps[,  grep("cov_inv", colnames(df_samps))])
 
-returned_object  <- list(parcors_mat = parcor_mat, inv_mat = inv_mat, posterior_samples = df_samps,
-     post_prob = prob_mat, p = ncol(x), dat = dat, iter = chains * iter)
+returned_object  <- list(parcors_mat = parcor_mat,
+                         inv_mat = inv_mat,
+                         posterior_samples = df_samps,
+                         p = ncol(x),
+                         dat = dat,
+                         iter = chains * iter)
 
 class(returned_object) <- "bayes_estimate"
 
