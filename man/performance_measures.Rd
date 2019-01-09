@@ -7,9 +7,9 @@
 performance_measures(estimated, true)
 }
 \arguments{
-\item{ThetaEst}{Estimated adjacency matrix}
+\item{estimated}{Estimated adjacency matrix}
 
-\item{Theta}{True adjacency matrix}
+\item{true}{True adjacency matrix}
 }
 \description{
 Title

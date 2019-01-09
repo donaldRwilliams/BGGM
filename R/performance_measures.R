@@ -1,7 +1,7 @@
 #' Title
 #'
-#' @param ThetaEst Estimated adjacency matrix
-#' @param Theta  True adjacency matrix
+#' @param estimated Estimated adjacency matrix
+#' @param true  True adjacency matrix
 #'
 #' @return
 #' @export
