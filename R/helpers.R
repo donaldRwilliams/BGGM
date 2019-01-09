@@ -99,3 +99,11 @@ R2_helper <- function(ypred, y, ci_width) {
   summary_r2 <- c(post_mean = mu_r2, post_sd = sd_r2, ci)
   list(summary_r2 = summary_r2, R2 = r2)
 }
+
+
+name_helper <-  function(x){
+
+  x <-  gsub("[A-z].*,", replacement = "", x)
+  col_names <- gsub("[]]", "", x)
+  col_names
+}
