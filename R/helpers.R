@@ -8,23 +8,39 @@ ci_helper <- function(x, ci_width){
 
 inverse_2_beta <- function(fit, samples = 500){
 
+  # check number of samples
   if(samples >= fit$iter){
     stop("Samples used to compute R2 cannot be greater than the number used for fitting the model")
 
   }
+
   # get posterior estimate for precision matrix
   inv <-  fit$posterior_samples[,  grep("cov_inv", colnames(fit$posterior_samples))]
 
   # seperate estimates by row
   node_wise_elements <- lapply(split(colnames(inv), 1:fit$p), function(x) inv[,x])
 
-  # convert elemetns to regression counterparts
+  # convert off-diagonals to betas
   betas <- lapply(1:fit$p, function(x) node_wise_elements[[x]][-x] *  as.matrix((1/ node_wise_elements[[x]][x]) ) * -1)
+
+  # convert diagonals to residual variance
   sigmas <- lapply(1:fit$p, function(x) as.matrix((1/ node_wise_elements[[x]][x])))
 
+
+  # betas: select number of posterior samples
   betas <- lapply(betas, function(x)  x[1:samples,])
+
+  # sigma: select number of posterior samples (sd scale)
   sigmas <- lapply(sigmas, function(x) sqrt(x[1:samples,]))
-  returned_object <- list(betas = betas,  sigmas = sigmas, p = fit$p, data = fit$dat)
+
+
+  # returned object
+  returned_object <- list(betas = betas,
+                          sigmas = sigmas,
+                          p = fit$p,
+                          data = fit$dat)
+
+  # assign class
   class(returned_object) <- "inverse_2_beta"
 
   returned_object
