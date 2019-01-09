@@ -28,7 +28,6 @@
 #' plt <- predictive_plot(pred_error, size = 2, color = "blue")
 
 
-test <- prediction_error(fit, measure = "mse", selected = select$adjacency_mat)
 prediction_error <- function(fit, measure, newdata = NULL, selected, ci_width = .95, samples = 500){
 
 
