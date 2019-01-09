@@ -45,7 +45,7 @@ bayes_estimate <- function(x, chains = 2, iter = 1000, burnin = 100){
   }
 }
 "
-dat <- scale(x)
+dat <- scale(x, scale = F)
 ## data list
 data_list = list(x = dat,
                  n = nrow(x),

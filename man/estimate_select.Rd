@@ -12,8 +12,8 @@ estimate_select(x, ci_width)
 \item{ci_width}{credible interval width used for the decision rule}
 }
 \value{
-he selected partial correlation matrix, that is the conditional dependence structure,
-is returned along with the adjacency matrix
+the selected partial correlation matrix (the conditional dependence structure) and
+ the adjacency matrix is returned
 }
 \description{
 Title
