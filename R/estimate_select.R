@@ -3,8 +3,8 @@
 #' @param x object of class \code{bayes_estimate}
 #' @param ci_width credible interval width used for the decision rule
 #'
-#' @return he selected partial correlation matrix, that is the conditional dependence structure,
-#' is returned along with the adjacency matrix
+#' @return the selected partial correlation matrix (the conditional dependence structure) and
+#'  the adjacency matrix is returned
 #' @export
 #'
 #' @examples
