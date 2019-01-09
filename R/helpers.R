@@ -85,3 +85,17 @@ summary_beta_helper <- function(x, node, ci_width){
   returned_object
 }
 
+
+R2_helper <- function(ypred, y, ci_width) {
+  low <- (1 - ci_width) / 2
+  up  <-  1 - low
+  e <- -1 * sweep(ypred, 2, y)
+  var_ypred <- apply(ypred, 1, var)
+  var_e <- apply(e, 1, var)
+  r2 <- unlist(var_ypred / (var_ypred + var_e))
+  ci <- quantile(r2, prob = c(low, up) )
+  mu_r2 <- mean(r2)
+  sd_r2 <- sd(r2)
+  summary_r2 <- c(post_mean = mu_r2, post_sd = sd_r2, ci)
+  list(summary_r2 = summary_r2, R2 = r2)
+}

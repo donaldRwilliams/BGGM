@@ -4,7 +4,7 @@
 \alias{performance_measures}
 \title{Title}
 \usage{
-performance_measures(ThetaEst, Theta)
+performance_measures(estimated, true)
 }
 \arguments{
 \item{ThetaEst}{Estimated adjacency matrix}
