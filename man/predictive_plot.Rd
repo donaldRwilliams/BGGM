@@ -35,4 +35,7 @@ plt <- predictive_plot(x = r2, size = 3, color = color)
 # plot can be changed further with ggplot--e.g., changing theme
 
 plt + theme_classic()
+
+
+
 }

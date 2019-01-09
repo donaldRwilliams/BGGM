@@ -48,7 +48,7 @@ bayes_R2 <- function(fit, newdata = NULL, selected, ci_width = .95, samples = 50
 
 
       ypred <- t(apply(as.matrix(beta_select), 1, function(x)  x %*% t(as.matrix(dat_select))))
-      r2 <- R2_helper(ypred, dat[,i],ci_width)
+      r2 <- BGGM:::R2_helper(ypred, dat[,i],ci_width)
       summary_r2[[i]] <- t(data.frame(r2$summary_r2))
       post_samples[[i]] <- r2$R2
     }
@@ -57,7 +57,7 @@ bayes_R2 <- function(fit, newdata = NULL, selected, ci_width = .95, samples = 50
   row.names(summary_r2) <- colnames(dat)
   names(post_samples) <- colnames(dat)
 
-  returned_object <- list(summary_r2 = summary_r2, post_samples = post_samples, p = fit$p)
+  returned_object <- list(summary_error = summary_r2, post_samples = post_samples, p = fit$p, measure = "bayes_R2")
 
   class(returned_object) <- "bayes_R2"
 

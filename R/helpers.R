@@ -123,3 +123,36 @@ name_helper <-  function(x){
   col_names <- gsub("[]]", "", x)
   col_names
 }
+
+
+
+error_helper <- function(ypred, y, ci_width, measure, sigmas =  NULL) {
+  low <- (1 - ci_width) / 2
+  up  <-  1 - low
+
+
+  all_residual <- sweep(ypred, 2, y)
+  if(measure == "mse"){
+    out <- rowMeans(all_residual^2)
+  }
+  if(measure == "mae"){
+    out <- rowMeans(abs(all_residual))
+  }
+  if(measure == "kl"){
+    out <- BGGM:::kl_func(var(y), sigmas^2)
+    }
+  ci <- quantile(out, prob = c(low, up) )
+  mu_out <- mean(out)
+  sd_out <- sd(out)
+  summary <- c(post_mean = mu_out, post_sd = sd_out, ci)
+  list(summary = summary, error = out)
+}
+
+kl_func <- function(sigma_1, sigma_2){
+
+  log(sqrt(sigma_2) / sqrt(sigma_1)) + (sigma_1 / (2 * sigma_2)) - .5
+
+}
+
+
+

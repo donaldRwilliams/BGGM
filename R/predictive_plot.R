@@ -6,6 +6,7 @@
 #' @param size size of the points
 #' @param color color of points
 #'
+#'
 #' @return
 #' @export
 #'
@@ -27,26 +28,106 @@
 #' # plot can be changed further with ggplot--e.g., changing theme
 #'
 #' plt + theme_classic()
+#'
+#'
+#'
 predictive_plot <- function(x, size, color){
 
-  if(class(x) == "bayes_R2"){
+
     # column for nodes
-    x$summary_r2$node <- 1:x$p
+    x$summary_error$node <- 1:x$p
 
     # add ordered levels
-    x$summary_r2$node <- factor(x$summary_r2$node,
-                                levels = order(x$summary_r2$post_mean),
-                                labels = order(x$summary_r2$post_mean))
+    x$summary_error$node <- factor(x$summary_error$node,
+                                levels = order(x$summary_error$post_mean),
+                                labels = order(x$summary_error$post_mean))
 
-    plt <- ggplot(x$summary_r2, aes(x = node,
-                                    y = post_mean)) +
-      geom_point(size = size,
-                 color = color) +
-      geom_errorbar(aes(ymin = `2.5%`,
-                        ymax =`97.5%`), width = .1) +
-      coord_flip() +
-      ylab("Bayesian R2") +
-      xlab("Node")
-  }
-  plt
+
+
+
+
+    if(x$measure == "bayes_R2"){
+      # column for nodes
+      x$summary_error$node <- 1:x$p
+
+      # add ordered levels
+      x$summary_error$node <- factor(x$summary_error$node,
+                                     levels = order(x$summary_error$post_mean),
+                                     labels = order(x$summary_error$post_mean))
+
+      plt <- ggplot(x$summary_error, aes(x = node,
+                                           y = post_mean)) +
+        geom_errorbar(aes(ymin = `2.5%`,
+                          ymax =`97.5%`), width = .1) +
+        geom_point(size = size,
+                   color = color) +
+        coord_flip() +
+        xlab("Node") +
+        ylab("Bayesian R2")
+      }
+    if(x$measure == "kl"){
+      # column for nodes
+      x$summary_error$node <- 1:x$p
+
+      # add ordered levels
+      x$summary_error$node <- factor(x$summary_error$node,
+                                     levels = order(x$summary_error$post_mean),
+                                     labels = order(x$summary_error$post_mean))
+      plt <- ggplot(x$summary_error, aes(x = reorder(node, desc(node)),
+                                         y = post_mean)) +
+        geom_errorbar(aes(ymin = `2.5%`,
+                          ymax =`97.5%`), width = .1) +
+        geom_point(size = size,
+                   color = color) +
+        coord_flip() +
+        xlab("Node") +
+        ylab("KL-Divergence")
+
+    }
+
+    if(x$measure == "mse"){
+      # column for nodes
+      x$summary_error$node <- 1:x$p
+
+      # add ordered levels
+      x$summary_error$node <- factor(x$summary_error$node,
+                                     levels = rev(order(x$summary_error$post_mean)),
+                                     labels = rev(order(x$summary_error$post_mean)))
+
+
+      plt <- ggplot(x$summary_error, aes(x = reorder(node, desc(node)),
+                                         y = post_mean)) +
+        geom_errorbar(aes(ymin = `2.5%`,
+                          ymax =`97.5%`), width = .1) +
+        geom_point(size = size,
+                   color = color) +
+        coord_flip() +
+        xlab("Node") +
+        ylab("Mean Squared Error")
+
+    }
+
+    if(x$measure == "mae"){
+
+      # column for nodes
+      x$summary_error$node <- 1:x$p
+
+      # add ordered levels
+      x$summary_error$node <- factor(x$summary_error$node,
+                                     levels = rev(order(x$summary_error$post_mean)),
+                                     labels = rev(order(x$summary_error$post_mean)))
+
+
+      plt <- ggplot(x$summary_error, aes(x = node,
+                                         y = post_mean)) +
+        geom_errorbar(aes(ymin = `2.5%`,
+                          ymax =`97.5%`), width = .1) +
+        geom_point(size = size,
+                   color = color) +
+        coord_flip() +
+        xlab("Node") +
+        ylab("Mean Absolute Error")
+    }
+   plt
 }
+
