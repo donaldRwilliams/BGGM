@@ -31,23 +31,39 @@ inverse_2_beta <- function(fit, samples = 500){
 }
 
 summary_beta_helper <- function(x, node, ci_width){
+  # index for row_names
   row_names <- 1:x$p
+
+  # lower and upper ci
   low <- (1 - ci_width) / 2
   up <- 1 - low
+
+  # beta posterior mean
   beta <- apply(x$betas[[node]], 2, mean)
+
+  # beta poster sd
   post_sd <- apply(x$betas[[node]], 2, sd)
+
+  # lower and upper of posterior
   beta_ci <- t(apply(x$betas[[node]], 2, quantile, probs = c(low, up)))
+
+  # sd of the outcome
   sd_y <- sd(x$data[,node])
+
+  # sd of the predictors
   sd_x <- apply(x$data[,-node], 2, sd)
+
+  # standardized (std) beta
   beta_std_temp <- x$betas[[node]] * (sd_x / sd_y)
+
+  # beta std posterior mean
   beta_std <- apply(beta_std_temp, 2, mean)
+
+  # beta std posterior sd
   beta_std_post_sd <- apply(beta_std_temp, 2, sd)
+
+  # lower and upper of posterior
   beta_std_ci <- t(apply(beta_std_temp, 2,  quantile, probs = c(low, up)))
-
-
-
-
-
 
   returned_object <- round(cbind(node =  row_names[-node],
                                  beta,
@@ -57,10 +73,13 @@ summary_beta_helper <- function(x, node, ci_width){
                                  post_sd = beta_std_post_sd,
                                  beta_std_ci),3)
 
+  # remove row names
   row.names(returned_object ) <- NULL
 
+  # make list for naming purposes
   returned_object <- list(as.data.frame(returned_object))
 
+  # list elemenet name as the response
   names(returned_object) <- paste("predicting node", node)
 
   returned_object
