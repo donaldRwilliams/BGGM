@@ -7,8 +7,29 @@
 predictive_plot(x, size, color)
 }
 \arguments{
-\item{color}{}
+\item{x}{object of class \code{bayes_R2} or \code{predictive error}}
+
+\item{size}{size of the points}
+
+\item{color}{color of points}
 }
 \description{
 Title
+}
+\examples{
+
+# X is the data matrix of dimensions n by p
+fit <- bayes_estimate(X)
+
+# select the graphical structure
+select <- estimate_select(fit, ci_width = .95)
+
+# compute Bayesian R2
+r2 <-  bayes_R2(fit, selected = select$adjacency_mat, ci_width = .95, samples = 1000)
+
+plt <- predictive_plot(x = r2, size = 3, color = color)
+
+# plot can be changed further with ggplot--e.g., changing theme
+
+plt + theme_classic()
 }
