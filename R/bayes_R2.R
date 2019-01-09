@@ -29,8 +29,11 @@ bayes_R2 <- function(fit, newdata = NULL, selected, ci_width = .95, samples = 50
 
   # predicted values for each regression model
   for(i in 1:fit$p){
-    #dat_temp <- dat[,-i]
+
+    # selected betas for row (outcome)
     row_select <- selected[i, -i]
+
+    #
     if(sum(row_select) == 0){
       summary_r2[[i]] <- 0
       post_samples[[i]] <- 0
@@ -53,5 +56,11 @@ bayes_R2 <- function(fit, newdata = NULL, selected, ci_width = .95, samples = 50
   summary_r2 <- do.call(rbind.data.frame, summary_r2)
   row.names(summary_r2) <- colnames(dat)
   names(post_samples) <- colnames(dat)
-  list(summary_r2 = summary_r2, post_samples = post_samples)
+
+  returned_object <- list(summary_r2 = summary_r2, post_samples = post_samples, p = fit$p)
+
+  class(returned_object) <- "bayes_R2"
+
+  returned_object
+
 }
