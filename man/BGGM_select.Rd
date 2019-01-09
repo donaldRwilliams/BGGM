@@ -13,6 +13,10 @@ BGGM_select(x, BF_directional = NULL, probability = NULL)
 
 \item{probability}{Decision rule based on Posterior probabiities}
 }
+\value{
+The selected partial correlation matrix, that is the conditional dependence structure,
+is returned along with the adjacency matrix
+}
 \description{
 Title
 }

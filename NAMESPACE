@@ -1,1 +1,2 @@
-exportPattern("^[[:alpha:]]+")
+export(bayes_estimate)
+export(estimate_select)

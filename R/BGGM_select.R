@@ -4,7 +4,9 @@
 #' @param BF_directional Decision rule based on Bayes factors
 #' @param probability Decision rule based on Posterior probabiities
 #'
-#' @return
+#' @return The selected partial correlation matrix, that is the conditional dependence structure,
+#' is returned along with the adjacency matrix
+#'
 #' @export
 #'
 #' @examples
