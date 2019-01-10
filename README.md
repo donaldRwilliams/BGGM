@@ -13,6 +13,6 @@ Bayes factors.
 
 Download package here:
 
-devtools::install_github("donaldRwilliams/GGMprojpred")
+devtools::install_github("donaldRwilliams/BGGM")
 
 Williams, D. R. (2018, September 20). Bayesian Inference for Gaussian Graphical Models: Structure Learning, Explanation, and Prediction. https://doi.org/10.31234/osf.io/x8dpr
