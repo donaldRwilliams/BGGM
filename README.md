@@ -10,4 +10,9 @@ Bayes factors.
 <!---
 #Comparing GGMs is also possible. These methods are described in Williams and Mulder (2019b). The comparison can be made with posterior #predictive loss functions for mulviarte normal distributions, or with the Bayes factor. Entire networks can be assess for similarities or #differences, or indidvudal nodes or edges can be tested. These methods can also be used to determine if network structures replicated #across two dataset, where evidence can be gained not only against but for hypothesized model.
 -->
+
+Download package here:
+
+devtools::install_github("donaldRwilliams/BGGM")
+
 Williams, D. R. (2018, September 20). Bayesian Inference for Gaussian Graphical Models: Structure Learning, Explanation, and Prediction. https://doi.org/10.31234/osf.io/x8dpr
