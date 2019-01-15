@@ -36,7 +36,8 @@ explore_selection <- function(X, threshold = 3, type = NULL){
       results <-  list(BF_null_adj = BF_null_adj,
                        BF_alt_adj = BF_alt_adj,
                        BF_null = X$BF_01,
-                       BF_alt = 1 / X$BF_01)
+                       BF_alt = 1 / X$BF_01,
+                       partial_mat = X$partial_mat  * BF_alt_adj)
     }
 
     # one-sided (greater_than) hyp testing
@@ -49,7 +50,9 @@ explore_selection <- function(X, threshold = 3, type = NULL){
 
       BF_pos_adj <- ifelse(BF_pos > threshold, 1, 0)
 
-      results <- list(BF_pos_adj = BF_pos_adj, BF_pos = BF_pos)
+      results <- list(BF_pos_adj = BF_pos_adj,
+                      BF_pos = BF_pos,
+                      partial_mat = X$partial_mat * BF_pos_adj)
     }
 
 
