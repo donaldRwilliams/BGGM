@@ -8,7 +8,7 @@
 #' @export
 #'
 #' @examples
-explore_selection <- function(X, threshold = 3, type = NULL){
+explore_select <- function(X, threshold = 3, type = NULL){
 
   # check the class
   if(class(X) != "Bayes_explore_object") stop("X must be from Bayes_explore")
