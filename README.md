@@ -5,8 +5,7 @@ This package is described in Williams and Mulder (2019) and Williams (2018). The
 
 The estimation based method are described in Williams (2018). The methods offer advantages compared to classical methods, 
 in that a measure of uncertainty is provided for all parameters. For example, each node has a distribution for
-the variance explained. Measure of out-of-sample performance are also available. The model is selected with directional
-Bayes factors.
+the variance explained. Measures of out-of-sample performance are also available. The model is selected with credible exclusion of zero.
 <!---
 #Comparing GGMs is also possible. These methods are described in Williams and Mulder (2019b). The comparison can be made with posterior #predictive loss functions for mulviarte normal distributions, or with the Bayes factor. Entire networks can be assess for similarities or #differences, or indidvudal nodes or edges can be tested. These methods can also be used to determine if network structures replicated #across two dataset, where evidence can be gained not only against but for hypothesized model.
 -->
