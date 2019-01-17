@@ -73,4 +73,6 @@ qgraph::qgraph(select_graph$BF_null_adj, layout = "circle")
 
 ![](README-unnamed-chunk-4-1.png)
 
-We are currently thinking of ways to plot the conditional independence structure (open to suggestions), but for now are using only the adjacency matrix. Further, for those interested in the substantive aspect of these networks, please see the **psyche** package for the variable descriptions.
+We are currently thinking of ways to plot the conditional independence structure (open to suggestions), but for now are using only the adjacency matrix.
+
+Finally, for those interested in the substantive aspect of these networks, please see the **psyche** package for the variable descriptions.
