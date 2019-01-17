@@ -8,7 +8,7 @@ output: github_document
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "README-"
+  fig.path = "man/figures/README-"
 )
 ```
 
@@ -18,9 +18,9 @@ This package is described in Williams and Mulder (2019) and Williams (2018). The
 The estimation based method are described in Williams (2018). The methods offer advantages compared to classical methods, in that a 
 measure of uncertainty is provided for all parameters. For example, each node has a distribution for the variance explained (i.e., Bayesian $R^2$). Measures of out-of-sample performance are also available, which also have a measure of uncertainty. The model is selected with credible interval exclusion of zero.
 
-Williams, D. R. (2018, September 20). Bayesian Inference for Gaussian Graphical Models: Structure Learning, Explanation, and Prediction. [pre-print](https://doi.org/10.31234/osf.io/x8dpr)
+Williams, D. R. (2018, September 20). Bayesian Inference for Gaussian Graphical Models: Structure Learning, Explanation, and Prediction. ([pre-print](https://doi.org/10.31234/osf.io/x8dpr))
 
-Williams, D. R., & Mulder, J. (2019, January 14). Bayesian Hypothesis Testing for Gaussian Graphical Models:Conditional Independence and Order Constraints. [pre-print](https://doi.org/10.31234/osf.io/ypxd8)
+Williams, D. R., & Mulder, J. (2019, January 14). Bayesian Hypothesis Testing for Gaussian Graphical Models:Conditional Independence and Order Constraints. ([pre-print](https://doi.org/10.31234/osf.io/ypxd8))
 
 ## Installation
 
