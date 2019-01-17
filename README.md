@@ -39,7 +39,9 @@ select_graph <- BGGM::explore_select(fit, threshold = 3, type = "two_sided")
 qgraph::qgraph(select_graph$partial_mat)
 ```
 
-![](README-example-1.png) Some of the methods rely on sampling, so we found it most convenient to select the model after fitting-thus changing the threshold does not require refitting the model.
+![](README-example-1.png)
+
+Some of the methods rely on sampling, so we found it most convenient to select the model after fitting-thus changing the threshold does not require refitting the model.
 
 ``` r
 # select the network (threshold of 10)
@@ -47,7 +49,9 @@ select_graph <- BGGM::explore_select(fit, threshold = 10, type = "two_sided")
 qgraph::qgraph(select_graph$partial_mat)
 ```
 
-![](README-unnamed-chunk-2-1.png) It is likely that there is an expected direction. That is, maybe it does not make theoretical sense to have negative effects. At this time it is only possible to assume all relations are in the same direction, but this will be changed soon. One-sided hypothesis testing can be perfomed as follows:
+![](README-unnamed-chunk-2-1.png)
+
+It is likely that there is an expected direction. That is, maybe it does not make theoretical sense to have negative effects. At this time it is only possible to assume all relations are in the same direction, but this will be changed soon. One-sided hypothesis testing can be perfomed as follows:
 
 ``` r
 # select the network (threshold of 10; one-sided)
@@ -55,7 +59,9 @@ select_graph <- BGGM::explore_select(fit, threshold = 10, type = "greater_than")
 qgraph::qgraph(select_graph$partial_mat)
 ```
 
-![](README-unnamed-chunk-3-1.png) Note that all the effects are now positive (i.e., the color green).
+![](README-unnamed-chunk-3-1.png)
+
+Note that all the effects are now positive (i.e., the color green).
 
 To date, the conditional independence structure of personality has not been directly assesed. Let us examine for which relations there is evidence for the null hypothesis.
 
@@ -65,4 +71,6 @@ select_graph <- BGGM::explore_select(fit, threshold = 3, type = "two_sided")
 qgraph::qgraph(select_graph$BF_null_adj, layout = "circle")
 ```
 
-![](README-unnamed-chunk-4-1.png) We are currently thinking of ways to plot the conditional independence structure (open to suggestions), but for now are using only the adjacency matrix. Further, for those interested in the substantive aspect of these networks, please see the **psyche** package for the variable descriptions.
+![](README-unnamed-chunk-4-1.png)
+
+We are currently thinking of ways to plot the conditional independence structure (open to suggestions), but for now are using only the adjacency matrix. Further, for those interested in the substantive aspect of these networks, please see the **psyche** package for the variable descriptions.
