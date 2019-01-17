@@ -66,7 +66,7 @@ Note that all the effects are now positive (i.e., the color green).
 To date, the conditional independence structure of personality has not been directly assessed. Let us examine for which relations there is evidence for the null hypothesis.
 
 ``` r
-# select the network (threshold of 3; one-sided)
+# select the network (threshold of 3; two-sided)
 select_graph <- BGGM::explore_select(fit, threshold = 3, type = "two_sided")
 qgraph::qgraph(select_graph$BF_null_adj, layout = "circle")
 ```
