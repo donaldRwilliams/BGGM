@@ -14,6 +14,8 @@
 #'
 #' @examples
 #'
+#'X <- BGGM::ptsd
+#'
 #' # X is the data matrix of dimensions n by p
 #' fit <- bayes_estimate(X)
 #'
