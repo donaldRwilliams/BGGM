@@ -18,6 +18,7 @@ Description: This package is described in Williams and Mulder (2019) and William
     The model is selected with directional Bayes factors.
 License: GPL-2
 Depends: rjags, foreach, doSNOW, extraDistr
+Suggests: qgraph, ggplot2
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1.9000
