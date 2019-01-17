@@ -1,4 +1,4 @@
-# BGGM
+## BGGM
 Bayesian Gaussian Graphical Models
 
 This package is described in Williams and Mulder (2019) and Williams (2018). The methods are seperated into two Bayesian approaches for inference: hypothesis testing and estimation. The former is described in Williams and Mulder (2018a), and allows for testing for the presence of edges with the Bayes factor. One-sided hypothesis testing is also possible. These methods can also provide evidence for the null hypothesis. There are extensions for confirmatory hypothesis testing in GGMs, that can include inequality or equality contraints on the partial correlation.
