@@ -2,13 +2,19 @@
 % Please edit documentation in R/sample_prior.R
 \name{sample_prior}
 \alias{sample_prior}
-\title{Title}
+\title{Sample from prior distributions}
 \usage{
 sample_prior(distribution, p = NULL, delta = NULL, samples = 500)
 }
 \arguments{
+\item{distribution}{"wishart" or "matrix-f"}
+
 \item{samples}{}
 }
 \description{
-Title
+Sample from prior distributions
+}
+\note{
+This function can be used to determined the prior distribution for hypothesis testing, where it will be very important
+for determing the graphical structure. For estimation the prior is not as important
 }

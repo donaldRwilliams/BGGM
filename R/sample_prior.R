@@ -1,13 +1,15 @@
-
-#' Title
+#' Sample from prior distributions
 #'
-#' @param distribution
+#' @param distribution "wishart" or "matrix-f"
 #' @param p
 #' @param delta
 #' @param samples
 #'
 #' @return
 #' @export
+#'
+#' @note This function can be used to determined the prior distribution for hypothesis testing, where it will be very important
+#' for determing the graphical structure. For estimation the prior is not as important
 #'
 #' @examples
 sample_prior <- function(distribution, p = NULL, delta = NULL, samples = 500){

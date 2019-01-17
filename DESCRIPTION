@@ -1,13 +1,23 @@
 Package: BGGM 
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Bayesian Gaussian Graphical Models
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
-Depends: rjags
+Authors@R: c(person("Donald", "Williams", email = "drwwilliams@ucdavis.edu", role = c("aut", "cre")),
+             person("Joris", "Mulder", email = "J.Mulder3@uvt.nl", role = "ctb"))
+Maintainer: Donald R. Williams <drwwilliams@ucdavis.edu>
+Description: This package is described in Williams and Mulder (2019) and Williams (2018). 
+    The methods are seperated into two Bayesian approaches for inference: hypothesis testing 
+    and estimation. The former is described in Williams and Mulder (2018a), and allows for 
+    testing for the presence of edges with the Bayes factor. One-sided hypothesis testing is 
+    also possible. These methods can also provide evidence for the null hypothesis. There are 
+    extensions for confirmatory hypothesis testing in GGMs, that can include inequality or 
+    equality contraints on the partial correlation. The estimation based method are described 
+    in Williams (2018). The methods offer advantages compared to classical methods, in that a 
+    measure of uncertainty is provided for all parameters. For example, each node has a 
+    distribution for the variance explained. Measure of out-of-sample performance are also available. 
+    The model is selected with directional Bayes factors.
+License: GPL-2
+Depends: rjags, foreach, doSNOW
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1.9000

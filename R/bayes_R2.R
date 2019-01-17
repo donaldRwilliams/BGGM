@@ -1,15 +1,25 @@
-#' Title
+#' Bayesian R2
 #'
-#' @param fit
-#' @param newdata
-#' @param selected
-#' @param ci_width
-#' @param samples
+#' @param fit object of class bayes_estimate
+#' @param newdata out-of-sample option
+#' @param selected the selected adjacency matrix
+#' @param ci_width credible interval width for Bayes R2
+#' @param samples Number of samples for compute Bayes R2
 #'
 #' @return
 #' @export
 #'
 #' @examples
+#'X <- BGGM::ptsd
+#'
+#' # X is the data matrix of dimensions n by p
+#' fit <- bayes_estimate(X)
+#'
+#' # select the graphical structure
+#' select <- estimate_select(fit, ci_width = .95)
+#'
+#' # compute Bayesian R2
+#' r2 <-  bayes_R2(fit, selected = select$adjacency_mat, ci_width = .95, samples = 1000)
 bayes_R2 <- function(fit, newdata = NULL, selected, ci_width = .95, samples = 500){
 
   # ensure data is centered
