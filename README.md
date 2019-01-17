@@ -41,7 +41,7 @@ qgraph::qgraph(select_graph$partial_mat)
 
 ![](README-example-1.png)
 
-Some of the methods rely on sampling, so we found it most convenient to select the model after fitting-thus changing the threshold does not require refitting the model.
+Some of the methods rely on sampling, so we found it most convenient to select the model after fitting-thus changing the threshold does not require refitting the model. This particular method does not require sampling from the prior or posterior distribution, but does rely on assuming normality. In the paper, Williams and Mulder (2019), it was shown these approximations performed well: the Bayes factor was consistent for model selection and invariant to the scale of the data. Sampling is possible for those not happy with the normal approximation.
 
 ``` r
 # select the network (threshold of 10)
