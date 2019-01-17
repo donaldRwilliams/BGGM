@@ -3,7 +3,7 @@
 BGGM
 ====
 
-This package is described in Williams and Mulder (2019) and Williams (2018). The methods are seperated into two Bayesian approaches for inference: hypothesis testing and estimation. The former is described in Williams and Mulder (2018a), and allows for testing for the presence of edges with the Bayes factor. One-sided hypothesis testing is also possible. These methods can also provide evidence for the null hypothesis. There are extensions for confirmatory hypothesis testing in GGMs, that can include inequality or equality contraints on the partial correlation.
+This package is described in Williams and Mulder (2019) and Williams (2018). The methods are separated into two Bayesian approaches for inference: hypothesis testing and estimation. The former is described in Williams and Mulder (2018a), and allows for testing for the presence of edges with the Bayes factor. One-sided hypothesis testing is also possible. These methods can also provide evidence for the null hypothesis. There are extensions for confirmatory hypothesis testing in GGMs, that can include inequality or equality constraints on the partial correlation.
 
 The estimation based method are described in Williams (2018). The methods offer advantages compared to classical methods, in that a measure of uncertainty is provided for all parameters. For example, each node has a distribution for the variance explained. Measures of out-of-sample performance are also available. The model is selected with credible interval exclusion of zero.
 
@@ -14,7 +14,7 @@ Williams, D. R., & Mulder, J. (2019, January 14). Bayesian Hypothesis Testing fo
 Installation
 ------------
 
-You can install BGGM from github with:
+You can install BGGM from git hub with:
 
 ``` r
 # install.packages("devtools")
@@ -24,9 +24,9 @@ devtools::install_github("donaldRwilliams/BGGM")
 Example
 -------
 
-### Hypothesis Testing
+### Exploratory Hypothesis Testing
 
-These methods allow for gaining evidence for both conditional depedence (*ρ* ≠ 0) and independence (*ρ* = 0). Note that GGMs are often thought to characterize conditional independece structures, but evidence for the null hypothesis of no effect is not (typically) assessed.
+These methods allow for gaining evidence for both conditional dependence (*ρ* ≠ 0) and independence (*ρ* = 0). Note that GGMs are often thought to characterize conditional independence structures, but evidence for the null hypothesis of no effect is not (typically) assessed.
 
 ``` r
 dat <- BGGM::bfi
@@ -51,7 +51,7 @@ qgraph::qgraph(select_graph$partial_mat)
 
 ![](README-unnamed-chunk-2-1.png)
 
-It is likely that there is an expected direction. That is, maybe it does not make theoretical sense to have negative effects. At this time it is only possible to assume all relations are in the same direction, but this will be changed soon. One-sided hypothesis testing can be perfomed as follows:
+It is likely that there is an expected direction. That is, maybe it does not make theoretical sense to have negative effects. At this time it is only possible to assume all relations are in the same direction, but this will be changed soon. One-sided hypothesis testing can be performed as follows:
 
 ``` r
 # select the network (threshold of 10; one-sided)
@@ -63,7 +63,7 @@ qgraph::qgraph(select_graph$partial_mat)
 
 Note that all the effects are now positive (i.e., the color green).
 
-To date, the conditional independence structure of personality has not been directly assesed. Let us examine for which relations there is evidence for the null hypothesis.
+To date, the conditional independence structure of personality has not been directly assessed. Let us examine for which relations there is evidence for the null hypothesis.
 
 ``` r
 # select the network (threshold of 10; one-sided)
