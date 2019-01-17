@@ -33,7 +33,7 @@ devtools::install_github("donaldRwilliams/BGGM")
 
 ## Example
 ###  Exploratory Hypothesis Testing
-These methods allow for gaining evidence for both conditional dependence ($\rho \neq 0$) and independence ($\rho = 0$). Note that GGMs are often thought to characterize conditional independence structures, but evidence for the null hypothesis of no effect is not (typically) assessed. The following uses the Bayes factor to assess evidence for the null vs. alternative hypothesis, and have some patience.
+These methods allow for gaining evidence for both conditional dependence ($\rho \neq 0$) and independence ($\rho = 0$). Note that GGMs are often thought to characterize conditional independence structures, but evidence for the null hypothesis of no effect is not (typically) assessed. The following uses the Bayes factor to assess evidence for the null vs. alternative hypothesis.
 
 ```{r example}
 dat <- BGGM::bfi
@@ -46,7 +46,7 @@ select_graph <- BGGM::explore_select(fit, threshold = 3, type = "two_sided")
 qgraph::qgraph(select_graph$partial_mat)
 ```
 
-Some of the methods rely on sampling, so we found it most convenient to select the model after fitting-thus changing the threshold does not require refitting the model. This particular method does not require sampling from the prior or posterior distributions, but does rely on assuming normality. In the paper, Williams and Mulder (2019), it was shown these approximations performed well: the Bayes factor was consistent for model selection and invariant to the scale of the data. Sampling is possible for those not happy with the normal approximation.
+Some of the methods rely on sampling, so we found it most convenient to select the model after fitting-thus changing the threshold does not require refitting the model. This particular method does not require sampling from the prior or posterior distributions, but does rely on assuming normality. In the paper, Williams and Mulder (2019), it was shown these approximations performed well: the Bayes factor was consistent for model selection and invariant to the scale of the data. Sampling is possible for those not happy with the normal approximation, and have some patience.
 
 ```{r}
 # select the network (threshold of 10)
