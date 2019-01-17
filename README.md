@@ -9,7 +9,7 @@ The estimation based method are described in Williams (2018). The methods offer 
 
 Williams, D. R. (2018, September 20). Bayesian Inference for Gaussian Graphical Models: Structure Learning, Explanation, and Prediction. [pre-print](https://doi.org/10.31234/osf.io/x8dpr)
 
-Williams, D. R., & Mulder, J. (2019, January 14). Bayesian Hypothesis Testing for Gaussian Graphical Models: Conditional Independence and Order Constraints. [pre-print](https://doi.org/10.31234/osf.io/ypxd8)
+Williams, D. R., & Mulder, J. (2019, January 14). Bayesian Hypothesis Testing for Gaussian Graphical Models:Conditional Independence and Order Constraints. [pre-print](https://doi.org/10.31234/osf.io/ypxd8)
 
 Installation
 ------------
@@ -26,7 +26,7 @@ Example
 
 ### Hypothesis Testing
 
-These methods allow for gaining evidence for both conditional depedence (*ρ*<sub>*i**j*</sub> ≠ 0) and independence (*ρ*<sub>*i**j*</sub> = 0). Note that GGMs are often thought to characterize conditional independece structures, but evidence for the null hypothesis of no effect is not typically assessed.
+These methods allow for gaining evidence for both conditional depedence (*ρ* ≠ 0) and independence (*ρ* = 0). Note that GGMs are often thought to characterize conditional independece structures, but evidence for the null hypothesis of no effect is not typically assessed.
 
 ``` r
 ## basic example code

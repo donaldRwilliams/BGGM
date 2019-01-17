@@ -33,7 +33,7 @@ devtools::install_github("donaldRwilliams/BGGM")
 
 ## Example
 ###  Hypothesis Testing
-These methods allow for gaining evidence for both conditional depedence ($\rho_{ij} \neq 0$) and independence ($\rho_{ij} = 0$). Note that GGMs are often thought to characterize conditional independece structures, but evidence for the null hypothesis of no effect is not typically assessed.
+These methods allow for gaining evidence for both conditional depedence ($\rho \neq 0$) and independence ($\rho = 0$). Note that GGMs are often thought to characterize conditional independece structures, but evidence for the null hypothesis of no effect is not typically assessed.
 
 
 ```{r example}
