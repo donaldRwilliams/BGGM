@@ -1,9 +1,9 @@
 #' Sample from prior distributions
 #'
 #' @param distribution "wishart" or "matrix-f"
-#' @param p
-#' @param delta
-#' @param samples
+#' @param p the number of variables in the model
+#' @param delta hyperparameter for matrix-f distribution
+#' @param samples number of prior samples
 #'
 #' @return
 #' @export
