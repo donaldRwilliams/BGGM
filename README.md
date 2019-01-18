@@ -90,7 +90,7 @@ Finally, for those interested in the substantive aspect of these networks, pleas
 
 There is a direct correspondence between the precision matrix, that is the inverse of the covariance matrix, and multiple regression. The details are provided ([here](https://donaldrwilliams.github.io/post/2019-10-1-r-markdown/)). Rather than fit a sequence of regression models (i.e., neighborhood selection), as in the R package [GGMnonreg](https://github.com/donaldRwilliams/GGMnonreg), it is possible to only estimate the precision matrix and then transform the elements to their respective regression counterparts. This approach is described in Williams (2018).
 
-With the regression coefficients in-hand, it is then possible to compute *R*<sup>2</sup> for each node in the network. Similar approaches are sometimes used in the social-behavioral sciences. Here the GGMs are often estimated with ℓ<sub>1</sub>-regularization and the reported *R*<sup>2</sup> is a point estimate. This is problematic, because it can be misleading to note that one node has higher *R*<sup>2</sup> than another when there is not a measure of uncertainty. The present methods overcome this limitation with Bayesian *R*<sup>2</sup> that is described ([here](http://www.stat.columbia.edu/~gelman/research/unpublished/bayes_R2.pdf))
+With the regression coefficients in-hand, it is then possible to compute *R*<sup>2</sup> for each node in the network. Similar approaches are sometimes used in the social-behavioral sciences. Here the GGMs are often estimated with ℓ<sub>1</sub>-regularization and the reported *R*<sup>2</sup> is a point estimate. This is problematic, because it can be misleading to note that one node has higher *R*<sup>2</sup> than another when there is not a measure of uncertainty. The present methods overcome this limitation with Bayesian *R*<sup>2</sup> that is described [here](http://www.stat.columbia.edu/~gelman/research/unpublished/bayes_R2.pdf)
 
 JAGS will need to be installed to estimate this model ([link](https://sourceforge.net/projects/mcmc-jags/files/))
 
@@ -111,31 +111,31 @@ r2 <- BGGM::bayes_R2(fit = fit, ci_width = .99,
 
 |     |  post\_mean|   post\_sd|       0.5%|      99.5%|
 |-----|-----------:|----------:|----------:|----------:|
-| A1  |   0.1767016|  0.0159124|  0.1373595|  0.2142345|
-| A2  |   0.3919014|  0.0147482|  0.3555315|  0.4277212|
-| A3  |   0.4247237|  0.0160517|  0.3828288|  0.4619725|
-| A4  |   0.2938094|  0.0183540|  0.2485219|  0.3351594|
-| A5  |   0.3741748|  0.0179158|  0.3255494|  0.4195448|
-| C1  |   0.2809184|  0.0168896|  0.2345826|  0.3234448|
-| C2  |   0.3621744|  0.0145532|  0.3217681|  0.3960621|
-| C3  |   0.2529893|  0.0156885|  0.2161154|  0.2919030|
-| C4  |   0.3861281|  0.0149336|  0.3455471|  0.4221855|
-| C5  |   0.3616609|  0.0173941|  0.3214110|  0.4030931|
-| E1  |   0.3561308|  0.0146115|  0.3189728|  0.3960974|
-| E2  |   0.4324890|  0.0160518|  0.3903357|  0.4722081|
-| E3  |   0.4048774|  0.0149578|  0.3609459|  0.4393714|
-| E4  |   0.4443058|  0.0148561|  0.4059519|  0.4800768|
-| E5  |   0.3238932|  0.0180396|  0.2735098|  0.3653599|
-| N1  |   0.5948297|  0.0087822|  0.5732075|  0.6168393|
-| N2  |   0.5334384|  0.0125834|  0.4941341|  0.5649206|
-| N3  |   0.4703463|  0.0124241|  0.4407522|  0.4984730|
-| N4  |   0.4247019|  0.0168976|  0.3809173|  0.4676981|
-| N5  |   0.3074240|  0.0183800|  0.2603691|  0.3505870|
-| O1  |   0.2443120|  0.0159369|  0.2015653|  0.2836741|
-| O2  |   0.1971164|  0.0151157|  0.1598589|  0.2375019|
-| O3  |   0.3168011|  0.0143951|  0.2767166|  0.3491280|
-| O4  |   0.1617073|  0.0142415|  0.1290707|  0.2000124|
-| O5  |   0.2165251|  0.0150597|  0.1779080|  0.2571017|
+| A1  |   0.1883695|  0.0169427|  0.1483073|  0.2301100|
+| A2  |   0.3908436|  0.0151503|  0.3519957|  0.4257576|
+| A3  |   0.4247919|  0.0140904|  0.3902738|  0.4594377|
+| A4  |   0.2960216|  0.0184537|  0.2493414|  0.3439533|
+| A5  |   0.3726663|  0.0179936|  0.3349501|  0.4151132|
+| C1  |   0.2676955|  0.0161162|  0.2250139|  0.3106030|
+| C2  |   0.3612206|  0.0133233|  0.3281061|  0.3940112|
+| C3  |   0.2534096|  0.0151985|  0.2185585|  0.2934040|
+| C4  |   0.4000672|  0.0145855|  0.3593509|  0.4373497|
+| C5  |   0.3612097|  0.0181928|  0.3186064|  0.4001974|
+| E1  |   0.3565906|  0.0143239|  0.3210204|  0.3918290|
+| E2  |   0.4338273|  0.0153173|  0.3922678|  0.4703743|
+| E3  |   0.4102626|  0.0148775|  0.3696444|  0.4423100|
+| E4  |   0.4556025|  0.0142341|  0.4169238|  0.4857838|
+| E5  |   0.3238241|  0.0185447|  0.2761092|  0.3686461|
+| N1  |   0.5946657|  0.0086407|  0.5706682|  0.6132380|
+| N2  |   0.5337332|  0.0131920|  0.5012615|  0.5659472|
+| N3  |   0.4699821|  0.0118583|  0.4395410|  0.4991964|
+| N4  |   0.4256822|  0.0169256|  0.3861438|  0.4671784|
+| N5  |   0.3071237|  0.0193187|  0.2551863|  0.3503473|
+| O1  |   0.2437566|  0.0157097|  0.2075506|  0.2789982|
+| O2  |   0.1962032|  0.0150615|  0.1563283|  0.2346939|
+| O3  |   0.3027874|  0.0153374|  0.2655831|  0.3369440|
+| O4  |   0.1621969|  0.0146192|  0.1181268|  0.1991478|
+| O5  |   0.2168877|  0.0147817|  0.1827811|  0.2544819|
 
 Note that the R package mgm can also compute *R*<sup>2</sup>, but only provides point estimates. It would be possible to apply the bootstrap. However, then *R*<sup>2</sup> would not be conditional on the fitted model and posterior distributions but instead would capture sampling variability.
 
