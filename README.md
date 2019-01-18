@@ -70,7 +70,7 @@ qgraph::qgraph(select_graph$partial_mat)
 
 Note that all the effects are now positive (i.e., the color green).
 
-To date, the conditional independence structure of personality has not been directly assessed. Let us examine for which relations there is evidence for the null hypothesis.
+To date, the conditional independence structure of personality has not been directly assessed. Let us examine for which relations there is evidence for the null hypothesis:
 
 ``` r
 # select the network (threshold of 3; two-sided)
@@ -90,9 +90,9 @@ Finally, for those interested in the substantive aspect of these networks, pleas
 
 There is a direct correspondence between the precision matrix, that is the inverse of the covariance matrix, and multiple regression. The details are provided ([here](https://donaldrwilliams.github.io/post/2019-10-1-r-markdown/)). Rather than fit a sequence of regression models (i.e., neighborhood selection), as in the R package [GGMnonreg](https://github.com/donaldRwilliams/GGMnonreg), it is possible to only estimate the precision matrix and then transform the elements to their respective regression counterparts. This approach is described in Williams (2018).
 
-With the regression coefficients in-hand, it is then possible to compute *R*<sup>2</sup> for each node in the network. Similar approaches are sometimes used in the social-behavioral sciences. Here the GGMs are often estimated with ℓ<sub>1</sub>-regularization and the reported *R*<sup>2</sup> is a point estimate. This is problematic, because it can be misleading to note that one node has higher *R*<sup>2</sup> than another when there is not a measure of uncertainty. The present methods overcome this limitation with Bayesian *R*<sup>2</sup> that is described [here](http://www.stat.columbia.edu/~gelman/research/unpublished/bayes_R2.pdf)
+With the regression coefficients in-hand, it is then possible to compute *R*<sup>2</sup> for each node in the network. Similar approaches are sometimes used in the social-behavioral sciences. Here the GGMs are often estimated with ℓ<sub>1</sub>-regularization and the reported *R*<sup>2</sup> is a point estimate. This is problematic, because it can be misleading to note that one node has higher *R*<sup>2</sup> than another when there is not a measure of uncertainty. The present methods comptue Bayesian *R*<sup>2</sup> that is described [here](http://www.stat.columbia.edu/~gelman/research/unpublished/bayes_R2.pdf)
 
-JAGS will need to be installed to estimate this model ([link](https://sourceforge.net/projects/mcmc-jags/files/))
+JAGS will need to be installed to estimate this model ([link](https://sourceforge.net/projects/mcmc-jags/files/)).
 
 The following code fits the model, then selects the graph, and finally computes Bayesian *R*<sup>2</sup> conditional on the fitted model:
 
@@ -113,13 +113,11 @@ Here are the results for the first 5 nodes:
 
 |     |  post\_mean|   post\_sd|       0.5%|      99.5%|
 |-----|-----------:|----------:|----------:|----------:|
-| A1  |   0.1763431|  0.0156027|  0.1372135|  0.2155447|
-| A2  |   0.3904883|  0.0162905|  0.3472217|  0.4288337|
-| A3  |   0.4238384|  0.0145248|  0.3819263|  0.4559821|
-| A4  |   0.2955242|  0.0180556|  0.2495075|  0.3434673|
-| A5  |   0.3753671|  0.0168617|  0.3319761|  0.4156472|
-
-Note that the R package mgm can also compute *R*<sup>2</sup>, but only provides point estimates. It would be possible to apply the bootstrap. However, then *R*<sup>2</sup> would not be conditional on the fitted model and posterior distributions but instead would capture sampling variability.
+| A1  |   0.1851253|  0.0168115|  0.1453836|  0.2282809|
+| A2  |   0.3903337|  0.0157331|  0.3512112|  0.4337891|
+| A3  |   0.4248438|  0.0150871|  0.3867440|  0.4612122|
+| A4  |   0.2944465|  0.0192016|  0.2436344|  0.3396721|
+| A5  |   0.3732935|  0.0177519|  0.3246199|  0.4129309|
 
 The package BGGM can also plot the results:
 
