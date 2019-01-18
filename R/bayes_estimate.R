@@ -21,7 +21,7 @@
 
 
 bayes_estimate <- function(x, chains = 2, iter = 1000, burnin = 100){
-  x <- as.matrix(x)
+  x <- na.omit(as.matrix(x))
 
   ## model
   mod = "model{

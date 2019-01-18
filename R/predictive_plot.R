@@ -59,13 +59,14 @@ predictive_plot <- function(x, size, color){
 
       plt <- ggplot(x$summary_error, aes(x = node,
                                            y = post_mean)) +
-        geom_errorbar(aes(ymin = `2.5%`,
-                          ymax =`97.5%`), width = .1) +
+        geom_errorbar(aes(ymin =  x$summary_error[,3],
+                          ymax = x$summary_error[,4]), width = .1) +
         geom_point(size = size,
                    color = color) +
         coord_flip() +
         xlab("Node") +
-        ylab("Bayesian R2")
+        ylab("Bayesian R2") +
+        theme_classic()
       }
     if(x$measure == "kl"){
       # column for nodes

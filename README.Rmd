@@ -35,14 +35,17 @@ devtools::install_github("donaldRwilliams/BGGM")
 ###  Exploratory Hypothesis Testing
 These methods allow for gaining evidence for both conditional dependence ($\rho \neq 0$) and independence ($\rho = 0$). Note that GGMs are often thought to characterize conditional independence structures, but evidence for the null hypothesis of no effect is not (typically) assessed. The following uses the Bayes factor to assess evidence for the null vs. alternative hypothesis.
 
-```{r example}
+```{r example, message=FALSE, warning=FALSE}
+library(BGGM)
 dat <- BGGM::bfi
 
 # fit the exploratory approach
 fit <- BGGM::bayes_explore(X = dat)
 
 # select the network (threshold of 3)
-select_graph <- BGGM::explore_select(fit, threshold = 3, type = "two_sided")
+select_graph <- BGGM::explore_select(fit, 
+                                     threshold = 3, 
+                                     type = "two_sided")
 qgraph::qgraph(select_graph$partial_mat)
 ```
 
@@ -50,14 +53,18 @@ Some of the methods rely on sampling, so we found it most convenient to select t
 
 ```{r}
 # select the network (threshold of 10)
-select_graph <- BGGM::explore_select(fit, threshold = 10, type = "two_sided")
+select_graph <- BGGM::explore_select(fit, 
+                                     threshold = 10, 
+                                     type = "two_sided")
 qgraph::qgraph(select_graph$partial_mat)
 ```
 
 It is likely that there is an expected direction. That is, maybe it does not make theoretical sense to have negative effects. At this time it is only possible to assume all relations are in the same direction, but this will be changed soon. One-sided hypothesis testing can be performed as follows:
 ```{r}
 # select the network (threshold of 10; one-sided)
-select_graph <- BGGM::explore_select(fit, threshold = 10, type = "greater_than")
+select_graph <- BGGM::explore_select(fit, 
+                                     threshold = 10, 
+                                     type = "greater_than")
 qgraph::qgraph(select_graph$partial_mat)
 ```
 
@@ -66,7 +73,9 @@ Note that all the effects are now positive (i.e., the color green).
 To date, the conditional independence structure of personality has not been directly assessed. Let us examine for which relations there is evidence for the null hypothesis.
 ```{r}
 # select the network (threshold of 3; two-sided)
-select_graph <- BGGM::explore_select(fit, threshold = 3, type = "two_sided")
+select_graph <- BGGM::explore_select(fit, 
+                                     threshold = 3, 
+                                     type = "two_sided")
 qgraph::qgraph(select_graph$BF_null_adj, layout = "circle")
 ```
 
@@ -75,7 +84,46 @@ We are currently thinking of ways to plot the conditional independence structure
 
 Finally, for those interested in the substantive aspect of these networks, please see the **psych** package for the variable descriptions.
 
+###  Bayesian R-squared
+There is a direct corresposnade between the precision matrix, that is the inverse of the covariance matrix, and multiple regression. The details are provided ([here](https://donaldrwilliams.github.io/post/2019-10-1-r-markdown/)). Rather than fit a sequence of regression models (i.e., neighborhood selection), as in the R packaage [GGMnonreg](https://github.com/donaldRwilliams/GGMnonreg), it is possible to only estimate the precison matrix and then transform the elements to their respective regression counterparts. This approach is described in Williams (2018). 
 
+With the regression coefficients in-hand, it is then possible to compute $R^2$ for each node in the network. Similar approaches are sometimes used in the social-behavioral sciences. Here the GGMs are often estimated with $\ell_1$-regularization and the reported $R^2$ is a point estimate. This is problematic, because it can be misleading to note that one node has higher $R^2$ than another when there is not a measure of uncertainty. The present methods overcome this limitation with computing Bayesian $R^2$ that is described ([here](http://www.stat.columbia.edu/~gelman/research/unpublished/bayes_R2.pdf))
+
+JAGS will need to be installed to estimate this model ([link](https://sourceforge.net/projects/mcmc-jags/files/))
+
+
+The following code fits the model, then selects the graph, and finally computes Bayesian $R^2$ conditional on the fitted model.
+
+```{r}
+# fit the model
+fit <- BGGM::bayes_estimate(dat)
+
+# select the graph
+select <- BGGM::estimate_select(fit, ci_width = .99)
+
+# Bayesian R2
+r2 <- BGGM::bayes_R2(fit = fit, ci_width = .99, 
+               selected = select$adjacency_mat, 
+               samples = 500)
+
+```
+
+
+```{r echo=FALSE, results='asis'}
+# knit table
+knitr::kable(r2$summary_error)
+```
+
+Note that the R package mgm also provides $R^2$, but only a point estimate. It would be possible to apply the boostrap, but then $R^2$ would not conditional on this fitted model but instead would capture variability in the selected model. 
+
+
+The package BGGM can also plot the results.
+```{r}
+plot_r2 <- BGGM::predictive_plot(r2, 
+                                 size = 2, 
+                                 color = "blue")
+plot_r2
+```
 
 
 
