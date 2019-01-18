@@ -107,10 +107,10 @@ r2 <- BGGM::bayes_R2(fit = fit, ci_width = .99,
 
 ```
 
-
+Here are the results for the first 5 nodes:
 ```{r echo=FALSE, results='asis'}
 # knit table
-knitr::kable(r2$summary_error)
+knitr::kable(r2$summary_error[1:5,])
 ```
 
 Note that the R package mgm can also compute $R^2$, but only provides point estimates. It would be possible to apply the bootstrap. However, then $R^2$ would not be conditional on the fitted model and posterior distributions but instead would capture sampling variability.
