@@ -88,7 +88,7 @@ Finally, for those interested in the substantive aspect of these networks, pleas
 
 ### Bayesian R-squared
 
-There is a direct corresposnade between the precision matrix, that is the inverse of the covariance matrix, and multiple regression. The details are provided ([here](https://donaldrwilliams.github.io/post/2019-10-1-r-markdown/)). Rather than fit a sequence of regression models (i.e., neighborhood selection), as in the R packaage [GGMnonreg](https://github.com/donaldRwilliams/GGMnonreg), it is possible to only estimate the precison matrix and then transform the elements to their respective regression counterparts. This approach is described in Williams (2018).
+There is a direct correspondence between the precision matrix, that is the inverse of the covariance matrix, and multiple regression. The details are provided ([here](https://donaldrwilliams.github.io/post/2019-10-1-r-markdown/)). Rather than fit a sequence of regression models (i.e., neighborhood selection), as in the R package [GGMnonreg](https://github.com/donaldRwilliams/GGMnonreg), it is possible to only estimate the precision matrix and then transform the elements to their respective regression counterparts. This approach is described in Williams (2018).
 
 With the regression coefficients in-hand, it is then possible to compute *R*<sup>2</sup> for each node in the network. Similar approaches are sometimes used in the social-behavioral sciences. Here the GGMs are often estimated with ℓ<sub>1</sub>-regularization and the reported *R*<sup>2</sup> is a point estimate. This is problematic, because it can be misleading to note that one node has higher *R*<sup>2</sup> than another when there is not a measure of uncertainty. The present methods overcome this limitation with computing Bayesian *R*<sup>2</sup> that is described ([here](http://www.stat.columbia.edu/~gelman/research/unpublished/bayes_R2.pdf))
 
@@ -111,33 +111,33 @@ r2 <- BGGM::bayes_R2(fit = fit, ci_width = .99,
 
 |     |  post\_mean|   post\_sd|       0.5%|      99.5%|
 |-----|-----------:|----------:|----------:|----------:|
-| A1  |   0.1762433|  0.0153795|  0.1343879|  0.2167329|
-| A2  |   0.3787972|  0.0154766|  0.3384944|  0.4218465|
-| A3  |   0.4243752|  0.0146088|  0.3837946|  0.4602597|
-| A4  |   0.2930627|  0.0186739|  0.2403309|  0.3371595|
-| A5  |   0.3723416|  0.0172815|  0.3277725|  0.4110295|
-| C1  |   0.2674264|  0.0168821|  0.2237354|  0.3075276|
-| C2  |   0.3626886|  0.0141462|  0.3241912|  0.3961935|
-| C3  |   0.2533925|  0.0163347|  0.2139193|  0.2940771|
-| C4  |   0.3875414|  0.0151338|  0.3495201|  0.4262289|
-| C5  |   0.3619965|  0.0170042|  0.3121257|  0.4014649|
-| E1  |   0.3420622|  0.0153976|  0.3031188|  0.3802848|
-| E2  |   0.4112181|  0.0163961|  0.3691747|  0.4577512|
-| E3  |   0.4028405|  0.0150143|  0.3636495|  0.4405028|
-| E4  |   0.4439218|  0.0151850|  0.4115520|  0.4843417|
-| E5  |   0.3250965|  0.0189092|  0.2803104|  0.3742529|
-| N1  |   0.5956285|  0.0087006|  0.5679209|  0.6156081|
-| N2  |   0.5325689|  0.0125474|  0.5013309|  0.5611329|
-| N3  |   0.4709537|  0.0131091|  0.4371265|  0.4999997|
-| N4  |   0.4055708|  0.0176145|  0.3576690|  0.4531165|
-| N5  |   0.3076864|  0.0177331|  0.2571552|  0.3533014|
-| O1  |   0.2454228|  0.0157277|  0.2112855|  0.2815676|
-| O2  |   0.1969441|  0.0154500|  0.1625608|  0.2358583|
-| O3  |   0.3027144|  0.0149969|  0.2647663|  0.3398599|
-| O4  |   0.1615788|  0.0148849|  0.1254582|  0.2015237|
-| O5  |   0.2168135|  0.0141829|  0.1823249|  0.2552581|
+| A1  |   0.1843384|  0.0170868|  0.1407121|  0.2268644|
+| A2  |   0.3793222|  0.0154584|  0.3401976|  0.4158084|
+| A3  |   0.4251098|  0.0140937|  0.3892133|  0.4593636|
+| A4  |   0.2939574|  0.0180705|  0.2474599|  0.3368746|
+| A5  |   0.3733821|  0.0168506|  0.3276465|  0.4175422|
+| C1  |   0.2808090|  0.0165221|  0.2372187|  0.3220607|
+| C2  |   0.3624453|  0.0138960|  0.3243861|  0.3937191|
+| C3  |   0.2531259|  0.0154444|  0.2131810|  0.2914723|
+| C4  |   0.3920481|  0.0147570|  0.3552214|  0.4243922|
+| C5  |   0.3611309|  0.0185880|  0.3146360|  0.4033821|
+| E1  |   0.3418326|  0.0153472|  0.3054234|  0.3766458|
+| E2  |   0.4112106|  0.0180507|  0.3629777|  0.4543671|
+| E3  |   0.4124500|  0.0149382|  0.3727128|  0.4452719|
+| E4  |   0.4441843|  0.0159870|  0.3997374|  0.4816921|
+| E5  |   0.3237211|  0.0193466|  0.2759184|  0.3736665|
+| N1  |   0.5950395|  0.0085594|  0.5717469|  0.6165439|
+| N2  |   0.5332315|  0.0134098|  0.5008989|  0.5649439|
+| N3  |   0.4713478|  0.0115029|  0.4415002|  0.4987279|
+| N4  |   0.4046368|  0.0184112|  0.3605165|  0.4511908|
+| N5  |   0.3091847|  0.0183291|  0.2555911|  0.3519177|
+| O1  |   0.2450947|  0.0160598|  0.2068505|  0.2847126|
+| O2  |   0.1967598|  0.0146717|  0.1606702|  0.2344459|
+| O3  |   0.3159447|  0.0146435|  0.2800873|  0.3493020|
+| O4  |   0.1619399|  0.0150331|  0.1174297|  0.2018222|
+| O5  |   0.2167016|  0.0141681|  0.1822034|  0.2524083|
 
-Note that the R package mgm also provides *R*<sup>2</sup>, but only a point estimate. It would be possible to apply the boostrap, but then *R*<sup>2</sup> would not conditional on this fitted model but instead would capture variability in the selected model.
+Note that the R package mgm also provides *R*<sup>2</sup>, but only provides point estimate. It would be possible to apply the bootstrap. However, then *R*<sup>2</sup> would not be conditional on this fitted model and posterior distributions but instead would capture sampling variability.
 
 The package BGGM can also plot the results.
 

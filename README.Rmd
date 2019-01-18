@@ -85,7 +85,7 @@ We are currently thinking of ways to plot the conditional independence structure
 Finally, for those interested in the substantive aspect of these networks, please see the **psych** package for the variable descriptions.
 
 ###  Bayesian R-squared
-There is a direct corresposnade between the precision matrix, that is the inverse of the covariance matrix, and multiple regression. The details are provided ([here](https://donaldrwilliams.github.io/post/2019-10-1-r-markdown/)). Rather than fit a sequence of regression models (i.e., neighborhood selection), as in the R packaage [GGMnonreg](https://github.com/donaldRwilliams/GGMnonreg), it is possible to only estimate the precison matrix and then transform the elements to their respective regression counterparts. This approach is described in Williams (2018). 
+There is a direct correspondence between the precision matrix, that is the inverse of the covariance matrix, and multiple regression. The details are provided ([here](https://donaldrwilliams.github.io/post/2019-10-1-r-markdown/)). Rather than fit a sequence of regression models (i.e., neighborhood selection), as in the R package [GGMnonreg](https://github.com/donaldRwilliams/GGMnonreg), it is possible to only estimate the precision matrix and then transform the elements to their respective regression counterparts. This approach is described in Williams (2018). 
 
 With the regression coefficients in-hand, it is then possible to compute $R^2$ for each node in the network. Similar approaches are sometimes used in the social-behavioral sciences. Here the GGMs are often estimated with $\ell_1$-regularization and the reported $R^2$ is a point estimate. This is problematic, because it can be misleading to note that one node has higher $R^2$ than another when there is not a measure of uncertainty. The present methods overcome this limitation with computing Bayesian $R^2$ that is described ([here](http://www.stat.columbia.edu/~gelman/research/unpublished/bayes_R2.pdf))
 
@@ -114,7 +114,7 @@ r2 <- BGGM::bayes_R2(fit = fit, ci_width = .99,
 knitr::kable(r2$summary_error)
 ```
 
-Note that the R package mgm also provides $R^2$, but only a point estimate. It would be possible to apply the boostrap, but then $R^2$ would not conditional on this fitted model but instead would capture variability in the selected model. 
+Note that the R package mgm also provides $R^2$, but only provides point estimate. It would be possible to apply the bootstrap. However, then $R^2$ would not be conditional on this fitted model and posterior distributions but instead would capture sampling variability.
 
 
 The package BGGM can also plot the results.
