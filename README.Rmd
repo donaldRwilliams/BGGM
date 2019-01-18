@@ -114,7 +114,7 @@ r2 <- BGGM::bayes_R2(fit = fit, ci_width = .99,
 knitr::kable(r2$summary_error)
 ```
 
-Note that the R package mgm also provides $R^2$, but only provides point estimate. It would be possible to apply the bootstrap. However, then $R^2$ would not be conditional on this fitted model and posterior distributions but instead would capture sampling variability.
+Note that the R package mgm can also compute $R^2$, but only provides point estimate. It would be possible to apply the bootstrap. However, then $R^2$ would not be conditional on this fitted model and posterior distributions but instead would capture sampling variability.
 
 
 The package BGGM can also plot the results.
