@@ -42,7 +42,7 @@ select_graph <- BGGM::explore_select(fit,
 qgraph::qgraph(select_graph$partial_mat)
 ```
 
-![](man/figures/README-example-1.png)
+<img src="man/figures/README-example-1.png" width="60%" style="display: block; margin: auto;" />
 
 Some of the methods rely on sampling, so we found it most convenient to select the model after fitting-thus changing the threshold does not require refitting the model. This particular method does not require sampling from the prior or posterior distributions, but does rely on assuming normality. In the paper, Williams and Mulder (2019), it was shown these approximations performed well: the Bayes factor was consistent for model selection and invariant to the scale of the data. Sampling is possible for those not happy-and have some patience-with the normal approximation.
 
@@ -54,7 +54,7 @@ select_graph <- BGGM::explore_select(fit,
 qgraph::qgraph(select_graph$partial_mat)
 ```
 
-![](man/figures/README-unnamed-chunk-2-1.png)
+<img src="man/figures/README-unnamed-chunk-2-1.png" width="60%" style="display: block; margin: auto;" />
 
 It is likely that there is an expected direction. That is, maybe it does not make theoretical sense to have negative effects. At this time it is only possible to assume all relations are in the same direction, but this will be changed soon. One-sided hypothesis testing can be performed as follows:
 
@@ -66,7 +66,7 @@ select_graph <- BGGM::explore_select(fit,
 qgraph::qgraph(select_graph$partial_mat)
 ```
 
-![](man/figures/README-unnamed-chunk-3-1.png)
+<img src="man/figures/README-unnamed-chunk-3-1.png" width="60%" style="display: block; margin: auto;" />
 
 Note that all the effects are now positive (i.e., the color green).
 
@@ -80,7 +80,7 @@ select_graph <- BGGM::explore_select(fit,
 qgraph::qgraph(select_graph$BF_null_adj, layout = "circle")
 ```
 
-![](man/figures/README-unnamed-chunk-4-1.png)
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="60%" style="display: block; margin: auto;" />
 
 We are currently thinking of ways to plot the conditional independence structure (open to suggestions), but for now are using only the adjacency matrix.
 
@@ -113,11 +113,11 @@ Here are the results for the first 5 nodes:
 
 |     |  post\_mean|   post\_sd|       0.5%|      99.5%|
 |-----|-----------:|----------:|----------:|----------:|
-| A1  |   0.1855059|  0.0157695|  0.1486448|  0.2240205|
-| A2  |   0.3784810|  0.0153791|  0.3400013|  0.4183555|
-| A3  |   0.4251080|  0.0152452|  0.3859776|  0.4628360|
-| A4  |   0.2926764|  0.0182539|  0.2492619|  0.3406679|
-| A5  |   0.3727553|  0.0169268|  0.3313713|  0.4140967|
+| A1  |   0.1763431|  0.0156027|  0.1372135|  0.2155447|
+| A2  |   0.3904883|  0.0162905|  0.3472217|  0.4288337|
+| A3  |   0.4238384|  0.0145248|  0.3819263|  0.4559821|
+| A4  |   0.2955242|  0.0180556|  0.2495075|  0.3434673|
+| A5  |   0.3753671|  0.0168617|  0.3319761|  0.4156472|
 
 Note that the R package mgm can also compute *R*<sup>2</sup>, but only provides point estimates. It would be possible to apply the bootstrap. However, then *R*<sup>2</sup> would not be conditional on the fitted model and posterior distributions but instead would capture sampling variability.
 
@@ -130,4 +130,4 @@ plot_r2 <- BGGM::predictive_plot(r2,
 plot_r2
 ```
 
-![](man/figures/README-unnamed-chunk-7-1.png)
+<img src="man/figures/README-unnamed-chunk-7-1.png" width="60%" style="display: block; margin: auto;" />
