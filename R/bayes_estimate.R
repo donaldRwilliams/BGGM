@@ -78,8 +78,5 @@ bayes_estimate <- function(x, samples = 5000){
                          iter = samples)
 
 class(returned_object) <- "bayes_estimate"
-
 returned_object
-
-
 }

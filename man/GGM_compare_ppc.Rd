@@ -2,13 +2,17 @@
 % Please edit documentation in R/GGM_compare_ppc.R
 \name{GGM_compare_ppc}
 \alias{GGM_compare_ppc}
-\title{Title}
+\title{GGM comparison based on the predictive distribution}
 \usage{
 GGM_compare_ppc(g1, g2, samples)
 }
 \arguments{
-\item{samples}{}
+\item{g1}{data from group 1 (n $\times$ p)}
+
+\item{g2}{data from group 1 (n $\times$ p)}
+
+\item{samples}{numer of posterior and predictive samples}
 }
 \description{
-Title
+GGM comparison based on the predictive distribution
 }
