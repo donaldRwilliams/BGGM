@@ -74,7 +74,7 @@ bayes_estimate <- function(x, samples){
                          inv_mat = inv_mat,
                          posterior_samples = as.data.frame(df_samps),
                          p = ncol(x),
-                         dat = dat,
+                         dat = X,
                          iter = samples)
 
 class(returned_object) <- "bayes_estimate"
