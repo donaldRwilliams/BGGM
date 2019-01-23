@@ -21,6 +21,8 @@ The error bars correspond to what was specificed in the function \code{bayes_R2}
 }
 \examples{
 
+X <- BGGM::ptsd
+
 # X is the data matrix of dimensions n by p
 fit <- bayes_estimate(X)
 

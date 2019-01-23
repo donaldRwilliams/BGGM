@@ -4,18 +4,18 @@
 \alias{bayes_estimate}
 \title{bayes_estimate}
 \usage{
-bayes_estimate(x, chains = 2, iter = 1000, burnin = 100)
+bayes_estimate(x, samples = 5000)
 }
 \arguments{
 \item{x}{data matrix}
+
+\item{df}{degrees of freedom for the Wishart prior}
 
 \item{chains}{number of chains}
 
 \item{iter}{number of posterior samples for each chain}
 
 \item{burnin}{discarded samples during warmup}
-
-\item{df}{degrees of freedom for the Wishart prior}
 }
 \value{
 An object of class \code{bayes_estimate} that includes posterior samples, partial correlation matrix, etc. Note

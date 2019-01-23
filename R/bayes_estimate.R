@@ -20,7 +20,7 @@
 #' fit <- bayes_estimate(X)
 
 
-bayes_estimate <- function(x, samples){
+bayes_estimate <- function(x, samples = 5000){
 
   # remove the NAs
   X <- na.omit(as.matrix(x))

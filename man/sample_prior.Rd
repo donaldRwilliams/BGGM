@@ -9,7 +9,11 @@ sample_prior(distribution, p = NULL, delta = NULL, samples = 500)
 \arguments{
 \item{distribution}{"wishart" or "matrix-f"}
 
-\item{samples}{}
+\item{p}{the number of variables in the model}
+
+\item{delta}{hyperparameter for matrix-f distribution}
+
+\item{samples}{number of prior samples}
 }
 \description{
 Sample from prior distributions

@@ -155,6 +155,68 @@ kl_func <- function(sigma_1, sigma_2){
 }
 
 
+ppc_helper <- function(x, inv_g1, inv_cov, n, p){
+
+  inv_mat <- matrix(0, p , p)
+  inv_mat[,] <- as.numeric(inv_cov[x,])
+
+
+  y_rep <- mvnfast::rmvn(n, mu = rep(0, p),sigma =  solve(inv_mat))
+
+  S_rep <- t(y_rep) %*% y_rep
+
+  theta_rep <- (n - 1) * solve(S_rep)
+
+  KLD <- KL(Theta = inv_g1, hatTheta = theta_rep)
+
+  JSD <- 0.5 * KL(Theta = inv_g1, hatTheta = theta_rep) + 0.5 * KL(hatTheta = theta_rep, Theta = inv_g1)
+
+  QL <-  QL(Theta = inv_g1, hatTheta = theta_rep)
+
+  FL <- sum((inv_g1 - theta_rep)^2)
+
+  return <- list(KLD = KLD, JSD = JSD, QL = QL, FL = FL)
+}
+
+
+
+
+KL = function(Theta,hatTheta){
+
+  # Kuismin, M., & Sillanpää, M. J. (2016). Use of Wishart prior and simple extensions for
+  # sparse precision matrix estimation. PloS one, 11(2), e0148171.
+
+
+  p = ncol(Theta)
+
+  invTheta = solve(Theta,diag(1,p))
+
+  kl  = 0.5 * (sum(diag(invTheta%*%hatTheta)) - log(det(invTheta%*%hatTheta)) - p)
+
+  return(kl)
+
+}
+
+QL = function(Theta,hatTheta){
+
+
+  # Kuismin, M., & Sillanpää, M. J. (2016). Use of Wishart prior and simple extensions for
+  # sparse precision matrix estimation. PloS one, 11(2), e0148171.
+
+  p = ncol(Theta)
+  I = diag(1,p)
+
+  invTheta = solve(Theta,I)
+
+  osa = sum(diag(invTheta%*%hatTheta - I))
+  tulos = osa^2
+
+  return(tulos)
+
+}
+
+
+
 
 approx_sd <- function(r, n, k){
   sqrt((1-r^2)/(n  - k - 2))

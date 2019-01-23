@@ -4,18 +4,10 @@
 \alias{bayes_explore}
 \title{bayes_explore}
 \usage{
-bayes_explore(X, exhaustive = FALSE, adjustment = NULL, sample = NULL,
-  prior = NULL)
+bayes_explore(X, exhaustive = FALSE, adjustment = NULL,
+  sample = NULL, prior = NULL)
 }
 \arguments{
-\item{X}{}
-
-\item{exhaustive}{}
-
-\item{adjustment}{}
-
-\item{sample}{}
-
 \item{prior}{}
 }
 \description{
