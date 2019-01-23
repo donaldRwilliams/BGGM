@@ -752,6 +752,16 @@ numbers2words <- function(x){
 
 
 
+samps_inv_helper <- function(x, p){
 
+  inv <- paste("cov_inv", paste(paste("[", paste( 1:p, x, sep = ","), sep = ""), "]", sep = ""), sep = "")
+  inv
+}
+
+samps_pcor_helper <- function(x, p){
+
+  pcors <- paste("pcors", paste(paste("[", paste( 1:p, x, sep = ","), sep = ""), "]", sep = ""), sep = "")
+  pcors
+}
 
 
