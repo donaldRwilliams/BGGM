@@ -4,14 +4,15 @@
 \alias{GGM_compare_ppc}
 \title{GGM comparison based on the predictive distribution}
 \usage{
-GGM_compare_ppc(g1, g2, samples)
+GGM_compare_ppc(Y_g1, Y_g2, Y_g3 = NULL, Y_g4 = NULL, contrast, groups,
+  samples)
 }
 \arguments{
+\item{samples}{numer of posterior and predictive samples}
+
 \item{g1}{data from group 1 (n $\times$ p)}
 
 \item{g2}{data from group 1 (n $\times$ p)}
-
-\item{samples}{numer of posterior and predictive samples}
 }
 \description{
 GGM comparison based on the predictive distribution

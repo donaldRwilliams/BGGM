@@ -173,7 +173,7 @@ ppc_helper <- function(x, inv_g1, inv_cov, n, p){
 
   QL <-  QL(Theta = inv_g1, hatTheta = theta_rep)
 
-  FL <- sum((inv_g1 - theta_rep)^2)
+  FL <- sum((cov2cor(inv_g1) *-1 - cov2cor((theta_rep) * -1)^2))
 
   return <- list(KLD = KLD, JSD = JSD, QL = QL, FL = FL)
 }
@@ -214,6 +214,39 @@ QL = function(Theta,hatTheta){
   return(tulos)
 
 }
+
+
+unbiased_cov <- function(x){
+  x <- scale(x)
+  n <- nrow(x) - 1
+  mle_cov <- n^-1 * t(x) %*% x
+  solve(mle_cov)
+}
+
+
+
+Mo_risk_help <- function(x, post, n1, n2, p){
+  inv_mat <- post[,,x]
+  Y_rep1 <- mvnfast::rmvn(n = n1,  mu = rep(0, p), sigma = solve(inv_mat))
+  Y_rep2 <-  mvnfast::rmvn(n = n2, mu = rep(0, p), sigma = solve(inv_mat))
+
+  jd <- 0.5 * BGGM::KL(unbiased_cov(Y_rep1), unbiased_cov(Y_rep2)) +
+        0.5 * BGGM::KL(unbiased_cov(Y_rep2), unbiased_cov(Y_rep1))
+
+  pc1 <- cov2cor(unbiased_cov(Y_rep1)) * -1
+  pc1 <- pc1[upper.tri(pc1)]
+
+  pc2 <- cov2cor(unbiased_cov(Y_rep2)) * -1
+  pc2 <- pc2[upper.tri(pc2)] * -1
+
+
+  sse <- sum((pc1 - pc2)^2)
+
+  data.frame(loss = c("jd", "sse"), score = c(jd, sse))
+
+}
+
+
 
 
 

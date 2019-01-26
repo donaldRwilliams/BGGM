@@ -1,104 +1,247 @@
 #' GGM comparison based on the predictive distribution
 #'
-#' @param g1 data from group 1 (n $\times$ p)
-#' @param g2 data from group 1 (n $\times$ p)
-#' @param samples numer of posterior and predictive samples
+#' @param Y_g1
+#' @param Y_g2
+#' @param Y_g3
+#' @param Y_g4
+#' @param contrast
+#' @param groups
 #'
+#' @param samples numer of posterior and predictive samples
 #' @return
 #' @export
 #'
 #' @examples
-GGM_compare_ppc <- function(g1, g2, samples){
-  # g1: network from group 1
-  # g2: network from group 2
-  # samples: number of samples
+GGM_compare_ppc <- function(Y_g1, Y_g2, Y_g3 = NULL, Y_g4 = NULL,
+                            contrast, groups, samples) {
 
-  # g1 sample size
-  n <- nrow(g1)
+  # number of columns
+  p <- ncol(Y_g1)
 
-  # g2 sample size
-  p <- ncol(g1)
-
-  # n2 sample size
-  n2 <- nrow(g2)
-
-  # g1 posterior distribution
-  fit_g1 <- BGGM::bayes_estimate(g1, samples = samples)
-
-  # g1 posterior mean
-  inv_g1 <- fit_g1$inv_mat
-
-  # g2 scatter matrix
-  S_g2 <- t(g2) %*% g2
-
-  # g2 precision martrix
-  inv_g2 <- (n2 - 1) * solve(S_g2)
-
-  # get names for matching
-  col_names <-  colnames(fit_g1$posterior_samples)
-
-  # posterior sample for precision matrix
-  inv_cov <- fit_g1$posterior_samples[,grep(pattern = "cov_inv", x = col_names)]
-
-  # compute predictive risk
-  loss_fun <- lapply(1:samples, function(x) ppc_helper(x, inv_g1 = inv_g1, inv_cov, n =  n2, p))
-
-  # retrieve predictive distributions
-  # KL divergence
-  KLD_ppc <- as.numeric(lapply(1:samples,function(x)  loss_fun[[x]]$KLD))
-
-  # Jensen Shannon Divergence
-  JSD_ppc <- as.numeric(lapply(1:samples,function(x)  loss_fun[[x]]$JSD))
-
-  # Quadratic loss
-  QL_ppc <- as.numeric(lapply(1:samples,function(x)  loss_fun[[x]]$QL))
-
-  # frobenius loss
-  FL_ppc <- as.numeric(lapply(1:samples,function(x)  loss_fun[[x]]$FL))
-
-  # compute g1 vs g2 risk
-  # KL divergence
-  KLD_groups <- KL(Theta = inv_g1, hatTheta = inv_g2)
-
-  # Jensen Shannon Divergence
-  JSD_groups <- 0.5 *  KL(Theta = inv_g1, hatTheta = inv_g2) + 0.5 * KL(Theta = inv_g2, hatTheta = inv_g1)
-
-  # Quadratic loss
-  QL_groups <- QL(Theta = inv_g1, hatTheta = inv_g2)
-
-  # frobenius loss
-  FL_groups <- sum((inv_g1 - inv_g2)^2)
+  if(groups == 2){
+    Y_g1 <- as.matrix(Y_g1)
+    Y_g2 <- as.matrix(Y_g2)
 
 
-  # posterior predictive p-values
-  # KL divergence
-  KLD_pvalue <-  mean(KLD_ppc > KLD_groups)
+    n1 <- nrow(Y_g1)
+    n2 <- nrow(Y_g2)
 
-  # Jensen Shannon Divergence
-  JSD_pvalue <-  mean(JSD_ppc > JSD_groups)
+    Y_G <- scale(rbind(Y_g1, Y_g2), scale = F)
+    S_G <- solve(t(Y_G) %*% Y_G)
 
-  # Quadratic loss
-  QL_pvalue  <-  mean(QL_ppc > QL_groups)
+    post <- rWishart(samples, n1 + n2 - 1, S_G)
 
-  # Quadratic loss
-  FL_pvalue   <- mean(FL_ppc > FL_groups)
 
-returned <- list(p_values = data.frame(loss = c("KL", "JSD", "QL","FL"),
-                             p_value = c(KLD_pvalue,
-                                         JSD_pvalue,
-                                         QL_pvalue,
-                                         FL_pvalue)),
+    if(contrast == "Y_g1_vs_Y_g2"){
 
-                 score = data.frame(loss = c("KL", "JSD", "QL","FL"),
-                                    score = c(KLD_groups,
-                                              JSD_groups,
-                                              QL_groups,
-                                              FL_groups)),
+      Mo_risk <-  lapply(1:samples, function(x) BGGM:::Mo_risk_help(x, post, n1, n2, p))
 
-                 predictive_dists = list(KLD_ppc = KLD_ppc,
-                                         JSD_ppc = JSD_ppc,
-                                         QL_ppc  = QL_ppc,
-                                         FL_ppc = FL_ppc))
+      obs_jd <- 0.5 * KL(unbiased_cov(Y_g1), unbiased_cov(Y_g2)) + 0.5 * KL(unbiased_cov(Y_g2), unbiased_cov(Y_g1))
+
+      pc1 <- cov2cor(unbiased_cov(Y_rep2)) * -1
+      pc1 <- pc1[upper.tri(pc1)]
+
+      pc2 <- cov2cor(unbiased_cov(Y_rep1)) * -1
+      pc2 <- pc2[upper.tri(pc2)] * -1
+
+      obs_sse <- sum((pc1 - pc2)^2)
+
+    }
+
+  }
+
+  if(groups == 3){
+    Y_g1 <- as.matrix(Y_g1)
+    Y_g2 <- as.matrix(Y_g2)
+    Y_g3 <- as.matrix(Y_g3)
+
+    n1 <- nrow(Y_g1)
+    n2 <- nrow(Y_g2)
+    n3 <- nrow(Y_g3)
+
+    Y_G <- scale(rbind(Y_g1, Y_g2, Y_g3), scale = F)
+    S_G <- solve(t(Y_G) %*% Y_G)
+    post <- rWishart(samples, n1 + n2 + n3 - 1, S_G)
+
+
+    if(contrasts == "Y_g1_vs_Y_g2"){
+      Mo_risk <-  lapply(1:samples, function(x) BGGM:::Mo_risk_help(x, post, n1, n2, p))
+
+      obs_jd <- 0.5 * KL(unbiased_cov(Y_g1), unbiased_cov(Y_g2)) + 0.5 * KL(unbiased_cov(Y_g2), unbiased_cov(Y_g1))
+
+      pc1 <- cov2cor(unbiased_cov(Y_rep2)) * -1
+      pc1 <- pc1[upper.tri(pc1)]
+
+      pc2 <- cov2cor(unbiased_cov(Y_rep1)) * -1
+      pc2 <- pc2[upper.tri(pc2)] * -1
+
+      sse <- sum((pc1 - pc2)^2)
+
+    }
+
+    if(contrasts == "Y_g1_vs_Y_g3"){
+      Mo_risk <-  lapply(1:samples, function(x) BGGM:::Mo_risk_help(x, post, n1, n3, p))
+
+      obs_jd <- 0.5 * BGGM::KL(mle(Y_g1), mle(Y_g3)) +
+                0.5 * BGGM::KL(mle(Y_g3), mle(Y_g1))
+
+      pc1 <- cov2cor(unbiased_cov(Y_rep3)) * -1
+      pc1 <- pc1[upper.tri(pc1)]
+
+      pc2 <- cov2cor(unbiased_cov(Y_rep1)) * -1
+      pc2 <- pc2[upper.tri(pc2)] * -1
+
+      sse <- sum((pc1 - pc2)^2)
+
+
+    }
+
+   if(contrasts == "Y_g2_vs_Y_g3"){
+      Mo_risk <-  lapply(1:samples, function(x) BGGM:::Mo_risk_help(x, post, n2, n3, p))
+
+      obs_jd <- 0.5 *  KL(unbiased_cov(Y_g2), unbiased_cov(Y_g3)) + 0.5 * KL(unbiased_cov(Y_g3), unbiased_cov(Y_g2))
+
+      pc1 <- cov2cor(unbiased_cov(Y_rep3)) * -1
+      pc1 <- pc1[upper.tri(pc1)]
+
+      pc2 <- cov2cor(unbiased_cov(Y_rep2)) * -1
+      pc2 <- pc2[upper.tri(pc2)] * -1
+
+      sse <- sum((pc1 - pc2)^2)
+
+    }
+
+  }
+  if(groups == 4){
+    Y_g1 <- as.matrix(Y_g1)
+    Y_g2 <- as.matrix(Y_g2)
+    Y_g3 <- as.matrix(Y_g3)
+    Y_g4 <- as.matrix(Y_g4)
+
+    n1 <- nrow(Y_g1)
+    n2 <- nrow(Y_g2)
+    n3 <- nrow(Y_g3)
+    n4 <- nrow(Y_g4)
+
+    Y_G <- scale(rbind(Y_g1, Y_g2, Y_g3, Y_g4), scale = F)
+    S_G <- solve(t(Y_G) %*% Y_G)
+
+    post <- rWishart(samples, n1 + n2 + n3 + n4 - 1, S_G)
+
+    if(contrasts == "Y_g1_vs_Y_g2"){
+      Mo_risk <-  lapply(1:samples, function(x) BGGM:::Mo_risk_help(x, post, n1, n2, p))
+
+      obs_jd <- 0.5 * KL(unbiased_cov(Y_g1), unbiased_cov(Y_g2)) + 0.5 * KL(unbiased_cov(Y_g2), unbiased_cov(Y_g1))
+
+      pc1 <- cov2cor(unbiased_cov(Y_rep2)) * -1
+      pc1 <- pc1[upper.tri(pc1)]
+
+      pc2 <- cov2cor(unbiased_cov(Y_rep1)) * -1
+      pc2 <- pc2[upper.tri(pc2)] * -1
+
+      sse <- sum((pc1 - pc2)^2)
+
+
+    }
+
+    if(contrasts == "Y_g1_vs_Y_g3"){
+      Mo_risk <-  lapply(1:samples, function(x) BGGM:::Mo_risk_help(x, post, n1, n3, p))
+
+
+      obs_jd <- 0.5 * KL(unbiased_cov(Y_g1), unbiased_cov(Y_g3)) + 0.5 * KL(unbiased_cov(Y_g3), unbiased_cov(Y_g1))
+
+      pc1 <- cov2cor(unbiased_cov(Y_rep3)) * -1
+      pc1 <- pc1[upper.tri(pc1)]
+
+      pc2 <- cov2cor(unbiased_cov(Y_rep1)) * -1
+      pc2 <- pc2[upper.tri(pc2)] * -1
+
+      sse <- sum((pc1 - pc2)^2)
+
+
+
+    }
+
+    if(contrasts == "Y_g1_vs_Y_g4"){
+      Mo_risk <-  lapply(1:samples, function(x) BGGM:::Mo_risk_help(x, post, n1, n4, p))
+
+      obs_jd <- 0.5 * KL(unbiased_cov(Y_g1), unbiased_cov(Y_g4)) + 0.5 * KL(unbiased_cov(Y_g4), unbiased_cov(Y_g1))
+
+      pc1 <- cov2cor(unbiased_cov(Y_rep4)) * -1
+      pc1 <- pc1[upper.tri(pc1)]
+
+      pc2 <- cov2cor(unbiased_cov(Y_rep1)) * -1
+      pc2 <- pc2[upper.tri(pc2)] * -1
+
+      sse <- sum((pc1 - pc2)^2)
+
+
+    }
+
+    if(contrasts == "Y_g2_vs_Y_g3"){
+      Mo_risk <-  lapply(1:samples, function(x) BGGM:::Mo_risk_help(x, post, n2, n3, p))
+
+
+      obs_jd <- 0.5 * KL(unbiased_cov(Y_g2), unbiased_cov(Y_g3)) + 0.5 * KL(unbiased_cov(Y_g3), unbiased_cov(Y_g2))
+
+      pc1 <- cov2cor(unbiased_cov(Y_rep3)) * -1
+      pc1 <- pc1[upper.tri(pc1)]
+
+      pc2 <- cov2cor(unbiased_cov(Y_rep2)) * -1
+      pc2 <- pc2[upper.tri(pc2)] * -1
+
+      sse <- sum((pc1 - pc2)^2)
+
+
+    }
+
+    if(contrasts == "Y_g2_vs_Y_g4"){
+      Mo_risk <-  lapply(1:samples, function(x) BGGM:::Mo_risk_help(x, post, n2, n4, p))
+
+      obs_jd <- 0.5 * KL(unbiased_cov(Y_g2), unbiased_cov(Y_g4)) + 0.5 * KL(unbiased_cov(Y_g4), unbiased_cov(Y_g2))
+
+      pc1 <- cov2cor(unbiased_cov(Y_rep4)) * -1
+      pc1 <- pc1[upper.tri(pc1)]
+
+      pc2 <- cov2cor(unbiased_cov(Y_rep2)) * -1
+      pc2 <- pc2[upper.tri(pc2)] * -1
+
+      sse <- sum((pc1 - pc2)^2)
+
+    }
+
+    if(contrasts == "Y_g3_vs_Y_g4"){
+
+      Mo_risk <-  lapply(1:samples, function(x) Mo_risk_help(x, post, n3, n4, p))
+
+      obs_jd <- 0.5 * KL(unbiased_cov(Y_g3), unbiased_cov(Y_g4)) + 0.5 * KL(unbiased_cov(Y_g4), unbiased_cov(Y_g3))
+
+      pc1 <- cov2cor(unbiased_cov(Y_rep4)) * -1
+      pc1 <- pc1[upper.tri(pc1)]
+
+      pc2 <- cov2cor(unbiased_cov(Y_rep3)) * -1
+      pc2 <- pc2[upper.tri(pc2)] * -1
+
+      sse <- sum((pc1 - pc2)^2)
+    }
+
+
+  }
+
+  scores <- do.call(rbind.data.frame, Mo_risk)
+
+  jd_scores <- subset(scores, loss = "jd")
+  sse_scores <- subset(scores, loss = "sse")
+
+
+  p_value_jsd <- mean(jd_scores$score > obs_jd)
+  p_value_sse <- mean(jd_scores$score > obs_sse)
+
+  p_value_df <- data.frame(loss = c("jd", "sse"), p_value = c(p_value_jsd, p_value_sse))
+
+  returned <- list(p_value_df = p_value_df, scores = scores)
+  returned
+
 
 }
 
