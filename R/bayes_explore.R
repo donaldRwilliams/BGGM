@@ -18,7 +18,7 @@ bayes_explore <- function(X,
 
   # ensure input is a matrix
   X <- na.omit(as.matrix(X))
-
+  X <- scale(X)
   # dimensions of data
   n = dim(X)[1]
   p <- dim(X)[2]
