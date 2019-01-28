@@ -7,8 +7,19 @@
 explore_select(X, threshold = 3, type = NULL)
 }
 \arguments{
-\item{type}{}
+\item{threshold}{boundary for concluding there is an effect (or no effect)}
+
+\item{type}{two sided or one sided hypothesis testing}
 }
 \description{
 Title
+}
+\note{
+Note that the default setting were set for psychological data in particular, where
+the number of obervation far exceed the number of variables--i.e., low-dimensional \eqn{p < n}.
+Because the prior distribution is a function of the number of variables, it is recommoned to set
+adjustment in \code{bayes_explore} to 0.5 (which simulates a uniform prior distribution) when there are
+many variabeles (perhaps \eqn{p > 30}). For those
+doing simulation studies as \eqn{p \rightarrow n}, this will ensure competive performance with
+alternative methods (and possible setting \code{threshold} = 10).
 }

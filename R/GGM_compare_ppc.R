@@ -18,6 +18,8 @@ GGM_compare_ppc <- function(Y_g1, Y_g2, Y_g3 = NULL, Y_g4 = NULL,
   # number of columns
   p <- ncol(Y_g1)
 
+
+
   if(groups == 2){
     Y_g1 <- as.matrix(Y_g1)
     Y_g2 <- as.matrix(Y_g2)
@@ -38,10 +40,10 @@ GGM_compare_ppc <- function(Y_g1, Y_g2, Y_g3 = NULL, Y_g4 = NULL,
 
       obs_jd <- 0.5 * KL(unbiased_cov(Y_g1), unbiased_cov(Y_g2)) + 0.5 * KL(unbiased_cov(Y_g2), unbiased_cov(Y_g1))
 
-      pc1 <- cov2cor(unbiased_cov(Y_rep2)) * -1
+      pc1 <- cov2cor(unbiased_cov(Y_g1)) * -1
       pc1 <- pc1[upper.tri(pc1)]
 
-      pc2 <- cov2cor(unbiased_cov(Y_rep1)) * -1
+      pc2 <- cov2cor(unbiased_cov(Y_g2)) * -1
       pc2 <- pc2[upper.tri(pc2)] * -1
 
       obs_sse <- sum((pc1 - pc2)^2)
@@ -230,14 +232,14 @@ GGM_compare_ppc <- function(Y_g1, Y_g2, Y_g3 = NULL, Y_g4 = NULL,
 
   scores <- do.call(rbind.data.frame, Mo_risk)
 
-  jd_scores <- subset(scores, loss = "jd")
-  sse_scores <- subset(scores, loss = "sse")
+  jd_scores <- subset(scores, loss == "jd")
+  sse_scores <- subset(scores, loss == "sse")
 
 
-  p_value_jsd <- mean(jd_scores$score > obs_jd)
-  p_value_sse <- mean(jd_scores$score > obs_sse)
+  p_value_jd <- mean(jd_scores$score > obs_jd)
+  p_value_sse <- mean(sse_scores$score > obs_sse)
 
-  p_value_df <- data.frame(loss = c("jd", "sse"), p_value = c(p_value_jsd, p_value_sse))
+  p_value_df <- data.frame(loss = c("jd", "sse"), p_value = c(p_value_jd, p_value_sse))
 
   returned <- list(p_value_df = p_value_df, scores = scores)
   returned

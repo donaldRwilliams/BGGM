@@ -8,11 +8,9 @@ GGM_compare_ppc(Y_g1, Y_g2, Y_g3 = NULL, Y_g4 = NULL, contrast, groups,
   samples)
 }
 \arguments{
+\item{groups}{}
+
 \item{samples}{numer of posterior and predictive samples}
-
-\item{g1}{data from group 1 (n $\times$ p)}
-
-\item{g2}{data from group 1 (n $\times$ p)}
 }
 \description{
 GGM comparison based on the predictive distribution
