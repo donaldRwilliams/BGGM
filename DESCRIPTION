@@ -17,7 +17,7 @@ Description: This package is described in Williams and Mulder (2019) and William
     distribution for the variance explained. Measure of out-of-sample performance are also available. 
     The model is selected with directional Bayes factors.
 License: GPL-2
-Depends: mvnfast, foreach, doSNOW, extraDistr, ggplot2
+Depends: mvnfast, foreach, doSNOW, ggplot2, logspline, mvtnorm
 Suggests: qgraph
 Encoding: UTF-8
 LazyData: true
