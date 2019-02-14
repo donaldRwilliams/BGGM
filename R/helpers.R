@@ -178,6 +178,10 @@ ppc_helper <- function(x, inv_g1, inv_cov, n, p){
   return <- list(KLD = KLD, JSD = JSD, QL = QL, FL = FL)
 }
 
+contrast_helper <- function(x){
+  temp <- unlist(regmatches(x, gregexpr("[[:digit:]]+", x)))
+  paste("Y", temp, sep = "_g", collapse = "_vs_")
+}
 
 
 

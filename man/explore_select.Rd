@@ -21,5 +21,5 @@ Because the prior distribution is a function of the number of variables, it is r
 adjustment in \code{bayes_explore} to 0.5 (which simulates a uniform prior distribution) when there are
 many variabeles (perhaps \eqn{p > 30}). For those
 doing simulation studies as \eqn{p \rightarrow n}, this will ensure competive performance with
-alternative methods (and possible setting \code{threshold} = 10).
+alternative methods (and possibly setting \code{threshold} = 10).
 }
