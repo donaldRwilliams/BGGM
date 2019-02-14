@@ -230,19 +230,12 @@ Mo_risk_help <- function(x, post, n1, n2, p){
   Y_rep1 <- mvnfast::rmvn(n = n1,  mu = rep(0, p), sigma = cov2cor(solve(inv_mat)))
   Y_rep2 <-  mvnfast::rmvn(n = n2, mu = rep(0, p), sigma = cov2cor(solve(inv_mat)))
 
-  jd <- 0.5 * BGGM::KL(unbiased_cov(Y_rep1), unbiased_cov(Y_rep2)) +
+  jsd <- 0.5 * BGGM::KL(unbiased_cov(Y_rep1), unbiased_cov(Y_rep2)) +
         0.5 * BGGM::KL(unbiased_cov(Y_rep2), unbiased_cov(Y_rep1))
 
-  pc1 <- cov2cor(unbiased_cov(Y_rep1)) * -1
-  pc1 <- pc1[upper.tri(pc1)]
-
-  pc2 <- cov2cor(unbiased_cov(Y_rep2)) * -1
-  pc2 <- pc2[upper.tri(pc2)] * -1
 
 
-  sse <- sum((pc1 - pc2)^2)
-
-  data.frame(loss = c("jd", "sse"), score = c(jd, sse))
+ jsd
 
 }
 

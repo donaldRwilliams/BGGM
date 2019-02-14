@@ -75,9 +75,11 @@ GGM_compare_bf <- function(X1, X2, hyp, priorprob = 1, cores, delta, nu, n_sampl
 
     hyp_new <- stringr::str_remove_all(hyp, "_")
 
+    gsub("(\\.+|[[:punct:]])", " \\1 ", hyp)
 
     pcor_names <- BGGM:::pcor_name_helper(hyp_new)
 
+    gsub("[.][A-z]", ", [A-z]", hyp)
 
     pcor_names <- pcor_names[grep("[a-zA-Z]+", pcor_names)]
 
