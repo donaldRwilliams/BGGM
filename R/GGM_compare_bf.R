@@ -15,13 +15,9 @@
 #' @examples
 GGM_compare_bf <- function(X1, X2, hyp, priorprob = 1, cores, delta, nu, n_samples){
 
-  p <- ncol(X)
+  p <- ncol(X1)
   off_diag <- (p * (p-1)) / 2
 
-  if(is.null(colnames(X))){
-    stop("The variables must be named. These names cannot included numbers")
-
-  }
 
   samples_1 <- BGGM:::sampling(as.matrix(X1), nu = nu, delta = delta, n_samples = n_samples, cores)
   samples_2 <- BGGM:::sampling(as.matrix(X2), nu = nu, delta = delta, n_samples = n_samples, cores)
@@ -29,38 +25,22 @@ GGM_compare_bf <- function(X1, X2, hyp, priorprob = 1, cores, delta, nu, n_sampl
 
   if(hyp == "all"){
 
-    bf_diff_helper <- function(x, prior_density){
-      post_density <-   logspline::dlogspline(0, logspline::logspline(x))
-      BF_01 <- (post_density / prior_density)
-    }
-
-    post_1 <- do.call(rbind.data.frame, lapply(1:cores, function(x)    samples_1[[x]]$pcor_post[,1:off_diag]))
-    post_2 <- do.call(rbind.data.frame, lapply(1:cores, function(x)    samples_2[[x]]$pcor_post[,1:off_diag]))
 
 
-    prior_1 <- do.call(rbind.data.frame, lapply(1:cores, function(x)    samples_1[[x]]$pcor_prior[,1:off_diag]))
-    prior_2 <- do.call(rbind.data.frame, lapply(1:cores, function(x)    samples_2[[x]]$pcor_prior[,1:off_diag]))
+    post_1 <- do.call(rbind.data.frame, lapply(1:cores, function(x)    samples_1[[x]]$fisher_z_post[,1:off_diag]))
+    post_2 <- do.call(rbind.data.frame, lapply(1:cores, function(x)    samples_2[[x]]$fisher_z_post[,1:off_diag]))
+
+
+    prior_1 <- do.call(rbind.data.frame, lapply(1:cores, function(x)    samples_1[[x]]$fisher_z_prior[,1:off_diag]))
+    prior_2 <- do.call(rbind.data.frame, lapply(1:cores, function(x)    samples_2[[x]]$fisher_z_prior[,1:off_diag]))
 
 
     post_diff <- post_1 - post_2
     prior_diff <- prior_1[,1] - prior_2[,1]
 
-    prior_density <- logspline::dlogspline(0, logspline::logspline(prior))
+    post_dens <- apply(post_diff, 2, function(x){dnorm(0, mean(x), sd(x))})
 
-
-
-
-    cl <- parallel::makeCluster(cores)
-    doSNOW::registerDoSNOW(cl)
-
-    parallel::clusterExport(cl = cl, varlist =c("bf_diff_helper",
-                                                "prior_density",
-                                                "post_diff"))
-
-    parallel::stopCluster(cl)
-
-    bf <- parLapply(X = 1:off_diag, cl = cl, function(x)  bf_diff_helper(post_diff[1:10000,x], prior_density))
-
+    bf <-   post_dens  / dnorm(0, mean(prior_diff), sd(prior_diff))
 
 
     mat_temp <- BF_01 <- pcor_mean <- matrix(0, p, p)
