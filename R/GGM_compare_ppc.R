@@ -261,5 +261,6 @@ GGM_compare_ppc <- function(Y_g1,
                          jsd_scores = unlist(Mo_risk))
 
   } # end of loop
+  class(results) <- "GGM_compare_pcc"
   results
-}
+  }
