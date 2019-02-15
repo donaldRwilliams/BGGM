@@ -184,6 +184,14 @@ contrast_helper <- function(x){
 }
 
 
+axis_ticks_helper <- function(x){
+
+  paste(stringr::str_sub(x, start = 1, end = 3),
+        stringr::str_sub(x, start = 4, end = 5),
+        stringr::str_sub(x, start = 6, end = 8))
+}
+
+
 
 KL = function(Theta,hatTheta){
 

@@ -4,7 +4,7 @@
 \alias{GGM_compare_ppc_plot}
 \title{Title}
 \usage{
-GGM_compare_ppc_plot(x)
+GGM_compare_ppc_plot(X, alpha, bw, log_transform = NULL)
 }
 \arguments{
 \item{x}{}
