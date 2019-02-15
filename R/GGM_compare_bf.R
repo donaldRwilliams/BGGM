@@ -58,13 +58,15 @@ GGM_compare_bf <- function(X1, X2, hyp, priorprob = 1, cores, delta, nu, n_sampl
 
 
     BF_01[upper.tri(BF_01)] <- unlist(bf)
-
+    BF_10 = BGGM:::symmteric_mat(1 / BF_01)
+    diag(BF_10) <- 0
     returned <- list(BF_01 = BGGM:::symmteric_mat(BF_01),
-                     BF_10 = BGGM:::symmteric_mat(1 / BF_01),
+                     BF_10 = BF_10,
                      prob_01 = BGGM:::symmteric_mat(BF_01) / (1 + BGGM:::symmteric_mat(BF_01)),
                      prob_10 = 1 - BGGM:::symmteric_mat(BF_01) / (1 + BGGM:::symmteric_mat(BF_01)),
                      out = out, post_diff = post_diff,
-                     prior_diff = prior_diff)
+                     prior_diff = prior_diff,
+                     hyp = hyp)
 
 
 
@@ -397,6 +399,7 @@ GGM_compare_bf <- function(X1, X2, hyp, priorprob = 1, cores, delta, nu, n_sampl
                      BFu_CI = BFu_ci)
 
   }
+  class(returned) <- "GGM_compare_bf"
   returned
 }
 

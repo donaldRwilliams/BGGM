@@ -37,20 +37,31 @@ GGM_compare_ppc_plot <- function(X, alpha, bw, log_transform = NULL){
 
   if(is.null(log_transform)){
 
-    plt <- ggplot(dat_plt, aes(group = contrast_names, risk, y= contrast_names)) +
-      geom_density_ridges(aes(fill = contrast_names), alpha = alpha, show.legend = F,  bandwidth = bw) +
+    plt <- ggplot(dat_plt, aes(group = contrast_names,
+                               risk,
+                               y = contrast_names)) +
+      geom_density_ridges(aes(fill = contrast_names),
+                          alpha = alpha,
+                          show.legend = F,
+                          bandwidth = bw) +
 
-      geom_point(data = dat_point, aes(x = obs_jsd, group = contrast_names)) +
+      geom_point(data = dat_point, aes(x = obs_jsd,
+                                       group = contrast_names)) +
       ylab("Constrasts")
   }
 
   if(isTRUE(log_transform)){
 
+    plt <- ggplot(dat_plt, aes(group = contrast_names,
+                               log(risk),
+                               y = contrast_names)) +
+      geom_density_ridges(aes(fill = contrast_names),
+                          alpha = alpha,
+                          show.legend = F,
+                          bandwidth = bw) +
 
-    plt <- ggplot(dat_plt, aes(group = contrast_names, log(risk), y= contrast_names)) +
-      geom_density_ridges(aes(fill = contrast_names), alpha = alpha, show.legend = F,  bandwidth = bw) +
-
-      geom_point(data = dat_point, aes(x = log(obs_jsd), group = contrast_names)) +
+      geom_point(data = dat_point, aes(x = log(obs_jsd),
+                                       group = contrast_names)) +
       ylab("Constrasts")
 
 
