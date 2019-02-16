@@ -52,7 +52,7 @@ GGM_compare_bf_plot <- function(X, cutoff){
 
 
 
-  plt_alt <- ggplot(melt_10, aes(x = as.factor(X2),
+    plt_alt <- ggplot(melt_10, aes(x = as.factor(X2),
                                  y = as.factor(X1),
                                  fill = round(log(value)))) +
     geom_tile() +
