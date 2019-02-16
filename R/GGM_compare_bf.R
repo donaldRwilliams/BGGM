@@ -13,18 +13,57 @@
 #' @export
 #'
 #' @examples
-GGM_compare_bf <- function(X1, X2, hyp, priorprob = 1, cores, delta, nu, n_samples){
+GGM_compare_bf <- function(Y_g1,
+                           Y_g2,
+                           Y_g3 = NULL,
+                           Y_g4 = NULL,
+                           hyp,
+                           priorprob = 1,
+                           cores,
+                           delta,
+                           nu,
+                           n_samples){
 
-  p <- ncol(X1)
-  off_diag <- (p * (p-1)) / 2
+  # check group number
+  if(is.null(Y_g3) && is.null(Y_g4)){
+    # number of groups
+    groups <- 2
+
+  } else if(is.null(Y_g4) & !is.null(Y_g1) & !is.null(Y_g2)){
+    # number of groups
+    groups <- 3
+
+  } else if(!is.null(Y_g4) & !is.null(Y_g3) & !is.null(Y_g2) & !is.null(Y_g1)){
+    # number of groups
+    groups <- 4
+
+  } else {
+    # invalid input (nothing recognized)
+    stop("invalid input")
+
+  }
+
+  p <- ncol(Y_g1)
+
+  off_diag <-  0.5 * (p * (p - 1))
 
 
-  samples_1 <- BGGM:::sampling(as.matrix(X1), nu = nu, delta = delta, n_samples = n_samples, cores)
-  samples_2 <- BGGM:::sampling(as.matrix(X2), nu = nu, delta = delta, n_samples = n_samples, cores)
+  # additions
+  # Y_g1 <- MASS::mvrnorm(n = 300, rep(0, 16), Sigma = BGGM::ptsd_cor1, empirical = T)
+  # Y_g2 <- MASS::mvrnorm(n = 950, rep(0, 16), Sigma = BGGM::ptsd_cor2, empirical = T)
+  # Y_g3 <- MASS::mvrnorm(n = 950, rep(0, 16), Sigma = BGGM::ptsd_cor3, empirical = T)
+  # nu = 20; delta = 20; n_samples = 5000; cores = 4
+  #
+
+
+  samples_1 <- BGGM:::sampling(as.matrix(Y_g1), nu = nu, delta = delta, n_samples = n_samples, cores)
+  samples_2 <- BGGM:::sampling(as.matrix(Y_g2), nu = nu, delta = delta, n_samples = n_samples, cores)
 
 
   if(hyp == "all"){
 
+
+    if(groups == 2) {
 
 
     post_1 <- do.call(rbind.data.frame, lapply(1:cores, function(x)    samples_1[[x]]$fisher_z_post[,1:off_diag]))
@@ -47,37 +86,131 @@ GGM_compare_bf <- function(X1, X2, hyp, priorprob = 1, cores, delta, nu, n_sampl
 
     mat_temp[] <- unlist(lapply(1:p, function(x) paste(1:p, x, sep = "_")))
 
+    } # end groups == 2
 
-    out <- cbind.data.frame(pcor_mean = colMeans(post_diff),
-                            pcor_sd = apply(post_diff, 2, sd),
-                            BF_01 = unlist(bf),
-                            BF_10 = 1/ unlist(bf))
+    if(groups == 3){
 
+    samples_3 <- BGGM:::sampling(as.matrix(Y_g3), nu = nu, delta = delta, n_samples = n_samples, cores)
 
-    out <- cbind.data.frame(pcor_names = mat_temp[upper.tri(mat_temp)], round(out, 3))
+    post_1 <- do.call(rbind.data.frame, lapply(1:cores, function(x)    samples_1[[x]]$fisher_z_post[,1:off_diag]))
+    post_2 <- do.call(rbind.data.frame, lapply(1:cores, function(x)    samples_2[[x]]$fisher_z_post[,1:off_diag]))
+    post_3 <- do.call(rbind.data.frame, lapply(1:cores, function(x)    samples_3[[x]]$fisher_z_post[,1:off_diag]))
 
-
-    BF_01[upper.tri(BF_01)] <- unlist(bf)
-    BF_10 = BGGM:::symmteric_mat(1 / BF_01)
-    diag(BF_10) <- 0
-    returned <- list(BF_01 = BGGM:::symmteric_mat(BF_01),
-                     BF_10 = BF_10,
-                     prob_01 = BGGM:::symmteric_mat(BF_01) / (1 + BGGM:::symmteric_mat(BF_01)),
-                     prob_10 = 1 - BGGM:::symmteric_mat(BF_01) / (1 + BGGM:::symmteric_mat(BF_01)),
-                     out = out, post_diff = post_diff,
-                     prior_diff = prior_diff,
-                     hyp = hyp)
+    prior_1 <- do.call(rbind.data.frame, lapply(1:cores, function(x)    samples_1[[x]]$fisher_z_prior[,1:off_diag]))
+    prior_2 <- do.call(rbind.data.frame, lapply(1:cores, function(x)    samples_2[[x]]$fisher_z_prior[,1:off_diag]))
+    prior_3 <- do.call(rbind.data.frame, lapply(1:cores, function(x)    samples_3[[x]]$fisher_z_prior[,1:off_diag]))
 
 
+    post_diff_1_vs_2 <- NA
+    post_diff_1_vs_3 <- NA
+    post_diff_2_vs_3 <- NA
+
+    sd_diff_1_vs_2 <- NA
+    sd_diff_1_vs_3 <- NA
+    sd_diff_2_vs_3 <- NA
+
+    R <- matrix(c(1,-1,0,
+                  0,1,-1),
+                nrow = 2,
+                byrow = T)
 
 
+     for(i in 1:off_diag){
+
+      post_diff_1_vs_2[i] <- mean(post_1[,i] - post_2[,i])
+      post_diff_1_vs_3[i] <- mean(post_1[,i] - post_3[,i])
+      post_diff_2_vs_3[i] <- mean(post_2[,i] - post_3[,i])
+
+
+      sd_diff_1_vs_2[i] <- sd(post_1[,i] - post_2[,i])
+      sd_diff_1_vs_3[i] <- sd(post_1[,i] - post_3[,i])
+      sd_diff_2_vs_3[i] <- sd(post_2[,i] - post_3[,i])
+
+
+
+      mu_post <- c(mean(post_1[,i]), mean(post_2[,i]), mean(post_3[,i]) )
+      cov_post <- cov(cbind(post_1[,i], post_2[,i], post_3[,i]))
+
+
+      mu_prior <- c(mean(prior_1[,i]), mean(prior_2[,i]), mean(prior_3[,i]) )
+      cov_prior <- cov(cbind(prior_1[,i], prior_2[,i], prior_3[,i]))
+
+
+      mu1 <- R %*% mu_post
+      s1 <- R %*% cov_post %*% t(R)
+
+
+      mu0 <- rep(0, 2)
+      s0 <- R %*% cov_prior %*% t(R)
+
+      #Hypothesis test
+      log_BF <- mvnfast::dmvn(X = rep(0,2), mu = mu1, sigma  = s1, log = TRUE) -
+                mvnfast::dmvn(X = rep(0,2), mu = mu0, sigma = s0, log = TRUE)
+
+       BF[i] <- exp(log_BF)
   }
 
-  if(hyp != "all"){
+
+    mat_temp <- BF_01 <- BF_10 <- matrix(0, p, p)
+    mat_temp[] <- unlist(lapply(1:p, function(x) paste(1:p, x, sep = "_")))
+
+    contrast_name <- rep(c("1_vs_2", "1_vs_3", "2_vs_3"), each = off_diag)
+
+    edge_name <- mat_temp[upper.tri(mat_temp)]
+    mean_diffs <- c(post_diff_1_vs_2, post_diff_1_vs_3, post_diff_2_vs_3)
+    sd_diffs <- c(sd_diff_1_vs_2, sd_diff_1_vs_3, sd_diff_2_vs_3)
+
+    dat_1 <- cbind.data.frame(contrast = "1_vs_2",
+                     edge_names,
+                     mean_difference = post_diff_1_vs_2,
+                     sd_difference = sd_diff_1_vs_2)
+
+    dat_2 <- cbind.data.frame(contrast = "1_vs_3",
+                              edge_names,
+                              mean_difference = post_diff_1_vs_3,
+                              sd_difference = sd_diff_1_vs_3)
+
+    dat_3 <- cbind.data.frame(contrast = "2_vs_3",
+                              edge_names,
+                              mean_difference = post_diff_2_vs_3,
+                              sd_difference = sd_diff_2_vs_3)
+
+
+    returned_list <- list(dat_1, dat_2, dat_3)
+    names(returned_list) <- c("1_vs_2", "1_vs_3", "2_vs_3")
+
+   # BF <- round(BF, 4)
+
+    BF_01[upper.tri(BF_01)] <- BF
+    BF_01 <- BGGM:::symmteric_mat(BF_01)
+
+
+    BF_10[upper.tri(BF_10)] <- 1 / BF
+    BF_10 <- BGGM:::symmteric_mat(BF_10)
+
+
+    prob_01 <- round(BF_01 / (1 + BF_01), 4)
+    prob_10 <- round(1 - prob_01, 4)
+
+    BF_01 <- round(BF_01, 4)
+    BF_10 <- round(BF_10, 4)
+
+
+    returned <- list(BF_01 = BF_01,
+                     BF_10 = BF_10,
+                     prob_01 = prob_01,
+                     prob_10 = prob_10,
+                     contrast_inf = returned_list)
+
+   }
+   returned
+}
+
+if(hyp != "all"){
 
     hyp_new <- stringr::str_remove_all(hyp, "_")
 
-    gsub("(\\.+|[[:punct:]])", " \\1 ", hyp)
+    # gsub("(\\.+|[[:punct:]])", " \\1 ", hyp)
 
     pcor_names <- BGGM:::pcor_name_helper(hyp_new)
 
@@ -205,7 +338,7 @@ GGM_compare_bf <- function(X1, X2, hyp, priorprob = 1, cores, delta, nu, n_sampl
         framed <- BGGM:::framer(hyp2)
 
         # matrix info
-        matrix_info <- BGGM:::create_matrices(framed, varnames = pcor_names)
+        matrix_info <- create_matrices(framed, varnames = pcor_names)
 
         comparisons <- matrix_info$comparisons
 
@@ -234,7 +367,7 @@ GGM_compare_bf <- function(X1, X2, hyp, priorprob = 1, cores, delta, nu, n_sampl
 
           #Hypothesis test
           log_BF <- mvtnorm::dmvnorm(x = t(r_e), mean = mu1, sigma  = s1, log = TRUE) -
-            mvtnorm::dmvnorm(x = t(r_e), mean = mu0, sigma = s0, log = TRUE)
+                    mvtnorm::dmvnorm(x = t(r_e), mean = mu0, sigma = s0, log = TRUE)
 
           f_E <- mvtnorm::dmvnorm(x = t(r_e), mean = mu1, sigma  = s1, log = FALSE)
           c_E <- mvtnorm::dmvnorm(x = t(r_e), mean = mu0, sigma = s0, log = FALSE)
@@ -402,4 +535,6 @@ GGM_compare_bf <- function(X1, X2, hyp, priorprob = 1, cores, delta, nu, n_sampl
   class(returned) <- "GGM_compare_bf"
   returned
 }
+
+
 

@@ -37,7 +37,7 @@ GGM_compare_bf_plot <- function(X, cutoff){
     scale_fill_gradientn(colours = c("white", "yellow", "red"),
                          values = c(0, .1, 1),
                          limits = c(log(cutoff), max_01),
-                         labels = round(c(3,   exp(max_01))),
+                         labels = round(c(log(3),    max_01)),
                          breaks =  c(log(cutoff),  max_01),
                          name = "BF 01") +
 
@@ -58,7 +58,7 @@ GGM_compare_bf_plot <- function(X, cutoff){
     geom_tile() +
     scale_fill_gradientn(colours = c("white", "lightblue", "purple"),
                          values = c(0, .1, 1), limits = round(c(log(3), max_10)),
-                         labels = round(c(3,   exp(max_10))),
+                         labels = round(c(log(3),   max_10)),
                          breaks =  round(c(log(cutoff),  max_10)),
                          name = "BF 10") +
 
