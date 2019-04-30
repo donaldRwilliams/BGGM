@@ -7,7 +7,6 @@ select <- function(x,...){
 
 compare <- function(x, ...){
   UseMethod("compare", x)
-
 }
 
 
