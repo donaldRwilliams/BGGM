@@ -30,6 +30,6 @@ select.estimate  <- function(x, ci_width){
   returned_object <- list(pcor_selected = x$parcors_mat * adjacency_mat,
                           adjacency_mat = adjacency_mat)
 
-  class(returned_object) <- "estimate"
+  class(returned_object) <- "select.estimate"
   returned_object
 }

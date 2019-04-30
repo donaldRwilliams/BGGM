@@ -17,6 +17,25 @@ explore  <- function(x, ...) UseMethod("explore")
 confirm  <- function(x, ...) UseMethod("confirm")
 
 
+coef.estimate <- function(fit, node, ci_width,  samples = 1000){
+  test <- beta_summary(fit, node = node, ci_width = ci_width, samples = samples)
+  sums <- list()
+  for(i in 1:max(node)){
+
+    sums[[i]] <- test[[i]][[1]]
+    names(sums)[[i]] <-  paste("Predicting node", node[i])
+  }
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type: Inverse to Regression \n")
+  cat("--- \n")
+  cat("Call: \n")
+  print(test$call)
+  cat("--- \n")
+  cat("Posterior Estimates: \n \n")
+  sums
+}
+
 
 print.predict <- function(x, digits = 3, ...){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
@@ -42,6 +61,17 @@ print.predict <- function(x, digits = 3, ...){
   round(x$summary_error, digits = digits)
 }
 
+print.estimate <- function(x){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type: Estimation \n")
+  cat("Posterior Samples:", x$iter, "\n")
+  cat("Observations (n):", nrow(x$dat), "\n")
+  cat("Variables (p):", x$p, "\n")
+  cat("Edges:", .5 * (x$p * (x$p-1)), "\n")
+  cat("--- \n")
+  cat("Date:", date(), "\n")
+}
 
 
 ci_helper <- function(x, ci_width){
@@ -87,6 +117,7 @@ beta_helper <- function(x, which_one){
 }
 
 inverse_2_beta <- function(fit, samples = 500){
+  fit <- fit[1:6]
 
   # check number of samples
   if(samples > fit$iter){
@@ -177,7 +208,7 @@ summary_beta_helper <- function(x, node, ci_width){
 
   # list elemenet name as the response
   names(returned_object) <- paste("predicting node", node)
-
+  returned_object$call <- match.call()
   returned_object
 }
 

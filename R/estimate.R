@@ -78,5 +78,6 @@ estimate.default  <- function(x, samples = 5000, ...){
                          iter = samples)
 
 class(returned_object) <- "estimate"
+
 returned_object
 }

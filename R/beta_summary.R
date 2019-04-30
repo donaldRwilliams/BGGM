@@ -26,5 +26,8 @@ beta_summary <- function(x, node, ci_width, samples){
   returned_object <- lapply(node, function(y) summary_beta_helper(node =  y,
                                                                   x = x,
                                                                   ci_width))
+  class(returned_object) <- "beta_summary"
+
+  returned_object$call <- match.call()
   returned_object
-}
+  }
