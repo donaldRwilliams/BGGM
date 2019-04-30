@@ -23,7 +23,7 @@ beta_summary <- function(x, node, ci_width, samples){
   if(ci_width >= 1 | ci_width <= 0){
     stop("ci_width must be between 0 and 1")
   }
-  returned_object <- lapply(node, function(y) summary_beta_helper(node =  y,
+  returned_object <- lapply(node, function(y) BGGM:::summary_beta_helper(node =  y,
                                                                   x = x,
                                                                   ci_width))
   class(returned_object) <- "beta_summary"

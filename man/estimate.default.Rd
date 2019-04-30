@@ -9,26 +9,17 @@
 \arguments{
 \item{x}{data matrix}
 
-\item{df}{degrees of freedom for the Wishart prior}
-
-\item{chains}{number of chains}
-
-\item{iter}{number of posterior samples for each chain}
-
-\item{burnin}{discarded samples during warmup}
+\item{samples}{number of posterior samples}
 }
 \value{
-An object of class \code{bayes_estimate} that includes posterior samples, partial correlation matrix, etc. Note
+An object of class \code{estimate} that includes posterior samples, partial correlation matrix, etc. Note
 this object is then used with other functions for model selection, prediction, regression coverion, etc.
-For Bayesian hypothesis testing see \code{bayes_explore} and \code{bayes_confirm}.
+For Bayesian hypothesis testing see \code{explore} and \code{confirm}.
 }
 \description{
 Samples from the posterior with the Wishart prior distribution.
 }
-\note{
-This is an "estimation" based method, wherein the network sturcutre is determined with credible interval exclusion of 0.
-Extension include in- and out-of-sample error measures (e.g., Bayesian R2).
-}
 \examples{
 fit <- estimate(X)
+fit
 }
