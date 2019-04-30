@@ -8,10 +8,10 @@
 #' @export
 #'
 #' @examples
-estimate_select  <- function(x, ci_width){
+select.estimate  <- function(x, ci_width){
 
   # check object class
-  if(class(x) !=  "bayes_estimate"){
+  if(class(x) !=  "estimate"){
     stop("Must be an object class bayes_estimate")
   }
 
@@ -30,6 +30,6 @@ estimate_select  <- function(x, ci_width){
   returned_object <- list(pcor_selected = x$parcors_mat * adjacency_mat,
                           adjacency_mat = adjacency_mat)
 
-  class(returned_object) <- "estimate_select"
+  class(returned_object) <- "estimate"
   returned_object
 }

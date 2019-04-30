@@ -4,8 +4,8 @@
 \alias{prediction_error}
 \title{Title}
 \usage{
-prediction_error(fit, measure, newdata = NULL, selected,
-  ci_width = 0.95, samples = 500)
+prediction_error(fit, measure, newdata = NULL, selected, ci_width = 0.95,
+  samples = 500)
 }
 \arguments{
 \item{fit}{fitted model from \code{bayes_estimate}}

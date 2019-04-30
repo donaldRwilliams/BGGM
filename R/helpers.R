@@ -1,3 +1,49 @@
+####################################
+########## generics ################
+####################################
+select <- function(x,...){
+  UseMethod("select", x)
+}
+
+compare <- function(x, ...){
+  UseMethod("compare", x)
+
+}
+
+
+estimate <- function(x, ...) UseMethod("estimate")
+
+explore  <- function(x, ...) UseMethod("explore")
+
+confirm  <- function(x, ...) UseMethod("confirm")
+
+
+
+print.predict <- function(x, digits = 3, ...){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  if(is.null(x$test_data)){
+    cat("Type: In-sample predictive accuracy \n")
+  } else{
+    cat("Type: Out-of-sample predictive accuracy \n")
+
+  }
+  if(x$measure == "R2"){
+    measure <-  "Variance Explained (R2) \n"
+  } else{
+    measure <-  "Mean Squared Error (MSE) \n"
+
+  }
+  cat("Measure:", measure)
+  cat("--- \n")
+  cat("Call:\n")
+  print(x$call)
+  cat("--- \n")
+  cat("Posterior Estimates: \n\n")
+  round(x$summary_error, digits = digits)
+}
+
+
 
 ci_helper <- function(x, ci_width){
   low <- (1 - ci_width) / 2
@@ -6,10 +52,45 @@ ci_helper <- function(x, ci_width){
   as.numeric(ifelse(interval[1] < 0 & interval[2] > 0, 0, 1))
 }
 
+
+
+Mo_risk_help_node <- function(x,  n1, n2, p){
+
+  inv_mat <- x
+  Y_rep1 <- mvnfast::rmvn(n = n1,  mu = rep(0, p), sigma = cov2cor(solve(inv_mat)))
+  Y_rep2 <-  mvnfast::rmvn(n = n2, mu = rep(0, p), sigma = cov2cor(solve(inv_mat)))
+
+  jsd_node <- unlist(lapply(1:ncol(Y_rep1), function(x) BGGM:::node_jsd_help(x, Y_rep1, Y_rep2)))
+
+  jsd_node
+
+
+
+}
+
+
+
+node_jsd_help <- function(x, Y_rep1, Y_rep2){
+  pred1 <- Y_rep1[,-x]  %*%  BGGM:::beta_helper(Y_rep1, x)
+  pred2 <- Y_rep2[,-x]  %*%  BGGM:::beta_helper(Y_rep2, x)
+  jsd_node <- (BGGM:::kl_func(var(pred1), var(pred2)) + BGGM:::kl_func(var(pred2), var(pred1))) * .5
+
+
+}
+
+beta_helper <- function(x, which_one){
+  y <- x[,which_one]
+  X <- x[,-which_one]
+
+  fit <- lm(y ~ 0 + X)
+  coef(fit)
+
+}
+
 inverse_2_beta <- function(fit, samples = 500){
 
   # check number of samples
-  if(samples >= fit$iter){
+  if(samples > fit$iter){
     stop("Samples used to compute R2 cannot be greater than the number used for fitting the model")
 
   }
@@ -115,6 +196,24 @@ R2_helper <- function(ypred, y, ci_width) {
   summary_r2 <- c(post_mean = mu_r2, post_sd = sd_r2, ci)
   list(summary_r2 = summary_r2, R2 = r2)
 }
+
+
+MSE_helper <- function(ypred, y, ci_width){
+  low <- (1 - ci_width) / 2
+  up  <-  1 - low
+  mse <- apply(ypred, MARGIN = 1, function(x){mean((x - y)^2)})
+  ci <- quantile(mse, prob = c(low, up) )
+  mu_mse <- mean(mse)
+  sd_mse <- sd(mse)
+  summary_mse <- c(post_mean = mu_mse, post_sd = sd_mse, ci)
+  list(summary_mse = summary_mse, MSE = mse)
+}
+
+
+
+
+
+
 
 
 name_helper <-  function(x){
@@ -313,7 +412,7 @@ sampling_helper = function(X,  nu, delta,  n_samples){
 
   for(i in 1:n_samples){
     # draw from posterior
-    post <- post_helper(S = S, n = n, nu = nu, p = p, delta = delta, Psi = Psi, b_inv = b_inv)
+    post <- post_helper(S = S, n = n, nu = nu, p = p, delta = delta, Psi = Psi, b_inv = b_inv * nu)
     # store partials
     pcor_store_up[i,] <- post$pcors_post_up
     pcor_store_low[i,] <- post$pcors_post_low
@@ -371,12 +470,15 @@ prior_helper <- function(nu, p, delta){
 post_helper <- function(S, n, nu, p, delta, Psi, b_inv){
   # precision matrix
   sigma_inv <- rWishart(1, delta + n - 1, solve(Psi+S,  tol =  1e-20))[,,1]
+
   # Psi
   Psi <- rWishart(1, nu + delta + p - 2, solve(sigma_inv + b_inv,  tol  = 1e-20))[,,1]
+
   # partial correlation matrix
   pcor_mat <- - diag(1/sqrt(diag(sigma_inv)))%*%sigma_inv%*%diag(1/sqrt(diag(sigma_inv)))
   pcors_post_up = pcor_mat[upper.tri(pcor_mat)]
   pcors_post_low = pcor_mat[lower.tri(pcor_mat)]
+
   # returned list
   list(pcors_post_up = pcors_post_up, pcors_post_low = pcors_post_low, sigma_inv = sigma_inv, Psi = Psi)
 }

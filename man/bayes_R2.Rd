@@ -4,8 +4,7 @@
 \alias{bayes_R2}
 \title{Bayesian R2}
 \usage{
-bayes_R2(fit, newdata = NULL, selected, ci_width = 0.95,
-  samples = 500)
+bayes_R2(fit, newdata = NULL, selected, ci_width = 0.95, samples = 500)
 }
 \arguments{
 \item{fit}{object of class bayes_estimate}

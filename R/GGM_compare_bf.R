@@ -79,14 +79,37 @@ GGM_compare_bf <- function(Y_g1,
 
     post_dens <- apply(post_diff, 2, function(x){dnorm(0, mean(x), sd(x))})
 
-    bf <-   post_dens  / dnorm(0, mean(prior_diff), sd(prior_diff))
+    BF <-   post_dens  / dnorm(0, mean(prior_diff), sd(prior_diff))
 
 
     mat_temp <- BF_01 <- pcor_mean <- matrix(0, p, p)
 
     mat_temp[] <- unlist(lapply(1:p, function(x) paste(1:p, x, sep = "_")))
 
+    BF_01[upper.tri(BF_01)] <- BF
+    BF_01 <- BGGM:::symmteric_mat(BF_01)
+
+
+    BF_10[upper.tri(BF_10)] <- 1 / BF
+    BF_10 <- BGGM:::symmteric_mat(BF_10)
+
+
+    prob_01 <- round(BF_01 / (1 + BF_01), 4)
+    prob_10 <- round(1 - prob_01, 4)
+
+    BF_01 <- round(BF_01, 4)
+    BF_10 <- round(BF_10, 4)
+
+
+    returned <- list(BF_01 = BF_01,
+                     BF_10 = BF_10,
+                     prob_01 = prob_01,
+                     prob_10 = prob_10,
+                     groups = groups)
+
     } # end groups == 2
+
+
 
     if(groups == 3){
 
@@ -101,13 +124,6 @@ GGM_compare_bf <- function(Y_g1,
     prior_3 <- do.call(rbind.data.frame, lapply(1:cores, function(x)    samples_3[[x]]$fisher_z_prior[,1:off_diag]))
 
 
-    post_diff_1_vs_2 <- NA
-    post_diff_1_vs_3 <- NA
-    post_diff_2_vs_3 <- NA
-
-    sd_diff_1_vs_2 <- NA
-    sd_diff_1_vs_3 <- NA
-    sd_diff_2_vs_3 <- NA
 
     R <- matrix(c(1,-1,0,
                   0,1,-1),
@@ -116,17 +132,6 @@ GGM_compare_bf <- function(Y_g1,
 
 
      for(i in 1:off_diag){
-
-      post_diff_1_vs_2[i] <- mean(post_1[,i] - post_2[,i])
-      post_diff_1_vs_3[i] <- mean(post_1[,i] - post_3[,i])
-      post_diff_2_vs_3[i] <- mean(post_2[,i] - post_3[,i])
-
-
-      sd_diff_1_vs_2[i] <- sd(post_1[,i] - post_2[,i])
-      sd_diff_1_vs_3[i] <- sd(post_1[,i] - post_3[,i])
-      sd_diff_2_vs_3[i] <- sd(post_2[,i] - post_3[,i])
-
-
 
       mu_post <- c(mean(post_1[,i]), mean(post_2[,i]), mean(post_3[,i]) )
       cov_post <- cov(cbind(post_1[,i], post_2[,i], post_3[,i]))
@@ -154,30 +159,30 @@ GGM_compare_bf <- function(Y_g1,
     mat_temp <- BF_01 <- BF_10 <- matrix(0, p, p)
     mat_temp[] <- unlist(lapply(1:p, function(x) paste(1:p, x, sep = "_")))
 
-    contrast_name <- rep(c("1_vs_2", "1_vs_3", "2_vs_3"), each = off_diag)
-
-    edge_name <- mat_temp[upper.tri(mat_temp)]
-    mean_diffs <- c(post_diff_1_vs_2, post_diff_1_vs_3, post_diff_2_vs_3)
-    sd_diffs <- c(sd_diff_1_vs_2, sd_diff_1_vs_3, sd_diff_2_vs_3)
-
-    dat_1 <- cbind.data.frame(contrast = "1_vs_2",
-                     edge_names,
-                     mean_difference = post_diff_1_vs_2,
-                     sd_difference = sd_diff_1_vs_2)
-
-    dat_2 <- cbind.data.frame(contrast = "1_vs_3",
-                              edge_names,
-                              mean_difference = post_diff_1_vs_3,
-                              sd_difference = sd_diff_1_vs_3)
-
-    dat_3 <- cbind.data.frame(contrast = "2_vs_3",
-                              edge_names,
-                              mean_difference = post_diff_2_vs_3,
-                              sd_difference = sd_diff_2_vs_3)
-
-
-    returned_list <- list(dat_1, dat_2, dat_3)
-    names(returned_list) <- c("1_vs_2", "1_vs_3", "2_vs_3")
+    # contrast_name <- rep(c("1_vs_2", "1_vs_3", "2_vs_3"), each = off_diag)
+    #
+    # edge_name <- mat_temp[upper.tri(mat_temp)]
+    # mean_diffs <- c(post_diff_1_vs_2, post_diff_1_vs_3, post_diff_2_vs_3)
+    # sd_diffs <- c(sd_diff_1_vs_2, sd_diff_1_vs_3, sd_diff_2_vs_3)
+    #
+    # dat_1 <- cbind.data.frame(contrast = "1_vs_2",
+    #                  edge_names,
+    #                  mean_difference = post_diff_1_vs_2,
+    #                  sd_difference = sd_diff_1_vs_2)
+    #
+    # dat_2 <- cbind.data.frame(contrast = "1_vs_3",
+    #                           edge_names,
+    #                           mean_difference = post_diff_1_vs_3,
+    #                           sd_difference = sd_diff_1_vs_3)
+    #
+    # dat_3 <- cbind.data.frame(contrast = "2_vs_3",
+    #                           edge_names,
+    #                           mean_difference = post_diff_2_vs_3,
+    #                           sd_difference = sd_diff_2_vs_3)
+    #
+    #
+    # returned_list <- list(dat_1, dat_2, dat_3)
+    # names(returned_list) <- c("1_vs_2", "1_vs_3", "2_vs_3")
 
    # BF <- round(BF, 4)
 
@@ -200,10 +205,122 @@ GGM_compare_bf <- function(Y_g1,
                      BF_10 = BF_10,
                      prob_01 = prob_01,
                      prob_10 = prob_10,
-                     contrast_inf = returned_list)
+                     groups = groups)
 
-   }
+   } # end groups three
+
+
+    if(groups == 4){
+      BF <- NA
+
+      samples_3 <- BGGM:::sampling(as.matrix(Y_g3), nu = nu, delta = delta, n_samples = n_samples, cores)
+      samples_4 <- BGGM:::sampling(as.matrix(Y_g4), nu = nu, delta = delta, n_samples = n_samples, cores)
+
+      post_1 <- do.call(rbind.data.frame, lapply(1:cores, function(x)    samples_1[[x]]$fisher_z_post[,1:off_diag]))
+      post_2 <- do.call(rbind.data.frame, lapply(1:cores, function(x)    samples_2[[x]]$fisher_z_post[,1:off_diag]))
+      post_3 <- do.call(rbind.data.frame, lapply(1:cores, function(x)    samples_3[[x]]$fisher_z_post[,1:off_diag]))
+      post_4 <- do.call(rbind.data.frame, lapply(1:cores, function(x)    samples_4[[x]]$fisher_z_post[,1:off_diag]))
+
+      prior_1 <- do.call(rbind.data.frame, lapply(1:cores, function(x)    samples_1[[x]]$fisher_z_prior[,1:off_diag]))
+      prior_2 <- do.call(rbind.data.frame, lapply(1:cores, function(x)    samples_2[[x]]$fisher_z_prior[,1:off_diag]))
+      prior_3 <- do.call(rbind.data.frame, lapply(1:cores, function(x)    samples_3[[x]]$fisher_z_prior[,1:off_diag]))
+      prior_4 <- do.call(rbind.data.frame, lapply(1:cores, function(x)    samples_4[[x]]$fisher_z_prior[,1:off_diag]))
+
+
+
+
+      R <- matrix(c(1,-1,0, 0,
+                    0,1,-1,0,
+                    0,0,1,-1),
+                  nrow = 3,
+                  byrow = T)
+
+
+      for(i in 1:off_diag){
+
+        mu_post <- c(mean(post_1[,i]), mean(post_2[,i]), mean(post_3[,i]), mean(post_4[,i]))
+        cov_post <- diag(diag(cov(cbind(post_1[,i], post_2[,i], post_3[,i], post_4[,i]))), 4)
+
+
+        mu_prior <- c(mean(prior_1[,i]), mean(prior_2[,i]), mean(prior_3[,i]), mean(prior_4[,i]))
+        cov_prior <- cov(cbind(prior_1[,i], prior_2[,i], prior_3[,i], prior_4[,i]))
+
+
+        mu1 <- R %*% mu_post
+        s1 <- R %*% cov_post %*% t(R)
+
+
+        mu0 <- rep(0, 3)
+        s0 <- R %*% cov_prior %*% t(R)
+
+        #Hypothesis test
+        log_BF <- mvnfast::dmvn(X = rep(0,3), mu = mu1, sigma  = s1, log = TRUE) -
+                  mvnfast::dmvn(X = rep(0,3), mu = mu0, sigma = s0, log = TRUE)
+
+        BF[i] <- exp(log_BF)
+      }
+
+
+      mat_temp <- BF_01 <- BF_10 <- matrix(0, p, p)
+      # mat_temp[] <- unlist(lapply(1:p, function(x) paste(1:p, x, sep = "_")))
+      #
+      # contrast_name <- rep(c("1_vs_2",
+      #                        "1_vs_3",
+      #                        "1_vs_4",
+      #                        "2_vs_3",
+      #                        "2_vs_4",
+      #                        "3_vs_4"), each = off_diag)
+      #
+      # edge_name <- mat_temp[upper.tri(mat_temp)]
+      # mean_diffs <- c(post_diff_1_vs_2, post_diff_1_vs_3, post_diff_2_vs_3)
+      # sd_diffs <- c(sd_diff_1_vs_2, sd_diff_1_vs_3, sd_diff_2_vs_3)
+      #
+      # dat_1 <- cbind.data.frame(contrast = "1_vs_2",
+      #                           edge_names,
+      #                           mean_difference = post_diff_1_vs_2,
+      #                           sd_difference = sd_diff_1_vs_2)
+      #
+      # dat_2 <- cbind.data.frame(contrast = "1_vs_3",
+      #                           edge_names,
+      #                           mean_difference = post_diff_1_vs_3,
+      #                           sd_difference = sd_diff_1_vs_3)
+      #
+      # dat_3 <- cbind.data.frame(contrast = "2_vs_3",
+      #                           edge_names,
+      #                           mean_difference = post_diff_2_vs_3,
+      #                           sd_difference = sd_diff_2_vs_3)
+      #
+      #
+      # returned_list <- list(dat_1, dat_2, dat_3)
+      # names(returned_list) <- c("1_vs_2", "1_vs_3", "2_vs_3")
+
+      # BF <- round(BF, 4)
+
+      BF_01[upper.tri(BF_01)] <- BF
+      BF_01 <- BGGM:::symmteric_mat(BF_01)
+
+
+      BF_10[upper.tri(BF_10)] <- 1 / BF
+      BF_10 <- BGGM:::symmteric_mat(BF_10)
+
+
+      prob_01 <- round(BF_01 / (1 + BF_01), 4)
+      prob_10 <- round(1 - prob_01, 4)
+
+      BF_01 <- round(BF_01, 4)
+      BF_10 <- round(BF_10, 4)
+
+
+      returned <- list(BF_01 = BF_01,
+                       BF_10 = BF_10,
+                       prob_01 = prob_01,
+                       prob_10 = prob_10,
+                       groups = groups)
+
+    }
+
    returned
+
 }
 
 if(hyp != "all"){

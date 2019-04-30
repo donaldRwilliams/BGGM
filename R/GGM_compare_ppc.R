@@ -17,6 +17,7 @@ GGM_compare_ppc <- function(Y_g1,
                             Y_g3 = NULL,
                             Y_g4 = NULL,
                             contrast = NULL,
+                            type = NULL,
                             compare_all = NULL,
                             samples){
 
@@ -71,9 +72,9 @@ GGM_compare_ppc <- function(Y_g1,
   }
 
   results <- list()
-  for(i in 1:length(contrast2)){
+  for(i in 1:length(contrast_2)){
 
-    contrast_loop <- contrast2[[i]]
+    contrast_loop <- contrast_2[[i]]
 
 
     # 2 groups
@@ -260,7 +261,9 @@ GGM_compare_ppc <- function(Y_g1,
                          contrast = contrast_loop,
                          jsd_scores = unlist(Mo_risk))
 
-  } # end of loop
+  }
+
+  # end of loop
   class(results) <- "GGM_compare_pcc"
   results
   }

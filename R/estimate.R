@@ -1,4 +1,4 @@
-#' bayes_estimate
+#' estimate
 #'
 #' @description Samples from the posterior with the Wishart prior distribution.
 #' @param x data matrix
@@ -17,10 +17,10 @@
 #' Extension include in- and out-of-sample error measures (e.g., Bayesian R2).
 #'
 #' @examples
-#' fit <- bayes_estimate(X)
+#' fit <- estimate(X)
 
 
-bayes_estimate <- function(x, samples = 5000){
+estimate.default  <- function(x, samples = 5000, ...){
 
   # remove the NAs
   X <- na.omit(as.matrix(x))
@@ -77,6 +77,6 @@ bayes_estimate <- function(x, samples = 5000){
                          dat = X,
                          iter = samples)
 
-class(returned_object) <- "bayes_estimate"
+class(returned_object) <- "estimate"
 returned_object
 }
