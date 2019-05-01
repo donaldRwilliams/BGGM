@@ -2,23 +2,17 @@
 #'
 #' @description Samples from the posterior with the Wishart prior distribution.
 #' @param x data matrix
-#' @param df degrees of freedom for the Wishart prior
-#' @param chains number of chains
-#' @param iter number of posterior samples for each chain
-#' @param burnin discarded samples during warmup
+#' @param samples number of posterior samples
 #'
-#' @return  An object of class \code{bayes_estimate} that includes posterior samples, partial correlation matrix, etc. Note
+#' @return  An object of class \code{estimate} that includes posterior samples, partial correlation matrix, etc. Note
 #' this object is then used with other functions for model selection, prediction, regression coverion, etc.
-#' For Bayesian hypothesis testing see \code{bayes_explore} and \code{bayes_confirm}.
+#' For Bayesian hypothesis testing see \code{explore} and \code{confirm}.
 #'
 #' @export
 #'
-#' @note This is an "estimation" based method, wherein the network sturcutre is determined with credible interval exclusion of 0.
-#' Extension include in- and out-of-sample error measures (e.g., Bayesian R2).
-#'
 #' @examples
 #' fit <- estimate(X)
-
+#' fit
 
 estimate.default  <- function(x, samples = 5000, ...){
 
@@ -75,9 +69,9 @@ estimate.default  <- function(x, samples = 5000, ...){
                          posterior_samples = as.data.frame(df_samps),
                          p = ncol(x),
                          dat = X,
-                         iter = samples)
+                         iter = samples, call = match.call())
 
 class(returned_object) <- "estimate"
 
-returned_object
+return(returned_object)
 }
