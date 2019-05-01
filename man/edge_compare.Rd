@@ -4,8 +4,7 @@
 \alias{edge_compare}
 \title{Title}
 \usage{
-edge_compare(X1, X2, ROPE, decision_rule, chains = 2, iter = 1000,
-  burnin = 100)
+edge_compare(x, ...)
 }
 \arguments{
 \item{burnin}{}

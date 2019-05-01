@@ -4,8 +4,8 @@
 \alias{GGM_compare_bf}
 \title{GGM_compare_bf}
 \usage{
-GGM_compare_bf(Y_g1, Y_g2, Y_g3 = NULL, Y_g4 = NULL, hyp, priorprob = 1,
-  cores, delta, nu, n_samples)
+GGM_compare_bf(Y_g1, Y_g2, Y_g3 = NULL, Y_g4 = NULL, hyp,
+  priorprob = 1, cores, delta, nu, n_samples)
 }
 \arguments{
 \item{n_samples}{}

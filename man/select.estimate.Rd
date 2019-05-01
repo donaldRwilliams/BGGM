@@ -2,19 +2,23 @@
 % Please edit documentation in R/select.estimate.R
 \name{select.estimate}
 \alias{select.estimate}
-\title{Title}
+\title{Select graphical structure}
 \usage{
-\method{select}{estimate}(x, ci_width)
+\method{select}{estimate}(x, ci_width = 0.95, rope = NULL,
+  prob = 0.975)
 }
 \arguments{
 \item{x}{object of class \code{bayes_estimate}}
 
 \item{ci_width}{credible interval width used for the decision rule}
+
+\item{prob}{}
 }
 \value{
-the selected partial correlation matrix (the conditional dependence structure) and
- the adjacency matrix is returned
+partial  selected partial correlations
+
+adjacency selected adjacency matrix
 }
 \description{
-Title
+Select graphical structure
 }
