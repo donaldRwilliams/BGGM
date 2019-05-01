@@ -5,16 +5,83 @@ select <- function(x,...){
   UseMethod("select", x)
 }
 
+edge_compare <- function(x, ...){
+  UseMethod("edge_compare", x)
+}
+
 compare <- function(x, ...){
   UseMethod("compare", x)
 }
 
 
+
 estimate <- function(x, ...) UseMethod("estimate")
-
 explore  <- function(x, ...) UseMethod("explore")
-
 confirm  <- function(x, ...) UseMethod("confirm")
+
+
+
+####################################
+############ generics ##############
+####################################
+summary.compare.predict <- function(x, ...){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  if(is.null(x$test_data)){
+    cat("Type: In-sample predictive accuracy \n")
+  } else{
+    cat("Type: Out-of-sample predictive accuracy \n")
+  }
+  if(x$measure == "R2"){
+    measure <-  "Variance Explained (R2) \n"
+  } else{
+    measure <-  "Mean Squared Error (MSE) \n"
+  }
+  cat("Measure:", measure)
+  cat("Constrasts: Pairwise \n")
+  cat("--- \n")
+  cat("Call:\n")
+  print(x$call)
+  cat("--- \n")
+  cat("Posterior Estimates: \n\n")
+  print(x$summary_error, ...)
+
+}
+
+
+print.compare.predict <- function(x, ...){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  if(is.null(x$test_data)){
+    cat("Type: In-sample predictive accuracy contrasts \n")
+  } else{
+    cat("Type: Out-of-sample predictive accuracy contrasts \n")
+  }
+  if(x$measure == "R2"){
+    measure <-  "Variance Explained (R2) \n"
+  } else{
+    measure <-  "Mean Squared Error (MSE) \n"
+  }
+  cat("Measure:", measure)
+  cat("Contrasts: All pairwise \n")
+  cat("--- \n")
+  cat("Call:\n")
+  print(x$call)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 coef.estimate <- function(fit, node, ci_width,  samples = 1000){
@@ -24,7 +91,7 @@ coef.estimate <- function(fit, node, ci_width,  samples = 1000){
 
     sums[[i]] <- test[[i]][[1]]
     names(sums)[[i]] <-  paste("Predicting node", node[i])
-  }
+        }
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
   cat("Type: Inverse to Regression \n")
@@ -36,8 +103,7 @@ coef.estimate <- function(fit, node, ci_width,  samples = 1000){
   sums
 }
 
-
-print.predict <- function(x, digits = 3, ...){
+summary.predict <- function(x,  ...){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
   if(is.null(x$test_data)){
@@ -58,8 +124,37 @@ print.predict <- function(x, digits = 3, ...){
   print(x$call)
   cat("--- \n")
   cat("Posterior Estimates: \n\n")
-  round(x$summary_error, digits = digits)
+  temp <- cbind.data.frame(Node = 1:nrow(x$summary_error), x$summary_error)
+  rownames(temp) <- c()
+  print(temp,  row.names = FALSE, ...)
 }
+
+print.predict <- function(x,  ...){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  if(is.null(x$test_data)){
+    cat("Type: In-sample predictive accuracy \n")
+  } else{
+    cat("Type: Out-of-sample predictive accuracy \n")
+
+  }
+  if(x$measure == "R2"){
+    measure <-  "Variance Explained (R2) \n"
+  } else{
+    measure <-  "Mean Squared Error (MSE) \n"
+
+  }
+  cat("Measure:", measure)
+  cat("--- \n")
+  cat("Call:\n")
+  print(x$call)
+  # cat("--- \n")
+  # cat("Posterior Estimates: \n\n")
+  # print(x$summary_error, ...)
+}
+
+
+
 
 print.estimate <- function(x){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
@@ -70,7 +165,95 @@ print.estimate <- function(x){
   cat("Variables (p):", x$p, "\n")
   cat("Edges:", .5 * (x$p * (x$p-1)), "\n")
   cat("--- \n")
+  cat("Call: \n")
+  print(x$call)
+  cat("--- \n")
   cat("Date:", date(), "\n")
+}
+
+
+print.select.estimate <- function(x, ...){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type: Selected Graph \n")
+  if(is.null(x$rope)){
+    cat("Credible Interval:", gsub("^.*\\.","", x$ci), "% \n")
+    cat("--- \n")
+    cat("Call:\n")
+    print(x$call)
+    cat("--- \n")
+    cat("Selected:\n \n")
+    colnames( x$partials) <- 1:ncol(x$partials)
+    row.names( x$partials) <- 1:ncol(x$partials)
+    colnames( x$adjacency) <- 1:ncol(x$partials)
+    row.names( x$adjacency) <- 1:ncol(x$partials)
+    cat("Partial correlations \n \n")
+    print(x$partials, digits = 2)
+    cat("--- \n \n")
+    cat("Adjacency \n \n")
+    print(x$adjacency)
+  } else{
+    cat("Region of Practical Equivalence:", "[", -1 * x$rope, ", ", x$rope, "]", "\n", sep = "")
+    cat("--- \n")
+    cat("Call:\n")
+    print(x$call)
+    cat("--- \n")
+    cat("Selected:\n \n")
+    colnames(x$partials_non_zero) <- 1:ncol(x$partials_non_zero)
+    row.names(x$partials_non_zero) <- 1:ncol(x$partials_non_zero)
+    cat("Partial correlations \n \n")
+    print(x$partials_non_zero, digits = 2)
+    cat("--- \n \n")
+    cat("Adjacency non-zero \n \n")
+    colnames(x$adjacency_non_zero) <- 1:ncol(x$partials_non_zero)
+    rownames(x$adjacency_non_zero) <- 1:ncol(x$partials_non_zero)
+    print(x$adjacency_non_zero)
+    cat("--- \n \n")
+    cat("Adjacency zero \n \n")
+    colnames(x$adjacency_zero) <- 1:ncol(x$partials_non_zero)
+    rownames(x$adjacency_zero) <- 1:ncol(x$partials_non_zero)
+    print(x$adjacency_zero)
+  }
+}
+
+
+
+
+print.edge_compare.estimate <- function(x, ...){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type: Edge comparison(s) \n")
+  cat("Credible Interval:", gsub("^.*\\.","", x$ci), "% \n")
+
+  if(is.numeric(x$rope)){
+    cat("Region of Practical Equivalence:", "[", -1 * x$rope, ", ", x$rope, "]", "\n", sep = "")
+  }
+  cat("--- \n")
+  cat("Call:\n")
+  print(x$call)
+  cat("--- \n")
+  cat("Posterior Estimates: \n\n")
+  print(x$returned_object, ...)
+}
+
+
+
+compare_predict_helper <- function(x, ci_width){
+  post_mean <- mean(x)
+  post_sd <- sd(x)
+  low <- (1 - ci_width) / 2
+  up  <-  1 - low
+  interval <-  t(quantile(x, c(low, up)))
+  summ <-  round(cbind.data.frame(post_mean = post_mean,
+                            post_sd = post_sd,
+                            interval), 3)
+}
+
+
+
+rope_helper <- function(x, rope){
+  mean(- rope < x & x < rope )
+
 }
 
 
