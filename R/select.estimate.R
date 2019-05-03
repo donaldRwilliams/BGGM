@@ -12,6 +12,8 @@
 #' @examples
 select.estimate <- function(x, ci_width = 0.95, rope = NULL, prob = 0.975){
 
+
+
   # check object class
   if(class(x) !=  "estimate"){
     stop("Must be an object class bayes_estimate")
@@ -21,6 +23,9 @@ select.estimate <- function(x, ci_width = 0.95, rope = NULL, prob = 0.975){
   if(ci_width >= 1 | ci_width <= 0){
     stop("ci_width must be between 0 and 1")
   }
+
+  if(isFALSE( x$analytic) ){
+
   pcor_samples <- x$posterior_samples[,  grep("pcors", colnames(x$posterior_samples))]
   if(is.null(rope)){
     # matrices for selected edges and the adjacency matrix
@@ -49,6 +54,24 @@ select.estimate <- function(x, ci_width = 0.95, rope = NULL, prob = 0.975){
                             partial_zero = x$parcors_mat * zero_mat,
                             adjacency_zero = zero_mat,
                             call = match.call(), rope = rope, prob = prob)
+  }
+
+  }
+
+  if(!isFALSE(x$analytic)){
+    crit <- abs(qnorm((1 - ci_width) /2))
+
+    mat_sig <- matrix(0, x$p, x$p)
+    up <-  x$fit$inv_mu[upper.tri(x$fit$inv_mu)] +   sqrt(x$fit$inv_var[upper.tri(x$fit$inv_var)]) * crit
+    low <-  x$fit$inv_mu[upper.tri(x$fit$inv_mu)] -  sqrt(x$fit$inv_var[upper.tri(x$fit$inv_var)]) * crit
+
+    mat_sig[upper.tri(mat_sig)] <- ifelse(low < 0 & up > 0, 0, 1)
+    mat_sig <- BGGM:::symmteric_mat(mat_sig)
+
+   returned_object <- list(partials_non_zero = x$fit$partial * mat_sig,
+                           adjacency_non_zero = mat_sig, call = match.call(),
+                           ci = ci_width, analytic = x$analytic)
+
   }
 
 

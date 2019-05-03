@@ -4,12 +4,16 @@
 \alias{estimate.default}
 \title{estimate}
 \usage{
-\method{estimate}{default}(x, samples = 5000, ...)
+\method{estimate}{default}(x, samples = 5000, analytic = FALSE, ...)
 }
 \arguments{
 \item{x}{data matrix}
 
 \item{samples}{number of posterior samples}
+
+\item{analytic}{analytic solution. see notes for futher details.}
+
+\item{...}{}
 }
 \value{
 An object of class \code{estimate} that includes posterior samples, partial correlation matrix, etc. Note
@@ -18,6 +22,13 @@ For Bayesian hypothesis testing see \code{explore} and \code{confirm}.
 }
 \description{
 Samples from the posterior with the Wishart prior distribution.
+}
+\note{
+The default is to draws samples from the posterior distribution (\code{analytic = FALSE}). The samples are required for computing edge differences,
+Bayesian R2, etc. If the goal is to *only* determined the non-zero effects, this can be accomplished by setting \code{analytic = TRUE}. This is accomplished
+by estimating the posterior mean and variance, from which the credible intervals can computed. Note also sampling is very fast--i.e., less than 1 second
+with p = 25, n = 2500 and 5,000 samples. There is one function that makes use of the analytic solution. Namely, \code{loocv} computes node-wise leave-one-out
+error (also analytically).
 }
 \examples{
 fit <- estimate(X)

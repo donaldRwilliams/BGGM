@@ -9,7 +9,7 @@
 \arguments{
 \item{x}{object of type \code{predict}}
 
-\item{limits}{upper and lower boundary for gradient}
+\item{limits}{upper and lower boundary for the gradient}
 }
 \description{
 Plotting (node-wise) Differences in Predictive Accuracy

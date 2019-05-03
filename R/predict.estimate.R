@@ -53,6 +53,8 @@
 
 predict.estimate <- function(fit, selected, test_data = NULL, ci_width, samples = 1000, measure = c("R2", "MSE")){
 
+    selected <- select(fit, ci_width = ci_width)$adjacency
+
     # check class
     if(class(fit) != "estimate"){
       stop("must be of class estimate")
@@ -90,7 +92,7 @@ predict.estimate <- function(fit, selected, test_data = NULL, ci_width, samples 
 
       # here no edges were selected
       if(sum(row_select) == 0){
-        summary_r2[[i]] <- 0
+        summary[[i]] <- 0
         post_samples[[i]] <- 0
       } else{
 

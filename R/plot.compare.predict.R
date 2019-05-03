@@ -53,7 +53,7 @@ plot.compare.predict  <- function(x, limits){
                         levels = 1:length(levels(dat_plot$X1)),
                         labels = 1:length(levels(dat_plot$X1)))
 
-  # R2 difference plot
+  # predictive difference plot
   plt1 <- ggplot(dat_plot, aes(x = as.factor(X2),
                                y = as.factor(X1),
                                fill = value)) +
@@ -97,7 +97,7 @@ plot.compare.predict  <- function(x, limits){
     xlab("")
 
   # plots
-  plots <-  list(R2_diff = plt1, sig_diff = plt2)
+  plots <-  list(pred_diff = plt1, sig_diff = plt2)
   return(plots)
 }
 

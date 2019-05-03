@@ -1,8 +1,11 @@
 #' estimate
 #'
 #' @description Samples from the posterior with the Wishart prior distribution.
+#'
 #' @param x data matrix
 #' @param samples number of posterior samples
+#' @param analytic analytic solution. see notes for futher details.
+#' @param ...
 #'
 #' @return  An object of class \code{estimate} that includes posterior samples, partial correlation matrix, etc. Note
 #' this object is then used with other functions for model selection, prediction, regression coverion, etc.
@@ -10,17 +13,25 @@
 #'
 #' @export
 #'
-#' @examples
-#' fit <- estimate(X)
+
+#'
+#' @note The default is to draws samples from the posterior distribution (\code{analytic = FALSE}). The samples are required for computing edge differences,
+#' Bayesian R2, etc. If the goal is to *only* determined the non-zero effects, this can be accomplished by setting \code{analytic = TRUE}. This is accomplished
+#' by estimating the posterior mean and variance, from which the credible intervals can computed. Note also sampling is very fast--i.e., less than 1 second
+#' with p = 25, n = 2500 and 5,000 samples. There is one function that makes use of the analytic solution. Namely, \code{loocv} computes node-wise leave-one-out
+#' error (also analytically).
+#'
+
+#' @examples fit <- estimate(X)
 #' fit
 
-estimate.default  <- function(x, samples = 5000, ...){
+estimate.default  <- function(x, samples = 5000, analytic = FALSE, ...){
 
   # remove the NAs
   X <- na.omit(as.matrix(x))
 
   # mean center the data
-  X <- scale(X, scale = F)
+  X <- scale(X, scale = T)
 
 
   # number of observations
@@ -35,6 +46,7 @@ estimate.default  <- function(x, samples = 5000, ...){
   S <- t(X) %*% X
 
 
+  if(isFALSE(analytic)){
   # store posterior samples
   df_samps <- matrix(0, nrow = samples, ncol = cols_samps)
 
@@ -69,9 +81,20 @@ estimate.default  <- function(x, samples = 5000, ...){
                          posterior_samples = as.data.frame(df_samps),
                          p = ncol(x),
                          dat = X,
-                         iter = samples, call = match.call())
+                         iter = samples, call = match.call(),
+                         analytic = analytic)
+  } else{
+
+
+    fit <-  analytic_solve(X)
+
+    returned_object <- list(fit = fit, analytic = analytic, call = match.call(), data = X, p = ncol(X))
+
+    }
 
 class(returned_object) <- "estimate"
 
 return(returned_object)
 }
+
+

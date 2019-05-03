@@ -2,12 +2,15 @@
 % Please edit documentation in R/plot.predict.R
 \name{plot.predict}
 \alias{plot.predict}
-\title{Predict plot}
+\title{Predictive Plots for In- and Out-of-Sample Data}
 \usage{
-\method{plot}{predict}(x, size = 2, color = "red", width = 0.1)
+\method{plot}{predict}(x1, x2 = NULL, size = 2, color = "red",
+  width = 0.1, order = NULL)
 }
 \arguments{
-\item{x}{object of class "predict"}
+\item{x1}{object of class \code{predict}}
+
+\item{x2}{optional object of class \code{predict} (typically using \code{test_data})}
 
 \item{size}{geom_point size}
 
@@ -16,10 +19,15 @@
 \item{width}{geom_errorbar width}
 }
 \value{
-ggplot object
+A baseline \code{ggplot} object. Further customization is possible. An example is provided below.
 }
 \description{
-Predict plot
+Predictive Plots for In- and Out-of-Sample Data
+}
+\note{
+x1 can be a \code{predict} object that asseses predictive accuracy on in- or out-of-sample (\code{test_data}) data. x2 can be used to
+visiually compare in- and out-of sample predictive accuracy. This is accomplished by providing the respective \code{predict} objects to
+x1 and x2. An example is provided below.
 }
 \examples{
 

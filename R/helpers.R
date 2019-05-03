@@ -16,10 +16,11 @@ compare <- function(x, ...){
 
 
 estimate <- function(x, ...) UseMethod("estimate")
+loocv <- function(x, ...) UseMethod("loocv")
 explore  <- function(x, ...) UseMethod("explore")
 confirm  <- function(x, ...) UseMethod("confirm")
 
-
+loocv <- function(x, ...) UseMethod("loocv")
 
 ####################################
 ############ generics ##############
@@ -71,11 +72,64 @@ print.compare.predict <- function(x, ...){
 
 
 
+summary.loocv <- function(x,...){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  if(is.numeric(x$samples)){
+    cat("Type: Leave-One-Out Prediction Error (Bayesian) \n")
+  } else {
+    cat("Type: Leave-One-Out Prediction Error (Analytic) \n")
+  }
+  cat("--- \n")
+  cat("Call:\n")
+  print(x$call)
+  cat("--- \n")
+  cat("Estimates: \n\n ")
+  temp <- x$returned_object
+  rownames(temp) <- c()
+  print(temp,  row.names = FALSE, ...)
+  cat("--- \n")
+  cat("Note: rss = residual sum of squares")
+
+}
+
+
+print.loocv <- function(x,...){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+
+  if(is.numeric(x$samples)){
+    cat("Type: Leave-One-Out Prediction Error (Bayesian) \n")
+  } else {
+    cat("Type: Leave-One-Out Prediction Error (Analytic) \n")
+  }
+  cat("--- \n")
+  cat("Call:\n")
+  print(x$call)
+
+}
 
 
 
 
 
+
+analytic_solve <- function(X){
+  # sample size
+  n <- nrow(X)
+  p <- ncol(X)
+  # centererd mat
+  X <- scale(X, scale = T)
+  # scale matrix
+  S <- t(X) %*% X
+  inv_mu <-  solve(S) * (n)
+  inv_var <-  (n)*(solve(S)^2 + tcrossprod(diag(solve(S))))
+
+
+  inv_cor <- diag( 1 / sqrt((diag(inv_mu)))) %*% inv_mu %*% diag( 1 / sqrt((diag(inv_mu))) )
+  partials <- inv_cor * -1 + diag(2, p)
+  list(inv_mu = inv_mu, inv_var = inv_var, partial = partials)
+}
 
 
 
@@ -153,13 +207,21 @@ print.predict <- function(x,  ...){
   # print(x$summary_error, ...)
 }
 
+summary.estimate <- function(x){
+  print(x)
 
+}
 
 
 print.estimate <- function(x){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
-  cat("Type: Estimation \n")
+  if(!isFALSE( x$analytic)){
+    cat("Type: Estimation (Analytic Solution) \n")
+  }
+  if(isFALSE( x$analytic)){
+    cat("Type: Estimation (Sampling) \n")
+  }
   cat("Posterior Samples:", x$iter, "\n")
   cat("Observations (n):", nrow(x$dat), "\n")
   cat("Variables (p):", x$p, "\n")
@@ -172,10 +234,16 @@ print.estimate <- function(x){
 }
 
 
+
 print.select.estimate <- function(x, ...){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
-  cat("Type: Selected Graph \n")
+  if(isFALSE( x$analytic)){
+  cat("Type: Selected Graph (Analytic Solution) \n")
+  } else{
+    cat("Type: Selected Graph (Sampling) \n")
+
+  }
   if(is.null(x$rope)){
     cat("Credible Interval:", gsub("^.*\\.","", x$ci), "% \n")
     cat("--- \n")
