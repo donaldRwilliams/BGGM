@@ -234,8 +234,7 @@ print.estimate <- function(x){
 }
 
 
-
-print.select.estimate <- function(x, ...){
+summary.select.estimate <- function(x, ...){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
   if(isFALSE( x$analytic)){
@@ -284,6 +283,22 @@ print.select.estimate <- function(x, ...){
   }
 }
 
+
+
+print.select.estimate <- function(x, ...){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  if(isFALSE( x$analytic)){
+    cat("Type: Selected Graph (Analytic Solution) \n")
+  } else{
+    cat("Type: Selected Graph (Sampling) \n")
+
+  }
+  cat("--- \n")
+  cat("Call: \n")
+  print(x$call)
+
+}
 
 
 
