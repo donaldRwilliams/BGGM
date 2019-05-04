@@ -16,8 +16,8 @@ Description: This package is described in Williams and Mulder (2019) and William
     measure of uncertainty is provided for all parameters. For example, each node has a 
     distribution for the variance explained. Measure of out-of-sample performance are also available. 
     The model is selected with directional Bayes factors.
+Depends: R (>= 3.5.0)
 License: GPL-2
-Depends: R (≥ 3.5.0)
 Imports: mvnfast, foreach, doSNOW, ggplot2, mvtnorm, stringr, ggridges, reshape, extraDistr, loo
 Suggests: qgraph
 Encoding: UTF-8
