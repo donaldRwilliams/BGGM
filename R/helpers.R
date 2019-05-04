@@ -245,6 +245,7 @@ summary.select.estimate <- function(x, ...){
   }
   if(is.null(x$rope)){
     cat("Credible Interval:", gsub("^.*\\.","", x$ci), "% \n")
+    cat("Connectivity:", round(mean(x$adjacency[upper.tri(x$adjacency)]) * 100, 1), "% \n")
     cat("--- \n")
     cat("Call:\n")
     print(x$call)
@@ -259,6 +260,8 @@ summary.select.estimate <- function(x, ...){
     cat("--- \n \n")
     cat("Adjacency \n \n")
     print(x$adjacency)
+    cat("--- \n")
+
   } else{
     cat("Region of Practical Equivalence:", "[", -1 * x$rope, ", ", x$rope, "]", "\n", sep = "")
     cat("--- \n")
