@@ -43,7 +43,7 @@ select.estimate <- function(x, ci_width = 0.95, rope = NULL, prob = 0.975){
     if(!is.numeric(prob)){
       stop("prob must be specificed (0 - 1) when rope = TRUE")
     }
-    in_rope <- apply(pcor_samples, 2, BGGM:::rope_helper,  .1)
+    in_rope <- apply(pcor_samples, 2, BGGM:::rope_helper,  rope)
     out_rope <- 1 - in_rope
     nonzero_mat <- zero_mat <- matrix(0, x$p, x$p)
     nonzero_mat[] <- ifelse(out_rope >= prob, 1, 0)
@@ -53,7 +53,7 @@ select.estimate <- function(x, ci_width = 0.95, rope = NULL, prob = 0.975){
                             adjacency_non_zero = nonzero_mat,
                             partial_zero = x$parcors_mat * zero_mat,
                             adjacency_zero = zero_mat,
-                            call = match.call(), rope = rope, prob = prob)
+                            call = match.call(), rope = rope, prob = prob, in_rope = in_rope)
   }
 
   }

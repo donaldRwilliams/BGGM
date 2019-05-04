@@ -263,7 +263,9 @@ summary.select.estimate <- function(x, ...){
     cat("--- \n")
 
   } else{
+    cat("Probability:", x$prob, "\n")
     cat("Region of Practical Equivalence:", "[", -1 * x$rope, ", ", x$rope, "]", "\n", sep = "")
+    cat("Connectivity:", round(mean(x$adjacency_non_zero[upper.tri(x$adjacency_non_zero)]) * 100, 1), "% \n")
     cat("--- \n")
     cat("Call:\n")
     print(x$call)
