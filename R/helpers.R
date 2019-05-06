@@ -122,8 +122,8 @@ analytic_solve <- function(X){
   X <- scale(X, scale = T)
   # scale matrix
   S <- t(X) %*% X
-  inv_mu <-  solve(S) * (n)
-  inv_var <-  (n)*(solve(S)^2 + tcrossprod(diag(solve(S))))
+  inv_mu <-  solve(S + diag(10^-5,  p)) * (n)
+  inv_var <-  (n + p + 1)*(solve(S + diag(10^-5, p) )^2 + tcrossprod(diag(solve(S + diag(10^-5, p)))))
 
 
   inv_cor <- diag( 1 / sqrt((diag(inv_mu)))) %*% inv_mu %*% diag( 1 / sqrt((diag(inv_mu))) )
@@ -237,7 +237,7 @@ print.estimate <- function(x){
 summary.select.estimate <- function(x, ...){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
-  if(isFALSE( x$analytic)){
+  if(!isFALSE(x$analytic)){
   cat("Type: Selected Graph (Analytic Solution) \n")
   } else{
     cat("Type: Selected Graph (Sampling) \n")
@@ -291,23 +291,79 @@ summary.select.estimate <- function(x, ...){
 
 
 print.select.estimate <- function(x, ...){
+  # cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  # cat("--- \n")
+  # if(isFALSE( x$analytic)){
+  #   cat("Type: Selected Graph (Analytic Solution) \n")
+  # } else{
+  #   cat("Type: Selected Graph (Sampling) \n")
+  #
+  # }
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
-  if(isFALSE( x$analytic)){
-    cat("Type: Selected Graph (Analytic Solution) \n")
-  } else{
+  if(is.numeric(x$rope)){
     cat("Type: Selected Graph (Sampling) \n")
+  } else{
+    cat("Type: Selected Graph (Analytic Solution) \n")
 
   }
-  cat("--- \n")
-  cat("Call: \n")
-  print(x$call)
+  if(is.null(x$rope)){
+    cat("Credible Interval:", gsub("^.*\\.","", x$ci), "% \n")
+    cat("Connectivity:", round(mean(x$adjacency[upper.tri(x$adjacency)]) * 100, 1), "% \n")
+    cat("--- \n")
+    cat("Call:\n")
+    print(x$call)
+    cat("--- \n")
 
+
+  } else{
+    cat("Probability:", x$prob, "\n")
+    cat("Region of Practical Equivalence:", "[", -1 * x$rope, ", ", x$rope, "]", "\n", sep = "")
+    cat("Connectivity:", round(mean(x$adjacency_non_zero[upper.tri(x$adjacency_non_zero)]) * 100, 1), "% \n")
+    cat("--- \n")
+    cat("Call:\n")
+    print(x$call)
+    cat("--- \n")
+
+}
+}
+
+head.compare.estimate <- function(x){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type: Edge comparison(s) \n")
+  cat("Credible Interval:", gsub("^.*\\.","", x$ci), "% \n")
+
+  if(is.numeric(x$rope)){
+    cat("Region of Practical Equivalence:", "[", -1 * x$rope, ", ", x$rope, "]", "\n", sep = "")
+  }
+  cat("--- \n")
+  cat("Call:\n")
+  print(x$call)
+  cat("--- \n")
+  print(edge_difference$returned_object[1,])
+  cat("---")
+
+}
+print.compare.estimate <- function(x, ...){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type: Edge comparison(s) \n")
+  cat("Credible Interval:", gsub("^.*\\.","", x$ci), "% \n")
+
+  if(is.numeric(x$rope)){
+    cat("Region of Practical Equivalence:", "[", -1 * x$rope, ", ", x$rope, "]", "\n", sep = "")
+  }
+  cat("--- \n")
+  cat("Call:\n")
+  print(x$call)
+  cat("--- \n")
+  # cat("Posterior Estimates: \n\n")
+  # print(x$returned_object, ...)
 }
 
 
-
-print.edge_compare.estimate <- function(x, ...){
+summary.compare.estimate <- function(x, ...){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
   cat("Type: Edge comparison(s) \n")
@@ -323,7 +379,6 @@ print.edge_compare.estimate <- function(x, ...){
   cat("Posterior Estimates: \n\n")
   print(x$returned_object, ...)
 }
-
 
 
 compare_predict_helper <- function(x, ci_width){
