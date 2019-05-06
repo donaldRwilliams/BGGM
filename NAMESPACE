@@ -24,6 +24,11 @@ export(print.select.estimate)
 export(summary.select.estimate )
 export(plot.select.estimate)
 
+export(compare)
+export(compare.estimate)
+export(summary.compare.estimate)
+export(print.compare.estimate)
+export(head.compare.estimate)
 
 #export(edge_compare.estimate)
 #export(print.edge_compare.estimate)
