@@ -11,11 +11,12 @@
 #' @export
 #'
 #' @examples
-plot.edge_compare.estimate <- function(x,  size = 2, color = "red", width = .01, rope = NULL, prob = NULL){
+plot.compare.estimate <- function(x,  size = 2, color = "red", width = .01, prob = NULL){
   x <- x[1:4]
-  if (is.null(rope)) {
+
+  if (is.null(x$rope)) {
     dat_plt <- x$returned_object
-    dat_plt$sig <- ifelse(dat_plt$`2.5%` < 0 & dat_plt$`97.5%` > 0, 0, 1)
+    dat_plt$sig <- ifelse(dat_plt[,4] < 0 & dat_plt[,5] > 0, 0, 1)
     dat_plt <- subset(dat_plt, sig == 1)
     dat_plt$contrast <- factor(dat_plt$contrast,
                                levels = dat_plt$contrast[order(dat_plt$post_mean)],
@@ -28,8 +29,8 @@ plot.edge_compare.estimate <- function(x,  size = 2, color = "red", width = .01,
                  linetype = "dotted",
                  color = "grey50") +
       geom_point() +
-      geom_errorbar(aes(ymin =  dat_plt$`2.5%`,
-                        ymax = dat_plt$`97.5%`),
+      geom_errorbar(aes(ymin =  dat_plt[,4],
+                        ymax = dat_plt[,4]),
                     width = width) +
       geom_point(size = size,
                  color = color) +
@@ -39,12 +40,19 @@ plot.edge_compare.estimate <- function(x,  size = 2, color = "red", width = .01,
       theme_classic()
   }
 
-  if(isTRUE(rope)){
+  if(is.numeric(x$rope)){
     dat_plt <- x$returned_object
+
+    if(is.null(prob)){
+      stop("please specificy the rope probability")
+
+    }
 
     if( sum( dat_plt$pr_out_rope > prob) == 0 &   sum( dat_plt$pr_n_rope  > prob) == 0 ){
       stop("no intervals exclude rope")
     }
+
+
 
 
     if(sum( dat_plt$pr_out_rope > prob) != 0 & sum( dat_plt$pr_n_rope > prob) != 0){
@@ -70,8 +78,8 @@ plot.edge_compare.estimate <- function(x,  size = 2, color = "red", width = .01,
                    linetype = "dotted",
                    color = "grey50") +
         geom_point() +
-        geom_errorbar(aes(ymin =  dat_nonzero$`2.5%`,
-                          ymax = dat_nonzero$`97.5%`),
+        geom_errorbar(aes(ymin =  dat_nonzero[,4],
+                          ymax = dat_nonzero[,5]),
                       width = width) +
         geom_point(size = size,
                    color = color) +
@@ -107,7 +115,7 @@ plot.edge_compare.estimate <- function(x,  size = 2, color = "red", width = .01,
     }
 
 
-    if(sum( dat_plt$pr_out_rope > prob) != 0){
+    if(sum( dat_plt$pr_out_rope > prob) != 0  &  sum( dat_plt$pr_n_rope > prob) == 0 ){
 
       dat_nonzero <- subset(dat_plt, dat_plt$pr_out_rope >= prob)
       dat_nonzero$contrast <- factor(dat_nonzero$contrast,
@@ -125,8 +133,8 @@ plot.edge_compare.estimate <- function(x,  size = 2, color = "red", width = .01,
                    linetype = "dotted",
                    color = "grey50") +
         geom_point() +
-        geom_errorbar(aes(ymin =  dat_nonzero$`2.5%`,
-                          ymax = dat_nonzero$`97.5%`),
+        geom_errorbar(aes(ymin =  dat_nonzero[,4],
+                          ymax = dat_nonzero[,5]),
                       width = width) +
         geom_point(size = size,
                    color = color) +
@@ -144,7 +152,7 @@ plot.edge_compare.estimate <- function(x,  size = 2, color = "red", width = .01,
 
     }
 
-    if(sum( dat_plt$pr_n_rope > prob) != 0){
+    if(sum( dat_plt$pr_n_rope > prob) != 0 & sum( dat_plt$pr_out_rope > prob) == 0 ){
 
       plt <- ggplot(dat_zero, aes(y = post_mean,
 
@@ -155,8 +163,8 @@ plot.edge_compare.estimate <- function(x,  size = 2, color = "red", width = .01,
                    linetype = "dotted",
                    color = "grey50") +
         geom_point() +
-        geom_errorbar(aes(ymin =  dat_zero$`2.5%`,
-                          ymax = dat_zero$`97.5%`),
+        geom_errorbar(aes(ymin =  dat_zero[,4],
+                          ymax = dat_zero[,5]),
                       width = width) +
         geom_point(size = size,
                    color = color) +
@@ -174,3 +182,11 @@ plot.edge_compare.estimate <- function(x,  size = 2, color = "red", width = .01,
   plt
 
 }
+
+
+
+
+
+
+
+

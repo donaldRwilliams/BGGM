@@ -9,7 +9,7 @@
 #' @export
 #'
 #' @examples
-edge_compare.estimate <- function(x, contrast, ci_width, rope = NULL){
+compare.estimate <- function(x, contrast, ci_width, rope = NULL){
 
   # lower interval
   low <- (1 - ci_width) / 2
@@ -222,6 +222,7 @@ edge_compare.estimate <- function(x, contrast, ci_width, rope = NULL){
                             classes = "numeric",
                             how = "replace",
                             digits = 3)
+
         }
       # no rope
       if(is.null(rope)){
@@ -253,8 +254,12 @@ returned_object <- list(returned_object = returned_object,
                         ci = ci_width,
                         rope = rope, samples = diff)
 
-class(returned_object) <- "edge_compare.estimate"
+class(returned_object) <- "compare.estimate"
 
 returned_object
 }
+
+
+
+
 

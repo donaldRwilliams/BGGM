@@ -53,16 +53,13 @@ plot.select.estimate <- function(x, limits){
 
     zeros <- reshape::melt(x$adjacency_zero)
     zeros$X1 <- as.factor(zeros$X1)
-    zeros$value <- x$in_rope
-    zeros <- subset(zeros, value >= x$prob)
+    zeros$value <- ifelse(x$in_rope > x$prob, 1, 0)
 
-
-
-    plt2 <- ggplot(zeros, aes(x = as.factor(X2),
+   plt2 <- ggplot(zeros, aes(x = as.factor(X2),
                               y = as.factor(X1),
                               fill = value)) +
-      geom_tile(show.legend = T) +
-      scale_fill_gradient(low = "grey", high = "black", name = "") +
+      geom_tile(show.legend = F) +
+      scale_fill_gradient(low = "white", high = "black", name = "") +
       theme_bw(base_size = 12) +
       theme(panel.grid = element_blank()) +
       scale_y_discrete(limits= rev(levels(partials$X1)), expand = c(0, 0)) +
@@ -73,13 +70,7 @@ plot.select.estimate <- function(x, limits){
 
     plt <- list(plot_nonzero = plt1, plot_zero = plt2)
 
-
-
-
-
-
-
-  }
+    }
 
   plt
 
