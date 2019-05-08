@@ -51,7 +51,7 @@
 #'
 #' r2$summary_error
 
-predict.estimate <- function(fit, selected, test_data = NULL, ci_width, samples = 1000, measure = c("R2", "MSE")){
+predict.estimate <- function(fit, test_data = NULL, ci_width, samples = 1000, measure = c("R2", "MSE")){
 
     selected <- select(fit, ci_width = ci_width)$adjacency
 
@@ -113,14 +113,14 @@ predict.estimate <- function(fit, selected, test_data = NULL, ci_width, samples 
 
         if(measure == "R2"){
         # compute error measure
-        r2 <- BGGM:::R2_helper(ypred = ypred, y = dat[,i], ci_width = ci_width)
+        r2 <- BGGM:::R2_helper(ypred = ypred, y = dat[,i], ci_width = 0.95)
         # store the sumamaries
         summary[[i]] <- t(data.frame(r2$summary_r2))
         # store the posterior samples
         post_samples[[i]] <- r2$R2
         }
         if(measure == "MSE"){
-          mse <- BGGM:::MSE_helper(ypred = ypred, y = dat[,i], ci_width = ci_width)
+          mse <- BGGM:::MSE_helper(ypred = ypred, y = dat[,i], ci_width = 0.95)
           summary[[i]] <- t(data.frame(mse$summary_mse))
           post_samples[[i]] <- mse$MSE
         }

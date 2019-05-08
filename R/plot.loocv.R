@@ -25,7 +25,8 @@ plot.loocv <- function(x, size = 2, color = "blue", width = 0.01){
          geom_point(aes(x = dat$node,
                         y = loo),
                     size = size,
-                    color = color)
+                    color = color) +
+    xlab("Node")
 
   if(is.numeric(x$samples)){
     plt <- ggplot(dat, aes(x = node,
@@ -36,7 +37,8 @@ plot.loocv <- function(x, size = 2, color = "blue", width = 0.01){
       geom_point(aes(x = dat$node,
                      y = loo),
                  size = size,
-                 color = color)
+                 color = color) +
+      xlab("Node")
     }
 
   plt

@@ -1,4 +1,8 @@
-# estimate
+########################
+## estimate functions ##
+########################
+
+#  estimate
 export(estimate)
 export(estimate.default)
 export(summary.estimate)
@@ -6,6 +10,7 @@ export(print.estimate)
 export(plot.estimate)
 
 # loocv
+export(loocv)
 export(loocv.default)
 export(plot.loocv)
 export(print.loocv)
@@ -16,6 +21,7 @@ export(predict.estimate)
 export(plot.predict)
 export(summary.predict)
 export(print.predict)
+export(head.predict)
 
 # select
 export(select)
@@ -29,6 +35,17 @@ export(compare.estimate)
 export(summary.compare.estimate)
 export(print.compare.estimate)
 export(head.compare.estimate)
+
+
+
+export(explore)
+export(explore.default)
+export(print.explore)
+export(summary.explore)
+
+
+export(select.explore)
+
 
 #export(edge_compare.estimate)
 #export(print.edge_compare.estimate)

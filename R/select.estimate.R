@@ -10,6 +10,7 @@
 #' @export
 #'
 #' @examples
+
 select.estimate <- function(x, ci_width = 0.95, rope = NULL, prob = 0.975){
 
 
