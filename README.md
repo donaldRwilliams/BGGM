@@ -57,7 +57,7 @@ summary(fit_analytic)
 #> Call: 
 #> estimate.default(x = Y, analytic = T)
 #> --- 
-#> Date: Sat May 11 21:12:48 2019
+#> Date: Sat May 11 21:14:42 2019
 ```
 
 Note `summary(.)` provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
@@ -120,16 +120,16 @@ summary(E, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd   2.5%  97.5%
-#>  1--2   -0.2399   0.018 -0.276 -0.204
-#>  1--3   -0.1075   0.019 -0.145 -0.070
-#>  2--3    0.2861   0.017  0.252  0.320
-#>  1--4   -0.0072   0.019 -0.045  0.031
-#>  2--4    0.1647   0.019  0.128  0.201
-#>  3--4    0.1779   0.019  0.141  0.214
-#>  1--5   -0.0098   0.019 -0.046  0.029
-#>  2--5    0.1561   0.019  0.119  0.193
-#>  3--5    0.3590   0.017  0.326  0.391
-#>  4--5    0.1212   0.019  0.084  0.158
+#>  1--2   -0.2404   0.018 -0.276 -0.205
+#>  1--3   -0.1074   0.019 -0.144 -0.071
+#>  2--3    0.2860   0.018  0.251  0.321
+#>  1--4   -0.0071   0.019 -0.043  0.032
+#>  2--4    0.1643   0.018  0.128  0.200
+#>  3--4    0.1780   0.019  0.141  0.215
+#>  1--5   -0.0095   0.019 -0.048  0.029
+#>  2--5    0.1564   0.019  0.120  0.194
+#>  3--5    0.3588   0.017  0.324  0.391
+#>  4--5    0.1218   0.019  0.085  0.158
 #> ---
 ```
 
@@ -222,15 +222,15 @@ head(E, nrow = 10, summarize = T, digits = 2)
 #>  
 #>  egde post_mean post_sd pr_out  pr_in
 #>  1--2    -0.244   0.018   1.00 0.0000
-#>  1--3    -0.106   0.019   0.63 0.3682
+#>  1--3    -0.106   0.019   0.62 0.3822
 #>  2--3     0.286   0.018   1.00 0.0000
-#>  1--4    -0.014   0.020   0.00 1.0000
-#>  2--4     0.161   0.019   1.00 0.0002
-#>  3--4     0.160   0.019   1.00 0.0006
-#>  1--5    -0.015   0.020   0.00 1.0000
-#>  2--5     0.146   0.019   0.99 0.0074
+#>  1--4    -0.015   0.020   0.00 1.0000
+#>  2--4     0.161   0.019   1.00 0.0020
+#>  3--4     0.160   0.019   1.00 0.0008
+#>  1--5    -0.016   0.020   0.00 1.0000
+#>  2--5     0.145   0.019   0.99 0.0070
 #>  3--5     0.354   0.017   1.00 0.0000
-#>  4--5     0.114   0.019   0.76 0.2394
+#>  4--5     0.114   0.020   0.76 0.2374
 #> ---
 ```
 
@@ -290,9 +290,9 @@ head(edge_difference, nrow = 5)
 #> Estimates: 
 #>  
 #>   contrast post_mean post_sd pr_out pr_in
-#>  1--2-1--3    -0.138   0.030  0.898 0.102
-#>  1--2-2--3    -0.530   0.023  1.000 0.000
-#>  1--2-1--4    -0.230   0.028  1.000 0.000
+#>  1--2-1--3    -0.138   0.030  0.897 0.103
+#>  1--2-2--3    -0.530   0.024  1.000 0.000
+#>  1--2-1--4    -0.229   0.029  1.000 0.000
 #>  1--2-2--4    -0.405   0.026  1.000 0.000
 #>  1--2-3--4    -0.404   0.027  1.000 0.000
 #> ---
@@ -329,7 +329,7 @@ This shows the central idea behind the region of practical equivalence, which is
 Prediction
 ----------
 
-The following is based on the correspondence between the elements ofΘand multiple regression. In the context of GGMs, using regression to select edges is referred to as “neighborhood” selection. On the other hand, the method described in Williams (2018) works directly with either the posterior distribution for precision matrix or the maximum a posteriori estimate. It follows that **BGGM** can also be used for the purpose of multiple regression–i.e.,
+The following is based on the correspondence between the elements of the precision matrix and multiple regression. In the context of GGMs, using regression to select edges is referred to as “neighborhood” selection. On the other hand, the method described in Williams (2018) works directly with either the posterior distribution for precision matrix or the maximum a posteriori estimate. It follows that **BGGM** can also be used for the purpose of multiple regression–i.e.,
 
 ``` r
 # p = 10
@@ -351,15 +351,15 @@ coefficients(fit, node = 1, ci_width = 0.95)
 #> Estimates: 
 #>  
 #>  node post_mean post_sd   2.5%  97.5%
-#>     2    -0.278   0.022 -0.319 -0.233
-#>     3    -0.125   0.023 -0.169 -0.079
-#>     4    -0.015   0.020 -0.056  0.022
-#>     5    -0.017   0.022 -0.059  0.026
-#>     6     0.056   0.020  0.017  0.096
-#>     7     0.081   0.021  0.041  0.121
-#>     8     0.044   0.020  0.005  0.084
-#>     9     0.141   0.022  0.100  0.186
-#>    10    -0.028   0.021 -0.071  0.013
+#>     2    -0.277   0.021 -0.318 -0.240
+#>     3    -0.125   0.023 -0.171 -0.076
+#>     4    -0.016   0.021 -0.056  0.023
+#>     5    -0.017   0.022 -0.059  0.027
+#>     6     0.056   0.021  0.015  0.097
+#>     7     0.080   0.021  0.038  0.122
+#>     8     0.044   0.020  0.008  0.084
+#>     9     0.140   0.023  0.098  0.186
+#>    10    -0.028   0.021 -0.071  0.014
 #> ---
 ```
 
@@ -395,9 +395,9 @@ head(train_R2, nrow = 2)
 #> --- 
 #> Estimates: 
 #> 
-#>  node post_mean    post_sd       2.5%     97.5%
-#>     1 0.1730429 0.06769087 0.05002817 0.3102517
-#>     2 0.2869906 0.06594982 0.14874643 0.4078271
+#>  node post_mean    post_sd      2.5%     97.5%
+#>     1 0.1684297 0.06675745 0.0492175 0.3012937
+#>     2 0.2896139 0.06828907 0.1548445 0.4121517
 #> ---
 ```
 
@@ -445,16 +445,16 @@ summary(bayes_loo)
 #> Estimates: 
 #> 
 #>   node      loo   loo_se
-#>     1 2575.121 49.11974
-#>     2 2332.066 64.19520
-#>     3 2302.532 63.92505
-#>     4 2464.668 51.48360
-#>     5 2415.549 55.48159
-#>     6 2432.609 59.37936
-#>     7 2300.149 50.41882
-#>     8 2391.307 51.36661
-#>     9 2294.508 51.51196
-#>    10 2365.346 39.50116
+#>     1 2574.994 49.04962
+#>     2 2332.420 63.90806
+#>     3 2303.256 64.29669
+#>     4 2465.456 51.77724
+#>     5 2416.313 55.09421
+#>     6 2434.168 58.44953
+#>     7 2301.237 50.31893
+#>     8 2391.138 51.38851
+#>     9 2295.859 51.77170
+#>    10 2363.553 40.16517
 #> ---
 ```
 
