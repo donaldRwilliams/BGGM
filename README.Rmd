@@ -31,7 +31,7 @@ Williams, D. R., & Mulder, J. (2019, January 14). Bayesian Hypothesis Testing fo
 Williams, D. R., Rast, P., Pericchi, L. R., & Mulder, J. (2019). Comparing Gaussian Graphical Models with the Posterior Predictive Distribution and Bayesian Model Selection. ([pre-print](https://psyarxiv.com/yt386/))
 
 
-## Installation
+# Installation
 
 You can install BGGM from git hub with:
 
@@ -41,6 +41,7 @@ devtools::install_github("donaldRwilliams/BGGM")
 ```
 
 # 1. Estimation
+
 ## 1.1 Structure Learning
 
 By structure learning we are referring to selecting the graph (i.e., the edge set $E$), which consists of those edges determinedto be non-zero.  For demonstrative purposes, we consider a relatively small number of variables ($p= 5$).  This 

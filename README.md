@@ -14,7 +14,7 @@ Williams, D. R., & Mulder, J. (2019, January 14). Bayesian Hypothesis Testing fo
 Williams, D. R., Rast, P., Pericchi, L. R., & Mulder, J. (2019). Comparing Gaussian Graphical Models with the Posterior Predictive Distribution and Bayesian Model Selection. ([pre-print](https://psyarxiv.com/yt386/))
 
 Installation
-------------
+============
 
 You can install BGGM from git hub with:
 
@@ -57,7 +57,7 @@ summary(fit_analytic)
 #> Call: 
 #> estimate.default(x = Y, analytic = T)
 #> --- 
-#> Date: Sat May 11 20:37:47 2019
+#> Date: Sat May 11 20:38:51 2019
 ```
 
 Note `summary(.)` provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
@@ -117,16 +117,16 @@ summary(E, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd   2.5%  97.5%
-#>  1--2   -0.2403   0.018 -0.276 -0.205
-#>  1--3   -0.1079   0.019 -0.146 -0.071
-#>  2--3    0.2863   0.018  0.251  0.320
-#>  1--4   -0.0071   0.019 -0.043  0.031
-#>  2--4    0.1649   0.019  0.128  0.201
-#>  3--4    0.1779   0.019  0.140  0.214
-#>  1--5   -0.0087   0.019 -0.046  0.029
-#>  2--5    0.1561   0.019  0.120  0.192
-#>  3--5    0.3587   0.016  0.326  0.391
-#>  4--5    0.1213   0.019  0.084  0.159
+#>  1--2   -0.2404   0.018 -0.275 -0.205
+#>  1--3   -0.1072   0.019 -0.145 -0.071
+#>  2--3    0.2864   0.018  0.251  0.321
+#>  1--4   -0.0074   0.019 -0.045  0.031
+#>  2--4    0.1645   0.019  0.126  0.201
+#>  3--4    0.1779   0.019  0.141  0.214
+#>  1--5   -0.0088   0.019 -0.046  0.029
+#>  2--5    0.1567   0.019  0.120  0.193
+#>  3--5    0.3583   0.017  0.325  0.392
+#>  4--5    0.1217   0.019  0.085  0.158
 #> ---
 ```
 
