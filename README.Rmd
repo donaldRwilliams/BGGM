@@ -38,7 +38,9 @@ devtools::install_github("donaldRwilliams/BGGM")
 ```
 
 ## 1. Estimation
+
 ### 1.1 Structure Learning
+
 The package **BGGM** offers a convenient analytic solution for estimating GGMs. It is implemented with:
 ```{r eval=TRUE, message=F, warning=F}
 # load pacakges
