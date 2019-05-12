@@ -3,13 +3,13 @@
 BGGM
 ====
 
-This package includes the sofware implemention of methods introduced in Williams, Rast, Pericchi, and Mulder (2019), Williams and Mulder (2019) and Williams (2018). The packaged is built around two Bayesian approaches for inference: estimation and hypothesis.
+This package includes methods introduced in Williams, Rast, Pericchi, and Mulder (2019), Williams and Mulder (2019), and Williams (2018). The package is built around two Bayesian approaches for inference: estimation and hypothesis testing.
 
-The estimation based methods are described in Williams (2018). The methods offer advantages compared to classical methods, in that a measure of uncertainty is provided for all parameters. For example, each node has a distribution for the variance explained (i.e., Bayesian *R*<sup>2</sup>). Measures of out-of-sample performance are also available, which also have a measure of uncertainty. The model is selected with credible interval exclusion of zero. Further, it is possible to define a region of practical equivalence. This allows for computing the posterior probability of a *null* region--i.e., conditional independence. It is also possible to compare partial correlations.
+The estimation based methods are described in Williams (2018). They offer advantages compared to classical methods, in that a measure of uncertainty is provided for all parameters. For example, each node has a distribution for variance explained (i.e., Bayesian *R*<sup>2</sup>). Measures of out-of-sample prediction error are available, which also have a measure of uncertainty. The model is selected with credible interval exclusion of zero or a region of practical equivalence. This allows for computing the posterior probability for an assumed *null* region--i.e., conditional independence. It is also possible to compare partial correlations.
 
-Hypothesis testing methods are described in Williams and Mulder (2019), and allow for testing of edges (i.e., partial correlations) with the Bayes factor. One-sided hypothesis testing is also possible. These methods can also provide evidence for the null hypothesis. There are extensions for confirmatory hypothesis testing in GGMs, that can include inequality or equality constraints on the partial correlations. This allows for comparing theroetically informated models with Bayseian model selection.
+The hypothesis testing based methods are described in Williams and Mulder (2019), and allow for testing edges (i.e., partial correlations) with the Bayes factor. One-sided hypothesis testing is also possible. These methods provide (relative) evidence for the null hypothesis. There are extensions for **confirmatory hypothesis testing** in GGMs--e.g., inequality or equality constraints on the partial correlations. This allows for comparing theroetically informed models with Bayseian model selection.
 
-Further, it is possible to assess differences as well as similarities (i.e., the null hypothesis) between GGMs with the posterior predictive distribution and Bayesian model selection. The latter allows for testing hypothesized changes in graphical structures between, for example, control and treatment groups. The posterior preditive approach is based on KL-divergence. It allows for testing the assumed model of group equality for the entire graph or specific variables.
+Further, it is possible to assess differences as well as similarities (i.e., the null hypothesis) between GGMs. These method were introduced in Williams, Rast, Pericchi, and Mulder (2019). Graphs are compared either with the posterior predictive distribution or Bayesian model selection. The latter allows for testing hypothesized changes in graphical structures between, for example, control and treatment groups. The posterior preditive approach is based on KL-divergence. It allows for testing the assumed (null) model of group equality for the entire graph or specific variables. These methods can be used to comapre any number of GGMs.
 
 Williams, D. R. (2018). Bayesian Inference for Gaussian Graphical Models: Structure Learning, Explanation, and Prediction. ([pre-print](https://doi.org/10.31234/osf.io/x8dpr))
 
@@ -74,7 +74,9 @@ Estimation
 Structure Learning
 ------------------
 
-By structure learning we are referring to selecting the graph (i.e., the edge set *E*), which consists of those edges determined to be non-zero. For demonstrative purposes, we consider a relatively small number of variables (*p* = 5). This The package **BGGM** offers a convenient analytic solution for estimating GGMs. It is implemented with:
+By structure learning we are referring to selecting the graph (i.e., the edge set *E*), which consists of those edges determined to be non-zero. For demonstrative purposes, we consider a relatively small number of variables (*p* = 5).
+
+The package **BGGM** offers a convenient analytic solution for estimating GGMs. It is implemented with:
 
 ``` r
 library(BGGM)
@@ -102,7 +104,7 @@ summary(fit_analytic)
 #> Call: 
 #> estimate.default(x = Y, analytic = T)
 #> --- 
-#> Date: Sun May 12 07:21:48 2019
+#> Date: Sun May 12 07:37:42 2019
 ```
 
 Note `summary(.)` provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
@@ -147,7 +149,7 @@ summary(E)
 #> ---
 ```
 
-The analytic solution works directly with the precision matrix, and thus, there is not an option to summarize the posterior distributions. This is because the non-standardized elements are in the opposite direction (±) of the partial correlations, which in our experience, can lead to confusion. To summarize the posteriors change `analytic = T` to `analytic = F`:
+The analytic solution works directly with the precision matrix, and thus, there is not an option to summarize the posterior distributions. This is because the non-standardized elements are in the opposite direction (±) of the partial correlations, which in our experience, can lead to confusion. To summarize the partial correlations change `analytic = T` to `analytic = F`:
 
 ``` r
 # sample from posterior
@@ -170,16 +172,16 @@ summary(E, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd   2.5%  97.5%
-#>  1--2   -0.2409   0.018 -0.277 -0.205
-#>  1--3   -0.1074   0.019 -0.144 -0.070
+#>  1--2   -0.2398   0.018 -0.275 -0.206
+#>  1--3   -0.1077   0.019 -0.145 -0.071
 #>  2--3    0.2863   0.018  0.252  0.321
-#>  1--4   -0.0074   0.019 -0.045  0.029
-#>  2--4    0.1644   0.019  0.128  0.200
-#>  3--4    0.1778   0.019  0.140  0.213
-#>  1--5   -0.0092   0.019 -0.047  0.029
-#>  2--5    0.1563   0.019  0.119  0.192
-#>  3--5    0.3587   0.017  0.326  0.392
-#>  4--5    0.1216   0.019  0.084  0.159
+#>  1--4   -0.0070   0.020 -0.046  0.031
+#>  2--4    0.1647   0.018  0.129  0.201
+#>  3--4    0.1776   0.019  0.141  0.214
+#>  1--5   -0.0096   0.019 -0.048  0.028
+#>  2--5    0.1560   0.019  0.119  0.192
+#>  3--5    0.3587   0.017  0.325  0.391
+#>  4--5    0.1217   0.019  0.084  0.159
 #> ---
 ```
 
@@ -274,15 +276,15 @@ head(E, nrow = 10, summarize = T, digits = 2)
 #>  
 #>  egde post_mean post_sd pr_out  pr_in
 #>  1--2    -0.244   0.018   1.00 0.0000
-#>  1--3    -0.106   0.019   0.63 0.3692
-#>  2--3     0.286   0.018   1.00 0.0000
-#>  1--4    -0.014   0.020   0.00 1.0000
-#>  2--4     0.161   0.019   1.00 0.0004
-#>  3--4     0.160   0.019   1.00 0.0008
-#>  1--5    -0.015   0.019   0.00 1.0000
-#>  2--5     0.145   0.019   0.99 0.0086
+#>  1--3    -0.107   0.019   0.64 0.3582
+#>  2--3     0.287   0.018   1.00 0.0000
+#>  1--4    -0.015   0.020   0.00 1.0000
+#>  2--4     0.161   0.019   1.00 0.0008
+#>  3--4     0.161   0.019   1.00 0.0006
+#>  1--5    -0.016   0.019   0.00 1.0000
+#>  2--5     0.145   0.019   0.99 0.0098
 #>  3--5     0.354   0.017   1.00 0.0000
-#>  4--5     0.114   0.019   0.76 0.2414
+#>  4--5     0.113   0.019   0.76 0.2358
 #> ---
 ```
 
@@ -345,11 +347,11 @@ head(edge_difference, nrow = 5)
 #> Estimates: 
 #>  
 #>   contrast post_mean post_sd pr_out pr_in
-#>  1--2-1--3    -0.138   0.030  0.894 0.106
-#>  1--2-2--3    -0.530   0.024  1.000 0.000
-#>  1--2-1--4    -0.230   0.029  1.000 0.000
+#>  1--2-1--3    -0.137   0.030  0.899 0.101
+#>  1--2-2--3    -0.531   0.023  1.000 0.000
+#>  1--2-1--4    -0.229   0.029  1.000 0.000
 #>  1--2-2--4    -0.405   0.026  1.000 0.000
-#>  1--2-3--4    -0.404   0.027  1.000 0.000
+#>  1--2-3--4    -0.405   0.026  1.000 0.000
 #> ---
 ```
 
@@ -387,7 +389,7 @@ This shows the central idea behind the region of practical equivalence, which is
 Prediction
 ----------
 
-The following is based on the correspondence between the elements of the precision matrix and multiple regression. In the context of GGMs, using regression to select edges is referred to as “neighborhood” selection. On the other hand, the method described in Williams (2018) works directly with either the posterior distribution for the precision matrix or the maximum a posteriori estimates. These are then converted to their respective regression counterparts. It follows that **BGGM** can also be used for the purpose of multiple regression–i.e.,
+The following is based on the correspondence between the elements of the precision matrix and multiple regression. In the context of GGMs, using regression to select edges is referred to as “neighborhood” selection. On the other hand, the method described in Williams (2018) works directly with either the posterior distribution for the precision matrix or the maximum a posteriori estimates. These are then converted to the corresponding regression coefficients and residual variances. It follows that **BGGM** can also be used for the purpose of multiple regression–i.e.,
 
 ``` r
 # p = 10
@@ -409,15 +411,15 @@ coefficients(fit, node = 1, ci_width = 0.95)
 #> Estimates: 
 #>  
 #>  node post_mean post_sd   2.5%  97.5%
-#>     2    -0.278   0.021 -0.320 -0.237
-#>     3    -0.126   0.023 -0.169 -0.081
-#>     4    -0.015   0.020 -0.054  0.024
-#>     5    -0.017   0.021 -0.059  0.026
-#>     6     0.056   0.021  0.014  0.095
-#>     7     0.081   0.021  0.041  0.123
-#>     8     0.044   0.022  0.004  0.086
-#>     9     0.141   0.022  0.097  0.186
-#>    10    -0.030   0.020 -0.069  0.011
+#>     2    -0.278   0.022 -0.322 -0.236
+#>     3    -0.123   0.022 -0.168 -0.079
+#>     4    -0.015   0.020 -0.054  0.023
+#>     5    -0.017   0.022 -0.060  0.025
+#>     6     0.056   0.021  0.012  0.096
+#>     7     0.081   0.022  0.037  0.123
+#>     8     0.043   0.020  0.002  0.082
+#>     9     0.141   0.022  0.096  0.184
+#>    10    -0.029   0.021 -0.072  0.010
 #> ---
 ```
 
@@ -454,8 +456,8 @@ head(train_R2, nrow = 2)
 #> Estimates: 
 #> 
 #>  node post_mean    post_sd       2.5%     97.5%
-#>     1 0.1675865 0.06704388 0.04534863 0.3020816
-#>     2 0.2876730 0.06763723 0.15407048 0.4162613
+#>     1 0.1730122 0.06754063 0.05194313 0.3057845
+#>     2 0.2928709 0.06449296 0.16107100 0.4112752
 #> ---
 ```
 
@@ -510,16 +512,16 @@ summary(bayes_loo)
 #> Estimates: 
 #> 
 #>   node      loo   loo_se
-#>     1 2574.219 48.45759
-#>     2 2329.028 63.46088
-#>     3 2302.129 64.53693
-#>     4 2465.285 51.89776
-#>     5 2417.002 56.42462
-#>     6 2434.616 58.72451
-#>     7 2302.553 50.65782
-#>     8 2391.254 51.23596
-#>     9 2295.626 52.09091
-#>    10 2364.418 39.69765
+#>     1 2575.308 48.75850
+#>     2 2330.398 63.43717
+#>     3 2302.226 64.03833
+#>     4 2466.058 51.45350
+#>     5 2417.206 55.08175
+#>     6 2433.155 58.52057
+#>     7 2301.276 50.22989
+#>     8 2391.458 51.48469
+#>     9 2295.304 51.40400
+#>    10 2363.915 39.53659
 #> ---
 ```
 

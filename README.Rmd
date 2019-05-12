@@ -19,15 +19,15 @@ knitr::opts_chunk$set(
 ```
 
 # BGGM
-This package includes the sofware implemention of methods introduced in Williams, Rast, Pericchi, and Mulder (2019), Williams and Mulder (2019) and Williams (2018). The packaged is built around two Bayesian approaches for inference: estimation and hypothesis. 
+This package includes methods introduced in Williams, Rast, Pericchi, and Mulder (2019), Williams and Mulder (2019), and Williams (2018). The package is built around two Bayesian approaches for inference: estimation and hypothesis testing. 
 
-The estimation based methods are described in Williams (2018). The methods offer advantages compared to classical methods, in that a 
-measure of uncertainty is provided for all parameters. For example, each node has a distribution for the variance explained (i.e., Bayesian $R^2$). Measures of out-of-sample performance are also available, which also have a measure of uncertainty. The model is selected with credible interval exclusion of zero. Further, it is possible to define a region of practical equivalence. This allows for computing the posterior probability of a *null* region--i.e., conditional independence. It is also possible to compare partial correlations. 
+The estimation based methods are described in Williams (2018). They offer advantages compared to classical methods, in that a 
+measure of uncertainty is provided for all parameters. For example, each node has a distribution for variance explained (i.e., Bayesian $R^2$). Measures of out-of-sample prediction error are available, which also have a measure of uncertainty. The model is selected with credible interval exclusion of zero or a region of practical equivalence. This allows for computing the posterior probability for an assumed *null* region--i.e., conditional independence. It is also possible to compare partial correlations. 
 
-Hypothesis testing methods are described in Williams and Mulder (2019), and allow for testing of edges (i.e., partial correlations) with the Bayes factor. One-sided hypothesis testing is also possible. These methods can also provide evidence for the null hypothesis. There are extensions for confirmatory hypothesis testing in GGMs, that can include inequality or equality constraints on the partial correlations. This allows for comparing theroetically informated models with Bayseian model selection.
+The hypothesis testing based methods are described in Williams and Mulder (2019), and allow for testing edges (i.e., partial correlations) with the Bayes factor. One-sided hypothesis testing is also possible. These methods provide (relative) evidence for the null hypothesis. There are extensions for **confirmatory hypothesis testing** in GGMs--e.g., inequality or equality constraints on the partial correlations. This allows for comparing theroetically informed models with Bayseian model selection.
 
 
-Further, it is possible to assess differences as well as similarities (i.e., the null hypothesis)  between  GGMs  with  the  posterior  predictive  distribution  and  Bayesian model  selection.   The  latter  allows  for  testing  hypothesized  changes  in  graphical structures  between,  for  example,  control  and  treatment  groups. The posterior  preditive approach is based on KL-divergence. It allows for testing the assumed model of group equality for the entire graph or specific variables.
+Further, it is possible to assess differences as well as similarities (i.e., the null hypothesis)  between  GGMs. These method were introduced in Williams, Rast, Pericchi, and Mulder (2019). Graphs are compared either with the posterior  predictive  distribution  or Bayesian model  selection.   The  latter  allows  for  testing hypothesized  changes  in  graphical structures  between,  for  example,  control  and  treatment  groups. The posterior  preditive approach is based on KL-divergence. It allows for testing the assumed (null) model of group equality for the entire graph or specific variables. These methods can be used to comapre any number of GGMs.
 
 
 
@@ -94,7 +94,8 @@ devtools::install_github("donaldRwilliams/BGGM")
 
 ##  Structure Learning
 
-By structure learning we are referring to selecting the graph (i.e., the edge set $E$), which consists of those edges determined to be non-zero.  For demonstrative purposes, we consider a relatively small number of variables ($p= 5$).  This 
+By structure learning we are referring to selecting the graph (i.e., the edge set $E$), which consists of those edges determined to be non-zero.  For demonstrative purposes, we consider a relatively small number of variables ($p= 5$). 
+
 The package **BGGM** offers a convenient analytic solution for estimating GGMs. It is implemented with:
 ```{r eval=TRUE, message=F, warning=F}
 library(BGGM)
@@ -123,7 +124,7 @@ E <- select(fit_analytic, ci_width = 0.95)
 summary(E)
 ```
 
-The analytic solution works directly with the precision matrix, and thus, there is not an option to summarize the posterior distributions. This is because the non-standardized elements are in the opposite direction ($\pm$) of the partial correlations, which in our experience, can lead to confusion. To summarize  the posteriors change `analytic = T` to `analytic = F`:
+The analytic solution works directly with the precision matrix, and thus, there is not an option to summarize the posterior distributions. This is because the non-standardized elements are in the opposite direction ($\pm$) of the partial correlations, which in our experience, can lead to confusion. To summarize  the partial correlations change `analytic = T` to `analytic = F`:
 ```{r}
 # sample from posterior
 fit_sampling <- estimate(Y, analytic = F)
@@ -274,7 +275,7 @@ plot_2B
 This shows the central idea behind the region of practical equivalence, which is highlighted in grey. Ideally only a few contrasts would be examined in light of a guiding theory.
 
 ## Prediction
-The following is based on the correspondence between the elements of the precision matrix and multiple regression. In the context of GGMs, using regression to select edges is referred to as “neighborhood” selection.   On the other hand, the method described in Williams (2018) works directly with either the posterior distribution for the precision matrix or the maximum a posteriori estimates. These are then converted to their respective regression counterparts. It follows that **BGGM** can also be used for the purpose of multiple regression–i.e.,
+The following is based on the correspondence between the elements of the precision matrix and multiple regression. In the context of GGMs, using regression to select edges is referred to as “neighborhood” selection.   On the other hand, the method described in Williams (2018) works directly with either the posterior distribution for the precision matrix or the maximum a posteriori estimates. These are then converted to the corresponding regression coefficients and residual variances. It follows that **BGGM** can also be used for the purpose of multiple regression–i.e.,
 
 ```{r}
 # p = 10
