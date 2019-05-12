@@ -19,17 +19,63 @@ knitr::opts_chunk$set(
 ```
 
 # BGGM
-This package is described in Williams and Mulder (2019) and Williams (2018). The methods are separated into two Bayesian approaches for inference: hypothesis testing and estimation. The former is described in Williams and Mulder (2018a), and allows for testing for the presence of edges with the Bayes factor. One-sided hypothesis testing is also possible. These methods can also provide evidence for the null hypothesis. There are extensions for confirmatory hypothesis testing in GGMs, that can include inequality or equality constraints on the partial correlations. Further, it is possible to assess differences as well as similarities (i.e., the null hypothesis)  between  GGMs  with  the  posterior  predictive  distribution  and  Bayesian model  selection.   The  latter  allows  for  testing  hypothesized  changes  in  graphical structures  between,  for  example,  control  and  treatment  groups. 
+This package includes the sofware implemention of methods introduced in Williams, Rast, Pericchi, and Mulder (2019), Williams and Mulder (2019) and Williams (2018). The packaged is built around two Bayesian approaches for inference: estimation and hypothesis. 
 
 The estimation based methods are described in Williams (2018). The methods offer advantages compared to classical methods, in that a 
-measure of uncertainty is provided for all parameters. For example, each node has a distribution for the variance explained (i.e., Bayesian $R^2$). Measures of out-of-sample performance are also available, which also have a measure of uncertainty. The model is selected with credible interval exclusion of zero.
+measure of uncertainty is provided for all parameters. For example, each node has a distribution for the variance explained (i.e., Bayesian $R^2$). Measures of out-of-sample performance are also available, which also have a measure of uncertainty. The model is selected with credible interval exclusion of zero. Further, it is possible to define a region of practical equivalence. This allows for computing the posterior probability of a *null* region--i.e., conditional independence. It is also possible to compare partial correlations. 
 
-Williams, D. R. (2018, September 20). Bayesian Inference for Gaussian Graphical Models: Structure Learning, Explanation, and Prediction. ([pre-print](https://doi.org/10.31234/osf.io/x8dpr))
+Hypothesis testing methods are described in Williams and Mulder (2019), and allow for testing of edges (i.e., partial correlations) with the Bayes factor. One-sided hypothesis testing is also possible. These methods can also provide evidence for the null hypothesis. There are extensions for confirmatory hypothesis testing in GGMs, that can include inequality or equality constraints on the partial correlations. This allows for comparing theroetically informated models with Bayseian model selection.
 
-Williams, D. R., & Mulder, J. (2019, January 14). Bayesian Hypothesis Testing for Gaussian Graphical Models:Conditional Independence and Order Constraints. ([pre-print](https://doi.org/10.31234/osf.io/ypxd8))
+
+Further, it is possible to assess differences as well as similarities (i.e., the null hypothesis)  between  GGMs  with  the  posterior  predictive  distribution  and  Bayesian model  selection.   The  latter  allows  for  testing  hypothesized  changes  in  graphical structures  between,  for  example,  control  and  treatment  groups. The posterior  preditive approach is based on KL-divergence. It allows for testing the assumed model of group equality for the entire graph or specific variables.
+
+
+
+Williams, D. R. (2018). Bayesian Inference for Gaussian Graphical Models: Structure Learning, Explanation, and Prediction. ([pre-print](https://doi.org/10.31234/osf.io/x8dpr))
+
+Williams, D. R., & Mulder, J. (2019). Bayesian Hypothesis Testing for Gaussian Graphical Models:Conditional Independence and Order Constraints. ([pre-print](https://doi.org/10.31234/osf.io/ypxd8))
 
 Williams, D. R., Rast, P., Pericchi, L. R., & Mulder, J. (2019). Comparing Gaussian Graphical Models with the Posterior Predictive Distribution and Bayesian Model Selection. ([pre-print](https://psyarxiv.com/yt386/))
 
+## Outline
+
+This README is organized as follows:
+
+* Installation
+
+* Estimation
+    
+    + Structure Learning
+    
+    + Edge (parital correlation) differences 
+    
+    + Prediction
+        
+        - Bayesian $R^2$
+        
+        - Bayesian Leave-One-Out Cross-Validation
+
+* Hypothesis Testing
+    
+    + Prior specification
+    
+    + Stucture Learning
+        
+        - One-sided hypthesis testing
+        
+        - Exhaustive hypothesis testing
+    
+    + Confirmatory Hypothesis Testing
+      
+        - Order Contraints
+        
+        - Equality Contraints
+
+* Comparing GGMs
+    
+    + Posterior Predictive KL-divergence
+    
+    + Bayesian Model Selection
 
 # Installation
 
@@ -42,6 +88,8 @@ devtools::install_github("donaldRwilliams/BGGM")
 
 
 
+
+
 # Estimation
 
 ##  Structure Learning
@@ -49,10 +97,8 @@ devtools::install_github("donaldRwilliams/BGGM")
 By structure learning we are referring to selecting the graph (i.e., the edge set $E$), which consists of those edges determined to be non-zero.  For demonstrative purposes, we consider a relatively small number of variables ($p= 5$).  This 
 The package **BGGM** offers a convenient analytic solution for estimating GGMs. It is implemented with:
 ```{r eval=TRUE, message=F, warning=F}
-# load pacakges
-# install.packages("devtools")
-# devtools::install_github("donaldRwilliams/BGGM")
 library(BGGM)
+
 library(ggplot2)
 library(ggraph)
 library(foreach)
@@ -62,23 +108,30 @@ Y <- BGGM::bfi[,1:5]
 
 # analytic solution
 fit_analytic <- estimate(Y, analytic = T)
+
+# summary
 summary(fit_analytic)
 ```
 Note `summary(.)` provides information about the fitted model, including that the analytic solution was used, the number of observations ($n$) and variables ($p$), and the number of edges. 
 
 The edge set is then selected with:
 ```{r }
+# select the graph (edge set E)
 E <- select(fit_analytic, ci_width = 0.95)
 
+# summary of E
 summary(E)
 ```
 
 The analytic solution works directly with the precision matrix, and thus, there is not an option to summarize the posterior distributions. This is because the non-standardized elements are in the opposite direction ($\pm$) of the partial correlations, which in our experience, can lead to confusion. To summarize  the posteriors change `analytic = T` to `analytic = F`:
 ```{r}
+# sample from posterior
 fit_sampling <- estimate(Y, analytic = F)
 
+# select the graph
 E <- select(fit_sampling, ci_width = 0.95)
 
+# summarize partial correlations
 summary(E, summarize = T, digits = 2)
 ```
 Note that `edge` corresponds to that particular entry in the partial correlation matrix--i.e., `1--2` is the relation between the first and second variables, respectively.
@@ -110,6 +163,7 @@ This example nicely demonstrates how the `plot` objects can be further customize
 # select the graph
 E <- select(fit_sampling, ci_width = 0.95)
 
+# heatmap plot
 plot_1B <- plot(E, 
                 type = "heatmap", 
                 lower_tri = TRUE) +
@@ -122,6 +176,7 @@ Here `lower_tri = TRUE` controls which partial correlations are plotted.  In thi
 
 On the other hand, a “network” plot can be obtained with:
 ```{r, warning=F}
+# network plot
 plot_1C <- plot(E, type = "network",
                 layout ='circle',
                 node_outer = 8,
@@ -154,12 +209,14 @@ The argument `prob = 0.95` requires that 95 % of the posterior density be in or 
 In this case, `plot(.)` returns two objects:  (1) the selected edges; (2) those for which there is support for the null values.  These plots are displayed. This is implemented with:
 
 ```{r warning = F }
+# network plot
 plts <- plot(E, type = "network",
              layout ='circle',
              node_outer = 10,
              node_inner = 9,
              node_text_size = 6)
 
+# practically non-zero
 plot_1D <- plts$plot_nonzero +
              ggtitle("Practically Non-zero") +
              theme(plot.title = element_text(size = 15))
@@ -168,6 +225,7 @@ plot_1D
 ```
 
 ```{r, warning=F}
+# practically zero
 plot_1E <- plts$plot_zero +
               ggtitle("Practically Zero") +
               theme(plot.title = element_text(size = 15))
@@ -186,7 +244,7 @@ Differences between partial correlations are often tested in GGMs; for example, 
 # edge differences
 edge_difference <- edge_compare(fit_sample, contrast = "all", ci_width = 0.95, rope = 0.1)
 
-# summary for first 5 rows
+# summary for first 5 contrasts
 head(edge_difference, nrow = 5)
 ```
 
@@ -194,14 +252,17 @@ This  output  includes  the  posterior  mean  and  standard  deviation  for  eac
 
 The object `edge_difference` can the be plotted with:
 ```{r}
+# plot contrasts
 plot_diff <- plot(edge_difference, prob = .99)
 
+# practically different
 plot_2A <- plot_diff$plt_nonzero +
            ggtitle("Practically Different") +
            theme(axis.text.y = element_blank())
 plot_2A
 ```
 ```{r}
+# practically equivalent
 plot_2B <- plot_diff$plt_zero +
   scale_y_continuous(limits = c(-0.4, 0.4)) +
   ggtitle("Practically Equivalent") +
@@ -213,7 +274,7 @@ plot_2B
 This shows the central idea behind the region of practical equivalence, which is highlighted in grey. Ideally only a few contrasts would be examined in light of a guiding theory.
 
 ## Prediction
-The following is based on the correspondence between the elements of the precision matrix and multiple regression. In the context of GGMs, using regression to select edges is referred to as “neighborhood” selection.   On the other hand, the method described in Williams (2018) works directly with either the posterior distribution for precision matrix or the maximum a posteriori estimate. It follows that **BGGM** can also be used for the purpose of multiple regression–i.e.,
+The following is based on the correspondence between the elements of the precision matrix and multiple regression. In the context of GGMs, using regression to select edges is referred to as “neighborhood” selection.   On the other hand, the method described in Williams (2018) works directly with either the posterior distribution for the precision matrix or the maximum a posteriori estimates. These are then converted to their respective regression counterparts. It follows that **BGGM** can also be used for the purpose of multiple regression–i.e.,
 
 ```{r}
 # p = 10
@@ -253,8 +314,10 @@ head(train_R2, nrow = 2)
 Here `ci_width = 0.90` indicates the decision rule for setting coefficients to zero, and by default, 95 % intervals are used to in the summary output.   Similarly, out-of-sample Bayesian $R^2$ is computed with:
 
 ```{r}
+# test data
 Y_test <-  BGGM::bfi[101:2000,1:10]
 
+# predict test data
 test_R2 <- predict(fit_train, ci_width = 0.90,
                    test_data = Y_test,
                    samples = 1000, measure = "R2")
@@ -263,7 +326,9 @@ test_R2 <- predict(fit_train, ci_width = 0.90,
 The work flow is completed by visualizing Bayesian $R^2$ for each node–i.e.,
 
 ```{r}
+# prior training and test error in the same plot
 plt_3A <- plot(x1 = train_R2, x2 =  test_R2, order = "test")
+
 plt_3A
 ```
 
@@ -275,33 +340,42 @@ Here the nodes have been ordered by which has the best out-of-sample performance
 Bayesian leave-one-out cross-validation is implemented with:
 
 ```{r}
-
+# p = 10
 Y <- BGGM::bfi[1:1000,1:10]
 
+# sample posterior
 fit_sample <- estimate(Y, samples = 5000)
 
+# Bayesian LOO
 bayes_loo <- loocv(fit_sample)
 
+# nodewise loo summary
 summary(bayes_loo)
 ```
 
 The results are plotted with:
 ```{r}
+# plot CV error
 plt_3B <- plot(bayes_loo, size = 8) +
           theme_classic() +
           ylab("Bayesian Leave-One-Out")
+
 plt_3B
 ```
 
 Similarly,  by  setting `analytic = T`,  leave-one-out  prediction  error  can  be  computed analytically.  This is implemented with:
 
 ```{r}
+# p = 10
 Y <- BGGM::bfi[1:1000,1:10]
 
+# analytic solution
 fit_analytic <- estimate(Y, analytic = T)
 
+# analytic LOO (PRESS; based on point estimates)
 press_loo <- loocv(fit_analytic)
 
+# plot CV error
 plt_3C <- plot(press_loo, size = 8) +
           theme_classic() +
           ylab("PRESS: Leave-One-Out") +
