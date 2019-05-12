@@ -206,7 +206,7 @@ head(E, nrow = 10, summarize = T, digits = 2)
 
 The argument `prob = 0.95` requires that 95 % of the posterior density be in or out of the rope to be considered practically equivalent or different from zero.  With this decision rule, as seen with `head(.)`, edges `1--4` and `1--5` are practically equivalent to zero.  This inference is made possible with **BGGM**.
 
-In this case, `plot(.)` returns two objects:  (1) the selected edges; (2) those for which there is support for the null values.  These plots are displayed. This is implemented with:
+In this case, `plot(.)` returns two objects:  (1) the selected edges; (2) those for which there is support for the null values.  This is implemented with:
 
 ```{r warning = F }
 # network plot
