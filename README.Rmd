@@ -44,7 +44,7 @@ devtools::install_github("donaldRwilliams/BGGM")
 
 # Estimation
 
-<!-- ## 1.1 Structure Learning -->
+##  Structure Learning
 
 By structure learning we are referring to selecting the graph (i.e., the edge set $E$), which consists of those edges determinedto be non-zero.  For demonstrative purposes, we consider a relatively small number of variables ($p= 5$).  This 
 The package **BGGM** offers a convenient analytic solution for estimating GGMs. It is implemented with:
@@ -115,203 +115,203 @@ plot_1B <- plot(E,
 plot_1B
 ```
 
-<!-- Here `lower_tri = TRUE` controls which partial correlations are plotted.  In this case, only the lower triangular elements are included in the plot. This can be changed with `lower_tri = FALSE`.  -->
+Here `lower_tri = TRUE` controls which partial correlations are plotted.  In this case, only the lower triangular elements are included in the plot. This can be changed with `lower_tri = FALSE`.
 
-<!-- On the other hand, a “network” plot can be obtained with: -->
-<!-- ```{r, warning=F} -->
-<!-- plot_1C <- plot(E, type = "network",  -->
-<!--                 layout ='circle', -->
-<!--                 node_outer = 8, -->
-<!--                 node_inner = 7, -->
-<!--                 node_text_size = 4) + -->
-<!--            ggtitle("Network Plot") + -->
-<!--            theme(plot.title = element_text(size = 15)) -->
-<!-- plot_1C -->
-<!-- ``` -->
-
-
-<!-- A  key  feature  of **BGGM** is  extending  inference  beyond  identifying  non-zero  partialcorrelations.  The region of practical equivalence can be used for this purpose, as it allowsfor determining which relations are practically zero. In this case, we follow Cohen’s guidelines, wherein 0.1 is considered asmall effect.This is implemented with: -->
-
-<!-- ```{r, eval=T} -->
-<!-- # p = 10 -->
-<!-- Y <- BGGM::bfi[,1:10] -->
-
-<!-- # sample from posterior -->
-<!-- fit_sample <- estimate(Y, samples = 5000, analytic = F) -->
-
-<!-- # select the graph -->
-<!-- E <- select(fit_sample, rope = 0.1, prob = 0.95) -->
-
-<!-- # summary for first 10 rows -->
-<!-- head(E, nrow = 10, summarize = T, digits = 2) -->
-<!-- ``` -->
-
-<!-- The argument `prob = 0.95` requires that 95 % of the posterior density be in or out of the rope to be considered practically equivalent or different from zero.  With this decision rule, as seen with `head(.)`, edges `1--4` and `1--5` are practically equivalent to zero.  This inference is made possible with **BGGM**. -->
-
-<!-- In this case, `plot(.)` returns two objects:  (1) the selected edges; (2) those for which there is support for the null values.  These plots are displayed. This is implemented with: -->
-
-<!-- ```{r warning = F } -->
-<!-- plts <- plot(E, type = "network", -->
-<!--              layout ='circle', -->
-<!--              node_outer = 10,  -->
-<!--              node_inner = 9,  -->
-<!--              node_text_size = 6)  -->
-
-<!-- plot_1D <- plts$plot_nonzero +  -->
-<!--              ggtitle("Practically Non-zero") + -->
-<!--              theme(plot.title = element_text(size = 15)) -->
-
-<!-- plot_1D -->
-<!-- ``` -->
-
-<!-- ```{r, warning=F} -->
-<!-- plot_1E <- plts$plot_zero +  -->
-<!--               ggtitle("Practically Zero") + -->
-<!--               theme(plot.title = element_text(size = 15)) -->
-
-<!-- plot_1E -->
-<!-- ``` -->
+On the other hand, a “network” plot can be obtained with:
+```{r, warning=F}
+plot_1C <- plot(E, type = "network",
+                layout ='circle',
+                node_outer = 8,
+                node_inner = 7,
+                node_text_size = 4) +
+           ggtitle("Network Plot") +
+           theme(plot.title = element_text(size = 15))
+plot_1C
+```
 
 
-<!-- We emphasize that GGMs are often thought to capture conditionally *independent* relations--i.e., evidence for the null hypothesis of no effect, conditional on the other variables in the model. However, the dominant approach assesses conditional *dependence* ($\rho_{ij} \neq 0$), and then sets the off-diagonal elements to zero otherwise. **BGGM** can explicitly answers the question of conditional independence. -->
+A  key  feature  of **BGGM** is  extending  inference  beyond  identifying  non-zero  partialcorrelations.  The region of practical equivalence can be used for this purpose, as it allowsfor determining which relations are practically zero. In this case, we follow Cohen’s guidelines, wherein 0.1 is considered asmall effect.This is implemented with:
 
-<!-- ## 3.2 Edge differences -->
-<!-- Differences between partial correlations are often tested in GGMs; for example, with a classical (i.e., frequentist) approach that is implemented in **bootnet**.  One contribution ofBGGMis providing Bayesian analogs for commonly used methods, as well as extensions to those methods.  In this case, we can use posterior probabilities to determine which edges are practically equivalent.  This is implemented with: -->
+```{r, eval=T}
+# p = 10
+Y <- BGGM::bfi[,1:10]
 
+# sample from posterior
+fit_sample <- estimate(Y, samples = 5000, analytic = F)
 
-<!-- ```{r} -->
-<!-- # edge differences -->
-<!-- edge_difference <- edge_compare(fit_sample, contrast = "all", ci_width = 0.95, rope = 0.1) -->
+# select the graph
+E <- select(fit_sample, rope = 0.1, prob = 0.95)
 
-<!-- # summary for first 5 rows -->
-<!-- head(edge_difference, nrow = 5) -->
-<!-- ``` -->
+# summary for first 10 rows
+head(E, nrow = 10, summarize = T, digits = 2)
+```
 
-<!-- This  output  includes  the  posterior  mean  and  standard  deviation  for  each  difference. Further, `pr_out` is  the  proportion  of  samples  included  between ($\pm$) 0.1.   This  can  be interpreted as the posterior probability of practical equivalence, which has been defined with the argument `rope = 0.1`.  Further, this powerful function can be used to assess specific contrasts.  This can be accomplished, for example, with 5--1 - 6--10.  Note that care must be taken when specifying the contrasts, as an error will arise if they are not in the proper format. -->
+The argument `prob = 0.95` requires that 95 % of the posterior density be in or out of the rope to be considered practically equivalent or different from zero.  With this decision rule, as seen with `head(.)`, edges `1--4` and `1--5` are practically equivalent to zero.  This inference is made possible with **BGGM**.
 
-<!-- The object `edge_difference` can the be plotted with: -->
-<!-- ```{r} -->
-<!-- plot_diff <- plot(edge_difference, prob = .99) -->
+In this case, `plot(.)` returns two objects:  (1) the selected edges; (2) those for which there is support for the null values.  These plots are displayed. This is implemented with:
 
-<!-- plot_2A <- plot_diff$plt_nonzero +  -->
-<!--            ggtitle("Practically Different") + -->
-<!--            theme(axis.text.y = element_blank()) -->
-<!-- plot_2A -->
-<!-- ``` -->
-<!-- ```{r} -->
-<!-- plot_2B <- plot_diff$plt_zero + -->
-<!--   scale_y_continuous(limits = c(-0.4, 0.4)) +  -->
-<!--   ggtitle("Practically Equivalent") + -->
-<!--   theme(axis.text.y = element_blank()) -->
+```{r warning = F }
+plts <- plot(E, type = "network",
+             layout ='circle',
+             node_outer = 10,
+             node_inner = 9,
+             node_text_size = 6)
 
-<!-- plot_2B -->
-<!-- ``` -->
+plot_1D <- plts$plot_nonzero +
+             ggtitle("Practically Non-zero") +
+             theme(plot.title = element_text(size = 15))
 
-<!-- This shows the central idea behind the region of practical equivalence, which is highlighted in grey. Ideally only a few contrasts would be examined in light of a guiding theory. In this way, 1) the side of the barn is not being shot at and then targets drawn around the bullet holes; 2) the contrast name can be displayed on the $y$-axis. -->
+plot_1D
+```
 
-<!-- ## 3.3 Prediction -->
-<!-- The following is based on the correspondence between the elements ofΘand multiple regression. In the context of GGMs, using regression to select edges is referred to as “neighborhood” selection.   On the other hand, the method described in Williams (2018) works directly with either the posterior distribution for precision matrix or the maximum a posteriori estimate. It follows that **BGGM** can also be used for the purpose of multiple regression–i.e., -->
+```{r, warning=F}
+plot_1E <- plts$plot_zero +
+              ggtitle("Practically Zero") +
+              theme(plot.title = element_text(size = 15))
 
-<!-- ```{r} -->
-<!-- # p = 10 -->
-<!-- Y <- BGGM::bfi[,1:10] -->
-
-<!-- # sample posterior -->
-<!-- fit <- estimate(Y, samples = 5000) -->
-
-<!-- # precision to regression -->
-<!-- coefficients(fit, node = 1, ci_width = 0.95) -->
-<!-- ``` -->
-
-<!-- Here `node = 1` indicates which node is summarized.  This correspondence allows forcomputing measures of prediction, including Bayesian $R^2$ and Bayesian leave-one-out cross-validation,  each  of  which  has  a  measure  of  uncertainty. Furthermore,  when  a computationally option is desirable, **BGGM** includes an analytic expression for prediction error. This is also known as the predicted residual sums of squares (PRESS). -->
-
-<!-- *Bayesian $R^2$* -->
-
-<!-- In-sample Bayesian $R^2$ is implemented with: -->
-
-<!-- ```{r} -->
-<!-- # training data -->
-<!-- Y_train <- BGGM::bfi[1:100,1:10] -->
-
-<!-- # fit to training data  -->
-<!-- fit_train <- estimate(Y_train, samples = 5000) -->
-
-<!-- # compute Bayes R2 -->
-<!-- train_R2 <- predict(fit_train,   -->
-<!--                     ci_width = 0.90,  -->
-<!--                     samples = 1000,  -->
-<!--                     measure = "R2") -->
-
-<!-- # summary for first 2 rows -->
-<!-- head(train_R2, nrow = 2) -->
-
-<!-- ``` -->
-
-<!-- Here `ci_width = 0.90` indicates the decision rule for setting coefficients to zero.  Similarly, out-of-sample Bayesian $R^2$ is computed with: -->
-
-<!-- ```{r} -->
-<!-- Y_test <-  BGGM::bfi[101:2000,1:10] -->
-
-<!-- test_R2 <- predict(fit_train, ci_width = 0.90, -->
-<!--                    test_data = Y_test, -->
-<!--                    samples = 1000, measure = "R2") -->
-<!-- ``` -->
-
-<!-- The work flow is completed by visualizing BayesianR2for each node–i.e., -->
-
-<!-- ```{r} -->
-<!-- plt_3A <- plot(train_R2, test_R2, order = "test") -->
-<!-- plt_3A -->
-<!-- ``` -->
-
-<!-- Here the nodes have been ordered by which has the best out-of-sample performance.  The `predict` object can be used to assess differences in predictive accuracy with compare(.). **BGGM** also includes mean squared error (`measure = "mse"`). -->
+plot_1E
+```
 
 
-<!-- *Leave-one-out cross-validation* -->
+We emphasize that GGMs are often thought to capture conditionally *independent* relations--i.e., evidence for the null hypothesis of no effect, conditional on the other variables in the model. However, the dominant approach assesses conditional *dependence* ($\rho_{ij} \neq 0$), and then sets the off-diagonal elements to zero otherwise. **BGGM** can explicitly answers the question of conditional independence.
 
-<!-- Bayesian leave-one-out cross-validation is implemented with: -->
+## Edge differences
+Differences between partial correlations are often tested in GGMs; for example, with a classical (i.e., frequentist) approach that is implemented in **bootnet**.  One contribution ofBGGMis providing Bayesian analogs for commonly used methods, as well as extensions to those methods.  In this case, we can use posterior probabilities to determine which edges are practically equivalent.  This is implemented with:
 
-<!-- ```{r} -->
 
-<!-- Y <- BGGM::bfi[1:1000,1:10] -->
+```{r}
+# edge differences
+edge_difference <- edge_compare(fit_sample, contrast = "all", ci_width = 0.95, rope = 0.1)
 
-<!-- fit_sample <- estimate(Y, samples = 5000) -->
+# summary for first 5 rows
+head(edge_difference, nrow = 5)
+```
 
-<!-- bayes_loo <- loocv(fit_sample)  -->
+This  output  includes  the  posterior  mean  and  standard  deviation  for  each  difference. Further, `pr_out` is  the  proportion  of  samples  included  between ($\pm$) 0.1.   This  can  be interpreted as the posterior probability of practical equivalence, which has been defined with the argument `rope = 0.1`.  Further, this powerful function can be used to assess specific contrasts.  This can be accomplished, for example, with 5--1 - 6--10.  Note that care must be taken when specifying the contrasts, as an error will arise if they are not in the proper format.
 
-<!-- summary(bayes_loo) -->
-<!-- ``` -->
+The object `edge_difference` can the be plotted with:
+```{r}
+plot_diff <- plot(edge_difference, prob = .99)
 
-<!-- The results are plotted with: -->
-<!-- ```{r} -->
-<!-- plt_3B <- plot(bayes_loo) +   -->
-<!--           theme_classic() +   -->
-<!--            ylab("Bayesian Leave-One-Out") -->
-<!-- plt_3B -->
-<!-- ``` -->
+plot_2A <- plot_diff$plt_nonzero +
+           ggtitle("Practically Different") +
+           theme(axis.text.y = element_blank())
+plot_2A
+```
+```{r}
+plot_2B <- plot_diff$plt_zero +
+  scale_y_continuous(limits = c(-0.4, 0.4)) +
+  ggtitle("Practically Equivalent") +
+  theme(axis.text.y = element_blank())
 
-<!-- Similarly,  by  setting `analytic = T`,  leave-one-out  prediction  error  can  be  computed analytically.  This is implemented with: -->
+plot_2B
+```
 
-<!-- ```{r} -->
-<!-- Y <- BGGM::bfi[1:1000,1:10] -->
+This shows the central idea behind the region of practical equivalence, which is highlighted in grey. Ideally only a few contrasts would be examined in light of a guiding theory. In this way, 1) the side of the barn is not being shot at and then targets drawn around the bullet holes; 2) the contrast name can be displayed on the $y$-axis.
 
-<!-- fit_analytic <- estimate(Y, analytic = T) -->
+## Prediction
+The following is based on the correspondence between the elements ofΘand multiple regression. In the context of GGMs, using regression to select edges is referred to as “neighborhood” selection.   On the other hand, the method described in Williams (2018) works directly with either the posterior distribution for precision matrix or the maximum a posteriori estimate. It follows that **BGGM** can also be used for the purpose of multiple regression–i.e.,
 
-<!-- press_loo <- loocv(fit_analytic) -->
+```{r}
+# p = 10
+Y <- BGGM::bfi[,1:10]
 
-<!-- plt_3C <- plot(press_loo) + -->
-<!--           theme_classic() + -->
-<!--           ylab("PRESS: Leave-One-Out") + -->
-<!--           scale_y_continuous(expand = c(0, 0), -->
-<!--           limit = c(0, 1000)) -->
+# sample posterior
+fit <- estimate(Y, samples = 5000)
 
-<!-- plt_3C -->
-<!-- ``` -->
+# precision to regression
+coefficients(fit, node = 1, ci_width = 0.95)
+```
 
-<!-- This highlights the difference between the leave-one-out methods, in that the Bayesian version has a measure of uncertainty (although the order is the same). For both measure of predictive *error*, a lower value indicates a more predictable nodel (variable). -->
+Here `node = 1` indicates which node is summarized.  This correspondence allows forcomputing measures of prediction, including Bayesian $R^2$ and Bayesian leave-one-out cross-validation,  each  of  which  has  a  measure  of  uncertainty. Furthermore,  when  a computationally option is desirable, **BGGM** includes an analytic expression for prediction error. This is also known as the predicted residual sums of squares (PRESS).
 
-<!-- # 2. Hypothesis Testing -->
-<!-- # 3. Comparing GGMs -->
+*Bayesian $R^2$*
+
+In-sample Bayesian $R^2$ is implemented with:
+
+```{r}
+# training data
+Y_train <- BGGM::bfi[1:100,1:10]
+
+# fit to training data
+fit_train <- estimate(Y_train, samples = 5000)
+
+# compute Bayes R2
+train_R2 <- predict(fit_train,
+                    ci_width = 0.90,
+                    samples = 1000,
+                    measure = "R2")
+
+# summary for first 2 rows
+head(train_R2, nrow = 2)
+
+```
+
+Here `ci_width = 0.90` indicates the decision rule for setting coefficients to zero.  Similarly, out-of-sample Bayesian $R^2$ is computed with:
+
+```{r}
+Y_test <-  BGGM::bfi[101:2000,1:10]
+
+test_R2 <- predict(fit_train, ci_width = 0.90,
+                   test_data = Y_test,
+                   samples = 1000, measure = "R2")
+```
+
+The work flow is completed by visualizing BayesianR2for each node–i.e.,
+
+```{r}
+plt_3A <- plot(train_R2, test_R2, order = "test")
+plt_3A
+```
+
+Here the nodes have been ordered by which has the best out-of-sample performance.  The `predict` object can be used to assess differences in predictive accuracy with compare(.). **BGGM** also includes mean squared error (`measure = "mse"`).
+
+
+*Leave-one-out cross-validation*
+
+Bayesian leave-one-out cross-validation is implemented with:
+
+```{r}
+
+Y <- BGGM::bfi[1:1000,1:10]
+
+fit_sample <- estimate(Y, samples = 5000)
+
+bayes_loo <- loocv(fit_sample)
+
+summary(bayes_loo)
+```
+
+The results are plotted with:
+```{r}
+plt_3B <- plot(bayes_loo) +
+          theme_classic() +
+           ylab("Bayesian Leave-One-Out")
+plt_3B
+```
+
+Similarly,  by  setting `analytic = T`,  leave-one-out  prediction  error  can  be  computed analytically.  This is implemented with:
+
+```{r}
+Y <- BGGM::bfi[1:1000,1:10]
+
+fit_analytic <- estimate(Y, analytic = T)
+
+press_loo <- loocv(fit_analytic)
+
+plt_3C <- plot(press_loo) +
+          theme_classic() +
+          ylab("PRESS: Leave-One-Out") +
+          scale_y_continuous(expand = c(0, 0),
+          limit = c(0, 1000))
+
+plt_3C
+```
+
+This highlights the difference between the leave-one-out methods, in that the Bayesian version has a measure of uncertainty (although the order is the same). For both measure of predictive *error*, a lower value indicates a more predictable nodel (variable).
+
+# Hypothesis Testing
+# Comparing GGMs
 
 
 
