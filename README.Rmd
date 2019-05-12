@@ -138,7 +138,7 @@ summary(E, summarize = T, digits = 2)
 Note that `edge` corresponds to that particular entry in the partial correlation matrix--i.e., `1--2` is the relation between the first and second variables, respectively.
 
 
-**BGGM** provide several options for plotting, with each implemented as a S3 generic. For example, the partial correlations can be plotted with:
+**BGGM** provides several options for plotting, with each implemented as a S3 generic. For example, the partial correlations can be plotted with:
 
 ```{r message=F}
 # p = 10
@@ -235,7 +235,7 @@ plot_1E
 ```
 
 
-We emphasize that GGMs are often thought to capture conditionally *independent* relations--i.e., evidence for the null hypothesis of no effect, conditional on the other variables in the model. However, the dominant approach assesses conditional *dependence* ($\rho_{ij} \neq 0$), and then sets the off-diagonal elements to zero otherwise. **BGGM** can explicitly answer the question of conditional independence.
+We emphasize that GGMs are often thought to capture conditionally *independent* relations--i.e., evidence for the null hypothesis of no effect, conditional on the other variables in the model. However, the dominant approach assesses conditional *dependence* ($\rho_{ij} \neq 0$), and then sets relations to zero otherwise. **BGGM** can explicitly answer the question of conditional independence.
 
 ## Edge differences
 Differences between partial correlations are often tested in GGMs; for example, with a classical (i.e., frequentist) approach that is implemented in **bootnet**.  One contribution of **BGGM** is providing Bayesian analogs for commonly used methods, as well as extensions to those methods.  In this case, we can use posterior probabilities to determine which edges are practically equivalent.  This is implemented with:
@@ -288,7 +288,7 @@ fit <- estimate(Y, samples = 5000)
 coefficients(fit, node = 1, ci_width = 0.95)
 ```
 
-Here `node = 1` indicates which node is summarized.  This correspondence allows for computing measures of prediction error (or accuracy), including Bayesian $R^2$ and Bayesian leave-one-out cross-validation,  each  of  which  has  a  measure  of  uncertainty. Furthermore,  when  a computationally option is desirable, **BGGM** includes an analytic expression for prediction error. This is also known as the predicted residual sums of squares (PRESS).
+Here `node = 1` indicates which node is summarized.  This correspondence allows for computing measures of prediction error (or accuracy), including Bayesian $R^2$ and Bayesian leave-one-out cross-validation,  each  of  which  has  a  measure  of  uncertainty. Furthermore,  when  a computationally convenient option is desirable, **BGGM** includes an analytic expression for prediction error. This is also known as the predicted residual sums of squares (PRESS).
 
 ### Bayesian $R^2$
 

@@ -104,7 +104,7 @@ summary(fit_analytic)
 #> Call: 
 #> estimate.default(x = Y, analytic = T)
 #> --- 
-#> Date: Sun May 12 07:37:42 2019
+#> Date: Sun May 12 07:44:50 2019
 ```
 
 Note `summary(.)` provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
@@ -172,22 +172,22 @@ summary(E, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd   2.5%  97.5%
-#>  1--2   -0.2398   0.018 -0.275 -0.206
-#>  1--3   -0.1077   0.019 -0.145 -0.071
-#>  2--3    0.2863   0.018  0.252  0.321
-#>  1--4   -0.0070   0.020 -0.046  0.031
-#>  2--4    0.1647   0.018  0.129  0.201
-#>  3--4    0.1776   0.019  0.141  0.214
-#>  1--5   -0.0096   0.019 -0.048  0.028
-#>  2--5    0.1560   0.019  0.119  0.192
-#>  3--5    0.3587   0.017  0.325  0.391
-#>  4--5    0.1217   0.019  0.084  0.159
+#>  1--2   -0.2404   0.018 -0.275 -0.206
+#>  1--3   -0.1078   0.019 -0.144 -0.071
+#>  2--3    0.2862   0.017  0.252  0.320
+#>  1--4   -0.0075   0.020 -0.045  0.030
+#>  2--4    0.1644   0.019  0.128  0.202
+#>  3--4    0.1782   0.018  0.142  0.215
+#>  1--5   -0.0091   0.019 -0.046  0.028
+#>  2--5    0.1563   0.019  0.118  0.194
+#>  3--5    0.3588   0.017  0.325  0.392
+#>  4--5    0.1214   0.019  0.084  0.159
 #> ---
 ```
 
 Note that `edge` corresponds to that particular entry in the partial correlation matrix--i.e., `1--2` is the relation between the first and second variables, respectively.
 
-**BGGM** provide several options for plotting, with each implemented as a S3 generic. For example, the partial correlations can be plotted with:
+**BGGM** provides several options for plotting, with each implemented as a S3 generic. For example, the partial correlations can be plotted with:
 
 ``` r
 # p = 10
@@ -276,15 +276,15 @@ head(E, nrow = 10, summarize = T, digits = 2)
 #>  
 #>  egde post_mean post_sd pr_out  pr_in
 #>  1--2    -0.244   0.018   1.00 0.0000
-#>  1--3    -0.107   0.019   0.64 0.3582
-#>  2--3     0.287   0.018   1.00 0.0000
+#>  1--3    -0.106   0.019   0.62 0.3784
+#>  2--3     0.286   0.018   1.00 0.0000
 #>  1--4    -0.015   0.020   0.00 1.0000
-#>  2--4     0.161   0.019   1.00 0.0008
-#>  3--4     0.161   0.019   1.00 0.0006
-#>  1--5    -0.016   0.019   0.00 1.0000
-#>  2--5     0.145   0.019   0.99 0.0098
+#>  2--4     0.160   0.019   1.00 0.0018
+#>  3--4     0.160   0.019   1.00 0.0008
+#>  1--5    -0.016   0.020   0.00 1.0000
+#>  2--5     0.145   0.019   0.99 0.0096
 #>  3--5     0.354   0.017   1.00 0.0000
-#>  4--5     0.113   0.019   0.76 0.2358
+#>  4--5     0.114   0.019   0.76 0.2372
 #> ---
 ```
 
@@ -321,7 +321,7 @@ plot_1E
 
 <img src="man/figures/README-unnamed-chunk-10-1.png" width="60%" style="display: block; margin: auto;" />
 
-We emphasize that GGMs are often thought to capture conditionally *independent* relations--i.e., evidence for the null hypothesis of no effect, conditional on the other variables in the model. However, the dominant approach assesses conditional *dependence* (*ρ*<sub>*i**j*</sub> ≠ 0), and then sets the off-diagonal elements to zero otherwise. **BGGM** can explicitly answer the question of conditional independence.
+We emphasize that GGMs are often thought to capture conditionally *independent* relations--i.e., evidence for the null hypothesis of no effect, conditional on the other variables in the model. However, the dominant approach assesses conditional *dependence* (*ρ*<sub>*i**j*</sub> ≠ 0), and then sets relations to zero otherwise. **BGGM** can explicitly answer the question of conditional independence.
 
 Edge differences
 ----------------
@@ -347,11 +347,11 @@ head(edge_difference, nrow = 5)
 #> Estimates: 
 #>  
 #>   contrast post_mean post_sd pr_out pr_in
-#>  1--2-1--3    -0.137   0.030  0.899 0.101
-#>  1--2-2--3    -0.531   0.023  1.000 0.000
-#>  1--2-1--4    -0.229   0.029  1.000 0.000
+#>  1--2-1--3    -0.139   0.030  0.897 0.103
+#>  1--2-2--3    -0.531   0.024  1.000 0.000
+#>  1--2-1--4    -0.230   0.029  1.000 0.000
 #>  1--2-2--4    -0.405   0.026  1.000 0.000
-#>  1--2-3--4    -0.405   0.026  1.000 0.000
+#>  1--2-3--4    -0.405   0.027  1.000 0.000
 #> ---
 ```
 
@@ -411,19 +411,19 @@ coefficients(fit, node = 1, ci_width = 0.95)
 #> Estimates: 
 #>  
 #>  node post_mean post_sd   2.5%  97.5%
-#>     2    -0.278   0.022 -0.322 -0.236
-#>     3    -0.123   0.022 -0.168 -0.079
-#>     4    -0.015   0.020 -0.054  0.023
-#>     5    -0.017   0.022 -0.060  0.025
-#>     6     0.056   0.021  0.012  0.096
-#>     7     0.081   0.022  0.037  0.123
-#>     8     0.043   0.020  0.002  0.082
-#>     9     0.141   0.022  0.096  0.184
-#>    10    -0.029   0.021 -0.072  0.010
+#>     2    -0.277   0.021 -0.320 -0.237
+#>     3    -0.124   0.022 -0.167 -0.082
+#>     4    -0.016   0.020 -0.057  0.026
+#>     5    -0.018   0.022 -0.060  0.024
+#>     6     0.056   0.021  0.016  0.097
+#>     7     0.080   0.020  0.041  0.119
+#>     8     0.045   0.021  0.003  0.088
+#>     9     0.140   0.022  0.097  0.183
+#>    10    -0.028   0.021 -0.070  0.015
 #> ---
 ```
 
-Here `node = 1` indicates which node is summarized. This correspondence allows for computing measures of prediction error (or accuracy), including Bayesian *R*<sup>2</sup> and Bayesian leave-one-out cross-validation, each of which has a measure of uncertainty. Furthermore, when a computationally option is desirable, **BGGM** includes an analytic expression for prediction error. This is also known as the predicted residual sums of squares (PRESS).
+Here `node = 1` indicates which node is summarized. This correspondence allows for computing measures of prediction error (or accuracy), including Bayesian *R*<sup>2</sup> and Bayesian leave-one-out cross-validation, each of which has a measure of uncertainty. Furthermore, when a computationally convenient option is desirable, **BGGM** includes an analytic expression for prediction error. This is also known as the predicted residual sums of squares (PRESS).
 
 ### Bayesian *R*<sup>2</sup>
 
@@ -456,8 +456,8 @@ head(train_R2, nrow = 2)
 #> Estimates: 
 #> 
 #>  node post_mean    post_sd       2.5%     97.5%
-#>     1 0.1730122 0.06754063 0.05194313 0.3057845
-#>     2 0.2928709 0.06449296 0.16107100 0.4112752
+#>     1 0.1671621 0.06570266 0.04705517 0.3040091
+#>     2 0.2904898 0.06887841 0.14894712 0.4215417
 #> ---
 ```
 
@@ -512,16 +512,16 @@ summary(bayes_loo)
 #> Estimates: 
 #> 
 #>   node      loo   loo_se
-#>     1 2575.308 48.75850
-#>     2 2330.398 63.43717
-#>     3 2302.226 64.03833
-#>     4 2466.058 51.45350
-#>     5 2417.206 55.08175
-#>     6 2433.155 58.52057
-#>     7 2301.276 50.22989
-#>     8 2391.458 51.48469
-#>     9 2295.304 51.40400
-#>    10 2363.915 39.53659
+#>     1 2574.214 48.61999
+#>     2 2331.049 63.52809
+#>     3 2302.250 64.43982
+#>     4 2468.609 52.16749
+#>     5 2416.843 55.36360
+#>     6 2434.102 59.02198
+#>     7 2301.415 50.22154
+#>     8 2390.895 51.54763
+#>     9 2295.378 51.43669
+#>    10 2364.382 39.85320
 #> ---
 ```
 
