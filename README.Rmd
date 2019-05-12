@@ -40,7 +40,9 @@ You can install BGGM from git hub with:
 devtools::install_github("donaldRwilliams/BGGM")
 ```
 
-# 1. Estimation
+
+
+## 1. Estimation
 
 <!-- ## 1.1 Structure Learning -->
 
