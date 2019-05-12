@@ -284,7 +284,7 @@ summary(bayes_loo)
 
 The results are plotted with:
 ```{r}
-plt_3B <- plot(bayes_loo) +
+plt_3B <- plot(bayes_loo, size = 8) +
           theme_classic() +
            ylab("Bayesian Leave-One-Out")
 plt_3B
