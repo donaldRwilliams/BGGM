@@ -75,7 +75,7 @@ predict.estimate <- function(fit, test_data = NULL, ci_width, samples = 1000, me
         stop("the dimensions of the training and test data must be the same")
       }
       # ensure data is scaled
-      dat <- scale(as.matrix(test_data), scale = T)
+      dat <- na.omit(scale(as.matrix(test_data), scale = T))
     }
 
     # lists for storate
@@ -113,14 +113,14 @@ predict.estimate <- function(fit, test_data = NULL, ci_width, samples = 1000, me
 
         if(measure == "R2"){
         # compute error measure
-        r2 <- BGGM:::R2_helper(ypred = ypred, y = dat[,i], ci_width = ci_width)
+        r2 <- BGGM:::R2_helper(ypred = ypred, y = dat[,i], ci_width = 0.95)
         # store the sumamaries
         summary[[i]] <- t(data.frame(r2$summary_r2))
         # store the posterior samples
         post_samples[[i]] <- r2$R2
         }
         if(measure == "MSE"){
-          mse <- BGGM:::MSE_helper(ypred = ypred, y = dat[,i], ci_width = ci_width)
+          mse <- BGGM:::MSE_helper(ypred = ypred, y = dat[,i], ci_width = 0.95)
           summary[[i]] <- t(data.frame(mse$summary_mse))
           post_samples[[i]] <- mse$MSE
         }

@@ -96,7 +96,7 @@ summary.loocv <- function(x,...){
   rownames(temp) <- c()
   print(temp,  row.names = FALSE, ...)
   cat("--- \n")
-  cat("Note: rss = residual sum of squares")
+  # cat("Note: rss = residual sum of squares")
 
 }
 
