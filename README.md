@@ -57,7 +57,7 @@ summary(fit_analytic)
 #> Call: 
 #> estimate.default(x = Y, analytic = T)
 #> --- 
-#> Date: Sat May 11 20:29:31 2019
+#> Date: Sat May 11 20:33:11 2019
 ```
 
 Note `summary(.)` provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
@@ -117,16 +117,16 @@ summary(E, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd   2.5%  97.5%
-#>  1--2   -0.2407   0.018 -0.276 -0.204
-#>  1--3   -0.1074   0.019 -0.146 -0.070
-#>  2--3    0.2866   0.018  0.250  0.320
-#>  1--4   -0.0071   0.019 -0.044  0.031
-#>  2--4    0.1642   0.019  0.128  0.201
-#>  3--4    0.1777   0.019  0.141  0.215
-#>  1--5   -0.0091   0.019 -0.047  0.028
-#>  2--5    0.1563   0.019  0.119  0.193
-#>  3--5    0.3589   0.017  0.325  0.391
-#>  4--5    0.1218   0.019  0.085  0.159
+#>  1--2   -0.2407   0.018 -0.277 -0.205
+#>  1--3   -0.1074   0.019 -0.144 -0.070
+#>  2--3    0.2862   0.018  0.252  0.321
+#>  1--4   -0.0066   0.019 -0.044  0.031
+#>  2--4    0.1645   0.019  0.127  0.202
+#>  3--4    0.1783   0.019  0.142  0.214
+#>  1--5   -0.0089   0.019 -0.047  0.028
+#>  2--5    0.1566   0.019  0.120  0.193
+#>  3--5    0.3584   0.016  0.326  0.390
+#>  4--5    0.1213   0.019  0.085  0.158
 #> ---
 ```
 
@@ -219,15 +219,15 @@ head(E, nrow = 10, summarize = T, digits = 2)
 #>  
 #>  egde post_mean post_sd pr_out  pr_in
 #>  1--2    -0.244   0.019   1.00 0.0000
-#>  1--3    -0.105   0.020   0.61 0.3916
+#>  1--3    -0.106   0.020   0.62 0.3830
 #>  2--3     0.287   0.018   1.00 0.0000
-#>  1--4    -0.014   0.019   0.00 1.0000
-#>  2--4     0.161   0.019   1.00 0.0002
-#>  3--4     0.160   0.019   1.00 0.0008
+#>  1--4    -0.015   0.019   0.00 1.0000
+#>  2--4     0.160   0.019   1.00 0.0016
+#>  3--4     0.160   0.019   1.00 0.0006
 #>  1--5    -0.016   0.020   0.00 1.0000
-#>  2--5     0.145   0.019   0.99 0.0102
-#>  3--5     0.355   0.017   1.00 0.0000
-#>  4--5     0.114   0.019   0.76 0.2386
+#>  2--5     0.145   0.019   0.99 0.0124
+#>  3--5     0.354   0.017   1.00 0.0000
+#>  4--5     0.114   0.019   0.77 0.2290
 #> ---
 ```
 
@@ -288,10 +288,10 @@ head(edge_difference, nrow = 5)
 #> Estimates: 
 #>  
 #>   contrast post_mean post_sd pr_out pr_in
-#>  1--2-1--3    -0.139   0.031  0.889 0.111
+#>  1--2-1--3    -0.139   0.031  0.892 0.108
 #>  1--2-2--3    -0.531   0.024  1.000 0.000
 #>  1--2-1--4    -0.230   0.029  1.000 0.000
-#>  1--2-2--4    -0.405   0.026  1.000 0.000
+#>  1--2-2--4    -0.405   0.027  1.000 0.000
 #>  1--2-3--4    -0.404   0.027  1.000 0.000
 #> ---
 ```
@@ -349,21 +349,21 @@ coefficients(fit, node = 1, ci_width = 0.95)
 #> Estimates: 
 #>  
 #>  node post_mean post_sd   2.5%  97.5%
-#>     2    -0.279   0.021 -0.320 -0.239
-#>     3    -0.123   0.023 -0.169 -0.078
-#>     4    -0.016   0.021 -0.057  0.025
-#>     5    -0.017   0.021 -0.059  0.026
-#>     6     0.056   0.021  0.016  0.096
-#>     7     0.080   0.022  0.040  0.124
-#>     8     0.044   0.020  0.004  0.083
-#>     9     0.142   0.022  0.096  0.187
-#>    10    -0.029   0.021 -0.071  0.014
+#>     2    -0.278   0.022 -0.321 -0.236
+#>     3    -0.125   0.023 -0.169 -0.078
+#>     4    -0.016   0.020 -0.055  0.023
+#>     5    -0.018   0.022 -0.064  0.025
+#>     6     0.056   0.021  0.017  0.097
+#>     7     0.080   0.022  0.037  0.121
+#>     8     0.044   0.021  0.004  0.088
+#>     9     0.140   0.022  0.096  0.184
+#>    10    -0.029   0.022 -0.071  0.013
 #> ---
 ```
 
 Here `node = 1` indicates which node is summarized. This correspondence allows forcomputing measures of prediction, including Bayesian *R*<sup>2</sup> and Bayesian leave-one-out cross-validation, each of which has a measure of uncertainty. Furthermore, when a computationally option is desirable, **BGGM** includes an analytic expression for prediction error. This is also known as the predicted residual sums of squares (PRESS).
 
-### Bayesian *R*<sup>2</sup>
+#### Bayesian *R*<sup>2</sup>
 
 In-sample Bayesian *R*<sup>2</sup> is implemented with:
 
@@ -394,8 +394,8 @@ head(train_R2, nrow = 2)
 #> Estimates: 
 #> 
 #>  node post_mean    post_sd       2.5%     97.5%
-#>     1 0.1656848 0.06566955 0.04797398 0.3016108
-#>     2 0.2885351 0.06669494 0.15280083 0.4128113
+#>     1 0.1724339 0.06668608 0.05828647 0.3063433
+#>     2 0.2905546 0.06851327 0.15632956 0.4162564
 #> ---
 ```
 
@@ -420,7 +420,7 @@ plt_3A
 
 Here the nodes have been ordered by which has the best out-of-sample performance. The `predict` object can be used to assess differences in predictive accuracy with compare(.). **BGGM** also includes mean squared error (`measure = "mse"`).
 
-### Leave-one-out cross-validation
+#### Leave-one-out cross-validation
 
 Bayesian leave-one-out cross-validation is implemented with:
 
@@ -443,16 +443,16 @@ summary(bayes_loo)
 #> Estimates: 
 #> 
 #>   node      loo   loo_se
-#>     1 2573.952 48.72772
-#>     2 2329.582 63.59198
-#>     3 2301.517 63.90639
-#>     4 2465.528 51.74915
-#>     5 2416.200 55.61575
-#>     6 2433.079 59.62582
-#>     7 2299.722 50.40787
-#>     8 2389.518 51.69534
-#>     9 2295.726 51.16123
-#>    10 2364.785 39.79386
+#>     1 2574.090 48.97801
+#>     2 2331.605 63.85987
+#>     3 2304.250 63.84579
+#>     4 2465.871 51.89194
+#>     5 2418.611 56.23029
+#>     6 2433.685 58.79988
+#>     7 2300.195 50.17138
+#>     8 2388.832 51.46545
+#>     9 2294.806 51.48139
+#>    10 2363.604 39.90078
 #> ---
 ```
 
