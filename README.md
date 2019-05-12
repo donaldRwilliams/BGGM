@@ -3,13 +3,15 @@
 BGGM
 ====
 
-This package is described in Williams and Mulder (2019) and Williams (2018). The methods are separated into two Bayesian approaches for inference: hypothesis testing and estimation. The former is described in Williams and Mulder (2018a), and allows for testing for the presence of edges with the Bayes factor. One-sided hypothesis testing is also possible. These methods can also provide evidence for the null hypothesis. There are extensions for confirmatory hypothesis testing in GGMs, that can include inequality or equality constraints on the partial correlations.
+This package is described in Williams and Mulder (2019) and Williams (2018). The methods are separated into two Bayesian approaches for inference: hypothesis testing and estimation. The former is described in Williams and Mulder (2018a), and allows for testing for the presence of edges with the Bayes factor. One-sided hypothesis testing is also possible. These methods can also provide evidence for the null hypothesis. There are extensions for confirmatory hypothesis testing in GGMs, that can include inequality or equality constraints on the partial correlations. Further, it is possible to assess differences as well as similarities (i.e., the null hy-pothesis) between GGMs with the posterior predictive distribution and Bayesianmodel selection. The latter allows for testing hypothesized changes in graphicalstructures between, for example, control and treatment groups.
 
 The estimation based methods are described in Williams (2018). The methods offer advantages compared to classical methods, in that a measure of uncertainty is provided for all parameters. For example, each node has a distribution for the variance explained (i.e., Bayesian *R*<sup>2</sup>). Measures of out-of-sample performance are also available, which also have a measure of uncertainty. The model is selected with credible interval exclusion of zero.
 
 Williams, D. R. (2018, September 20). Bayesian Inference for Gaussian Graphical Models: Structure Learning, Explanation, and Prediction. ([pre-print](https://doi.org/10.31234/osf.io/x8dpr))
 
 Williams, D. R., & Mulder, J. (2019, January 14). Bayesian Hypothesis Testing for Gaussian Graphical Models:Conditional Independence and Order Constraints. ([pre-print](https://doi.org/10.31234/osf.io/ypxd8))
+
+Williams, D. R., Rast, P., Pericchi, L. R., & Mulder, J. (2019). Comparing Gaussian Graphical Models with the Posterior Predictive Distribution and Bayesian Model Selection. ([pre-print](https://psyarxiv.com/yt386/))
 
 Installation
 ------------
@@ -21,13 +23,13 @@ You can install BGGM from git hub with:
 devtools::install_github("donaldRwilliams/BGGM")
 ```
 
-Estimation
-==========
+1. Estimation
+=============
 
-Structure Learning
-------------------
+1.1 Structure Learning
+----------------------
 
-The package **BGGM** offers a convenient analytic solution for estimating GGMs. It is implemented with:
+By structure learning we are referring to selecting the graph (i.e., the edge set *E*), which consists of those edges determinedto be non-zero. For demonstrative purposes, we consider a relatively small number of variables (*p* = 5). This The package **BGGM** offers a convenient analytic solution for estimating GGMs. It is implemented with:
 
 ``` r
 # load pacakges
@@ -54,10 +56,10 @@ summary(fit_analytic)
 #> Call: 
 #> estimate.default(x = Y, analytic = T)
 #> --- 
-#> Date: Sat May 11 19:16:52 2019
+#> Date: Sat May 11 19:49:11 2019
 ```
 
-Note provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
+Note `summary(.)` provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
 
 The edge set is then selected with:
 
@@ -114,16 +116,16 @@ summary(E, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd   2.5%  97.5%
-#>  1--2   -0.2401   0.018 -0.275 -0.204
-#>  1--3   -0.1074   0.019 -0.143 -0.071
-#>  2--3    0.2863   0.017  0.253  0.319
-#>  1--4   -0.0075   0.019 -0.045  0.030
-#>  2--4    0.1644   0.019  0.127  0.201
-#>  3--4    0.1784   0.018  0.143  0.215
-#>  1--5   -0.0092   0.019 -0.047  0.029
-#>  2--5    0.1565   0.019  0.120  0.194
-#>  3--5    0.3589   0.017  0.324  0.392
-#>  4--5    0.1210   0.019  0.084  0.158
+#>  1--2   -0.2400   0.018 -0.275 -0.204
+#>  1--3   -0.1073   0.020 -0.145 -0.069
+#>  2--3    0.2870   0.018  0.251  0.322
+#>  1--4   -0.0074   0.019 -0.046  0.031
+#>  2--4    0.1650   0.019  0.129  0.202
+#>  3--4    0.1778   0.019  0.142  0.214
+#>  1--5   -0.0089   0.019 -0.047  0.029
+#>  2--5    0.1557   0.019  0.118  0.192
+#>  3--5    0.3589   0.017  0.326  0.392
+#>  4--5    0.1209   0.019  0.083  0.159
 #> ---
 ```
 
@@ -149,7 +151,7 @@ plot_1A <- plot(fit_sampling,
 plot_1A
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="90%" style="display: block; margin: auto;" />
 
 This example nicely demonstrates how the `plot` objects can be further customarized with **ggplot2**. There are two options for visualizing the selected graph. The heatmap plot is generated with:
 
@@ -165,7 +167,9 @@ plot_1B <- plot(E,
 plot_1B
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-6-1.png" width="90%" style="display: block; margin: auto;" />
+
+Here `lower_tri = TRUE` controls which partial correlations are plotted. In this case, only the lower triangular elements are included in the plot. This can be changed with `lower_tri = FALSE`.
 
 On the other hand, a “network” plot can be obtained with:
 
@@ -180,7 +184,122 @@ plot_1C <- plot(E, type = "network",
 plot_1C
 ```
 
-<img src="man/figures/README-unnamed-chunk-7-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-7-1.png" width="90%" style="display: block; margin: auto;" />
 
-Hypothesis Testing
-------------------
+A key feature of **BGGM** is extending inference beyond identifying non-zero partialcorrelations. The region of practical equivalence can be used for this purpose, as it allowsfor determining which relations are practically zero. In this case, we follow Cohen’s guidelines, wherein 0.1 is considered asmall effect.This is implemented with:
+
+``` r
+# p = 10
+Y <- BGGM::bfi[,1:10]
+
+# sample from posterior
+fit_sample <- estimate(Y, samples = 5000, analytic = F)
+
+# select the graph
+E <- select(fit_sample, rope = 0.1, prob = 0.95)
+#> ci_width is ignored
+
+# summary for first 10 rows
+head(E, nrow = 10, summarize = T, digits = 2)
+#> BGGM: Bayesian Gaussian Graphical Models 
+#> --- 
+#> Type: Selected Graph (Sampling) 
+#> Probability: 0.95 
+#> Region of Practical Equivalence:[-0.1, 0.1]
+#> Connectivity: 31.1 % 
+#> --- 
+#> Call:
+#> select.estimate(x = fit_sample, rope = 0.1, prob = 0.95)
+#> --- 
+#> pr_out: post prob outside of rope 
+#> pr_in: post prob inside of rope 
+#> --- 
+#> Estimates: 
+#>  
+#>  egde post_mean post_sd pr_out  pr_in
+#>  1--2    -0.244   0.019   1.00 0.0000
+#>  1--3    -0.106   0.019   0.63 0.3652
+#>  2--3     0.286   0.018   1.00 0.0000
+#>  1--4    -0.015   0.019   0.00 1.0000
+#>  2--4     0.161   0.019   1.00 0.0008
+#>  3--4     0.161   0.019   1.00 0.0012
+#>  1--5    -0.016   0.019   0.00 1.0000
+#>  2--5     0.145   0.019   0.99 0.0120
+#>  3--5     0.354   0.017   1.00 0.0000
+#>  4--5     0.114   0.019   0.76 0.2376
+#> ---
+```
+
+The argument `prob = 0.95` requires that 95 % of the posterior density be in or out of the rope to be considered practically equivalent or different from zero. With this decision rule, as seen with `head(.)`, edges `1--4` and `1--5` are practically equivalent to zero. This inference is made possible with **BGGM**.
+
+In this case, `plot(.)` returns two objects: (1) the selected edges; (2) those for which there is support for the null values. These plots are displayed. This is implemented with:
+
+``` r
+plts <- plot(E, type = "network",
+             layout ='circle',
+             node_outer = 10, 
+             node_inner = 9, 
+             node_text_size = 6) 
+
+plot_1D <- plts$plot_nonzero + 
+             ggtitle("Practically Non-zero") +
+             theme(plot.title = element_text(size = 15))
+             
+plot_1E <- plts$plot_zero + 
+              ggtitle("Practically Zero") +
+              theme(plot.title = element_text(size = 15))
+             
+cowplot::plot_grid(plot_1D, plot_1E)
+```
+
+<img src="man/figures/README-unnamed-chunk-9-1.png" width="90%" style="display: block; margin: auto;" />
+
+We emphasize that GGMs are often thought to capture conditionally *independent* relations--i.e., evidence for the null hypothesis of no effect, conditional on the other variables in the model. However, the dominant approach assesses conditional *dependence* (*ρ*<sub>*i**j*</sub> ≠ 0), and then sets the off-diagonal elements to zero otherwise. **BGGM** can explicitly answers the question of conditional independence.
+
+3.2 Edge differences
+--------------------
+
+Differences between partial correlations are often tested in GGMs; for example, with a classical (i.e., frequentist) approach that is implemented in **bootnet**. One contribution ofBGGMis providing Bayesian analogs for commonly used methods, as well as extensions to those methods. In this case, we can use posterior probabilities to determine which edges are practically equivalent. This is implemented with:
+
+``` r
+# edge differences
+edge_difference <- edge_compare(fit_sample, contrast = "all", ci_width = 0.95, rope = 0.1)
+#> ci_width is ignored for decision rule, but used in for plotting
+
+# summary for first 5 rows
+head(edge_difference, nrow = 5)
+#> BGGM: Bayesian Gaussian Graphical Models 
+#> --- 
+#> Type: Edge comparison(s) 
+#> Credible Interval: 95 % 
+#> Region of Practical Equivalence:[-0.1, 0.1]
+#> --- 
+#> Call:
+#> edge_compare.estimate(x = fit_sample, contrast = "all", ci_width = 0.95, 
+#>     rope = 0.1)
+#> --- 
+#> Estimates: 
+#>  
+#>   contrast post_mean post_sd pr_out pr_in
+#>  1--2-1--3    -0.137   0.031  0.886 0.114
+#>  1--2-2--3    -0.529   0.024  1.000 0.000
+#>  1--2-1--4    -0.229   0.029  1.000 0.000
+#>  1--2-2--4    -0.404   0.026  1.000 0.000
+#>  1--2-3--4    -0.404   0.027  1.000 0.000
+#> ---
+```
+
+This output includes the posterior mean and standard deviation for each difference. Further, `pr_out` is the proportion of samples included between (±) 0.1. This can be interpreted as the posterior probability of practical equivalence, which has been defined with the argument `rope = 0.1`. Further, this powerful function can be used to assess specific contrasts. This can be accomplished, for example, with 5--1 - 6--10. Note that care must be taken when specifying the contrasts, as an error will arise if they are not in the proper format.
+
+The object `edge_difference` can the be plotted with:
+
+``` r
+plot_diff <- plot(edge_difference, prob = .99)
+plot_2A <- plot_diff$plt_nonzero + ggtitle("Practically Different") 
+```
+
+2. Hypothesis Testing
+=====================
+
+3. Comparing GGMs
+=================

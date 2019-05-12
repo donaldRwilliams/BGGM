@@ -54,7 +54,7 @@ net_plot <- function(x, layout = "circle", mat_type, node_outer, node_inner, nod
       geom_node_point(color = "black", size = node_outer) +
       geom_node_point(color = "white", size = node_inner) +
       geom_node_text(aes(label = 1:p), repel = FALSE, size = node_text_size) +
-      theme_graph() +
+      theme_graph(base_size = 12, title_face = "plain") +
       coord_flip()
 
 
