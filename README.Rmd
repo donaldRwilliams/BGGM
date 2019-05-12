@@ -42,7 +42,7 @@ devtools::install_github("donaldRwilliams/BGGM")
 
 
 
-## 1. Estimation
+# Estimation
 
 <!-- ## 1.1 Structure Learning -->
 
