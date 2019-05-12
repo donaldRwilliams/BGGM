@@ -103,7 +103,7 @@ summary(fit_analytic)
 #> Call: 
 #> estimate.default(x = Y, analytic = T)
 #> --- 
-#> Date: Sun May 12 10:58:57 2019
+#> Date: Sun May 12 11:01:18 2019
 ```
 
 Note `summary(.)` provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
@@ -171,16 +171,16 @@ summary(E, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd   2.5%  97.5%
-#>  1--2   -0.2400   0.018 -0.275 -0.203
-#>  1--3   -0.1074   0.019 -0.145 -0.070
-#>  2--3    0.2863   0.018  0.251  0.321
-#>  1--4   -0.0076   0.019 -0.046  0.030
-#>  2--4    0.1647   0.018  0.129  0.200
-#>  3--4    0.1778   0.018  0.143  0.214
-#>  1--5   -0.0089   0.019 -0.047  0.029
-#>  2--5    0.1560   0.019  0.119  0.192
-#>  3--5    0.3589   0.017  0.326  0.392
-#>  4--5    0.1213   0.019  0.085  0.159
+#>  1--2   -0.2403   0.018 -0.275 -0.204
+#>  1--3   -0.1073   0.019 -0.145 -0.071
+#>  2--3    0.2862   0.018  0.252  0.321
+#>  1--4   -0.0073   0.019 -0.047  0.031
+#>  2--4    0.1645   0.018  0.127  0.200
+#>  3--4    0.1776   0.018  0.141  0.213
+#>  1--5   -0.0093   0.019 -0.046  0.027
+#>  2--5    0.1568   0.019  0.121  0.193
+#>  3--5    0.3586   0.017  0.326  0.391
+#>  4--5    0.1217   0.019  0.085  0.159
 #> ---
 ```
 
@@ -275,15 +275,15 @@ head(E, nrow = 10, summarize = T, digits = 2)
 #>  
 #>  egde post_mean post_sd pr_out  pr_in
 #>  1--2    -0.244   0.018   1.00 0.0000
-#>  1--3    -0.106   0.019   0.63 0.3684
+#>  1--3    -0.106   0.019   0.63 0.3680
 #>  2--3     0.286   0.018   1.00 0.0000
-#>  1--4    -0.014   0.019   0.00 1.0000
-#>  2--4     0.161   0.019   1.00 0.0004
-#>  3--4     0.160   0.019   1.00 0.0016
-#>  1--5    -0.015   0.020   0.00 1.0000
-#>  2--5     0.145   0.019   0.99 0.0074
-#>  3--5     0.355   0.017   1.00 0.0000
-#>  4--5     0.114   0.019   0.76 0.2360
+#>  1--4    -0.014   0.020   0.00 1.0000
+#>  2--4     0.161   0.019   1.00 0.0012
+#>  3--4     0.160   0.019   1.00 0.0012
+#>  1--5    -0.016   0.020   0.00 1.0000
+#>  2--5     0.145   0.019   0.99 0.0112
+#>  3--5     0.354   0.017   1.00 0.0000
+#>  4--5     0.114   0.019   0.77 0.2258
 #> ---
 ```
 
@@ -346,11 +346,11 @@ head(edge_difference, nrow = 5)
 #> Estimates: 
 #>  
 #>   contrast post_mean post_sd pr_out pr_in
-#>  1--2-1--3    -0.138   0.030  0.897 0.103
+#>  1--2-1--3    -0.138   0.030  0.889 0.111
 #>  1--2-2--3    -0.530   0.024  1.000 0.000
-#>  1--2-1--4    -0.230   0.028  1.000 0.000
+#>  1--2-1--4    -0.229   0.029  1.000 0.000
 #>  1--2-2--4    -0.405   0.026  1.000 0.000
-#>  1--2-3--4    -0.404   0.027  1.000 0.000
+#>  1--2-3--4    -0.403   0.027  1.000 0.000
 #> ---
 ```
 
@@ -410,15 +410,15 @@ coefficients(fit, node = 1, ci_width = 0.95)
 #> Estimates: 
 #>  
 #>  node post_mean post_sd   2.5%  97.5%
-#>     2    -0.278   0.022 -0.319 -0.236
-#>     3    -0.124   0.024 -0.168 -0.074
-#>     4    -0.015   0.021 -0.055  0.027
-#>     5    -0.017   0.021 -0.057  0.025
-#>     6     0.057   0.020  0.018  0.095
-#>     7     0.080   0.021  0.037  0.123
-#>     8     0.044   0.021  0.002  0.084
-#>     9     0.141   0.022  0.099  0.184
-#>    10    -0.029   0.021 -0.070  0.012
+#>     2    -0.277   0.021 -0.316 -0.236
+#>     3    -0.125   0.023 -0.170 -0.079
+#>     4    -0.016   0.020 -0.056  0.023
+#>     5    -0.017   0.022 -0.061  0.024
+#>     6     0.056   0.020  0.017  0.094
+#>     7     0.080   0.022  0.039  0.123
+#>     8     0.044   0.021  0.003  0.084
+#>     9     0.142   0.022  0.099  0.185
+#>    10    -0.030   0.022 -0.074  0.014
 #> ---
 ```
 
@@ -454,13 +454,13 @@ head(train_R2, nrow = 2)
 #> --- 
 #> Estimates: 
 #> 
-#>  node post_mean    post_sd      2.5%     97.5%
-#>     1 0.1714598 0.06723376 0.0446904 0.3048055
-#>     2 0.2887576 0.06601949 0.1547830 0.4134875
+#>  node post_mean    post_sd       2.5%     97.5%
+#>     1 0.1668549 0.06590392 0.04679319 0.2964818
+#>     2 0.2867305 0.06576330 0.15117925 0.4079704
 #> ---
 ```
 
-Here `ci_width = 0.90` indicates the decision rule for setting coefficients to zero, and by default, 95 % intervals are used to in the summary output. Similarly, out-of-sample Bayesian *R*<sup>2</sup> is computed with:
+Here `ci_width = 0.90` indicates the decision rule for setting coefficients to zero, and by default, 95 % intervals are used in the summary output. Similarly, out-of-sample Bayesian *R*<sup>2</sup> is computed with:
 
 ``` r
 # test data
@@ -483,7 +483,7 @@ plt_3A
 
 <img src="man/figures/README-unnamed-chunk-17-1.png" width="60%" style="display: block; margin: auto;" />
 
-Here the nodes have been ordered by which has the best out-of-sample performance. It is also possible to predict each in seperate plot by leaving `x2` empty. The `predict` object can be used to assess differences in predictive accuracy with compare(.). **BGGM** also includes mean squared error (`measure = "mse"`).
+Here the nodes have been ordered by which has the best out-of-sample performance. It is also possible to have each in seperate plot by leaving `x2` empty. The `predict` object can be used to assess differences in predictive accuracy with compare(.). **BGGM** also includes mean squared error (`measure = "mse"`).
 
 ### Leave-one-out cross-validation
 
@@ -511,16 +511,16 @@ summary(bayes_loo)
 #> Estimates: 
 #> 
 #>   node      loo   loo_se
-#>     1 2574.437 48.52337
-#>     2 2330.495 63.65410
-#>     3 2303.084 64.62549
-#>     4 2464.922 51.62574
-#>     5 2415.823 55.53354
-#>     6 2435.999 59.36498
-#>     7 2300.627 50.44460
-#>     8 2389.776 51.72487
-#>     9 2295.828 51.54496
-#>    10 2364.485 40.11619
+#>     1 2573.688 48.80164
+#>     2 2331.665 63.66164
+#>     3 2302.803 64.57135
+#>     4 2468.259 52.19951
+#>     5 2416.034 55.66911
+#>     6 2434.467 59.58896
+#>     7 2302.263 50.48571
+#>     8 2392.019 51.44590
+#>     9 2294.042 51.10558
+#>    10 2364.030 39.72362
 #> ---
 ```
 
