@@ -13,7 +13,7 @@
 edge_compare.estimate <- function(x, contrast, ci_width, rope = NULL){
 
   if(!is.null(rope)){
-    message("ci_width is ignored for decision rule, but used in for plotting")
+    message("ci_width is ignored for decision rule, but used is for plotting")
   }
   # lower interval
   low <- (1 - ci_width) / 2

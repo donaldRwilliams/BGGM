@@ -247,7 +247,7 @@ head(train_R2, nrow = 2)
 
 ```
 
-Here `ci_width = 0.90` indicates the decision rule for setting coefficients to zero.  Similarly, out-of-sample Bayesian $R^2$ is computed with:
+Here `ci_width = 0.90` indicates the decision rule for setting coefficients to zero, and by default, 95 % intervals are used to in the summary output.   Similarly, out-of-sample Bayesian $R^2$ is computed with:
 
 ```{r}
 Y_test <-  BGGM::bfi[101:2000,1:10]
@@ -257,7 +257,7 @@ test_R2 <- predict(fit_train, ci_width = 0.90,
                    samples = 1000, measure = "R2")
 ```
 
-The work flow is completed by visualizing BayesianR2for each node–i.e.,
+The work flow is completed by visualizing Bayesian $R^2$ for each node–i.e.,
 
 ```{r}
 plt_3A <- plot(x1 = train_R2, x2 =  test_R2, order = "test")
