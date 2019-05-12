@@ -225,7 +225,7 @@ coefficients(fit, node = 1, ci_width = 0.95)
 
 Here `node = 1` indicates which node is summarized.  This correspondence allows forcomputing measures of prediction, including Bayesian $R^2$ and Bayesian leave-one-out cross-validation,  each  of  which  has  a  measure  of  uncertainty. Furthermore,  when  a computationally option is desirable, **BGGM** includes an analytic expression for prediction error. This is also known as the predicted residual sums of squares (PRESS).
 
-*Bayesian $R^2$*
+### Bayesian $R^2$
 
 In-sample Bayesian $R^2$ is implemented with:
 
@@ -267,7 +267,7 @@ plt_3A
 Here the nodes have been ordered by which has the best out-of-sample performance.  The `predict` object can be used to assess differences in predictive accuracy with compare(.). **BGGM** also includes mean squared error (`measure = "mse"`).
 
 
-*Leave-one-out cross-validation*
+### Leave-one-out cross-validation
 
 Bayesian leave-one-out cross-validation is implemented with:
 
@@ -308,7 +308,7 @@ plt_3C <- plot(press_loo) +
 plt_3C
 ```
 
-This highlights the difference between the leave-one-out methods, in that the Bayesian version has a measure of uncertainty (although the order is the same). For both measure of predictive *error*, a lower value indicates a more predictable nodel (variable).
+This highlights the difference between the leave-one-out methods, in that the Bayesian version has a measure of uncertainty (although the order is the same). For both measure of predictive *error*, a lower value indicates a more predictable node (variable).
 
 # Hypothesis Testing
 # Comparing GGMs

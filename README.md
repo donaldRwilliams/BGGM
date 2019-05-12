@@ -57,7 +57,7 @@ summary(fit_analytic)
 #> Call: 
 #> estimate.default(x = Y, analytic = T)
 #> --- 
-#> Date: Sat May 11 20:43:32 2019
+#> Date: Sat May 11 20:45:44 2019
 ```
 
 Note `summary(.)` provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
@@ -117,16 +117,16 @@ summary(E, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd   2.5%  97.5%
-#>  1--2   -0.2403   0.018 -0.275 -0.204
-#>  1--3   -0.1074   0.019 -0.145 -0.071
-#>  2--3    0.2866   0.018  0.251  0.321
-#>  1--4   -0.0077   0.019 -0.044  0.030
-#>  2--4    0.1640   0.019  0.127  0.200
-#>  3--4    0.1779   0.018  0.141  0.213
-#>  1--5   -0.0088   0.020 -0.048  0.029
-#>  2--5    0.1559   0.019  0.118  0.193
-#>  3--5    0.3591   0.017  0.326  0.392
-#>  4--5    0.1215   0.019  0.084  0.158
+#>  1--2   -0.2401   0.018 -0.275 -0.204
+#>  1--3   -0.1072   0.019 -0.144 -0.071
+#>  2--3    0.2863   0.017  0.252  0.320
+#>  1--4   -0.0072   0.019 -0.044  0.029
+#>  2--4    0.1642   0.019  0.127  0.201
+#>  3--4    0.1784   0.019  0.142  0.214
+#>  1--5   -0.0092   0.019 -0.047  0.028
+#>  2--5    0.1562   0.019  0.119  0.192
+#>  3--5    0.3585   0.017  0.325  0.391
+#>  4--5    0.1216   0.019  0.085  0.159
 #> ---
 ```
 
@@ -219,15 +219,15 @@ head(E, nrow = 10, summarize = T, digits = 2)
 #>  
 #>  egde post_mean post_sd pr_out  pr_in
 #>  1--2    -0.244   0.018   1.00 0.0000
-#>  1--3    -0.106   0.019   0.62 0.3842
-#>  2--3     0.287   0.018   1.00 0.0000
-#>  1--4    -0.014   0.019   0.00 1.0000
-#>  2--4     0.161   0.019   1.00 0.0008
-#>  3--4     0.160   0.019   1.00 0.0012
-#>  1--5    -0.016   0.019   0.00 1.0000
-#>  2--5     0.145   0.019   0.99 0.0080
+#>  1--3    -0.106   0.019   0.63 0.3696
+#>  2--3     0.286   0.018   1.00 0.0000
+#>  1--4    -0.014   0.020   0.00 1.0000
+#>  2--4     0.161   0.019   1.00 0.0002
+#>  3--4     0.160   0.019   1.00 0.0014
+#>  1--5    -0.016   0.020   0.00 1.0000
+#>  2--5     0.145   0.019   0.99 0.0128
 #>  3--5     0.354   0.017   1.00 0.0000
-#>  4--5     0.114   0.020   0.76 0.2358
+#>  4--5     0.114   0.019   0.77 0.2340
 #> ---
 ```
 
@@ -288,9 +288,9 @@ head(edge_difference, nrow = 5)
 #> Estimates: 
 #>  
 #>   contrast post_mean post_sd pr_out pr_in
-#>  1--2-1--3    -0.138   0.030  0.895 0.105
-#>  1--2-2--3    -0.530   0.023  1.000 0.000
-#>  1--2-1--4    -0.230   0.028  1.000 0.000
+#>  1--2-1--3    -0.137   0.030  0.891 0.109
+#>  1--2-2--3    -0.530   0.024  1.000 0.000
+#>  1--2-1--4    -0.229   0.029  1.000 0.000
 #>  1--2-2--4    -0.405   0.026  1.000 0.000
 #>  1--2-3--4    -0.404   0.027  1.000 0.000
 #> ---
@@ -349,21 +349,21 @@ coefficients(fit, node = 1, ci_width = 0.95)
 #> Estimates: 
 #>  
 #>  node post_mean post_sd   2.5%  97.5%
-#>     2    -0.279   0.022 -0.323 -0.236
-#>     3    -0.125   0.022 -0.168 -0.083
-#>     4    -0.014   0.021 -0.053  0.028
-#>     5    -0.017   0.022 -0.060  0.025
-#>     6     0.057   0.021  0.017  0.095
-#>     7     0.080   0.022  0.039  0.123
-#>     8     0.045   0.021  0.001  0.085
-#>     9     0.141   0.021  0.097  0.183
-#>    10    -0.027   0.021 -0.069  0.013
+#>     2    -0.278   0.022 -0.322 -0.234
+#>     3    -0.124   0.022 -0.169 -0.081
+#>     4    -0.016   0.021 -0.055  0.026
+#>     5    -0.017   0.021 -0.059  0.023
+#>     6     0.057   0.020  0.016  0.096
+#>     7     0.081   0.022  0.040  0.123
+#>     8     0.045   0.021  0.006  0.084
+#>     9     0.142   0.021  0.104  0.183
+#>    10    -0.028   0.022 -0.073  0.013
 #> ---
 ```
 
 Here `node = 1` indicates which node is summarized. This correspondence allows forcomputing measures of prediction, including Bayesian *R*<sup>2</sup> and Bayesian leave-one-out cross-validation, each of which has a measure of uncertainty. Furthermore, when a computationally option is desirable, **BGGM** includes an analytic expression for prediction error. This is also known as the predicted residual sums of squares (PRESS).
 
-*Bayesian *R*<sup>2</sup>*
+### Bayesian *R*<sup>2</sup>
 
 In-sample Bayesian *R*<sup>2</sup> is implemented with:
 
@@ -394,8 +394,8 @@ head(train_R2, nrow = 2)
 #> Estimates: 
 #> 
 #>  node post_mean    post_sd       2.5%     97.5%
-#>     1 0.1698515 0.06498715 0.05251031 0.2945357
-#>     2 0.2866415 0.06682663 0.15613290 0.4101098
+#>     1 0.1686907 0.06377968 0.05361756 0.3000757
+#>     2 0.2901488 0.06970098 0.14454999 0.4146632
 #> ---
 ```
 
@@ -420,7 +420,7 @@ plt_3A
 
 Here the nodes have been ordered by which has the best out-of-sample performance. The `predict` object can be used to assess differences in predictive accuracy with compare(.). **BGGM** also includes mean squared error (`measure = "mse"`).
 
-*Leave-one-out cross-validation*
+### Leave-one-out cross-validation
 
 Bayesian leave-one-out cross-validation is implemented with:
 
@@ -443,16 +443,16 @@ summary(bayes_loo)
 #> Estimates: 
 #> 
 #>   node      loo   loo_se
-#>     1 2573.977 48.61256
-#>     2 2330.723 63.46465
-#>     3 2302.595 64.14399
-#>     4 2464.321 51.50520
-#>     5 2416.653 55.88570
-#>     6 2433.707 59.56878
-#>     7 2300.738 50.46220
-#>     8 2391.076 51.36920
-#>     9 2296.200 51.40245
-#>    10 2364.856 39.84138
+#>     1 2574.940 48.71710
+#>     2 2332.024 63.77143
+#>     3 2301.537 64.32520
+#>     4 2463.846 51.41931
+#>     5 2416.504 55.37769
+#>     6 2435.991 59.08329
+#>     7 2302.372 50.09318
+#>     8 2390.844 51.68033
+#>     9 2295.293 51.46706
+#>    10 2363.308 39.73993
 #> ---
 ```
 
@@ -487,7 +487,7 @@ plt_3C
 
 <img src="man/figures/README-unnamed-chunk-20-1.png" width="90%" style="display: block; margin: auto;" />
 
-This highlights the difference between the leave-one-out methods, in that the Bayesian version has a measure of uncertainty (although the order is the same). For both measure of predictive *error*, a lower value indicates a more predictable nodel (variable).
+This highlights the difference between the leave-one-out methods, in that the Bayesian version has a measure of uncertainty (although the order is the same). For both measure of predictive *error*, a lower value indicates a more predictable node (variable).
 
 Hypothesis Testing
 ==================
