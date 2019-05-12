@@ -7,7 +7,7 @@ This package includes methods introduced in Williams, Rast, Pericchi, and Mulder
 
 The estimation based methods are described in Williams (2018). They offer advantages compared to classical methods, in that a measure of uncertainty is provided for all parameters. For example, each node has a distribution for variance explained (i.e., Bayesian *R*<sup>2</sup>). Measures of out-of-sample prediction error are available, which also have a measure of uncertainty. The model is selected with credible interval exclusion of zero or a region of practical equivalence. This allows for computing the posterior probability for an assumed *null* region--i.e., conditional independence. It is also possible to compare partial correlations.
 
-The hypothesis testing based methods are described in Williams and Mulder (2019), and allow for testing edges (i.e., partial correlations) with the Bayes factor. One-sided hypothesis testing is also possible. These methods provide (relative) evidence for the null hypothesis. There are extensions for **confirmatory hypothesis testing** in GGMs--e.g., inequality or equality constraints on the partial correlations. This allows for comparing theroetically informed models with Bayseian model selection.
+The hypothesis testing based methods are described in Williams and Mulder (2019), and allow for testing edges (i.e., partial correlations) with the Bayes factor. One-sided hypothesis testing is also possible. These methods provide (relative) evidence for the null hypothesis. There are extensions for **confirmatory hypothesis testing** in GGMs--e.g., inequality or equality constraints on the partial correlations. This allows for comparing theroetically informed models with Bayesian model selection.
 
 Further, it is possible to assess differences as well as similarities (i.e., the null hypothesis) between GGMs. These method were introduced in Williams, Rast, Pericchi, and Mulder (2019). Graphs are compared either with the posterior predictive distribution or Bayesian model selection. The latter allows for testing hypothesized changes in graphical structures between, for example, control and treatment groups. The posterior preditive approach is based on KL-divergence. It allows for testing the assumed (null) model of group equality for the entire graph or specific variables. These methods can be used to comapre any number of GGMs.
 
@@ -103,7 +103,7 @@ summary(fit_analytic)
 #> Call: 
 #> estimate.default(x = Y, analytic = T)
 #> --- 
-#> Date: Sun May 12 08:35:12 2019
+#> Date: Sun May 12 10:56:17 2019
 ```
 
 Note `summary(.)` provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
@@ -171,16 +171,16 @@ summary(E, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd   2.5%  97.5%
-#>  1--2   -0.2404   0.018 -0.276 -0.205
-#>  1--3   -0.1074   0.019 -0.145 -0.070
-#>  2--3    0.2861   0.017  0.251  0.320
-#>  1--4   -0.0074   0.019 -0.046  0.030
-#>  2--4    0.1643   0.018  0.129  0.200
-#>  3--4    0.1779   0.019  0.141  0.215
-#>  1--5   -0.0091   0.019 -0.047  0.028
-#>  2--5    0.1563   0.018  0.119  0.192
-#>  3--5    0.3590   0.017  0.327  0.391
-#>  4--5    0.1214   0.019  0.085  0.159
+#>  1--2   -0.2406   0.018 -0.276 -0.205
+#>  1--3   -0.1072   0.019 -0.143 -0.069
+#>  2--3    0.2863   0.018  0.251  0.320
+#>  1--4   -0.0074   0.019 -0.045  0.030
+#>  2--4    0.1646   0.019  0.127  0.202
+#>  3--4    0.1776   0.019  0.140  0.215
+#>  1--5   -0.0089   0.019 -0.047  0.028
+#>  2--5    0.1566   0.019  0.120  0.193
+#>  3--5    0.3589   0.017  0.326  0.392
+#>  4--5    0.1213   0.019  0.085  0.158
 #> ---
 ```
 
@@ -274,16 +274,16 @@ head(E, nrow = 10, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd pr_out  pr_in
-#>  1--2    -0.244   0.018   1.00 0.0000
-#>  1--3    -0.106   0.019   0.62 0.3816
-#>  2--3     0.287   0.018   1.00 0.0000
-#>  1--4    -0.015   0.020   0.00 1.0000
-#>  2--4     0.161   0.019   1.00 0.0008
-#>  3--4     0.160   0.019   1.00 0.0004
-#>  1--5    -0.016   0.020   0.00 1.0000
-#>  2--5     0.145   0.019   0.99 0.0106
+#>  1--2    -0.244   0.019   1.00 0.0000
+#>  1--3    -0.106   0.019   0.62 0.3784
+#>  2--3     0.286   0.018   1.00 0.0000
+#>  1--4    -0.015   0.019   0.00 1.0000
+#>  2--4     0.161   0.019   1.00 0.0014
+#>  3--4     0.160   0.019   1.00 0.0012
+#>  1--5    -0.016   0.019   0.00 1.0000
+#>  2--5     0.145   0.019   0.99 0.0088
 #>  3--5     0.354   0.017   1.00 0.0000
-#>  4--5     0.114   0.019   0.77 0.2306
+#>  4--5     0.114   0.019   0.76 0.2380
 #> ---
 ```
 
@@ -346,8 +346,8 @@ head(edge_difference, nrow = 5)
 #> Estimates: 
 #>  
 #>   contrast post_mean post_sd pr_out pr_in
-#>  1--2-1--3    -0.138   0.030  0.895 0.105
-#>  1--2-2--3    -0.531   0.024  1.000 0.000
+#>  1--2-1--3    -0.138   0.030  0.893 0.107
+#>  1--2-2--3    -0.530   0.024  1.000 0.000
 #>  1--2-1--4    -0.230   0.029  1.000 0.000
 #>  1--2-2--4    -0.405   0.026  1.000 0.000
 #>  1--2-3--4    -0.404   0.027  1.000 0.000
@@ -410,15 +410,15 @@ coefficients(fit, node = 1, ci_width = 0.95)
 #> Estimates: 
 #>  
 #>  node post_mean post_sd   2.5%  97.5%
-#>     2    -0.278   0.022 -0.320 -0.235
-#>     3    -0.125   0.022 -0.167 -0.082
-#>     4    -0.014   0.021 -0.055  0.025
-#>     5    -0.017   0.022 -0.060  0.025
-#>     6     0.057   0.021  0.018  0.097
-#>     7     0.081   0.021  0.041  0.122
-#>     8     0.044   0.021  0.004  0.085
-#>     9     0.142   0.021  0.102  0.180
-#>    10    -0.028   0.021 -0.068  0.013
+#>     2    -0.278   0.021 -0.320 -0.238
+#>     3    -0.124   0.022 -0.168 -0.082
+#>     4    -0.014   0.021 -0.054  0.026
+#>     5    -0.019   0.021 -0.058  0.022
+#>     6     0.056   0.021  0.012  0.096
+#>     7     0.079   0.022  0.039  0.121
+#>     8     0.044   0.021  0.003  0.084
+#>     9     0.141   0.022  0.098  0.184
+#>    10    -0.029   0.022 -0.072  0.013
 #> ---
 ```
 
@@ -455,8 +455,8 @@ head(train_R2, nrow = 2)
 #> Estimates: 
 #> 
 #>  node post_mean    post_sd       2.5%     97.5%
-#>     1 0.1683798 0.06649303 0.04747612 0.3022317
-#>     2 0.2901035 0.06813785 0.15597718 0.4118885
+#>     1 0.1714515 0.06756086 0.05301071 0.3073297
+#>     2 0.2902358 0.06434043 0.15787246 0.4078729
 #> ---
 ```
 
@@ -511,16 +511,16 @@ summary(bayes_loo)
 #> Estimates: 
 #> 
 #>   node      loo   loo_se
-#>     1 2574.507 48.36298
-#>     2 2330.158 63.52101
-#>     3 2302.647 64.36049
-#>     4 2465.047 51.70081
-#>     5 2415.924 55.82051
-#>     6 2434.581 59.11209
-#>     7 2299.411 50.17876
-#>     8 2390.166 51.34004
-#>     9 2295.142 51.45025
-#>    10 2363.403 40.03325
+#>     1 2573.124 49.12292
+#>     2 2332.022 63.55928
+#>     3 2304.194 64.51565
+#>     4 2466.018 51.63881
+#>     5 2416.656 55.43735
+#>     6 2434.170 59.12660
+#>     7 2300.229 50.38502
+#>     8 2390.186 51.25955
+#>     9 2294.591 51.39750
+#>    10 2363.737 39.92830
 #> ---
 ```
 
