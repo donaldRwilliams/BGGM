@@ -13,13 +13,13 @@ knitr::opts_chunk$set(
   dpi = 500,
   fig.asp = 0.8,
   fig.width = 7,
-  out.width = "90%",
+  out.width = "60%",
   fig.align = "center"
 )
 ```
 
 # BGGM
-This package is described in Williams and Mulder (2019) and Williams (2018). The methods are separated into two Bayesian approaches for inference: hypothesis testing and estimation. The former is described in Williams and Mulder (2018a), and allows for testing for the presence of edges with the Bayes factor. One-sided hypothesis testing is also possible. These methods can also provide evidence for the null hypothesis. There are extensions for confirmatory hypothesis testing in GGMs, that can include inequality or equality constraints on the partial correlations. Further, it is possible to assess differences as well as similarities (i.e., the null hy-pothesis)  between  GGMs  with  the  posterior  predictive  distribution  and  Bayesianmodel  selection.   The  latter  allows  for  testing  hypothesized  changes  in  graphicalstructures  between,  for  example,  control  and  treatment  groups. 
+This package is described in Williams and Mulder (2019) and Williams (2018). The methods are separated into two Bayesian approaches for inference: hypothesis testing and estimation. The former is described in Williams and Mulder (2018a), and allows for testing for the presence of edges with the Bayes factor. One-sided hypothesis testing is also possible. These methods can also provide evidence for the null hypothesis. There are extensions for confirmatory hypothesis testing in GGMs, that can include inequality or equality constraints on the partial correlations. Further, it is possible to assess differences as well as similarities (i.e., the null hypothesis)  between  GGMs  with  the  posterior  predictive  distribution  and  Bayesian model  selection.   The  latter  allows  for  testing  hypothesized  changes  in  graphical structures  between,  for  example,  control  and  treatment  groups. 
 
 The estimation based methods are described in Williams (2018). The methods offer advantages compared to classical methods, in that a 
 measure of uncertainty is provided for all parameters. For example, each node has a distribution for the variance explained (i.e., Bayesian $R^2$). Measures of out-of-sample performance are also available, which also have a measure of uncertainty. The model is selected with credible interval exclusion of zero.
@@ -46,7 +46,7 @@ devtools::install_github("donaldRwilliams/BGGM")
 
 ##  Structure Learning
 
-By structure learning we are referring to selecting the graph (i.e., the edge set $E$), which consists of those edges determinedto be non-zero.  For demonstrative purposes, we consider a relatively small number of variables ($p= 5$).  This 
+By structure learning we are referring to selecting the graph (i.e., the edge set $E$), which consists of those edges determined to be non-zero.  For demonstrative purposes, we consider a relatively small number of variables ($p= 5$).  This 
 The package **BGGM** offers a convenient analytic solution for estimating GGMs. It is implemented with:
 ```{r eval=TRUE, message=F, warning=F}
 # load pacakges
@@ -101,7 +101,7 @@ plot_1A <- plot(fit_sampling,
 plot_1A
 ```
 
-This example nicely demonstrates how the `plot` objects can be further customarized with **ggplot2**. There are two options for visualizing the selected graph. The heatmap plot is generated with:
+This example nicely demonstrates how the `plot` objects can be further customized with **ggplot2**. There are two options for visualizing the selected graph. The heatmap plot is generated with:
 
 ```{r, message=F}
 # select the graph
@@ -130,7 +130,7 @@ plot_1C
 ```
 
 
-A  key  feature  of **BGGM** is  extending  inference  beyond  identifying  non-zero  partialcorrelations.  The region of practical equivalence can be used for this purpose, as it allowsfor determining which relations are practically zero. In this case, we follow Cohen’s guidelines, wherein 0.1 is considered asmall effect.This is implemented with:
+A  key  feature  of **BGGM** is  extending  inference  beyond  identifying  non-zero  partial correlations.  The region of practical equivalence can be used for this purpose, as it allows for determining which relations are practically zero. In this case, we follow Cohen’s guidelines, wherein 0.1 is considered a small effect.This is implemented with:
 
 ```{r, eval=T}
 # p = 10
@@ -176,7 +176,7 @@ plot_1E
 We emphasize that GGMs are often thought to capture conditionally *independent* relations--i.e., evidence for the null hypothesis of no effect, conditional on the other variables in the model. However, the dominant approach assesses conditional *dependence* ($\rho_{ij} \neq 0$), and then sets the off-diagonal elements to zero otherwise. **BGGM** can explicitly answers the question of conditional independence.
 
 ## Edge differences
-Differences between partial correlations are often tested in GGMs; for example, with a classical (i.e., frequentist) approach that is implemented in **bootnet**.  One contribution ofBGGMis providing Bayesian analogs for commonly used methods, as well as extensions to those methods.  In this case, we can use posterior probabilities to determine which edges are practically equivalent.  This is implemented with:
+Differences between partial correlations are often tested in GGMs; for example, with a classical (i.e., frequentist) approach that is implemented in **bootnet**.  One contribution of **BGGM** is providing Bayesian analogs for commonly used methods, as well as extensions to those methods.  In this case, we can use posterior probabilities to determine which edges are practically equivalent.  This is implemented with:
 
 
 ```{r}
@@ -207,7 +207,7 @@ plot_2B <- plot_diff$plt_zero +
 plot_2B
 ```
 
-This shows the central idea behind the region of practical equivalence, which is highlighted in grey. Ideally only a few contrasts would be examined in light of a guiding theory. In this way, 1) the side of the barn is not being shot at and then targets drawn around the bullet holes; 2) the contrast name can be displayed on the $y$-axis.
+This shows the central idea behind the region of practical equivalence, which is highlighted in grey. Ideally only a few contrasts would be examined in light of a guiding theory.
 
 ## Prediction
 The following is based on the correspondence between the elements ofΘand multiple regression. In the context of GGMs, using regression to select edges is referred to as “neighborhood” selection.   On the other hand, the method described in Williams (2018) works directly with either the posterior distribution for precision matrix or the maximum a posteriori estimate. It follows that **BGGM** can also be used for the purpose of multiple regression–i.e.,
@@ -308,7 +308,7 @@ plt_3C <- plot(press_loo) +
 plt_3C
 ```
 
-This highlights the difference between the leave-one-out methods, in that the Bayesian version has a measure of uncertainty (although the order is the same). For both measure of predictive *error*, a lower value indicates a more predictable node (variable).
+This highlights the difference between the leave-one-out methods, in that the Bayesian version has a measure of uncertainty (although the order is the same). For both measures of predictive *error*, a lower value indicates a more predictable node (variable).
 
 # Hypothesis Testing
 # Comparing GGMs

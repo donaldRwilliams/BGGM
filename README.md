@@ -3,7 +3,7 @@
 BGGM
 ====
 
-This package is described in Williams and Mulder (2019) and Williams (2018). The methods are separated into two Bayesian approaches for inference: hypothesis testing and estimation. The former is described in Williams and Mulder (2018a), and allows for testing for the presence of edges with the Bayes factor. One-sided hypothesis testing is also possible. These methods can also provide evidence for the null hypothesis. There are extensions for confirmatory hypothesis testing in GGMs, that can include inequality or equality constraints on the partial correlations. Further, it is possible to assess differences as well as similarities (i.e., the null hy-pothesis) between GGMs with the posterior predictive distribution and Bayesianmodel selection. The latter allows for testing hypothesized changes in graphicalstructures between, for example, control and treatment groups.
+This package is described in Williams and Mulder (2019) and Williams (2018). The methods are separated into two Bayesian approaches for inference: hypothesis testing and estimation. The former is described in Williams and Mulder (2018a), and allows for testing for the presence of edges with the Bayes factor. One-sided hypothesis testing is also possible. These methods can also provide evidence for the null hypothesis. There are extensions for confirmatory hypothesis testing in GGMs, that can include inequality or equality constraints on the partial correlations. Further, it is possible to assess differences as well as similarities (i.e., the null hypothesis) between GGMs with the posterior predictive distribution and Bayesian model selection. The latter allows for testing hypothesized changes in graphical structures between, for example, control and treatment groups.
 
 The estimation based methods are described in Williams (2018). The methods offer advantages compared to classical methods, in that a measure of uncertainty is provided for all parameters. For example, each node has a distribution for the variance explained (i.e., Bayesian *R*<sup>2</sup>). Measures of out-of-sample performance are also available, which also have a measure of uncertainty. The model is selected with credible interval exclusion of zero.
 
@@ -29,7 +29,7 @@ Estimation
 Structure Learning
 ------------------
 
-By structure learning we are referring to selecting the graph (i.e., the edge set *E*), which consists of those edges determinedto be non-zero. For demonstrative purposes, we consider a relatively small number of variables (*p* = 5). This The package **BGGM** offers a convenient analytic solution for estimating GGMs. It is implemented with:
+By structure learning we are referring to selecting the graph (i.e., the edge set *E*), which consists of those edges determined to be non-zero. For demonstrative purposes, we consider a relatively small number of variables (*p* = 5). This The package **BGGM** offers a convenient analytic solution for estimating GGMs. It is implemented with:
 
 ``` r
 # load pacakges
@@ -57,7 +57,7 @@ summary(fit_analytic)
 #> Call: 
 #> estimate.default(x = Y, analytic = T)
 #> --- 
-#> Date: Sat May 11 20:45:44 2019
+#> Date: Sat May 11 20:50:09 2019
 ```
 
 Note `summary(.)` provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
@@ -117,16 +117,16 @@ summary(E, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd   2.5%  97.5%
-#>  1--2   -0.2401   0.018 -0.275 -0.204
-#>  1--3   -0.1072   0.019 -0.144 -0.071
-#>  2--3    0.2863   0.017  0.252  0.320
-#>  1--4   -0.0072   0.019 -0.044  0.029
-#>  2--4    0.1642   0.019  0.127  0.201
-#>  3--4    0.1784   0.019  0.142  0.214
-#>  1--5   -0.0092   0.019 -0.047  0.028
-#>  2--5    0.1562   0.019  0.119  0.192
-#>  3--5    0.3585   0.017  0.325  0.391
-#>  4--5    0.1216   0.019  0.085  0.159
+#>  1--2   -0.2405   0.018 -0.277 -0.205
+#>  1--3   -0.1071   0.019 -0.144 -0.069
+#>  2--3    0.2863   0.018  0.252  0.321
+#>  1--4   -0.0068   0.019 -0.044  0.031
+#>  2--4    0.1642   0.019  0.127  0.200
+#>  3--4    0.1781   0.019  0.140  0.214
+#>  1--5   -0.0093   0.019 -0.047  0.028
+#>  2--5    0.1565   0.019  0.119  0.193
+#>  3--5    0.3587   0.017  0.327  0.391
+#>  4--5    0.1218   0.019  0.084  0.159
 #> ---
 ```
 
@@ -152,9 +152,9 @@ plot_1A <- plot(fit_sampling,
 plot_1A
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="90%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="60%" style="display: block; margin: auto;" />
 
-This example nicely demonstrates how the `plot` objects can be further customarized with **ggplot2**. There are two options for visualizing the selected graph. The heatmap plot is generated with:
+This example nicely demonstrates how the `plot` objects can be further customized with **ggplot2**. There are two options for visualizing the selected graph. The heatmap plot is generated with:
 
 ``` r
 # select the graph
@@ -168,7 +168,7 @@ plot_1B <- plot(E,
 plot_1B
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="90%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-6-1.png" width="60%" style="display: block; margin: auto;" />
 
 Here `lower_tri = TRUE` controls which partial correlations are plotted. In this case, only the lower triangular elements are included in the plot. This can be changed with `lower_tri = FALSE`.
 
@@ -185,9 +185,9 @@ plot_1C <- plot(E, type = "network",
 plot_1C
 ```
 
-<img src="man/figures/README-unnamed-chunk-7-1.png" width="90%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-7-1.png" width="60%" style="display: block; margin: auto;" />
 
-A key feature of **BGGM** is extending inference beyond identifying non-zero partialcorrelations. The region of practical equivalence can be used for this purpose, as it allowsfor determining which relations are practically zero. In this case, we follow Cohen’s guidelines, wherein 0.1 is considered asmall effect.This is implemented with:
+A key feature of **BGGM** is extending inference beyond identifying non-zero partial correlations. The region of practical equivalence can be used for this purpose, as it allows for determining which relations are practically zero. In this case, we follow Cohen’s guidelines, wherein 0.1 is considered a small effect.This is implemented with:
 
 ``` r
 # p = 10
@@ -218,16 +218,16 @@ head(E, nrow = 10, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd pr_out  pr_in
-#>  1--2    -0.244   0.018   1.00 0.0000
-#>  1--3    -0.106   0.019   0.63 0.3696
-#>  2--3     0.286   0.018   1.00 0.0000
-#>  1--4    -0.014   0.020   0.00 1.0000
-#>  2--4     0.161   0.019   1.00 0.0002
-#>  3--4     0.160   0.019   1.00 0.0014
-#>  1--5    -0.016   0.020   0.00 1.0000
-#>  2--5     0.145   0.019   0.99 0.0128
-#>  3--5     0.354   0.017   1.00 0.0000
-#>  4--5     0.114   0.019   0.77 0.2340
+#>  1--2    -0.244   0.018 1.0000 0.0000
+#>  1--3    -0.106   0.019 0.6236 0.3764
+#>  2--3     0.287   0.018 1.0000 0.0000
+#>  1--4    -0.015   0.020 0.0002 0.9998
+#>  2--4     0.161   0.019 0.9998 0.0002
+#>  3--4     0.160   0.019 0.9992 0.0008
+#>  1--5    -0.016   0.020 0.0000 1.0000
+#>  2--5     0.145   0.019 0.9912 0.0088
+#>  3--5     0.354   0.017 1.0000 0.0000
+#>  4--5     0.114   0.019 0.7626 0.2374
 #> ---
 ```
 
@@ -249,7 +249,7 @@ plot_1D <- plts$plot_nonzero +
 plot_1D
 ```
 
-<img src="man/figures/README-unnamed-chunk-9-1.png" width="90%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-9-1.png" width="60%" style="display: block; margin: auto;" />
 
 ``` r
 plot_1E <- plts$plot_zero +
@@ -259,14 +259,14 @@ plot_1E <- plts$plot_zero +
 plot_1E
 ```
 
-<img src="man/figures/README-unnamed-chunk-10-1.png" width="90%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-10-1.png" width="60%" style="display: block; margin: auto;" />
 
 We emphasize that GGMs are often thought to capture conditionally *independent* relations--i.e., evidence for the null hypothesis of no effect, conditional on the other variables in the model. However, the dominant approach assesses conditional *dependence* (*ρ*<sub>*i**j*</sub> ≠ 0), and then sets the off-diagonal elements to zero otherwise. **BGGM** can explicitly answers the question of conditional independence.
 
 Edge differences
 ----------------
 
-Differences between partial correlations are often tested in GGMs; for example, with a classical (i.e., frequentist) approach that is implemented in **bootnet**. One contribution ofBGGMis providing Bayesian analogs for commonly used methods, as well as extensions to those methods. In this case, we can use posterior probabilities to determine which edges are practically equivalent. This is implemented with:
+Differences between partial correlations are often tested in GGMs; for example, with a classical (i.e., frequentist) approach that is implemented in **bootnet**. One contribution of **BGGM** is providing Bayesian analogs for commonly used methods, as well as extensions to those methods. In this case, we can use posterior probabilities to determine which edges are practically equivalent. This is implemented with:
 
 ``` r
 # edge differences
@@ -288,11 +288,11 @@ head(edge_difference, nrow = 5)
 #> Estimates: 
 #>  
 #>   contrast post_mean post_sd pr_out pr_in
-#>  1--2-1--3    -0.137   0.030  0.891 0.109
-#>  1--2-2--3    -0.530   0.024  1.000 0.000
+#>  1--2-1--3    -0.139   0.030  0.898 0.102
+#>  1--2-2--3    -0.531   0.024  1.000 0.000
 #>  1--2-1--4    -0.229   0.029  1.000 0.000
 #>  1--2-2--4    -0.405   0.026  1.000 0.000
-#>  1--2-3--4    -0.404   0.027  1.000 0.000
+#>  1--2-3--4    -0.405   0.027  1.000 0.000
 #> ---
 ```
 
@@ -309,7 +309,7 @@ plot_2A <- plot_diff$plt_nonzero +
 plot_2A
 ```
 
-<img src="man/figures/README-unnamed-chunk-12-1.png" width="90%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-12-1.png" width="60%" style="display: block; margin: auto;" />
 
 ``` r
 plot_2B <- plot_diff$plt_zero +
@@ -320,9 +320,9 @@ plot_2B <- plot_diff$plt_zero +
 plot_2B
 ```
 
-<img src="man/figures/README-unnamed-chunk-13-1.png" width="90%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-13-1.png" width="60%" style="display: block; margin: auto;" />
 
-This shows the central idea behind the region of practical equivalence, which is highlighted in grey. Ideally only a few contrasts would be examined in light of a guiding theory. In this way, 1) the side of the barn is not being shot at and then targets drawn around the bullet holes; 2) the contrast name can be displayed on the *y*-axis.
+This shows the central idea behind the region of practical equivalence, which is highlighted in grey. Ideally only a few contrasts would be examined in light of a guiding theory.
 
 Prediction
 ----------
@@ -349,15 +349,15 @@ coefficients(fit, node = 1, ci_width = 0.95)
 #> Estimates: 
 #>  
 #>  node post_mean post_sd   2.5%  97.5%
-#>     2    -0.278   0.022 -0.322 -0.234
-#>     3    -0.124   0.022 -0.169 -0.081
-#>     4    -0.016   0.021 -0.055  0.026
-#>     5    -0.017   0.021 -0.059  0.023
-#>     6     0.057   0.020  0.016  0.096
-#>     7     0.081   0.022  0.040  0.123
-#>     8     0.045   0.021  0.006  0.084
-#>     9     0.142   0.021  0.104  0.183
-#>    10    -0.028   0.022 -0.073  0.013
+#>     2    -0.278   0.022 -0.318 -0.233
+#>     3    -0.125   0.023 -0.170 -0.078
+#>     4    -0.015   0.020 -0.053  0.025
+#>     5    -0.017   0.022 -0.060  0.027
+#>     6     0.056   0.021  0.017  0.096
+#>     7     0.081   0.021  0.038  0.123
+#>     8     0.044   0.021  0.003  0.086
+#>     9     0.141   0.022  0.097  0.185
+#>    10    -0.029   0.022 -0.073  0.013
 #> ---
 ```
 
@@ -393,9 +393,9 @@ head(train_R2, nrow = 2)
 #> --- 
 #> Estimates: 
 #> 
-#>  node post_mean    post_sd       2.5%     97.5%
-#>     1 0.1686907 0.06377968 0.05361756 0.3000757
-#>     2 0.2901488 0.06970098 0.14454999 0.4146632
+#>  node post_mean    post_sd      2.5%     97.5%
+#>     1 0.1664624 0.06686051 0.0475985 0.3033684
+#>     2 0.2902257 0.06849111 0.1468201 0.4185682
 #> ---
 ```
 
@@ -416,7 +416,7 @@ plt_3A <- plot(train_R2, test_R2, order = "test")
 plt_3A
 ```
 
-<img src="man/figures/README-unnamed-chunk-17-1.png" width="90%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-17-1.png" width="60%" style="display: block; margin: auto;" />
 
 Here the nodes have been ordered by which has the best out-of-sample performance. The `predict` object can be used to assess differences in predictive accuracy with compare(.). **BGGM** also includes mean squared error (`measure = "mse"`).
 
@@ -443,16 +443,16 @@ summary(bayes_loo)
 #> Estimates: 
 #> 
 #>   node      loo   loo_se
-#>     1 2574.940 48.71710
-#>     2 2332.024 63.77143
-#>     3 2301.537 64.32520
-#>     4 2463.846 51.41931
-#>     5 2416.504 55.37769
-#>     6 2435.991 59.08329
-#>     7 2302.372 50.09318
-#>     8 2390.844 51.68033
-#>     9 2295.293 51.46706
-#>    10 2363.308 39.73993
+#>     1 2573.047 48.66431
+#>     2 2330.735 63.79323
+#>     3 2303.667 64.68381
+#>     4 2467.004 52.06248
+#>     5 2416.060 55.32276
+#>     6 2433.480 58.96692
+#>     7 2299.730 50.18904
+#>     8 2390.012 51.37976
+#>     9 2295.230 51.40862
+#>    10 2364.167 39.83962
 #> ---
 ```
 
@@ -465,7 +465,7 @@ plt_3B <- plot(bayes_loo) +
 plt_3B
 ```
 
-<img src="man/figures/README-unnamed-chunk-19-1.png" width="90%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-19-1.png" width="60%" style="display: block; margin: auto;" />
 
 Similarly, by setting `analytic = T`, leave-one-out prediction error can be computed analytically. This is implemented with:
 
@@ -485,9 +485,9 @@ plt_3C <- plot(press_loo) +
 plt_3C
 ```
 
-<img src="man/figures/README-unnamed-chunk-20-1.png" width="90%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-20-1.png" width="60%" style="display: block; margin: auto;" />
 
-This highlights the difference between the leave-one-out methods, in that the Bayesian version has a measure of uncertainty (although the order is the same). For both measure of predictive *error*, a lower value indicates a more predictable node (variable).
+This highlights the difference between the leave-one-out methods, in that the Bayesian version has a measure of uncertainty (although the order is the same). For both measures of predictive *error*, a lower value indicates a more predictable node (variable).
 
 Hypothesis Testing
 ==================
