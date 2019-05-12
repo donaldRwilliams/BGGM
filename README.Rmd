@@ -37,9 +37,8 @@ You can install BGGM from git hub with:
 devtools::install_github("donaldRwilliams/BGGM")
 ```
 
-## 1. Estimation
-
-### 1.1 Structure Learning
+# Estimation
+## Structure Learning
 
 The package **BGGM** offers a convenient analytic solution for estimating GGMs. It is implemented with:
 ```{r eval=TRUE, message=F, warning=F}
@@ -121,3 +120,4 @@ plot_1C <- plot(E, type = "network",
 plot_1C
 ```
 
+## Hypothesis Testing

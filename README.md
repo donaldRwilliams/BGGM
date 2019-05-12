@@ -21,10 +21,11 @@ You can install BGGM from git hub with:
 devtools::install_github("donaldRwilliams/BGGM")
 ```
 
-1. Estimation
--------------
+Estimation
+==========
 
-### 1.1 Structure Learning
+Structure Learning
+------------------
 
 The package **BGGM** offers a convenient analytic solution for estimating GGMs. It is implemented with:
 
@@ -53,7 +54,7 @@ summary(fit_analytic)
 #> Call: 
 #> estimate.default(x = Y, analytic = T)
 #> --- 
-#> Date: Sat May 11 19:13:12 2019
+#> Date: Sat May 11 19:16:52 2019
 ```
 
 Note provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
@@ -113,16 +114,16 @@ summary(E, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd   2.5%  97.5%
-#>  1--2   -0.2409   0.018 -0.276 -0.205
-#>  1--3   -0.1070   0.019 -0.143 -0.070
-#>  2--3    0.2864   0.018  0.251  0.321
-#>  1--4   -0.0071   0.019 -0.045  0.030
-#>  2--4    0.1642   0.019  0.127  0.200
-#>  3--4    0.1781   0.019  0.142  0.213
-#>  1--5   -0.0091   0.019 -0.046  0.027
-#>  2--5    0.1564   0.019  0.120  0.194
-#>  3--5    0.3590   0.017  0.325  0.392
-#>  4--5    0.1212   0.019  0.084  0.158
+#>  1--2   -0.2401   0.018 -0.275 -0.204
+#>  1--3   -0.1074   0.019 -0.143 -0.071
+#>  2--3    0.2863   0.017  0.253  0.319
+#>  1--4   -0.0075   0.019 -0.045  0.030
+#>  2--4    0.1644   0.019  0.127  0.201
+#>  3--4    0.1784   0.018  0.143  0.215
+#>  1--5   -0.0092   0.019 -0.047  0.029
+#>  2--5    0.1565   0.019  0.120  0.194
+#>  3--5    0.3589   0.017  0.324  0.392
+#>  4--5    0.1210   0.019  0.084  0.158
 #> ---
 ```
 
@@ -180,3 +181,6 @@ plot_1C
 ```
 
 <img src="man/figures/README-unnamed-chunk-7-1.png" width="60%" style="display: block; margin: auto;" />
+
+Hypothesis Testing
+------------------
