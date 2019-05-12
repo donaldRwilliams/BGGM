@@ -69,13 +69,16 @@ Note `summary(.)` provides information about the fitted model, including that th
 The edge set is then selected with:
 ```{r }
 E <- select(fit_analytic, ci_width = 0.95)
+
 summary(E)
 ```
 
 The analytic solution works directly with the precision matrix, and thus, there is not an option to summarize the posterior distributions. This is because the non-standardized elements are in the opposite direction ($\pm$) of the partial correlations, which in our experience, can lead to confusion. To summarize  the posteriors change `analytic = T` to `analytic = F`:
 ```{r}
 fit_sampling <- estimate(Y, analytic = F)
+
 E <- select(fit_sampling, ci_width = 0.95)
+
 summary(E, summarize = T, digits = 2)
 ```
 Note that `edge` corresponds to that particular entry in the partial correlation matrix--i.e., `1--2` is the relation between the first and second variables, respectively.
@@ -286,7 +289,7 @@ The results are plotted with:
 ```{r}
 plt_3B <- plot(bayes_loo, size = 8) +
           theme_classic() +
-           ylab("Bayesian Leave-One-Out")
+          ylab("Bayesian Leave-One-Out")
 plt_3B
 ```
 
