@@ -11,8 +11,8 @@
 #' @export
 #'
 #' @examples
-plot.compare.estimate <- function(x,  size = 2, color = "red", width = .01, prob = NULL){
-  x <- x[1:4]
+plot.edge_compare.estimate <- function(x,  size = 2, color = "red", width = .01, prob = NULL){
+  # x <- x[1:4]
 
   if (is.null(x$rope)) {
     dat_plt <- x$returned_object
@@ -48,26 +48,28 @@ plot.compare.estimate <- function(x,  size = 2, color = "red", width = .01, prob
 
     }
 
-    if( sum( dat_plt$pr_out_rope > prob) == 0 &   sum( dat_plt$pr_n_rope  > prob) == 0 ){
+    if( sum( dat_plt$pr_out > prob) == 0 &   sum( dat_plt$pr_in > prob) == 0 ){
       stop("no intervals exclude rope")
     }
 
 
 
 
-    if(sum( dat_plt$pr_out_rope > prob) != 0 & sum( dat_plt$pr_n_rope > prob) != 0){
+    if(sum( dat_plt$pr_out > prob) != 0 & sum( dat_plt$pr_in > prob) != 0){
 
-      dat_nonzero <- subset(dat_plt, dat_plt$pr_out_rope >= prob)
+      dat_nonzero <- subset(dat_plt, dat_plt$pr_out >= prob)
       dat_nonzero$contrast <- factor(dat_nonzero$contrast,
                                      levels = dat_nonzero$contrast[order(dat_nonzero$post_mean)],
                                      labels = dat_nonzero$contrast[order(dat_nonzero$post_mean)])
 
 
-      dat_zero <- subset(dat_plt, dat_plt$pr_n_rope >= prob)
+      dat_zero <- subset(dat_plt, dat_plt$pr_in >= prob)
       dat_zero$contrast <- factor(dat_zero$contrast,
                                   levels = dat_zero$contrast[order(dat_zero$post_mean)],
                                   labels = dat_zero$contrast[order(dat_zero$post_mean)])
 
+
+      # ci_times  qnorm((1- x$ci)/2, lower.tail =  F)
 
       plt_nonzero <- ggplot(dat_nonzero, aes(y = post_mean,
 
@@ -115,7 +117,7 @@ plot.compare.estimate <- function(x,  size = 2, color = "red", width = .01, prob
     }
 
 
-    if(sum( dat_plt$pr_out_rope > prob) != 0  &  sum( dat_plt$pr_n_rope > prob) == 0 ){
+    if(sum( dat_plt$pr_out > prob) != 0  &  sum( dat_plt$pr_in > prob) == 0 ){
 
       dat_nonzero <- subset(dat_plt, dat_plt$pr_out_rope >= prob)
       dat_nonzero$contrast <- factor(dat_nonzero$contrast,
@@ -152,7 +154,7 @@ plot.compare.estimate <- function(x,  size = 2, color = "red", width = .01, prob
 
     }
 
-    if(sum( dat_plt$pr_n_rope > prob) != 0 & sum( dat_plt$pr_out_rope > prob) == 0 ){
+    if(sum( dat_plt$pr_in > prob) != 0 & sum( dat_plt$pr_out > prob) == 0 ){
 
       plt <- ggplot(dat_zero, aes(y = post_mean,
 

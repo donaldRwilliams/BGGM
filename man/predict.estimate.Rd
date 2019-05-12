@@ -4,13 +4,11 @@
 \alias{predict.estimate}
 \title{predictive accuracy}
 \usage{
-\method{predict}{estimate}(fit, selected, test_data = NULL, ci_width,
+\method{predict}{estimate}(fit, test_data = NULL, ci_width,
   samples = 1000, measure = c("R2", "MSE"))
 }
 \arguments{
 \item{fit}{fitted object of class estimate}
-
-\item{selected}{selected graph with credible intervals}
 
 \item{test_data}{option test data set}
 
@@ -19,6 +17,8 @@
 \item{samples}{number of samples used to}
 
 \item{measure}{Bayesian R2 (R2) or mean squared error (MSE)}
+
+\item{selected}{selected graph with credible intervals}
 }
 \value{
 summary_error posterior mean, standard deviation, and credible interval for each variable

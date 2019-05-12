@@ -1,8 +1,8 @@
 #' Title
-#' @param x
-#' @param BF_cut
-#' @param alternative
-#' @param hyp_prob
+#' @param x data matrix
+#' @param BF_cut evidentiary threshold
+#' @param alternative type of hypothesis (see notes)
+#' @param hyp_prob posterior probability threshold (see notes)
 #'
 #' @return
 #' @export
@@ -13,7 +13,7 @@ select.explore <- function(x,
                            alternative = "two.sided",
                            hyp_prob = NULL){
 
-  call = match.call()
+
 
 
   posterior_samples <- do.call(rbind.data.frame,
@@ -44,13 +44,15 @@ select.explore <- function(x,
     diag(Adj_01) <- 0
     diag(BF_01_mat) <- 0
     returned_object = list(partials_non_zero = x$parcors_mat * Adj_10,
+                           pcor_mat = x$parcors_mat,
+                           pcor_sd = x$parcors_sd,
                            Adj_10 = Adj_10,
                            Adj_01 = Adj_01,
                            BF_10 = BF_10_mat,
                            BF_01 = BF_01_mat,
-                           call = call,
                            BF_cut = BF_cut,
-                           alternative = alternative)
+                           alternative = alternative,
+                           call = match.call())
   }
   if(alternative == "greater"){
 
@@ -58,7 +60,7 @@ select.explore <- function(x,
 
     BF_20_mat <- BF_01_mat <- matrix(0, x$p, x$p)
 
-    BF_10 <- apply(posterior_samples, MARGIN = 2, FUN = function(z){prior_dens / dnorm(0, mean(z), sd(z))} )
+    BF_10 <- apply(posterior_samples, MARGIN = 2, FUN = function(z){prior_dens / dnorm(0, mean(z), sd(z)) } )
 
     dens_greater <-  apply(posterior_samples, MARGIN = 2, FUN = function(z){(1  - pnorm(0, mean(z), sd(z))) * 2} )
 
@@ -75,7 +77,7 @@ select.explore <- function(x,
     BF_01_mat <- BGGM:::symmteric_mat(BF_01_mat)
 
     Adj_20 <- ifelse(BF_20_mat > BF_cut, 1, 0)
-    Adj_01 <- ifelse(BF_10_mat < 1 / BF_cut, 1, 0)
+    Adj_01 <- ifelse(BF_01_mat > BF_cut, 1, 0)
 
     diag(Adj_01) <- 0
 
@@ -83,12 +85,15 @@ select.explore <- function(x,
 
 
     returned_object = list(partials_positive = x$parcors_mat * Adj_20,
+                           pcor_mat = x$parcors_mat,
+                           pcor_sd = x$parcors_sd,
                            Adj_01 = Adj_01,
+                           Adj_20 =  Adj_20,
                            BF_20 = BF_20_mat,
                            BF_01 = BF_01_mat,
-                           call = call,
                            BF_cut = BF_cut,
-                           alternative = alternative)
+                           alternative = alternative,
+                           call = match.call())
 
 
   }
@@ -123,12 +128,15 @@ select.explore <- function(x,
 
 
     returned_object = list(partials_negative = x$parcors_mat * Adj_20,
+                           pcor_mat = x$parcors_mat,
+                           pcor_sd = x$parcors_sd,
                            Adj_01 = Adj_01,
+                           Adj_20 = Adj_20,
                            BF_20 = BF_20_mat,
                            BF_01 = BF_01_mat,
-                           call = call,
                            BF_cut = BF_cut,
-                           alternative = alternative)
+                           alternative = alternative,
+                           call = match.call())
 
   }
   if(alternative == "exhaustive"){
@@ -182,7 +190,11 @@ select.explore <- function(x,
                             neg_mat = neg_mat,
                             pos_mat = pos_mat,
                             null_mat = null_mat,
-                            call = call)
+                            alternative = alternative,
+                            pcor_mat = x$parcors_mat,
+                            pcor_sd = x$parcors_sd,
+                            call = match.call(),
+                            prob = hyp_prob)
 }
 
   class(returned_object) <- "select.explore"

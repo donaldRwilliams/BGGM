@@ -37,94 +37,85 @@ You can install BGGM from git hub with:
 devtools::install_github("donaldRwilliams/BGGM")
 ```
 
-## Example
-###  Exploratory Hypothesis Testing
-These methods allow for gaining evidence for both conditional dependence ($\rho \neq 0$) and independence ($\rho = 0$). Note that GGMs are often thought to characterize conditional independence structures, but evidence for the null hypothesis of no effect is not (typically) assessed. The following uses the Bayes factor to assess evidence for the null vs. alternative hypothesis.
-
-```{r example, message=FALSE, warning=FALSE}
+## 1. Estimation
+### 1.1 Structure Learning
+The package **BGGM** offers a convenient analytic solution for estimating GGMs. It is implemented with:
+```{r eval=TRUE, message=F, warning=F}
+# load pacakges
+# install.packages("devtools")
+# devtools::install_github("donaldRwilliams/BGGM")
 library(BGGM)
-dat <- BGGM::bfi
+library(ggplot2)
+library(ggraph)
 
-# fit the exploratory approach
-fit <- BGGM::bayes_explore(X = dat)
+# p = 5
+Y <- BGGM::bfi[,1:5]
 
-# select the network (threshold of 3)
-select_graph <- BGGM::explore_select(fit, 
-                                     threshold = 3, 
-                                     type = "two_sided")
-qgraph::qgraph(select_graph$partial_mat)
+# analytic solution
+fit_analytic <- estimate(Y, analytic = T)
+summary(fit_analytic)
+```
+Note \code{summary(.)} provides information about the fitted model, including that the analytic solution was used, the number of observations ($n$) and variables ($p$), and the number of edges. 
+
+The edge set is then selected with:
+```{r }
+E <- select(fit_analytic, ci_width = 0.95)
+summary(E)
 ```
 
-Some of the methods rely on sampling, so we found it most convenient to select the model after fitting-thus changing the threshold does not require refitting the model. This particular method does not require sampling from the prior or posterior distributions, but does rely on assuming normality. In the paper, Williams and Mulder (2019), it was shown these approximations performed well: the Bayes factor was consistent for model selection and invariant to the scale of the data. Sampling is possible for those not happy-and have some patience-with the normal approximation.
-
+The analytic solution works directly with the precision matrix, and thus, there is not an option to summarize the posterior distributions. This is because the non-standardized elements are in the opposite direction ($\pm$) of the partial correlations, which in our experience, can lead to confusion. To summarize  the posteriors change `analytic = T` to `analytic = F`:
 ```{r}
-# select the network (threshold of 10)
-select_graph <- BGGM::explore_select(fit, 
-                                     threshold = 10, 
-                                     type = "two_sided")
-qgraph::qgraph(select_graph$partial_mat)
+fit_sampling <- estimate(Y, analytic = F)
+E <- select(fit_sampling, ci_width = 0.95)
+summary(E, summarize = T, digits = 2)
+```
+Note that `edge` corresponds to that particular entry in the partial correlation matrix--i.e., `1--2` is the relation between the first and second variables, respectively.
+
+
+**BGGM** provide several options for plotting, with each implemented as a S3 generic. For example, the partial correlations can be plotted with:
+
+```{r message=F}
+# p = 10
+Y <- BGGM::bfi[,1:10]
+
+# sampling required
+fit_sampling <- estimate(Y, analytic = F)
+
+# plot
+plot_1A <- plot(fit_sampling, 
+                ci_width = 0.95, 
+                width = 0.1,  
+                size = 2) +
+            coord_cartesian() +
+            theme(axis.text.x = element_text(angle = 90))
+  
+plot_1A
 ```
 
-It is likely that there is an expected direction. That is, maybe it does not make theoretical sense to have negative effects. At this time it is only possible to assume all relations are in the same direction, but this will be changed soon. One-sided hypothesis testing can be performed as follows:
-```{r}
-# select the network (threshold of 10; one-sided)
-select_graph <- BGGM::explore_select(fit, 
-                                     threshold = 10, 
-                                     type = "greater_than")
-qgraph::qgraph(select_graph$partial_mat)
-```
+This example nicely demonstrates how the `plot` objects can be further customarized with **ggplot2**. There are two options for visualizing the selected graph. The heatmap plot is generated with:
 
-Note that all the effects are now positive (i.e., the color green).
-
-To date, the conditional independence structure of personality has not been directly assessed. Let us examine for which relations there is evidence for the null hypothesis:
-```{r}
-# select the network (threshold of 3; two-sided)
-select_graph <- BGGM::explore_select(fit, 
-                                     threshold = 3, 
-                                     type = "two_sided")
-qgraph::qgraph(select_graph$BF_null_adj, layout = "circle")
-```
-
-We are currently thinking of ways to plot the conditional independence structure (open to suggestions), but for now are using only the adjacency matrix. 
-
-
-Finally, for those interested in the substantive aspect of these networks, please see the **psych** package for the variable descriptions.
-
-###  Bayesian R-squared
-There is a direct correspondence between the precision matrix, that is the inverse of the covariance matrix, and multiple regression. The details are provided ([here](https://donaldrwilliams.github.io/post/2019-10-1-r-markdown/)). Rather than fit a sequence of regression models (i.e., neighborhood selection), as in the R package [GGMnonreg](https://github.com/donaldRwilliams/GGMnonreg), it is possible to only estimate the precision matrix and then transform the elements to their respective regression counterparts. This approach is described in Williams (2018). 
-
-With the regression coefficients in-hand, it is then possible to compute $R^2$ for each node in the network. Similar approaches are sometimes used in the social-behavioral sciences. Here the GGMs are often estimated with $\ell_1$-regularization and the reported $R^2$ is a point estimate. This is problematic, because it can be misleading to note that one node has higher $R^2$ than another when there is not a measure of uncertainty. The present methods comptue Bayesian $R^2$ that is described [here](http://www.stat.columbia.edu/~gelman/research/unpublished/bayes_R2.pdf).
-
-
-The following code fits the model, then selects the graph, and finally computes Bayesian $R^2$ conditional on the fitted model:
-```{r}
-# fit the model
-fit <- BGGM::bayes_estimate(dat, samples = 5000)
-
+```{r, message=F}
 # select the graph
-select <- BGGM::estimate_select(fit, ci_width = .99)
+E <- select(fit_sampling, ci_width = 0.95)
 
-# Bayesian R2
-r2 <- BGGM::bayes_R2(fit = fit, ci_width = .99, 
-               selected = select$adjacency_mat, 
-               samples = 500)
-
-```
-
-Here are the results for the first 5 nodes:
-```{r echo=FALSE, results='asis'}
-# knit table
-knitr::kable(r2$summary_error[1:5,])
+plot_1B <- plot(E, 
+                type = "heatmap", 
+                lower_tri = TRUE) +
+           ggtitle("Heatmap Plot") + 
+           theme(plot.title = element_text(size = 15))
+plot_1B
 ```
 
 
-The package BGGM can also plot the results:
-```{r}
-plot_r2 <- BGGM::predictive_plot(r2, 
-                                 size = 2, 
-                                 color = "blue")
-plot_r2
+On the other hand, a “network” plot can be obtained with:
+```{r, warning=F}
+plot_1C <- plot(E, type = "network", 
+                layout ='circle',
+                node_outer = 8,
+                node_inner = 7,
+                node_text_size = 4) +
+           ggtitle("Network Plot") +
+           theme(plot.title = element_text(size = 15))
+plot_1C
 ```
-
-
 

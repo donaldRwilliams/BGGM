@@ -2,13 +2,27 @@
 % Please edit documentation in R/plot.select.estimate.R
 \name{plot.select.estimate}
 \alias{plot.select.estimate}
-\title{Title}
+\title{Plot Estimation Based Graphs}
 \usage{
-\method{plot}{select.estimate}(x)
+\method{plot}{select.estimate}(x, type, lower_tri = TRUE,
+  layout = "circle", node_outer = 10, node_inner = 9,
+  node_text_size = 8)
 }
 \arguments{
-\item{x}{}
+\item{x}{object of class \code{select.estimate}}
+
+\item{type}{\code{heatmap} or \code{network} plot}
+
+\item{lower_tri}{heatmap lower triangular elements}
+
+\item{layout}{layout of network plot. see igraph for options}
+
+\item{node_outer}{border for node}
+
+\item{node_inner}{node size (see notes)}
+
+\item{node_text_size}{node text size}
 }
 \description{
-Title
+Plot Estimation Based Graphs
 }

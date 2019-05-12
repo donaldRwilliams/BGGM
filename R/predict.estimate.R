@@ -113,14 +113,14 @@ predict.estimate <- function(fit, test_data = NULL, ci_width, samples = 1000, me
 
         if(measure == "R2"){
         # compute error measure
-        r2 <- BGGM:::R2_helper(ypred = ypred, y = dat[,i], ci_width = 0.95)
+        r2 <- BGGM:::R2_helper(ypred = ypred, y = dat[,i], ci_width = ci_width)
         # store the sumamaries
         summary[[i]] <- t(data.frame(r2$summary_r2))
         # store the posterior samples
         post_samples[[i]] <- r2$R2
         }
         if(measure == "MSE"){
-          mse <- BGGM:::MSE_helper(ypred = ypred, y = dat[,i], ci_width = 0.95)
+          mse <- BGGM:::MSE_helper(ypred = ypred, y = dat[,i], ci_width = ci_width)
           summary[[i]] <- t(data.frame(mse$summary_mse))
           post_samples[[i]] <- mse$MSE
         }

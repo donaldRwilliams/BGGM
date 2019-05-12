@@ -4,13 +4,17 @@
 #' @param contrast
 #' @param ci_width
 #' @param rope
+#' @param mute
 #'
 #' @return
 #' @export
 #'
 #' @examples
-compare.estimate <- function(x, contrast, ci_width, rope = NULL){
+edge_compare.estimate <- function(x, contrast, ci_width, rope = NULL){
 
+  if(!is.null(rope)){
+    message("ci_width is ignored for decision rule, but used in for plotting")
+  }
   # lower interval
   low <- (1 - ci_width) / 2
 
@@ -47,7 +51,7 @@ compare.estimate <- function(x, contrast, ci_width, rope = NULL){
     # returned object
     returned_object <- cbind.data.frame(
                                 # contrast name
-                                contrast = con,
+                                contrast = contrast,
                                 # posterior mean
                                 post_mean = mean(diff),
                                 # posterior sd
@@ -55,9 +59,9 @@ compare.estimate <- function(x, contrast, ci_width, rope = NULL){
                                 # credible interval
                                 t(quantile(diff, c(low, up))),
                                 # probability *out* rope
-                                pr_out_rope = 1 - rp,
+                                pr_out = 1 - rp,
                                 # probability *in* rope
-                                pr_n_rope = rp)
+                                pr_in = rp)
 
     returned_object <- rapply(object = returned_object,
                               f = round,
@@ -70,7 +74,7 @@ compare.estimate <- function(x, contrast, ci_width, rope = NULL){
   # no rope
   returned_object <- cbind.data.frame(
                               # contrast name
-                              contrast = con,
+                              contrast = contrast,
                               # posterior mean
                               post_mean = mean(diff),
                               # posterior sd
@@ -118,7 +122,7 @@ compare.estimate <- function(x, contrast, ci_width, rope = NULL){
       diff[[i]] <- pcors[,one] - pcors[,two]
 
       # names
-      names(diff)[[i]] <- con
+      names(diff)[[i]] <- contrast
 
       if(is.numeric(rope)){
         # proportion in rope
@@ -126,7 +130,7 @@ compare.estimate <- function(x, contrast, ci_width, rope = NULL){
 
         summ[[i]] <- cbind.data.frame(
                                       # contrast name
-                                      contrast = con,
+                                      contrast = contrast,
                                       # posterior mean
                                       post_mean = mean(diff[[i]]),
                                       # posterior sd
@@ -134,9 +138,9 @@ compare.estimate <- function(x, contrast, ci_width, rope = NULL){
                                       # credible inteval
                                       t(quantile(diff[[i]], c(low, up))),
                                       # probability *out* rope
-                                      pr_out_rope = 1 - rp,
+                                      pr_out = 1 - rp,
                                       # probability *in* rope
-                                      pr_n_rope = rp)
+                                      pr_in = rp)
 
         summ[[i]] <- rapply(object = summ[[i]],
                             f = round,
@@ -148,7 +152,7 @@ compare.estimate <- function(x, contrast, ci_width, rope = NULL){
       # no rope
       summ[[i]] <- cbind.data.frame(
                                     # contrast name
-                                    contrast = con,
+                                    contrast = contrast,
                                     # posterior mean
                                     post_mean = mean(diff[[i]]),
                                     # posterior sd
@@ -213,9 +217,9 @@ compare.estimate <- function(x, contrast, ci_width, rope = NULL){
                                       # credible interval
                                       t(quantile(diff[[i]], c(low, up))),
                                       # probability *out* rope
-                                      pr_out_rope = 1- rp,
+                                      pr_out = 1- rp,
                                       # probability in rope
-                                      pr_n_rope = rp)
+                                      pr_in = rp)
 
         summ[[i]] <- rapply(object = summ[[i]],
                             f = round,
@@ -254,7 +258,7 @@ returned_object <- list(returned_object = returned_object,
                         ci = ci_width,
                         rope = rope, samples = diff)
 
-class(returned_object) <- "compare.estimate"
+class(returned_object) <- "edge_compare.estimate"
 
 returned_object
 }

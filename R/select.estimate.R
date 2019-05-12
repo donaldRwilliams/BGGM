@@ -28,6 +28,8 @@ select.estimate <- function(x, ci_width = 0.95, rope = NULL, prob = 0.975){
   if(isFALSE( x$analytic) ){
 
   pcor_samples <- x$posterior_samples[,  grep("pcors", colnames(x$posterior_samples))]
+  pcor_sd <- matrix(0, x$p, x$p)
+  pcor_sd[] <- apply(pcor_samples, 2, sd)
   if(is.null(rope)){
     # matrices for selected edges and the adjacency matrix
     adjacency_mat <- matrix(0, x$p, x$p)
@@ -37,14 +39,21 @@ select.estimate <- function(x, ci_width = 0.95, rope = NULL, prob = 0.975){
     adjacency_mat[] <- apply(pcor_samples, 2, BGGM:::ci_helper, ci_width)
 
     returned_object <- list(partials = x$parcors_mat * adjacency_mat,
-                            adjacency = adjacency_mat, call = match.call(), ci = ci_width, rope = rope)
+                            pcor_sd = pcor_sd,
+                            adjacency = adjacency_mat,
+                            call = match.call(),
+                            ci = ci_width,
+                            rope = rope,
+                            pcor_samples  = pcor_samples)
   }
 
   if(is.numeric(rope)){
+    message("ci_width is ignored")
     if(!is.numeric(prob)){
       stop("prob must be specificed (0 - 1) when rope = TRUE")
     }
-    in_rope <- apply(pcor_samples, 2, BGGM:::rope_helper,  rope)
+    in_rope <- apply(pcor_samples, 2, BGGM:::rope_helper,  rope )
+
     out_rope <- 1 - in_rope
     nonzero_mat <- zero_mat <- matrix(0, x$p, x$p)
     nonzero_mat[] <- ifelse(out_rope >= prob, 1, 0)
@@ -54,7 +63,12 @@ select.estimate <- function(x, ci_width = 0.95, rope = NULL, prob = 0.975){
                             adjacency_non_zero = nonzero_mat,
                             partial_zero = x$parcors_mat * zero_mat,
                             adjacency_zero = zero_mat,
-                            call = match.call(), rope = rope, prob = prob, in_rope = in_rope)
+                            pcor_sd = pcor_sd,
+                            call = match.call(),
+                            rope = rope,
+                            prob = prob,
+                            in_rope = in_rope,
+                            pcor_samples = pcor_samples)
   }
 
   }

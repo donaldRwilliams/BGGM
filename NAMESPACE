@@ -29,12 +29,14 @@ export(select.estimate)
 export(print.select.estimate)
 export(summary.select.estimate )
 export(plot.select.estimate)
+export(head.select.estimate)
 
-export(compare)
-export(compare.estimate)
-export(summary.compare.estimate)
-export(print.compare.estimate)
-export(head.compare.estimate)
+export(edge_compare)
+export(edge_compare.estimate)
+export(summary.edge_compare.estimate)
+export(print.edge_compare.estimate)
+export(head.edge_compare.estimate)
+export(plot.edge_compare.estimate)
 
 
 
@@ -45,7 +47,11 @@ export(summary.explore)
 
 
 export(select.explore)
+export(summary.select.explore)
+export(print.select.explore)
 
+
+export(coef.estimate)
 
 #export(edge_compare.estimate)
 #export(print.edge_compare.estimate)

@@ -13,7 +13,7 @@ explore.default <- function(X, delta, iter = 5000,  cores = 2){
 
   X <- na.omit(X)
   p <- ncol(X)
-  parcors_mat <- matrix(0, p, p)
+  parcors_mat <- parcors_sd <- matrix(0, p, p)
   edges <- 0.5 * (p * (p -1))
 
   samples <- BGGM:::sampling(X, nu = 10000,
@@ -31,9 +31,13 @@ explore.default <- function(X, delta, iter = 5000,  cores = 2){
   parcors_mat[upper.tri(parcors_mat)] <- colMeans(posterior_samples)[1:edges]
   pacors_mat <- BGGM:::symmteric_mat(parcors_mat)
 
+  parcors_sd[upper.tri(parcors_sd)] <- apply(posterior_samples, 2,sd)[1:edges]
+
+  pacors_sd <- BGGM:::symmteric_mat(parcors_sd)
 
 
   returned_object <- list(parcors_mat = pacors_mat,
+                          parcors_sd = parcors_sd,
                           samples = samples,
                           delta = delta,
                           iter = iter,
