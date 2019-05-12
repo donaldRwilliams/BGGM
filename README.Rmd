@@ -249,7 +249,7 @@ edge_difference <- edge_compare(fit_sample, contrast = "all", ci_width = 0.95, r
 head(edge_difference, nrow = 5)
 ```
 
-This  output  includes  the  posterior  mean  and  standard  deviation  for  each  difference. Further, `pr_out` is  the  proportion  of  samples  included  between ($\pm$) 0.1.   This  can  be interpreted as the posterior probability of practical equivalence, which has been defined with the argument `rope = 0.1`.  Further, this powerful function can be used to assess specific contrasts.  This can be accomplished, for example, with 5--1 - 6--10.  Note that care must be taken when specifying the contrasts, as an error will arise if they are not in the proper format.
+This  output  includes  the  posterior  mean  and  standard  deviation  for  each  difference. Further, `pr_in` is  the  proportion  of  samples  between ($\pm$) 0.1.   This  can  be interpreted as the posterior probability of practical equivalence, which has been defined with the argument `rope = 0.1`.  Further, this powerful function can be used to assess specific contrasts.  This can be accomplished, for example, with 5--1 - 6--10.  Note that care must be taken when specifying the contrasts, as an error will arise if they are not in the proper format.
 
 The object `edge_difference` can the be plotted with:
 ```{r}

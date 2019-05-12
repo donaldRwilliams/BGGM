@@ -104,7 +104,7 @@ summary(fit_analytic)
 #> Call: 
 #> estimate.default(x = Y, analytic = T)
 #> --- 
-#> Date: Sun May 12 08:02:29 2019
+#> Date: Sun May 12 08:13:15 2019
 ```
 
 Note `summary(.)` provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
@@ -172,16 +172,16 @@ summary(E, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd   2.5%  97.5%
-#>  1--2   -0.2403   0.018 -0.274 -0.204
-#>  1--3   -0.1076   0.019 -0.145 -0.071
-#>  2--3    0.2859   0.017  0.251  0.319
-#>  1--4   -0.0078   0.019 -0.045  0.030
-#>  2--4    0.1647   0.019  0.127  0.202
-#>  3--4    0.1779   0.019  0.140  0.215
-#>  1--5   -0.0088   0.019 -0.047  0.029
-#>  2--5    0.1567   0.018  0.120  0.193
-#>  3--5    0.3588   0.017  0.325  0.392
-#>  4--5    0.1212   0.019  0.084  0.159
+#>  1--2    -0.241   0.018 -0.275 -0.204
+#>  1--3    -0.108   0.019 -0.145 -0.071
+#>  2--3     0.287   0.018  0.251  0.320
+#>  1--4    -0.007   0.019 -0.043  0.031
+#>  2--4     0.164   0.019  0.127  0.201
+#>  3--4     0.178   0.019  0.141  0.214
+#>  1--5    -0.009   0.019 -0.046  0.029
+#>  2--5     0.156   0.019  0.120  0.193
+#>  3--5     0.358   0.017  0.326  0.391
+#>  4--5     0.122   0.019  0.084  0.158
 #> ---
 ```
 
@@ -275,16 +275,16 @@ head(E, nrow = 10, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd pr_out  pr_in
-#>  1--2    -0.244   0.019   1.00 0.0000
-#>  1--3    -0.106   0.019   0.62 0.3830
+#>  1--2    -0.244   0.018   1.00 0.0000
+#>  1--3    -0.106   0.019   0.61 0.3934
 #>  2--3     0.287   0.018   1.00 0.0000
 #>  1--4    -0.015   0.019   0.00 1.0000
-#>  2--4     0.161   0.019   1.00 0.0002
-#>  3--4     0.160   0.019   1.00 0.0012
+#>  2--4     0.160   0.019   1.00 0.0006
+#>  3--4     0.160   0.019   1.00 0.0002
 #>  1--5    -0.016   0.020   0.00 1.0000
-#>  2--5     0.145   0.019   0.99 0.0082
-#>  3--5     0.354   0.017   1.00 0.0000
-#>  4--5     0.115   0.019   0.78 0.2192
+#>  2--5     0.145   0.019   0.99 0.0094
+#>  3--5     0.355   0.017   1.00 0.0000
+#>  4--5     0.114   0.019   0.76 0.2372
 #> ---
 ```
 
@@ -347,15 +347,15 @@ head(edge_difference, nrow = 5)
 #> Estimates: 
 #>  
 #>   contrast post_mean post_sd pr_out pr_in
-#>  1--2-1--3    -0.138   0.031  0.883 0.117
-#>  1--2-2--3    -0.530   0.024  1.000 0.000
-#>  1--2-1--4    -0.229   0.029  1.000 0.000
-#>  1--2-2--4    -0.405   0.026  1.000 0.000
-#>  1--2-3--4    -0.404   0.027  1.000 0.000
+#>  1--2-1--3    -0.139   0.030    0.9   0.1
+#>  1--2-2--3    -0.531   0.024    1.0   0.0
+#>  1--2-1--4    -0.229   0.028    1.0   0.0
+#>  1--2-2--4    -0.405   0.025    1.0   0.0
+#>  1--2-3--4    -0.405   0.027    1.0   0.0
 #> ---
 ```
 
-This output includes the posterior mean and standard deviation for each difference. Further, `pr_out` is the proportion of samples included between (±) 0.1. This can be interpreted as the posterior probability of practical equivalence, which has been defined with the argument `rope = 0.1`. Further, this powerful function can be used to assess specific contrasts. This can be accomplished, for example, with 5--1 - 6--10. Note that care must be taken when specifying the contrasts, as an error will arise if they are not in the proper format.
+This output includes the posterior mean and standard deviation for each difference. Further, `pr_in` is the proportion of samples between (±) 0.1. This can be interpreted as the posterior probability of practical equivalence, which has been defined with the argument `rope = 0.1`. Further, this powerful function can be used to assess specific contrasts. This can be accomplished, for example, with 5--1 - 6--10. Note that care must be taken when specifying the contrasts, as an error will arise if they are not in the proper format.
 
 The object `edge_difference` can the be plotted with:
 
@@ -411,15 +411,15 @@ coefficients(fit, node = 1, ci_width = 0.95)
 #> Estimates: 
 #>  
 #>  node post_mean post_sd   2.5%  97.5%
-#>     2    -0.278   0.022 -0.319 -0.233
-#>     3    -0.124   0.022 -0.168 -0.083
-#>     4    -0.015   0.020 -0.053  0.026
-#>     5    -0.018   0.021 -0.060  0.023
-#>     6     0.057   0.021  0.016  0.096
-#>     7     0.080   0.021  0.040  0.121
-#>     8     0.043   0.020  0.004  0.083
-#>     9     0.142   0.022  0.101  0.185
-#>    10    -0.030   0.021 -0.071  0.011
+#>     2    -0.278   0.021 -0.318 -0.236
+#>     3    -0.125   0.023 -0.170 -0.081
+#>     4    -0.014   0.020 -0.053  0.024
+#>     5    -0.017   0.021 -0.060  0.024
+#>     6     0.057   0.021  0.015  0.095
+#>     7     0.080   0.022  0.039  0.121
+#>     8     0.044   0.021  0.005  0.086
+#>     9     0.140   0.023  0.095  0.187
+#>    10    -0.029   0.021 -0.069  0.012
 #> ---
 ```
 
@@ -456,8 +456,8 @@ head(train_R2, nrow = 2)
 #> Estimates: 
 #> 
 #>  node post_mean    post_sd       2.5%     97.5%
-#>     1 0.1687363 0.06684558 0.04710252 0.3063529
-#>     2 0.2851956 0.07065163 0.14438180 0.4094888
+#>     1 0.1705417 0.06638632 0.04498184 0.3040906
+#>     2 0.2880196 0.06864805 0.15253969 0.4111230
 #> ---
 ```
 
@@ -512,16 +512,16 @@ summary(bayes_loo)
 #> Estimates: 
 #> 
 #>   node      loo   loo_se
-#>     1 2573.748 48.59837
-#>     2 2330.823 63.65590
-#>     3 2301.734 64.36837
-#>     4 2467.402 51.95522
-#>     5 2416.256 55.46030
-#>     6 2433.354 58.87974
-#>     7 2300.391 50.67988
-#>     8 2390.375 51.17164
-#>     9 2294.638 51.38352
-#>    10 2365.065 39.76016
+#>     1 2573.120 48.88857
+#>     2 2330.417 63.21588
+#>     3 2303.851 64.65397
+#>     4 2465.635 51.77971
+#>     5 2416.815 55.67643
+#>     6 2433.489 58.97781
+#>     7 2300.486 50.77850
+#>     8 2389.360 51.45174
+#>     9 2295.786 51.36911
+#>    10 2364.466 39.62005
 #> ---
 ```
 
