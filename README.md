@@ -26,9 +26,7 @@ devtools::install_github("donaldRwilliams/BGGM")
 1. Estimation
 =============
 
-1.1 Structure Learning
-----------------------
-
+<!-- ## 1.1 Structure Learning -->
 By structure learning we are referring to selecting the graph (i.e., the edge set *E*), which consists of those edges determinedto be non-zero. For demonstrative purposes, we consider a relatively small number of variables (*p* = 5). This The package **BGGM** offers a convenient analytic solution for estimating GGMs. It is implemented with:
 
 ``` r
@@ -57,7 +55,7 @@ summary(fit_analytic)
 #> Call: 
 #> estimate.default(x = Y, analytic = T)
 #> --- 
-#> Date: Sat May 11 20:38:51 2019
+#> Date: Sat May 11 20:39:42 2019
 ```
 
 Note `summary(.)` provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
@@ -117,16 +115,16 @@ summary(E, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd   2.5%  97.5%
-#>  1--2   -0.2404   0.018 -0.275 -0.205
-#>  1--3   -0.1072   0.019 -0.145 -0.071
-#>  2--3    0.2864   0.018  0.251  0.321
-#>  1--4   -0.0074   0.019 -0.045  0.031
-#>  2--4    0.1645   0.019  0.126  0.201
-#>  3--4    0.1779   0.019  0.141  0.214
-#>  1--5   -0.0088   0.019 -0.046  0.029
-#>  2--5    0.1567   0.019  0.120  0.193
-#>  3--5    0.3583   0.017  0.325  0.392
-#>  4--5    0.1217   0.019  0.085  0.158
+#>  1--2   -0.2398   0.018 -0.275 -0.205
+#>  1--3   -0.1076   0.019 -0.145 -0.071
+#>  2--3    0.2867   0.017  0.253  0.319
+#>  1--4   -0.0078   0.019 -0.045  0.030
+#>  2--4    0.1647   0.019  0.128  0.200
+#>  3--4    0.1778   0.018  0.140  0.214
+#>  1--5   -0.0096   0.019 -0.047  0.028
+#>  2--5    0.1561   0.019  0.118  0.193
+#>  3--5    0.3586   0.017  0.324  0.391
+#>  4--5    0.1211   0.019  0.085  0.158
 #> ---
 ```
 

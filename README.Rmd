@@ -42,7 +42,7 @@ devtools::install_github("donaldRwilliams/BGGM")
 
 # 1. Estimation
 
-## 1.1 Structure Learning
+<!-- ## 1.1 Structure Learning -->
 
 By structure learning we are referring to selecting the graph (i.e., the edge set $E$), which consists of those edges determinedto be non-zero.  For demonstrative purposes, we consider a relatively small number of variables ($p= 5$).  This 
 The package **BGGM** offers a convenient analytic solution for estimating GGMs. It is implemented with:
