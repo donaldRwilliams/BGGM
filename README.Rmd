@@ -173,13 +173,13 @@ plot_1E
 ```
 
 
-We emphasize that GGMs are often thought to capture conditionally *independent* relations--i.e., evidence for the null hypothesis of no effect, conditional on the other variables in the model. However, the dominant approach assesses conditional *dependence* ($\rho_{ij} \neq 0$), and then sets the off-diagonal elements to zero otherwise. **BGGM** can explicitly answers the question of conditional independence.
+We emphasize that GGMs are often thought to capture conditionally *independent* relations--i.e., evidence for the null hypothesis of no effect, conditional on the other variables in the model. However, the dominant approach assesses conditional *dependence* ($\rho_{ij} \neq 0$), and then sets the off-diagonal elements to zero otherwise. **BGGM** can explicitly answer the question of conditional independence.
 
 ## Edge differences
 Differences between partial correlations are often tested in GGMs; for example, with a classical (i.e., frequentist) approach that is implemented in **bootnet**.  One contribution of **BGGM** is providing Bayesian analogs for commonly used methods, as well as extensions to those methods.  In this case, we can use posterior probabilities to determine which edges are practically equivalent.  This is implemented with:
 
 
-```{r}
+```{r, message=F}
 # edge differences
 edge_difference <- edge_compare(fit_sample, contrast = "all", ci_width = 0.95, rope = 0.1)
 
@@ -260,11 +260,11 @@ test_R2 <- predict(fit_train, ci_width = 0.90,
 The work flow is completed by visualizing BayesianR2for each node–i.e.,
 
 ```{r}
-plt_3A <- plot(train_R2, test_R2, order = "test")
+plt_3A <- plot(x1 = train_R2, x2 =  test_R2, order = "test")
 plt_3A
 ```
 
-Here the nodes have been ordered by which has the best out-of-sample performance.  The `predict` object can be used to assess differences in predictive accuracy with compare(.). **BGGM** also includes mean squared error (`measure = "mse"`).
+Here the nodes have been ordered by which has the best out-of-sample performance. It is also possible to predict each in seperate plot by leaving `x2` empty. The `predict` object can be used to assess differences in predictive accuracy with compare(.). **BGGM** also includes mean squared error (`measure = "mse"`).
 
 
 ### Leave-one-out cross-validation

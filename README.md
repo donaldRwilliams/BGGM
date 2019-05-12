@@ -57,7 +57,7 @@ summary(fit_analytic)
 #> Call: 
 #> estimate.default(x = Y, analytic = T)
 #> --- 
-#> Date: Sat May 11 20:50:09 2019
+#> Date: Sat May 11 20:58:00 2019
 ```
 
 Note `summary(.)` provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
@@ -117,16 +117,16 @@ summary(E, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd   2.5%  97.5%
-#>  1--2   -0.2405   0.018 -0.277 -0.205
-#>  1--3   -0.1071   0.019 -0.144 -0.069
-#>  2--3    0.2863   0.018  0.252  0.321
-#>  1--4   -0.0068   0.019 -0.044  0.031
-#>  2--4    0.1642   0.019  0.127  0.200
-#>  3--4    0.1781   0.019  0.140  0.214
-#>  1--5   -0.0093   0.019 -0.047  0.028
-#>  2--5    0.1565   0.019  0.119  0.193
-#>  3--5    0.3587   0.017  0.327  0.391
-#>  4--5    0.1218   0.019  0.084  0.159
+#>  1--2   -0.2402   0.018 -0.276 -0.204
+#>  1--3   -0.1078   0.019 -0.144 -0.071
+#>  2--3    0.2865   0.018  0.250  0.320
+#>  1--4   -0.0070   0.019 -0.044  0.030
+#>  2--4    0.1646   0.019  0.128  0.201
+#>  3--4    0.1783   0.018  0.142  0.214
+#>  1--5   -0.0091   0.019 -0.046  0.029
+#>  2--5    0.1561   0.019  0.119  0.193
+#>  3--5    0.3588   0.017  0.326  0.392
+#>  4--5    0.1212   0.019  0.084  0.158
 #> ---
 ```
 
@@ -218,16 +218,16 @@ head(E, nrow = 10, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd pr_out  pr_in
-#>  1--2    -0.244   0.018 1.0000 0.0000
-#>  1--3    -0.106   0.019 0.6236 0.3764
-#>  2--3     0.287   0.018 1.0000 0.0000
-#>  1--4    -0.015   0.020 0.0002 0.9998
-#>  2--4     0.161   0.019 0.9998 0.0002
-#>  3--4     0.160   0.019 0.9992 0.0008
-#>  1--5    -0.016   0.020 0.0000 1.0000
-#>  2--5     0.145   0.019 0.9912 0.0088
-#>  3--5     0.354   0.017 1.0000 0.0000
-#>  4--5     0.114   0.019 0.7626 0.2374
+#>  1--2    -0.244   0.018   1.00 0.0000
+#>  1--3    -0.105   0.019   0.61 0.3890
+#>  2--3     0.287   0.018   1.00 0.0000
+#>  1--4    -0.015   0.020   0.00 1.0000
+#>  2--4     0.161   0.019   1.00 0.0008
+#>  3--4     0.160   0.019   1.00 0.0006
+#>  1--5    -0.016   0.019   0.00 1.0000
+#>  2--5     0.145   0.019   0.99 0.0100
+#>  3--5     0.354   0.017   1.00 0.0000
+#>  4--5     0.114   0.019   0.77 0.2256
 #> ---
 ```
 
@@ -261,7 +261,7 @@ plot_1E
 
 <img src="man/figures/README-unnamed-chunk-10-1.png" width="60%" style="display: block; margin: auto;" />
 
-We emphasize that GGMs are often thought to capture conditionally *independent* relations--i.e., evidence for the null hypothesis of no effect, conditional on the other variables in the model. However, the dominant approach assesses conditional *dependence* (*ρ*<sub>*i**j*</sub> ≠ 0), and then sets the off-diagonal elements to zero otherwise. **BGGM** can explicitly answers the question of conditional independence.
+We emphasize that GGMs are often thought to capture conditionally *independent* relations--i.e., evidence for the null hypothesis of no effect, conditional on the other variables in the model. However, the dominant approach assesses conditional *dependence* (*ρ*<sub>*i**j*</sub> ≠ 0), and then sets the off-diagonal elements to zero otherwise. **BGGM** can explicitly answer the question of conditional independence.
 
 Edge differences
 ----------------
@@ -271,7 +271,6 @@ Differences between partial correlations are often tested in GGMs; for example, 
 ``` r
 # edge differences
 edge_difference <- edge_compare(fit_sample, contrast = "all", ci_width = 0.95, rope = 0.1)
-#> ci_width is ignored for decision rule, but used in for plotting
 
 # summary for first 5 rows
 head(edge_difference, nrow = 5)
@@ -288,11 +287,11 @@ head(edge_difference, nrow = 5)
 #> Estimates: 
 #>  
 #>   contrast post_mean post_sd pr_out pr_in
-#>  1--2-1--3    -0.139   0.030  0.898 0.102
+#>  1--2-1--3    -0.139   0.030  0.903 0.097
 #>  1--2-2--3    -0.531   0.024  1.000 0.000
 #>  1--2-1--4    -0.229   0.029  1.000 0.000
 #>  1--2-2--4    -0.405   0.026  1.000 0.000
-#>  1--2-3--4    -0.405   0.027  1.000 0.000
+#>  1--2-3--4    -0.404   0.027  1.000 0.000
 #> ---
 ```
 
@@ -349,15 +348,15 @@ coefficients(fit, node = 1, ci_width = 0.95)
 #> Estimates: 
 #>  
 #>  node post_mean post_sd   2.5%  97.5%
-#>     2    -0.278   0.022 -0.318 -0.233
-#>     3    -0.125   0.023 -0.170 -0.078
-#>     4    -0.015   0.020 -0.053  0.025
-#>     5    -0.017   0.022 -0.060  0.027
-#>     6     0.056   0.021  0.017  0.096
-#>     7     0.081   0.021  0.038  0.123
-#>     8     0.044   0.021  0.003  0.086
-#>     9     0.141   0.022  0.097  0.185
-#>    10    -0.029   0.022 -0.073  0.013
+#>     2    -0.278   0.022 -0.321 -0.234
+#>     3    -0.124   0.022 -0.168 -0.083
+#>     4    -0.015   0.021 -0.057  0.026
+#>     5    -0.017   0.022 -0.058  0.026
+#>     6     0.057   0.020  0.015  0.095
+#>     7     0.081   0.023  0.038  0.124
+#>     8     0.044   0.021  0.004  0.084
+#>     9     0.142   0.021  0.101  0.186
+#>    10    -0.028   0.022 -0.074  0.015
 #> ---
 ```
 
@@ -393,9 +392,9 @@ head(train_R2, nrow = 2)
 #> --- 
 #> Estimates: 
 #> 
-#>  node post_mean    post_sd      2.5%     97.5%
-#>     1 0.1664624 0.06686051 0.0475985 0.3033684
-#>     2 0.2902257 0.06849111 0.1468201 0.4185682
+#>  node post_mean    post_sd       2.5%     97.5%
+#>     1 0.1698155 0.06707914 0.04572123 0.3045737
+#>     2 0.2880415 0.06561424 0.15356142 0.4092516
 #> ---
 ```
 
@@ -412,13 +411,13 @@ test_R2 <- predict(fit_train, ci_width = 0.90,
 The work flow is completed by visualizing BayesianR2for each node–i.e.,
 
 ``` r
-plt_3A <- plot(train_R2, test_R2, order = "test")
+plt_3A <- plot(x1 = train_R2, x2 =  test_R2, order = "test")
 plt_3A
 ```
 
 <img src="man/figures/README-unnamed-chunk-17-1.png" width="60%" style="display: block; margin: auto;" />
 
-Here the nodes have been ordered by which has the best out-of-sample performance. The `predict` object can be used to assess differences in predictive accuracy with compare(.). **BGGM** also includes mean squared error (`measure = "mse"`).
+Here the nodes have been ordered by which has the best out-of-sample performance. It is also possible to predict each in seperate plot by leaving `x2` empty. The `predict` object can be used to assess differences in predictive accuracy with compare(.). **BGGM** also includes mean squared error (`measure = "mse"`).
 
 ### Leave-one-out cross-validation
 
@@ -443,16 +442,16 @@ summary(bayes_loo)
 #> Estimates: 
 #> 
 #>   node      loo   loo_se
-#>     1 2573.047 48.66431
-#>     2 2330.735 63.79323
-#>     3 2303.667 64.68381
-#>     4 2467.004 52.06248
-#>     5 2416.060 55.32276
-#>     6 2433.480 58.96692
-#>     7 2299.730 50.18904
-#>     8 2390.012 51.37976
-#>     9 2295.230 51.40862
-#>    10 2364.167 39.83962
+#>     1 2574.605 48.81872
+#>     2 2330.370 63.99668
+#>     3 2303.414 64.65518
+#>     4 2464.619 51.72684
+#>     5 2416.548 55.37304
+#>     6 2434.405 58.94747
+#>     7 2302.936 50.56797
+#>     8 2391.584 51.70112
+#>     9 2294.785 51.10311
+#>    10 2363.910 39.69742
 #> ---
 ```
 
