@@ -12,10 +12,20 @@
 #'
 #' @examples
 #'
+#'# plot prior distributions
+#'plot_priors <- hypothesis_plot(c(0.25, 0.5))
+#'plot_prior
 #'
-#' test <- hypothesis_plot(.577, samples = 1000000)
+#'#plot prior distribution differences
+#' plot_priors <- hypothesis_plot(c(0.25, 0.5))
+#' plot_prior
 #'
+#' # plot posterior and prior
+#' Y <- BGGM::ptsd[,1:10]
+#' fit <- explore(Y, prior_sd = .5, iter = 5000)
 #'
+#' plot_post_prior <- hypothesis_plot(fit = fit, edge = "2--3", size = 4, difference = FALSE)
+#' plot_post_prior
 #'
 hypothesis_plot <- function(rho_sd = NULL,
                             difference = FALSE,
@@ -24,7 +34,9 @@ hypothesis_plot <- function(rho_sd = NULL,
                             samples = 10000,
                             size = NULL){
 
-  if(isFALSE(difference)){
+  if(isFALSE(is.element(c("ggplot2"), installed.packages()))) stop("please install ggplot2")
+
+  if(isFALSE(difference) && is.null(fit)){
     delta <- list()
     prior_samples <- list()
 
@@ -117,7 +129,8 @@ hypothesis_plot <- function(rho_sd = NULL,
                      adjust = 1.5) +
         annotate(geom = "point", x = 0, y = dens_post, color = "red", size = size) +
         annotate(geom = "point", x = 0, y = dens_prior, color = "blue", size = size) +
-        scale_linetype(name = "")
+        scale_linetype(name = "") +
+        theme_bw()
     }
   }
   list(plt = plt)
