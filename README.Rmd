@@ -41,7 +41,7 @@ Williams, D. R., Rast, P., Pericchi, L. R., & Mulder, J. (2019). Comparing Gauss
 
 This README is organized as follows:
 
-* Installation
+* [Installation](https://github.com/donaldRwilliams/BGGM#installation)
 
 * Estimation
     
