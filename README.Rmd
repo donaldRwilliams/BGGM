@@ -43,17 +43,17 @@ This README is organized as follows:
 
 * [Installation](https://github.com/donaldRwilliams/BGGM#installation)
 
-* Estimation
+* [Estimation](https://github.com/donaldRwilliams/BGGM#estimation)
     
-    + Structure Learning
+    + [Structure Learning](https://github.com/donaldRwilliams/BGGM#structure-learning)
     
-    + Edge (parital correlation) differences 
+    + [Edge (parital correlation) Differences](https://github.com/donaldRwilliams/BGGM#edge-differences)
     
-    + Prediction
+    + [Prediction](https://github.com/donaldRwilliams/BGGM#prediction)
         
-        - Bayesian $R^2$
+        - [Bayesian $R^2$](https://github.com/donaldRwilliams/BGGM#bayesian-r2)
         
-        - Bayesian Leave-One-Out Cross-Validation
+        - [Leave-One-Out Cross-Validation](https://github.com/donaldRwilliams/BGGM#leave-one-out-cross-validation)
 
 * Hypothesis Testing
     
