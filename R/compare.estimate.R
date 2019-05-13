@@ -12,9 +12,9 @@
 #' @examples
 edge_compare.estimate <- function(x, contrast, ci_width, rope = NULL){
 
-  if(!is.null(rope)){
-    message("ci_width is ignored for decision rule, but used is for plotting")
-  }
+  # if(!is.null(rope)){
+  #   message("ci_width is ignored for decision rule, but used is for plotting")
+  # }
   # lower interval
   low <- (1 - ci_width) / 2
 
@@ -30,7 +30,8 @@ edge_compare.estimate <- function(x, contrast, ci_width, rope = NULL){
   # name partials to match contrasts
   colnames(pcors) <- unlist(lapply(1:p, function(x) paste(1:p, x, sep = "--")))
 
-  if(length(contrast) == 1 & contrast != "all"){
+  options(warn=-1)
+  if(length(contrast) == 1 && contrast != "all"){
 
     one <- sub(".* - ","", contrast)
     two <- gsub(" .*","", contrast)
@@ -49,9 +50,9 @@ edge_compare.estimate <- function(x, contrast, ci_width, rope = NULL){
     rp <- BGGM:::rope_helper(diff, rope)
 
     # returned object
-    returned_object <- cbind.data.frame(
+    returned_object <-   data.frame( cbind(
                                 # contrast name
-                                contrast = contrast,
+                                "contrast" = contrast,
                                 # posterior mean
                                 post_mean = mean(diff),
                                 # posterior sd
@@ -61,7 +62,7 @@ edge_compare.estimate <- function(x, contrast, ci_width, rope = NULL){
                                 # probability *out* rope
                                 pr_out = 1 - rp,
                                 # probability *in* rope
-                                pr_in = rp)
+                                pr_in = rp), check.names = F)
 
     returned_object <- rapply(object = returned_object,
                               f = round,
@@ -72,7 +73,7 @@ edge_compare.estimate <- function(x, contrast, ci_width, rope = NULL){
 
   if(is.null(rope)){
   # no rope
-  returned_object <- cbind.data.frame(
+  returned_object <- data.frame( cbind(
                               # contrast name
                               contrast = contrast,
                               # posterior mean
@@ -80,7 +81,7 @@ edge_compare.estimate <- function(x, contrast, ci_width, rope = NULL){
                               # posterior sd
                               post_sd = sd(diff),
                               # credible interval
-                              t(quantile(diff, c(low, up))))
+                              t(quantile(diff, c(low, up)))), check.names  = F)
 
 
   returned_object <- rapply(object = returned_object,
@@ -109,8 +110,8 @@ edge_compare.estimate <- function(x, contrast, ci_width, rope = NULL){
       # contrast
 
 
-      one <- sub(".* - ","", contrast)
-      two <- gsub(" .*","", contrast)
+      one <- sub(".* - ","", contrast[i])
+      two <- gsub(" .*","", contrast[i])
 
 
       if(anyNA(match(c(one, two), colnames(pcors)))){
@@ -119,18 +120,18 @@ edge_compare.estimate <- function(x, contrast, ci_width, rope = NULL){
 
 
       # store differences
-      diff[[i]] <- pcors[,one] - pcors[,two]
+      diff[[i]] <- pcors[,two] - pcors[,one]
 
       # names
-      names(diff)[[i]] <- contrast
+      names(diff)[[i]] <- contrast[i]
 
       if(is.numeric(rope)){
         # proportion in rope
         rp <- BGGM:::rope_helper(diff[[i]], rope)
 
-        summ[[i]] <- cbind.data.frame(
+        summ[[i]] <- data.frame( cbind(
                                       # contrast name
-                                      contrast = contrast,
+                                      "contrast" = contrast[i],
                                       # posterior mean
                                       post_mean = mean(diff[[i]]),
                                       # posterior sd
@@ -140,7 +141,7 @@ edge_compare.estimate <- function(x, contrast, ci_width, rope = NULL){
                                       # probability *out* rope
                                       pr_out = 1 - rp,
                                       # probability *in* rope
-                                      pr_in = rp)
+                                      pr_in = rp), check.names = F)
 
         summ[[i]] <- rapply(object = summ[[i]],
                             f = round,
@@ -150,15 +151,15 @@ edge_compare.estimate <- function(x, contrast, ci_width, rope = NULL){
 
         } else{
       # no rope
-      summ[[i]] <- cbind.data.frame(
+      summ[[i]] <- data.frame(cbind(
                                     # contrast name
-                                    contrast = contrast,
+                                    "contrast" = contrast[i],
                                     # posterior mean
                                     post_mean = mean(diff[[i]]),
                                     # posterior sd
                                     post_sd = sd(diff[[i]]),
                                     # credible interval
-                                    t(quantile(diff[[i]], c(low, up))))
+                                    t(quantile(diff[[i]], c(low, up)))), check.names = F)
 
       summ[[i]] <- rapply(object = summ[[i]],
                           f = round,
@@ -252,7 +253,7 @@ edge_compare.estimate <- function(x, contrast, ci_width, rope = NULL){
 
   returned_object <-    do.call(rbind.data.frame, summ)
 }
-
+  options(warn=0)
 returned_object <- list(returned_object = returned_object,
                         call = match.call(),
                         ci = ci_width,

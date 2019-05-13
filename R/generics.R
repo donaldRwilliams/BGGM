@@ -692,17 +692,28 @@ summary.edge_compare.estimate <- function(x, ...){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
   cat("Type: Edge comparison(s) \n")
-  cat("Credible Interval:", gsub("^.*\\.","", x$ci), "% \n")
+
 
   if(is.numeric(x$rope)){
     cat("Region of Practical Equivalence:", "[", -1 * x$rope, ", ", x$rope, "]", "\n", sep = "")
+
+    cat("--- \n")
+    cat("Call:\n")
+    print(x$call)
+    cat("--- \n")
+    cat("Posterior Estimates: \n\n")
+    print(x$returned_object[,-c(4:5)], row.names = FALSE,  ...)
+  } else{
+    cat("Credible Interval:", gsub("^.*\\.","", x$ci), "% \n")
+    cat("--- \n")
+    cat("Call:\n")
+    print(x$call)
+    cat("--- \n")
+    cat("Posterior Estimates: \n\n")
+    print(x$returned_object, row.names = FALSE,  ...)
+
   }
-  cat("--- \n")
-  cat("Call:\n")
-  print(x$call)
-  cat("--- \n")
-  cat("Posterior Estimates: \n\n")
-  print(x$returned_object[,-c(4:5)], row.names = FALSE,  ...)
+
 }
 
 
