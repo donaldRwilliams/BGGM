@@ -4,7 +4,7 @@
 \alias{explore.default}
 \title{Title}
 \usage{
-\method{explore}{default}(X, delta, iter = 5000, cores = 2)
+\method{explore}{default}(X, prior_sd, iter = 5000, cores = 2)
 }
 \arguments{
 \item{cores}{}

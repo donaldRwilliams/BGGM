@@ -9,6 +9,11 @@ compare_predict_helper <- function(x, ci_width){
                             interval), 3)
 }
 
+delta_solve = function(x){
+  (x^2)^-1 - 1
+
+}
+
 get_lower_tri<-function(cormat){
   cormat[upper.tri(cormat)] <- NA
   return(cormat)

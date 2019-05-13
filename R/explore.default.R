@@ -9,8 +9,9 @@
 #' @export
 #'
 #' @examples
-explore.default <- function(X, delta, iter = 5000,  cores = 2){
+explore.default <- function(X, prior_sd, iter = 5000,  cores = 2){
 
+  delta <- BGGM:::delta_solve(prior_sd)
   X <- na.omit(X)
   p <- ncol(X)
   parcors_mat <- parcors_sd <- matrix(0, p, p)

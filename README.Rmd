@@ -67,9 +67,9 @@ This README is organized as follows:
     
     + Confirmatory Hypothesis Testing
       
-        - Order Contraints
+        - Order Constraints
         
-        - Equality Contraints
+        - Equality Constraints
 
 * Comparing GGMs
     
