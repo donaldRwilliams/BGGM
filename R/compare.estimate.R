@@ -40,7 +40,7 @@ edge_compare.estimate <- function(x, contrast, ci_width, rope = NULL){
       stop("rewrite the contrasts. must be 1--2 - 1--3")
     }
 
-    diff <- pcors[,one] - pcors[,two]
+    diff <- pcors[,two] - pcors[,one]
 
 
     # for rope (region of practical equivalence)
