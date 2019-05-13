@@ -59,7 +59,7 @@ This README is organized as follows:
     
     + Prior specification
     
-    + Stucture Learning
+    + Structure Learning
         
         - One-sided hypthesis testing
         
