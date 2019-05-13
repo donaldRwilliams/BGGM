@@ -61,7 +61,7 @@ This README is organized as follows:
     
     + Structure Learning
         
-        - One-sided hypthesis testing
+        - One-sided hypothesis testing
         
         - Exhaustive hypothesis testing
     
