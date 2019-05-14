@@ -1,18 +1,18 @@
 #' Hypothesis Plot
 #'
 #' @description This function allows for plotting prior distributions and prior distribution differences.
-#'  This can assist in selecting a hypothesized effect size, which is used in the computation of the Bayes factor. Further,
-#'  if a fitted object is supplied (\code{fit}), this allows for plotting the prior and a selected posterior distribution (\code{edge}).
+#'  This can assist in selecting a hypothesized effect size, which is used for computing the the Bayes factor. Further,
+#'  if a fitted object is supplied (\code{fit}), this allows for plotting the chosen prior and a selected posterior distribution (\code{edge}).
 #'  This shows how the Bayes factor is computed (ratio of denisty evaluated at zero).
 #'
-#' @param rho_sd
-#' @param difference
-#' @param fit
-#' @param edge
-#' @param samples
-#' @param size
+#' @param rho_sd standard deviation of the prior distribution (see notes)
+#' @param difference \code{TRUE} plots the difference between prior distributions (see notes)
+#' @param fit option object of class \code{explore}
+#' @param edge option for plotting selected posterior distribtion (only if a fitted model is provided)
+#' @param size point size for prior and posteriro plot (only needed if a fitted model is provided)
+#' @param samples number of samples drawn from the prior distirbition
 #'
-#' @return
+#' @return a \code{ggplot2} object
 #' @export
 #'
 #' @examples
@@ -38,6 +38,7 @@ hypothesis_plot <- function(rho_sd = NULL,
                             edge = NULL,
                             samples = 10000,
                             size = NULL){
+
 
   if(isFALSE(is.element(c("ggplot2"), installed.packages()))) stop("please install ggplot2")
 
