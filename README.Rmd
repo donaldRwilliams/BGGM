@@ -24,10 +24,10 @@ This package includes methods introduced in Williams, Rast, Pericchi, and Mulder
 The estimation based methods are described in Williams (2018). They offer advantages compared to classical methods, in that a 
 measure of uncertainty is provided for all parameters. For example, each node has a distribution for variance explained (i.e., Bayesian $R^2$). Measures of out-of-sample prediction error are available, which also have a measure of uncertainty. The model is selected with credible interval exclusion of zero or a region of practical equivalence. This allows for computing the posterior probability for an assumed *null* region--i.e., conditional independence. It is also possible to compare partial correlations. 
 
-The hypothesis testing based methods are described in Williams and Mulder (2019), and allow for testing edges (i.e., partial correlations) with the Bayes factor. One-sided hypothesis testing is also possible. These methods provide (relative) evidence for the null hypothesis. There are extensions for **confirmatory hypothesis testing** in GGMs--e.g., inequality or equality constraints on the partial correlations. This allows for comparing theroetically informed models with Bayesian model selection.
+The hypothesis testing based methods are described in Williams and Mulder (2019), and allow for testing edges (i.e., partial correlations) with the Bayes factor. One-sided hypothesis testing is also possible. These methods provide (relative) evidence for the null hypothesis. There are extensions for **confirmatory hypothesis testing** in GGMs--e.g., inequality or equality constraints on the partial correlations. This allows for comparing theoretically informed models with Bayesian model selection.
 
 
-Further, it is possible to assess differences as well as similarities (i.e., the null hypothesis)  between  GGMs. These method were introduced in Williams, Rast, Pericchi, and Mulder (2019). Graphs are compared either with the posterior  predictive  distribution  or Bayesian model  selection.   The  latter  allows  for  testing hypothesized  changes  in  graphical structures  between,  for  example,  control  and  treatment  groups. The posterior  preditive approach is based on KL-divergence. It allows for testing the assumed (null) model of group equality for the entire graph or specific variables. These methods can be used to comapre any number of GGMs.
+Further, it is possible to assess differences as well as similarities (i.e., the null hypothesis)  between  GGMs. These method were introduced in Williams, Rast, Pericchi, and Mulder (2019). Graphs are compared either with the posterior  predictive  distribution  or Bayesian model  selection.   The  latter  allows  for  testing hypothesized  changes  in  graphical structures  between,  for  example,  control  and  treatment  groups. The posterior  predictive approach is based on KL-divergence. It allows for testing the assumed (null) model of group equality for the entire graph or specific variables. These methods can be used to compare any number of GGMs.
 
 
 
@@ -47,7 +47,7 @@ This README is organized as follows:
     
     + [Structure Learning](https://github.com/donaldRwilliams/BGGM#structure-learning)
     
-    + [Edge (parital correlation) Differences](https://github.com/donaldRwilliams/BGGM#edge-differences)
+    + [Edge (partial correlation) Differences](https://github.com/donaldRwilliams/BGGM#edge-differences)
     
     + [Prediction](https://github.com/donaldRwilliams/BGGM#prediction)
         
@@ -91,6 +91,8 @@ devtools::install_github("donaldRwilliams/BGGM")
 
 
 # Estimation
+The following methods are described in Williams (2018). They build upon two basic ideas. First, the Wishart distribution is a conjugate prior distribution for the precision matrix (inverse of the covariance matrix). This provides an analytic solution for selecting the graph, and allows for conveniently drawing posterior samples. Second, there is an exact relationship between estimating the precision matrix directly and with multiple regression. Here the individual elements, from joint posterior distribution of the precision matrix, can be converted to their respective regression counterparts. This allows for assessing nodewise (for each variable in the model) predictability. 
+
 
 ##  Structure Learning
 
@@ -332,7 +334,7 @@ plt_3A <- plot(x1 = train_R2, x2 =  test_R2, order = "test")
 plt_3A
 ```
 
-Here the nodes have been ordered by which has the best out-of-sample performance. It is also possible to have each in a seperate plot by leaving `x2` empty. The `predict` object can be used to assess differences in predictive accuracy with compare(.). **BGGM** also includes mean squared error (`measure = "mse"`).
+Here the nodes have been ordered by which has the best out-of-sample performance. It is also possible to have each in a separate plot by leaving `x2` empty. The `predict` object can be used to assess differences in predictive accuracy with compare(.). **BGGM** also includes mean squared error (`measure = "mse"`).
 
 
 ### Leave-one-out cross-validation
@@ -388,6 +390,12 @@ plt_3C
 This highlights the difference between the leave-one-out methods, in that the Bayesian version has a measure of uncertainty (although the order is the same). For both measures of predictive *error*, a lower value indicates a more predictable node (variable).
 
 # Hypothesis Testing
+The following methods were introduced in Williams and Mulder (2019). That work not only presented an exploratory approach using the Bayes factor, but it also proposed methodology for confirmatory hypothesis testing in GGMs. The latter provides an alternative to data driven model selection that is commonplace in the GGM literature, and in particular, it allows for comparing theoretical models. The approach builds upon (Mulder2016), where the focus was on correlations (as opposed to *partial* correlations). In particular, **BGGM** allows for Bayesian model selection with competing sets of order or equality constraints on multiple partial correlations.
+
+## Stucture Learning
+### Visualizing Scientific Expectations
+For Bayesian hypothesis testing in particular, it is important to *fully* understand the prior distribution $\mathcal{H}_u$. This is because caputres the predicted effect size, and it is used to compute the Bayes factor. This stands in contrast to the above estimation based methods, where $E$ is determined with respect to the posterior distribution. To this end, \pkg{BGGM} includes functions to visualize the prior distribution--i.e.,
+
 # Comparing GGMs
 
 

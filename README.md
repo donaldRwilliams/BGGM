@@ -7,9 +7,9 @@ This package includes methods introduced in Williams, Rast, Pericchi, and Mulder
 
 The estimation based methods are described in Williams (2018). They offer advantages compared to classical methods, in that a measure of uncertainty is provided for all parameters. For example, each node has a distribution for variance explained (i.e., Bayesian *R*<sup>2</sup>). Measures of out-of-sample prediction error are available, which also have a measure of uncertainty. The model is selected with credible interval exclusion of zero or a region of practical equivalence. This allows for computing the posterior probability for an assumed *null* region--i.e., conditional independence. It is also possible to compare partial correlations.
 
-The hypothesis testing based methods are described in Williams and Mulder (2019), and allow for testing edges (i.e., partial correlations) with the Bayes factor. One-sided hypothesis testing is also possible. These methods provide (relative) evidence for the null hypothesis. There are extensions for **confirmatory hypothesis testing** in GGMs--e.g., inequality or equality constraints on the partial correlations. This allows for comparing theroetically informed models with Bayesian model selection.
+The hypothesis testing based methods are described in Williams and Mulder (2019), and allow for testing edges (i.e., partial correlations) with the Bayes factor. One-sided hypothesis testing is also possible. These methods provide (relative) evidence for the null hypothesis. There are extensions for **confirmatory hypothesis testing** in GGMs--e.g., inequality or equality constraints on the partial correlations. This allows for comparing theoretically informed models with Bayesian model selection.
 
-Further, it is possible to assess differences as well as similarities (i.e., the null hypothesis) between GGMs. These method were introduced in Williams, Rast, Pericchi, and Mulder (2019). Graphs are compared either with the posterior predictive distribution or Bayesian model selection. The latter allows for testing hypothesized changes in graphical structures between, for example, control and treatment groups. The posterior preditive approach is based on KL-divergence. It allows for testing the assumed (null) model of group equality for the entire graph or specific variables. These methods can be used to comapre any number of GGMs.
+Further, it is possible to assess differences as well as similarities (i.e., the null hypothesis) between GGMs. These method were introduced in Williams, Rast, Pericchi, and Mulder (2019). Graphs are compared either with the posterior predictive distribution or Bayesian model selection. The latter allows for testing hypothesized changes in graphical structures between, for example, control and treatment groups. The posterior predictive approach is based on KL-divergence. It allows for testing the assumed (null) model of group equality for the entire graph or specific variables. These methods can be used to compare any number of GGMs.
 
 Williams, D. R. (2018). Bayesian Inference for Gaussian Graphical Models: Structure Learning, Explanation, and Prediction. ([pre-print](https://doi.org/10.31234/osf.io/x8dpr))
 
@@ -28,7 +28,7 @@ This README is organized as follows:
 
     -   [Structure Learning](https://github.com/donaldRwilliams/BGGM#structure-learning)
 
-    -   [Edge (parital correlation) Differences](https://github.com/donaldRwilliams/BGGM#edge-differences)
+    -   [Edge (partial correlation) Differences](https://github.com/donaldRwilliams/BGGM#edge-differences)
 
     -   [Prediction](https://github.com/donaldRwilliams/BGGM#prediction)
 
@@ -71,6 +71,8 @@ devtools::install_github("donaldRwilliams/BGGM")
 Estimation
 ==========
 
+The following methods are described in Williams (2018). They build upon two basic ideas. First, the Wishart distribution is a conjugate prior distribution for the precision matrix (inverse of the covariance matrix). This provides an analytic solution for selecting the graph, and allows for conveniently drawing posterior samples. Second, there is an exact relationship between estimating the precision matrix directly and with multiple regression. Here the individual elements, from joint posterior distribution of the precision matrix, can be converted to their respective regression counterparts. This allows for assessing nodewise (for each variable in the model) predictability.
+
 Structure Learning
 ------------------
 
@@ -103,7 +105,7 @@ summary(fit_analytic)
 #> Call: 
 #> estimate.default(x = Y, analytic = T)
 #> --- 
-#> Date: Mon May 13 13:25:16 2019
+#> Date: Tue May 14 13:36:42 2019
 ```
 
 Note `summary(.)` provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
@@ -171,16 +173,16 @@ summary(E, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd   2.5%  97.5%
-#>  1--2   -0.2406   0.018 -0.276 -0.205
-#>  1--3   -0.1069   0.019 -0.144 -0.070
-#>  2--3    0.2863   0.018  0.251  0.321
-#>  1--4   -0.0072   0.019 -0.046  0.030
-#>  2--4    0.1642   0.019  0.128  0.201
-#>  3--4    0.1780   0.019  0.142  0.215
-#>  1--5   -0.0095   0.019 -0.047  0.028
-#>  2--5    0.1562   0.019  0.120  0.191
-#>  3--5    0.3589   0.017  0.326  0.391
-#>  4--5    0.1212   0.019  0.084  0.158
+#>  1--2   -0.2403   0.018 -0.275 -0.204
+#>  1--3   -0.1075   0.019 -0.145 -0.070
+#>  2--3    0.2865   0.018  0.251  0.321
+#>  1--4   -0.0076   0.019 -0.046  0.031
+#>  2--4    0.1645   0.019  0.128  0.200
+#>  3--4    0.1780   0.019  0.141  0.214
+#>  1--5   -0.0091   0.020 -0.048  0.029
+#>  2--5    0.1560   0.019  0.119  0.191
+#>  3--5    0.3587   0.017  0.326  0.392
+#>  4--5    0.1213   0.019  0.084  0.158
 #> ---
 ```
 
@@ -275,15 +277,15 @@ head(E, nrow = 10, summarize = T, digits = 2)
 #>  
 #>  egde post_mean post_sd pr_out  pr_in
 #>  1--2    -0.244   0.018   1.00 0.0000
-#>  1--3    -0.105   0.020   0.62 0.3840
-#>  2--3     0.286   0.018   1.00 0.0000
-#>  1--4    -0.014   0.020   0.00 1.0000
-#>  2--4     0.161   0.019   1.00 0.0014
-#>  3--4     0.160   0.019   1.00 0.0004
+#>  1--3    -0.106   0.019   0.63 0.3678
+#>  2--3     0.287   0.018   1.00 0.0000
+#>  1--4    -0.015   0.020   0.00 1.0000
+#>  2--4     0.161   0.019   1.00 0.0010
+#>  3--4     0.160   0.019   1.00 0.0012
 #>  1--5    -0.016   0.020   0.00 1.0000
-#>  2--5     0.145   0.019   0.99 0.0110
+#>  2--5     0.144   0.019   0.99 0.0114
 #>  3--5     0.354   0.017   1.00 0.0000
-#>  4--5     0.114   0.019   0.76 0.2376
+#>  4--5     0.114   0.019   0.77 0.2326
 #> ---
 ```
 
@@ -346,11 +348,11 @@ head(edge_difference, nrow = 5)
 #> Estimates: 
 #>  
 #>   contrast post_mean post_sd pr_out pr_in
-#>  1--2-1--3    -0.139   0.030  0.903 0.097
-#>  1--2-2--3    -0.531   0.023  1.000 0.000
-#>  1--2-1--4    -0.230   0.029  1.000 0.000
+#>  1--2-1--3    -0.138   0.030  0.899 0.101
+#>  1--2-2--3    -0.531   0.024  1.000 0.000
+#>  1--2-1--4    -0.229   0.029  1.000 0.000
 #>  1--2-2--4    -0.405   0.026  1.000 0.000
-#>  1--2-3--4    -0.405   0.027  1.000 0.000
+#>  1--2-3--4    -0.404   0.027  1.000 0.000
 #> ---
 ```
 
@@ -410,15 +412,15 @@ coefficients(fit, node = 1, ci_width = 0.95)
 #> Estimates: 
 #>  
 #>  node post_mean post_sd   2.5%  97.5%
-#>     2    -0.278   0.022 -0.322 -0.234
-#>     3    -0.125   0.023 -0.170 -0.078
-#>     4    -0.014   0.020 -0.054  0.026
-#>     5    -0.017   0.021 -0.057  0.025
-#>     6     0.056   0.020  0.016  0.095
-#>     7     0.080   0.022  0.035  0.120
-#>     8     0.044   0.022 -0.004  0.085
-#>     9     0.140   0.022  0.097  0.181
-#>    10    -0.028   0.021 -0.070  0.012
+#>     2    -0.278   0.021 -0.319 -0.237
+#>     3    -0.125   0.024 -0.174 -0.081
+#>     4    -0.015   0.021 -0.055  0.026
+#>     5    -0.016   0.021 -0.056  0.025
+#>     6     0.055   0.021  0.015  0.095
+#>     7     0.082   0.022  0.040  0.124
+#>     8     0.044   0.021  0.004  0.085
+#>     9     0.141   0.022  0.097  0.183
+#>    10    -0.028   0.021 -0.070  0.013
 #> ---
 ```
 
@@ -455,8 +457,8 @@ head(train_R2, nrow = 2)
 #> Estimates: 
 #> 
 #>  node post_mean    post_sd       2.5%     97.5%
-#>     1 0.1662904 0.06712537 0.04178771 0.3030704
-#>     2 0.2870111 0.06722520 0.15485202 0.4081324
+#>     1 0.1701557 0.06665457 0.05251008 0.3052455
+#>     2 0.2871757 0.06556507 0.15402343 0.4090553
 #> ---
 ```
 
@@ -483,7 +485,7 @@ plt_3A
 
 <img src="man/figures/README-unnamed-chunk-17-1.png" width="60%" style="display: block; margin: auto;" />
 
-Here the nodes have been ordered by which has the best out-of-sample performance. It is also possible to have each in a seperate plot by leaving `x2` empty. The `predict` object can be used to assess differences in predictive accuracy with compare(.). **BGGM** also includes mean squared error (`measure = "mse"`).
+Here the nodes have been ordered by which has the best out-of-sample performance. It is also possible to have each in a separate plot by leaving `x2` empty. The `predict` object can be used to assess differences in predictive accuracy with compare(.). **BGGM** also includes mean squared error (`measure = "mse"`).
 
 ### Leave-one-out cross-validation
 
@@ -511,16 +513,16 @@ summary(bayes_loo)
 #> Estimates: 
 #> 
 #>   node      loo   loo_se
-#>     1 2574.812 48.83041
-#>     2 2328.450 63.34057
-#>     3 2302.763 64.00411
-#>     4 2466.304 51.65003
-#>     5 2417.453 55.48486
-#>     6 2433.786 58.71051
-#>     7 2300.477 50.15347
-#>     8 2390.640 52.18110
-#>     9 2295.289 51.32062
-#>    10 2364.742 39.76278
+#>     1 2573.557 48.68346
+#>     2 2330.708 63.14921
+#>     3 2304.005 63.87255
+#>     4 2466.550 52.05154
+#>     5 2417.750 55.41054
+#>     6 2433.759 59.39414
+#>     7 2299.838 50.28099
+#>     8 2389.744 51.45594
+#>     9 2294.705 51.59662
+#>    10 2363.413 39.76496
 #> ---
 ```
 
@@ -565,6 +567,15 @@ This highlights the difference between the leave-one-out methods, in that the Ba
 
 Hypothesis Testing
 ==================
+
+The following methods were introduced in Williams and Mulder (2019). That work not only presented an exploratory approach using the Bayes factor, but it also proposed methodology for confirmatory hypothesis testing in GGMs. The latter provides an alternative to data driven model selection that is commonplace in the GGM literature, and in particular, it allows for comparing theoretical models. The approach builds upon (Mulder2016), where the focus was on correlations (as opposed to *partial* correlations). In particular, **BGGM** allows for Bayesian model selection with competing sets of order or equality constraints on multiple partial correlations.
+
+Stucture Learning
+-----------------
+
+### Visualizing Scientific Expectations
+
+For Bayesian hypothesis testing in particular, it is important to *fully* understand the prior distribution ℋ<sub>*u*</sub>. This is because it captures the predicted effect size, and it is used to compute the Bayes factor. This stands in contrast to the above estimation based methods, where *E* is determined with respect to the posterior distribution. To this end, includes functions to visualize the prior distribution--i.e.,
 
 Comparing GGMs
 ==============
