@@ -45,7 +45,7 @@ This README is organized as follows:
 
 * [Estimation](https://github.com/donaldRwilliams/BGGM#estimation)
     
-    + [Structure Learning](https://github.com/donaldRwilliams/BGGM#structure-learning)
+    + [Structure Learning (Estimation)](https://github.com/donaldRwilliams/BGGM#structure-learning)
     
     + [Edge (partial correlation) Differences](https://github.com/donaldRwilliams/BGGM#edge-differences)
     
@@ -55,11 +55,11 @@ This README is organized as follows:
         
         - [Leave-One-Out Cross-Validation](https://github.com/donaldRwilliams/BGGM#leave-one-out-cross-validation)
 
-* Hypothesis Testing
+* [Hypothesis Testing](https://github.com/donaldRwilliams/BGGM#hypothesis-testing)
     
-    + Prior specification
-    
-    + Structure Learning
+    + Structure Learning (Bayes Factor)
+        
+        - Visualizing Scientific Expectations
         
         - One-sided hypothesis testing
         
@@ -94,7 +94,7 @@ devtools::install_github("donaldRwilliams/BGGM")
 The following methods are described in Williams (2018). They build upon two basic ideas. First, the Wishart distribution is a conjugate prior distribution for the precision matrix (inverse of the covariance matrix). This provides an analytic solution for selecting the graph, and allows for conveniently drawing posterior samples. Second, there is an exact relationship between estimating the precision matrix directly and with multiple regression. Here the individual elements, from joint posterior distribution of the precision matrix, can be converted to their respective regression counterparts. This allows for assessing nodewise (for each variable in the model) predictability. 
 
 
-##  Structure Learning
+##  Structure Learning (Estimation)
 
 By structure learning we are referring to selecting the graph (i.e., the edge set $E$), which consists of those edges determined to be non-zero.  For demonstrative purposes, we consider a relatively small number of variables ($p= 5$). 
 
