@@ -397,6 +397,7 @@ The following methods were introduced in Williams and Mulder (2019). That work n
 ## Stucture Learning (Bayes Factor)
 ### Visualizing Scientific Expectations
 For Bayesian hypothesis testing in particular, it is important to *fully* understand the prior distribution $\mathcal{H}_u$. This is because it captures the predicted effect size, and it is used to compute the Bayes factor. This stands in contrast to the above estimation based methods, where $E$ is determined with respect to (only) the posterior distribution. To this end, **BGGM** includes functions to visualize the prior distribution--i.e.,
+
 ```{r}
 # define (potentially) hypothesized standard deviations for rho_ij
 rho_sd <- c(0.1, 0.25, 0.5)
@@ -409,9 +410,21 @@ plt_4A <- hypothesis_plot(rho_sd = rho_sd) +
 plt_4A
 ```
 
+`rho_sd = c(.)` defines a couple (prospective) values for the hypothesized standard deviation of the partial correlations. Further, **BGGM** allows for testing edge differences with the Bayes factor. Accordingly, the *implied* prior distribution for the difference can also be visualized. This is implemented with:
 # Comparing GGMs
 
+```{r}
+# define (potentially) hypothesized standard deviations for rho_ij
+rho_sd <- c(0.1, 0.25, 0.5)
 
+# plot
+plt_4B <- hypothesis_plot(rho_sd = rho_sd,
+                          difference = TRUE) +
+                theme(panel.grid.major = element_blank()) +
+                ylab("Density")        
+
+plt_4B
+```
 
 
 
