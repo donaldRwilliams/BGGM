@@ -105,7 +105,7 @@ summary(fit_analytic)
 #> Call: 
 #> estimate.default(x = Y, analytic = T)
 #> --- 
-#> Date: Tue May 14 13:36:42 2019
+#> Date: Tue May 14 13:39:59 2019
 ```
 
 Note `summary(.)` provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
@@ -173,16 +173,16 @@ summary(E, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd   2.5%  97.5%
-#>  1--2   -0.2403   0.018 -0.275 -0.204
-#>  1--3   -0.1075   0.019 -0.145 -0.070
-#>  2--3    0.2865   0.018  0.251  0.321
-#>  1--4   -0.0076   0.019 -0.046  0.031
-#>  2--4    0.1645   0.019  0.128  0.200
-#>  3--4    0.1780   0.019  0.141  0.214
-#>  1--5   -0.0091   0.020 -0.048  0.029
-#>  2--5    0.1560   0.019  0.119  0.191
-#>  3--5    0.3587   0.017  0.326  0.392
-#>  4--5    0.1213   0.019  0.084  0.158
+#>  1--2   -0.2404   0.018 -0.276 -0.205
+#>  1--3   -0.1072   0.019 -0.145 -0.070
+#>  2--3    0.2865   0.018  0.252  0.321
+#>  1--4   -0.0075   0.019 -0.044  0.031
+#>  2--4    0.1643   0.019  0.127  0.201
+#>  3--4    0.1780   0.019  0.140  0.215
+#>  1--5   -0.0093   0.019 -0.047  0.029
+#>  2--5    0.1558   0.019  0.118  0.194
+#>  3--5    0.3590   0.017  0.326  0.391
+#>  4--5    0.1211   0.019  0.084  0.159
 #> ---
 ```
 
@@ -276,16 +276,16 @@ head(E, nrow = 10, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd pr_out  pr_in
-#>  1--2    -0.244   0.018   1.00 0.0000
-#>  1--3    -0.106   0.019   0.63 0.3678
-#>  2--3     0.287   0.018   1.00 0.0000
-#>  1--4    -0.015   0.020   0.00 1.0000
-#>  2--4     0.161   0.019   1.00 0.0010
-#>  3--4     0.160   0.019   1.00 0.0012
-#>  1--5    -0.016   0.020   0.00 1.0000
-#>  2--5     0.144   0.019   0.99 0.0114
+#>  1--2    -0.244   0.019   1.00 0.0000
+#>  1--3    -0.106   0.019   0.61 0.3880
+#>  2--3     0.286   0.018   1.00 0.0000
+#>  1--4    -0.015   0.019   0.00 1.0000
+#>  2--4     0.161   0.019   1.00 0.0014
+#>  3--4     0.161   0.019   1.00 0.0010
+#>  1--5    -0.016   0.019   0.00 1.0000
+#>  2--5     0.145   0.019   0.99 0.0082
 #>  3--5     0.354   0.017   1.00 0.0000
-#>  4--5     0.114   0.019   0.77 0.2326
+#>  4--5     0.114   0.019   0.76 0.2392
 #> ---
 ```
 
@@ -348,11 +348,11 @@ head(edge_difference, nrow = 5)
 #> Estimates: 
 #>  
 #>   contrast post_mean post_sd pr_out pr_in
-#>  1--2-1--3    -0.138   0.030  0.899 0.101
-#>  1--2-2--3    -0.531   0.024  1.000 0.000
-#>  1--2-1--4    -0.229   0.029  1.000 0.000
+#>  1--2-1--3    -0.139   0.031  0.896 0.104
+#>  1--2-2--3    -0.530   0.024  1.000 0.000
+#>  1--2-1--4    -0.230   0.029  1.000 0.000
 #>  1--2-2--4    -0.405   0.026  1.000 0.000
-#>  1--2-3--4    -0.404   0.027  1.000 0.000
+#>  1--2-3--4    -0.405   0.027  1.000 0.000
 #> ---
 ```
 
@@ -412,15 +412,15 @@ coefficients(fit, node = 1, ci_width = 0.95)
 #> Estimates: 
 #>  
 #>  node post_mean post_sd   2.5%  97.5%
-#>     2    -0.278   0.021 -0.319 -0.237
-#>     3    -0.125   0.024 -0.174 -0.081
-#>     4    -0.015   0.021 -0.055  0.026
-#>     5    -0.016   0.021 -0.056  0.025
-#>     6     0.055   0.021  0.015  0.095
-#>     7     0.082   0.022  0.040  0.124
-#>     8     0.044   0.021  0.004  0.085
-#>     9     0.141   0.022  0.097  0.183
-#>    10    -0.028   0.021 -0.070  0.013
+#>     2    -0.278   0.022 -0.320 -0.234
+#>     3    -0.124   0.023 -0.169 -0.077
+#>     4    -0.016   0.020 -0.056  0.023
+#>     5    -0.017   0.022 -0.058  0.025
+#>     6     0.057   0.021  0.016  0.099
+#>     7     0.081   0.021  0.038  0.122
+#>     8     0.044   0.020  0.004  0.083
+#>     9     0.142   0.022  0.097  0.185
+#>    10    -0.028   0.022 -0.068  0.016
 #> ---
 ```
 
@@ -457,8 +457,8 @@ head(train_R2, nrow = 2)
 #> Estimates: 
 #> 
 #>  node post_mean    post_sd       2.5%     97.5%
-#>     1 0.1701557 0.06665457 0.05251008 0.3052455
-#>     2 0.2871757 0.06556507 0.15402343 0.4090553
+#>     1 0.1715594 0.06835650 0.04968277 0.3069263
+#>     2 0.2914341 0.06783582 0.15719500 0.4161997
 #> ---
 ```
 
@@ -513,16 +513,16 @@ summary(bayes_loo)
 #> Estimates: 
 #> 
 #>   node      loo   loo_se
-#>     1 2573.557 48.68346
-#>     2 2330.708 63.14921
-#>     3 2304.005 63.87255
-#>     4 2466.550 52.05154
-#>     5 2417.750 55.41054
-#>     6 2433.759 59.39414
-#>     7 2299.838 50.28099
-#>     8 2389.744 51.45594
-#>     9 2294.705 51.59662
-#>    10 2363.413 39.76496
+#>     1 2573.735 48.71788
+#>     2 2329.764 63.69746
+#>     3 2303.315 64.46444
+#>     4 2464.195 51.51201
+#>     5 2417.283 55.42889
+#>     6 2434.220 58.96168
+#>     7 2299.369 50.47223
+#>     8 2388.973 51.35230
+#>     9 2293.780 51.76995
+#>    10 2362.629 40.09569
 #> ---
 ```
 
@@ -575,7 +575,7 @@ Stucture Learning
 
 ### Visualizing Scientific Expectations
 
-For Bayesian hypothesis testing in particular, it is important to *fully* understand the prior distribution ℋ<sub>*u*</sub>. This is because it captures the predicted effect size, and it is used to compute the Bayes factor. This stands in contrast to the above estimation based methods, where *E* is determined with respect to the posterior distribution. To this end, includes functions to visualize the prior distribution--i.e.,
+For Bayesian hypothesis testing in particular, it is important to *fully* understand the prior distribution ℋ<sub>*u*</sub>. This is because it captures the predicted effect size, and it is used to compute the Bayes factor. This stands in contrast to the above estimation based methods, where *E* is determined with respect to the posterior distribution. To this end, **BGGM** includes functions to visualize the prior distribution--i.e.,
 
 Comparing GGMs
 ==============

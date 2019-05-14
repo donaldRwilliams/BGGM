@@ -394,7 +394,7 @@ The following methods were introduced in Williams and Mulder (2019). That work n
 
 ## Stucture Learning
 ### Visualizing Scientific Expectations
-For Bayesian hypothesis testing in particular, it is important to *fully* understand the prior distribution $\mathcal{H}_u$. This is because it captures the predicted effect size, and it is used to compute the Bayes factor. This stands in contrast to the above estimation based methods, where $E$ is determined with respect to the posterior distribution. To this end, \pkg{BGGM} includes functions to visualize the prior distribution--i.e.,
+For Bayesian hypothesis testing in particular, it is important to *fully* understand the prior distribution $\mathcal{H}_u$. This is because it captures the predicted effect size, and it is used to compute the Bayes factor. This stands in contrast to the above estimation based methods, where $E$ is determined with respect to the posterior distribution. To this end, **BGGM** includes functions to visualize the prior distribution--i.e.,
 
 # Comparing GGMs
 
