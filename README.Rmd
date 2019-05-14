@@ -45,7 +45,7 @@ This README is organized as follows:
 
 * [Estimation](https://github.com/donaldRwilliams/BGGM#estimation)
     
-    + [Structure Learning (Estimation)](https://github.com/donaldRwilliams/BGGM#structure-learning)
+    + [Structure Learning (Estimation)](https://github.com/donaldRwilliams/BGGM#structure-learning-estimation)
     
     + [Edge (partial correlation) Differences](https://github.com/donaldRwilliams/BGGM#edge-differences)
     
@@ -392,7 +392,7 @@ This highlights the difference between the leave-one-out methods, in that the Ba
 # Hypothesis Testing
 The following methods were introduced in Williams and Mulder (2019). That work not only presented an exploratory approach using the Bayes factor, but it also proposed methodology for confirmatory hypothesis testing in GGMs. The latter provides an alternative to data driven model selection that is commonplace in the GGM literature, and in particular, it allows for comparing theoretical models. The approach builds upon (Mulder2016), where the focus was on correlations (as opposed to *partial* correlations). In particular, **BGGM** allows for Bayesian model selection with competing sets of order or equality constraints on multiple partial correlations.
 
-## Stucture Learning
+## Stucture Learning (Bayes Factor)
 ### Visualizing Scientific Expectations
 For Bayesian hypothesis testing in particular, it is important to *fully* understand the prior distribution $\mathcal{H}_u$. This is because it captures the predicted effect size, and it is used to compute the Bayes factor. This stands in contrast to the above estimation based methods, where $E$ is determined with respect to the posterior distribution. To this end, **BGGM** includes functions to visualize the prior distribution--i.e.,
 

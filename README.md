@@ -26,7 +26,7 @@ This README is organized as follows:
 
 -   [Estimation](https://github.com/donaldRwilliams/BGGM#estimation)
 
-    -   [Structure Learning (Estimation)](https://github.com/donaldRwilliams/BGGM#structure-learning)
+    -   [Structure Learning (Estimation)](https://github.com/donaldRwilliams/BGGM#structure-learning-estimation)
 
     -   [Edge (partial correlation) Differences](https://github.com/donaldRwilliams/BGGM#edge-differences)
 
@@ -105,7 +105,7 @@ summary(fit_analytic)
 #> Call: 
 #> estimate.default(x = Y, analytic = T)
 #> --- 
-#> Date: Tue May 14 13:44:17 2019
+#> Date: Tue May 14 13:46:41 2019
 ```
 
 Note `summary(.)` provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
@@ -173,16 +173,16 @@ summary(E, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd   2.5%  97.5%
-#>  1--2   -0.2402   0.018 -0.275 -0.204
-#>  1--3   -0.1076   0.019 -0.145 -0.069
-#>  2--3    0.2867   0.018  0.252  0.322
-#>  1--4   -0.0071   0.020 -0.045  0.031
-#>  2--4    0.1645   0.019  0.127  0.202
-#>  3--4    0.1774   0.019  0.140  0.214
-#>  1--5   -0.0090   0.019 -0.047  0.028
-#>  2--5    0.1558   0.019  0.117  0.192
-#>  3--5    0.3588   0.017  0.325  0.392
-#>  4--5    0.1217   0.019  0.085  0.159
+#>  1--2   -0.2401   0.018 -0.276 -0.204
+#>  1--3   -0.1076   0.019 -0.145 -0.070
+#>  2--3    0.2866   0.018  0.251  0.321
+#>  1--4   -0.0072   0.019 -0.045  0.030
+#>  2--4    0.1644   0.019  0.129  0.201
+#>  3--4    0.1779   0.019  0.142  0.215
+#>  1--5   -0.0092   0.019 -0.047  0.029
+#>  2--5    0.1560   0.019  0.119  0.193
+#>  3--5    0.3588   0.017  0.325  0.391
+#>  4--5    0.1217   0.019  0.082  0.159
 #> ---
 ```
 
@@ -277,15 +277,15 @@ head(E, nrow = 10, summarize = T, digits = 2)
 #>  
 #>  egde post_mean post_sd pr_out  pr_in
 #>  1--2    -0.244   0.018   1.00 0.0000
-#>  1--3    -0.106   0.020   0.61 0.3896
-#>  2--3     0.287   0.018   1.00 0.0000
+#>  1--3    -0.106   0.019   0.63 0.3700
+#>  2--3     0.286   0.018   1.00 0.0000
 #>  1--4    -0.014   0.019   0.00 1.0000
-#>  2--4     0.161   0.019   1.00 0.0008
+#>  2--4     0.161   0.019   1.00 0.0006
 #>  3--4     0.160   0.019   1.00 0.0008
 #>  1--5    -0.016   0.020   0.00 1.0000
-#>  2--5     0.145   0.019   0.99 0.0096
+#>  2--5     0.145   0.019   0.99 0.0090
 #>  3--5     0.354   0.017   1.00 0.0000
-#>  4--5     0.114   0.019   0.76 0.2396
+#>  4--5     0.114   0.019   0.77 0.2304
 #> ---
 ```
 
@@ -348,10 +348,10 @@ head(edge_difference, nrow = 5)
 #> Estimates: 
 #>  
 #>   contrast post_mean post_sd pr_out pr_in
-#>  1--2-1--3    -0.138   0.031  0.894 0.106
-#>  1--2-2--3    -0.531   0.024  1.000 0.000
-#>  1--2-1--4    -0.230   0.028  1.000 0.000
-#>  1--2-2--4    -0.404   0.026  1.000 0.000
+#>  1--2-1--3    -0.138   0.030  0.898 0.102
+#>  1--2-2--3    -0.530   0.024  1.000 0.000
+#>  1--2-1--4    -0.230   0.029  1.000 0.000
+#>  1--2-2--4    -0.405   0.026  1.000 0.000
 #>  1--2-3--4    -0.404   0.027  1.000 0.000
 #> ---
 ```
@@ -412,15 +412,15 @@ coefficients(fit, node = 1, ci_width = 0.95)
 #> Estimates: 
 #>  
 #>  node post_mean post_sd   2.5%  97.5%
-#>     2    -0.279   0.021 -0.318 -0.237
-#>     3    -0.124   0.022 -0.169 -0.082
-#>     4    -0.015   0.020 -0.054  0.024
-#>     5    -0.017   0.022 -0.060  0.026
-#>     6     0.056   0.021  0.014  0.096
-#>     7     0.080   0.021  0.039  0.121
-#>     8     0.045   0.021  0.005  0.083
-#>     9     0.141   0.022  0.097  0.184
-#>    10    -0.027   0.021 -0.069  0.012
+#>     2    -0.279   0.021 -0.319 -0.237
+#>     3    -0.124   0.023 -0.169 -0.080
+#>     4    -0.015   0.020 -0.057  0.021
+#>     5    -0.016   0.021 -0.056  0.024
+#>     6     0.056   0.021  0.012  0.096
+#>     7     0.081   0.021  0.041  0.121
+#>     8     0.044   0.020  0.004  0.084
+#>     9     0.142   0.022  0.100  0.182
+#>    10    -0.028   0.023 -0.074  0.015
 #> ---
 ```
 
@@ -457,8 +457,8 @@ head(train_R2, nrow = 2)
 #> Estimates: 
 #> 
 #>  node post_mean    post_sd       2.5%     97.5%
-#>     1 0.1668180 0.06622889 0.04794512 0.2982395
-#>     2 0.2857802 0.06855863 0.14499228 0.4171460
+#>     1 0.1690258 0.06683016 0.05241307 0.2979438
+#>     2 0.2870656 0.06597447 0.15288120 0.4101140
 #> ---
 ```
 
@@ -513,16 +513,16 @@ summary(bayes_loo)
 #> Estimates: 
 #> 
 #>   node      loo   loo_se
-#>     1 2572.961 49.09380
-#>     2 2330.629 63.23555
-#>     3 2302.726 64.55942
-#>     4 2466.165 51.83470
-#>     5 2416.321 55.08019
-#>     6 2433.750 59.37343
-#>     7 2300.147 49.98920
-#>     8 2390.735 51.76673
-#>     9 2294.281 51.81471
-#>    10 2364.548 39.76373
+#>     1 2573.836 48.91149
+#>     2 2331.010 63.39963
+#>     3 2302.521 64.19115
+#>     4 2466.700 51.91314
+#>     5 2415.202 55.60574
+#>     6 2433.965 58.75457
+#>     7 2300.739 50.46577
+#>     8 2390.646 51.31934
+#>     9 2294.259 51.59381
+#>    10 2364.832 39.87730
 #> ---
 ```
 
@@ -570,8 +570,8 @@ Hypothesis Testing
 
 The following methods were introduced in Williams and Mulder (2019). That work not only presented an exploratory approach using the Bayes factor, but it also proposed methodology for confirmatory hypothesis testing in GGMs. The latter provides an alternative to data driven model selection that is commonplace in the GGM literature, and in particular, it allows for comparing theoretical models. The approach builds upon (Mulder2016), where the focus was on correlations (as opposed to *partial* correlations). In particular, **BGGM** allows for Bayesian model selection with competing sets of order or equality constraints on multiple partial correlations.
 
-Stucture Learning
------------------
+Stucture Learning (Bayes Factor)
+--------------------------------
 
 ### Visualizing Scientific Expectations
 
