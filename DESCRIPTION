@@ -3,7 +3,7 @@ Type: Package
 Title: Bayesian Gaussian Graphical Models
 Version: 0.1.0
 Authors@R: c(person("Donald", "Williams", email = "drwwilliams@ucdavis.edu", role = c("aut", "cre")),
-             person("Joris", "Mulder", email = "J.Mulder3@uvt.nl", role = "ctb"))
+             person("Joris", "Mulder", email = "J.Mulder3@uvt.nl", role = "aut"))
 Maintainer: Donald R. Williams <drwwilliams@ucdavis.edu>
 Description: This package is described in Williams and Mulder (2019) and Williams (2018). 
     The methods are seperated into two Bayesian approaches for inference: hypothesis testing 

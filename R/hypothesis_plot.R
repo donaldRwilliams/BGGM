@@ -133,5 +133,5 @@ hypothesis_plot <- function(rho_sd = NULL,
         theme_bw()
     }
   }
-  list(plt = plt)
+  plt
 }
