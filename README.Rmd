@@ -411,7 +411,7 @@ plt_4A
 ```
 
 `rho_sd = c(.)` defines a couple (prospective) values for the hypothesized standard deviation of the partial correlations. Further, **BGGM** allows for testing edge differences with the Bayes factor. Accordingly, the *implied* prior distribution for the difference can also be visualized. This is implemented with:
-# Comparing GGMs
+
 
 ```{r}
 # define (potentially) hypothesized standard deviations for rho_ij
@@ -426,5 +426,5 @@ plt_4B <- hypothesis_plot(rho_sd = rho_sd,
 plt_4B
 ```
 
-
+# Comparing GGMs
 
