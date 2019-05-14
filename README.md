@@ -107,7 +107,7 @@ summary(fit_analytic)
 #> Call: 
 #> estimate.default(x = Y, analytic = T)
 #> --- 
-#> Date: Tue May 14 14:02:45 2019
+#> Date: Tue May 14 14:07:26 2019
 ```
 
 Note `summary(.)` provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
@@ -175,16 +175,16 @@ summary(E, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd   2.5%  97.5%
-#>  1--2   -0.2403   0.018 -0.275 -0.204
-#>  1--3   -0.1074   0.019 -0.145 -0.071
-#>  2--3    0.2868   0.017  0.253  0.320
-#>  1--4   -0.0075   0.019 -0.045  0.030
-#>  2--4    0.1641   0.019  0.127  0.200
-#>  3--4    0.1782   0.019  0.141  0.215
-#>  1--5   -0.0093   0.019 -0.048  0.028
-#>  2--5    0.1557   0.018  0.121  0.193
-#>  3--5    0.3588   0.017  0.325  0.391
-#>  4--5    0.1213   0.019  0.084  0.159
+#>  1--2   -0.2401   0.018 -0.276 -0.204
+#>  1--3   -0.1073   0.019 -0.144 -0.070
+#>  2--3    0.2866   0.018  0.251  0.320
+#>  1--4   -0.0073   0.019 -0.045  0.029
+#>  2--4    0.1647   0.019  0.129  0.200
+#>  3--4    0.1779   0.018  0.141  0.214
+#>  1--5   -0.0089   0.019 -0.047  0.029
+#>  2--5    0.1562   0.019  0.120  0.194
+#>  3--5    0.3585   0.017  0.325  0.391
+#>  4--5    0.1216   0.019  0.085  0.158
 #> ---
 ```
 
@@ -279,15 +279,15 @@ head(E, nrow = 10, summarize = T, digits = 2)
 #>  
 #>  egde post_mean post_sd pr_out  pr_in
 #>  1--2    -0.244   0.019   1.00 0.0000
-#>  1--3    -0.106   0.019   0.62 0.3770
-#>  2--3     0.286   0.018   1.00 0.0000
-#>  1--4    -0.014   0.019   0.00 1.0000
-#>  2--4     0.160   0.019   1.00 0.0012
-#>  3--4     0.160   0.019   1.00 0.0008
-#>  1--5    -0.016   0.020   0.00 1.0000
-#>  2--5     0.145   0.019   0.99 0.0082
+#>  1--3    -0.106   0.019   0.63 0.3714
+#>  2--3     0.287   0.018   1.00 0.0000
+#>  1--4    -0.015   0.020   0.00 1.0000
+#>  2--4     0.161   0.019   1.00 0.0006
+#>  3--4     0.160   0.019   1.00 0.0006
+#>  1--5    -0.015   0.020   0.00 1.0000
+#>  2--5     0.144   0.019   0.99 0.0104
 #>  3--5     0.354   0.017   1.00 0.0000
-#>  4--5     0.114   0.020   0.76 0.2416
+#>  4--5     0.114   0.019   0.78 0.2250
 #> ---
 ```
 
@@ -350,10 +350,10 @@ head(edge_difference, nrow = 5)
 #> Estimates: 
 #>  
 #>   contrast post_mean post_sd pr_out pr_in
-#>  1--2-1--3    -0.138   0.031  0.897 0.103
-#>  1--2-2--3    -0.530   0.024  1.000 0.000
-#>  1--2-1--4    -0.229   0.029  1.000 0.000
-#>  1--2-2--4    -0.404   0.026  1.000 0.000
+#>  1--2-1--3    -0.138   0.030  0.896 0.104
+#>  1--2-2--3    -0.531   0.024  1.000 0.000
+#>  1--2-1--4    -0.230   0.029  1.000 0.000
+#>  1--2-2--4    -0.405   0.027  1.000 0.000
 #>  1--2-3--4    -0.404   0.027  1.000 0.000
 #> ---
 ```
@@ -414,15 +414,15 @@ coefficients(fit, node = 1, ci_width = 0.95)
 #> Estimates: 
 #>  
 #>  node post_mean post_sd   2.5%  97.5%
-#>     2    -0.277   0.021 -0.320 -0.239
-#>     3    -0.125   0.023 -0.166 -0.077
-#>     4    -0.015   0.021 -0.056  0.026
-#>     5    -0.017   0.022 -0.060  0.025
-#>     6     0.056   0.021  0.015  0.096
-#>     7     0.081   0.022  0.037  0.124
-#>     8     0.044   0.020  0.002  0.081
-#>     9     0.141   0.022  0.096  0.184
-#>    10    -0.028   0.021 -0.069  0.012
+#>     2    -0.279   0.021 -0.321 -0.235
+#>     3    -0.123   0.023 -0.167 -0.078
+#>     4    -0.015   0.020 -0.056  0.025
+#>     5    -0.018   0.022 -0.059  0.024
+#>     6     0.057   0.020  0.019  0.097
+#>     7     0.080   0.021  0.037  0.123
+#>     8     0.044   0.021  0.006  0.086
+#>     9     0.142   0.022  0.098  0.183
+#>    10    -0.028   0.022 -0.068  0.014
 #> ---
 ```
 
@@ -458,9 +458,9 @@ head(train_R2, nrow = 2)
 #> --- 
 #> Estimates: 
 #> 
-#>  node post_mean    post_sd       2.5%     97.5%
-#>     1 0.1670593 0.06630245 0.04655275 0.3003053
-#>     2 0.2849458 0.06671511 0.15103290 0.4091984
+#>  node post_mean    post_sd      2.5%     97.5%
+#>     1 0.1680123 0.06526644 0.0478407 0.3045185
+#>     2 0.2861838 0.06847080 0.1482465 0.4106814
 #> ---
 ```
 
@@ -515,16 +515,16 @@ summary(bayes_loo)
 #> Estimates: 
 #> 
 #>   node      loo   loo_se
-#>     1 2576.054 48.70159
-#>     2 2331.910 63.49503
-#>     3 2303.110 63.84553
-#>     4 2467.264 51.85707
-#>     5 2417.323 55.94358
-#>     6 2435.085 59.33153
-#>     7 2300.828 50.27483
-#>     8 2392.173 51.47996
-#>     9 2296.377 51.65029
-#>    10 2365.100 39.99506
+#>     1 2574.682 48.81114
+#>     2 2329.999 63.36382
+#>     3 2302.015 64.04841
+#>     4 2465.222 51.63714
+#>     5 2415.969 55.73402
+#>     6 2432.336 59.07052
+#>     7 2300.817 49.94190
+#>     8 2390.238 51.16854
+#>     9 2294.532 51.45602
+#>    10 2364.605 39.54517
 #> ---
 ```
 
@@ -577,7 +577,21 @@ Stucture Learning (Bayes Factor)
 
 ### Visualizing Scientific Expectations
 
-For Bayesian hypothesis testing in particular, it is important to *fully* understand the prior distribution ℋ<sub>*u*</sub>. This is because it captures the predicted effect size, and it is used to compute the Bayes factor. This stands in contrast to the above estimation based methods, where *E* is determined with respect to the posterior distribution. To this end, **BGGM** includes functions to visualize the prior distribution--i.e.,
+For Bayesian hypothesis testing in particular, it is important to *fully* understand the prior distribution ℋ<sub>*u*</sub>. This is because it captures the predicted effect size, and it is used to compute the Bayes factor. This stands in contrast to the above estimation based methods, where *E* is determined with respect to (only) the posterior distribution. To this end, **BGGM** includes functions to visualize the prior distribution--i.e.,
+
+``` r
+# define (potentially) hypothesized standard deviations for rho_ij
+rho_sd <- c(0.1, 0.25, 0.5)
+
+# plot
+plt_4A <- hypothesis_plot(rho_sd = rho_sd) +
+                theme(panel.grid.major = element_blank()) +
+                ylab("Density")        
+
+plt_4A
+```
+
+<img src="man/figures/README-unnamed-chunk-21-1.png" width="60%" style="display: block; margin: auto;" />
 
 Comparing GGMs
 ==============
