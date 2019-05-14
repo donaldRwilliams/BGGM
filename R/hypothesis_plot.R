@@ -33,7 +33,7 @@ hypothesis_plot <- function(rho_sd = NULL,
                             edge = NULL,
                             samples = 10000,
                             size = NULL){
-
+  #test
   if(isFALSE(is.element(c("ggplot2"), installed.packages()))) stop("please install ggplot2")
 
   if(isFALSE(difference) && is.null(fit)){
