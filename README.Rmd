@@ -439,7 +439,7 @@ fit_bf <- explore(Y, prior_sd = 0.5,
                   cores = 2)
 summary(fit_bf)
 ```
-Note `summary(.)`, or alternatively `print(.)`, provides information about the fitted model, including that hypothesis testing (exploratory) was used, the number of observations ($n$) and variables ($p$), and the number of edges. Delta ($\delta$) is the hyperparameter of the matrix$-F$ distribution. A value of 3 correpsonds to \code{prior_sd = 0.5}. This output parallels the estimation based methods. Importantly, all fitted objects include specific (what method was used) and general information (e.g., $n$ and $p$) when printed.
+Note `summary(.)`, or alternatively `print(.)`, provides information about the fitted model, including that hypothesis testing (exploratory) was used, the number of observations ($n$) and variables ($p$), and the number of edges. Delta ($\delta$) is the hyperparameter of the matrix$-F$ distribution. A value of 3 correpsonds to `prior_sd = 0.5`. This output parallels the estimation based methods. Importantly, all fitted objects include specific (what method was used) and general information (e.g., $n$ and $p$) when printed.
 
 The graph is then selected with:
 
@@ -451,7 +451,11 @@ E <- select(fit_bf,
 # summary 
 summary(E, hyp = "H1")
 ```
+It is also possible to change `hyp = "H1"` to `hyp = "H0`, which will print the adjacency matrix for conditionally independent relations. Further, it is possible to summarize $E$ as follows:
 
+```{r}
+summary(E, summarize = T, log = T, digits = 2)
+```
 # Comparing GGMs
 
 # References
