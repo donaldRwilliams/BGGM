@@ -107,7 +107,7 @@ summary(fit_analytic)
 #> Call: 
 #> estimate.default(x = Y, analytic = T)
 #> --- 
-#> Date: Tue May 14 17:17:02 2019
+#> Date: Tue May 14 17:24:45 2019
 ```
 
 Note `summary(.)` provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
@@ -175,16 +175,16 @@ summary(E, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd   2.5%  97.5%
-#>  1--2   -0.2405   0.018 -0.275 -0.204
-#>  1--3   -0.1075   0.019 -0.144 -0.070
-#>  2--3    0.2867   0.018  0.252  0.321
-#>  1--4   -0.0074   0.019 -0.046  0.029
-#>  2--4    0.1644   0.019  0.128  0.200
-#>  3--4    0.1780   0.019  0.141  0.215
-#>  1--5   -0.0091   0.019 -0.047  0.029
-#>  2--5    0.1557   0.019  0.119  0.192
-#>  3--5    0.3588   0.016  0.326  0.391
-#>  4--5    0.1215   0.019  0.084  0.159
+#>  1--2   -0.2403   0.018 -0.275 -0.204
+#>  1--3   -0.1078   0.019 -0.144 -0.070
+#>  2--3    0.2859   0.018  0.250  0.320
+#>  1--4   -0.0077   0.019 -0.046  0.030
+#>  2--4    0.1650   0.019  0.129  0.202
+#>  3--4    0.1781   0.018  0.142  0.214
+#>  1--5   -0.0085   0.019 -0.046  0.029
+#>  2--5    0.1566   0.019  0.121  0.194
+#>  3--5    0.3588   0.017  0.325  0.392
+#>  4--5    0.1213   0.019  0.084  0.158
 #> ---
 ```
 
@@ -278,16 +278,16 @@ head(E, nrow = 10, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd pr_out  pr_in
-#>  1--2    -0.244   0.018   1.00 0.0000
-#>  1--3    -0.106   0.019   0.61 0.3856
+#>  1--2    -0.244   0.019   1.00 0.0000
+#>  1--3    -0.106   0.019   0.61 0.3912
 #>  2--3     0.286   0.018   1.00 0.0000
-#>  1--4    -0.014   0.019   0.00 1.0000
-#>  2--4     0.161   0.019   1.00 0.0012
-#>  3--4     0.161   0.019   1.00 0.0010
-#>  1--5    -0.016   0.020   0.00 1.0000
-#>  2--5     0.145   0.019   0.99 0.0090
+#>  1--4    -0.015   0.019   0.00 1.0000
+#>  2--4     0.161   0.019   1.00 0.0010
+#>  3--4     0.160   0.019   1.00 0.0008
+#>  1--5    -0.016   0.019   0.00 1.0000
+#>  2--5     0.146   0.019   0.99 0.0092
 #>  3--5     0.354   0.017   1.00 0.0000
-#>  4--5     0.114   0.019   0.76 0.2426
+#>  4--5     0.114   0.019   0.76 0.2440
 #> ---
 ```
 
@@ -350,7 +350,7 @@ head(edge_difference, nrow = 5)
 #> Estimates: 
 #>  
 #>   contrast post_mean post_sd pr_out pr_in
-#>  1--2-1--3    -0.139   0.030  0.894 0.106
+#>  1--2-1--3    -0.139   0.031  0.893 0.107
 #>  1--2-2--3    -0.531   0.024  1.000 0.000
 #>  1--2-1--4    -0.230   0.029  1.000 0.000
 #>  1--2-2--4    -0.405   0.026  1.000 0.000
@@ -414,15 +414,15 @@ coefficients(fit, node = 1, ci_width = 0.95)
 #> Estimates: 
 #>  
 #>  node post_mean post_sd   2.5%  97.5%
-#>     2    -0.278   0.021 -0.321 -0.235
-#>     3    -0.124   0.023 -0.173 -0.078
-#>     4    -0.015   0.021 -0.056  0.022
-#>     5    -0.018   0.022 -0.061  0.024
-#>     6     0.056   0.021  0.014  0.096
-#>     7     0.080   0.022  0.038  0.125
-#>     8     0.045   0.021  0.005  0.087
-#>     9     0.142   0.022  0.102  0.187
-#>    10    -0.028   0.021 -0.071  0.012
+#>     2    -0.278   0.022 -0.320 -0.237
+#>     3    -0.124   0.022 -0.170 -0.078
+#>     4    -0.015   0.021 -0.057  0.025
+#>     5    -0.017   0.021 -0.061  0.025
+#>     6     0.056   0.021  0.017  0.100
+#>     7     0.081   0.021  0.039  0.122
+#>     8     0.044   0.020  0.005  0.081
+#>     9     0.142   0.022  0.098  0.185
+#>    10    -0.029   0.022 -0.073  0.012
 #> ---
 ```
 
@@ -459,8 +459,8 @@ head(train_R2, nrow = 2)
 #> Estimates: 
 #> 
 #>  node post_mean    post_sd       2.5%     97.5%
-#>     1 0.1676941 0.06594070 0.05080497 0.3036873
-#>     2 0.2883528 0.06667559 0.15518691 0.4103246
+#>     1 0.1694785 0.06617770 0.04787098 0.3045103
+#>     2 0.2906437 0.06823827 0.15419010 0.4111268
 #> ---
 ```
 
@@ -515,16 +515,16 @@ summary(bayes_loo)
 #> Estimates: 
 #> 
 #>   node      loo   loo_se
-#>     1 2573.008 48.82548
-#>     2 2329.219 64.05654
-#>     3 2301.568 63.73463
-#>     4 2464.996 51.76356
-#>     5 2416.521 55.60876
-#>     6 2433.833 59.27253
-#>     7 2300.971 49.50484
-#>     8 2390.959 51.29674
-#>     9 2294.349 51.26253
-#>    10 2362.938 39.83582
+#>     1 2573.503 48.65191
+#>     2 2330.786 63.66738
+#>     3 2302.584 64.79813
+#>     4 2467.007 52.04712
+#>     5 2416.174 55.61398
+#>     6 2433.206 59.02343
+#>     7 2300.985 50.82540
+#>     8 2391.046 51.41369
+#>     9 2294.826 51.21297
+#>    10 2365.352 39.59298
 #> ---
 ```
 
@@ -570,7 +570,7 @@ This highlights the difference between the leave-one-out methods, in that the Ba
 Hypothesis Testing
 ==================
 
-The following methods were introduced in Williams and Mulder (2019). That work not only presented an exploratory approach using the Bayes factor, but it also proposed methodology for confirmatory hypothesis testing in GGMs. The latter provides an alternative to data driven model selection that is commonplace in the GGM literature, and in particular, it allows for comparing theoretical models. The approach builds upon (Mulder2016), where the focus was on correlations (as opposed to *partial* correlations). In particular, **BGGM** allows for Bayesian model selection with competing sets of inequality and/or equality constraints on multiple partial correlations.
+The following methods were introduced in Williams and Mulder (2019). That work not only presented an exploratory approach using the Bayes factor, but it also proposed methodology for confirmatory hypothesis testing in GGMs. The latter provides an alternative to data driven model selection that is commonplace in the GGM literature, and in particular, it allows for comparing theoretical models. The novel matrix−*F* prior distribution is used for the partial correlations, which offers more flexibility than the Wishart distribution. This approach builds upon (Mulder2016), where the focus was on correlations (as opposed to *partial* correlations). In particular, **BGGM** allows for Bayesian model selection with competing sets of inequality and/or equality constraints on multiple partial correlations.
 
 Stucture Learning (Bayes Factor)
 --------------------------------
@@ -635,10 +635,13 @@ summary(fit_bf)
 #> Call: 
 #> explore.default(X = Y, prior_sd = 0.5, iter = 5000, cores = 2)
 #> --- 
-#> Date: Tue May 14 17:17:30 2019
+#> Date: Tue May 14 17:25:13 2019
 ```
 
 Note `summary(.)`, or alternatively `print(.)`, provides information about the fitted model, including that hypothesis testing (exploratory) was used, the number of observations (*n*) and variables (*p*), and the number of edges. The parallels the estimation based methods. Importantly, all fitted objects include specific (what method was used) and general information (e.g., *n* and *p*) when printed.
 
 Comparing GGMs
 ==============
+
+References
+==========
