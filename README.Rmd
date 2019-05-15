@@ -396,7 +396,7 @@ The following methods were introduced in Williams and Mulder (2019). That work n
 
 ## Stucture Learning (Bayes Factor)
 ### Visualizing Scientific Expectations
-For Bayesian hypothesis testing in particular, it is important to *fully* understand the prior distribution $\mathcal{H}_u$. This is because it captures the predicted effect size, and it is used to compute the Bayes factor. This stands in contrast to the above estimation based methods, where $E$ is determined with respect to (only) the posterior distribution. To this end, **BGGM** includes functions to visualize the prior distribution--i.e.,
+For Bayesian hypothesis testing in particular, it is important to *fully* understand the prior distribution $\mathcal{H}_u$. This is because it captures the predicted effect size, and it is used to compute the Bayes factor. This stands in contrast to the above estimation based methods, where $E$ is determined with respect to (only) the posterior distribution. To this end, **BGGM** includes functions to visualize the prior distribution or prediction--i.e.,
 
 ```{r}
 # define (potentially) hypothesized standard deviations for rho_ij
@@ -425,6 +425,21 @@ plt_4B <- hypothesis_plot(rho_sd = rho_sd,
 
 plt_4B
 ```
+
+### Two-Sided Testing
+Two-sided hypothesis testing is implemented as follows. First the model is fitted with:
+
+```{r, warning=F}
+# p = 5
+Y <- BGGM::bfi[,1:5]
+
+# fit model
+fit_bf <- explore(Y, prior_sd = 0.5, 
+                  iter = 5000, 
+                  cores = 2)
+summary(fit_bf)
+```
+Note `summary(.)`, or alternatively `print(.)`, provides information about the fitted model, including that hypothesis testing (exploratory) was used, the number of observations ($n$) and variables ($p$), and the number of edges. The parallels the estimation based methods. Importantly, all fitted objects include specific (what method was used) and general information (e.g., $n$ and $p$) when printed.
 
 # Comparing GGMs
 

@@ -567,7 +567,7 @@ sampling <- function(X, nu, delta, n_samples = 20000, cores = 4){
   samps <- rep(round(n_samples / cores), cores)
   chains = cores
   # sample from priors and posteriors
-  samples <- foreach(i = 1:chains, .export = c("fisher_z", "sampling_helper",
+  samples <- foreach::foreach(i = 1:chains, .export = c("fisher_z", "sampling_helper",
                                                "numbers2words",
                                                "prior_helper", "post_helper")) %dopar%{
                                                  sampling_helper(X = X, nu = nu, delta = delta,  n_samples = samps[i])

@@ -11,6 +11,9 @@
 #' @examples
 explore.default <- function(X, prior_sd, iter = 5000,  cores = 2){
 
+
+  if(isFALSE(is.element(c("foreach"), installed.packages()))) stop("please install foreach")
+
   delta <- BGGM:::delta_solve(prior_sd)
   X <- na.omit(X)
   p <- ncol(X)
