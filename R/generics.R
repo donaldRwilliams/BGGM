@@ -763,7 +763,7 @@ print.select.explore <- function(x, hyp = "H1",  log = TRUE, summarize = FALSE, 
   cat("Type: Hypothesis Testing \n")
 
   # alternative argument
-  cat("Alternative:", sel$alternative, "\n")
+  cat("Alternative:", x$alternative, "\n")
 
   # if exhaustive hypothesis testing
   if(x$alternative == "exhaustive"){
@@ -1012,7 +1012,6 @@ summary.select.explore <- function(x, hyp = "H1",  log = TRUE, summarize = FALSE
 
     else{
       if(hyp == "H1"){
-
         cat("Hypothesis: \n")
         cat("H1: rho < 0 \n")
         cat("--- \n")
@@ -1054,7 +1053,11 @@ summary.select.explore <- function(x, hyp = "H1",  log = TRUE, summarize = FALSE
   if(x$alternative == "two.sided"){
     cat("Bayes Factor:", x$BF_cut, "\n")
     if(isFALSE(summarize)){
-      cat("Connectivity:", round(mean(x$Adj_10[upper.tri(x$Adj_10)]) * 100, 1), "% \n")
+      if(hyp == "H1"){
+        cat("Connectivity:", round(mean(x$Adj_10[upper.tri(x$Adj_10)]) * 100, 1), "% \n")
+      } else{
+        cat("Connectivity:", round(mean(x$Adj_01[upper.tri(x$Adj_01)]) * 100, 1), "% \n")
+      }
 
     }
     cat("--- \n")
@@ -1131,7 +1134,8 @@ summary.select.explore <- function(x, hyp = "H1",  log = TRUE, summarize = FALSE
         row.names(x$Adj_01) <- 1:p
         print(x$Adj_01, ...)
         cat("--- \n")
-      }
+        cat("note: connectivity reflects conditionally independent relations")
+        }
     }
 
 

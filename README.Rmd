@@ -441,6 +441,17 @@ summary(fit_bf)
 ```
 Note `summary(.)`, or alternatively `print(.)`, provides information about the fitted model, including that hypothesis testing (exploratory) was used, the number of observations ($n$) and variables ($p$), and the number of edges. Delta ($\delta$) is the hyperparameter of the matrix$-F$ distribution. A value of 3 correpsonds to \code{prior_sd = 0.5}. This output parallels the estimation based methods. Importantly, all fitted objects include specific (what method was used) and general information (e.g., $n$ and $p$) when printed.
 
+The graph is then selected with:
+
+```{r}
+E <- select(fit_bf, 
+            BF_cut = 3, 
+            alternative = "two.sided")
+
+# summary 
+summary(E, hyp = "H1")
+```
+
 # Comparing GGMs
 
 # References
