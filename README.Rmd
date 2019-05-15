@@ -439,7 +439,7 @@ fit_bf <- explore(Y, prior_sd = 0.5,
                   cores = 2)
 summary(fit_bf)
 ```
-Note `summary(.)`, or alternatively `print(.)`, provides information about the fitted model, including that hypothesis testing (exploratory) was used, the number of observations ($n$) and variables ($p$), and the number of edges. Delta ($\delta$) is the hyperparameter of the matrix$-F$ distribution. A value of 3 correpsonds to `prior_sd = 0.5`. This output parallels the estimation based methods. Importantly, all fitted objects include specific (what method was used) and general information (e.g., $n$ and $p$) when printed.
+Note `summary(.)`, or alternatively `print(.)`, provides information about the fitted model, including that hypothesis testing (exploratory) was used, the number of observations ($n$) and variables ($p$), and the number of edges. Delta ($\delta$) is the hyperparameter of the matrix$-F$ distribution. A value of 3 corresponds to `prior_sd = 0.5`. This output parallels the estimation based methods. Importantly, all fitted objects include specific (what method was used) and general information (e.g., $n$ and $p$) when printed.
 
 The graph is then selected with:
 
@@ -456,6 +456,21 @@ It is also possible to change `hyp = "H1"` to `hyp = "H0`, which will print the 
 ```{r}
 summary(E, summarize = T, log = T, digits = 2)
 ```
+The option `log = TRUE` controls the scale of the Bayes factor. Note that the same plotting options available for these methods. They have the same implementation as the estimation based methods, and thus not shown here. It is also possible to plot $\mathcal{H}_u$ and a selected posterior distribution. This visualizes how the Bayes factor is computed--i.e.,
+
+
+```{r}
+plt_4C <- hypothesis_plot(fit = fit_bf, 
+                edge = "1--4", size = 3) +
+        theme(panel.grid.minor = element_blank(),
+              legend.position = "top") +
+  ylab("Density") +
+  xlab("Distributions")
+
+
+plt_4C
+```
+
 # Comparing GGMs
 
 # References
