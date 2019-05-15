@@ -275,7 +275,7 @@ plot_2B <- plot_diff$plt_zero +
 plot_2B
 ```
 
-This shows the central idea behind the region of practical equivalence, which is highlighted in grey. Ideally only a few contrasts would be examined in light of a guiding theory.
+This shows the central idea behind the region of practical equivalence, which is highlighted in grey. Ideally only a few contrasts would be examined in light of a guiding theory. To this end, the option \code{contrast = "all"} may be removed altogether from **BGGM**.
 
 ## Prediction
 The following is based on the correspondence between the elements of the precision matrix and multiple regression. In the context of GGMs, using regression to select edges is referred to as “neighborhood” selection.   On the other hand, the method described in Williams (2018) works directly with either the posterior distribution for the precision matrix or the maximum a posteriori estimates. These are then converted to the corresponding regression coefficients and residual variances. It follows that **BGGM** can also be used for the purpose of multiple regression–i.e.,
@@ -315,7 +315,7 @@ head(train_R2, nrow = 2)
 
 ```
 
-Here `ci_width = 0.90` indicates the decision rule for setting coefficients to zero, and by default, 95 % intervals are used in the summary output.   Similarly, out-of-sample Bayesian $R^2$ is computed with:
+Here `ci_width = 0.90` indicates the decision rule for setting coefficients to zero, and by default, 95 % intervals are used in the summary output. Similarly, out-of-sample Bayesian $R^2$ is computed with:
 
 ```{r}
 # test data
