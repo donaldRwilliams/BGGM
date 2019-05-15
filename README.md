@@ -107,7 +107,7 @@ summary(fit_analytic)
 #> Call: 
 #> estimate.default(x = Y, analytic = T)
 #> --- 
-#> Date: Tue May 14 18:28:53 2019
+#> Date: Tue May 14 18:31:24 2019
 ```
 
 Note `summary(.)` provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
@@ -175,16 +175,16 @@ summary(E, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd   2.5%  97.5%
-#>  1--2   -0.2402   0.018 -0.276 -0.203
-#>  1--3   -0.1074   0.019 -0.144 -0.071
-#>  2--3    0.2867   0.018  0.251  0.320
-#>  1--4   -0.0073   0.019 -0.044  0.030
-#>  2--4    0.1640   0.018  0.127  0.200
-#>  3--4    0.1785   0.018  0.143  0.215
-#>  1--5   -0.0094   0.020 -0.048  0.028
-#>  2--5    0.1562   0.018  0.121  0.194
-#>  3--5    0.3588   0.017  0.326  0.391
-#>  4--5    0.1209   0.019  0.083  0.158
+#>  1--2   -0.2404   0.018 -0.276 -0.205
+#>  1--3   -0.1071   0.019 -0.144 -0.070
+#>  2--3    0.2864   0.018  0.251  0.321
+#>  1--4   -0.0073   0.019 -0.045  0.031
+#>  2--4    0.1647   0.018  0.128  0.201
+#>  3--4    0.1780   0.018  0.142  0.214
+#>  1--5   -0.0096   0.019 -0.049  0.028
+#>  2--5    0.1553   0.019  0.118  0.191
+#>  3--5    0.3591   0.017  0.326  0.391
+#>  4--5    0.1214   0.019  0.084  0.159
 #> ---
 ```
 
@@ -279,15 +279,15 @@ head(E, nrow = 10, summarize = T, digits = 2)
 #>  
 #>  egde post_mean post_sd pr_out  pr_in
 #>  1--2    -0.244   0.018   1.00 0.0000
-#>  1--3    -0.106   0.019   0.63 0.3724
-#>  2--3     0.286   0.018   1.00 0.0000
+#>  1--3    -0.106   0.019   0.62 0.3776
+#>  2--3     0.287   0.018   1.00 0.0000
 #>  1--4    -0.015   0.019   0.00 1.0000
-#>  2--4     0.161   0.019   1.00 0.0004
-#>  3--4     0.160   0.019   1.00 0.0008
-#>  1--5    -0.016   0.020   0.00 1.0000
-#>  2--5     0.145   0.019   0.99 0.0112
+#>  2--4     0.161   0.019   1.00 0.0006
+#>  3--4     0.160   0.019   1.00 0.0006
+#>  1--5    -0.016   0.019   0.00 1.0000
+#>  2--5     0.145   0.019   0.99 0.0106
 #>  3--5     0.354   0.017   1.00 0.0000
-#>  4--5     0.114   0.019   0.77 0.2320
+#>  4--5     0.114   0.020   0.77 0.2308
 #> ---
 ```
 
@@ -350,9 +350,9 @@ head(edge_difference, nrow = 5)
 #> Estimates: 
 #>  
 #>   contrast post_mean post_sd pr_out pr_in
-#>  1--2-1--3    -0.138   0.030  0.898 0.102
+#>  1--2-1--3    -0.139   0.030  0.898 0.102
 #>  1--2-2--3    -0.531   0.024  1.000 0.000
-#>  1--2-1--4    -0.230   0.029  1.000 0.000
+#>  1--2-1--4    -0.229   0.029  1.000 0.000
 #>  1--2-2--4    -0.405   0.026  1.000 0.000
 #>  1--2-3--4    -0.404   0.027  1.000 0.000
 #> ---
@@ -387,7 +387,7 @@ plot_2B
 
 <img src="man/figures/README-unnamed-chunk-13-1.png" width="60%" style="display: block; margin: auto;" />
 
-This shows the central idea behind the region of practical equivalence, which is highlighted in grey. Ideally only a few contrasts would be examined in light of a guiding theory. To this end, the option may be removed altogether from **BGGM**.
+This shows the central idea behind the region of practical equivalence, which is highlighted in grey. Ideally only a few contrasts would be examined in light of a guiding theory. To this end, the option `contrast = "all"` may be removed altogether from **BGGM**.
 
 Prediction
 ----------
@@ -414,15 +414,15 @@ coefficients(fit, node = 1, ci_width = 0.95)
 #> Estimates: 
 #>  
 #>  node post_mean post_sd   2.5%  97.5%
-#>     2    -0.278   0.022 -0.324 -0.237
-#>     3    -0.125   0.023 -0.169 -0.079
-#>     4    -0.014   0.020 -0.052  0.025
-#>     5    -0.018   0.022 -0.062  0.026
-#>     6     0.057   0.021  0.017  0.099
-#>     7     0.081   0.021  0.040  0.124
-#>     8     0.044   0.022  0.002  0.088
-#>     9     0.141   0.022  0.097  0.183
-#>    10    -0.028   0.020 -0.070  0.010
+#>     2    -0.278   0.021 -0.317 -0.234
+#>     3    -0.125   0.022 -0.169 -0.082
+#>     4    -0.016   0.021 -0.057  0.023
+#>     5    -0.017   0.022 -0.062  0.026
+#>     6     0.055   0.021  0.012  0.095
+#>     7     0.082   0.022  0.038  0.128
+#>     8     0.044   0.021  0.005  0.087
+#>     9     0.141   0.022  0.099  0.184
+#>    10    -0.028   0.022 -0.071  0.012
 #> ---
 ```
 
@@ -459,8 +459,8 @@ head(train_R2, nrow = 2)
 #> Estimates: 
 #> 
 #>  node post_mean    post_sd       2.5%     97.5%
-#>     1 0.1672461 0.06571545 0.04486131 0.2984018
-#>     2 0.2826497 0.06902142 0.14730370 0.4102688
+#>     1 0.1680152 0.06583949 0.04937767 0.2995540
+#>     2 0.2900889 0.06774452 0.15167155 0.4105475
 #> ---
 ```
 
@@ -515,16 +515,16 @@ summary(bayes_loo)
 #> Estimates: 
 #> 
 #>   node      loo   loo_se
-#>     1 2573.863 48.81035
-#>     2 2330.636 63.45968
-#>     3 2302.655 64.18478
-#>     4 2464.862 51.34703
-#>     5 2416.229 55.38984
-#>     6 2434.837 59.07984
-#>     7 2300.221 50.19206
-#>     8 2391.740 51.29185
-#>     9 2294.105 51.39990
-#>    10 2365.243 39.46661
+#>     1 2574.391 48.65749
+#>     2 2330.720 63.71455
+#>     3 2303.831 64.87444
+#>     4 2464.642 51.41766
+#>     5 2416.406 55.35746
+#>     6 2435.144 59.03167
+#>     7 2301.279 50.36490
+#>     8 2391.718 51.38357
+#>     9 2296.578 51.76418
+#>    10 2363.804 39.64007
 #> ---
 ```
 
@@ -635,7 +635,7 @@ summary(fit_bf)
 #> Call: 
 #> explore.default(X = Y, prior_sd = 0.5, iter = 5000, cores = 2)
 #> --- 
-#> Date: Tue May 14 18:29:21 2019
+#> Date: Tue May 14 18:31:55 2019
 ```
 
 Note `summary(.)`, or alternatively `print(.)`, provides information about the fitted model, including that hypothesis testing (exploratory) was used, the number of observations (*n*) and variables (*p*), and the number of edges. Delta (*δ*) is the hyperparameter of the matrix−*F* distribution. A value of 3 correpsonds to . This output parallels the estimation based methods. Importantly, all fitted objects include specific (what method was used) and general information (e.g., *n* and *p*) when printed.
