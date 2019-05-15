@@ -61,7 +61,7 @@ This README is organized as follows:
         
         - [Visualizing Scientific Expectations](https://github.com/donaldRwilliams/BGGM#visualizing-scientific-expectations)
         
-        - Two-sided Hypothesis Testing
+        - [Two-sided Hypothesis Testing](https://github.com/donaldRwilliams/BGGM#two-sided-testing)
         
         - One-sided Hypothesis Testing
         
