@@ -1078,15 +1078,13 @@ summary.select.explore <- function(x, hyp = "H1",  log = TRUE, summarize = FALSE
         summ <-  cbind.data.frame(edge = mat_names[upper.tri(mat_names)],
                                   post_mean = x$pcor_mat[upper.tri(x$pcor_mat)],
                                   post_sd = x$pcor_sd[upper.tri(x$pcor_sd)],
-                                  "BF 10" = log(x$BF_10[upper.tri(x$BF_10)]),
-                                  "BF 01" = log(x$BF_01[upper.tri(x$BF_01)]))
+                                  "BF 10" = log(x$BF_10[upper.tri(x$BF_10)]))
       } else{
 
         summ <-  cbind.data.frame(edge = mat_names[upper.tri(mat_names)],
                                   post_mean = x$pcor_mat[upper.tri(x$pcor_mat)],
                                   post_sd = x$pcor_sd[upper.tri(x$pcor_sd)],
-                                  "BF 20" = x$BF_10[upper.tri(x$BF_10)],
-                                  "BF 01" = x$BF_01[upper.tri(x$BF_01)])
+                                  "BF 10" = x$BF_10[upper.tri(x$BF_10)])
       }
 
 
@@ -1096,6 +1094,7 @@ summary.select.explore <- function(x, hyp = "H1",  log = TRUE, summarize = FALSE
       cat("Estimates: \n \n ")
       print(summ, row.names = FALSE, ...)
       cat("--- \n")
+      cat("note: BF_10 is evidence in favor of H1")
     }
     else{
 
