@@ -38,7 +38,7 @@ plot.select.estimate <- function(x, type,
 
         partials <- reshape::melt(x$partials)
 
-      }
+    }
 
     partials$X1 <- as.factor(partials$X1)
 
@@ -121,6 +121,7 @@ plot.select.estimate <- function(x, type,
 
   if(type == "network"){
     if(is.null(x$rope)){
+
    plt <- BGGM:::net_plot(x$partials,
                     layout = layout,
                     mat_type = "partials",
@@ -132,7 +133,6 @@ plot.select.estimate <- function(x, type,
   }
 
   if(!is.null(x$rope)){
-
     plt1 <- BGGM:::net_plot(x$partials_non_zero,
                             layout = layout,
                             mat_type = "partials",

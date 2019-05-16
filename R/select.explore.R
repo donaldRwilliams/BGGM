@@ -120,7 +120,7 @@ select.explore <- function(x,
     BF_01_mat <- BGGM:::symmteric_mat(BF_01_mat)
 
     Adj_20 <- ifelse(BF_20_mat > BF_cut, 1, 0)
-    Adj_01 <- ifelse(BF_10_mat < 1 / BF_cut, 1, 0)
+    Adj_01 <- ifelse(BF_01_mat > BF_cut, 1, 0)
 
     diag(Adj_01) <- 0
 

@@ -470,7 +470,7 @@ plt_4C <- hypothesis_plot(fit = fit_bf,
 
 plt_4C
 ```
-
+Here it can be seen that the Bayes factor is the ratio of density evaluated at 0. In this case, there is evidence for $\mathcal{H}_0$ ($BF_{01} \approx 33$). This plotting option will may be useful, for example, in applied setting, when explaining the Bayes factor approach for selecting the graph (or more generally evaluated partial correlations). 
 # Comparing GGMs
 
 # References

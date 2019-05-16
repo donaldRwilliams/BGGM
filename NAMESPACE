@@ -49,9 +49,11 @@ export(summary.explore)
 export(select.explore)
 export(summary.select.explore)
 export(print.select.explore)
-
+export(head.select.explore)
 
 export(coef.estimate)
+
+
 
 
 export(hypothesis_plot)
