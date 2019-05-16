@@ -501,17 +501,7 @@ plt_pos
 $\mathcal{H}_1: \rho_{ij} < 0$ can be tested by changing `alternative = greater` to `alternative = less`.
 
 ### Exhaustive Hypothesis Testing
-A defining feature of Bayesian hypothesis testing is the ability to assess which theoretical model best predicts the data at hand. However, in the absence of guiding theory, it is likely that a more exploratory approach is warranted. **BGGM** thus includes an exhaustive approach--i.e.,
-
-$$
-\mathcal{H}_0: \rho_{ij} = 0
-$$
-$$
-\mathcal{H}_1: \rho_{ij} > 0
-$$
-$$
-\mathcal{H}_2: \rho_{ij} < 0
-$$
+A defining feature of Bayesian hypothesis testing is the ability to assess which theoretical model best predicts the data at hand. However, in the absence of guiding theory, it is likely that a more exploratory approach is warranted. **BGGM** thus includes an exhaustive approach--i.e.,$\mathcal{H}_0: \rho_{ij} = 0$ vs. $\mathcal{H}_1: \rho_{ij} > 0$ vs. $\mathcal{H}_2: \rho_{ij} < 0$.
 
 which covers the entire parameter space. Further details can be found in Williams and Mulder (2019). The exhaustive approach is implemented with:
 ```{r}
