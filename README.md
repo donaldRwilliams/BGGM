@@ -42,9 +42,9 @@ This README is organized as follows:
 
         -   [Visualizing Scientific Expectations](https://github.com/donaldRwilliams/BGGM#visualizing-scientific-expectations)
 
-        -   [Two-sided Hypothesis Testing](https://github.com/donaldRwilliams/BGGM#two-sided-testing)
+        -   [Two-Sided Hypothesis Testing](https://github.com/donaldRwilliams/BGGM#two-sided-testing)
 
-        -   One-sided Hypothesis Testing
+        -   [One-Sided Hypothesis Testing](https://github.com/donaldRwilliams/BGGM#one-sided-testing)
 
         -   Exhaustive Hypothesis Testing
 
@@ -108,7 +108,7 @@ summary(fit_analytic)
 #> Call: 
 #> estimate.default(x = Y, analytic = T)
 #> --- 
-#> Date: Thu May 16 13:04:13 2019
+#> Date: Thu May 16 13:17:50 2019
 ```
 
 Note `summary(.)` provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
@@ -176,16 +176,16 @@ summary(E, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd   2.5%  97.5%
-#>  1--2   -0.2404   0.018 -0.275 -0.205
-#>  1--3   -0.1075   0.019 -0.146 -0.070
-#>  2--3    0.2860   0.017  0.252  0.319
-#>  1--4   -0.0073   0.019 -0.044  0.030
-#>  2--4    0.1645   0.019  0.127  0.202
-#>  3--4    0.1782   0.019  0.141  0.215
-#>  1--5   -0.0087   0.019 -0.047  0.029
-#>  2--5    0.1566   0.019  0.121  0.192
-#>  3--5    0.3586   0.017  0.325  0.391
-#>  4--5    0.1215   0.019  0.084  0.158
+#>  1--2   -0.2405   0.018 -0.275 -0.204
+#>  1--3   -0.1074   0.019 -0.144 -0.071
+#>  2--3    0.2863   0.018  0.252  0.321
+#>  1--4   -0.0076   0.019 -0.045  0.031
+#>  2--4    0.1645   0.019  0.127  0.200
+#>  3--4    0.1781   0.018  0.143  0.214
+#>  1--5   -0.0089   0.019 -0.047  0.029
+#>  2--5    0.1565   0.019  0.120  0.193
+#>  3--5    0.3583   0.017  0.326  0.391
+#>  4--5    0.1215   0.019  0.085  0.158
 #> ---
 ```
 
@@ -280,15 +280,15 @@ head(E, nrow = 10, summarize = T, digits = 2)
 #>  
 #>  egde post_mean post_sd pr_out  pr_in
 #>  1--2    -0.244   0.018   1.00 0.0000
-#>  1--3    -0.106   0.019   0.62 0.3784
-#>  2--3     0.286   0.018   1.00 0.0000
+#>  1--3    -0.105   0.019   0.61 0.3928
+#>  2--3     0.287   0.018   1.00 0.0000
 #>  1--4    -0.014   0.020   0.00 1.0000
-#>  2--4     0.161   0.019   1.00 0.0008
-#>  3--4     0.160   0.019   1.00 0.0016
-#>  1--5    -0.015   0.020   0.00 1.0000
-#>  2--5     0.145   0.019   0.99 0.0098
+#>  2--4     0.161   0.019   1.00 0.0014
+#>  3--4     0.160   0.019   1.00 0.0004
+#>  1--5    -0.016   0.020   0.00 1.0000
+#>  2--5     0.145   0.019   0.99 0.0104
 #>  3--5     0.354   0.017   1.00 0.0000
-#>  4--5     0.114   0.019   0.77 0.2282
+#>  4--5     0.114   0.019   0.77 0.2322
 #> ---
 ```
 
@@ -351,11 +351,11 @@ head(edge_difference, nrow = 5)
 #> Estimates: 
 #>  
 #>   contrast post_mean post_sd pr_out pr_in
-#>  1--2-1--3    -0.138   0.030  0.897 0.103
-#>  1--2-2--3    -0.530   0.024  1.000 0.000
-#>  1--2-1--4    -0.229   0.029  1.000 0.000
-#>  1--2-2--4    -0.405   0.026  1.000 0.000
-#>  1--2-3--4    -0.404   0.027  1.000 0.000
+#>  1--2-1--3    -0.139   0.030  0.905 0.095
+#>  1--2-2--3    -0.531   0.024  1.000 0.000
+#>  1--2-1--4    -0.230   0.029  1.000 0.000
+#>  1--2-2--4    -0.406   0.026  1.000 0.000
+#>  1--2-3--4    -0.405   0.027  1.000 0.000
 #> ---
 ```
 
@@ -415,15 +415,15 @@ coefficients(fit, node = 1, ci_width = 0.95)
 #> Estimates: 
 #>  
 #>  node post_mean post_sd   2.5%  97.5%
-#>     2    -0.278   0.022 -0.321 -0.236
-#>     3    -0.124   0.023 -0.169 -0.079
-#>     4    -0.015   0.021 -0.058  0.027
-#>     5    -0.018   0.021 -0.057  0.023
-#>     6     0.057   0.020  0.019  0.096
-#>     7     0.081   0.021  0.041  0.122
-#>     8     0.046   0.021  0.003  0.086
-#>     9     0.143   0.022  0.103  0.187
-#>    10    -0.027   0.022 -0.069  0.017
+#>     2    -0.277   0.022 -0.319 -0.234
+#>     3    -0.126   0.022 -0.167 -0.082
+#>     4    -0.014   0.022 -0.059  0.028
+#>     5    -0.016   0.021 -0.059  0.023
+#>     6     0.056   0.021  0.014  0.097
+#>     7     0.080   0.022  0.040  0.126
+#>     8     0.044   0.021  0.005  0.085
+#>     9     0.141   0.023  0.095  0.185
+#>    10    -0.028   0.022 -0.072  0.014
 #> ---
 ```
 
@@ -460,8 +460,8 @@ head(train_R2, nrow = 2)
 #> Estimates: 
 #> 
 #>  node post_mean    post_sd       2.5%     97.5%
-#>     1 0.1719635 0.06892251 0.05438133 0.3123197
-#>     2 0.2901513 0.06461499 0.15385177 0.4074170
+#>     1 0.1679631 0.06650085 0.05303765 0.3053018
+#>     2 0.2896986 0.06624140 0.15471157 0.4133420
 #> ---
 ```
 
@@ -516,16 +516,16 @@ summary(bayes_loo)
 #> Estimates: 
 #> 
 #>   node      loo   loo_se
-#>     1 2572.017 48.49658
-#>     2 2329.332 63.31297
-#>     3 2302.197 64.31555
-#>     4 2465.102 51.87511
-#>     5 2416.768 55.64306
-#>     6 2434.774 58.74154
-#>     7 2300.747 50.02321
-#>     8 2390.942 51.55774
-#>     9 2294.948 51.65490
-#>    10 2364.818 40.29977
+#>     1 2574.013 49.16658
+#>     2 2331.146 63.84151
+#>     3 2303.675 64.24243
+#>     4 2464.812 51.23244
+#>     5 2417.041 55.63270
+#>     6 2434.540 59.37700
+#>     7 2301.445 50.77641
+#>     8 2391.327 51.55849
+#>     9 2295.416 51.72883
+#>    10 2364.967 39.62298
 #> ---
 ```
 
@@ -636,7 +636,7 @@ summary(fit_bf)
 #> Call: 
 #> explore.default(X = Y, prior_sd = 0.5, iter = 5000, cores = 2)
 #> --- 
-#> Date: Thu May 16 13:04:43 2019
+#> Date: Thu May 16 13:18:20 2019
 ```
 
 Note `summary(.)`, or alternatively `print(.)`, provides information about the fitted model, including that hypothesis testing (exploratory) was used, the number of observations (*n*) and variables (*p*), and the number of edges. Delta (*δ*) is the hyperparameter of the matrix−*F* distribution. A value of 3 corresponds to `prior_sd = 0.5`. This output parallels the estimation based methods. Importantly, all fitted objects include specific (what method was used) and general information (e.g., *n* and *p*) when printed.
@@ -666,11 +666,11 @@ summary(E, hyp = "H1")
 #> Partial Correlations 
 #>  
 #>            1          2          3         4         5
-#> 1  0.0000000 -0.2398434 -0.1077251 0.0000000 0.0000000
-#> 2 -0.2398434  0.0000000  0.2861982 0.1642424 0.1562285
-#> 3 -0.1077251  0.2861982  0.0000000 0.1775018 0.3587873
-#> 4  0.0000000  0.1642424  0.1775018 0.0000000 0.1216007
-#> 5  0.0000000  0.1562285  0.3587873 0.1216007 0.0000000
+#> 1  0.0000000 -0.2405268 -0.1075724 0.0000000 0.0000000
+#> 2 -0.2405268  0.0000000  0.2865512 0.1645318 0.1561914
+#> 3 -0.1075724  0.2865512  0.0000000 0.1779372 0.3585124
+#> 4  0.0000000  0.1645318  0.1779372 0.0000000 0.1216666
+#> 5  0.0000000  0.1561914  0.3585124 0.1216666 0.0000000
 #> --- 
 #>  
 #> Adjancency (non-zero) 
@@ -704,16 +704,16 @@ summary(E, summarize = T, log = T, digits = 2)
 #> Estimates: 
 #>  
 #>   edge post_mean post_sd BF 10
-#>  1--2   -0.2398   0.018  78.7
-#>  1--3   -0.1077   0.019  12.6
-#>  2--3    0.2862   0.018 113.4
+#>  1--2   -0.2405   0.018  79.3
+#>  1--3   -0.1076   0.019  11.9
+#>  2--3    0.2866   0.018 113.9
 #>  1--4   -0.0074   0.019  -3.5
-#>  2--4    0.1642   0.019  33.3
-#>  3--4    0.1775   0.019  39.3
-#>  1--5   -0.0089   0.019  -3.5
-#>  2--5    0.1562   0.019  30.2
-#>  3--5    0.3588   0.017 188.9
-#>  4--5    0.1216   0.019  16.3
+#>  2--4    0.1645   0.019  34.5
+#>  3--4    0.1779   0.019  39.6
+#>  1--5   -0.0083   0.019  -3.5
+#>  2--5    0.1562   0.019  29.1
+#>  3--5    0.3585   0.017 186.1
+#>  4--5    0.1217   0.019  17.1
 #> --- 
 #> note: BF_10 is evidence in favor of H1
 ```
@@ -752,25 +752,15 @@ E_pos <- select(fit_bf,
             BF_cut = 3, 
             alternative = "greater")
 
-# rho < 0
-E_neg <- select(fit_bf, 
-                BF_cut = 3, 
-                alternative = "less")
-
 # positive plot
 plt_pos <- plot(E_pos, type = "network") 
 plt_pos <- plt_pos$plot_nonzero + 
            ggtitle(expression(atop(H[0]: rho[i][j]*" = "*0, H[1]: rho[i][j]*" > "*0))) 
 
-# negative plot
-plt_neg <- plot(E_neg, type = "network")
-plt_neg <- plt_neg$plot_nonzero + 
-           ggtitle(expression(atop(H[0]: rho[i][j]*" = "*0, H[1]: rho[i][j]*" < "*0))) 
-
-cowplot::plot_grid(plt_pos, plt_neg)
+plt_pos
 ```
 
-<img src="man/figures/README-unnamed-chunk-27-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-27-1.png" width="60%" style="display: block; margin: auto;" /> *H*<sub>1</sub> : *ρ*<sub>*i**j*</sub> &lt; 0 can be testing by changing `alternative = greater` to `alternative = less`.
 
 Comparing GGMs
 ==============

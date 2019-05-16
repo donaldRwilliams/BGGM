@@ -61,9 +61,9 @@ This README is organized as follows:
         
         - [Visualizing Scientific Expectations](https://github.com/donaldRwilliams/BGGM#visualizing-scientific-expectations)
         
-        - [Two-sided Hypothesis Testing](https://github.com/donaldRwilliams/BGGM#two-sided-testing)
+        - [Two-Sided Hypothesis Testing](https://github.com/donaldRwilliams/BGGM#two-sided-testing)
         
-        - One-sided Hypothesis Testing
+        - [One-Sided Hypothesis Testing](https://github.com/donaldRwilliams/BGGM#one-sided-testing)
         
         - Exhaustive Hypothesis Testing
     
@@ -475,7 +475,7 @@ Here it can be seen that the Bayes factor is the ratio of density evaluated at 0
 
 ### One-Sided Testing
 One-sided hypothesis testing is implemented with:
-```{r, warning=F, message=F}
+```{r, warning=F, message=F, fig.height=3, fig.width=7}
 # p =  10
 Y <- BGGM::bfi[,1:10]
 
@@ -489,23 +489,14 @@ E_pos <- select(fit_bf,
             BF_cut = 3, 
             alternative = "greater")
 
-# rho < 0
-E_neg <- select(fit_bf, 
-                BF_cut = 3, 
-                alternative = "less")
-
 # positive plot
 plt_pos <- plot(E_pos, type = "network") 
 plt_pos <- plt_pos$plot_nonzero + 
            ggtitle(expression(atop(H[0]: rho[i][j]*" = "*0, H[1]: rho[i][j]*" > "*0))) 
 
-# negative plot
-plt_neg <- plot(E_neg, type = "network")
-plt_neg <- plt_neg$plot_nonzero + 
-           ggtitle(expression(atop(H[0]: rho[i][j]*" = "*0, H[1]: rho[i][j]*" < "*0))) 
-
-cowplot::plot_grid(plt_pos, plt_neg)
+plt_pos
 ```
+$H_1: \rho_{{ij}} < 0$ can be testing by changing `alternative = greater` to `alternative = less`.
 
 
 # Comparing GGMs
