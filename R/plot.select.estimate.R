@@ -139,7 +139,7 @@ plot.select.estimate <- function(x, type,
                             node_outer = node_outer,
                             node_inner = node_inner,
                             node_text_size = node_text_size)
-    plt2 <- BGGM:::net_plot(x,
+    plt2 <- BGGM:::net_plot(x$adjacency_zero,
                             layout = layout,
                             mat_type = "adj",
                             node_outer = node_outer,

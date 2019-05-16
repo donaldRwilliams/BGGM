@@ -72,10 +72,8 @@ net_plot <- function(x, layout = "circle", mat_type, node_outer, node_inner, nod
 }
 
   if(mat_type == "adj"){
-    # x <- x$adjacency_zero
-    # mlt_data <- reshape::melt(x)
-    p <- ncol(x$adjacency_zero)
-    graph_cors <- igraph::graph_from_adjacency_matrix(adjmatrix  =  x$adjacency_zero)
+    p <- ncol(x)
+    graph_cors <- igraph::graph_from_adjacency_matrix(adjmatrix  =  x)
 
     plt <- ggraph(graph_cors, layout = "circle") +
       geom_edge_link(color = "black") +

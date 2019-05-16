@@ -365,5 +365,153 @@ plot.select.explore <- function(x, type,
     }
   }
 
+  if(type == "network")  {
+
+    if(x$alternative == "two.sided"){
+
+      if(sum(x$partials_positive[upper.tri(x$partials_positive)]) == 0 ){
+
+        plt1 <- NA
+
+      } else {
+
+
+        plt1 <- BGGM:::net_plot(x$partials_non_zero,
+                                layout = layout,
+                                mat_type = "partials",
+                                node_outer = node_outer,
+                                node_inner = node_inner,
+                                node_text_size = node_text_size)
+      }
+
+      if(sum(x$Adj_01[upper.tri(x$Adj_01)]) == 0){
+
+        plt2 <- NA
+
+      }
+      plt2 <- BGGM:::net_plot(x$Adj_01,
+                              layout = layout,
+                              mat_type = "adj",
+                              node_outer = node_outer,
+                              node_inner = node_inner,
+                              node_text_size = node_text_size)
+
+
+
+      plt <- list(plot_nonzero = plt1, plot_zero = plt2)
+    }
+
+
+    if(x$alternative == "greater"){
+
+      if(sum(x$partials_positive[upper.tri(x$partials_positive)]) == 0 ){
+        plt1 <- NA
+
+      } else {
+        plt1 <- BGGM:::net_plot(x$partials_positive,
+                                layout = layout,
+                                mat_type = "partials",
+                                node_outer = node_outer,
+                                node_inner = node_inner,
+                                node_text_size = node_text_size)
+      }
+
+      if(sum(x$Adj_01[upper.tri(x$Adj_01)] ) == 0 ) {
+
+        plt2 <- NA
+
+      } else {
+        plt2 <- BGGM:::net_plot(x$Adj_01,
+                                layout = layout,
+                                mat_type = "adj",
+                                node_outer = node_outer,
+                                node_inner = node_inner,
+                                node_text_size = node_text_size)
+      }
+
+
+      plt <- list(plot_nonzero = plt1, plot_zero = plt2)
+
+
+
+
+    }
+    if(x$alternative == "less"){
+
+      if( sum(x$partials_negative[upper.tri(x$partials_negative)] ) == 0 ) {
+        plt1 <- NA
+
+      } else {
+        plt1 <- BGGM:::net_plot(x$partials_negative,
+                                layout = layout,
+                                mat_type = "partials",
+                                node_outer = node_outer,
+                                node_inner = node_inner,
+                                node_text_size = node_text_size)
+      }
+
+      if( sum(x$Adj_01[upper.tri(x$Adj_01)]) == 0 ){
+        plt2 <- NA
+
+      } else {
+        plt2 <- BGGM:::net_plot(x$Adj_01,
+                                layout = layout,
+                                mat_type = "adj",
+                                node_outer = node_outer,
+                                node_inner = node_inner,
+                                node_text_size = node_text_size)
+
+      }
+
+      plt <- list(plot_nonzero = plt1, plot_zero = plt2)
+
+    }
+
+
+    if(x$alternative == "exhaustive"){
+
+      if(sum(x$pos_mat[upper.tri(x$pos_mat)]) == 0  ){
+        plt1 <- NA
+
+      } else{
+
+        plt1 <- BGGM:::net_plot(x$pos_mat * x$pcor_mat,
+                                layout = layout,
+                                mat_type = "partials",
+                                node_outer = node_outer,
+                                node_inner = node_inner,
+                                node_text_size = node_text_size)
+      }
+
+      if(sum(x$neg_mat[upper.tri(x$neg_mat)]) == 0){
+        plt2 <- NA
+
+      } else{
+
+        plt2 <- BGGM:::net_plot(x$neg_mat * x$pcor_mat,
+                                layout = layout,
+                                mat_type = "partials",
+                                node_outer = node_outer,
+                                node_inner = node_inner,
+                                node_text_size = node_text_size)
+      }
+
+      adj_zero <- ifelse(x$null_mat > x$prob, 1, 0)
+
+      if(sum(adj_zero[upper.tri(adj_zero)])   == 0) {
+        plt3 <- NA
+
+      } else{
+        plt3 <-  BGGM:::net_plot(adj_zero,
+                                 layout = layout,
+                                 mat_type = "adj",
+                                 node_outer = node_outer,
+                                 node_inner = node_inner,
+                                 node_text_size = node_text_size)
+      }
+      plt <- list(plot_H1 = plt1, plot_H2 = plt2, plot_H0 = plt3)
+    }
+  }
   plt
 }
+

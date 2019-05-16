@@ -456,7 +456,7 @@ It is also possible to change `hyp = "H1"` to `hyp = "H0`, which will print the 
 ```{r}
 summary(E, summarize = T, log = T, digits = 2)
 ```
-The option `log = TRUE` controls the scale of the Bayes factor. Note that the same plotting options available for these methods. They have the same implementation as the estimation based methods, and thus not shown here. It is also possible to plot $\mathcal{H}_u$ and a selected posterior distribution. This visualizes how the Bayes factor is computed--i.e.,
+The option `log = TRUE` controls the scale of the Bayes factor. Note that the same plotting options available for these methods. They have the same implementation as the estimation based methods, and thus the `alternative = two.sided` plot is not shown here. It is also possible to plot $\mathcal{H}_u$ and a selected posterior distribution. This visualizes how the Bayes factor is computed--i.e.,
 
 
 ```{r}
@@ -470,7 +470,7 @@ plt_4C <- hypothesis_plot(fit = fit_bf,
 
 plt_4C
 ```
-Here it can be seen that the Bayes factor is the ratio of density evaluated at 0. In this case, there is evidence for $\mathcal{H}_0$ ($BF_{01} \approx 33$). This plotting option will may be useful, for example, in applied setting, when explaining the Bayes factor approach for selecting the graph (or more generally evaluated partial correlations). 
+Here it can be seen that the Bayes factor is the ratio of density evaluated at 0. In this case, there is evidence for $\mathcal{H}_0$ ($BF_{01} \approx 33$). This plotting option  may be useful, for example in applied settings, for undertanding the Bayes factor approach for selecting the graph (or more generally evaluated partial correlations). 
 # Comparing GGMs
 
 # References
