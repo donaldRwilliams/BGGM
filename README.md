@@ -88,6 +88,7 @@ library(ggplot2)
 library(ggraph)
 library(foreach)
 
+
 # p = 5
 Y <- BGGM::bfi[,1:5]
 
@@ -107,7 +108,7 @@ summary(fit_analytic)
 #> Call: 
 #> estimate.default(x = Y, analytic = T)
 #> --- 
-#> Date: Thu May 16 06:41:54 2019
+#> Date: Thu May 16 13:04:13 2019
 ```
 
 Note `summary(.)` provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
@@ -175,16 +176,16 @@ summary(E, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd   2.5%  97.5%
-#>  1--2   -0.2399   0.018 -0.275 -0.204
-#>  1--3   -0.1072   0.019 -0.144 -0.070
-#>  2--3    0.2867   0.018  0.252  0.321
-#>  1--4   -0.0072   0.019 -0.044  0.030
-#>  2--4    0.1644   0.018  0.128  0.200
-#>  3--4    0.1780   0.018  0.142  0.214
-#>  1--5   -0.0097   0.019 -0.047  0.027
-#>  2--5    0.1565   0.019  0.120  0.194
-#>  3--5    0.3585   0.017  0.325  0.390
-#>  4--5    0.1214   0.019  0.084  0.158
+#>  1--2   -0.2404   0.018 -0.275 -0.205
+#>  1--3   -0.1075   0.019 -0.146 -0.070
+#>  2--3    0.2860   0.017  0.252  0.319
+#>  1--4   -0.0073   0.019 -0.044  0.030
+#>  2--4    0.1645   0.019  0.127  0.202
+#>  3--4    0.1782   0.019  0.141  0.215
+#>  1--5   -0.0087   0.019 -0.047  0.029
+#>  2--5    0.1566   0.019  0.121  0.192
+#>  3--5    0.3586   0.017  0.325  0.391
+#>  4--5    0.1215   0.019  0.084  0.158
 #> ---
 ```
 
@@ -279,15 +280,15 @@ head(E, nrow = 10, summarize = T, digits = 2)
 #>  
 #>  egde post_mean post_sd pr_out  pr_in
 #>  1--2    -0.244   0.018   1.00 0.0000
-#>  1--3    -0.106   0.019   0.62 0.3776
-#>  2--3     0.287   0.018   1.00 0.0000
-#>  1--4    -0.014   0.019   0.00 1.0000
-#>  2--4     0.161   0.019   1.00 0.0004
-#>  3--4     0.160   0.019   1.00 0.0014
-#>  1--5    -0.016   0.020   0.00 1.0000
-#>  2--5     0.145   0.019   0.99 0.0100
+#>  1--3    -0.106   0.019   0.62 0.3784
+#>  2--3     0.286   0.018   1.00 0.0000
+#>  1--4    -0.014   0.020   0.00 1.0000
+#>  2--4     0.161   0.019   1.00 0.0008
+#>  3--4     0.160   0.019   1.00 0.0016
+#>  1--5    -0.015   0.020   0.00 1.0000
+#>  2--5     0.145   0.019   0.99 0.0098
 #>  3--5     0.354   0.017   1.00 0.0000
-#>  4--5     0.114   0.020   0.77 0.2278
+#>  4--5     0.114   0.019   0.77 0.2282
 #> ---
 ```
 
@@ -350,9 +351,9 @@ head(edge_difference, nrow = 5)
 #> Estimates: 
 #>  
 #>   contrast post_mean post_sd pr_out pr_in
-#>  1--2-1--3    -0.138   0.030  0.896 0.104
-#>  1--2-2--3    -0.531   0.024  1.000 0.000
-#>  1--2-1--4    -0.230   0.029  1.000 0.000
+#>  1--2-1--3    -0.138   0.030  0.897 0.103
+#>  1--2-2--3    -0.530   0.024  1.000 0.000
+#>  1--2-1--4    -0.229   0.029  1.000 0.000
 #>  1--2-2--4    -0.405   0.026  1.000 0.000
 #>  1--2-3--4    -0.404   0.027  1.000 0.000
 #> ---
@@ -414,15 +415,15 @@ coefficients(fit, node = 1, ci_width = 0.95)
 #> Estimates: 
 #>  
 #>  node post_mean post_sd   2.5%  97.5%
-#>     2    -0.278   0.021 -0.319 -0.238
-#>     3    -0.123   0.022 -0.164 -0.077
-#>     4    -0.016   0.020 -0.057  0.023
-#>     5    -0.017   0.021 -0.061  0.024
-#>     6     0.058   0.021  0.016  0.097
-#>     7     0.081   0.021  0.039  0.125
-#>     8     0.044   0.021  0.002  0.084
-#>     9     0.141   0.023  0.098  0.183
-#>    10    -0.027   0.022 -0.070  0.016
+#>     2    -0.278   0.022 -0.321 -0.236
+#>     3    -0.124   0.023 -0.169 -0.079
+#>     4    -0.015   0.021 -0.058  0.027
+#>     5    -0.018   0.021 -0.057  0.023
+#>     6     0.057   0.020  0.019  0.096
+#>     7     0.081   0.021  0.041  0.122
+#>     8     0.046   0.021  0.003  0.086
+#>     9     0.143   0.022  0.103  0.187
+#>    10    -0.027   0.022 -0.069  0.017
 #> ---
 ```
 
@@ -459,8 +460,8 @@ head(train_R2, nrow = 2)
 #> Estimates: 
 #> 
 #>  node post_mean    post_sd       2.5%     97.5%
-#>     1 0.1686586 0.06488876 0.05556471 0.2981412
-#>     2 0.2878120 0.06954673 0.14989238 0.4182743
+#>     1 0.1719635 0.06892251 0.05438133 0.3123197
+#>     2 0.2901513 0.06461499 0.15385177 0.4074170
 #> ---
 ```
 
@@ -515,16 +516,16 @@ summary(bayes_loo)
 #> Estimates: 
 #> 
 #>   node      loo   loo_se
-#>     1 2573.763 48.70023
-#>     2 2330.429 63.59928
-#>     3 2302.663 64.33628
-#>     4 2464.524 51.34919
-#>     5 2416.512 55.50422
-#>     6 2435.605 58.74767
-#>     7 2300.165 50.32138
-#>     8 2390.127 51.80015
-#>     9 2295.741 51.28650
-#>    10 2366.442 39.76552
+#>     1 2572.017 48.49658
+#>     2 2329.332 63.31297
+#>     3 2302.197 64.31555
+#>     4 2465.102 51.87511
+#>     5 2416.768 55.64306
+#>     6 2434.774 58.74154
+#>     7 2300.747 50.02321
+#>     8 2390.942 51.55774
+#>     9 2294.948 51.65490
+#>    10 2364.818 40.29977
 #> ---
 ```
 
@@ -635,7 +636,7 @@ summary(fit_bf)
 #> Call: 
 #> explore.default(X = Y, prior_sd = 0.5, iter = 5000, cores = 2)
 #> --- 
-#> Date: Thu May 16 06:42:23 2019
+#> Date: Thu May 16 13:04:43 2019
 ```
 
 Note `summary(.)`, or alternatively `print(.)`, provides information about the fitted model, including that hypothesis testing (exploratory) was used, the number of observations (*n*) and variables (*p*), and the number of edges. Delta (*δ*) is the hyperparameter of the matrix−*F* distribution. A value of 3 corresponds to `prior_sd = 0.5`. This output parallels the estimation based methods. Importantly, all fitted objects include specific (what method was used) and general information (e.g., *n* and *p*) when printed.
@@ -665,11 +666,11 @@ summary(E, hyp = "H1")
 #> Partial Correlations 
 #>  
 #>            1          2          3         4         5
-#> 1  0.0000000 -0.2400720 -0.1081317 0.0000000 0.0000000
-#> 2 -0.2400720  0.0000000  0.2858270 0.1645515 0.1558439
-#> 3 -0.1081317  0.2858270  0.0000000 0.1778616 0.3588660
-#> 4  0.0000000  0.1645515  0.1778616 0.0000000 0.1219286
-#> 5  0.0000000  0.1558439  0.3588660 0.1219286 0.0000000
+#> 1  0.0000000 -0.2398434 -0.1077251 0.0000000 0.0000000
+#> 2 -0.2398434  0.0000000  0.2861982 0.1642424 0.1562285
+#> 3 -0.1077251  0.2861982  0.0000000 0.1775018 0.3587873
+#> 4  0.0000000  0.1642424  0.1775018 0.0000000 0.1216007
+#> 5  0.0000000  0.1562285  0.3587873 0.1216007 0.0000000
 #> --- 
 #>  
 #> Adjancency (non-zero) 
@@ -703,16 +704,16 @@ summary(E, summarize = T, log = T, digits = 2)
 #> Estimates: 
 #>  
 #>   edge post_mean post_sd BF 10
-#>  1--2   -0.2401   0.018  78.6
-#>  1--3   -0.1081   0.019  12.4
-#>  2--3    0.2858   0.017 116.5
-#>  1--4   -0.0068   0.019  -3.5
-#>  2--4    0.1646   0.019  33.9
-#>  3--4    0.1779   0.018  41.4
-#>  1--5   -0.0090   0.019  -3.5
-#>  2--5    0.1558   0.019  28.3
-#>  3--5    0.3589   0.017 186.2
-#>  4--5    0.1219   0.019  16.6
+#>  1--2   -0.2398   0.018  78.7
+#>  1--3   -0.1077   0.019  12.6
+#>  2--3    0.2862   0.018 113.4
+#>  1--4   -0.0074   0.019  -3.5
+#>  2--4    0.1642   0.019  33.3
+#>  3--4    0.1775   0.019  39.3
+#>  1--5   -0.0089   0.019  -3.5
+#>  2--5    0.1562   0.019  30.2
+#>  3--5    0.3588   0.017 188.9
+#>  4--5    0.1216   0.019  16.3
 #> --- 
 #> note: BF_10 is evidence in favor of H1
 ```
@@ -731,7 +732,48 @@ plt_4C <- hypothesis_plot(fit = fit_bf,
 plt_4C
 ```
 
-<img src="man/figures/README-unnamed-chunk-26-1.png" width="60%" style="display: block; margin: auto;" /> Here it can be seen that the Bayes factor is the ratio of density evaluated at 0. In this case, there is evidence for ℋ<sub>0</sub> (*B**F*<sub>01</sub> ≈ 33). This plotting option may be useful, for example in applied settings, for undertanding the Bayes factor approach for selecting the graph (or more generally evaluated partial correlations). \# Comparing GGMs
+<img src="man/figures/README-unnamed-chunk-26-1.png" width="60%" style="display: block; margin: auto;" /> Here it can be seen that the Bayes factor is the ratio of density evaluated at 0. In this case, there is evidence for ℋ<sub>0</sub> (*B**F*<sub>01</sub> ≈ 33). This plotting option may be useful for undertanding (and describing) the Bayes factor approach for selecting the graph (or more generally evaluated partial correlations).
+
+### One-Sided Testing
+
+One-sided hypothesis testing is implemented with:
+
+``` r
+# p =  10
+Y <- BGGM::bfi[,1:10]
+
+# sample from posterior
+fit_bf <- explore(Y, prior_sd = 0.5, 
+                  iter = 5000, 
+                  cores = 2)
+
+# rho > 0
+E_pos <- select(fit_bf, 
+            BF_cut = 3, 
+            alternative = "greater")
+
+# rho < 0
+E_neg <- select(fit_bf, 
+                BF_cut = 3, 
+                alternative = "less")
+
+# positive plot
+plt_pos <- plot(E_pos, type = "network") 
+plt_pos <- plt_pos$plot_nonzero + 
+           ggtitle(expression(atop(H[0]: rho[i][j]*" = "*0, H[1]: rho[i][j]*" > "*0))) 
+
+# negative plot
+plt_neg <- plot(E_neg, type = "network")
+plt_neg <- plt_neg$plot_nonzero + 
+           ggtitle(expression(atop(H[0]: rho[i][j]*" = "*0, H[1]: rho[i][j]*" < "*0))) 
+
+cowplot::plot_grid(plt_pos, plt_neg)
+```
+
+<img src="man/figures/README-unnamed-chunk-27-1.png" width="60%" style="display: block; margin: auto;" />
+
+Comparing GGMs
+==============
 
 References
 ==========

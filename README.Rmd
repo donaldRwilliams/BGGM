@@ -107,6 +107,7 @@ library(ggplot2)
 library(ggraph)
 library(foreach)
 
+
 # p = 5
 Y <- BGGM::bfi[,1:5]
 
@@ -470,7 +471,43 @@ plt_4C <- hypothesis_plot(fit = fit_bf,
 
 plt_4C
 ```
-Here it can be seen that the Bayes factor is the ratio of density evaluated at 0. In this case, there is evidence for $\mathcal{H}_0$ ($BF_{01} \approx 33$). This plotting option  may be useful, for example in applied settings, for undertanding the Bayes factor approach for selecting the graph (or more generally evaluated partial correlations). 
+Here it can be seen that the Bayes factor is the ratio of density evaluated at 0. In this case, there is evidence for $\mathcal{H}_0$ ($BF_{01} \approx 33$). This plotting option  may be useful for undertanding (and describing) the Bayes factor approach for selecting the graph (or more generally evaluated partial correlations). 
+
+### One-Sided Testing
+One-sided hypothesis testing is implemented with:
+```{r, warning=F, message=F}
+# p =  10
+Y <- BGGM::bfi[,1:10]
+
+# sample from posterior
+fit_bf <- explore(Y, prior_sd = 0.5, 
+                  iter = 5000, 
+                  cores = 2)
+
+# rho > 0
+E_pos <- select(fit_bf, 
+            BF_cut = 3, 
+            alternative = "greater")
+
+# rho < 0
+E_neg <- select(fit_bf, 
+                BF_cut = 3, 
+                alternative = "less")
+
+# positive plot
+plt_pos <- plot(E_pos, type = "network") 
+plt_pos <- plt_pos$plot_nonzero + 
+           ggtitle(expression(atop(H[0]: rho[i][j]*" = "*0, H[1]: rho[i][j]*" > "*0))) 
+
+# negative plot
+plt_neg <- plot(E_neg, type = "network")
+plt_neg <- plt_neg$plot_nonzero + 
+           ggtitle(expression(atop(H[0]: rho[i][j]*" = "*0, H[1]: rho[i][j]*" < "*0))) 
+
+cowplot::plot_grid(plt_pos, plt_neg)
+```
+
+
 # Comparing GGMs
 
 # References
