@@ -108,7 +108,7 @@ summary(fit_analytic)
 #> Call: 
 #> estimate.default(x = Y, analytic = T)
 #> --- 
-#> Date: Thu May 16 13:21:21 2019
+#> Date: Thu May 16 14:27:31 2019
 ```
 
 Note `summary(.)` provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
@@ -176,16 +176,16 @@ summary(E, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd   2.5%  97.5%
-#>  1--2   -0.2405   0.018 -0.275 -0.205
-#>  1--3   -0.1073   0.019 -0.144 -0.070
-#>  2--3    0.2860   0.017  0.252  0.320
-#>  1--4   -0.0074   0.019 -0.046  0.030
-#>  2--4    0.1647   0.019  0.128  0.201
-#>  3--4    0.1783   0.019  0.143  0.215
-#>  1--5   -0.0090   0.019 -0.047  0.028
-#>  2--5    0.1561   0.019  0.119  0.192
-#>  3--5    0.3590   0.017  0.327  0.392
-#>  4--5    0.1210   0.019  0.084  0.158
+#>  1--2   -0.2404   0.018 -0.275 -0.206
+#>  1--3   -0.1074   0.019 -0.145 -0.070
+#>  2--3    0.2867   0.018  0.252  0.321
+#>  1--4   -0.0072   0.019 -0.045  0.031
+#>  2--4    0.1643   0.019  0.128  0.201
+#>  3--4    0.1779   0.019  0.140  0.215
+#>  1--5   -0.0093   0.019 -0.048  0.028
+#>  2--5    0.1561   0.019  0.118  0.193
+#>  3--5    0.3587   0.017  0.325  0.392
+#>  4--5    0.1214   0.019  0.084  0.159
 #> ---
 ```
 
@@ -279,16 +279,16 @@ head(E, nrow = 10, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd pr_out  pr_in
-#>  1--2    -0.244   0.018   1.00 0.0000
-#>  1--3    -0.105   0.019   0.61 0.3890
-#>  2--3     0.287   0.018   1.00 0.0000
-#>  1--4    -0.015   0.020   0.00 1.0000
-#>  2--4     0.161   0.019   1.00 0.0008
-#>  3--4     0.160   0.019   1.00 0.0004
-#>  1--5    -0.015   0.019   0.00 1.0000
-#>  2--5     0.145   0.019   0.99 0.0114
-#>  3--5     0.355   0.017   1.00 0.0000
-#>  4--5     0.114   0.019   0.78 0.2238
+#>  1--2    -0.245   0.018   1.00 0.0000
+#>  1--3    -0.106   0.019   0.62 0.3754
+#>  2--3     0.286   0.018   1.00 0.0000
+#>  1--4    -0.014   0.020   0.00 1.0000
+#>  2--4     0.161   0.019   1.00 0.0010
+#>  3--4     0.160   0.019   1.00 0.0014
+#>  1--5    -0.016   0.020   0.00 1.0000
+#>  2--5     0.145   0.020   0.99 0.0112
+#>  3--5     0.354   0.017   1.00 0.0000
+#>  4--5     0.114   0.019   0.77 0.2342
 #> ---
 ```
 
@@ -351,11 +351,11 @@ head(edge_difference, nrow = 5)
 #> Estimates: 
 #>  
 #>   contrast post_mean post_sd pr_out pr_in
-#>  1--2-1--3    -0.139   0.030  0.904 0.096
+#>  1--2-1--3    -0.139   0.030  0.907 0.093
 #>  1--2-2--3    -0.531   0.024  1.000 0.000
-#>  1--2-1--4    -0.229   0.029  1.000 0.000
-#>  1--2-2--4    -0.405   0.026  1.000 0.000
-#>  1--2-3--4    -0.404   0.027  1.000 0.000
+#>  1--2-1--4    -0.231   0.029  1.000 0.000
+#>  1--2-2--4    -0.406   0.026  1.000 0.000
+#>  1--2-3--4    -0.405   0.027  1.000 0.000
 #> ---
 ```
 
@@ -415,15 +415,15 @@ coefficients(fit, node = 1, ci_width = 0.95)
 #> Estimates: 
 #>  
 #>  node post_mean post_sd   2.5%  97.5%
-#>     2    -0.278   0.021 -0.319 -0.236
-#>     3    -0.125   0.022 -0.169 -0.083
-#>     4    -0.014   0.020 -0.053  0.026
-#>     5    -0.017   0.021 -0.058  0.024
+#>     2    -0.276   0.022 -0.321 -0.237
+#>     3    -0.124   0.022 -0.170 -0.084
+#>     4    -0.016   0.021 -0.055  0.026
+#>     5    -0.018   0.021 -0.059  0.023
 #>     6     0.057   0.021  0.017  0.097
-#>     7     0.080   0.022  0.036  0.120
-#>     8     0.045   0.020  0.005  0.082
-#>     9     0.141   0.022  0.100  0.180
-#>    10    -0.029   0.022 -0.071  0.015
+#>     7     0.080   0.021  0.039  0.119
+#>     8     0.044   0.021  0.002  0.087
+#>     9     0.140   0.021  0.097  0.180
+#>    10    -0.028   0.020 -0.069  0.010
 #> ---
 ```
 
@@ -460,8 +460,8 @@ head(train_R2, nrow = 2)
 #> Estimates: 
 #> 
 #>  node post_mean    post_sd       2.5%     97.5%
-#>     1 0.1709840 0.06834481 0.04302736 0.3101719
-#>     2 0.2893813 0.06779926 0.15335638 0.4119578
+#>     1 0.1742818 0.06786429 0.04961588 0.3104272
+#>     2 0.2879730 0.06557754 0.15731383 0.4091021
 #> ---
 ```
 
@@ -516,16 +516,16 @@ summary(bayes_loo)
 #> Estimates: 
 #> 
 #>   node      loo   loo_se
-#>     1 2574.260 48.45909
-#>     2 2329.915 63.33548
-#>     3 2302.143 64.42958
-#>     4 2465.382 51.58432
-#>     5 2415.934 55.72404
-#>     6 2434.442 58.79103
-#>     7 2300.092 50.61358
-#>     8 2391.041 51.45098
-#>     9 2294.894 51.73519
-#>    10 2364.967 40.09172
+#>     1 2575.330 48.62047
+#>     2 2332.212 63.78990
+#>     3 2303.290 64.35011
+#>     4 2465.595 51.53804
+#>     5 2415.839 55.46450
+#>     6 2434.446 58.49363
+#>     7 2300.976 50.46968
+#>     8 2391.903 51.53393
+#>     9 2294.669 51.29666
+#>    10 2362.610 39.69321
 #> ---
 ```
 
@@ -636,7 +636,7 @@ summary(fit_bf)
 #> Call: 
 #> explore.default(X = Y, prior_sd = 0.5, iter = 5000, cores = 2)
 #> --- 
-#> Date: Thu May 16 13:21:50 2019
+#> Date: Thu May 16 14:27:59 2019
 ```
 
 Note `summary(.)`, or alternatively `print(.)`, provides information about the fitted model, including that hypothesis testing (exploratory) was used, the number of observations (*n*) and variables (*p*), and the number of edges. Delta (*δ*) is the hyperparameter of the matrix−*F* distribution. A value of 3 corresponds to `prior_sd = 0.5`. This output parallels the estimation based methods. Importantly, all fitted objects include specific (what method was used) and general information (e.g., *n* and *p*) when printed.
@@ -666,11 +666,11 @@ summary(E, hyp = "H1")
 #> Partial Correlations 
 #>  
 #>            1          2          3         4         5
-#> 1  0.0000000 -0.2402674 -0.1070122 0.0000000 0.0000000
-#> 2 -0.2402674  0.0000000  0.2864259 0.1645977 0.1558880
-#> 3 -0.1070122  0.2864259  0.0000000 0.1776799 0.3586097
-#> 4  0.0000000  0.1645977  0.1776799 0.0000000 0.1216702
-#> 5  0.0000000  0.1558880  0.3586097 0.1216702 0.0000000
+#> 1  0.0000000 -0.2401367 -0.1073383 0.0000000 0.0000000
+#> 2 -0.2401367  0.0000000  0.2862579 0.1646968 0.1564919
+#> 3 -0.1073383  0.2862579  0.0000000 0.1775155 0.3587059
+#> 4  0.0000000  0.1646968  0.1775155 0.0000000 0.1217803
+#> 5  0.0000000  0.1564919  0.3587059 0.1217803 0.0000000
 #> --- 
 #>  
 #> Adjancency (non-zero) 
@@ -704,16 +704,16 @@ summary(E, summarize = T, log = T, digits = 2)
 #> Estimates: 
 #>  
 #>   edge post_mean post_sd BF 10
-#>  1--2   -0.2403   0.018  81.8
-#>  1--3   -0.1070   0.019  11.6
-#>  2--3    0.2864   0.018 114.3
-#>  1--4   -0.0075   0.019  -3.5
-#>  2--4    0.1646   0.019  34.5
-#>  3--4    0.1777   0.019  39.6
-#>  1--5   -0.0091   0.019  -3.4
-#>  2--5    0.1559   0.018  31.1
-#>  3--5    0.3586   0.017 187.6
-#>  4--5    0.1217   0.019  17.0
+#>  1--2   -0.2401   0.018  79.6
+#>  1--3   -0.1073   0.019  12.3
+#>  2--3    0.2863   0.018 111.8
+#>  1--4   -0.0071   0.019  -3.5
+#>  2--4    0.1647   0.019  34.1
+#>  3--4    0.1775   0.018  40.5
+#>  1--5   -0.0092   0.019  -3.4
+#>  2--5    0.1565   0.019  30.7
+#>  3--5    0.3587   0.017 188.9
+#>  4--5    0.1218   0.019  15.9
 #> --- 
 #> note: BF_10 is evidence in favor of H1
 ```
@@ -732,7 +732,9 @@ plt_4C <- hypothesis_plot(fit = fit_bf,
 plt_4C
 ```
 
-<img src="man/figures/README-unnamed-chunk-26-1.png" width="60%" style="display: block; margin: auto;" /> Here it can be seen that the Bayes factor is the ratio of density evaluated at 0. In this case, there is evidence for ℋ<sub>0</sub> (*B**F*<sub>01</sub> ≈ 33). This plotting option may be useful for undertanding (and describing) the Bayes factor approach for selecting the graph (or more generally evaluated partial correlations).
+<img src="man/figures/README-unnamed-chunk-26-1.png" width="60%" style="display: block; margin: auto;" />
+
+Here it can be seen that the Bayes factor is the ratio of density evaluated at 0. In this case, there is evidence for ℋ<sub>0</sub> (*B**F*<sub>01</sub> ≈ 33). This plotting option may be useful for understanding (and describing) the Bayes factor approach for selecting the graph (or more generally the testing strategy for partial correlations).
 
 ### One-Sided Testing
 
@@ -762,7 +764,7 @@ plt_pos
 
 <img src="man/figures/README-unnamed-chunk-27-1.png" width="60%" style="display: block; margin: auto;" />
 
-*H*<sub>1</sub> : *ρ*<sub>*i**j*</sub> &lt; 0 can be testing by changing `alternative = greater` to `alternative = less`.
+ℋ<sub>1</sub> : *ρ*<sub>*i**j*</sub> &lt; 0 can be tested by changing `alternative = greater` to `alternative = less`.
 
 Comparing GGMs
 ==============

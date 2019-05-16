@@ -471,7 +471,8 @@ plt_4C <- hypothesis_plot(fit = fit_bf,
 
 plt_4C
 ```
-Here it can be seen that the Bayes factor is the ratio of density evaluated at 0. In this case, there is evidence for $\mathcal{H}_0$ ($BF_{01} \approx 33$). This plotting option  may be useful for undertanding (and describing) the Bayes factor approach for selecting the graph (or more generally evaluated partial correlations). 
+
+Here it can be seen that the Bayes factor is the ratio of density evaluated at 0. In this case, there is evidence for $\mathcal{H}_0$ ($BF_{01} \approx 33$). This plotting option  may be useful for understanding (and describing) the Bayes factor approach for selecting the graph (or more generally the testing strategy for partial correlations). 
 
 ### One-Sided Testing
 One-sided hypothesis testing is implemented with:
@@ -497,7 +498,7 @@ plt_pos <- plt_pos$plot_nonzero +
 plt_pos
 ```
 
-$H_1: \rho_{{ij}} < 0$ can be testing by changing `alternative = greater` to `alternative = less`.
+$\mathcal{H}_1: \rho_{ij} < 0$ can be tested by changing `alternative = greater` to `alternative = less`.
 
 
 # Comparing GGMs
