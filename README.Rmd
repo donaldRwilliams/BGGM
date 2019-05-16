@@ -500,6 +500,53 @@ plt_pos
 
 $\mathcal{H}_1: \rho_{ij} < 0$ can be tested by changing `alternative = greater` to `alternative = less`.
 
+### Exhaustive Hypothesis Testing
+A defining feature of Bayesian hypothesis testing is the ability to assess which theoretical model best predicts the data at hand. However, in the absence of guiding theory, it is likely that a more exploratory approach is warranted. **BGGM** thus includes an exhaustive approach--i.e.,
+$$
+\begin{align}
+    \mathcal{H}_0: \rho_{ij} &= 0 \\ \nonumber
+    \mathcal{H}_1: \rho_{ij} &> 0 \\ \nonumber
+    \mathcal{H}_2: \rho_{ij} &< 0, 
+\end{align}
+$$
+
+which covers the entire parameter space. Further details can be found in Williams and Mulder (2019). The exhaustive approach is 
+```{r}
+# p = 10
+Y <- BGGM::bfi[,1:10]
+
+# sample from posterior
+fit_bf <- explore(Y, prior_sd = 0.5, 
+                  iter = 5000, 
+                  cores = 2)
+# select the graph
+E <- select(fit_bf, 
+            hyp_prob = 0.90, 
+            alternative = "exhaustive")
+
+# first 5 rows
+head(E, summarize = T, nrow = 5)
+```
+
+The ratio of posterior probabilities, e.g., $p(\mathcal{H}_1|\textbf{Y}) / p(\mathcal{H}_2|\textbf{Y})$, can then be used to compute a Bayes factor if desired. `hyp_prob = 0.90` is the decision rule for concluding there is evidence for a given hypothesis. This can the be plotted with:
+
+```{r, warning=F, message=F}
+plts <- plot(E, type = "network")
+
+# p(H0 | Y) > 0.90
+plts$plot_H0 +
+  ggtitle(expression("p"*"("*H[0]*"| Y)") )
+
+# p(H1 | Y) > 0.90
+plts$plot_H1 +
+  ggtitle(expression("p"*"("*H[1]*"| Y)") )
+
+# p(H2 | Y) > 0.90
+plts$plot_H2 +
+  ggtitle(expression("p"*"("*H[2]*"| Y)") )
+```
+
+
 
 # Comparing GGMs
 
