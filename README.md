@@ -46,7 +46,7 @@ This README is organized as follows:
 
         -   [One-Sided Hypothesis Testing](https://github.com/donaldRwilliams/BGGM#one-sided-testing)
 
-        -   Exhaustive Hypothesis Testing
+        -   [Exhaustive Hypothesis Testing](https://github.com/donaldRwilliams/BGGM#exhaustive-hypothesis-testing)
 
     -   Confirmatory Hypothesis Testing
 
@@ -108,7 +108,7 @@ summary(fit_analytic)
 #> Call: 
 #> estimate.default(x = Y, analytic = T)
 #> --- 
-#> Date: Thu May 16 15:21:06 2019
+#> Date: Thu May 16 15:43:14 2019
 ```
 
 Note `summary(.)` provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
@@ -176,16 +176,16 @@ summary(E, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd   2.5%  97.5%
-#>  1--2   -0.2405   0.018 -0.274 -0.204
-#>  1--3   -0.1070   0.019 -0.144 -0.069
-#>  2--3    0.2861   0.018  0.251  0.320
-#>  1--4   -0.0076   0.019 -0.045  0.029
-#>  2--4    0.1645   0.018  0.128  0.201
-#>  3--4    0.1783   0.018  0.142  0.214
-#>  1--5   -0.0088   0.019 -0.047  0.029
-#>  2--5    0.1568   0.019  0.120  0.194
-#>  3--5    0.3583   0.017  0.325  0.390
-#>  4--5    0.1212   0.019  0.084  0.157
+#>  1--2   -0.2406   0.018 -0.275 -0.205
+#>  1--3   -0.1071   0.019 -0.145 -0.070
+#>  2--3    0.2865   0.018  0.252  0.320
+#>  1--4   -0.0073   0.019 -0.045  0.031
+#>  2--4    0.1645   0.019  0.127  0.201
+#>  3--4    0.1781   0.018  0.142  0.215
+#>  1--5   -0.0092   0.019 -0.047  0.028
+#>  2--5    0.1563   0.019  0.119  0.194
+#>  3--5    0.3589   0.017  0.325  0.390
+#>  4--5    0.1213   0.019  0.085  0.158
 #> ---
 ```
 
@@ -279,16 +279,16 @@ head(E, nrow = 10, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd pr_out  pr_in
-#>  1--2    -0.244   0.019   1.00 0.0000
-#>  1--3    -0.106   0.019   0.63 0.3652
-#>  2--3     0.286   0.018   1.00 0.0000
+#>  1--2    -0.244   0.018   1.00 0.0000
+#>  1--3    -0.106   0.019   0.62 0.3760
+#>  2--3     0.286   0.017   1.00 0.0000
 #>  1--4    -0.015   0.019   0.00 1.0000
-#>  2--4     0.161   0.019   1.00 0.0010
-#>  3--4     0.160   0.019   1.00 0.0008
-#>  1--5    -0.015   0.019   0.00 1.0000
-#>  2--5     0.146   0.019   0.99 0.0096
+#>  2--4     0.161   0.019   1.00 0.0012
+#>  3--4     0.160   0.019   1.00 0.0010
+#>  1--5    -0.016   0.019   0.00 1.0000
+#>  2--5     0.145   0.019   0.99 0.0078
 #>  3--5     0.354   0.017   1.00 0.0000
-#>  4--5     0.114   0.019   0.77 0.2304
+#>  4--5     0.114   0.019   0.77 0.2300
 #> ---
 ```
 
@@ -351,11 +351,11 @@ head(edge_difference, nrow = 5)
 #> Estimates: 
 #>  
 #>   contrast post_mean post_sd pr_out pr_in
-#>  1--2-1--3    -0.138   0.030  0.891 0.109
+#>  1--2-1--3    -0.138   0.030  0.895 0.105
 #>  1--2-2--3    -0.530   0.024  1.000 0.000
 #>  1--2-1--4    -0.229   0.029  1.000 0.000
 #>  1--2-2--4    -0.405   0.026  1.000 0.000
-#>  1--2-3--4    -0.404   0.027  1.000 0.000
+#>  1--2-3--4    -0.405   0.027  1.000 0.000
 #> ---
 ```
 
@@ -415,15 +415,15 @@ coefficients(fit, node = 1, ci_width = 0.95)
 #> Estimates: 
 #>  
 #>  node post_mean post_sd   2.5%  97.5%
-#>     2    -0.279   0.021 -0.319 -0.237
-#>     3    -0.124   0.022 -0.167 -0.079
-#>     4    -0.015   0.020 -0.054  0.024
-#>     5    -0.018   0.022 -0.060  0.025
-#>     6     0.056   0.020  0.016  0.098
-#>     7     0.080   0.021  0.040  0.120
-#>     8     0.044   0.021  0.002  0.085
-#>     9     0.140   0.021  0.098  0.181
-#>    10    -0.028   0.022 -0.072  0.014
+#>     2    -0.278   0.021 -0.320 -0.239
+#>     3    -0.124   0.023 -0.168 -0.077
+#>     4    -0.015   0.020 -0.057  0.025
+#>     5    -0.018   0.021 -0.060  0.024
+#>     6     0.055   0.021  0.015  0.097
+#>     7     0.081   0.022  0.040  0.124
+#>     8     0.044   0.021  0.001  0.085
+#>     9     0.141   0.022  0.098  0.186
+#>    10    -0.028   0.021 -0.071  0.009
 #> ---
 ```
 
@@ -460,8 +460,8 @@ head(train_R2, nrow = 2)
 #> Estimates: 
 #> 
 #>  node post_mean    post_sd       2.5%     97.5%
-#>     1 0.1709186 0.06505820 0.05401086 0.3066594
-#>     2 0.2878316 0.06646025 0.16235077 0.4156734
+#>     1 0.1714614 0.06577017 0.04989841 0.2994917
+#>     2 0.2873757 0.06673547 0.15348418 0.4098200
 #> ---
 ```
 
@@ -516,16 +516,16 @@ summary(bayes_loo)
 #> Estimates: 
 #> 
 #>   node      loo   loo_se
-#>     1 2574.239 48.65020
-#>     2 2329.998 63.64437
-#>     3 2302.841 64.10787
-#>     4 2465.726 51.65270
-#>     5 2417.329 55.25862
-#>     6 2434.598 58.74663
-#>     7 2298.963 50.26813
-#>     8 2390.679 51.04925
-#>     9 2294.602 51.54272
-#>    10 2364.167 39.88373
+#>     1 2572.722 48.79408
+#>     2 2331.126 63.57257
+#>     3 2301.276 64.33105
+#>     4 2465.755 51.72610
+#>     5 2416.014 55.72272
+#>     6 2433.235 58.70367
+#>     7 2299.798 50.29568
+#>     8 2391.371 51.30994
+#>     9 2294.801 51.80863
+#>    10 2364.595 40.08308
 #> ---
 ```
 
@@ -636,7 +636,7 @@ summary(fit_bf)
 #> Call: 
 #> explore.default(X = Y, prior_sd = 0.5, iter = 5000, cores = 2)
 #> --- 
-#> Date: Thu May 16 15:21:35 2019
+#> Date: Thu May 16 15:43:43 2019
 ```
 
 Note `summary(.)`, or alternatively `print(.)`, provides information about the fitted model, including that hypothesis testing (exploratory) was used, the number of observations (*n*) and variables (*p*), and the number of edges. Delta (*δ*) is the hyperparameter of the matrix−*F* distribution. A value of 3 corresponds to `prior_sd = 0.5`. This output parallels the estimation based methods. Importantly, all fitted objects include specific (what method was used) and general information (e.g., *n* and *p*) when printed.
@@ -666,11 +666,11 @@ summary(E, hyp = "H1")
 #> Partial Correlations 
 #>  
 #>            1          2          3         4         5
-#> 1  0.0000000 -0.2400930 -0.1071745 0.0000000 0.0000000
-#> 2 -0.2400930  0.0000000  0.2862479 0.1649677 0.1561794
-#> 3 -0.1071745  0.2862479  0.0000000 0.1777465 0.3588276
-#> 4  0.0000000  0.1649677  0.1777465 0.0000000 0.1215594
-#> 5  0.0000000  0.1561794  0.3588276 0.1215594 0.0000000
+#> 1  0.0000000 -0.2401717 -0.1074126 0.0000000 0.0000000
+#> 2 -0.2401717  0.0000000  0.2861024 0.1652138 0.1564558
+#> 3 -0.1074126  0.2861024  0.0000000 0.1775314 0.3586115
+#> 4  0.0000000  0.1652138  0.1775314 0.0000000 0.1216954
+#> 5  0.0000000  0.1564558  0.3586115 0.1216954 0.0000000
 #> --- 
 #>  
 #> Adjancency (non-zero) 
@@ -704,16 +704,16 @@ summary(E, summarize = T, log = T, digits = 2)
 #> Estimates: 
 #>  
 #>   edge post_mean post_sd BF 10
-#>  1--2   -0.2401   0.018  81.1
-#>  1--3   -0.1072   0.019  12.0
-#>  2--3    0.2862   0.018 115.0
+#>  1--2   -0.2402   0.018  76.8
+#>  1--3   -0.1074   0.019  12.4
+#>  2--3    0.2861   0.017 116.8
 #>  1--4   -0.0075   0.019  -3.5
-#>  2--4    0.1650   0.019  34.2
-#>  3--4    0.1777   0.019  40.5
-#>  1--5   -0.0092   0.019  -3.5
-#>  2--5    0.1562   0.018  31.5
-#>  3--5    0.3588   0.017 187.1
-#>  4--5    0.1216   0.019  16.6
+#>  2--4    0.1652   0.019  33.9
+#>  3--4    0.1775   0.019  39.6
+#>  1--5   -0.0091   0.019  -3.4
+#>  2--5    0.1565   0.019  30.3
+#>  3--5    0.3586   0.017 190.4
+#>  4--5    0.1217   0.019  16.7
 #> --- 
 #> note: BF_10 is evidence in favor of H1
 ```
@@ -769,15 +769,12 @@ plt_pos
 ### Exhaustive Hypothesis Testing
 
 A defining feature of Bayesian hypothesis testing is the ability to assess which theoretical model best predicts the data at hand. However, in the absence of guiding theory, it is likely that a more exploratory approach is warranted. **BGGM** thus includes an exhaustive approach--i.e.,
-$$
-\\begin{align}
-    \\mathcal{H}\_0: \\rho\_{ij} &= 0 \\\\ \\nonumber
-    \\mathcal{H}\_1: \\rho\_{ij} &&gt; 0 \\\\ \\nonumber
-    \\mathcal{H}\_2: \\rho\_{ij} &&lt; 0, 
-\\end{align}
-$$
 
-which covers the entire parameter space. Further details can be found in Williams and Mulder (2019). The exhaustive approach is
+ℋ<sub>0</sub> : *ρ*<sub>*i**j*</sub> = 0
+ℋ<sub>1</sub> : *ρ*<sub>*i**j*</sub> &gt; 0
+ℋ<sub>2</sub> : *ρ*<sub>*i**j*</sub> &lt; 0
+
+which covers the entire parameter space. Further details can be found in Williams and Mulder (2019). The exhaustive approach is implemented with:
 
 ``` r
 # p = 10
@@ -811,11 +808,11 @@ head(E, summarize = T, nrow = 5)
 #> Estimates: 
 #>  
 #>   edge   post_mean    post_sd p(H0|Y) p(H1|Y) p(H2|Y)
-#>  1--2 -0.24385288 0.01818140   0.000   0.000   1.000
-#>  1--3 -0.10585729 0.01924094   0.000   0.000   1.000
-#>  2--3  0.28672102 0.01783417   0.000   1.000   0.000
-#>  1--4 -0.01459823 0.01953211   0.997   0.001   0.002
-#>  2--4  0.16005163 0.01888370   0.000   1.000   0.000
+#>  1--2 -0.24425932 0.01860670   0.000   0.000   1.000
+#>  1--3 -0.10574984 0.01917565   0.000   0.000   1.000
+#>  2--3  0.28615841 0.01779625   0.000   1.000   0.000
+#>  1--4 -0.01440605 0.01970697   0.997   0.001   0.002
+#>  2--4  0.16071284 0.01870740   0.000   1.000   0.000
 #> ---
 ```
 
