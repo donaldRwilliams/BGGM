@@ -770,7 +770,7 @@ plt_pos
 
 A defining feature of Bayesian hypothesis testing is the ability to assess which theoretical model best predicts the data at hand. However, in the absence of guiding theory, it is likely that a more exploratory approach is warranted. **BGGM** thus includes an exhaustive approach--i.e.,ℋ<sub>0</sub> : *ρ*<sub>*i**j*</sub> = 0 vs. ℋ<sub>1</sub> : *ρ*<sub>*i**j*</sub> &gt; 0 vs. ℋ<sub>2</sub> : *ρ*<sub>*i**j*</sub> &lt; 0.
 
-which covers the entire parameter space. Further details can be found in Williams and Mulder (2019). The exhaustive approach is implemented with:
+This covers the entire parameter space. Further details can be found in Williams and Mulder (2019). The exhaustive approach is implemented with:
 
 ``` r
 # p = 10
