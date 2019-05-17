@@ -1,9 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-BGGM: Bayesian Gaussian Graphical Models
-========================================
-
-This package includes methods introduced in Williams, Rast, Pericchi, and Mulder (2019), Williams and Mulder (2019), and Williams (2018). The package is built around two Bayesian approaches for inference: estimation and hypothesis testing.
+![](https://github.com/donaldRwilliams/BGGM/blob/master/man/figures/logo2.jpg) This package includes methods introduced in Williams, Rast, Pericchi, and Mulder (2019), Williams and Mulder (2019), and Williams (2018). The package is built around two Bayesian approaches for inference: estimation and hypothesis testing.
 
 The estimation based methods are described in Williams (2018). They offer advantages compared to classical methods, in that a measure of uncertainty is provided for all parameters. For example, each node has a distribution for variance explained (i.e., Bayesian *R*<sup>2</sup>). Measures of out-of-sample prediction error are available, which also have a measure of uncertainty. The model is selected with credible interval exclusion of zero or a region of practical equivalence. This allows for computing the posterior probability for an assumed *null* region--i.e., conditional independence. It is also possible to compare partial correlations.
 
@@ -108,7 +105,7 @@ summary(fit_analytic)
 #> Call: 
 #> estimate.default(x = Y, analytic = T)
 #> --- 
-#> Date: Thu May 16 20:46:50 2019
+#> Date: Thu May 16 20:51:48 2019
 ```
 
 Note `summary(.)` provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
@@ -176,16 +173,16 @@ summary(E, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd   2.5%  97.5%
-#>  1--2   -0.2400   0.018 -0.275 -0.205
-#>  1--3   -0.1075   0.019 -0.144 -0.071
-#>  2--3    0.2863   0.018  0.252  0.320
-#>  1--4   -0.0072   0.019 -0.044  0.029
-#>  2--4    0.1647   0.019  0.129  0.201
-#>  3--4    0.1779   0.019  0.142  0.215
-#>  1--5   -0.0089   0.019 -0.047  0.029
-#>  2--5    0.1564   0.019  0.119  0.192
-#>  3--5    0.3588   0.017  0.326  0.391
-#>  4--5    0.1210   0.019  0.084  0.158
+#>  1--2   -0.2404   0.018 -0.276 -0.205
+#>  1--3   -0.1074   0.019 -0.146 -0.070
+#>  2--3    0.2863   0.018  0.250  0.322
+#>  1--4   -0.0072   0.019 -0.044  0.030
+#>  2--4    0.1646   0.019  0.128  0.200
+#>  3--4    0.1778   0.018  0.141  0.214
+#>  1--5   -0.0094   0.019 -0.047  0.028
+#>  2--5    0.1565   0.019  0.121  0.194
+#>  3--5    0.3589   0.017  0.325  0.391
+#>  4--5    0.1215   0.019  0.084  0.158
 #> ---
 ```
 
@@ -278,15 +275,15 @@ head(E, nrow = 10, summarize = T, digits = 2)
 #>  
 #>  egde post_mean post_sd pr_out  pr_in
 #>  1--2    -0.244   0.018   1.00 0.0000
-#>  1--3    -0.106   0.019   0.63 0.3726
+#>  1--3    -0.105   0.019   0.62 0.3840
 #>  2--3     0.287   0.018   1.00 0.0000
-#>  1--4    -0.015   0.019   0.00 1.0000
-#>  2--4     0.160   0.019   1.00 0.0006
-#>  3--4     0.160   0.019   1.00 0.0008
-#>  1--5    -0.016   0.019   0.00 1.0000
-#>  2--5     0.145   0.019   0.99 0.0090
+#>  1--4    -0.014   0.020   0.00 1.0000
+#>  2--4     0.160   0.019   1.00 0.0010
+#>  3--4     0.161   0.019   1.00 0.0006
+#>  1--5    -0.016   0.020   0.00 1.0000
+#>  2--5     0.145   0.019   0.99 0.0104
 #>  3--5     0.354   0.017   1.00 0.0000
-#>  4--5     0.114   0.019   0.77 0.2268
+#>  4--5     0.114   0.019   0.76 0.2378
 #> ---
 ```
 
@@ -349,11 +346,11 @@ head(edge_difference, nrow = 5)
 #> Estimates: 
 #>  
 #>   contrast post_mean post_sd pr_out pr_in
-#>  1--2-1--3    -0.138   0.030  0.899 0.101
-#>  1--2-2--3    -0.531   0.023  1.000 0.000
-#>  1--2-1--4    -0.229   0.029  1.000 0.000
-#>  1--2-2--4    -0.404   0.026  1.000 0.000
-#>  1--2-3--4    -0.404   0.027  1.000 0.000
+#>  1--2-1--3    -0.139   0.031    0.9   0.1
+#>  1--2-2--3    -0.531   0.024    1.0   0.0
+#>  1--2-1--4    -0.230   0.029    1.0   0.0
+#>  1--2-2--4    -0.405   0.026    1.0   0.0
+#>  1--2-3--4    -0.405   0.027    1.0   0.0
 #> ---
 ```
 
@@ -413,15 +410,15 @@ coefficients(fit, node = 1, ci_width = 0.95)
 #> Estimates: 
 #>  
 #>  node post_mean post_sd   2.5%  97.5%
-#>     2    -0.279   0.021 -0.320 -0.238
-#>     3    -0.124   0.023 -0.168 -0.080
-#>     4    -0.015   0.020 -0.053  0.023
-#>     5    -0.018   0.022 -0.061  0.025
-#>     6     0.057   0.021  0.019  0.097
-#>     7     0.080   0.021  0.041  0.121
-#>     8     0.045   0.020  0.008  0.085
-#>     9     0.141   0.022  0.097  0.185
-#>    10    -0.028   0.022 -0.073  0.014
+#>     2    -0.277   0.022 -0.318 -0.234
+#>     3    -0.125   0.023 -0.173 -0.079
+#>     4    -0.015   0.020 -0.052  0.025
+#>     5    -0.017   0.022 -0.060  0.023
+#>     6     0.057   0.020  0.019  0.098
+#>     7     0.079   0.021  0.037  0.120
+#>     8     0.045   0.020  0.004  0.082
+#>     9     0.142   0.022  0.100  0.184
+#>    10    -0.028   0.021 -0.069  0.015
 #> ---
 ```
 
@@ -458,8 +455,8 @@ head(train_R2, nrow = 2)
 #> Estimates: 
 #> 
 #>  node post_mean    post_sd       2.5%     97.5%
-#>     1 0.1679804 0.06450531 0.05474795 0.2976700
-#>     2 0.2869622 0.06813807 0.14546291 0.4105672
+#>     1 0.1717871 0.06837291 0.04370271 0.3016798
+#>     2 0.2885568 0.06772075 0.14543435 0.4155935
 #> ---
 ```
 
@@ -514,16 +511,16 @@ summary(bayes_loo)
 #> Estimates: 
 #> 
 #>   node      loo   loo_se
-#>     1 2575.756 49.23737
-#>     2 2331.985 64.09128
-#>     3 2302.912 64.65597
-#>     4 2467.907 51.46033
-#>     5 2416.957 55.42401
-#>     6 2434.625 59.51693
-#>     7 2301.351 50.40049
-#>     8 2391.921 51.51267
-#>     9 2294.987 51.93578
-#>    10 2364.074 39.90943
+#>     1 2572.944 48.84184
+#>     2 2331.206 63.85614
+#>     3 2301.906 64.28532
+#>     4 2464.911 51.66478
+#>     5 2415.112 55.68145
+#>     6 2434.825 59.01729
+#>     7 2298.592 50.34482
+#>     8 2391.563 51.70422
+#>     9 2295.509 51.46434
+#>    10 2364.493 39.90095
 #> ---
 ```
 
@@ -634,7 +631,7 @@ summary(fit_bf)
 #> Call: 
 #> explore.default(X = Y, prior_sd = 0.5, iter = 5000, cores = 2)
 #> --- 
-#> Date: Thu May 16 20:47:17 2019
+#> Date: Thu May 16 20:52:15 2019
 ```
 
 Note `summary(.)`, or alternatively `print(.)`, provides information about the fitted model, including that hypothesis testing (exploratory) was used, the number of observations (*n*) and variables (*p*), and the number of edges. Delta (*δ*) is the hyperparameter of the matrix−*F* distribution. A value of 3 corresponds to `prior_sd = 0.5`. This output parallels the estimation based methods. Importantly, all fitted objects include specific (what method was used) and general information (e.g., *n* and *p*) when printed.
@@ -664,11 +661,11 @@ summary(E, hyp = "H1")
 #> Partial Correlations 
 #>  
 #>            1          2          3         4         5
-#> 1  0.0000000 -0.2398952 -0.1071753 0.0000000 0.0000000
-#> 2 -0.2398952  0.0000000  0.2861931 0.1649206 0.1563721
-#> 3 -0.1071753  0.2861931  0.0000000 0.1781230 0.3587902
-#> 4  0.0000000  0.1649206  0.1781230 0.0000000 0.1210981
-#> 5  0.0000000  0.1563721  0.3587902 0.1210981 0.0000000
+#> 1  0.0000000 -0.2405429 -0.1070275 0.0000000 0.0000000
+#> 2 -0.2405429  0.0000000  0.2866799 0.1641853 0.1563007
+#> 3 -0.1070275  0.2866799  0.0000000 0.1777945 0.3584203
+#> 4  0.0000000  0.1641853  0.1777945 0.0000000 0.1215327
+#> 5  0.0000000  0.1563007  0.3584203 0.1215327 0.0000000
 #> --- 
 #>  
 #> Adjancency (non-zero) 
@@ -702,16 +699,16 @@ summary(E, summarize = T, log = T, digits = 2)
 #> Estimates: 
 #>  
 #>   edge post_mean post_sd BF 10
-#>  1--2   -0.2399   0.018  76.3
-#>  1--3   -0.1072   0.019  12.3
-#>  2--3    0.2862   0.018 113.3
-#>  1--4   -0.0077   0.019  -3.5
-#>  2--4    0.1649   0.019  34.2
-#>  3--4    0.1781   0.019  40.0
-#>  1--5   -0.0089   0.019  -3.5
-#>  2--5    0.1564   0.019  29.9
-#>  3--5    0.3588   0.017 186.2
-#>  4--5    0.1211   0.019  16.4
+#>  1--2   -0.2405   0.018  77.6
+#>  1--3   -0.1070   0.019  11.9
+#>  2--3    0.2867   0.018 115.5
+#>  1--4   -0.0075   0.019  -3.5
+#>  2--4    0.1642   0.019  33.9
+#>  3--4    0.1778   0.019  39.5
+#>  1--5   -0.0093   0.019  -3.4
+#>  2--5    0.1563   0.019  29.1
+#>  3--5    0.3584   0.017 183.9
+#>  4--5    0.1215   0.019  16.7
 #> --- 
 #> note: BF_10 is evidence in favor of H1
 ```
@@ -801,12 +798,12 @@ head(E, summarize = T, nrow = 5)
 #> --- 
 #> Estimates: 
 #>  
-#>   edge   post_mean    post_sd p(H0|Y) p(H1|Y) p(H2|Y)
-#>  1--2 -0.24380595 0.01864338   0.000   0.000   1.000
-#>  1--3 -0.10588726 0.01932248   0.000   0.000   1.000
-#>  2--3  0.28624646 0.01789123   0.000   1.000   0.000
-#>  1--4 -0.01467042 0.01914440   0.997   0.001   0.002
-#>  2--4  0.16042850 0.01895235   0.000   1.000   0.000
+#>   edge  post_mean    post_sd p(H0|Y) p(H1|Y) p(H2|Y)
+#>  1--2 -0.2445903 0.01861305   0.000   0.000   1.000
+#>  1--3 -0.1056263 0.01920655   0.000   0.000   1.000
+#>  2--3  0.2867286 0.01797751   0.000   1.000   0.000
+#>  1--4 -0.0139859 0.01958790   0.997   0.001   0.002
+#>  2--4  0.1608487 0.01908118   0.000   1.000   0.000
 #> ---
 ```
 
