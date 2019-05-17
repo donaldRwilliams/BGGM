@@ -1,6 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-BGGM: Bayesian Gaussian Graphical Models
+![](https://github.com/donaldRwilliams/BGGM/blob/master/man/figures/logo2.jpg)
 ========================================
 
 This package includes methods introduced in Williams, Rast, Pericchi, and Mulder (2019), Williams and Mulder (2019), and Williams (2018). The package is built around two Bayesian approaches for inference: estimation and hypothesis testing.
