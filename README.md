@@ -108,7 +108,7 @@ summary(fit_analytic)
 #> Call: 
 #> estimate.default(x = Y, analytic = T)
 #> --- 
-#> Date: Thu May 16 15:55:23 2019
+#> Date: Thu May 16 19:40:30 2019
 ```
 
 Note `summary(.)` provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
@@ -176,16 +176,16 @@ summary(E, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd   2.5%  97.5%
-#>  1--2   -0.2401   0.018 -0.276 -0.204
-#>  1--3   -0.1077   0.019 -0.144 -0.071
-#>  2--3    0.2864   0.018  0.251  0.321
-#>  1--4   -0.0073   0.019 -0.045  0.030
-#>  2--4    0.1643   0.019  0.128  0.202
-#>  3--4    0.1775   0.019  0.141  0.214
-#>  1--5   -0.0088   0.019 -0.047  0.029
-#>  2--5    0.1565   0.019  0.120  0.193
-#>  3--5    0.3592   0.017  0.326  0.392
-#>  4--5    0.1216   0.019  0.084  0.159
+#>  1--2   -0.2406   0.018 -0.276 -0.205
+#>  1--3   -0.1074   0.019 -0.145 -0.070
+#>  2--3    0.2864   0.018  0.251  0.320
+#>  1--4   -0.0069   0.019 -0.044  0.032
+#>  2--4    0.1643   0.019  0.127  0.202
+#>  3--4    0.1781   0.019  0.141  0.214
+#>  1--5   -0.0085   0.019 -0.047  0.029
+#>  2--5    0.1571   0.019  0.121  0.193
+#>  3--5    0.3585   0.017  0.326  0.391
+#>  4--5    0.1212   0.019  0.084  0.158
 #> ---
 ```
 
@@ -211,7 +211,7 @@ plot_1A <- plot(fit_sampling,
 plot_1A
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
 
 This example nicely demonstrates how the `plot` objects can be further customized with **ggplot2**. There are two options for visualizing the selected graph. The heatmap plot is generated with:
 
@@ -228,7 +228,7 @@ plot_1B <- plot(E,
 plot_1B
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
 
 Here `lower_tri = TRUE` controls which partial correlations are plotted. In this case, only the lower triangular elements are included in the plot. This can be changed with `lower_tri = FALSE`.
 
@@ -246,7 +246,7 @@ plot_1C <- plot(E, type = "network",
 plot_1C
 ```
 
-<img src="man/figures/README-unnamed-chunk-7-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
 
 A key feature of **BGGM** is extending inference beyond identifying non-zero partial correlations. The region of practical equivalence can be used for this purpose, as it allows for determining which relations are practically zero. In this case, we follow Cohen’s guidelines, wherein 0.1 is considered a small effect.This is implemented with:
 
@@ -279,16 +279,16 @@ head(E, nrow = 10, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd pr_out  pr_in
-#>  1--2    -0.244   0.018   1.00 0.0000
-#>  1--3    -0.106   0.019   0.62 0.3780
-#>  2--3     0.286   0.018   1.00 0.0000
-#>  1--4    -0.015   0.019   0.00 1.0000
-#>  2--4     0.161   0.019   1.00 0.0006
-#>  3--4     0.160   0.019   1.00 0.0002
-#>  1--5    -0.015   0.020   0.00 1.0000
-#>  2--5     0.145   0.019   0.99 0.0090
-#>  3--5     0.355   0.017   1.00 0.0000
-#>  4--5     0.114   0.019   0.76 0.2350
+#>  1--2    -0.244   0.018 1.0000 0.0000
+#>  1--3    -0.106   0.020 0.6222 0.3778
+#>  2--3     0.287   0.018 1.0000 0.0000
+#>  1--4    -0.014   0.020 0.0000 1.0000
+#>  2--4     0.161   0.019 1.0000 0.0000
+#>  3--4     0.161   0.019 0.9990 0.0010
+#>  1--5    -0.016   0.020 0.0002 0.9998
+#>  2--5     0.145   0.019 0.9902 0.0098
+#>  3--5     0.354   0.017 1.0000 0.0000
+#>  4--5     0.114   0.019 0.7754 0.2246
 #> ---
 ```
 
@@ -312,7 +312,7 @@ plot_1D <- plts$plot_nonzero +
 plot_1D
 ```
 
-<img src="man/figures/README-unnamed-chunk-9-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
 
 ``` r
 # practically zero
@@ -323,7 +323,7 @@ plot_1E <- plts$plot_zero +
 plot_1E
 ```
 
-<img src="man/figures/README-unnamed-chunk-10-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
 
 We emphasize that GGMs are often thought to capture conditionally *independent* relations--i.e., evidence for the null hypothesis of no effect, conditional on the other variables in the model. However, the dominant approach assesses conditional *dependence* (*ρ*<sub>*i**j*</sub> ≠ 0), and then sets relations to zero otherwise. **BGGM** can explicitly answer the question of conditional independence.
 
@@ -351,7 +351,7 @@ head(edge_difference, nrow = 5)
 #> Estimates: 
 #>  
 #>   contrast post_mean post_sd pr_out pr_in
-#>  1--2-1--3    -0.138   0.030  0.902 0.098
+#>  1--2-1--3    -0.138   0.030  0.888 0.112
 #>  1--2-2--3    -0.531   0.024  1.000 0.000
 #>  1--2-1--4    -0.230   0.029  1.000 0.000
 #>  1--2-2--4    -0.405   0.026  1.000 0.000
@@ -374,7 +374,7 @@ plot_2A <- plot_diff$plt_nonzero +
 plot_2A
 ```
 
-<img src="man/figures/README-unnamed-chunk-12-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-12-1.png" style="display: block; margin: auto;" />
 
 ``` r
 # practically equivalent
@@ -386,7 +386,7 @@ plot_2B <- plot_diff$plt_zero +
 plot_2B
 ```
 
-<img src="man/figures/README-unnamed-chunk-13-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-13-1.png" style="display: block; margin: auto;" />
 
 This shows the central idea behind the region of practical equivalence, which is highlighted in grey. Ideally only a few contrasts would be examined in light of a guiding theory. To this end, the option `contrast = "all"` may be removed altogether from **BGGM**.
 
@@ -415,15 +415,15 @@ coefficients(fit, node = 1, ci_width = 0.95)
 #> Estimates: 
 #>  
 #>  node post_mean post_sd   2.5%  97.5%
-#>     2    -0.278   0.021 -0.323 -0.238
-#>     3    -0.123   0.022 -0.165 -0.077
-#>     4    -0.016   0.021 -0.056  0.026
-#>     5    -0.018   0.022 -0.062  0.027
-#>     6     0.055   0.021  0.015  0.098
-#>     7     0.082   0.021  0.040  0.123
-#>     8     0.044   0.021 -0.001  0.086
-#>     9     0.142   0.022  0.097  0.183
-#>    10    -0.028   0.022 -0.069  0.015
+#>     2    -0.278   0.022 -0.320 -0.236
+#>     3    -0.124   0.023 -0.170 -0.079
+#>     4    -0.015   0.021 -0.055  0.024
+#>     5    -0.018   0.020 -0.057  0.020
+#>     6     0.057   0.020  0.019  0.096
+#>     7     0.080   0.022  0.038  0.123
+#>     8     0.044   0.020  0.006  0.083
+#>     9     0.142   0.021  0.099  0.183
+#>    10    -0.029   0.021 -0.073  0.010
 #> ---
 ```
 
@@ -460,8 +460,8 @@ head(train_R2, nrow = 2)
 #> Estimates: 
 #> 
 #>  node post_mean    post_sd       2.5%     97.5%
-#>     1 0.1705914 0.06613757 0.04976786 0.3018362
-#>     2 0.2890002 0.06951521 0.14891387 0.4117084
+#>     1 0.1674191 0.06617027 0.05148899 0.2978007
+#>     2 0.2899875 0.06536641 0.15943240 0.4097267
 #> ---
 ```
 
@@ -486,7 +486,7 @@ plt_3A <- plot(x1 = train_R2, x2 =  test_R2, order = "test")
 plt_3A
 ```
 
-<img src="man/figures/README-unnamed-chunk-17-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-17-1.png" style="display: block; margin: auto;" />
 
 Here the nodes have been ordered by which has the best out-of-sample performance. It is also possible to have each in a separate plot by leaving `x2` empty. The `predict` object can be used to assess differences in predictive accuracy with compare(.). **BGGM** also includes mean squared error (`measure = "mse"`).
 
@@ -516,16 +516,16 @@ summary(bayes_loo)
 #> Estimates: 
 #> 
 #>   node      loo   loo_se
-#>     1 2574.141 49.10713
-#>     2 2330.519 63.65018
-#>     3 2303.372 63.80631
-#>     4 2463.214 51.43944
-#>     5 2416.119 55.45273
-#>     6 2434.526 59.00896
-#>     7 2300.228 49.96724
-#>     8 2390.794 51.54103
-#>     9 2295.128 51.56879
-#>    10 2364.326 39.40372
+#>     1 2574.208 49.05174
+#>     2 2330.789 64.14482
+#>     3 2302.495 64.56701
+#>     4 2464.380 51.98719
+#>     5 2417.587 55.74834
+#>     6 2434.012 58.78627
+#>     7 2299.851 50.22060
+#>     8 2391.741 51.64381
+#>     9 2295.157 51.59543
+#>    10 2365.048 39.82449
 #> ---
 ```
 
@@ -540,7 +540,7 @@ plt_3B <- plot(bayes_loo, size = 8) +
 plt_3B
 ```
 
-<img src="man/figures/README-unnamed-chunk-19-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-19-1.png" style="display: block; margin: auto;" />
 
 Similarly, by setting `analytic = T`, leave-one-out prediction error can be computed analytically. This is implemented with:
 
@@ -564,7 +564,7 @@ plt_3C <- plot(press_loo, size = 8) +
 plt_3C
 ```
 
-<img src="man/figures/README-unnamed-chunk-20-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-20-1.png" style="display: block; margin: auto;" />
 
 This highlights the difference between the leave-one-out methods, in that the Bayesian version has a measure of uncertainty (although the order is the same). For both measures of predictive *error*, a lower value indicates a more predictable node (variable).
 
@@ -592,7 +592,7 @@ plt_4A <- hypothesis_plot(rho_sd = rho_sd) +
 plt_4A
 ```
 
-<img src="man/figures/README-unnamed-chunk-21-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-21-1.png" style="display: block; margin: auto;" />
 
 `rho_sd = c(.)` defines a couple (prospective) values for the hypothesized standard deviation of the partial correlations. Further, **BGGM** allows for testing edge differences with the Bayes factor. Accordingly, the *implied* prior distribution for the difference can also be visualized. This is implemented with:
 
@@ -609,7 +609,7 @@ plt_4B <- hypothesis_plot(rho_sd = rho_sd,
 plt_4B
 ```
 
-<img src="man/figures/README-unnamed-chunk-22-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-22-1.png" style="display: block; margin: auto;" />
 
 ### Two-Sided Testing
 
@@ -636,7 +636,7 @@ summary(fit_bf)
 #> Call: 
 #> explore.default(X = Y, prior_sd = 0.5, iter = 5000, cores = 2)
 #> --- 
-#> Date: Thu May 16 15:55:52 2019
+#> Date: Thu May 16 19:40:58 2019
 ```
 
 Note `summary(.)`, or alternatively `print(.)`, provides information about the fitted model, including that hypothesis testing (exploratory) was used, the number of observations (*n*) and variables (*p*), and the number of edges. Delta (*δ*) is the hyperparameter of the matrix−*F* distribution. A value of 3 corresponds to `prior_sd = 0.5`. This output parallels the estimation based methods. Importantly, all fitted objects include specific (what method was used) and general information (e.g., *n* and *p*) when printed.
@@ -666,11 +666,11 @@ summary(E, hyp = "H1")
 #> Partial Correlations 
 #>  
 #>            1          2          3         4         5
-#> 1  0.0000000 -0.2403880 -0.1071266 0.0000000 0.0000000
-#> 2 -0.2403880  0.0000000  0.2867236 0.1644017 0.1566400
-#> 3 -0.1071266  0.2867236  0.0000000 0.1779555 0.3586125
-#> 4  0.0000000  0.1644017  0.1779555 0.0000000 0.1212713
-#> 5  0.0000000  0.1566400  0.3586125 0.1212713 0.0000000
+#> 1  0.0000000 -0.2402667 -0.1073392 0.0000000 0.0000000
+#> 2 -0.2402667  0.0000000  0.2860460 0.1643097 0.1563898
+#> 3 -0.1073392  0.2860460  0.0000000 0.1783472 0.3588642
+#> 4  0.0000000  0.1643097  0.1783472 0.0000000 0.1212199
+#> 5  0.0000000  0.1563898  0.3588642 0.1212199 0.0000000
 #> --- 
 #>  
 #> Adjancency (non-zero) 
@@ -704,16 +704,16 @@ summary(E, summarize = T, log = T, digits = 2)
 #> Estimates: 
 #>  
 #>   edge post_mean post_sd BF 10
-#>  1--2   -0.2404   0.018  76.9
-#>  1--3   -0.1071   0.019  12.5
-#>  2--3    0.2867   0.018 113.7
+#>  1--2   -0.2403   0.018  75.5
+#>  1--3   -0.1073   0.019  12.3
+#>  2--3    0.2860   0.018 111.4
 #>  1--4   -0.0072   0.019  -3.5
-#>  2--4    0.1644   0.019  33.7
-#>  3--4    0.1780   0.019  40.0
-#>  1--5   -0.0088   0.019  -3.4
-#>  2--5    0.1566   0.019  31.0
-#>  3--5    0.3586   0.017 188.1
-#>  4--5    0.1213   0.019  16.6
+#>  2--4    0.1643   0.018  34.9
+#>  3--4    0.1783   0.019  39.6
+#>  1--5   -0.0092   0.019  -3.5
+#>  2--5    0.1564   0.019  30.1
+#>  3--5    0.3589   0.017 183.9
+#>  4--5    0.1212   0.019  16.8
 #> --- 
 #> note: BF_10 is evidence in favor of H1
 ```
@@ -732,7 +732,7 @@ plt_4C <- hypothesis_plot(fit = fit_bf,
 plt_4C
 ```
 
-<img src="man/figures/README-unnamed-chunk-26-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-26-1.png" style="display: block; margin: auto;" />
 
 Here it can be seen that the Bayes factor is the ratio of density evaluated at 0. In this case, there is evidence for ℋ<sub>0</sub> (*B**F*<sub>01</sub> ≈ 33). This plotting option may be useful for understanding (and describing) the Bayes factor approach for selecting the graph (or more generally the testing strategy for partial correlations).
 
@@ -762,7 +762,7 @@ plt_pos <- plt_pos$plot_nonzero +
 plt_pos
 ```
 
-<img src="man/figures/README-unnamed-chunk-27-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-27-1.png" style="display: block; margin: auto;" />
 
 ℋ<sub>1</sub> : *ρ*<sub>*i**j*</sub> &lt; 0 can be tested by changing `alternative = greater` to `alternative = less`.
 
@@ -804,43 +804,25 @@ head(E, summarize = T, nrow = 5)
 #> Estimates: 
 #>  
 #>   edge   post_mean    post_sd p(H0|Y) p(H1|Y) p(H2|Y)
-#>  1--2 -0.24458090 0.01851326   0.000   0.000   1.000
-#>  1--3 -0.10506046 0.01915788   0.000   0.000   1.000
-#>  2--3  0.28688365 0.01756026   0.000   1.000   0.000
-#>  1--4 -0.01433754 0.01939895   0.997   0.001   0.002
-#>  2--4  0.16034385 0.01868939   0.000   1.000   0.000
+#>  1--2 -0.24406096 0.01864615   0.000   0.000   1.000
+#>  1--3 -0.10572131 0.01920342   0.000   0.000   1.000
+#>  2--3  0.28635116 0.01784996   0.000   1.000   0.000
+#>  1--4 -0.01500257 0.01995342   0.997   0.001   0.002
+#>  2--4  0.16048251 0.01895785   0.000   1.000   0.000
 #> ---
 ```
 
 The ratio of posterior probabilities, e.g., *p*(ℋ<sub>1</sub>|**Y**)/*p*(ℋ<sub>2</sub>|**Y**), can then be used to compute a Bayes factor if desired. `hyp_prob = 0.90` is the decision rule for concluding there is evidence for a given hypothesis. This can the be plotted with:
 
 ``` r
+# plots
 plts <- plot(E, type = "network")
 
-# p(H0 | Y) > 0.90
-plts$plot_H0 +
-  ggtitle(expression("p"*"("*H[0]*"| Y)") )
+# combine
+cowplot::plot_grid(plts$plot_H0, plts$plot_H1, plts$plot_H2, nrow = 1)
 ```
 
-<img src="man/figures/README-unnamed-chunk-29-1.png" width="60%" style="display: block; margin: auto;" />
-
-``` r
-
-# p(H1 | Y) > 0.90
-plts$plot_H1 +
-  ggtitle(expression("p"*"("*H[1]*"| Y)") )
-```
-
-<img src="man/figures/README-unnamed-chunk-29-2.png" width="60%" style="display: block; margin: auto;" />
-
-``` r
-
-# p(H2 | Y) > 0.90
-plts$plot_H2 +
-  ggtitle(expression("p"*"("*H[2]*"| Y)") )
-```
-
-<img src="man/figures/README-unnamed-chunk-29-3.png" width="60%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-29-1.png" style="display: block; margin: auto;" />
 
 Comparing GGMs
 ==============

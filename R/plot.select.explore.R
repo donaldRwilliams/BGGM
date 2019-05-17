@@ -480,7 +480,8 @@ plot.select.explore <- function(x, type,
                                 mat_type = "partials",
                                 node_outer = node_outer,
                                 node_inner = node_inner,
-                                node_text_size = node_text_size)
+                                node_text_size = node_text_size) +
+          ggtitle( bquote("   p("~H[1]~"|"~bold(Y)~")" >= .(x$prob)))
       }
 
       if(sum(x$neg_mat[upper.tri(x$neg_mat)]) == 0){
@@ -493,7 +494,8 @@ plot.select.explore <- function(x, type,
                                 mat_type = "partials",
                                 node_outer = node_outer,
                                 node_inner = node_inner,
-                                node_text_size = node_text_size)
+                                node_text_size = node_text_size) +
+          ggtitle(bquote("   p("~H[2]~"|"~bold(Y)~")" >= .(x$prob)))
       }
 
       adj_zero <- ifelse(x$null_mat > x$prob, 1, 0)
@@ -507,7 +509,8 @@ plot.select.explore <- function(x, type,
                                  mat_type = "adj",
                                  node_outer = node_outer,
                                  node_inner = node_inner,
-                                 node_text_size = node_text_size)
+                                 node_text_size = node_text_size) +
+          ggtitle( bquote("   p("~H[0]~"|"~bold(Y)~")" >= .(x$prob)))
       }
       plt <- list(plot_H1 = plt1, plot_H2 = plt2, plot_H0 = plt3)
     }

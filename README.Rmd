@@ -11,9 +11,9 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   dev = "png",
   dpi = 500,
-  fig.asp = 0.8,
-  fig.width = 7,
-  out.width = "60%",
+  # fig.asp = 0.8,
+  # fig.width = 7,
+  # out.width = "60%",
   fig.align = "center"
 )
 ```
@@ -476,7 +476,7 @@ Here it can be seen that the Bayes factor is the ratio of density evaluated at 0
 
 ### One-Sided Testing
 One-sided hypothesis testing is implemented with:
-```{r, warning=F, message=F, fig.height=3, fig.width=7}
+```{r, warning=F, message=F, fig.height=5, fig.width=5}
 # p =  10
 Y <- BGGM::bfi[,1:10]
 
@@ -523,20 +523,13 @@ head(E, summarize = T, nrow = 5)
 
 The ratio of posterior probabilities, e.g., $p(\mathcal{H}_1|\textbf{Y}) / p(\mathcal{H}_2|\textbf{Y})$, can then be used to compute a Bayes factor if desired. `hyp_prob = 0.90` is the decision rule for concluding there is evidence for a given hypothesis. This can the be plotted with:
 
-```{r, warning=F, message=F}
+```{r, warning=F, message=F, fig.width=10, fig.height=3.5}
+# plots
 plts <- plot(E, type = "network")
 
-# p(H0 | Y) > 0.90
-plts$plot_H0 +
-  ggtitle(expression("p"*"("*H[0]*"| Y)") )
+# combine
+cowplot::plot_grid(plts$plot_H0, plts$plot_H1, plts$plot_H2, nrow = 1)
 
-# p(H1 | Y) > 0.90
-plts$plot_H1 +
-  ggtitle(expression("p"*"("*H[1]*"| Y)") )
-
-# p(H2 | Y) > 0.90
-plts$plot_H2 +
-  ggtitle(expression("p"*"("*H[2]*"| Y)") )
 ```
 
 
