@@ -144,7 +144,7 @@ Note that `edge` corresponds to that particular entry in the partial correlation
 
 **BGGM** provides several options for plotting, with each implemented as a S3 generic. For example, the partial correlations can be plotted with:
 
-```{r message=F}
+```{r message=F, fig.height=3, fig.width=8}
 # p = 10
 Y <- BGGM::bfi[,1:10]
 
@@ -174,13 +174,14 @@ plot_1B <- plot(E,
                 lower_tri = TRUE) +
            ggtitle("Heatmap Plot") + 
            theme(plot.title = element_text(size = 15))
-plot_1B
+
+
 ```
 
 Here `lower_tri = TRUE` controls which partial correlations are plotted.  In this case, only the lower triangular elements are included in the plot. This can be changed with `lower_tri = FALSE`.
 
 On the other hand, a “network” plot can be obtained with:
-```{r, warning=F}
+```{r, warning=F,  fig.width=10, fig.height=4}
 # network plot
 plot_1C <- plot(E, type = "network",
                 layout ='circle',
@@ -189,7 +190,8 @@ plot_1C <- plot(E, type = "network",
                 node_text_size = 4) +
            ggtitle("Network Plot") +
            theme(plot.title = element_text(size = 15))
-plot_1C
+
+cowplot::plot_grid(plot_1B, plot_1C)
 ```
 
 
@@ -213,7 +215,7 @@ The argument `prob = 0.95` requires that 95 % of the posterior density be in or 
 
 In this case, `plot(.)` returns two objects:  (1) the selected edges; (2) those for which there is support for the null values.  This is implemented with:
 
-```{r warning = F }
+```{r warning = F , out.width = '50%'}
 # network plot
 plts <- plot(E, type = "network",
              layout ='circle',
@@ -229,7 +231,7 @@ plot_1D <- plts$plot_nonzero +
 plot_1D
 ```
 
-```{r, warning=F}
+```{r, warning=F, out.width = '50%'}
 # practically zero
 plot_1E <- plts$plot_zero +
               ggtitle("Practically Zero") +
@@ -256,7 +258,7 @@ head(edge_difference, nrow = 5)
 This  output  includes  the  posterior  mean  and  standard  deviation  for  each  difference. Further, `pr_in` is  the  proportion  of  samples  between ($\pm$) 0.1.   This  can  be interpreted as the posterior probability of practical equivalence, which has been defined with the argument `rope = 0.1`.  Further, this powerful function can be used to assess specific contrasts.  This can be accomplished, for example, with 5--1 - 6--10.  Note that care must be taken when specifying the contrasts, as an error will arise if they are not in the proper format.
 
 The object `edge_difference` can the be plotted with:
-```{r}
+```{r, out.width = '75%'}
 # plot contrasts
 plot_diff <- plot(edge_difference, prob = .99)
 
@@ -266,7 +268,7 @@ plot_2A <- plot_diff$plt_nonzero +
            theme(axis.text.y = element_blank())
 plot_2A
 ```
-```{r}
+```{r, out.width = '75%'}
 # practically equivalent
 plot_2B <- plot_diff$plt_zero +
   scale_y_continuous(limits = c(-0.4, 0.4)) +
@@ -330,7 +332,7 @@ test_R2 <- predict(fit_train, ci_width = 0.90,
 
 The work flow is completed by visualizing Bayesian $R^2$ for each node–i.e.,
 
-```{r}
+```{r, out.width = '75%'}
 # prior training and test error in the same plot
 plt_3A <- plot(x1 = train_R2, x2 =  test_R2, order = "test")
 
@@ -359,7 +361,7 @@ summary(bayes_loo)
 ```
 
 The results are plotted with:
-```{r}
+```{r, out.width = '75%'}
 # plot CV error
 plt_3B <- plot(bayes_loo, size = 8) +
           theme_classic() +
@@ -370,7 +372,7 @@ plt_3B
 
 Similarly,  by  setting `analytic = T`,  leave-one-out  prediction  error  can  be  computed analytically.  This is implemented with:
 
-```{r}
+```{r, out.width = '75%'}
 # p = 10
 Y <- BGGM::bfi[1:1000,1:10]
 
@@ -399,7 +401,7 @@ The following methods were introduced in Williams and Mulder (2019). That work n
 ### Visualizing Scientific Expectations
 For Bayesian hypothesis testing in particular, it is important to *fully* understand the prior distribution $\mathcal{H}_u$. This is because it captures the predicted effect size, and it is used to compute the Bayes factor. This stands in contrast to the above estimation based methods, where $E$ is determined with respect to (only) the posterior distribution. To this end, **BGGM** includes functions to visualize the prior distribution or prediction--i.e.,
 
-```{r}
+```{r,  out.width = '50%'}
 # define (potentially) hypothesized standard deviations for rho_ij
 rho_sd <- c(0.1, 0.25, 0.5)
 
@@ -414,7 +416,7 @@ plt_4A
 `rho_sd = c(.)` defines a couple (prospective) values for the hypothesized standard deviation of the partial correlations. Further, **BGGM** allows for testing edge differences with the Bayes factor. Accordingly, the *implied* prior distribution for the difference can also be visualized. This is implemented with:
 
 
-```{r}
+```{r,  out.width = '50%'}
 # define (potentially) hypothesized standard deviations for rho_ij
 rho_sd <- c(0.1, 0.25, 0.5)
 
@@ -460,7 +462,7 @@ summary(E, summarize = T, log = T, digits = 2)
 The option `log = TRUE` controls the scale of the Bayes factor. Note that the same plotting options available for these methods. They have the same implementation as the estimation based methods, and thus the `alternative = two.sided` plot is not shown here. It is also possible to plot $\mathcal{H}_u$ and a selected posterior distribution. This visualizes how the Bayes factor is computed--i.e.,
 
 
-```{r}
+```{r,  out.width = '50%'}
 plt_4C <- hypothesis_plot(fit = fit_bf, 
                 edge = "1--4", size = 3) +
         theme(panel.grid.minor = element_blank(),
@@ -476,7 +478,7 @@ Here it can be seen that the Bayes factor is the ratio of density evaluated at 0
 
 ### One-Sided Testing
 One-sided hypothesis testing is implemented with:
-```{r, warning=F, message=F, fig.height=5, fig.width=5}
+```{r, warning=F, message=F, out.width = '50%'}
 # p =  10
 Y <- BGGM::bfi[,1:10]
 
