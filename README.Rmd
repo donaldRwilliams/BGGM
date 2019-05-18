@@ -67,7 +67,7 @@ This README is organized as follows:
         
         - [Exhaustive Hypothesis Testing](https://github.com/donaldRwilliams/BGGM#exhaustive-hypothesis-testing)
     
-    + Edge Differences (Hypothesis Testing)(https://github.com/donaldRwilliams/BGGM#edge-differences-hypothesis-testing)
+    + [Edge Differences (Hypothesis Testing)](https://github.com/donaldRwilliams/BGGM#edge-differences-hypothesis-testing)
     
     + Confirmatory Hypothesis Testing
       
@@ -541,7 +541,7 @@ cowplot::plot_grid(plts$plot_H0, plts$plot_H1, plts$plot_H2, nrow = 1)
 
 
 
-```{r}
+```{r, out.height= "350 %"}
 # p = 10
 Y <- BGGM::bfi[,1:10]
 
@@ -563,9 +563,9 @@ summary(edge_comp)
 
 There are two plotting options for the returned object `edge_comp`. The first is ideal if few contrasts are tested--i.e.,
 
-```{r }
+```{r, out.height= "350 %"}
 # plot
-plt <- plot.edge_compare.explore(edge_comp, stack = F, spread = .75)
+plt <- plot(edge_comp, stack = F, spread = .75)
 
 # one contrast
 plt$`1--5 - 1--3`
@@ -573,9 +573,9 @@ plt$`1--5 - 1--3`
 
 The object `plt` includes a sepearte plot for each contrast. On the other hand, in the case of many contrasts, it is also possible to visualize each with a stacked bar chart--i.e.,
 
-```{r}
+```{r, out.height= "350 %"}
 # plot
-plt <- plot.edge_compare.explore(edge_comp, stack = T, spread = .75)
+plt <- plot(edge_comp, stack = T, spread = .75)
 
 # stacked
 plt
