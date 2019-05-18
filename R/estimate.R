@@ -86,7 +86,7 @@ estimate.default  <- function(x, samples = 5000, analytic = FALSE, ...){
   } else{
 
 
-    fit <-  analytic_solve(X)
+    fit <-  BGGM:::analytic_solve(X)
 
     returned_object <- list(fit = fit, analytic = analytic, call = match.call(), data = X, p = ncol(X))
 

@@ -24,5 +24,29 @@
 \item{node_text_size}{node text size}
 }
 \description{
-Plot Exploratory (hypothesis testing) Based Graphs
+Allows for plotting graphs selected wtih Bayesian hypothesis testing. Options include a heatmap or network plot.
+The conditional independence and dependence structure are visualized in seperate plots.
+}
+\examples{
+
+# p =  10
+Y <- BGGM::bfi[,1:10]
+
+# sample from posterior
+fit_bf <- explore(Y, prior_sd = 0.5,
+                 iter = 5000,
+                 cores = 2)
+
+# rho > 0
+E_pos <- select(fit_bf,
+               BF_cut = 3,
+               alternative = "greater")
+
+# positive plot
+plt_pos <- plot(E_pos, type = "network")
+plt_pos <- plt_pos$plot_nonzero +
+ggtitle(expression(atop(H[0]: rho[i][j]*" = "*0, H[1]: rho[i][j]*" > "*0)))
+
+plt_pos
+
 }

@@ -1,6 +1,8 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-![](https://github.com/donaldRwilliams/BGGM/blob/master/man/figures/logo2.jpg) This package includes methods introduced in Williams, Rast, Pericchi, and Mulder (2019), Williams and Mulder (2019), and Williams (2018). The package is built around two Bayesian approaches for inference: estimation and hypothesis testing.
+![](https://github.com/donaldRwilliams/BGGM/blob/master/man/figures/logo2.jpg)
+
+This package includes methods introduced in Williams, Rast, Pericchi, and Mulder (2019), Williams and Mulder (2019), and Williams (2018). The package is built around two Bayesian approaches for inference: estimation and hypothesis testing.
 
 The estimation based methods are described in Williams (2018). They offer advantages compared to classical methods, in that a measure of uncertainty is provided for all parameters. For example, each node has a distribution for variance explained (i.e., Bayesian *R*<sup>2</sup>). Measures of out-of-sample prediction error are available, which also have a measure of uncertainty. The model is selected with credible interval exclusion of zero or a region of practical equivalence. This allows for computing the posterior probability for an assumed *null* region--i.e., conditional independence. It is also possible to compare partial correlations.
 
@@ -25,7 +27,7 @@ This README is organized as follows:
 
     -   [Structure Learning (Estimation)](https://github.com/donaldRwilliams/BGGM#structure-learning-estimation)
 
-    -   [Edge (partial correlation) Differences](https://github.com/donaldRwilliams/BGGM#edge-differences)
+    -   [Edge Differences (Estimation)](https://github.com/donaldRwilliams/BGGM#edge-differences)
 
     -   [Prediction](https://github.com/donaldRwilliams/BGGM#prediction)
 
@@ -44,6 +46,8 @@ This README is organized as follows:
         -   [One-Sided Hypothesis Testing](https://github.com/donaldRwilliams/BGGM#one-sided-testing)
 
         -   [Exhaustive Hypothesis Testing](https://github.com/donaldRwilliams/BGGM#exhaustive-hypothesis-testing)
+
+    -   Edge Differences (Hypothesis Testing)(<https://github.com/donaldRwilliams/BGGM#edge-differences-hypothesis-testing>)
 
     -   Confirmatory Hypothesis Testing
 
@@ -105,7 +109,7 @@ summary(fit_analytic)
 #> Call: 
 #> estimate.default(x = Y, analytic = T)
 #> --- 
-#> Date: Thu May 16 20:51:48 2019
+#> Date: Sat May 18 09:07:14 2019
 ```
 
 Note `summary(.)` provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
@@ -173,16 +177,16 @@ summary(E, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd   2.5%  97.5%
-#>  1--2   -0.2404   0.018 -0.276 -0.205
-#>  1--3   -0.1074   0.019 -0.146 -0.070
-#>  2--3    0.2863   0.018  0.250  0.322
-#>  1--4   -0.0072   0.019 -0.044  0.030
-#>  2--4    0.1646   0.019  0.128  0.200
-#>  3--4    0.1778   0.018  0.141  0.214
-#>  1--5   -0.0094   0.019 -0.047  0.028
-#>  2--5    0.1565   0.019  0.121  0.194
-#>  3--5    0.3589   0.017  0.325  0.391
-#>  4--5    0.1215   0.019  0.084  0.158
+#>  1--2   -0.2406   0.018 -0.274 -0.205
+#>  1--3   -0.1074   0.019 -0.144 -0.071
+#>  2--3    0.2862   0.018  0.252  0.322
+#>  1--4   -0.0072   0.019 -0.045  0.031
+#>  2--4    0.1647   0.019  0.127  0.202
+#>  3--4    0.1779   0.018  0.143  0.214
+#>  1--5   -0.0093   0.019 -0.046  0.028
+#>  2--5    0.1559   0.019  0.119  0.191
+#>  3--5    0.3589   0.017  0.326  0.391
+#>  4--5    0.1214   0.019  0.083  0.158
 #> ---
 ```
 
@@ -275,15 +279,15 @@ head(E, nrow = 10, summarize = T, digits = 2)
 #>  
 #>  egde post_mean post_sd pr_out  pr_in
 #>  1--2    -0.244   0.018   1.00 0.0000
-#>  1--3    -0.105   0.019   0.62 0.3840
+#>  1--3    -0.106   0.019   0.61 0.3862
 #>  2--3     0.287   0.018   1.00 0.0000
-#>  1--4    -0.014   0.020   0.00 1.0000
-#>  2--4     0.160   0.019   1.00 0.0010
-#>  3--4     0.161   0.019   1.00 0.0006
+#>  1--4    -0.015   0.020   0.00 1.0000
+#>  2--4     0.161   0.019   1.00 0.0008
+#>  3--4     0.160   0.019   1.00 0.0008
 #>  1--5    -0.016   0.020   0.00 1.0000
-#>  2--5     0.145   0.019   0.99 0.0104
+#>  2--5     0.145   0.019   0.99 0.0106
 #>  3--5     0.354   0.017   1.00 0.0000
-#>  4--5     0.114   0.019   0.76 0.2378
+#>  4--5     0.114   0.019   0.77 0.2324
 #> ---
 ```
 
@@ -346,11 +350,11 @@ head(edge_difference, nrow = 5)
 #> Estimates: 
 #>  
 #>   contrast post_mean post_sd pr_out pr_in
-#>  1--2-1--3    -0.139   0.031    0.9   0.1
-#>  1--2-2--3    -0.531   0.024    1.0   0.0
-#>  1--2-1--4    -0.230   0.029    1.0   0.0
-#>  1--2-2--4    -0.405   0.026    1.0   0.0
-#>  1--2-3--4    -0.405   0.027    1.0   0.0
+#>  1--2-1--3    -0.138   0.031  0.894 0.106
+#>  1--2-2--3    -0.530   0.024  1.000 0.000
+#>  1--2-1--4    -0.229   0.029  1.000 0.000
+#>  1--2-2--4    -0.405   0.026  1.000 0.000
+#>  1--2-3--4    -0.404   0.027  1.000 0.000
 #> ---
 ```
 
@@ -410,15 +414,15 @@ coefficients(fit, node = 1, ci_width = 0.95)
 #> Estimates: 
 #>  
 #>  node post_mean post_sd   2.5%  97.5%
-#>     2    -0.277   0.022 -0.318 -0.234
-#>     3    -0.125   0.023 -0.173 -0.079
-#>     4    -0.015   0.020 -0.052  0.025
-#>     5    -0.017   0.022 -0.060  0.023
-#>     6     0.057   0.020  0.019  0.098
-#>     7     0.079   0.021  0.037  0.120
-#>     8     0.045   0.020  0.004  0.082
-#>     9     0.142   0.022  0.100  0.184
-#>    10    -0.028   0.021 -0.069  0.015
+#>     2    -0.279   0.022 -0.325 -0.237
+#>     3    -0.124   0.023 -0.169 -0.080
+#>     4    -0.015   0.021 -0.056  0.024
+#>     5    -0.017   0.021 -0.058  0.024
+#>     6     0.056   0.021  0.016  0.097
+#>     7     0.080   0.022  0.039  0.122
+#>     8     0.044   0.021  0.006  0.085
+#>     9     0.141   0.022  0.096  0.185
+#>    10    -0.028   0.021 -0.068  0.013
 #> ---
 ```
 
@@ -455,8 +459,8 @@ head(train_R2, nrow = 2)
 #> Estimates: 
 #> 
 #>  node post_mean    post_sd       2.5%     97.5%
-#>     1 0.1717871 0.06837291 0.04370271 0.3016798
-#>     2 0.2885568 0.06772075 0.14543435 0.4155935
+#>     1 0.1689264 0.06561179 0.05553025 0.3057697
+#>     2 0.2854480 0.06587381 0.15197974 0.4118365
 #> ---
 ```
 
@@ -511,16 +515,16 @@ summary(bayes_loo)
 #> Estimates: 
 #> 
 #>   node      loo   loo_se
-#>     1 2572.944 48.84184
-#>     2 2331.206 63.85614
-#>     3 2301.906 64.28532
-#>     4 2464.911 51.66478
-#>     5 2415.112 55.68145
-#>     6 2434.825 59.01729
-#>     7 2298.592 50.34482
-#>     8 2391.563 51.70422
-#>     9 2295.509 51.46434
-#>    10 2364.493 39.90095
+#>     1 2573.707 48.66448
+#>     2 2329.274 63.59983
+#>     3 2302.101 64.02134
+#>     4 2464.433 51.76308
+#>     5 2416.575 55.82515
+#>     6 2434.611 59.16663
+#>     7 2300.049 50.23630
+#>     8 2391.317 51.41047
+#>     9 2294.263 51.58874
+#>    10 2363.019 40.00079
 #> ---
 ```
 
@@ -631,7 +635,7 @@ summary(fit_bf)
 #> Call: 
 #> explore.default(X = Y, prior_sd = 0.5, iter = 5000, cores = 2)
 #> --- 
-#> Date: Thu May 16 20:52:15 2019
+#> Date: Sat May 18 09:07:41 2019
 ```
 
 Note `summary(.)`, or alternatively `print(.)`, provides information about the fitted model, including that hypothesis testing (exploratory) was used, the number of observations (*n*) and variables (*p*), and the number of edges. Delta (*δ*) is the hyperparameter of the matrix−*F* distribution. A value of 3 corresponds to `prior_sd = 0.5`. This output parallels the estimation based methods. Importantly, all fitted objects include specific (what method was used) and general information (e.g., *n* and *p*) when printed.
@@ -661,11 +665,11 @@ summary(E, hyp = "H1")
 #> Partial Correlations 
 #>  
 #>            1          2          3         4         5
-#> 1  0.0000000 -0.2405429 -0.1070275 0.0000000 0.0000000
-#> 2 -0.2405429  0.0000000  0.2866799 0.1641853 0.1563007
-#> 3 -0.1070275  0.2866799  0.0000000 0.1777945 0.3584203
-#> 4  0.0000000  0.1641853  0.1777945 0.0000000 0.1215327
-#> 5  0.0000000  0.1563007  0.3584203 0.1215327 0.0000000
+#> 1  0.0000000 -0.2401581 -0.1075180 0.0000000 0.0000000
+#> 2 -0.2401581  0.0000000  0.2865640 0.1643047 0.1563192
+#> 3 -0.1075180  0.2865640  0.0000000 0.1780118 0.3586933
+#> 4  0.0000000  0.1643047  0.1780118 0.0000000 0.1212792
+#> 5  0.0000000  0.1563192  0.3586933 0.1212792 0.0000000
 #> --- 
 #>  
 #> Adjancency (non-zero) 
@@ -699,16 +703,16 @@ summary(E, summarize = T, log = T, digits = 2)
 #> Estimates: 
 #>  
 #>   edge post_mean post_sd BF 10
-#>  1--2   -0.2405   0.018  77.6
-#>  1--3   -0.1070   0.019  11.9
-#>  2--3    0.2867   0.018 115.5
-#>  1--4   -0.0075   0.019  -3.5
-#>  2--4    0.1642   0.019  33.9
-#>  3--4    0.1778   0.019  39.5
-#>  1--5   -0.0093   0.019  -3.4
-#>  2--5    0.1563   0.019  29.1
-#>  3--5    0.3584   0.017 183.9
-#>  4--5    0.1215   0.019  16.7
+#>  1--2   -0.2402   0.018  77.3
+#>  1--3   -0.1075   0.019  12.0
+#>  2--3    0.2866   0.018 113.7
+#>  1--4   -0.0080   0.019  -3.5
+#>  2--4    0.1643   0.019  32.7
+#>  3--4    0.1780   0.019  40.5
+#>  1--5   -0.0088   0.019  -3.5
+#>  2--5    0.1563   0.019  30.9
+#>  3--5    0.3587   0.017 186.8
+#>  4--5    0.1213   0.019  17.0
 #> --- 
 #> note: BF_10 is evidence in favor of H1
 ```
@@ -798,12 +802,12 @@ head(E, summarize = T, nrow = 5)
 #> --- 
 #> Estimates: 
 #>  
-#>   edge  post_mean    post_sd p(H0|Y) p(H1|Y) p(H2|Y)
-#>  1--2 -0.2445903 0.01861305   0.000   0.000   1.000
-#>  1--3 -0.1056263 0.01920655   0.000   0.000   1.000
-#>  2--3  0.2867286 0.01797751   0.000   1.000   0.000
-#>  1--4 -0.0139859 0.01958790   0.997   0.001   0.002
-#>  2--4  0.1608487 0.01908118   0.000   1.000   0.000
+#>   edge   post_mean    post_sd p(H0|Y) p(H1|Y) p(H2|Y)
+#>  1--2 -0.24412932 0.01842073   0.000   0.000   1.000
+#>  1--3 -0.10576409 0.01948105   0.000   0.000   1.000
+#>  2--3  0.28618603 0.01794139   0.000   1.000   0.000
+#>  1--4 -0.01471791 0.01917185   0.997   0.001   0.002
+#>  2--4  0.16088307 0.01913176   0.000   1.000   0.000
 #> ---
 ```
 
@@ -818,6 +822,79 @@ cowplot::plot_grid(plts$plot_H0, plts$plot_H1, plts$plot_H2, nrow = 1)
 ```
 
 <img src="man/figures/README-unnamed-chunk-29-1.png" style="display: block; margin: auto;" />
+
+Edge Differences (Hypothesis Testing)
+-------------------------------------
+
+**BGGM** allows for testing edge differences with Bayesian hypothesis testing. The same options are available as for determining *E*--i.e., `alternative = "two.sided"`, `alternative = "greater"` (or less), and `alternative = "exhaustive"`. The exhaustive approach is implemented with:
+
+``` r
+# p = 10
+Y <- BGGM::bfi[,1:10]
+
+# sample from posterior
+fit_bf <- explore(Y, prior_sd = 0.5, 
+                  iter = 5000, 
+                  cores = 2)
+# edge compare
+edge_comp <- edge_compare(fit_bf, 
+                  contrast = c("1--5 - 1--3", 
+                               "1--2 - 1--6", 
+                               "1--4 - 1--7", 
+                               "1--5 - 1--10", 
+                               "1--2 - 1--9"), 
+                  alternative = "exhaustive")
+# summary
+summary(edge_comp)
+#> BGGM: Bayesian Gaussian Graphical Models 
+#> --- 
+#> Type: Edge comparison (Hypothesis Testing)
+#> Alternative: exhaustive 
+#> --- 
+#> Call:
+#> edge_compare.explore(x = fit_bf, contrast = c("1--5 - 1--3", 
+#>     "1--2 - 1--6", "1--4 - 1--7", "1--5 - 1--10", "1--2 - 1--9"), 
+#>     alternative = "exhaustive")
+#> --- 
+#> Hypotheses: 
+#> H0: rho = 0
+#> H1: rho > 0
+#> H2: rho < 0 
+#> --- 
+#> Estimates: 
+#>  
+#>       contrast    post_mean    post_sd p(H0|Y) p(H1|Y) p(H2|Y)
+#>   1--5 - 1--3  0.089852606 0.03198975   0.152   0.845   0.002
+#>   1--2 - 1--6 -0.297043664 0.02674804   0.000   0.000   1.000
+#>   1--4 - 1--7 -0.087334163 0.02947840   0.079   0.001   0.920
+#>  1--5 - 1--10  0.009512058 0.02694967   0.998   0.001   0.001
+#>   1--2 - 1--9 -0.367939262 0.02614654   0.000   0.000   1.000
+#> ---
+```
+
+There are two plotting options for the returned object `edge_comp`. The first is ideal if few contrasts are tested--i.e.,
+
+``` r
+# plot
+plt <- plot.edge_compare.explore(edge_comp, stack = F, spread = .75)
+
+# one contrast
+plt$`1--5 - 1--3`
+```
+
+<img src="man/figures/README-unnamed-chunk-31-1.png" style="display: block; margin: auto;" />
+
+The object `plt` includes a sepearte plot for each contrast. On the other hand, in the case of many contrasts, it is also possible to visualize each with a stacked bar chart--i.e.,
+
+``` r
+# plot
+plt <- plot.edge_compare.explore(edge_comp, stack = T, spread = .75)
+
+# stacked
+plt
+```
+
+<img src="man/figures/README-unnamed-chunk-32-1.png" style="display: block; margin: auto;" />
 
 Comparing GGMs
 ==============

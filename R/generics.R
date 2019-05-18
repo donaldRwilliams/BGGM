@@ -1492,4 +1492,219 @@ head.select.explore <- function(x, nrow, hyp = "H1",  log = TRUE, summarize = FA
 }
 
 
+head.edge_compare.explore <- function(x, log = TRUE, nrow = 1, ...){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type: Edge comparison (Hypothesis Testing)\n")
+
+
+  if(x$alternative == "exhaustive"){
+    cat("Alternative:", x$alternative, "\n")
+    cat("--- \n")
+    cat("Call:\n")
+    print(x$call)
+    cat("--- \n")
+    cat("Hypotheses: \n")
+    cat("H0: rho = 0\nH1: rho > 0\nH2: rho < 0", "\n")
+    cat("--- \n")
+    cat("Estimates: \n \n ")
+    print(x$results[1:nrow,], row.names = FALSE,  ...)
+    cat("--- \n")
+  }
+
+
+  if(x$alternative == "two.sided"){
+    cat("Alternative:", x$alternative, "\n")
+    cat("--- \n")
+    cat("Call:\n")
+    print(x$call)
+    cat("--- \n")
+    cat("Hypotheses: \n")
+    cat("H0: rho = 0\nH1: rho != 0", "\n")
+    cat("--- \n")
+    cat("Estimates: \n \n ")
+
+    if(isTRUE(log)){
+
+      print(cbind.data.frame(test$results[1:nrow,-4],  "BF 10" = log(test$results[1:nrow,4])), row.names = FALSE,  ...)[1:nrow,]
+      cat("--- \n")
+    } else{
+
+      print(cbind.data.frame(test$results[1:nrow,-4],  "BF 10" = (test$results[1:nrow,4])), row.names = FALSE,  ...)[1:nrow,]
+      cat("--- \n")
+
+    }
+    cat("note: BF 10 is evidence in favor of H1")
+
+  }
+
+  if(x$alternative == "greater"){
+    cat("Alternative:", x$alternative, "\n")
+    cat("--- \n")
+    cat("Call:\n")
+    print(x$call)
+    cat("--- \n")
+    cat("Hypotheses: \n")
+    cat("H0: rho = 0\nH1: rho > 0", "\n")
+    cat("--- \n")
+    cat("Estimates: \n \n ")
+
+    if(isTRUE(log)){
+
+      print(cbind.data.frame(test$results[1:nrow,-4],  "BF 10" = log(test$results[1:nrow,4])), row.names = FALSE,  ...)[1:nrow,]
+      cat("--- \n")
+    } else{
+
+      print(cbind.data.frame(test$results[1:nrow,-4],  "BF 10" = (test$results[1:nrow,4])), row.names = FALSE,  ...)[1:nrow,]
+      cat("--- \n")
+
+    }
+    cat("note: BF 10 is evidence in favor of H1")
+
+  }
+
+  if(x$alternative == "less"){
+    cat("Alternative:", x$alternative, "\n")
+    cat("--- \n")
+    cat("Call:\n")
+    print(x$call)
+    cat("--- \n")
+    cat("Hypotheses: \n")
+    cat("H0: rho = 0\nH1: rho < 0", "\n")
+    cat("--- \n")
+    cat("Estimates: \n \n ")
+
+    if(isTRUE(log)){
+
+      print(cbind.data.frame(test$results[1:nrow,-4],  "BF 10" = log(test$results[1:nrow,4])), row.names = FALSE,  ...)
+      cat("--- \n")
+    } else{
+
+      print(cbind.data.frame(test$results[1:nrow,-4],  "BF 10" = (test$results[1:nrow,4])), row.names = FALSE,  ...)
+      cat("--- \n")
+
+    }
+    cat("note: BF 10 is evidence in favor of H1")
+
+  }
+
+}
+
+
+summary.edge_compare.explore <- function(x, log = TRUE,...){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type: Edge comparison (Hypothesis Testing)\n")
+
+
+  if(x$alternative == "exhaustive"){
+    cat("Alternative:", x$alternative, "\n")
+    cat("--- \n")
+    cat("Call:\n")
+    print(x$call)
+    cat("--- \n")
+    cat("Hypotheses: \n")
+    cat("H0: rho = 0\nH1: rho > 0\nH2: rho < 0", "\n")
+    cat("--- \n")
+    cat("Estimates: \n \n ")
+    print(x$results, row.names = FALSE,  ...)
+    cat("--- \n")
+  }
+
+
+  if(x$alternative == "two.sided"){
+    cat("Alternative:", x$alternative, "\n")
+    cat("--- \n")
+    cat("Call:\n")
+    print(x$call)
+    cat("--- \n")
+    cat("Hypotheses: \n")
+    cat("H0: rho = 0\nH1: rho != 0", "\n")
+    cat("--- \n")
+    cat("Estimates: \n \n ")
+
+    if(isTRUE(log)){
+
+      print(cbind.data.frame(x$results[,-4],  "BF 10" = log(x$results[,4])), row.names = FALSE,  ...)
+      cat("--- \n")
+    } else{
+
+      print(cbind.data.frame(x$results[,-4],  "BF 10" = (x$results[,4])), row.names = FALSE,  ...)
+      cat("--- \n")
+
+    }
+    cat("note: BF 10 is evidence in favor of H1")
+
+  }
+
+  if(x$alternative == "greater"){
+    cat("Alternative:", x$alternative, "\n")
+    cat("--- \n")
+    cat("Call:\n")
+    print(x$call)
+    cat("--- \n")
+    cat("Hypotheses: \n")
+    cat("H0: rho = 0\nH1: rho > 0", "\n")
+    cat("--- \n")
+    cat("Estimates: \n \n ")
+
+    if(isTRUE(log)){
+
+      print(cbind.data.frame(x$results[,-4],  "BF 10" = log(x$results[,4])), row.names = FALSE,  ...)
+      cat("--- \n")
+    } else{
+
+      print(cbind.data.frame(x$results[,-4],  "BF 10" = (x$results[,4])), row.names = FALSE,  ...)
+      cat("--- \n")
+
+    }
+    cat("note: BF 10 is evidence in favor of H1")
+
+  }
+
+
+
+
+  if(x$alternative == "less"){
+    cat("Alternative:", x$alternative, "\n")
+    cat("--- \n")
+    cat("Call:\n")
+    print(x$call)
+    cat("--- \n")
+    cat("Hypotheses: \n")
+    cat("H0: rho = 0\nH1: rho < 0", "\n")
+    cat("--- \n")
+    cat("Estimates: \n \n ")
+
+    if(isTRUE(log)){
+
+      print(cbind.data.frame(x$results[,-4],  "BF 10" = log(x$results[,4])), row.names = FALSE,  ...)
+      cat("--- \n")
+    } else{
+
+      print(cbind.data.frame(x$results[,-4],  "BF 10" = (x$results[,4])), row.names = FALSE,  ...)
+      cat("--- \n")
+
+    }
+    cat("note: BF 10 is evidence in favor of H1")
+
+  }
+
+}
+
+
+
+print.edge_compare.explore <- function(x, ...){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type: Edge comparison (Hypothesis Testing) \n")
+
+
+  cat("Alternative:", x$alternative, "\n")
+  cat("--- \n")
+  cat("Call:\n")
+  print(x$call)
+  cat("--- \n")
+}
+
 

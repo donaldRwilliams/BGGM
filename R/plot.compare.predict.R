@@ -44,9 +44,11 @@ plot.compare.predict  <- function(x, limits){
   dat_plot$sig <- ifelse(x$summary_error[,4] < 0 & x$summary_error[,5] > 0, 0, 1)
 
   # create factor for ordering axes
-  dat_plot$X1 <- factor(dat_plot$X1,
+  dat_plot$X1 <- factor(
+                        dat_plot$X1,
                         levels = 1:length(levels(dat_plot$X1)),
-                        labels = 1:length(levels(dat_plot$X1)))
+                        labels = 1:length(levels(dat_plot$X1))
+                        )
 
   # create factor for ordering axes
   dat_plot$X2 <- factor(dat_plot$X2,

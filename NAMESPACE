@@ -57,6 +57,13 @@ export(coef.estimate)
 
 export(hypothesis_plot)
 
+
+export(edge_compare.explore)
+export(print.edge_compare.explore)
+export(summary.edge_compare.explore)
+export(head.edge_compare.explore)
+export(plot.edge_compare.explore)
+
 #export(edge_compare.estimate)
 #export(print.edge_compare.estimate)
 #export(plot.edge_compare.estimate)
