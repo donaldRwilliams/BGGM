@@ -109,7 +109,7 @@ summary(fit_analytic)
 #> Call: 
 #> estimate.default(x = Y, analytic = T)
 #> --- 
-#> Date: Sat May 18 09:22:32 2019
+#> Date: Sat May 18 10:42:34 2019
 ```
 
 Note `summary(.)` provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
@@ -177,16 +177,16 @@ summary(E, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd   2.5%  97.5%
-#>  1--2   -0.2403   0.018 -0.275 -0.205
-#>  1--3   -0.1078   0.019 -0.145 -0.070
-#>  2--3    0.2864   0.018  0.252  0.320
-#>  1--4   -0.0067   0.019 -0.044  0.031
-#>  2--4    0.1643   0.019  0.127  0.201
-#>  3--4    0.1782   0.019  0.143  0.215
-#>  1--5   -0.0089   0.019 -0.047  0.028
-#>  2--5    0.1564   0.019  0.121  0.193
-#>  3--5    0.3582   0.017  0.325  0.391
-#>  4--5    0.1218   0.019  0.085  0.159
+#>  1--2   -0.2401   0.018 -0.277 -0.204
+#>  1--3   -0.1073   0.019 -0.145 -0.069
+#>  2--3    0.2863   0.018  0.251  0.320
+#>  1--4   -0.0074   0.019 -0.045  0.030
+#>  2--4    0.1648   0.019  0.128  0.200
+#>  3--4    0.1778   0.018  0.142  0.213
+#>  1--5   -0.0090   0.019 -0.047  0.028
+#>  2--5    0.1563   0.019  0.118  0.194
+#>  3--5    0.3587   0.017  0.325  0.391
+#>  4--5    0.1214   0.020  0.082  0.160
 #> ---
 ```
 
@@ -279,15 +279,15 @@ head(E, nrow = 10, summarize = T, digits = 2)
 #>  
 #>  egde post_mean post_sd pr_out  pr_in
 #>  1--2    -0.244   0.018   1.00 0.0000
-#>  1--3    -0.106   0.019   0.63 0.3748
-#>  2--3     0.286   0.018   1.00 0.0000
-#>  1--4    -0.014   0.019   0.00 1.0000
-#>  2--4     0.161   0.019   1.00 0.0002
+#>  1--3    -0.106   0.020   0.62 0.3838
+#>  2--3     0.287   0.018   1.00 0.0000
+#>  1--4    -0.015   0.019   0.00 1.0000
+#>  2--4     0.161   0.019   1.00 0.0006
 #>  3--4     0.160   0.019   1.00 0.0004
 #>  1--5    -0.016   0.019   0.00 1.0000
-#>  2--5     0.145   0.019   0.99 0.0082
-#>  3--5     0.355   0.017   1.00 0.0000
-#>  4--5     0.114   0.019   0.76 0.2378
+#>  2--5     0.145   0.019   0.99 0.0106
+#>  3--5     0.354   0.017   1.00 0.0000
+#>  4--5     0.114   0.019   0.78 0.2234
 #> ---
 ```
 
@@ -311,7 +311,7 @@ plot_1D <- plts$plot_nonzero +
 plot_1D
 ```
 
-<img src="man/figures/README-unnamed-chunk-9-1.png" width="50%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-9-1.png" height="250 %" style="display: block; margin: auto;" />
 
 ``` r
 # practically zero
@@ -322,7 +322,7 @@ plot_1E <- plts$plot_zero +
 plot_1E
 ```
 
-<img src="man/figures/README-unnamed-chunk-10-1.png" width="50%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-10-1.png" height="250 %" style="display: block; margin: auto;" />
 
 We emphasize that GGMs are often thought to capture conditionally *independent* relations--i.e., evidence for the null hypothesis of no effect, conditional on the other variables in the model. However, the dominant approach assesses conditional *dependence* (*ρ*<sub>*i**j*</sub> ≠ 0), and then sets relations to zero otherwise. **BGGM** can explicitly answer the question of conditional independence.
 
@@ -350,9 +350,9 @@ head(edge_difference, nrow = 5)
 #> Estimates: 
 #>  
 #>   contrast post_mean post_sd pr_out pr_in
-#>  1--2-1--3    -0.138   0.030  0.897 0.103
+#>  1--2-1--3    -0.139   0.030  0.892 0.108
 #>  1--2-2--3    -0.531   0.024  1.000 0.000
-#>  1--2-1--4    -0.230   0.029  1.000 0.000
+#>  1--2-1--4    -0.229   0.028  1.000 0.000
 #>  1--2-2--4    -0.405   0.026  1.000 0.000
 #>  1--2-3--4    -0.404   0.027  1.000 0.000
 #> ---
@@ -373,7 +373,7 @@ plot_2A <- plot_diff$plt_nonzero +
 plot_2A
 ```
 
-<img src="man/figures/README-unnamed-chunk-12-1.png" width="75%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-12-1.png" height="250 %" style="display: block; margin: auto;" />
 
 ``` r
 # practically equivalent
@@ -385,7 +385,7 @@ plot_2B <- plot_diff$plt_zero +
 plot_2B
 ```
 
-<img src="man/figures/README-unnamed-chunk-13-1.png" width="75%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-13-1.png" height="250 %" style="display: block; margin: auto;" />
 
 This shows the central idea behind the region of practical equivalence, which is highlighted in grey. Ideally only a few contrasts would be examined in light of a guiding theory. To this end, the option `contrast = "all"` may be removed altogether from **BGGM**.
 
@@ -414,15 +414,15 @@ coefficients(fit, node = 1, ci_width = 0.95)
 #> Estimates: 
 #>  
 #>  node post_mean post_sd   2.5%  97.5%
-#>     2    -0.278   0.022 -0.319 -0.235
-#>     3    -0.124   0.024 -0.169 -0.076
-#>     4    -0.015   0.020 -0.054  0.022
-#>     5    -0.016   0.022 -0.060  0.028
-#>     6     0.057   0.020  0.017  0.096
-#>     7     0.081   0.021  0.039  0.123
-#>     8     0.043   0.020  0.005  0.083
-#>     9     0.141   0.022  0.098  0.181
-#>    10    -0.030   0.022 -0.071  0.012
+#>     2    -0.278   0.021 -0.315 -0.236
+#>     3    -0.124   0.024 -0.171 -0.079
+#>     4    -0.016   0.019 -0.054  0.021
+#>     5    -0.017   0.022 -0.057  0.026
+#>     6     0.056   0.020  0.018  0.094
+#>     7     0.080   0.021  0.036  0.121
+#>     8     0.044   0.021  0.003  0.087
+#>     9     0.140   0.022  0.098  0.183
+#>    10    -0.028   0.022 -0.072  0.013
 #> ---
 ```
 
@@ -459,8 +459,8 @@ head(train_R2, nrow = 2)
 #> Estimates: 
 #> 
 #>  node post_mean    post_sd       2.5%     97.5%
-#>     1 0.1694960 0.06696302 0.05503177 0.3047250
-#>     2 0.2847587 0.06734601 0.14250662 0.4119794
+#>     1 0.1708953 0.06368300 0.05491699 0.2917184
+#>     2 0.2943678 0.07062974 0.15190064 0.4211234
 #> ---
 ```
 
@@ -515,16 +515,16 @@ summary(bayes_loo)
 #> Estimates: 
 #> 
 #>   node      loo   loo_se
-#>     1 2574.728 48.26168
-#>     2 2330.612 63.36552
-#>     3 2303.524 64.50252
-#>     4 2466.992 52.03525
-#>     5 2416.869 55.79296
-#>     6 2432.605 59.21066
-#>     7 2300.502 50.36377
-#>     8 2390.163 51.37419
-#>     9 2294.479 51.54105
-#>    10 2365.210 39.98218
+#>     1 2571.965 48.80666
+#>     2 2328.372 63.26660
+#>     3 2303.307 64.27317
+#>     4 2465.342 51.83965
+#>     5 2415.944 56.05171
+#>     6 2435.303 58.74460
+#>     7 2299.808 50.37581
+#>     8 2388.444 51.21342
+#>     9 2294.106 51.61257
+#>    10 2363.240 39.85957
 #> ---
 ```
 
@@ -539,7 +539,7 @@ plt_3B <- plot(bayes_loo, size = 8) +
 plt_3B
 ```
 
-<img src="man/figures/README-unnamed-chunk-19-1.png" width="75%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-19-1.png" height="250 %" style="display: block; margin: auto;" />
 
 Similarly, by setting `analytic = T`, leave-one-out prediction error can be computed analytically. This is implemented with:
 
@@ -563,7 +563,7 @@ plt_3C <- plot(press_loo, size = 8) +
 plt_3C
 ```
 
-<img src="man/figures/README-unnamed-chunk-20-1.png" width="75%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-20-1.png" height="250 %" style="display: block; margin: auto;" />
 
 This highlights the difference between the leave-one-out methods, in that the Bayesian version has a measure of uncertainty (although the order is the same). For both measures of predictive *error*, a lower value indicates a more predictable node (variable).
 
@@ -635,7 +635,7 @@ summary(fit_bf)
 #> Call: 
 #> explore.default(X = Y, prior_sd = 0.5, iter = 5000, cores = 2)
 #> --- 
-#> Date: Sat May 18 09:22:58 2019
+#> Date: Sat May 18 10:43:00 2019
 ```
 
 Note `summary(.)`, or alternatively `print(.)`, provides information about the fitted model, including that hypothesis testing (exploratory) was used, the number of observations (*n*) and variables (*p*), and the number of edges. Delta (*δ*) is the hyperparameter of the matrix−*F* distribution. A value of 3 corresponds to `prior_sd = 0.5`. This output parallels the estimation based methods. Importantly, all fitted objects include specific (what method was used) and general information (e.g., *n* and *p*) when printed.
@@ -665,11 +665,11 @@ summary(E, hyp = "H1")
 #> Partial Correlations 
 #>  
 #>            1          2          3         4         5
-#> 1  0.0000000 -0.2399176 -0.1071600 0.0000000 0.0000000
-#> 2 -0.2399176  0.0000000  0.2867287 0.1640857 0.1561285
-#> 3 -0.1071600  0.2867287  0.0000000 0.1779700 0.3584341
-#> 4  0.0000000  0.1640857  0.1779700 0.0000000 0.1215853
-#> 5  0.0000000  0.1561285  0.3584341 0.1215853 0.0000000
+#> 1  0.0000000 -0.2402275 -0.1072969 0.0000000 0.0000000
+#> 2 -0.2402275  0.0000000  0.2868001 0.1643089 0.1558040
+#> 3 -0.1072969  0.2868001  0.0000000 0.1778575 0.3584851
+#> 4  0.0000000  0.1643089  0.1778575 0.0000000 0.1213794
+#> 5  0.0000000  0.1558040  0.3584851 0.1213794 0.0000000
 #> --- 
 #>  
 #> Adjancency (non-zero) 
@@ -703,16 +703,16 @@ summary(E, summarize = T, log = T, digits = 2)
 #> Estimates: 
 #>  
 #>   edge post_mean post_sd BF 10
-#>  1--2    -0.240   0.018  79.8
-#>  1--3    -0.107   0.019  12.1
-#>  2--3     0.287   0.018 112.4
-#>  1--4    -0.007   0.019  -3.5
-#>  2--4     0.164   0.019  33.6
-#>  3--4     0.178   0.019  40.7
-#>  1--5    -0.010   0.019  -3.4
-#>  2--5     0.156   0.019  30.0
-#>  3--5     0.358   0.017 188.9
-#>  4--5     0.122   0.019  17.0
+#>  1--2   -0.2402   0.018  80.1
+#>  1--3   -0.1073   0.019  12.8
+#>  2--3    0.2868   0.018 115.4
+#>  1--4   -0.0076   0.019  -3.5
+#>  2--4    0.1643   0.019  34.1
+#>  3--4    0.1779   0.019  40.6
+#>  1--5   -0.0091   0.019  -3.4
+#>  2--5    0.1558   0.019  29.8
+#>  3--5    0.3585   0.017 190.8
+#>  4--5    0.1214   0.019  16.7
 #> --- 
 #> note: BF_10 is evidence in favor of H1
 ```
@@ -803,11 +803,11 @@ head(E, summarize = T, nrow = 5)
 #> Estimates: 
 #>  
 #>   edge   post_mean    post_sd p(H0|Y) p(H1|Y) p(H2|Y)
-#>  1--2 -0.24413310 0.01828150   0.000   0.000   1.000
-#>  1--3 -0.10566846 0.01940301   0.000   0.000   1.000
-#>  2--3  0.28638232 0.01794794   0.000   1.000   0.000
-#>  1--4 -0.01510099 0.01941649   0.997   0.001   0.002
-#>  2--4  0.16013161 0.01870512   0.000   1.000   0.000
+#>  1--2 -0.24392086 0.01831286   0.000   0.000   1.000
+#>  1--3 -0.10626592 0.01909862   0.000   0.000   1.000
+#>  2--3  0.28643556 0.01798928   0.000   1.000   0.000
+#>  1--4 -0.01452113 0.01963796   0.997   0.001   0.002
+#>  2--4  0.16115989 0.01895801   0.000   1.000   0.000
 #> ---
 ```
 
@@ -863,12 +863,12 @@ summary(edge_comp)
 #> --- 
 #> Estimates: 
 #>  
-#>       contrast    post_mean    post_sd p(H0|Y) p(H1|Y) p(H2|Y)
-#>   1--5 - 1--3  0.090527861 0.03197956   0.131   0.867   0.002
-#>   1--2 - 1--6 -0.297057480 0.02622606   0.000   0.000   1.000
-#>   1--4 - 1--7 -0.085963881 0.02901464   0.079   0.001   0.919
-#>  1--5 - 1--10  0.009955972 0.02609009   0.998   0.001   0.001
-#>   1--2 - 1--9 -0.368446026 0.02571441   0.000   0.000   1.000
+#>       contrast   post_mean    post_sd p(H0|Y) p(H1|Y) p(H2|Y)
+#>   1--5 - 1--3  0.09058284 0.03168310   0.112   0.886   0.002
+#>   1--2 - 1--6 -0.29709882 0.02708227   0.000   0.000   1.000
+#>   1--4 - 1--7 -0.08750888 0.02958066   0.078   0.001   0.921
+#>  1--5 - 1--10  0.01077360 0.02674241   0.998   0.001   0.001
+#>   1--2 - 1--9 -0.36935197 0.02597840   0.000   0.000   1.000
 #> ---
 ```
 

@@ -217,7 +217,7 @@ The argument `prob = 0.95` requires that 95 % of the posterior density be in or 
 
 In this case, `plot(.)` returns two objects:  (1) the selected edges; (2) those for which there is support for the null values.  This is implemented with:
 
-```{r warning = F , out.width = '50%'}
+```{r warning = F , out.height= "250 %"}
 # network plot
 plts <- plot(E, type = "network",
              layout ='circle',
@@ -233,7 +233,7 @@ plot_1D <- plts$plot_nonzero +
 plot_1D
 ```
 
-```{r, warning=F, out.width = '50%'}
+```{r, warning=F, out.height= "250 %"}
 # practically zero
 plot_1E <- plts$plot_zero +
               ggtitle("Practically Zero") +
@@ -260,7 +260,7 @@ head(edge_difference, nrow = 5)
 This  output  includes  the  posterior  mean  and  standard  deviation  for  each  difference. Further, `pr_in` is  the  proportion  of  samples  between ($\pm$) 0.1.   This  can  be interpreted as the posterior probability of practical equivalence, which has been defined with the argument `rope = 0.1`.  Further, this powerful function can be used to assess specific contrasts.  This can be accomplished, for example, with 5--1 - 6--10.  Note that care must be taken when specifying the contrasts, as an error will arise if they are not in the proper format.
 
 The object `edge_difference` can the be plotted with:
-```{r, out.width = '75%'}
+```{r, out.height= "250 %"}
 # plot contrasts
 plot_diff <- plot(edge_difference, prob = .99)
 
@@ -270,7 +270,7 @@ plot_2A <- plot_diff$plt_nonzero +
            theme(axis.text.y = element_blank())
 plot_2A
 ```
-```{r, out.width = '75%'}
+```{r, out.height= "250 %"}
 # practically equivalent
 plot_2B <- plot_diff$plt_zero +
   scale_y_continuous(limits = c(-0.4, 0.4)) +
@@ -363,7 +363,7 @@ summary(bayes_loo)
 ```
 
 The results are plotted with:
-```{r, out.width = '75%'}
+```{r, out.height= "250 %"}
 # plot CV error
 plt_3B <- plot(bayes_loo, size = 8) +
           theme_classic() +
@@ -374,7 +374,7 @@ plt_3B
 
 Similarly,  by  setting `analytic = T`,  leave-one-out  prediction  error  can  be  computed analytically.  This is implemented with:
 
-```{r, out.width = '75%'}
+```{r, out.height= "250 %"}
 # p = 10
 Y <- BGGM::bfi[1:1000,1:10]
 
