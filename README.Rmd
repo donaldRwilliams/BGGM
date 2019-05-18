@@ -334,7 +334,7 @@ test_R2 <- predict(fit_train, ci_width = 0.90,
 
 The work flow is completed by visualizing Bayesian $R^2$ for each node–i.e.,
 
-```{r, out.width = '75%'}
+```{r, out.height= "300 %"}
 # prior training and test error in the same plot
 plt_3A <- plot(x1 = train_R2, x2 =  test_R2, order = "test")
 
@@ -363,7 +363,7 @@ summary(bayes_loo)
 ```
 
 The results are plotted with:
-```{r, out.height= "250 %"}
+```{r, out.height= "300 %"}
 # plot CV error
 plt_3B <- plot(bayes_loo, size = 8) +
           theme_classic() +
@@ -374,7 +374,7 @@ plt_3B
 
 Similarly,  by  setting `analytic = T`,  leave-one-out  prediction  error  can  be  computed analytically.  This is implemented with:
 
-```{r, out.height= "250 %"}
+```{r, out.height= "300 %"}
 # p = 10
 Y <- BGGM::bfi[1:1000,1:10]
 
