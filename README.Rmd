@@ -43,31 +43,31 @@ This README is organized as follows:
 
 * [Installation](#installation)
 
-* [Estimation](https://github.com/donaldRwilliams/BGGM#estimation)
+* [Estimation](#estimation)
     
-    + [Structure Learning (Estimation)](https://github.com/donaldRwilliams/BGGM#structure-learning-estimation)
+    + [Structure Learning (Estimation)](#structure-learning-estimation)
     
-    + [Edge Differences (Estimation)](https://github.com/donaldRwilliams/BGGM#edge-differences)
+    + [Edge Differences (Estimation)](#edge-differences)
     
-    + [Prediction](https://github.com/donaldRwilliams/BGGM#prediction)
+    + [Prediction](#prediction)
         
-        - [Bayesian $R^2$](https://github.com/donaldRwilliams/BGGM#bayesian-r2)
+        - [Bayesian $R^2$](#bayesian-r2)
         
-        - [Leave-One-Out Cross-Validation](https://github.com/donaldRwilliams/BGGM#leave-one-out-cross-validation)
+        - [Leave-One-Out Cross-Validation](#leave-one-out-cross-validation)
 
-* [Hypothesis Testing](https://github.com/donaldRwilliams/BGGM#hypothesis-testing)
+* [Hypothesis Testing](#hypothesis-testing)
     
-    + [Structure Learning (Bayes Factor)](https://github.com/donaldRwilliams/BGGM#structure-learning-bayes-factor)
+    + [Structure Learning (Bayes Factor)](#structure-learning-bayes-factor)
         
-        - [Visualizing Scientific Expectations](https://github.com/donaldRwilliams/BGGM#visualizing-scientific-expectations)
+        - [Visualizing Scientific Expectations](#visualizing-scientific-expectations)
         
         - [Two-Sided Hypothesis Testing](#two-sided-testing)
         
-        - [One-Sided Hypothesis Testing](https://github.com/donaldRwilliams/BGGM#one-sided-testing)
+        - [One-Sided Hypothesis Testing](#one-sided-testing)
         
-        - [Exhaustive Hypothesis Testing](https://github.com/donaldRwilliams/BGGM#exhaustive-hypothesis-testing)
+        - [Exhaustive Hypothesis Testing](#exhaustive-hypothesis-testing)
     
-    + [Edge Differences (Hypothesis Testing)](https://github.com/donaldRwilliams/BGGM#edge-differences-hypothesis-testing)
+    + [Edge Differences (Hypothesis Testing)](#edge-differences-hypothesis-testing)
     
     + Confirmatory Hypothesis Testing
       
@@ -89,10 +89,6 @@ You can install BGGM from git hub with:
 # install.packages("devtools")
 devtools::install_github("donaldRwilliams/BGGM")
 ```
-
-
-
-
 
 # Estimation
 The following methods are described in Williams (2018). They build upon two basic ideas. First, the Wishart distribution is a conjugate prior distribution for the precision matrix (inverse of the covariance matrix). This provides an analytic solution for selecting the graph, and allows for conveniently drawing posterior samples. Second, there is an exact relationship between estimating the precision matrix directly and with multiple regression. Here the individual elements, from joint posterior distribution of the precision matrix, can be converted to their respective regression counterparts. This allows for assessing nodewise (for each variable in the model) predictability. 

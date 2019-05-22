@@ -23,31 +23,31 @@ This README is organized as follows:
 
 -   [Installation](#installation)
 
--   [Estimation](https://github.com/donaldRwilliams/BGGM#estimation)
+-   [Estimation](#estimation)
 
-    -   [Structure Learning (Estimation)](https://github.com/donaldRwilliams/BGGM#structure-learning-estimation)
+    -   [Structure Learning (Estimation)](#structure-learning-estimation)
 
-    -   [Edge Differences (Estimation)](https://github.com/donaldRwilliams/BGGM#edge-differences)
+    -   [Edge Differences (Estimation)](#edge-differences)
 
-    -   [Prediction](https://github.com/donaldRwilliams/BGGM#prediction)
+    -   [Prediction](#prediction)
 
-        -   [Bayesian *R*<sup>2</sup>](https://github.com/donaldRwilliams/BGGM#bayesian-r2)
+        -   [Bayesian *R*<sup>2</sup>](#bayesian-r2)
 
-        -   [Leave-One-Out Cross-Validation](https://github.com/donaldRwilliams/BGGM#leave-one-out-cross-validation)
+        -   [Leave-One-Out Cross-Validation](#leave-one-out-cross-validation)
 
--   [Hypothesis Testing](https://github.com/donaldRwilliams/BGGM#hypothesis-testing)
+-   [Hypothesis Testing](#hypothesis-testing)
 
-    -   [Structure Learning (Bayes Factor)](https://github.com/donaldRwilliams/BGGM#structure-learning-bayes-factor)
+    -   [Structure Learning (Bayes Factor)](#structure-learning-bayes-factor)
 
-        -   [Visualizing Scientific Expectations](https://github.com/donaldRwilliams/BGGM#visualizing-scientific-expectations)
+        -   [Visualizing Scientific Expectations](#visualizing-scientific-expectations)
 
         -   [Two-Sided Hypothesis Testing](#two-sided-testing)
 
-        -   [One-Sided Hypothesis Testing](https://github.com/donaldRwilliams/BGGM#one-sided-testing)
+        -   [One-Sided Hypothesis Testing](#one-sided-testing)
 
-        -   [Exhaustive Hypothesis Testing](https://github.com/donaldRwilliams/BGGM#exhaustive-hypothesis-testing)
+        -   [Exhaustive Hypothesis Testing](#exhaustive-hypothesis-testing)
 
-    -   [Edge Differences (Hypothesis Testing)](https://github.com/donaldRwilliams/BGGM#edge-differences-hypothesis-testing)
+    -   [Edge Differences (Hypothesis Testing)](#edge-differences-hypothesis-testing)
 
     -   Confirmatory Hypothesis Testing
 
@@ -109,7 +109,7 @@ summary(fit_analytic)
 #> Call: 
 #> estimate.default(x = Y, analytic = T)
 #> --- 
-#> Date: Wed May 22 15:27:56 2019
+#> Date: Wed May 22 15:32:13 2019
 ```
 
 Note `summary(.)` provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
@@ -177,16 +177,16 @@ summary(E, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd   2.5%  97.5%
-#>  1--2   -0.2401   0.018 -0.275 -0.203
-#>  1--3   -0.1071   0.019 -0.144 -0.070
-#>  2--3    0.2867   0.017  0.253  0.321
-#>  1--4   -0.0078   0.019 -0.045  0.031
-#>  2--4    0.1643   0.019  0.128  0.202
-#>  3--4    0.1780   0.019  0.141  0.215
+#>  1--2   -0.2401   0.018 -0.275 -0.205
+#>  1--3   -0.1074   0.019 -0.145 -0.070
+#>  2--3    0.2860   0.018  0.252  0.320
+#>  1--4   -0.0073   0.019 -0.046  0.031
+#>  2--4    0.1646   0.018  0.128  0.200
+#>  3--4    0.1780   0.019  0.142  0.214
 #>  1--5   -0.0093   0.019 -0.047  0.028
-#>  2--5    0.1562   0.019  0.120  0.194
-#>  3--5    0.3588   0.017  0.326  0.392
-#>  4--5    0.1216   0.018  0.085  0.158
+#>  2--5    0.1565   0.019  0.119  0.193
+#>  3--5    0.3590   0.017  0.326  0.391
+#>  4--5    0.1210   0.019  0.085  0.157
 #> ---
 ```
 
@@ -279,15 +279,15 @@ head(E, nrow = 10, summarize = T, digits = 2)
 #>  
 #>  egde post_mean post_sd pr_out  pr_in
 #>  1--2    -0.244   0.018   1.00 0.0000
-#>  1--3    -0.106   0.019   0.63 0.3742
+#>  1--3    -0.106   0.019   0.62 0.3824
 #>  2--3     0.287   0.018   1.00 0.0000
-#>  1--4    -0.014   0.020   0.00 1.0000
-#>  2--4     0.161   0.019   1.00 0.0004
-#>  3--4     0.160   0.019   1.00 0.0012
-#>  1--5    -0.016   0.019   0.00 1.0000
-#>  2--5     0.145   0.019   0.99 0.0110
-#>  3--5     0.354   0.017   1.00 0.0000
-#>  4--5     0.114   0.019   0.77 0.2274
+#>  1--4    -0.015   0.019   0.00 1.0000
+#>  2--4     0.161   0.019   1.00 0.0010
+#>  3--4     0.160   0.019   1.00 0.0008
+#>  1--5    -0.015   0.020   0.00 1.0000
+#>  2--5     0.145   0.019   0.99 0.0098
+#>  3--5     0.355   0.017   1.00 0.0000
+#>  4--5     0.114   0.019   0.77 0.2286
 #> ---
 ```
 
@@ -356,10 +356,10 @@ head(edge_difference, nrow = 4)
 #> Estimates: 
 #>  
 #>      contrast post_mean post_sd pr_out  pr_in
-#>   1--5 - 1--3    0.0908  0.0317 0.3852 0.6148
-#>   1--2 - 1--6   -0.2967  0.0266      1      0
-#>   1--4 - 1--7    -0.087  0.0291 0.3302 0.6698
-#>  1--5 - 1--10    0.0102  0.0267  4e-04 0.9996
+#>   1--5 - 1--3    0.0902   0.032 0.3734 0.6266
+#>   1--2 - 1--6   -0.2971  0.0268      1      0
+#>   1--4 - 1--7   -0.0876   0.029 0.3226 0.6774
+#>  1--5 - 1--10    0.0101  0.0271  6e-04 0.9994
 #> ---
 ```
 
@@ -409,15 +409,15 @@ coefficients(fit, node = 1, ci_width = 0.95)
 #> Estimates: 
 #>  
 #>  node post_mean post_sd   2.5%  97.5%
-#>     2    -0.278   0.021 -0.318 -0.237
-#>     3    -0.125   0.024 -0.171 -0.080
-#>     4    -0.016   0.021 -0.056  0.024
-#>     5    -0.016   0.022 -0.059  0.024
-#>     6     0.056   0.021  0.014  0.096
-#>     7     0.082   0.022  0.039  0.123
-#>     8     0.044   0.021  0.004  0.084
-#>     9     0.142   0.022  0.098  0.182
-#>    10    -0.028   0.021 -0.070  0.013
+#>     2    -0.278   0.021 -0.319 -0.236
+#>     3    -0.125   0.023 -0.171 -0.082
+#>     4    -0.014   0.020 -0.054  0.026
+#>     5    -0.018   0.021 -0.060  0.025
+#>     6     0.057   0.020  0.019  0.098
+#>     7     0.079   0.021  0.035  0.120
+#>     8     0.044   0.021  0.003  0.084
+#>     9     0.141   0.023  0.095  0.186
+#>    10    -0.029   0.022 -0.073  0.016
 #> ---
 ```
 
@@ -454,8 +454,8 @@ head(train_R2, nrow = 2)
 #> Estimates: 
 #> 
 #>  node post_mean    post_sd       2.5%     97.5%
-#>     1 0.1687461 0.06458713 0.04605886 0.2973997
-#>     2 0.2838214 0.07035771 0.13340932 0.4186121
+#>     1 0.1708374 0.06561741 0.04971328 0.2999706
+#>     2 0.2852188 0.06829237 0.14546340 0.4095866
 #> ---
 ```
 
@@ -510,16 +510,16 @@ summary(bayes_loo)
 #> Estimates: 
 #> 
 #>   node      loo   loo_se
-#>     1 2575.824 48.57609
-#>     2 2332.474 63.83181
-#>     3 2303.577 64.54835
-#>     4 2465.325 51.25517
-#>     5 2416.961 55.62643
-#>     6 2433.832 58.61815
-#>     7 2301.084 50.63257
-#>     8 2391.200 51.24883
-#>     9 2294.788 51.44643
-#>    10 2363.784 39.81747
+#>     1 2575.351 48.66233
+#>     2 2329.965 63.57540
+#>     3 2302.385 64.09806
+#>     4 2466.156 52.29992
+#>     5 2417.085 55.60362
+#>     6 2433.551 58.57033
+#>     7 2300.192 50.32508
+#>     8 2391.225 51.40318
+#>     9 2296.636 51.90252
+#>    10 2365.429 39.69354
 #> ---
 ```
 
@@ -630,7 +630,7 @@ summary(fit_bf)
 #> Call: 
 #> explore.default(X = Y, prior_sd = 0.5, iter = 5000, cores = 2)
 #> --- 
-#> Date: Wed May 22 15:28:25 2019
+#> Date: Wed May 22 15:32:39 2019
 ```
 
 Note `summary(.)`, or alternatively `print(.)`, provides information about the fitted model, including that hypothesis testing (exploratory) was used, the number of observations (*n*) and variables (*p*), and the number of edges. Delta (*δ*) is the hyperparameter of the matrix−*F* distribution. A value of 3 corresponds to `prior_sd = 0.5`. This output parallels the estimation based methods. Importantly, all fitted objects include specific (what method was used) and general information (e.g., *n* and *p*) when printed.
@@ -660,11 +660,11 @@ summary(E, hyp = "H1")
 #> Partial Correlations 
 #>  
 #>            1          2          3         4         5
-#> 1  0.0000000 -0.2405157 -0.1077815 0.0000000 0.0000000
-#> 2 -0.2405157  0.0000000  0.2864280 0.1647009 0.1561210
-#> 3 -0.1077815  0.2864280  0.0000000 0.1770400 0.3587722
-#> 4  0.0000000  0.1647009  0.1770400 0.0000000 0.1214775
-#> 5  0.0000000  0.1561210  0.3587722 0.1214775 0.0000000
+#> 1  0.0000000 -0.2402079 -0.1072613 0.0000000 0.0000000
+#> 2 -0.2402079  0.0000000  0.2864696 0.1645736 0.1561465
+#> 3 -0.1072613  0.2864696  0.0000000 0.1781246 0.3584637
+#> 4  0.0000000  0.1645736  0.1781246 0.0000000 0.1215580
+#> 5  0.0000000  0.1561465  0.3584637 0.1215580 0.0000000
 #> --- 
 #>  
 #> Adjancency (non-zero) 
@@ -698,16 +698,16 @@ summary(E, summarize = T, log = T, digits = 2)
 #> Estimates: 
 #>  
 #>   edge post_mean post_sd BF 10
-#>  1--2   -0.2405   0.018  79.2
-#>  1--3   -0.1078   0.019  12.5
-#>  2--3    0.2864   0.018 113.6
-#>  1--4   -0.0074   0.019  -3.5
-#>  2--4    0.1647   0.019  34.1
-#>  3--4    0.1770   0.018  40.5
-#>  1--5   -0.0089   0.019  -3.5
-#>  2--5    0.1561   0.019  28.8
-#>  3--5    0.3588   0.016 194.9
-#>  4--5    0.1215   0.019  16.6
+#>  1--2   -0.2402   0.018  79.8
+#>  1--3   -0.1073   0.019  11.9
+#>  2--3    0.2865   0.018 112.3
+#>  1--4   -0.0077   0.019  -3.5
+#>  2--4    0.1646   0.019  33.4
+#>  3--4    0.1781   0.019  38.4
+#>  1--5   -0.0091   0.019  -3.5
+#>  2--5    0.1561   0.019  29.7
+#>  3--5    0.3585   0.017 186.7
+#>  4--5    0.1216   0.019  16.2
 #> --- 
 #> note: BF_10 is evidence in favor of H1
 ```
@@ -798,11 +798,11 @@ head(E, summarize = T, nrow = 5)
 #> Estimates: 
 #>  
 #>   edge   post_mean    post_sd p(H0|Y) p(H1|Y) p(H2|Y)
-#>  1--2 -0.24422521 0.01834910   0.000   0.000   1.000
-#>  1--3 -0.10610222 0.01912988   0.000   0.000   1.000
-#>  2--3  0.28589158 0.01765295   0.000   1.000   0.000
-#>  1--4 -0.01525764 0.01940496   0.997   0.001   0.002
-#>  2--4  0.16075624 0.01937900   0.000   1.000   0.000
+#>  1--2 -0.24389626 0.01814441   0.000   0.000   1.000
+#>  1--3 -0.10642404 0.01957115   0.000   0.000   1.000
+#>  2--3  0.28678948 0.01759207   0.000   1.000   0.000
+#>  1--4 -0.01433057 0.01933342   0.997   0.001   0.002
+#>  2--4  0.16083940 0.01883198   0.000   1.000   0.000
 #> ---
 ```
 
@@ -859,11 +859,11 @@ summary(edge_comp)
 #> Estimates: 
 #>  
 #>       contrast   post_mean    post_sd p(H0|Y) p(H1|Y) p(H2|Y)
-#>   1--5 - 1--3  0.09063340 0.03128319   0.100   0.898   0.002
-#>   1--2 - 1--6 -0.29723229 0.02688320   0.000   0.000   1.000
-#>   1--4 - 1--7 -0.08714557 0.02973046   0.090   0.002   0.908
-#>  1--5 - 1--10  0.01085317 0.02626785   0.998   0.001   0.001
-#>   1--2 - 1--9 -0.36843199 0.02664062   0.000   0.000   1.000
+#>   1--5 - 1--3  0.09021947 0.03163615   0.122   0.876   0.002
+#>   1--2 - 1--6 -0.29714850 0.02636826   0.000   0.000   1.000
+#>   1--4 - 1--7 -0.08786184 0.02961411   0.073   0.001   0.925
+#>  1--5 - 1--10  0.01039026 0.02722279   0.998   0.001   0.001
+#>   1--2 - 1--9 -0.36859476 0.02641653   0.000   0.000   1.000
 #> ---
 ```
 
