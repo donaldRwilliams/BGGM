@@ -41,7 +41,7 @@ Williams, D. R., Rast, P., Pericchi, L. R., & Mulder, J. (2019). Comparing Gauss
 
 This README is organized as follows:
 
-* [Installation](https://github.com/donaldRwilliams/BGGM#installation)
+* [Installation](#installation)
 
 * [Estimation](https://github.com/donaldRwilliams/BGGM#estimation)
     
@@ -61,7 +61,7 @@ This README is organized as follows:
         
         - [Visualizing Scientific Expectations](https://github.com/donaldRwilliams/BGGM#visualizing-scientific-expectations)
         
-        - [Two-Sided Hypothesis Testing](https://github.com/donaldRwilliams/BGGM#two-sided-testing)
+        - [Two-Sided Hypothesis Testing](#two-sided-testing)
         
         - [One-Sided Hypothesis Testing](https://github.com/donaldRwilliams/BGGM#one-sided-testing)
         
@@ -250,37 +250,42 @@ Differences between partial correlations are often tested in GGMs; for example, 
 
 
 ```{r, message=F}
-# edge differences
-edge_difference <- edge_compare(fit_sample, contrast = "all", ci_width = 0.95, rope = 0.1)
+edge_difference <- edge_compare(fit_sample, 
+                                contrast =  list("1--5 - 1--3", 
+                                                 "1--2 - 1--6", 
+                                                 "1--4 - 1--7", 
+                                                 "1--5 - 1--10", 
+                                                 "1--2 - 1--9"), 
+                                ci_width = 0.95,
+                                rope = 0.1)
 
-# summary for first 5 contrasts
-head(edge_difference, nrow = 5)
+head(edge_difference, nrow = 4)
 ```
 
-This  output  includes  the  posterior  mean  and  standard  deviation  for  each  difference. Further, `pr_in` is  the  proportion  of  samples  between ($\pm$) 0.1.   This  can  be interpreted as the posterior probability of practical equivalence, which has been defined with the argument `rope = 0.1`.  Further, this powerful function can be used to assess specific contrasts.  This can be accomplished, for example, with 5--1 - 6--10.  Note that care must be taken when specifying the contrasts, as an error will arise if they are not in the proper format.
+This  output  includes  the  posterior  mean  and  standard  deviation  for  each  difference. Further, `pr_in` is  the  proportion  of  samples  between ($\pm$) 0.1.   This  can  be interpreted as the posterior probability of practical equivalence, which has been defined with the argument `rope = 0.1`.  Note that care must be taken when specifying the contrasts, as an error will arise if they are not in the proper format. The object \code{edge_difference} can then be plotted, but this is omitted to save space.
 
-The object `edge_difference` can the be plotted with:
-```{r, out.height= "250 %"}
-# plot contrasts
-plot_diff <- plot(edge_difference, prob = .99)
+<!-- The object `edge_difference` can the be plotted with: -->
+<!-- ```{r, out.height= "250 %"} -->
+<!-- # plot contrasts -->
+<!-- plot_diff <- plot(edge_difference, prob = .99) -->
 
-# practically different
-plot_2A <- plot_diff$plt_nonzero +
-           ggtitle("Practically Different") +
-           theme(axis.text.y = element_blank())
-plot_2A
-```
-```{r, out.height= "250 %"}
-# practically equivalent
-plot_2B <- plot_diff$plt_zero +
-  scale_y_continuous(limits = c(-0.4, 0.4)) +
-  ggtitle("Practically Equivalent") +
-  theme(axis.text.y = element_blank())
+<!-- # practically different -->
+<!-- plot_2A <- plot_diff$plt_nonzero + -->
+<!--            ggtitle("Practically Different") + -->
+<!--            theme(axis.text.y = element_blank()) -->
+<!-- plot_2A -->
+<!-- ``` -->
+<!-- ```{r, out.height= "250 %"} -->
+<!-- # practically equivalent -->
+<!-- plot_2B <- plot_diff$plt_zero + -->
+<!--   scale_y_continuous(limits = c(-0.4, 0.4)) + -->
+<!--   ggtitle("Practically Equivalent") + -->
+<!--   theme(axis.text.y = element_blank()) -->
 
-plot_2B
-```
+<!-- plot_2B -->
+<!-- ``` -->
 
-This shows the central idea behind the region of practical equivalence, which is highlighted in grey. Ideally only a few contrasts would be examined in light of a guiding theory. To this end, the option `contrast = "all"` may be removed altogether from **BGGM**.
+<!-- This shows the central idea behind the region of practical equivalence, which is highlighted in grey. Ideally only a few contrasts would be examined in light of a guiding theory. To this end, the option `contrast = "all"` may be removed altogether from **BGGM**. -->
 
 ## Prediction
 The following is based on the correspondence between the elements of the precision matrix and multiple regression. In the context of GGMs, using regression to select edges is referred to as “neighborhood” selection.   On the other hand, the method described in Williams (2018) works directly with either the posterior distribution for the precision matrix or the maximum a posteriori estimates. These are then converted to the corresponding regression coefficients and residual variances. It follows that **BGGM** can also be used for the purpose of multiple regression–i.e.,
@@ -585,3 +590,4 @@ plt
 
 # References
 
+ 

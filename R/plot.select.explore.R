@@ -393,7 +393,7 @@ plot.select.explore <- function(x, type,
 
     if(x$alternative == "two.sided"){
 
-      if(sum(x$partials_positive[upper.tri(x$partials_positive)]) == 0 ){
+      if(sum(x$partials_non_zero[upper.tri(x$partials_non_zero)]) == 0 ){
 
         plt1 <- NA
 

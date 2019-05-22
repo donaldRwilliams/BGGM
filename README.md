@@ -21,7 +21,7 @@ Outline
 
 This README is organized as follows:
 
--   [Installation](https://github.com/donaldRwilliams/BGGM#installation)
+-   [Installation](#installation)
 
 -   [Estimation](https://github.com/donaldRwilliams/BGGM#estimation)
 
@@ -41,7 +41,7 @@ This README is organized as follows:
 
         -   [Visualizing Scientific Expectations](https://github.com/donaldRwilliams/BGGM#visualizing-scientific-expectations)
 
-        -   [Two-Sided Hypothesis Testing](https://github.com/donaldRwilliams/BGGM#two-sided-testing)
+        -   [Two-Sided Hypothesis Testing](#two-sided-testing)
 
         -   [One-Sided Hypothesis Testing](https://github.com/donaldRwilliams/BGGM#one-sided-testing)
 
@@ -109,7 +109,7 @@ summary(fit_analytic)
 #> Call: 
 #> estimate.default(x = Y, analytic = T)
 #> --- 
-#> Date: Sat May 18 10:46:02 2019
+#> Date: Wed May 22 15:27:56 2019
 ```
 
 Note `summary(.)` provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
@@ -177,16 +177,16 @@ summary(E, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  egde post_mean post_sd   2.5%  97.5%
-#>  1--2   -0.2402   0.018 -0.275 -0.204
-#>  1--3   -0.1074   0.019 -0.145 -0.070
-#>  2--3    0.2860   0.017  0.252  0.321
-#>  1--4   -0.0076   0.019 -0.046  0.031
-#>  2--4    0.1649   0.019  0.128  0.201
-#>  3--4    0.1774   0.019  0.140  0.215
-#>  1--5   -0.0091   0.019 -0.046  0.028
-#>  2--5    0.1561   0.018  0.121  0.193
-#>  3--5    0.3590   0.017  0.326  0.391
-#>  4--5    0.1216   0.019  0.085  0.158
+#>  1--2   -0.2401   0.018 -0.275 -0.203
+#>  1--3   -0.1071   0.019 -0.144 -0.070
+#>  2--3    0.2867   0.017  0.253  0.321
+#>  1--4   -0.0078   0.019 -0.045  0.031
+#>  2--4    0.1643   0.019  0.128  0.202
+#>  3--4    0.1780   0.019  0.141  0.215
+#>  1--5   -0.0093   0.019 -0.047  0.028
+#>  2--5    0.1562   0.019  0.120  0.194
+#>  3--5    0.3588   0.017  0.326  0.392
+#>  4--5    0.1216   0.018  0.085  0.158
 #> ---
 ```
 
@@ -279,15 +279,15 @@ head(E, nrow = 10, summarize = T, digits = 2)
 #>  
 #>  egde post_mean post_sd pr_out  pr_in
 #>  1--2    -0.244   0.018   1.00 0.0000
-#>  1--3    -0.106   0.019   0.64 0.3648
-#>  2--3     0.286   0.018   1.00 0.0000
-#>  1--4    -0.015   0.019   0.00 1.0000
-#>  2--4     0.161   0.019   1.00 0.0010
-#>  3--4     0.161   0.019   1.00 0.0020
-#>  1--5    -0.015   0.020   0.00 1.0000
-#>  2--5     0.145   0.019   0.99 0.0094
+#>  1--3    -0.106   0.019   0.63 0.3742
+#>  2--3     0.287   0.018   1.00 0.0000
+#>  1--4    -0.014   0.020   0.00 1.0000
+#>  2--4     0.161   0.019   1.00 0.0004
+#>  3--4     0.160   0.019   1.00 0.0012
+#>  1--5    -0.016   0.019   0.00 1.0000
+#>  2--5     0.145   0.019   0.99 0.0110
 #>  3--5     0.354   0.017   1.00 0.0000
-#>  4--5     0.115   0.019   0.77 0.2300
+#>  4--5     0.114   0.019   0.77 0.2274
 #> ---
 ```
 
@@ -332,11 +332,16 @@ Edge Differences
 Differences between partial correlations are often tested in GGMs; for example, with a classical (i.e., frequentist) approach that is implemented in **bootnet**. One contribution of **BGGM** is providing Bayesian analogs for commonly used methods, as well as extensions to those methods. In this case, we can use posterior probabilities to determine which edges are practically equivalent. This is implemented with:
 
 ``` r
-# edge differences
-edge_difference <- edge_compare(fit_sample, contrast = "all", ci_width = 0.95, rope = 0.1)
+edge_difference <- edge_compare(fit_sample, 
+                                contrast =  list("1--5 - 1--3", 
+                                                 "1--2 - 1--6", 
+                                                 "1--4 - 1--7", 
+                                                 "1--5 - 1--10", 
+                                                 "1--2 - 1--9"), 
+                                ci_width = 0.95,
+                                rope = 0.1)
 
-# summary for first 5 contrasts
-head(edge_difference, nrow = 5)
+head(edge_difference, nrow = 4)
 #> BGGM: Bayesian Gaussian Graphical Models 
 #> --- 
 #> Type: Edge comparison(s) 
@@ -344,51 +349,41 @@ head(edge_difference, nrow = 5)
 #> Region of Practical Equivalence:[-0.1, 0.1]
 #> --- 
 #> Call:
-#> edge_compare.estimate(x = fit_sample, contrast = "all", ci_width = 0.95, 
-#>     rope = 0.1)
+#> edge_compare.estimate(x = fit_sample, contrast = list("1--5 - 1--3", 
+#>     "1--2 - 1--6", "1--4 - 1--7", "1--5 - 1--10", "1--2 - 1--9"), 
+#>     ci_width = 0.95, rope = 0.1)
 #> --- 
 #> Estimates: 
 #>  
-#>   contrast post_mean post_sd pr_out pr_in
-#>  1--2-1--3    -0.138   0.030  0.891 0.109
-#>  1--2-2--3    -0.530   0.024  1.000 0.000
-#>  1--2-1--4    -0.229   0.029  1.000 0.000
-#>  1--2-2--4    -0.405   0.026  1.000 0.000
-#>  1--2-3--4    -0.405   0.027  1.000 0.000
+#>      contrast post_mean post_sd pr_out  pr_in
+#>   1--5 - 1--3    0.0908  0.0317 0.3852 0.6148
+#>   1--2 - 1--6   -0.2967  0.0266      1      0
+#>   1--4 - 1--7    -0.087  0.0291 0.3302 0.6698
+#>  1--5 - 1--10    0.0102  0.0267  4e-04 0.9996
 #> ---
 ```
 
-This output includes the posterior mean and standard deviation for each difference. Further, `pr_in` is the proportion of samples between (±) 0.1. This can be interpreted as the posterior probability of practical equivalence, which has been defined with the argument `rope = 0.1`. Further, this powerful function can be used to assess specific contrasts. This can be accomplished, for example, with 5--1 - 6--10. Note that care must be taken when specifying the contrasts, as an error will arise if they are not in the proper format.
+This output includes the posterior mean and standard deviation for each difference. Further, `pr_in` is the proportion of samples between (±) 0.1. This can be interpreted as the posterior probability of practical equivalence, which has been defined with the argument `rope = 0.1`. Note that care must be taken when specifying the contrasts, as an error will arise if they are not in the proper format. The object can then be plotted, but this is omitted to save space.
 
-The object `edge_difference` can the be plotted with:
-
-``` r
-# plot contrasts
-plot_diff <- plot(edge_difference, prob = .99)
-
-# practically different
-plot_2A <- plot_diff$plt_nonzero +
-           ggtitle("Practically Different") +
-           theme(axis.text.y = element_blank())
-plot_2A
-```
-
-<img src="man/figures/README-unnamed-chunk-12-1.png" height="250 %" style="display: block; margin: auto;" />
-
-``` r
-# practically equivalent
-plot_2B <- plot_diff$plt_zero +
-  scale_y_continuous(limits = c(-0.4, 0.4)) +
-  ggtitle("Practically Equivalent") +
-  theme(axis.text.y = element_blank())
-
-plot_2B
-```
-
-<img src="man/figures/README-unnamed-chunk-13-1.png" height="250 %" style="display: block; margin: auto;" />
-
-This shows the central idea behind the region of practical equivalence, which is highlighted in grey. Ideally only a few contrasts would be examined in light of a guiding theory. To this end, the option `contrast = "all"` may be removed altogether from **BGGM**.
-
+<!-- The object `edge_difference` can the be plotted with: -->
+<!-- ```{r, out.height= "250 %"} -->
+<!-- # plot contrasts -->
+<!-- plot_diff <- plot(edge_difference, prob = .99) -->
+<!-- # practically different -->
+<!-- plot_2A <- plot_diff$plt_nonzero + -->
+<!--            ggtitle("Practically Different") + -->
+<!--            theme(axis.text.y = element_blank()) -->
+<!-- plot_2A -->
+<!-- ``` -->
+<!-- ```{r, out.height= "250 %"} -->
+<!-- # practically equivalent -->
+<!-- plot_2B <- plot_diff$plt_zero + -->
+<!--   scale_y_continuous(limits = c(-0.4, 0.4)) + -->
+<!--   ggtitle("Practically Equivalent") + -->
+<!--   theme(axis.text.y = element_blank()) -->
+<!-- plot_2B -->
+<!-- ``` -->
+<!-- This shows the central idea behind the region of practical equivalence, which is highlighted in grey. Ideally only a few contrasts would be examined in light of a guiding theory. To this end, the option `contrast = "all"` may be removed altogether from **BGGM**. -->
 Prediction
 ----------
 
@@ -414,15 +409,15 @@ coefficients(fit, node = 1, ci_width = 0.95)
 #> Estimates: 
 #>  
 #>  node post_mean post_sd   2.5%  97.5%
-#>     2    -0.279   0.021 -0.319 -0.237
-#>     3    -0.124   0.022 -0.167 -0.082
-#>     4    -0.015   0.020 -0.054  0.023
-#>     5    -0.017   0.022 -0.062  0.025
-#>     6     0.055   0.021  0.016  0.098
-#>     7     0.082   0.021  0.043  0.124
-#>     8     0.045   0.021  0.008  0.089
-#>     9     0.142   0.022  0.101  0.185
-#>    10    -0.028   0.021 -0.071  0.011
+#>     2    -0.278   0.021 -0.318 -0.237
+#>     3    -0.125   0.024 -0.171 -0.080
+#>     4    -0.016   0.021 -0.056  0.024
+#>     5    -0.016   0.022 -0.059  0.024
+#>     6     0.056   0.021  0.014  0.096
+#>     7     0.082   0.022  0.039  0.123
+#>     8     0.044   0.021  0.004  0.084
+#>     9     0.142   0.022  0.098  0.182
+#>    10    -0.028   0.021 -0.070  0.013
 #> ---
 ```
 
@@ -459,8 +454,8 @@ head(train_R2, nrow = 2)
 #> Estimates: 
 #> 
 #>  node post_mean    post_sd       2.5%     97.5%
-#>     1 0.1698479 0.06422516 0.05166122 0.2958153
-#>     2 0.2828578 0.06639445 0.15131795 0.4039199
+#>     1 0.1687461 0.06458713 0.04605886 0.2973997
+#>     2 0.2838214 0.07035771 0.13340932 0.4186121
 #> ---
 ```
 
@@ -485,7 +480,7 @@ plt_3A <- plot(x1 = train_R2, x2 =  test_R2, order = "test")
 plt_3A
 ```
 
-<img src="man/figures/README-unnamed-chunk-17-1.png" height="300 %" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-15-1.png" height="300 %" style="display: block; margin: auto;" />
 
 Here the nodes have been ordered by which has the best out-of-sample performance. It is also possible to have each in a separate plot by leaving `x2` empty. The `predict` object can be used to assess differences in predictive accuracy with compare(.). **BGGM** also includes mean squared error (`measure = "mse"`).
 
@@ -515,16 +510,16 @@ summary(bayes_loo)
 #> Estimates: 
 #> 
 #>   node      loo   loo_se
-#>     1 2574.138 48.84211
-#>     2 2330.903 63.15710
-#>     3 2302.678 63.95326
-#>     4 2466.583 51.89166
-#>     5 2417.225 55.41453
-#>     6 2434.565 59.25353
-#>     7 2300.794 50.13562
-#>     8 2389.776 51.46731
-#>     9 2294.909 51.35988
-#>    10 2364.330 39.70063
+#>     1 2575.824 48.57609
+#>     2 2332.474 63.83181
+#>     3 2303.577 64.54835
+#>     4 2465.325 51.25517
+#>     5 2416.961 55.62643
+#>     6 2433.832 58.61815
+#>     7 2301.084 50.63257
+#>     8 2391.200 51.24883
+#>     9 2294.788 51.44643
+#>    10 2363.784 39.81747
 #> ---
 ```
 
@@ -539,7 +534,7 @@ plt_3B <- plot(bayes_loo, size = 8) +
 plt_3B
 ```
 
-<img src="man/figures/README-unnamed-chunk-19-1.png" height="300 %" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-17-1.png" height="300 %" style="display: block; margin: auto;" />
 
 Similarly, by setting `analytic = T`, leave-one-out prediction error can be computed analytically. This is implemented with:
 
@@ -563,7 +558,7 @@ plt_3C <- plot(press_loo, size = 8) +
 plt_3C
 ```
 
-<img src="man/figures/README-unnamed-chunk-20-1.png" height="300 %" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-18-1.png" height="300 %" style="display: block; margin: auto;" />
 
 This highlights the difference between the leave-one-out methods, in that the Bayesian version has a measure of uncertainty (although the order is the same). For both measures of predictive *error*, a lower value indicates a more predictable node (variable).
 
@@ -591,7 +586,7 @@ plt_4A <- hypothesis_plot(rho_sd = rho_sd) +
 plt_4A
 ```
 
-<img src="man/figures/README-unnamed-chunk-21-1.png" width="50%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-19-1.png" width="50%" style="display: block; margin: auto;" />
 
 `rho_sd = c(.)` defines a couple (prospective) values for the hypothesized standard deviation of the partial correlations. Further, **BGGM** allows for testing edge differences with the Bayes factor. Accordingly, the *implied* prior distribution for the difference can also be visualized. This is implemented with:
 
@@ -608,7 +603,7 @@ plt_4B <- hypothesis_plot(rho_sd = rho_sd,
 plt_4B
 ```
 
-<img src="man/figures/README-unnamed-chunk-22-1.png" width="50%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-20-1.png" width="50%" style="display: block; margin: auto;" />
 
 ### Two-Sided Testing
 
@@ -635,7 +630,7 @@ summary(fit_bf)
 #> Call: 
 #> explore.default(X = Y, prior_sd = 0.5, iter = 5000, cores = 2)
 #> --- 
-#> Date: Sat May 18 10:46:29 2019
+#> Date: Wed May 22 15:28:25 2019
 ```
 
 Note `summary(.)`, or alternatively `print(.)`, provides information about the fitted model, including that hypothesis testing (exploratory) was used, the number of observations (*n*) and variables (*p*), and the number of edges. Delta (*δ*) is the hyperparameter of the matrix−*F* distribution. A value of 3 corresponds to `prior_sd = 0.5`. This output parallels the estimation based methods. Importantly, all fitted objects include specific (what method was used) and general information (e.g., *n* and *p*) when printed.
@@ -665,11 +660,11 @@ summary(E, hyp = "H1")
 #> Partial Correlations 
 #>  
 #>            1          2          3         4         5
-#> 1  0.0000000 -0.2406078 -0.1069647 0.0000000 0.0000000
-#> 2 -0.2406078  0.0000000  0.2863904 0.1648917 0.1560864
-#> 3 -0.1069647  0.2863904  0.0000000 0.1775894 0.3587342
-#> 4  0.0000000  0.1648917  0.1775894 0.0000000 0.1210908
-#> 5  0.0000000  0.1560864  0.3587342 0.1210908 0.0000000
+#> 1  0.0000000 -0.2405157 -0.1077815 0.0000000 0.0000000
+#> 2 -0.2405157  0.0000000  0.2864280 0.1647009 0.1561210
+#> 3 -0.1077815  0.2864280  0.0000000 0.1770400 0.3587722
+#> 4  0.0000000  0.1647009  0.1770400 0.0000000 0.1214775
+#> 5  0.0000000  0.1561210  0.3587722 0.1214775 0.0000000
 #> --- 
 #>  
 #> Adjancency (non-zero) 
@@ -703,16 +698,16 @@ summary(E, summarize = T, log = T, digits = 2)
 #> Estimates: 
 #>  
 #>   edge post_mean post_sd BF 10
-#>  1--2   -0.2406   0.018  76.0
-#>  1--3   -0.1070   0.019  11.5
-#>  2--3    0.2864   0.017 117.9
-#>  1--4   -0.0077   0.019  -3.5
-#>  2--4    0.1649   0.019  33.8
-#>  3--4    0.1776   0.019  39.5
-#>  1--5   -0.0091   0.019  -3.5
-#>  2--5    0.1561   0.019  30.6
-#>  3--5    0.3587   0.017 186.2
-#>  4--5    0.1211   0.019  16.1
+#>  1--2   -0.2405   0.018  79.2
+#>  1--3   -0.1078   0.019  12.5
+#>  2--3    0.2864   0.018 113.6
+#>  1--4   -0.0074   0.019  -3.5
+#>  2--4    0.1647   0.019  34.1
+#>  3--4    0.1770   0.018  40.5
+#>  1--5   -0.0089   0.019  -3.5
+#>  2--5    0.1561   0.019  28.8
+#>  3--5    0.3588   0.016 194.9
+#>  4--5    0.1215   0.019  16.6
 #> --- 
 #> note: BF_10 is evidence in favor of H1
 ```
@@ -731,7 +726,7 @@ plt_4C <- hypothesis_plot(fit = fit_bf,
 plt_4C
 ```
 
-<img src="man/figures/README-unnamed-chunk-26-1.png" width="50%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-24-1.png" width="50%" style="display: block; margin: auto;" />
 
 Here it can be seen that the Bayes factor is the ratio of density evaluated at 0. In this case, there is evidence for ℋ<sub>0</sub> (*B**F*<sub>01</sub> ≈ 33). This plotting option may be useful for understanding (and describing) the Bayes factor approach for selecting the graph (or more generally the testing strategy for partial correlations).
 
@@ -761,7 +756,7 @@ plt_pos <- plt_pos$plot_nonzero +
 plt_pos
 ```
 
-<img src="man/figures/README-unnamed-chunk-27-1.png" width="50%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-25-1.png" width="50%" style="display: block; margin: auto;" />
 
 ℋ<sub>1</sub> : *ρ*<sub>*i**j*</sub> &lt; 0 can be tested by changing `alternative = greater` to `alternative = less`.
 
@@ -803,11 +798,11 @@ head(E, summarize = T, nrow = 5)
 #> Estimates: 
 #>  
 #>   edge   post_mean    post_sd p(H0|Y) p(H1|Y) p(H2|Y)
-#>  1--2 -0.24396830 0.01828369   0.000   0.000   1.000
-#>  1--3 -0.10541862 0.01928515   0.000   0.000   1.000
-#>  2--3  0.28648096 0.01753431   0.000   1.000   0.000
-#>  1--4 -0.01459717 0.01951240   0.997   0.001   0.002
-#>  2--4  0.16076144 0.01893750   0.000   1.000   0.000
+#>  1--2 -0.24422521 0.01834910   0.000   0.000   1.000
+#>  1--3 -0.10610222 0.01912988   0.000   0.000   1.000
+#>  2--3  0.28589158 0.01765295   0.000   1.000   0.000
+#>  1--4 -0.01525764 0.01940496   0.997   0.001   0.002
+#>  2--4  0.16075624 0.01937900   0.000   1.000   0.000
 #> ---
 ```
 
@@ -821,7 +816,7 @@ plts <- plot(E, type = "network")
 cowplot::plot_grid(plts$plot_H0, plts$plot_H1, plts$plot_H2, nrow = 1)
 ```
 
-<img src="man/figures/README-unnamed-chunk-29-1.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-27-1.png" style="display: block; margin: auto;" />
 
 Edge Differences (Hypothesis Testing)
 -------------------------------------
@@ -863,12 +858,12 @@ summary(edge_comp)
 #> --- 
 #> Estimates: 
 #>  
-#>       contrast    post_mean    post_sd p(H0|Y) p(H1|Y) p(H2|Y)
-#>   1--5 - 1--3  0.090452682 0.03160454   0.115   0.883   0.002
-#>   1--2 - 1--6 -0.297051427 0.02661197   0.000   0.000   1.000
-#>   1--4 - 1--7 -0.086607313 0.02977123   0.103   0.002   0.895
-#>  1--5 - 1--10  0.009687851 0.02676189   0.998   0.001   0.001
-#>   1--2 - 1--9 -0.368400461 0.02568282   0.000   0.000   1.000
+#>       contrast   post_mean    post_sd p(H0|Y) p(H1|Y) p(H2|Y)
+#>   1--5 - 1--3  0.09063340 0.03128319   0.100   0.898   0.002
+#>   1--2 - 1--6 -0.29723229 0.02688320   0.000   0.000   1.000
+#>   1--4 - 1--7 -0.08714557 0.02973046   0.090   0.002   0.908
+#>  1--5 - 1--10  0.01085317 0.02626785   0.998   0.001   0.001
+#>   1--2 - 1--9 -0.36843199 0.02664062   0.000   0.000   1.000
 #> ---
 ```
 
@@ -882,7 +877,7 @@ plt <- plot(edge_comp, stack = F, spread = .75)
 plt$`1--5 - 1--3`
 ```
 
-<img src="man/figures/README-unnamed-chunk-31-1.png" height="350 %" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-29-1.png" height="350 %" style="display: block; margin: auto;" />
 
 The object `plt` includes a sepearte plot for each contrast. On the other hand, in the case of many contrasts, it is also possible to visualize each with a stacked bar chart--i.e.,
 
@@ -894,7 +889,7 @@ plt <- plot(edge_comp, stack = T, spread = .75)
 plt
 ```
 
-<img src="man/figures/README-unnamed-chunk-32-1.png" height="350 %" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-30-1.png" height="350 %" style="display: block; margin: auto;" />
 
 Comparing GGMs
 ==============
