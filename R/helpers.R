@@ -59,16 +59,23 @@ net_plot <- function(x, layout = "circle", mat_type, node_outer, node_inner, nod
   graph_cors <- igraph::graph_from_data_frame(d = mlt_data, directed = FALSE)
 
   plt <- ggraph(graph_cors, layout = layout) +
+
     geom_edge_link(aes(edge_width = abs(value), color = value)) +
+
     guides(edge_alpha = "none", edge_width = "none") +
+
     scale_edge_colour_gradient2(limits = c(-max_partial, max_partial), guide = FALSE,
                                 low = "brown3", mid = "transparent",
                                 high = "palegreen3", midpoint = 0) +
+
     geom_node_point(color = "black", size = node_outer) +
+
     geom_node_point(color = "white", size = node_inner) +
+
     geom_node_text(aes(label = 1:p), repel = FALSE, size = node_text_size) +
+
     theme_void() +
-    # theme_graph(base_size = 12, title_face = "plain",base_family = 'Open Sans') +
+
     coord_flip()
 }
 
