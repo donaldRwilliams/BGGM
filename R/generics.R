@@ -353,7 +353,7 @@ summary.select.estimate <- function(x, summarize = F, ...){
       ci_low[] <- cis[1,]
       ci_up[] <- cis[2,]
 
-      summ <- data.frame(egde = mat_names[upper.tri(mat_names)],
+      summ <- data.frame(edge = mat_names[upper.tri(mat_names)],
                          post_mean = mu_mat[upper.tri(mu_mat)],
                          post_sd = x$pcor_sd[upper.tri(x$pcor_sd)],
                          temp1 = ci_low[upper.tri(ci_low)],
@@ -400,7 +400,7 @@ summary.select.estimate <- function(x, summarize = F, ...){
 
 
       cat("Estimates: \n \n")
-      summ <- data.frame(egde = mat_names[upper.tri(mat_names)],
+      summ <- data.frame(edge = mat_names[upper.tri(mat_names)],
                          post_mean = mu_mat[upper.tri(mu_mat)],
                          post_sd = x$pcor_sd[upper.tri(x$pcor_sd)],
                          "pr_out" = 1 - rope_in[upper.tri(rope_in)],
@@ -502,7 +502,7 @@ head.select.estimate <- function(x, summarize = F, nrow = 2, ...){
       ci_low[] <- cis[1,]
       ci_up[] <- cis[2,]
 
-      summ <- data.frame(egde = mat_names[upper.tri(mat_names)],
+      summ <- data.frame(edge = mat_names[upper.tri(mat_names)],
                          post_mean = mu_mat[upper.tri(mu_mat)],
                          post_sd = x$pcor_sd[upper.tri(x$pcor_sd)],
                          temp1 = ci_low[upper.tri(ci_low)],
@@ -549,7 +549,7 @@ head.select.estimate <- function(x, summarize = F, nrow = 2, ...){
 
 
       cat("Estimates: \n \n")
-      summ <- data.frame(egde = mat_names[upper.tri(mat_names)],
+      summ <- data.frame(edge = mat_names[upper.tri(mat_names)],
                          post_mean = mu_mat[upper.tri(mu_mat)],
                          post_sd = x$pcor_sd[upper.tri(x$pcor_sd)],
                          "pr_out" = 1 - rope_in[upper.tri(rope_in)],
