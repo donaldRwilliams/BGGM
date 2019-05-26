@@ -1,13 +1,34 @@
-#' Title
+#' Edge Contrasts with the Bayes Factor
 #'
-#' @param x
-#' @param contrast
-#' @param alternative
+#' @description Allows for comparing partial correlations \emph{within} the same GGM--e.g., to determine the largest edge for each node.
 #'
-#' @return
+#' @param x object from \code{explore}
+#' @param contrast partial correlations to compare
+#' @param alternative \code{greater}, \code{less}, \code{two.sided}, or \code{exhaustive}
+#'
+#' @return An object of class \code{edge_compare.explore}
 #' @export
 #'
 #' @examples
+#'
+#' # p = 10
+#' Y <- BGGM::bfi[,1:10]
+#'
+#' # sample from posterior
+#' fit_bf <- explore(Y, prior_sd = 0.5,
+#'               iter = 5000,
+#'               cores = 2)
+#'
+#' # edge compare
+#'  edge_comp <- edge_compare(fit_bf,
+#'                          contrast = c("1--5 - 1--3",
+#'                                       "1--2 - 1--6",
+#'                                       "1--4 - 1--7",
+#'                                       "1--5 - 1--10",
+#'                                       "1--2 - 1--9"),
+#'                          alternative = "exhaustive")
+#' # summary
+#' summary(edge_comp)
 edge_compare.explore <- function(x, contrast, alternative){
 
   p <- x$p

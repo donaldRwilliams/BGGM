@@ -2,7 +2,7 @@
 % Please edit documentation in R/select.estimate.R
 \name{select.estimate}
 \alias{select.estimate}
-\title{Select graphical structure}
+\title{Select Graphical Structure with Estimation Based Methods}
 \usage{
 \method{select}{estimate}(x, ci_width = 0.95, rope = NULL,
   prob = 0.975)
@@ -12,13 +12,37 @@
 
 \item{ci_width}{credible interval width used for the decision rule}
 
-\item{prob}{}
+\item{rope}{region of practical equivalence}
+
+\item{prob}{posterior probability (see notes)}
 }
 \value{
-partial  selected partial correlations
-
-adjacency selected adjacency matrix
+An object of class \code{select.estimate}
 }
 \description{
-Select graphical structure
+#' @description This allows for not only estimating the conditional dependence structure, that is non-zero edges, but also the conditional \textbf{in}dependence
+structure (evidence for no relation). For the latter, the region of practical equivalence must be specified
+}
+\note{
+The region of practical equivalence allows for assessing whether an edge is practically zero. In other words, conditional independence
+(\eqn{\rho = 0}). The agrument \code{prob} is then the posterior probability that must be in (practically zero edges) and out
+ (practically zero edges) of the rope.
+}
+\examples{
+
+# Analytic = TRUE
+# p = 5
+Y <- BGGM::bfi[,1:5]
+
+# analytic solution
+fit_analytic <- estimate(Y, analytic = T)
+
+# select E
+E <- select(fit_analytic, ci_width = 0.95)
+
+# non-zero partial correlations
+E$partials_non_zero
+
+# adjacency matrix
+E$adjacency_non_zero
 }

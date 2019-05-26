@@ -2,13 +2,42 @@
 % Please edit documentation in R/coef.estimates.R
 \name{coef.estimate}
 \alias{coef.estimate}
-\title{Title}
+\title{Precision Matrix to Multiple Regression}
 \usage{
 \method{coef}{estimate}(fit, node, ci_width, samples = 1000, ...)
 }
 \arguments{
-\item{...}{}
+\item{fit}{object of class \code{estimate} (analytic = F)}
+
+\item{node}{which node to summarize (i.e., the outcome)}
+
+\item{ci_width}{credible interval width used in the summary output}
+
+\item{samples}{number of samples used in the conversion.}
+
+\item{...}{e.g., \code{digits}}
+}
+\value{
+summary of the implicit multiple regresion for \code{node}
 }
 \description{
-Title
+There is a direct correspondence between the covariance matrix and multiple regression. In the case of GGMs, it is possible
+to estimate the edge set with multiple regression (i.e., neighborhood selection). In *BGGM*, the precision matrix is first sampled from, and then
+each draws is converted to the corresponding coefficient and error variance. This results in a posterior distribution. This function can be used
+to perform Bayesian multiple regression.
+}
+\examples{
+
+# p = 10
+Y <- BGGM::bfi[,1:10]
+
+# sample posterior
+fit <- estimate(Y, samples = 5000)
+
+# precision to regression
+coefficients(fit, node = 1, ci_width = 0.95)
+
+# precision to regression
+
+coefficients(fit, node = 1, ci_width = 0.95)
 }

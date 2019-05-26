@@ -2,13 +2,55 @@
 % Please edit documentation in R/compare.estimate.R
 \name{edge_compare.estimate}
 \alias{edge_compare.estimate}
-\title{Title}
+\title{Edge Contrasts with Estimation Based Methods}
 \usage{
 \method{edge_compare}{estimate}(x, contrast, ci_width, rope = NULL)
 }
 \arguments{
-\item{mute}{}
+\item{x}{object from \code{estimate} (\code{sampling = TRUE})}
+
+\item{contrast}{partial correlations to compare}
+
+\item{ci_width}{credible interval width}
+
+\item{rope}{region of practical equivalence}
+}
+\value{
+returned_object data.frame of results. use \code{summary} or \code{head}
+
+call call used in \code{edge_difference}
+
+ci credible interval used in \code{edge_difference}
+
+rope region of practical equivalence used in \code{edge_difference}
+
+samples list of posterior samples of each contrast. Can be used for custom plot, or the object can be plotted with \code{plot}
 }
 \description{
-Title
+Allows for comparing partial correlations \emph{within} the same GGM--e.g., to determine the largest edge for each node.
+}
+\note{
+These contrasts are based on the posterior distribution, and credible intervals or the rope are used to determine differences. In the case of
+the rope, it is also possible to assess similarity between edges. The function \code{edge_compare} is a generic, and for using the Bayes factor,
+\code{x} should be an object from \code{explore}.
+}
+\examples{
+
+# p = 10
+Y <- BGGM::bfi[,1:10]
+
+# sample from posterior
+
+fit_sample <- estimate(Y, samples = 5000, analytic = F)
+
+edge_difference <- edge_compare(fit_sample,
+contrast =  list("1--5 - 1--3",
+                 "1--2 - 1--6",
+                 "1--4 - 1--7",
+                 "1--5 - 1--10",
+                 "1--2 - 1--9"),
+                 ci_width = 0.95,
+                 rope = 0.1)
+
+head(edge_difference, nrow = 4)
 }

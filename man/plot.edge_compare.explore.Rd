@@ -4,8 +4,9 @@
 \alias{plot.edge_compare.explore}
 \title{Title}
 \usage{
-\method{plot}{edge_compare.explore}(x, hjust1 = -1, hjust2 = -1,
-  hjust3 = -1, base_text = 14, leg_text = 10)
+\method{plot}{edge_compare.explore}(x, stack = TRUE, hjust1 = -1,
+  hjust2 = -1, hjust3 = -1, base_text = 14, leg_text = 10,
+  spread = 0.95)
 }
 \arguments{
 \item{leg_text}{}

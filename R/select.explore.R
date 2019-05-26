@@ -1,13 +1,31 @@
-#' Title
-#' @param x data matrix
+#' Select Graphical Structure with the Bayes Factor
+#'
+#' @description This allows for not only estimating the conditional dependence structure, that is non-zero edges, but also the conditional \textbf{in}dependence
+#' structure (evidence for no relation).
+#'
+#' @param x data matrix (\emph{n} \times  \emph{p})
 #' @param BF_cut evidentiary threshold
 #' @param alternative type of hypothesis (see notes)
 #' @param hyp_prob posterior probability threshold (see notes)
 #'
-#' @return
+#' @return An object of class \code{select.explore}
 #' @export
 #'
+#' @note The \code{alternative} can be either \code{greater}, \code{less}, \code{two.sided}, or \code{exhaustive}. The argument \code{hyp_prob} is used only
+#' when \code{alternative = hypothesis}. It is the posterior hypothesis probability used as the decision rule.
+#'
 #' @examples
+#'
+#'
+#' # p = 5
+#' Y <- BGGM::bfi[,1:5]
+#'
+#' # fit model
+#' fit_bf <- explore(Y, prior_sd = 0.5,
+#'                   iter = 5000,
+#'                   cores = 2)
+#'
+#'summary(fit_bf)
 select.explore <- function(x,
                            BF_cut = 3,
                            alternative = "two.sided",

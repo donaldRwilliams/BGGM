@@ -2,13 +2,41 @@
 % Please edit documentation in R/edge_compare.explore.R
 \name{edge_compare.explore}
 \alias{edge_compare.explore}
-\title{Title}
+\title{Edge Contrasts with the Bayes Factor}
 \usage{
 \method{edge_compare}{explore}(x, contrast, alternative)
 }
 \arguments{
-\item{alternative}{}
+\item{x}{object from \code{explore}}
+
+\item{contrast}{partial correlations to compare}
+
+\item{alternative}{\code{greater}, \code{less}, \code{two.sided}, or \code{exhaustive}}
+}
+\value{
+An object of class \code{edge_compare.explore}
 }
 \description{
-Title
+Allows for comparing partial correlations \emph{within} the same GGM--e.g., to determine the largest edge for each node.
+}
+\examples{
+
+# p = 10
+Y <- BGGM::bfi[,1:10]
+
+# sample from posterior
+fit_bf <- explore(Y, prior_sd = 0.5,
+              iter = 5000,
+              cores = 2)
+
+# edge compare
+ edge_comp <- edge_compare(fit_bf,
+                         contrast = c("1--5 - 1--3",
+                                      "1--2 - 1--6",
+                                      "1--4 - 1--7",
+                                      "1--5 - 1--10",
+                                      "1--2 - 1--9"),
+                         alternative = "exhaustive")
+# summary
+summary(edge_comp)
 }

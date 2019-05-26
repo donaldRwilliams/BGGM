@@ -1,15 +1,34 @@
-#' Title
+#' Precision Matrix to Multiple Regression
 #'
-#' @param fit
-#' @param node
-#' @param ci_width
-#' @param samples
-#' @param ...
+#' @description There is a direct correspondence between the covariance matrix and multiple regression. In the case of GGMs, it is possible
+#' to estimate the edge set with multiple regression (i.e., neighborhood selection). In *BGGM*, the precision matrix is first sampled from, and then
+#' each draws is converted to the corresponding coefficient and error variance. This results in a posterior distribution. This function can be used
+#' to perform Bayesian multiple regression.
 #'
-#' @return
+#' @param fit object of class \code{estimate} (analytic = F)
+#' @param node which node to summarize (i.e., the outcome)
+#' @param ci_width credible interval width used in the summary output
+#' @param samples number of samples used in the conversion.
+#' @param ... e.g., \code{digits}
+#'
+#' @return summary of the implicit multiple regresion for \code{node}
 #' @export
 #'
 #' @examples
+#'
+#' # p = 10
+#' Y <- BGGM::bfi[,1:10]
+#'
+#' # sample posterior
+#' fit <- estimate(Y, samples = 5000)
+#'
+#' # precision to regression
+#' coefficients(fit, node = 1, ci_width = 0.95)
+#'
+#' # precision to regression
+#'
+#' coefficients(fit, node = 1, ci_width = 0.95)
+
 coef.estimate <- function(fit, node, ci_width,  samples = 1000, ...){
   test <- BGGM:::beta_summary(fit, node = node, ci_width = ci_width, samples = samples)
   sums <- list()

@@ -2,13 +2,13 @@
 % Please edit documentation in R/select.explore.R
 \name{select.explore}
 \alias{select.explore}
-\title{Title}
+\title{Select Graphical Structure with the Bayes Factor}
 \usage{
 \method{select}{explore}(x, BF_cut = 3, alternative = "two.sided",
   hyp_prob = NULL)
 }
 \arguments{
-\item{x}{data matrix}
+\item{x}{data matrix (\emph{n} \times  \emph{p})}
 
 \item{BF_cut}{evidentiary threshold}
 
@@ -16,6 +16,26 @@
 
 \item{hyp_prob}{posterior probability threshold (see notes)}
 }
+\value{
+An object of class \code{select.explore}
+}
 \description{
-Title
+Select Graphical Structure with the Bayes Factor
+}
+\note{
+The \code{alternative} can be either \code{greater}, \code{less}, \code{two.sided}, or \code{exhaustive}. The argument \code{hyp_prob} is used only
+when \code{alternative = hypothesis}. It is the posterior hypothesis probability used as the decision rule.
+}
+\examples{
+
+
+# p = 5
+Y <- BGGM::bfi[,1:5]
+
+# fit model
+fit_bf <- explore(Y, prior_sd = 0.5,
+                  iter = 5000,
+                  cores = 2)
+
+summary(fit_bf)
 }

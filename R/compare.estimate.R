@@ -1,15 +1,42 @@
-#' Title
+#' Edge Contrasts with Estimation Based Methods
 #'
-#' @param x
-#' @param contrast
-#' @param ci_width
-#' @param rope
-#' @param mute
+#' @description Allows for comparing partial correlations \emph{within} the same GGM--e.g., to determine the largest edge for each node.
 #'
-#' @return
+#' @param x object from \code{estimate} (\code{sampling = TRUE})
+#' @param contrast partial correlations to compare
+#' @param ci_width credible interval width
+#' @param rope region of practical equivalence
+#'
+#' @return returned_object data.frame of results. use \code{summary} or \code{head}
+#' @return call call used in \code{edge_difference}
+#' @return ci credible interval used in \code{edge_difference}
+#' @return rope region of practical equivalence used in \code{edge_difference}
+#' @return samples list of posterior samples of each contrast. Can be used for custom plot, or the object can be plotted with \code{plot}
+#'
+#' @note These contrasts are based on the posterior distribution, and credible intervals or the rope are used to determine differences. In the case of
+#' the rope, it is also possible to assess similarity between edges. The function \code{edge_compare} is a generic, and for using the Bayes factor,
+#' \code{x} should be an object from \code{explore}.
 #' @export
 #'
 #' @examples
+#'
+#' # p = 10
+#' Y <- BGGM::bfi[,1:10]
+#'
+#' # sample from posterior
+#'
+#' fit_sample <- estimate(Y, samples = 5000, analytic = F)
+#'
+#' edge_difference <- edge_compare(fit_sample,
+#' contrast =  list("1--5 - 1--3",
+#'                  "1--2 - 1--6",
+#'                  "1--4 - 1--7",
+#'                  "1--5 - 1--10",
+#'                  "1--2 - 1--9"),
+#'                  ci_width = 0.95,
+#'                  rope = 0.1)
+#'
+#' head(edge_difference, nrow = 4)
 edge_compare.estimate <- function(x, contrast, ci_width, rope = NULL){
 
   # if(!is.null(rope)){
