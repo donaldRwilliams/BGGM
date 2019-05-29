@@ -637,7 +637,7 @@ summary(test_order)
 
 There is strong support for $\mathcal{H}_1$. Note that `iter = 50000` ($\approx 7$ seconds), which ensures an adequate number of samples for accurately computing the Bayes factor. Although the focus is not *E*, but rather a subset of partial correlations, the object `test_order` can be plotted--i.e., 
 
-```{r, out.width= "300 %"}
+```{r, out.width= "325 %", out.width= "325 %"}
 plt <- hypothesis_plot(fit = test_order, 
                 node_outer = 8, 
                 node_inner = 7, 
