@@ -45,8 +45,7 @@ beta_summary <- function(x, node, ci_width, samples){
 
 
 
-net_plot <- function(x, layout = "circle", mat_type, node_outer, node_inner, node_text_size){
-
+net_plot <- function(x, layout = "circle", mat_type, node_outer, node_inner, node_text_size, alpha = TRUE){
 
   if(mat_type == "partials"){
   p <- ncol(x)
@@ -58,7 +57,9 @@ net_plot <- function(x, layout = "circle", mat_type, node_outer, node_inner, nod
 
   graph_cors <- igraph::graph_from_data_frame(d = mlt_data, directed = FALSE)
 
+  if(isTRUE(alpha)){
   plt <- ggraph(graph_cors, layout = layout) +
+
 
     geom_edge_link(aes(edge_width = abs(value), color = value)) +
 
@@ -77,6 +78,13 @@ net_plot <- function(x, layout = "circle", mat_type, node_outer, node_inner, nod
     theme_void() +
 
     coord_flip()
+  } else{
+
+
+
+
+  }
+
 }
 
   if(mat_type == "adj"){
@@ -1243,4 +1251,24 @@ samps_pcor_helper <- function(x, p){
 
 
 
+hyp_converter <- function(x){
 
+  hyp_converted <- x
+
+  extract_numbers <- unlist(stringr::str_extract_all(hyp_converted, "\\d+"))
+
+  extract_numbers <- extract_numbers[unlist(extract_numbers) != 0 ]
+  words <- NA
+  for(i in 1:length(extract_numbers)){
+
+    temp <- noquote(extract_numbers[i])
+    words[i] <- BGGM:::numbers2words(as.numeric(temp))
+    hyp_converted <- sub(temp, BGGM:::numbers2words(as.numeric(temp)), hyp_converted)
+
+
+  }
+
+  hyp_converted <- stringr::str_remove_all(hyp_converted, "--")
+
+  list(hyp_converted = hyp_converted, words = words)
+}

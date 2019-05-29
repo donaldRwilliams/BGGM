@@ -20,7 +20,6 @@ estimate <- function(x, ...) UseMethod("estimate")
 
 explore  <- function(x, ...) UseMethod("explore")
 
-
 confirm  <- function(x, ...) UseMethod("confirm")
 
 loocv <- function(x, ...) UseMethod("loocv")
@@ -1692,8 +1691,6 @@ summary.edge_compare.explore <- function(x, log = TRUE,...){
 
 }
 
-
-
 print.edge_compare.explore <- function(x, ...){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
@@ -1705,6 +1702,72 @@ print.edge_compare.explore <- function(x, ...){
   cat("Call:\n")
   print(x$call)
   cat("--- \n")
+}
+
+
+print.confirm <- function(x){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type: Hypothesis Testing (Confirmatory) \n")
+  cat("Posterior Samples:", x$iter, "\n")
+  cat("Observations (n):", nrow(x$dat), "\n")
+  cat("Variables (p):", x$p, "\n")
+  cat("Edges:", .5 * (x$p * (x$p-1)), "\n")
+  cat("Delta:", x$delta, "\n")
+  cat("--- \n")
+  cat("Call: \n")
+  print(x$call)
+  cat("--- \n")
+  cat("Date:", date(), "\n")
+}
+
+summary.confirm <- function(x, ...){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type: Confirmatory Hypothesis Testing \n")
+  cat("--- \n")
+  cat("Call:\n")
+  print(x$call)
+  cat("--- \n")
+  cat("Hypotheses: \n")
+
+  if(length(x$hypotheses) == length(x$post_prob)){
+
+    hyps <- data.frame( t(t(names(x$post_prob))), c(t(x$hypotheses)))
+    colnames(hyps) <- NULL
+    print(hyps, row.names = F)
+    }
+
+
+
+  if(length(x$hypotheses) != length(x$post_prob)){
+
+  if(length(x$hypotheses) > 1){
+  hyps <- data.frame( t(t(names(x$post_prob))), c(t(x$hypotheses), paste("'not ", "H1-",  length(x$hypotheses), "'", sep = "")))
+  colnames(hyps) <- NULL
+  print(hyps, row.names = FALSE)
+
+  } else{
+    hyps <- data.frame( t(t(names(x$post_prob))), c(t(x$hypotheses), paste("'not ", "H1", "'", sep = "")))
+    colnames(hyps) <- NULL
+    print(hyps, row.names = FALSE)
+
+  }
+
+  }
+
+  cat("--- \n")
+  cat("Posterior prob: \n")
+
+  temp <- data.frame( (paste("p(", names(x$post_prob), "|Y) = ", round(x$post_prob, 4),  sep = "")))
+  colnames(temp) <- ""
+
+  print(temp, row.names = F)
+  cat("--- \n")
+  cat('Bayes factor matrix: \n')
+  print(t(x$BF_matrix))
+  cat("--- \n")
+  cat("note: equal hypothesis prior probabilities")
 }
 
 

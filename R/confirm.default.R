@@ -1,148 +1,49 @@
-compare.predict <- function(x, ci_width){
+#' Confirmatory Hypothesis Testing
+#'
+#' @param x data matrix (\emph{n} \times  \emph{p})
+#' @param hypothesis hypotheses to be compared
+#' @param prior_sd hypothesized standard deviation for $\rho$
+#' @param iter posterior and prior samples. 25,000 is the default, as it results in a more stable Bayes factor than using, say, 5,000.
+#' @param cores number of cores for parallel computing. The defaul is 2, but this can be adjusted
+#'
+#' @return An object of class \code{confirm}
+#' @export
+#'
+#' @note Currently inequality and equality restrictions can be tested. The former is an ordering the respective edge sizes,
+#' whereas the latter allows for testing whether certian edges are exactly the same.
+#' @examples
+#'
+#'
+#' Y <- BGGM::bfi[,1:5]
+#'
+#' hypothesis <- c("3--5 > 1--5 > 2--5;
+#'                 3--5 > 2--5 > 1--5")
+#'
+#'                 test_order <-  confirm(x = x, hypothesis  = hypothesis,
+#'                 prior_sd = 0.5, iter = 50000,
+#'                 cores = 2)
+confirm.default <- function(x, hypothesis, prior_sd, iter = 25000,  cores = 2){
 
-  pairwise_comb <- t(combn(1:x$p, 2))
-  node_names <- names(x$post_samples)
-  diff <- list()
-  names_temp <- list()
-  for(i in 1:nrow(pairwise_comb)){
-    # paste()
-    temp <-  x$post_samples[[node_names[pairwise_comb[i,1]]]] - x$post_samples[[node_names[pairwise_comb[i,2]]]]
-    names_temp[[i]]  <- paste(which(names( x$post_samples) == node_names[pairwise_comb[i,1]]),
-                              which(names( x$post_samples) == node_names[pairwise_comb[i,2]]), sep = " - " )
-    diff[[i]] <- temp
+  # code taken and adapted from (with permission):
+  # https://github.com/Jaeoc/lmhyp
 
-  }
-
-
-  names(diff) <- names_temp
-
-
-  res <- lapply(1:nrow(pairwise_comb), function(x)   BGGM:::compare_predict_helper(diff[[x]] , ci_width)       )
-
-
-  summ <- cbind.data.frame(contrast = names(diff), do.call(rbind.data.frame, res))
-
-  retuned_object <- list(summary_error = summ, test_data = x$test_data,  measure = x$measure, call = match.call())
-
-  class(retuned_object) <- "compare.predict"
-
-  return(retuned_object)
-
-}
-
-
-plot.compare.predict  <- function(x, limits){
-
-  # check limits
-  if(length(limits) != 2){
-    stop("limites must be of length two--e.g., c(-1, 1)")
-  }
-
-  # extract 1st node in the pairwise comparsion
-  one <- unlist(noquote(lapply(1:length(x$summary_error$contrast),
-                               function(y) sub(".*- ", "", x$summary_error$contrast[y]))))
-
-  # extract 2nd node in the pairwise comparsion
-  two <- unlist(noquote(lapply(1:length(x$summary_error$contrast),
-                               function(y) gsub(" .*$", "", x$summary_error$contrast[y]))))
-
-  # data.frame for plotting
-  dat_plot <- rbind.data.frame(cbind.data.frame(
-    # 1st node
-    X1 = one,
-    # 2nd node
-    X2 = two,
-    # R2 difference
-    value = x$summary_error$post_mean) ,
-
-    cbind.data.frame(
-      # 1st node
-      X1 = two,
-      # 2nd node
-      X2 = one,
-      # R2 difference
-      value = x$summary_error$post_mean))
-
-  # check interval for 0
-  dat_plot$sig <- ifelse(x$summary_error[,4] < 0 & x$summary_error[,5] > 0, 0, 1)
-
-  # create factor for ordering axes
-  dat_plot$X1 <- factor(
-    dat_plot$X1,
-    levels = 1:length(levels(dat_plot$X1)),
-    labels = 1:length(levels(dat_plot$X1))
-  )
-
-  # create factor for ordering axes
-  dat_plot$X2 <- factor(dat_plot$X2,
-                        levels = 1:length(levels(dat_plot$X1)),
-                        labels = 1:length(levels(dat_plot$X1)))
-
-  # predictive difference plot
-  plt1 <- ggplot(dat_plot, aes(x = as.factor(X2),
-                               y = as.factor(X1),
-                               fill = value)) +
-    # heat map
-    geom_tile() +
-    # gradient for R2 difference
-    scale_fill_gradientn(colours = c("brown3", "white",  "palegreen3"),
-                         name = "Difference",
-                         # adjust legend
-                         limits = limits) +
-    # text size
-    theme_bw(base_size = 12) +
-    # remove grid
-    theme(panel.grid = element_blank()) +
-    # reverse y levels
-    scale_y_discrete(limits= rev(levels(dat_plot$X1)),
-                     expand = c(0, 0)) +
-    # remove gaps around plot
-    scale_x_discrete(expand = c(0,0)) +
-    ylab("") +
-    xlab("")
-
-  # exclusion of 0 plot
-  plt2 <- ggplot(dat_plot, aes(x = as.factor(X2),
-                               y = as.factor(X1),
-                               fill = as.factor(sig))) +
-    # heat map
-    geom_tile(show.legend = F) +
-    # fill colors
-    scale_fill_manual(values = c("white", "grey35")) +
-    # text size
-    theme_bw(base_size = 12) +
-    # remove grid
-    theme(panel.grid = element_blank()) +
-    # reverse y levels
-    scale_y_discrete(limits= rev(levels(dat_plot$X1)),
-                     expand = c(0, 0)) +
-    # remove gaps around plot
-    scale_x_discrete(expand = c(0,0))     +
-    ylab("") +
-    xlab("")
-
-  # plots
-  plots <-  list(pred_diff = plt1, sig_diff = plt2)
-  return(plots)
-}
-
-
-
-
-inequality_test <- function(x, hyp, prior_sd, iter = 5000,  cores = 2){
-
+  # set prior prob to 1--i.e., equal
   priorprob = 1
 
   # convert hypotheses
-  hyp <- hyp_converter(hyp)$hyp_converted
+  hyp <- BGGM:::hyp_converter(hypothesis)$hyp_converted
 
+  # fit model
   fit <- BGGM:::explore.default(X = x, prior_sd = prior_sd, iter = iter, cores = 2)
 
+  # number of edges
   edges <- 0.5* fit$p * (fit$p -1)
 
+  # posterior
   posterior_samples <- do.call(rbind.data.frame,
                                lapply(1:fit$cores, function(z)  fit$samples[[z]]$fisher_z_post))[1:edges]
 
+  # prior samples
   prior_samples <-     do.call(rbind.data.frame,
                                lapply(1:fit$cores, function(z)  fit$samples[[z]]$fisher_z_prior))[1:edges]
 
@@ -152,16 +53,19 @@ inequality_test <- function(x, hyp, prior_sd, iter = 5000,  cores = 2){
 
     # check hypotheses
     if(!grepl("^[0-9a-zA-Z><=,;().-]+$", hyp2)) stop("Impermissable characters in hypotheses.")
+
     if(grepl("[><=]{2,}", hyp2)) stop("Do not use combined comparison signs e.g., '>=' or '=='")
 
     # split hypotheses
     hyp_out <- if(length(hyp) > 1) c("X < 0", "X = 0", "X > 0") else unlist(strsplit(hyp2, split = ";"))
 
+    hypothesis <- gsub("[[:space:]]", "",  sub(pattern = "\n", "", unlist(strsplit(hypothesis, split = ";"))))
 
     for(no in seq_along(hyp_out)){
       names(hyp_out)[no] <- paste0("H", no)
-
+      names(hypothesis)[no] <- paste0("H", no)
     }
+
 
     # if(!isTRUE(priorprob == 1) && length(priorprob) < length(hyp_out)) stop("Use default equal priorprob or specify priorprob for all hypotheses")
 
@@ -424,7 +328,7 @@ inequality_test <- function(x, hyp, prior_sd, iter = 5000,  cores = 2){
     names(BF_matrices) <- rownames(matrix_post_prob) <- varnames
 
     out <- list(BF_matrix = BF_matrices, post_prob = matrix_post_prob,
-                hypotheses = hyp_out, BF_computation = "Not available when option 'exploratory' chosen.",
+                hypotheses = hypothesis, BF_computation = "Not available when option 'exploratory' chosen.",
                 BFu_CI = "Not available when option 'exploratory' chosen.")
 
   } else{
@@ -442,10 +346,18 @@ inequality_test <- function(x, hyp, prior_sd, iter = 5000,  cores = 2){
     BFu_ci <- as.matrix(data.frame(BFu, out_ci_lb, out_ci_ub))
     colnames(BFu_ci) <- c("B(t,u)", "lb. (5%)", "ub. (95%)")
 
-    out <- list(BF_matrix = round(BF_matrix, digits = 3),post_prob = out_hyp_prob,
-                hypotheses = hyp_out, BF_computation = BF_computation, BFu_CI = BFu_ci)
+
+    out <- list(BF_matrix = round(BF_matrix, digits = 3),
+                post_prob = out_hyp_prob,
+                hypotheses = hypothesis,
+                BF_computation = BF_computation,
+                BFu_CI = BFu_ci,
+                call = match.call(),
+                p = fit$p, n = nrow(fit$dat),
+                iter = fit$iter,
+                delta = fit$delta,
+                parcors_mat = fit$parcors_mat)
   }
-  class(out) <- "hyp"
+  class(out) <- "confirm"
   out
   }
-

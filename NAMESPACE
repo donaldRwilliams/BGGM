@@ -63,7 +63,14 @@ export(summary.edge_compare.explore)
 export(head.edge_compare.explore)
 export(plot.edge_compare.explore)
 
+export(confirm)
+export(confirm.default)
+export(print.confirm)
+export(summary.confirm)
 
+
+import(ggplot2)
+import(ggraph)
 #export(edge_compare.estimate)
 #export(print.edge_compare.estimate)
 #export(plot.edge_compare.estimate)
