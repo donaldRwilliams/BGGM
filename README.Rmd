@@ -587,7 +587,7 @@ A key contribution of **BGGM** is extending hypothesis testing beyond explorator
 the data to the functions in **BGGM** and seeing what comes back. In other words, there are no specific, hypothesized models under consideration. On the other hand, the confirmatory hypothesis testing approaches allows for comparing theoretical models or (actual) predictions. The focus is thus not on $E$, but only certain edges in the network. 
 
 ## Order Constraints
-Theory may suggest, for example, that a set of partial correlations is expected to be larger than another set of partial correlation, that there is a hypothesized order of edge magntifue for a given node (variable), or some edges are expected to be positive while others are predicted to be negative. These can be tested with **BGGM**. 
+Theory may suggest, for example, that a set of partial correlations is expected to be larger than another set of partial correlations, that there is a hypothesized order of edge magnitude for a given node (variable), or some edges are expected to be positive while others are predicted to be negative. These can be tested with **BGGM**. 
 
 For example, suppose we expected (predicted) the following: $\mathcal{H}_1: \rho_{1,2} > \rho_{1,3} > \rho_{1,4} > \rho_{1,5}$
 vs.  $\mathcal{H}_c:$ Not $\mathcal{H}_1$
