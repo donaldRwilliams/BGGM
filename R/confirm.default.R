@@ -30,6 +30,7 @@ confirm.default <- function(x, hypothesis, prior_sd, iter = 25000,  cores = 2){
   # set prior prob to 1--i.e., equal
   priorprob = 1
 
+  returned_mats <-list()
   # convert hypotheses
   hyp <- BGGM:::hyp_converter(hypothesis)$hyp_converted
 
@@ -115,6 +116,7 @@ confirm.default <- function(x, hypothesis, prior_sd, iter = 25000,  cores = 2){
       framed <- BGGM:::framer(hyp2)
       mats <- BGGM:::create_matrices(framed = framed, varnames = colnames(posterior_samples))
 
+      returned_mats[[h]] <- mats
 
       R_ei <- rbind(mats$R_e,mats$R_i)
       r_ei <- rbind(mats$r_e,mats$r_i)
@@ -356,7 +358,8 @@ confirm.default <- function(x, hypothesis, prior_sd, iter = 25000,  cores = 2){
                 p = fit$p, n = nrow(fit$dat),
                 iter = fit$iter,
                 delta = fit$delta,
-                parcors_mat = fit$parcors_mat)
+                parcors_mat = fit$parcors_mat,
+                returned_mats = returned_mats)
   }
   class(out) <- "confirm"
   out
