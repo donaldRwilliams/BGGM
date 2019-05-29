@@ -1745,12 +1745,12 @@ summary.confirm <- function(x, ...){
   if(length(x$hypotheses) > 1){
   hyps <- data.frame( t(t(names(x$post_prob))), c(t(x$hypotheses), paste("'not ", "H1-",  length(x$hypotheses), "'", sep = "")))
   colnames(hyps) <- NULL
-  print(hyps, row.names = FALSE)
+  print(hyps, row.names = FALSE, right = F)
 
   } else{
     hyps <- data.frame( t(t(names(x$post_prob))), c(t(x$hypotheses), paste("'not ", "H1", "'", sep = "")))
     colnames(hyps) <- NULL
-    print(hyps, row.names = FALSE)
+    print(hyps, row.names = FALSE )
 
   }
 
@@ -1762,7 +1762,7 @@ summary.confirm <- function(x, ...){
   temp <- data.frame( (paste("p(", names(x$post_prob), "|Y) = ", round(x$post_prob, 4),  sep = "")))
   colnames(temp) <- ""
 
-  print(temp, row.names = F)
+  print(temp, row.names = F, right = F)
   cat("--- \n")
   cat('Bayes factor matrix: \n')
   print(t(x$BF_matrix))
