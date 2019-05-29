@@ -109,7 +109,7 @@ summary(fit_analytic)
 #> Call: 
 #> estimate.default(x = Y, analytic = T)
 #> --- 
-#> Date: Tue May 28 18:34:26 2019
+#> Date: Wed May 29 07:07:27 2019
 ```
 
 Note `summary(.)` provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
@@ -177,16 +177,16 @@ summary(E, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  edge post_mean post_sd   2.5%  97.5%
-#>  1--2   -0.2403   0.018 -0.275 -0.204
-#>  1--3   -0.1075   0.019 -0.144 -0.072
-#>  2--3    0.2863   0.018  0.251  0.320
-#>  1--4   -0.0071   0.019 -0.045  0.031
-#>  2--4    0.1642   0.019  0.129  0.201
-#>  3--4    0.1780   0.019  0.140  0.215
-#>  1--5   -0.0087   0.019 -0.045  0.029
-#>  2--5    0.1560   0.019  0.119  0.194
-#>  3--5    0.3590   0.017  0.326  0.392
-#>  4--5    0.1214   0.018  0.086  0.158
+#>  1--2   -0.2403   0.018 -0.276 -0.204
+#>  1--3   -0.1076   0.019 -0.145 -0.069
+#>  2--3    0.2865   0.017  0.251  0.320
+#>  1--4   -0.0074   0.019 -0.044  0.029
+#>  2--4    0.1640   0.019  0.127  0.200
+#>  3--4    0.1779   0.018  0.141  0.212
+#>  1--5   -0.0091   0.019 -0.047  0.029
+#>  2--5    0.1560   0.019  0.118  0.193
+#>  3--5    0.3589   0.017  0.326  0.391
+#>  4--5    0.1213   0.019  0.084  0.159
 #> ---
 ```
 
@@ -278,16 +278,16 @@ head(E, nrow = 10, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  edge post_mean post_sd pr_out  pr_in
-#>  1--2    -0.244   0.018   1.00 0.0000
-#>  1--3    -0.106   0.019   0.63 0.3740
-#>  2--3     0.287   0.018   1.00 0.0000
-#>  1--4    -0.015   0.020   0.00 1.0000
-#>  2--4     0.161   0.019   1.00 0.0006
-#>  3--4     0.160   0.019   1.00 0.0006
-#>  1--5    -0.015   0.020   0.00 1.0000
-#>  2--5     0.145   0.019   0.99 0.0102
-#>  3--5     0.354   0.017   1.00 0.0000
-#>  4--5     0.114   0.019   0.77 0.2308
+#>  1--2    -0.244   0.018 1.0000 0.0000
+#>  1--3    -0.106   0.019 0.6158 0.3842
+#>  2--3     0.286   0.018 1.0000 0.0000
+#>  1--4    -0.014   0.019 0.0000 1.0000
+#>  2--4     0.161   0.019 0.9982 0.0018
+#>  3--4     0.160   0.019 0.9994 0.0006
+#>  1--5    -0.016   0.019 0.0002 0.9998
+#>  2--5     0.145   0.019 0.9912 0.0088
+#>  3--5     0.354   0.017 1.0000 0.0000
+#>  4--5     0.114   0.019 0.7726 0.2274
 #> ---
 ```
 
@@ -356,10 +356,10 @@ head(edge_difference, nrow = 4)
 #> Estimates: 
 #>  
 #>      contrast post_mean post_sd pr_out  pr_in
-#>   1--5 - 1--3    0.0906   0.032 0.3858 0.6142
-#>   1--2 - 1--6   -0.2971  0.0261      1      0
-#>   1--4 - 1--7   -0.0873  0.0296 0.3334 0.6666
-#>  1--5 - 1--10    0.0102  0.0267  2e-04 0.9998
+#>   1--5 - 1--3    0.0896  0.0318  0.372  0.628
+#>   1--2 - 1--6   -0.2975  0.0266      1      0
+#>   1--4 - 1--7   -0.0866  0.0296 0.3268 0.6732
+#>  1--5 - 1--10      0.01  0.0264  8e-04 0.9992
 #> ---
 ```
 
@@ -409,15 +409,15 @@ coefficients(fit, node = 1, ci_width = 0.95)
 #> Estimates: 
 #>  
 #>  node post_mean post_sd   2.5%  97.5%
-#>     2    -0.279   0.021 -0.320 -0.239
-#>     3    -0.124   0.023 -0.172 -0.079
-#>     4    -0.015   0.020 -0.054  0.023
-#>     5    -0.018   0.021 -0.059  0.027
-#>     6     0.056   0.020  0.012  0.096
-#>     7     0.080   0.021  0.039  0.121
-#>     8     0.044   0.021  0.002  0.084
-#>     9     0.142   0.022  0.097  0.186
-#>    10    -0.029   0.021 -0.074  0.008
+#>     2    -0.277   0.022 -0.319 -0.234
+#>     3    -0.125   0.023 -0.167 -0.080
+#>     4    -0.016   0.020 -0.056  0.020
+#>     5    -0.018   0.022 -0.057  0.026
+#>     6     0.055   0.021  0.016  0.097
+#>     7     0.080   0.022  0.036  0.124
+#>     8     0.044   0.021 -0.001  0.083
+#>     9     0.140   0.022  0.098  0.181
+#>    10    -0.030   0.021 -0.072  0.011
 #> ---
 ```
 
@@ -453,9 +453,9 @@ head(train_R2, nrow = 2)
 #> --- 
 #> Estimates: 
 #> 
-#>  node post_mean    post_sd      2.5%     97.5%
-#>     1 0.1684393 0.06742497 0.0521455 0.3048997
-#>     2 0.2860983 0.06648340 0.1535243 0.4076214
+#>  node post_mean   post_sd       2.5%     97.5%
+#>     1 0.1705695 0.0677193 0.05039498 0.3083307
+#>     2 0.2904589 0.0668951 0.15345835 0.4118516
 #> ---
 ```
 
@@ -510,16 +510,16 @@ summary(bayes_loo)
 #> Estimates: 
 #> 
 #>   node      loo   loo_se
-#>     1 2574.438 48.83474
-#>     2 2332.001 64.23737
-#>     3 2303.068 64.61605
-#>     4 2466.362 52.35997
-#>     5 2416.575 56.06943
-#>     6 2433.890 59.18862
-#>     7 2299.888 50.38952
-#>     8 2389.838 51.48809
-#>     9 2295.633 51.33843
-#>    10 2362.998 39.87439
+#>     1 2573.078 48.89792
+#>     2 2331.559 63.68049
+#>     3 2301.995 64.68297
+#>     4 2465.897 52.08869
+#>     5 2415.186 55.68637
+#>     6 2433.014 59.17952
+#>     7 2301.032 50.54731
+#>     8 2391.138 51.52176
+#>     9 2294.359 51.59717
+#>    10 2363.644 39.38359
 #> ---
 ```
 
@@ -630,7 +630,7 @@ summary(fit_bf)
 #> Call: 
 #> explore.default(X = Y, prior_sd = 0.5, iter = 5000, cores = 2)
 #> --- 
-#> Date: Tue May 28 18:34:52 2019
+#> Date: Wed May 29 07:07:53 2019
 ```
 
 Note `summary(.)`, or alternatively `print(.)`, provides information about the fitted model, including that hypothesis testing (exploratory) was used, the number of observations (*n*) and variables (*p*), and the number of edges. Delta (*δ*) is the hyperparameter of the matrix−*F* distribution. A value of 3 corresponds to `prior_sd = 0.5`. This output parallels the estimation based methods. Importantly, all fitted objects include specific (what method was used) and general information (e.g., *n* and *p*) when printed.
@@ -660,11 +660,11 @@ summary(E, hyp = "H1")
 #> Partial Correlations 
 #>  
 #>            1          2          3         4         5
-#> 1  0.0000000 -0.2401146 -0.1074150 0.0000000 0.0000000
-#> 2 -0.2401146  0.0000000  0.2862788 0.1642144 0.1565090
-#> 3 -0.1074150  0.2862788  0.0000000 0.1781143 0.3586772
-#> 4  0.0000000  0.1642144  0.1781143 0.0000000 0.1213570
-#> 5  0.0000000  0.1565090  0.3586772 0.1213570 0.0000000
+#> 1  0.0000000 -0.2396934 -0.1078165 0.0000000 0.0000000
+#> 2 -0.2396934  0.0000000  0.2861539 0.1651083 0.1562341
+#> 3 -0.1078165  0.2861539  0.0000000 0.1781069 0.3587519
+#> 4  0.0000000  0.1651083  0.1781069 0.0000000 0.1211211
+#> 5  0.0000000  0.1562341  0.3587519 0.1211211 0.0000000
 #> --- 
 #>  
 #> Adjancency (non-zero) 
@@ -698,16 +698,16 @@ summary(E, summarize = T, log = T, digits = 2)
 #> Estimates: 
 #>  
 #>   edge post_mean post_sd BF 10
-#>  1--2   -0.2401   0.018  77.9
-#>  1--3   -0.1074   0.019  11.9
-#>  2--3    0.2863   0.018 111.1
-#>  1--4   -0.0080   0.019  -3.5
-#>  2--4    0.1642   0.019  32.0
-#>  3--4    0.1781   0.019  40.2
-#>  1--5   -0.0087   0.019  -3.5
-#>  2--5    0.1565   0.019  29.3
-#>  3--5    0.3587   0.017 185.9
-#>  4--5    0.1214   0.019  16.7
+#>  1--2   -0.2397   0.018  77.2
+#>  1--3   -0.1078   0.019  12.7
+#>  2--3    0.2862   0.018 113.5
+#>  1--4   -0.0072   0.019  -3.5
+#>  2--4    0.1651   0.019  33.9
+#>  3--4    0.1781   0.019  40.8
+#>  1--5   -0.0088   0.019  -3.5
+#>  2--5    0.1562   0.019  29.8
+#>  3--5    0.3588   0.017 181.0
+#>  4--5    0.1211   0.019  16.2
 #> --- 
 #> note: BF_10 is evidence in favor of H1
 ```
@@ -798,11 +798,11 @@ head(E, summarize = T, nrow = 5)
 #> Estimates: 
 #>  
 #>   edge   post_mean    post_sd p(H0|Y) p(H1|Y) p(H2|Y)
-#>  1--2 -0.24427643 0.01846034   0.000   0.000   1.000
-#>  1--3 -0.10620873 0.01931071   0.000   0.000   1.000
-#>  2--3  0.28618401 0.01779939   0.000   1.000   0.000
-#>  1--4 -0.01479558 0.01958702   0.997   0.001   0.002
-#>  2--4  0.16070819 0.01925217   0.000   1.000   0.000
+#>  1--2 -0.24404634 0.01837737   0.000   0.000   1.000
+#>  1--3 -0.10589230 0.01921815   0.000   0.000   1.000
+#>  2--3  0.28672883 0.01773482   0.000   1.000   0.000
+#>  1--4 -0.01489638 0.01953140   0.997   0.001   0.002
+#>  2--4  0.16055800 0.01913814   0.000   1.000   0.000
 #> ---
 ```
 
@@ -859,11 +859,11 @@ summary(edge_comp)
 #> Estimates: 
 #>  
 #>       contrast   post_mean    post_sd p(H0|Y) p(H1|Y) p(H2|Y)
-#>   1--5 - 1--3  0.08986532 0.03237172   0.166   0.832   0.002
-#>   1--2 - 1--6 -0.29641174 0.02650569   0.000   0.000   1.000
-#>   1--4 - 1--7 -0.08700865 0.02951379   0.082   0.001   0.917
-#>  1--5 - 1--10  0.00964022 0.02666986   0.998   0.001   0.001
-#>   1--2 - 1--9 -0.36820613 0.02621815   0.000   0.000   1.000
+#>   1--5 - 1--3  0.09002524 0.03201313   0.142   0.856   0.002
+#>   1--2 - 1--6 -0.29677809 0.02724700   0.000   0.000   1.000
+#>   1--4 - 1--7 -0.08659867 0.02926599   0.079   0.001   0.920
+#>  1--5 - 1--10  0.01002931 0.02669435   0.998   0.001   0.001
+#>   1--2 - 1--9 -0.36841368 0.02611269   0.000   0.000   1.000
 #> ---
 ```
 
@@ -901,7 +901,13 @@ Order Constraints
 
 Theory may suggest, for example, that a set of partial correlations is expected to be larger than another set of partial correlations, that there is a hypothesized order of edge magnitude for a given node (variable), or some edges are expected to be positive while others are predicted to be negative. These can be tested with **BGGM**.
 
-For example, suppose we expected (predicted) the following: ℋ<sub>1</sub> : *ρ*<sub>1, 2</sub> &gt; *ρ*<sub>1, 3</sub> &gt; *ρ*<sub>1, 4</sub> &gt; *ρ*<sub>1, 5</sub> vs. ℋ<sub>*c*</sub>: Not ℋ<sub>1</sub>
+For example, suppose we expected (predicted) the following:
+
+ℋ<sub>1</sub> : *ρ*<sub>1, 2</sub> &gt; *ρ*<sub>1, 3</sub> &gt; *ρ*<sub>1, 4</sub> &gt; *ρ*<sub>1, 5</sub>
+
+vs.
+
+ℋ<sub>*c*</sub>: Not ℋ<sub>1</sub>
 
 This is implemented with:
 
@@ -914,6 +920,7 @@ hypothesis <- c("1--2 > 1--3 > 1--4 > 1--5")
 test_order <-  confirm(x = Y, hypothesis  = hypothesis, 
                        prior_sd = 0.5, iter = 50000, 
                        cores = 2)
+# summary
 summary(test_order)
 #> BGGM: Bayesian Gaussian Graphical Models 
 #> --- 
@@ -935,13 +942,60 @@ summary(test_order)
 #> --- 
 #> Bayes factor matrix: 
 #>    H1           Hc
-#> H1  1 4.188381e+20
+#> H1  1 2.544139e+20
 #> Hc  0 1.000000e+00
 #> --- 
 #> note: equal hypothesis prior probabilities
 ```
 
-As indicated by the posterior probabilities, the hypothesis was not supported. \# Comparing GGMs
+As indicated by the posterior probabilities, the hypothesis was not supported.
+
+One the other hand, we can also test the prediction that, for a specifc variable (for example), certain edges are negative while others are positive--i.e.,
+
+ℋ<sub>1</sub> : (*ρ*<sub>1, 2</sub>, *ρ*<sub>1, 3</sub>, *ρ*<sub>1, 4</sub>)&lt;0 &lt; *ρ*<sub>1, 6</sub>
+
+vs.
+
+ℋ<sub>*c*</sub>: Not ℋ<sub>1</sub>
+
+Here the prediction states that the relation between variable 1 and 6 is positive, whereas the others are predicted to be negative. This is implemented with:
+
+``` r
+# hypothesis
+hypothesis <- c("(1--2, 1--3, 1--4)  <  0 < (1--6)")
+# test order
+test_order <-  confirm(x = Y, hypothesis  = hypothesis, 
+                       prior_sd = 0.5, iter = 50000, 
+                       cores = 2)
+# summary
+summary(test_order)
+#> BGGM: Bayesian Gaussian Graphical Models 
+#> --- 
+#> Type: Confirmatory Hypothesis Testing 
+#> --- 
+#> Call:
+#> confirm.default(x = Y, hypothesis = hypothesis, prior_sd = 0.5, 
+#>     iter = 50000, cores = 2)
+#> --- 
+#> Hypotheses: 
+#>                              
+#>  H1 (1--2,1--3,1--4)<0<(1--6)
+#>  Hc                  'not H1'
+#> --- 
+#> Posterior prob: 
+#>                
+#>  p(H1|Y) = 0.98
+#>  p(Hc|Y) = 0.02
+#> --- 
+#> Bayes factor matrix: 
+#>        H1   Hc
+#> H1  1.000 0.02
+#> Hc 49.056 1.00
+#> --- 
+#> note: equal hypothesis prior probabilities
+```
+
+Here the prediction was supported. This powerful approach can be used to test, essentiallly, any hypothesized order restriction in relation to zero (directional) or, as in the first example, specific edges. <!-- (1--2,1--3,1--4)<0<(1--6) --> \# Comparing GGMs
 
 References
 ==========
