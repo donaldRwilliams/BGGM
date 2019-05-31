@@ -73,7 +73,7 @@ This README is organized as follows:
       
         - [Order Constraints](#order-constraints)
         
-        - Equality Constraints
+        - [Equality Constraints](#equality-constraints)
 
 * Comparing GGMs
     
@@ -646,7 +646,32 @@ plt
 ```
 
 This is meant to highlight the specific edges considered in the hypothesis test. Further, in this plot, it is clear that $(\rho_{1,2}, \rho_{1,3}, \rho_{1,4}) < 0$ and that $0 < \rho_{1,6}$. We emphasize that these *confirmatory* hypotheses should be decided upon before visualizing the network.
-<!-- (1--2,1--3,1--4)<0<(1--6) -->
+
+
+## Equality Constraints
+**BGGM** can also test exact equality constraints on sets of edges (i.e., partial correlations). One could predict that certain edges have the same strength (effect size) or that a set of edges are equal to zero. The latter allows for testing expectations about the underlying conditional independence structure, say, for a particular variable (node) in the model. For example,
+
+
+
+$\mathcal{H}_1: (\rho_{1,2}, \rho_{1,3}, \rho_{1,4}) = 0$
+
+vs.
+
+$\mathcal{H}_c:$ Not $\mathcal{H}_1$
+ 
+
+
+```{r}
+hypothesis <- "(1--2, 1--3, 1--4) = 0"
+
+# test order
+test_order <-  confirm(x = Y, hypothesis  = hypothesis, 
+                       prior_sd = 0.5, iter = 50000, 
+                       cores = 2)
+# summary
+summary(test_order)
+```
+
 
 
 # Comparing GGMs

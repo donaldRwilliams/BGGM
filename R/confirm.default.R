@@ -114,15 +114,44 @@ confirm.default <- function(x, hypothesis, prior_sd, iter = 25000,  cores = 2){
       if(any(duplicated(hyp_vars))) stop("Variables should occur only once in a hypothesis. Check semicolons.")
 
       framed <- BGGM:::framer(hyp2)
+
       mats <- BGGM:::create_matrices(framed = framed, varnames = colnames(posterior_samples))
 
       returned_mats[[h]] <- mats
 
       R_ei <- rbind(mats$R_e,mats$R_i)
+
       r_ei <- rbind(mats$r_e,mats$r_i)
+
       Rr_ei <- cbind(mats$R_ei,mats$r_ei)
+
       beta_zero <- MASS::ginv(mats$R_ei)%*%mats$r_ei
 
+
+
+      if(mats$comparisons == "only equality"){
+
+        Sigma0 <- cov(prior_samples)
+        Sigma1 <- cov(posterior_samples)
+
+        mu0 <- mats$R_e %*% colMeans(prior_samples)
+        mu1 <- mats$R_e %*% colMeans(posterior_samples)
+
+
+        s0 <- mats$R_e %*% Sigma0 %*% t(mats$R_e)
+        s1 <- mats$R_e %*% Sigma1 %*% t(mats$R_e)
+        #Hypothesis test
+        log_BF <- mvtnorm::dmvnorm(x = t(mats$r_e), mean =   t(mu1), sigma = s1, log = TRUE) -
+                   mvtnorm::dmvnorm(x = t(mats$r_e), mean = t(mu0), sigma = s0, log = TRUE)
+
+        f_E <- mvtnorm::dmvnorm(x = t(mats$r_e), mean =   t(mu1), sigma = s1, log = FALSE)
+        c_E <- mvtnorm::dmvnorm(x = t(mats$r_e), mean = t(mu0), sigma = s0, log = TRUE)
+        c_i_e <- f_i_e <- NA
+
+        BF <- exp(log_BF)
+        ci_lb <- ci_ub <- NA
+
+        }
 
       if(mats$comparisons == "only inequality"){
 
