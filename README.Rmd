@@ -709,7 +709,7 @@ summary(ggm_ppc2)
 
 The predictive distributions can also be visualized. For example, the `global` check is implemented with:
 
-```{r, out.width= "325 %", out.width= "325 %"}
+```{r, out.width= "500 %", out.width= "500 %", message=F, warning=F}
 # global predictive check
 plot(ggm_ppc1) +
   theme_minimal(base_size = 14)  +
