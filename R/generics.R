@@ -1826,13 +1826,13 @@ summary.ggm_compare_ppc <- function(x, ...){
     cat("note: \np_value = p(T(Y_rep) > T(y)|Y)\nKLD = Kullback–Leibler divergence")
   }
   if(x$type == "nodewise"){
-
+    temp <- list()
     for(i in 1:length(x$obs_jsd)){
       temp[[i]] <- data.frame(node = 1:p , KLD =  round(do.call(rbind, x$obs_jsd[[i]]), 3),
                               p_value = unlist(x$pvalue[[i]]))
     }
 
-    for(i in 1:1:length(x$obs_jsd)){
+    for(i in 1:length(x$obs_jsd)){
       cat("contrast:",do.call(rbind, x$names)[[i]], "\n\n")
       print(   temp[[i]],  row.names = F, ...)
       cat("\n")

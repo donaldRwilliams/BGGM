@@ -695,6 +695,17 @@ summary(ggm_ppc)
 
 In this case, the null hypothesis was not rejected. The `p_value` is the probability, or proportion, that the predictive KL divergence is larger than the observed KL divergence. For example, with `p_value = 0.02` (e.g.), this would indicate that, conditional on group equality, there is only a 2 % chance of observing that amount of error in the future. Thus this would be considered extreme at the conventional threshold ($\alpha = 0.05$).
 
-# References
+The above example tested the entire network (`type = global`). It is also possible to narrow the focus to each node in the GGM. In other words, the null hypothesis of group equality is tested for each variable. This predictive check is implemented with:
+```{r}
+# Assume null is true
+Y1 <- MASS::mvrnorm(500, rep(0, 16), Sigma = BGGM::ptsd_cor1)
+Y2 <- MASS::mvrnorm(500, rep(0, 16), Sigma = BGGM::ptsd_cor1)
+
+# predictive check
+ggm_ppc <- ggm_compare_ppc(Y1, Y2, type = "nodewise", iter = 5000)
+# summary
+summary(ggm_ppc)
+```
+
 
  
