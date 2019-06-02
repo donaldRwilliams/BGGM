@@ -143,13 +143,15 @@ ci_helper <- function(x, ci_width){
 
 
 
-Mo_risk_help_node <- function(x,  n1, n2, p){
+Mo_risk_help_node <- function(x, post,  n1, n2, p){
 
-  inv_mat <- x
+  inv_mat <- post[,,x]
+
   Y_rep1 <- mvnfast::rmvn(n = n1,  mu = rep(0, p), sigma = cov2cor(solve(inv_mat)))
+
   Y_rep2 <-  mvnfast::rmvn(n = n2, mu = rep(0, p), sigma = cov2cor(solve(inv_mat)))
 
-  jsd_node <- unlist(lapply(1:ncol(Y_rep1), function(x) BGGM:::node_jsd_help(x, Y_rep1, Y_rep2)))
+  jsd_node <- unlist(lapply(1:ncol(Y_rep1), function(z) BGGM:::node_jsd_help(z, Y_rep1, Y_rep2)))
 
   jsd_node
 
@@ -158,14 +160,22 @@ Mo_risk_help_node <- function(x,  n1, n2, p){
 }
 
 
-
 node_jsd_help <- function(x, Y_rep1, Y_rep2){
+
+  Y_rep1 <- scale(Y_rep1)
+
+  Y_rep2 <- scale(Y_rep2)
+
   pred1 <- Y_rep1[,-x]  %*%  BGGM:::beta_helper(Y_rep1, x)
+
   pred2 <- Y_rep2[,-x]  %*%  BGGM:::beta_helper(Y_rep2, x)
+
   jsd_node <- (BGGM:::kl_func(var(pred1), var(pred2)) + BGGM:::kl_func(var(pred2), var(pred1))) * .5
 
+  jsd_node
 
 }
+
 
 beta_helper <- function(x, which_one){
   y <- x[,which_one]
@@ -428,20 +438,30 @@ unbiased_cov <- function(x){
 
 Mo_risk_help <- function(x, post, n1, n2, p){
   inv_mat <- post[,,x]
-  Y_rep1 <- mvnfast::rmvn(n = n1,  mu = rep(0, p), sigma = cov2cor(solve(inv_mat)))
+  Y_rep1 <-  mvnfast::rmvn(n = n1,  mu = rep(0, p), sigma = cov2cor(solve(inv_mat)))
   Y_rep2 <-  mvnfast::rmvn(n = n2, mu = rep(0, p), sigma = cov2cor(solve(inv_mat)))
 
-  jsd <- 0.5 * BGGM::KL(unbiased_cov(Y_rep1), unbiased_cov(Y_rep2)) +
-        0.5 * BGGM::KL(unbiased_cov(Y_rep2), unbiased_cov(Y_rep1))
+  jsd <- 0.5 * BGGM:::KL(BGGM:::unbiased_cov(Y_rep1), BGGM:::unbiased_cov(Y_rep2)) +
+         0.5 *  BGGM:::KL(BGGM:::unbiased_cov(Y_rep2), BGGM:::unbiased_cov(Y_rep1))
 
-
-
- jsd
-
+  jsd
 }
 
 
 
+Y_combine <- function(...){
+
+  dat <- list(...)
+
+  dat <- lapply(1:length(dat), function(x) na.omit(dat))[[1]]
+
+  dat_info <- lapply(1:length(dat), function(x) {p <- ncol(dat[[x]]);
+  n <- nrow(dat[[x]]);
+  data.frame(p = p, n = n)})
+
+  list(dat = dat, dat_info =  do.call(rbind, dat_info),
+       pairwise = t(combn(1:length(dat), 2)))
+}
 
 
 

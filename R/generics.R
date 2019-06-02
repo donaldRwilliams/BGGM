@@ -24,6 +24,17 @@ confirm  <- function(x, ...) UseMethod("confirm")
 
 loocv <- function(x, ...) UseMethod("loocv")
 
+
+ggm_compare_ppc <- function(x, ...){
+  UseMethod("ggm_compare_ppc", x)
+}
+
+ggm_compare_bf <- function(x, ...){
+  UseMethod("ggm_compare_bf", x)
+}
+
+
+
 ####################################
 ############ generics ##############
 ####################################
@@ -1768,6 +1779,69 @@ summary.confirm <- function(x, ...){
   print(t(x$BF_matrix))
   cat("--- \n")
   cat("note: equal hypothesis prior probabilities")
+}
+
+
+print.ggm_compare_ppc <- function(x){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  if(x$type == "nodewise"){
+    cat("Type: GGM Comparison (Nodewise Predictive Check) \n")
+  } else{
+    cat("Type: GGM Comparison (Global Predictive Check) \n")
+  }
+  p <- x$info$dat_info$p[1]
+  cat("Posterior Samples:", x$iter, "\n")
+  cat("Observations (total):", sum(x$info$dat_info$n), "\n")
+  cat("Variables (p):", p, "\n")
+  cat("Edges:", .5 * (p * (p-1)), "\n")
+  cat("--- \n")
+  cat("Call: \n")
+  print(x$call)
+  cat("--- \n")
+  cat("Date:", date(), "\n")
+}
+
+
+summary.ggm_compare_ppc <- function(x, ...){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  if(x$type == "nodewise"){
+    cat("Type: GGM Comparison (Nodewise Predictive Check) \n")
+  } else{
+    cat("Type: GGM Comparison (Global Predictive Check) \n")
+  }
+  cat("--- \n")
+  cat("Call: \n")
+  print(x$call)
+  cat("--- \n")
+  cat("Estimates: \n \n")
+  p <- x$info$dat_info$p[1]
+  if(x$type == "global"){
+    print(data.frame(contrast = do.call(rbind, x$names),
+                     KLD =  do.call(rbind, x$obs_jsd),
+                     p_value = x$pvalue,
+                     check.names = F), right = T, row.names = F,...)
+    cat("--- \n")
+    cat("note: \np_value = p(T(Y_rep) > T(y)|Y)\nKLD = Kullback–Leibler divergence")
+  }
+  if(x$type == "nodewise"){
+
+    for(i in 1:length(x$obs_jsd)){
+      temp[[i]] <- data.frame(node = 1:p , KLD =  round(do.call(rbind, x$obs_jsd[[i]]), 3),
+                              p_value = unlist(x$pvalue[[i]]))
+    }
+
+    for(i in 1:1:length(x$obs_jsd)){
+      cat("contrast:",do.call(rbind, x$names)[[i]], "\n\n")
+      print(   temp[[i]],  row.names = F, ...)
+      cat("\n")
+    }
+
+    cat("--- \n")
+    cat("note: \np_value = p(T(Y_rep) > T(y)|Y)\nKLD = Kullback–Leibler divergence")
+  }
+
 }
 
 

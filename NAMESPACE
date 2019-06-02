@@ -68,9 +68,16 @@ export(confirm.default)
 export(print.confirm)
 export(summary.confirm)
 
+export(ggm_compare_ppc)
+export(ggm_compare_ppc.default)
+export(print.ggm_compare_ppc)
+export(summary.ggm_compare_ppc)
+
 
 import(ggplot2)
 import(ggraph)
+
+
 #export(edge_compare.estimate)
 #export(print.edge_compare.estimate)
 #export(plot.edge_compare.estimate)
