@@ -46,7 +46,7 @@ plot.ggm_compare_ppc <- function(x,
 
         stat_density_ridges(geom = "density_ridges_gradient",
                             calc_ecdf = TRUE, alpha = 0.5,
-                            quantiles = c(0.025, 1 - (critical / 2))) +
+                            quantiles = c(0.025, 1 - (critical))) +
         scale_fill_manual( values = c(col_noncritical, col_noncritical, col_critical)) +
         theme(legend.position = "none") +
         xlab("Predictive Check") +
@@ -67,7 +67,7 @@ plot.ggm_compare_ppc <- function(x,
                                  fill = factor(..quantile..))) +
         stat_density_ridges(geom = "density_ridges_gradient",
                             calc_ecdf = TRUE,
-                            quantiles = c(0.025, 1 - (critical / 2))) +
+                            quantiles = c(0.025, 1 - (critical ))) +
         scale_fill_manual( values = c(col_noncritical, col_noncritical, col_critical)) +
         theme(legend.position = "none") +
         xlab("Predictive Check") +
@@ -104,10 +104,10 @@ plot.ggm_compare_ppc <- function(x,
                                      fill = factor(..quantile..))) +
           stat_density_ridges(geom = "density_ridges_gradient",
                               calc_ecdf = TRUE,
-                              quantiles = c(0.025, 1 - (critical / 2))) +
+                              quantiles = c(0.025, 1 - (critical))) +
           scale_fill_manual( values = c(col_noncritical, col_noncritical, col_critical)) +
 
-          geom_point(data = dat_obs, inherit.aes = F,  aes(x = log(ppc), y = node)) +
+          geom_point(data = dat_obs, inherit.aes = F,  aes(x = log(ppc), y = node), size = point_size) +
           theme(legend.position = "none") +
           xlab("Predictive Check") +
           ylab("Node") +
@@ -135,7 +135,7 @@ plot.ggm_compare_ppc <- function(x,
                                      fill = factor(..quantile..))) +
           stat_density_ridges(geom = "density_ridges_gradient",
                               calc_ecdf = TRUE,
-                              quantiles = c(0.025, 1 - (critical / 2))) +
+                              quantiles = c(0.025, 1 - (critical))) +
           scale_fill_manual( values = c(col_noncritical, col_noncritical, col_critical)) +
           # scale_y_discrete(limits = rev(levels(as.factor(test$X2)))) +
           geom_point(data = dat_obs, inherit.aes = F,  aes(x = ppc, y = node)) +
