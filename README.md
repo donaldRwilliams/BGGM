@@ -109,7 +109,7 @@ summary(fit_analytic)
 #> Call: 
 #> estimate.default(x = Y, analytic = T)
 #> --- 
-#> Date: Sat Jun 01 18:12:04 2019
+#> Date: Sat Jun 01 18:17:26 2019
 ```
 
 Note `summary(.)` provides information about the fitted model, including that the analytic solution was used, the number of observations (*n*) and variables (*p*), and the number of edges.
@@ -177,16 +177,16 @@ summary(E, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  edge post_mean post_sd   2.5%  97.5%
-#>  1--2   -0.2407   0.018 -0.277 -0.205
-#>  1--3   -0.1075   0.019 -0.143 -0.069
-#>  2--3    0.2865   0.018  0.252  0.321
-#>  1--4   -0.0068   0.019 -0.044  0.031
-#>  2--4    0.1640   0.019  0.128  0.199
-#>  3--4    0.1780   0.019  0.141  0.215
-#>  1--5   -0.0089   0.019 -0.046  0.029
-#>  2--5    0.1565   0.019  0.120  0.193
-#>  3--5    0.3588   0.017  0.325  0.392
-#>  4--5    0.1214   0.019  0.084  0.159
+#>  1--2   -0.2403   0.018 -0.276 -0.204
+#>  1--3   -0.1073   0.019 -0.144 -0.069
+#>  2--3    0.2864   0.018  0.251  0.320
+#>  1--4   -0.0071   0.019 -0.044  0.030
+#>  2--4    0.1647   0.019  0.128  0.201
+#>  3--4    0.1779   0.019  0.141  0.214
+#>  1--5   -0.0090   0.019 -0.048  0.029
+#>  2--5    0.1560   0.019  0.120  0.193
+#>  3--5    0.3588   0.017  0.326  0.391
+#>  4--5    0.1213   0.019  0.084  0.158
 #> ---
 ```
 
@@ -278,16 +278,16 @@ head(E, nrow = 10, summarize = T, digits = 2)
 #> Estimates: 
 #>  
 #>  edge post_mean post_sd pr_out  pr_in
-#>  1--2    -0.244   0.019   1.00 0.0000
-#>  1--3    -0.106   0.019   0.62 0.3814
+#>  1--2    -0.244   0.018   1.00 0.0000
+#>  1--3    -0.106   0.020   0.61 0.3856
 #>  2--3     0.286   0.018   1.00 0.0000
-#>  1--4    -0.015   0.020   0.00 1.0000
+#>  1--4    -0.014   0.019   0.00 1.0000
 #>  2--4     0.161   0.019   1.00 0.0006
-#>  3--4     0.160   0.019   1.00 0.0006
+#>  3--4     0.160   0.019   1.00 0.0008
 #>  1--5    -0.016   0.020   0.00 1.0000
 #>  2--5     0.145   0.019   0.99 0.0100
 #>  3--5     0.354   0.017   1.00 0.0000
-#>  4--5     0.114   0.019   0.77 0.2256
+#>  4--5     0.114   0.019   0.76 0.2372
 #> ---
 ```
 
@@ -356,10 +356,10 @@ head(edge_difference, nrow = 4)
 #> Estimates: 
 #>  
 #>      contrast post_mean post_sd pr_out  pr_in
-#>   1--5 - 1--3    0.0905   0.032 0.3848 0.6152
-#>   1--2 - 1--6   -0.2971  0.0272      1      0
-#>   1--4 - 1--7   -0.0871  0.0293 0.3242 0.6758
-#>  1--5 - 1--10    0.0097  0.0266  4e-04 0.9996
+#>   1--5 - 1--3      0.09  0.0325 0.3796 0.6204
+#>   1--2 - 1--6   -0.2969  0.0269      1      0
+#>   1--4 - 1--7    -0.087  0.0295 0.3252 0.6748
+#>  1--5 - 1--10    0.0101   0.027  8e-04 0.9992
 #> ---
 ```
 
@@ -409,15 +409,15 @@ coefficients(fit, node = 1, ci_width = 0.95)
 #> Estimates: 
 #>  
 #>  node post_mean post_sd   2.5%  97.5%
-#>     2    -0.277   0.021 -0.318 -0.236
-#>     3    -0.126   0.023 -0.171 -0.083
-#>     4    -0.014   0.020 -0.055  0.024
-#>     5    -0.017   0.021 -0.060  0.025
-#>     6     0.055   0.020  0.017  0.094
-#>     7     0.081   0.023  0.037  0.128
-#>     8     0.044   0.021  0.006  0.086
-#>     9     0.142   0.022  0.099  0.184
-#>    10    -0.029   0.022 -0.074  0.014
+#>     2    -0.278   0.021 -0.319 -0.237
+#>     3    -0.124   0.023 -0.169 -0.079
+#>     4    -0.015   0.021 -0.055  0.026
+#>     5    -0.017   0.022 -0.059  0.026
+#>     6     0.056   0.020  0.017  0.096
+#>     7     0.081   0.022  0.039  0.123
+#>     8     0.045   0.020  0.004  0.085
+#>     9     0.141   0.022  0.097  0.183
+#>    10    -0.028   0.022 -0.070  0.015
 #> ---
 ```
 
@@ -454,8 +454,8 @@ head(train_R2, nrow = 2)
 #> Estimates: 
 #> 
 #>  node post_mean    post_sd       2.5%     97.5%
-#>     1 0.1723600 0.06476738 0.05061508 0.3016861
-#>     2 0.2877733 0.06696338 0.15863969 0.4133386
+#>     1 0.1718929 0.06648223 0.04968617 0.3093009
+#>     2 0.2918731 0.06926064 0.14792480 0.4179239
 #> ---
 ```
 
@@ -510,16 +510,16 @@ summary(bayes_loo)
 #> Estimates: 
 #> 
 #>   node      loo   loo_se
-#>     1 2573.889 49.17409
-#>     2 2330.677 63.59831
-#>     3 2302.730 63.87966
-#>     4 2464.710 51.66468
-#>     5 2417.268 55.25666
-#>     6 2432.328 59.03230
-#>     7 2300.802 50.01876
-#>     8 2389.696 50.83476
-#>     9 2294.045 51.43906
-#>    10 2363.708 39.82505
+#>     1 2573.508 48.94399
+#>     2 2330.874 63.68078
+#>     3 2302.692 64.23526
+#>     4 2464.356 51.95326
+#>     5 2416.901 55.32232
+#>     6 2433.930 59.34281
+#>     7 2301.630 50.54513
+#>     8 2390.611 51.43053
+#>     9 2295.510 51.38628
+#>    10 2364.192 39.64422
 #> ---
 ```
 
@@ -630,7 +630,7 @@ summary(fit_bf)
 #> Call: 
 #> explore.default(X = Y, prior_sd = 0.5, iter = 5000, cores = 2)
 #> --- 
-#> Date: Sat Jun 01 18:12:32 2019
+#> Date: Sat Jun 01 18:17:52 2019
 ```
 
 Note `summary(.)`, or alternatively `print(.)`, provides information about the fitted model, including that hypothesis testing (exploratory) was used, the number of observations (*n*) and variables (*p*), and the number of edges. Delta (*δ*) is the hyperparameter of the matrix−*F* distribution. A value of 3 corresponds to `prior_sd = 0.5`. This output parallels the estimation based methods. Importantly, all fitted objects include specific (what method was used) and general information (e.g., *n* and *p*) when printed.
@@ -660,11 +660,11 @@ summary(E, hyp = "H1")
 #> Partial Correlations 
 #>  
 #>            1          2          3         4         5
-#> 1  0.0000000 -0.2398758 -0.1070602 0.0000000 0.0000000
-#> 2 -0.2398758  0.0000000  0.2868756 0.1643916 0.1557714
-#> 3 -0.1070602  0.2868756  0.0000000 0.1780740 0.3584253
-#> 4  0.0000000  0.1643916  0.1780740 0.0000000 0.1212882
-#> 5  0.0000000  0.1557714  0.3584253 0.1212882 0.0000000
+#> 1  0.0000000 -0.2406615 -0.1078129 0.0000000 0.0000000
+#> 2 -0.2406615  0.0000000  0.2861812 0.1642840 0.1562842
+#> 3 -0.1078129  0.2861812  0.0000000 0.1779351 0.3588987
+#> 4  0.0000000  0.1642840  0.1779351 0.0000000 0.1212711
+#> 5  0.0000000  0.1562842  0.3588987 0.1212711 0.0000000
 #> --- 
 #>  
 #> Adjancency (non-zero) 
@@ -698,16 +698,16 @@ summary(E, summarize = T, log = T, digits = 2)
 #> Estimates: 
 #>  
 #>   edge post_mean post_sd BF 10
-#>  1--2   -0.2399   0.018  77.1
-#>  1--3   -0.1071   0.019  12.0
-#>  2--3    0.2869   0.018 115.2
-#>  1--4   -0.0078   0.019  -3.5
-#>  2--4    0.1644   0.018  34.5
-#>  3--4    0.1781   0.019  40.4
-#>  1--5   -0.0091   0.019  -3.5
-#>  2--5    0.1558   0.019  29.2
-#>  3--5    0.3584   0.016 194.9
-#>  4--5    0.1213   0.019  17.0
+#>  1--2   -0.2407   0.018  77.0
+#>  1--3   -0.1078   0.019  11.8
+#>  2--3    0.2862   0.018 109.8
+#>  1--4   -0.0074   0.019  -3.5
+#>  2--4    0.1643   0.019  33.8
+#>  3--4    0.1779   0.019  40.1
+#>  1--5   -0.0082   0.019  -3.5
+#>  2--5    0.1563   0.018  31.3
+#>  3--5    0.3589   0.017 189.6
+#>  4--5    0.1213   0.019  16.4
 #> --- 
 #> note: BF_10 is evidence in favor of H1
 ```
@@ -798,11 +798,11 @@ head(E, summarize = T, nrow = 5)
 #> Estimates: 
 #>  
 #>   edge   post_mean    post_sd p(H0|Y) p(H1|Y) p(H2|Y)
-#>  1--2 -0.24423480 0.01835063   0.000   0.000   1.000
-#>  1--3 -0.10552145 0.01949558   0.000   0.000   1.000
-#>  2--3  0.28579653 0.01791478   0.000   1.000   0.000
-#>  1--4 -0.01458779 0.01936589   0.997   0.001   0.002
-#>  2--4  0.16062394 0.01925060   0.000   1.000   0.000
+#>  1--2 -0.24383877 0.01801972   0.000   0.000   1.000
+#>  1--3 -0.10583456 0.01917141   0.000   0.000   1.000
+#>  2--3  0.28652775 0.01776958   0.000   1.000   0.000
+#>  1--4 -0.01452179 0.01925596   0.997   0.001   0.002
+#>  2--4  0.16137991 0.01899821   0.000   1.000   0.000
 #> ---
 ```
 
@@ -859,11 +859,11 @@ summary(edge_comp)
 #> Estimates: 
 #>  
 #>       contrast   post_mean    post_sd p(H0|Y) p(H1|Y) p(H2|Y)
-#>   1--5 - 1--3  0.09012598 0.03192294   0.142   0.856   0.002
-#>   1--2 - 1--6 -0.29737337 0.02608064   0.000   0.000   1.000
-#>   1--4 - 1--7 -0.08700255 0.02958435   0.089   0.002   0.910
-#>  1--5 - 1--10  0.01032651 0.02676124   0.998   0.001   0.001
-#>   1--2 - 1--9 -0.36932159 0.02595297   0.000   0.000   1.000
+#>   1--5 - 1--3  0.08973068 0.03224773   0.168   0.829   0.002
+#>   1--2 - 1--6 -0.29608537 0.02717647   0.000   0.000   1.000
+#>   1--4 - 1--7 -0.08723622 0.02929854   0.075   0.001   0.924
+#>  1--5 - 1--10  0.01009092 0.02699460   0.998   0.001   0.001
+#>   1--2 - 1--9 -0.36873277 0.02615446   0.000   0.000   1.000
 #> ---
 ```
 
@@ -887,7 +887,6 @@ plt <- plot(edge_comp, stack = T, spread = .75)
 
 # stacked
 plt
-#> Warning: Removed 1 rows containing missing values (geom_bar).
 ```
 
 <img src="man/figures/README-unnamed-chunk-30-1.png" height="350 %" style="display: block; margin: auto;" />
@@ -943,7 +942,7 @@ summary(test_order)
 #> --- 
 #> Bayes factor matrix: 
 #>    H1           Hc
-#> H1  1 4.570865e+20
+#> H1  1 3.710785e+20
 #> Hc  0 1.000000e+00
 #> --- 
 #> note: equal hypothesis prior probabilities
@@ -991,7 +990,7 @@ summary(test_order)
 #> Bayes factor matrix: 
 #>        H1   Hc
 #> H1  1.000 0.02
-#> Hc 50.267 1.00
+#> Hc 50.321 1.00
 #> --- 
 #> note: equal hypothesis prior probabilities
 ```
@@ -1051,7 +1050,7 @@ summary(test_order)
 #> --- 
 #> Bayes factor matrix: 
 #>    H1           Hc
-#> H1  1 2.549683e+57
+#> H1  1 2.605586e+56
 #> Hc  0 1.000000e+00
 #> --- 
 #> note: equal hypothesis prior probabilities
@@ -1065,7 +1064,7 @@ Posterior Predictive KL Divergence
 
 **BGGM** includes two approaches for comparing any number of GGMs. They were introduced in Williams, Rast, Pericchi, and Mulder (2019). The methods can test entire structures, particular edges, and nodewise testing. One approach is based on the posterior predictive distribution, and tests the null hypothesis of group equality. Importantly, like classical methods (i.e., frequentist), this approach can only determine whether the null of group equality is rejected or retained. It cannot provide evidence for the null hypothesis. To this end, another approach is based on Bayesian model selection. This allows for assessing network invariances (i.e., the null hypothesis).
 
-The predictive approach is based on the distribution of future data. In particular, the posterior predictive distribution of Kullback–Leibler divergence is to test the null hypothesis of group equality. This method can be understood as a multivariate likelihood ratio that accounts for uncertainty, but importantly, with respect to the predictive distributions.
+The predictive approach is based on the distribution of future data. In particular, the posterior predictive distribution of Kullback–Leibler divergence is to test the null hypothesis of group equality. This method can be understood as a multivariate likelihood ratio that accounts for uncertainty, but importantly, with respect to the predictive distribution.
 
 ``` r
 # Assume null is true
@@ -1088,9 +1087,9 @@ summary(ggm_ppc)
 #> Estimates: 
 #>  
 #>      contrast       KLD p_value
-#>  Y_g1 vs Y_g2 0.3178561  0.0720
-#>  Y_g1 vs Y_g3 0.2760706  0.3360
-#>  Y_g2 vs Y_g3 0.2346081  0.7682
+#>  Y_g1 vs Y_g2 0.2077290  0.9472
+#>  Y_g1 vs Y_g3 0.3224324  0.0584
+#>  Y_g2 vs Y_g3 0.2368593  0.7578
 #> --- 
 #> note: 
 #> p_value = p(T(Y_rep) > T(y)|Y)
