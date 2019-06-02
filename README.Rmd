@@ -717,6 +717,14 @@ plot(ggm_ppc1) +
 ```
 
 
+The `nodewise` predictive check is plotted with:
+```{r, message=F, warning=F, out.height= "500 %"}
+#plots
+plot(ggm_ppc2, log = T)[[1]] +
+  theme_minimal(base_size = 14)  +
+  theme(legend.position = "none",  panel.grid.minor.x = element_blank())
+```
+
 
 
  
