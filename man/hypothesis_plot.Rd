@@ -5,7 +5,8 @@
 \title{Hypothesis Plot}
 \usage{
 hypothesis_plot(rho_sd = NULL, difference = FALSE, fit = NULL,
-  edge = NULL, samples = 10000, size = NULL)
+  edge = NULL, samples = 10000, size = NULL, node_outer = 10,
+  node_inner = 8, node_text_size = 7)
 }
 \arguments{
 \item{rho_sd}{standard deviation of the prior distribution (see notes)}
@@ -19,6 +20,12 @@ hypothesis_plot(rho_sd = NULL, difference = FALSE, fit = NULL,
 \item{samples}{number of samples drawn from the prior distirbition}
 
 \item{size}{point size for prior and posteriro plot (only needed if a fitted model is provided)}
+
+\item{node_outer}{size of outer node (used as border). Only for when \code{class(fit)= confirm}}
+
+\item{node_inner}{size of inner node. Only for when \code{class(fit)= confirm}}
+
+\item{node_text_size}{size of node text. Only for when \code{class(fit)= confirm}}
 }
 \value{
 a \code{ggplot2} object
@@ -26,8 +33,9 @@ a \code{ggplot2} object
 \description{
 This function allows for plotting prior distributions and prior distribution differences.
  This can assist in selecting a hypothesized effect size, which is used for computing the the Bayes factor. Further,
- if a fitted object is supplied (\code{fit}), this allows for plotting the chosen prior and a selected posterior distribution (\code{edge}).
- This shows how the Bayes factor is computed (ratio of denisty evaluated at zero).
+ if a fitted object is supplied (\code{fit = explore}), this allows for plotting the chosen prior and a selected posterior distribution (\code{edge}).
+ This shows how the Bayes factor is computed (ratio of denisty evaluated at zero). On the other hand, when \code{fit = confirm},
+ a network plot is returned with only the edges included in the model comparison.
 }
 \examples{
 

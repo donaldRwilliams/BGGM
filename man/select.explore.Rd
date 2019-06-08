@@ -20,7 +20,8 @@
 An object of class \code{select.explore}
 }
 \description{
-Select Graphical Structure with the Bayes Factor
+This allows for not only estimating the conditional dependence structure, that is non-zero edges, but also the conditional \textbf{in}dependence
+structure (evidence for no relation).
 }
 \note{
 The \code{alternative} can be either \code{greater}, \code{less}, \code{two.sided}, or \code{exhaustive}. The argument \code{hyp_prob} is used only

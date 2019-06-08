@@ -18,7 +18,7 @@ Description: This package is described in Williams and Mulder (2019) and William
     The model is selected with directional Bayes factors.
 Depends: R (>= 3.5.0)
 License: GPL-2
-Imports: mvnfast, foreach, doSNOW, ggplot2, mvtnorm, stringr, ggridges, reshape, extraDistr, loo
+Imports: mvnfast, foreach, doSNOW, ggplot2, mvtnorm, stringr, ggridges, reshape, extraDistr, loo, shiny
 Suggests: psych
 Encoding: UTF-8
 LazyData: true
