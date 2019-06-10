@@ -1,4 +1,4 @@
-#' Title
+#' Plot Edges (Parial Correlation)
 #'
 #' @param x
 #' @param ci_width
@@ -10,15 +10,23 @@
 #'
 #' @examples
 plot.estimate <- function(x, ci_width, size, width){
+
   low <- ((1 - ci_width) / 2)
+
   up <- 1 - low
+
   if(!isFALSE(x$analytic)){
     stop("posterior samples required--i.e., analytic = TRUE")
   }
+
   mat_mu <- mat_low <- mat_up <- mat_names <- matrix(0, nrow = x$p, ncol = x$p)
+
   parcors <- x$posterior_samples[,  grep("pcors", colnames(x$posterior_samples))]
+
   mat_mu[] <-   colMeans(parcors)
+
   mat_low[] <- apply(parcors, 2, quantile, low)
+
   mat_up[]  <-  apply(parcors, 2, quantile, up)
 
   mat_names[] <-  unlist(lapply(1:x$p, function(y) paste(y, 1:x$p, sep = "--")))
@@ -30,6 +38,7 @@ plot.estimate <- function(x, ci_width, size, width){
 
 
   res$sig <- ifelse(res$low< 0 & res$up > 0, 0, 1)
+
   res$edge2 <- factor(res$edge, levels = res$edge[order(res$mu)], labels = res$edge[order(res$mu)])
 
   plt <- ggplot(res, aes(y = mu, x = edge2))  +

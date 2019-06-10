@@ -1,6 +1,9 @@
-#' Edge Contrasts with the Bayes Factor
+#' Edge (Partial Correaltion) Contrasts with the Bayes Factor
 #'
-#' @description Allows for comparing partial correlations \emph{within} the same GGM--e.g., to determine the largest edge for each node.
+#' @description Allows for comparing partial correlations \emph{within} the same GGM--e.g., to determine the largest edge for each node. The differences are tested
+#' with the Bayes factor. The test can be either directional, for example whether one edge is larger or smaller than another, or two sided testing is also possible. Further,
+#' there is also an exhaustive option that provides the posterior probability of the null, greater than zero, and less than zero.
+#'
 #'
 #' @param x object from \code{explore}
 #' @param contrast partial correlations to compare

@@ -142,7 +142,7 @@ confirm.default <- function(x, hypothesis, prior_sd, iter = 25000,  cores = 2){
         s1 <- mats$R_e %*% Sigma1 %*% t(mats$R_e)
         #Hypothesis test
         log_BF <- mvtnorm::dmvnorm(x = t(mats$r_e), mean =   t(mu1), sigma = s1, log = TRUE) -
-                   mvtnorm::dmvnorm(x = t(mats$r_e), mean = t(mu0), sigma = s0, log = TRUE)
+                  mvtnorm::dmvnorm(x = t(mats$r_e), mean = t(mu0), sigma = s0, log = TRUE)
 
         f_E <- mvtnorm::dmvnorm(x = t(mats$r_e), mean =   t(mu1), sigma = s1, log = FALSE)
         c_E <- mvtnorm::dmvnorm(x = t(mats$r_e), mean = t(mu0), sigma = s0, log = TRUE)

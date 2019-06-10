@@ -1,4 +1,4 @@
-#' Plot Estimation Based Graphs
+#' Plot Estimation Based Based Graphical Stuctures
 #'
 #' @param x object of class \code{select.estimate}
 #' @param type \code{heatmap} or \code{network} plot

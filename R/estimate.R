@@ -1,19 +1,17 @@
-#' estimate
+#' Gaussian Graphical Models with Credible Intervals or the Region of Practical Equivalence
 #'
-#' @description Samples from the posterior with the Wishart prior distribution.
+#' @description Learn the conditional (in)dependence structure with credible intervals or the region of practical equivalence.
+#' For the former, there is an analytic solution avaiable, whereas for the latter, samples are efficiently drawn from the posterior
+#' distribution.
 #'
-#' @param x data matrix
+#' @param x data matrix (\emph{n} $\times$  \emph{p}).
 #' @param samples number of posterior samples
 #' @param analytic analytic solution. see notes for futher details.
-#' @param ...
 #'
-#' @return  An object of class \code{estimate} that includes posterior samples, partial correlation matrix, etc. Note
-#' this object is then used with other functions for model selection, prediction, regression coverion, etc.
-#' For Bayesian hypothesis testing see \code{explore} and \code{confirm}.
+#' @return  An object of class \code{estimate}.
 #'
 #' @export
 #'
-
 #'
 #' @note The default is to draws samples from the posterior distribution (\code{analytic = FALSE}). The samples are required for computing edge differences,
 #' Bayesian R2, etc. If the goal is to *only* determined the non-zero effects, this can be accomplished by setting \code{analytic = TRUE}. This is accomplished
@@ -22,10 +20,21 @@
 #' error (also analytically).
 #'
 
-#' @examples fit <- estimate(X)
-#' fit
+#' @examples
+#'
+#' # p = 5
+#' Y <- BGGM::bfi[,1:20]
+#'
+#' # analytic approach (sample by setting analytic = F)
+#' fit_analytic <- estimate(Y, analytic = T)
+#'
+#' # select the graph (edge set E)
+#' E <- select(fit_analytic, ci_width = 0.95)
+#'
+#' # plot
+#' plot(E, type = "network")
 
-estimate.default  <- function(x, samples = 5000, analytic = FALSE, ...){
+estimate.default  <- function(x, samples = 5000, analytic = FALSE){
 
   # remove the NAs
   X <- na.omit(as.matrix(x))

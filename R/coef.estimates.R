@@ -11,7 +11,7 @@
 #' @param samples number of samples used in the conversion.
 #' @param ... e.g., \code{digits}
 #'
-#' @return summary of the implicit multiple regresion for \code{node}
+#' @return summary of the multiple regresion for \code{node}
 #' @export
 #'
 #' @examples

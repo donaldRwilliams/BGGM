@@ -2,7 +2,7 @@
 % Please edit documentation in R/predict.estimate.R
 \name{predict.estimate}
 \alias{predict.estimate}
-\title{predictive accuracy}
+\title{Nodewise In- and Out-of-Sample Predictive Accuracy}
 \usage{
 \method{predict}{estimate}(fit, test_data = NULL, ci_width,
   samples = 1000, measure = c("R2", "MSE"))

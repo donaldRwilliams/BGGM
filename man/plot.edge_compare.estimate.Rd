@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.edge_compare.estimate.R
 \name{plot.edge_compare.estimate}
 \alias{plot.edge_compare.estimate}
-\title{Title}
+\title{Plot Edge Contrasts from the Estimation Based Methods}
 \usage{
 \method{plot}{edge_compare.estimate}(x, size = 2, color = "red",
   width = 0.01, prob = NULL)
@@ -11,5 +11,5 @@
 \item{prob}{}
 }
 \description{
-Title
+Plot Edge Contrasts from the Estimation Based Methods
 }

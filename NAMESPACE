@@ -38,13 +38,10 @@ export(print.edge_compare.estimate)
 export(head.edge_compare.estimate)
 export(plot.edge_compare.estimate)
 
-
-
 export(explore)
 export(explore.default)
 export(print.explore)
 export(summary.explore)
-
 
 export(select.explore)
 export(summary.select.explore)
@@ -52,10 +49,8 @@ export(print.select.explore)
 export(head.select.explore)
 export(plot.select.explore)
 
-
 export(coef.estimate)
 export(hypothesis_plot)
-
 
 export(edge_compare.explore)
 export(print.edge_compare.explore)
@@ -75,6 +70,18 @@ export(summary.ggm_compare_ppc)
 export(plot.ggm_compare_ppc)
 
 
+export(ggm_compare_bf)
+export(ggm_compare_bf.default)
+export(print.select.ggm_compare_bf)
+export(summary.select.ggm_compare_bf)
+export(print.select.ggm_compare_bf)
+export(select.ggm_compare_bf)
+export(print.ggm_compare_bf)
+export(summary.ggm_compare_bf)
+
+
+
+
 import(ggplot2)
 import(ggraph)
 
@@ -82,6 +89,8 @@ import(ggraph)
 importFrom(ggridges, geom_density_ridges)
 importFrom(ggridges, stat_density_ridges)
 importFrom(mvnfast, rmvn)
+importFrom(foreach, "%dopar%")
+
 #export(edge_compare.estimate)
 #export(print.edge_compare.estimate)
 #export(plot.edge_compare.estimate)

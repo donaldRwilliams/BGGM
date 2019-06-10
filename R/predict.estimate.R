@@ -1,4 +1,4 @@
-#' predictive accuracy
+#' Nodewise In- and Out-of-Sample Predictive Accuracy
 #'
 #' @description Bayesian predictive error. The measures are computed with respect to the posterior distributions.
 #' This provides uncertaintly for variance explained (Bayesian R2) and mean squared error.

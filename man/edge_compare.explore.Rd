@@ -2,7 +2,7 @@
 % Please edit documentation in R/edge_compare.explore.R
 \name{edge_compare.explore}
 \alias{edge_compare.explore}
-\title{Edge Contrasts with the Bayes Factor}
+\title{Edge (Partial Correaltion) Contrasts with the Bayes Factor}
 \usage{
 \method{edge_compare}{explore}(x, contrast, alternative)
 }
@@ -17,7 +17,9 @@
 An object of class \code{edge_compare.explore}
 }
 \description{
-Allows for comparing partial correlations \emph{within} the same GGM--e.g., to determine the largest edge for each node.
+Allows for comparing partial correlations \emph{within} the same GGM--e.g., to determine the largest edge for each node. The differences are tested
+with the Bayes factor. The test can be either directional, for example whether one edge is larger or smaller than another, or two sided testing is also possible. Further,
+there is also an exhaustive option that provides the posterior probability of the null, greater than zero, and less than zero.
 }
 \examples{
 

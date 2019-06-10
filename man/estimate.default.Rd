@@ -2,26 +2,24 @@
 % Please edit documentation in R/estimate.R
 \name{estimate.default}
 \alias{estimate.default}
-\title{estimate}
+\title{Gaussian Graphical Models with Credible Intervals or the Region of Practical Equivalence}
 \usage{
-\method{estimate}{default}(x, samples = 5000, analytic = FALSE, ...)
+\method{estimate}{default}(x, samples = 5000, analytic = FALSE)
 }
 \arguments{
-\item{x}{data matrix}
+\item{x}{data matrix (\emph{n} $\times$  \emph{p}).}
 
 \item{samples}{number of posterior samples}
 
 \item{analytic}{analytic solution. see notes for futher details.}
-
-\item{...}{}
 }
 \value{
-An object of class \code{estimate} that includes posterior samples, partial correlation matrix, etc. Note
-this object is then used with other functions for model selection, prediction, regression coverion, etc.
-For Bayesian hypothesis testing see \code{explore} and \code{confirm}.
+An object of class \code{estimate}.
 }
 \description{
-Samples from the posterior with the Wishart prior distribution.
+Learn the conditional (in)dependence structure with credible intervals or the region of practical equivalence.
+For the former, there is an analytic solution avaiable, whereas for the latter, samples are efficiently drawn from the posterior
+distribution.
 }
 \note{
 The default is to draws samples from the posterior distribution (\code{analytic = FALSE}). The samples are required for computing edge differences,
@@ -31,6 +29,16 @@ with p = 25, n = 2500 and 5,000 samples. There is one function that makes use of
 error (also analytically).
 }
 \examples{
-fit <- estimate(X)
-fit
+
+# p = 5
+Y <- BGGM::bfi[,1:20]
+
+# analytic approach (sample by setting analytic = F)
+fit_analytic <- estimate(Y, analytic = T)
+
+# select the graph (edge set E)
+E <- select(fit_analytic, ci_width = 0.95)
+
+# plot
+plot(E, type = "network")
 }

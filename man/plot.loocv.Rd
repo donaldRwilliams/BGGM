@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.loocv.R
 \name{plot.loocv}
 \alias{plot.loocv}
-\title{Title}
+\title{Plot Nodewise Leave-One-Out Cross-Validation}
 \usage{
 \method{plot}{loocv}(x, size = 2, color = "blue", width = 0.01)
 }
@@ -10,5 +10,5 @@
 \item{width}{}
 }
 \description{
-Title
+Plot Nodewise Leave-One-Out Cross-Validation
 }

@@ -1,4 +1,4 @@
-#' Plot Exploratory (hypothesis testing) Based Graphs
+#' Plot Bayes Factor Based Graphical Stuctures
 #'
 #' @description Allows for plotting graphs selected wtih Bayesian hypothesis testing. Options include a heatmap or network plot.
 #' The conditional independence and dependence structure are visualized in seperate plots.

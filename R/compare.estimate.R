@@ -1,6 +1,8 @@
-#' Edge Contrasts with Estimation Based Methods
+#' Edge (Partial COrrelation) Contrasts with Estimation Based Methods
 #'
-#' @description Allows for comparing partial correlations \emph{within} the same GGM--e.g., to determine the largest edge for each node.
+#' @description Allows for comparing partial correlations \emph{within} the same GGM--e.g., to determine the largest edge for each node. A difference can
+#' either be asessed with a credible interval, or the region of practical equivalence. The latter allows for assessing practical equivalence--i.e.,
+#' whether two edges have the same strength or partial correlation size.
 #'
 #' @param x object from \code{estimate} (\code{sampling = TRUE})
 #' @param contrast partial correlations to compare
@@ -11,11 +13,13 @@
 #' @return call call used in \code{edge_difference}
 #' @return ci credible interval used in \code{edge_difference}
 #' @return rope region of practical equivalence used in \code{edge_difference}
-#' @return samples list of posterior samples of each contrast. Can be used for custom plot, or the object can be plotted with \code{plot}
+#'
+#' @return object of class \code{edge_compare.estimate}
 #'
 #' @note These contrasts are based on the posterior distribution, and credible intervals or the rope are used to determine differences. In the case of
 #' the rope, it is also possible to assess similarity between edges. The function \code{edge_compare} is a generic, and for using the Bayes factor,
 #' \code{x} should be an object from \code{explore}.
+#'
 #' @export
 #'
 #' @examples

@@ -34,13 +34,13 @@ Thus, if the observed value is in the red region, this suggests the null hypothe
 \note{
 This method is Bayesian, as it relies on the posterior predictive distribution. That said, there are clear parallels to frequentist testing-e.g.,
 assuming group equality and critical regions. Most importanly, this method CANNOT provide evidence for the null hypothesis. Thus it can only reject
-the unerlying assumption of group equality. For gainiong evieence for the null hyp
+the unerlying assumption of group equality. For gaining (relative) evidence for the null hypothesis see X.
 }
 \examples{
-
-Y1 <- MASS::mvrnorm(500, rep(0, 16), Sigma = BGGM::ptsd_cor1)
-Y2 <- MASS::mvrnorm(500, rep(0, 16), Sigma = BGGM::ptsd_cor1)
-Y3 <- MASS::mvrnorm(500, rep(0, 16), Sigma = BGGM::ptsd_cor1)
+# assume group equality
+Y1 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
+Y2 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
+Y3 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
 
 # global
 ggm_ppc  <- ggm_compare_ppc(Y1, Y2, Y3, type = "global", iter = 5000)
@@ -57,4 +57,8 @@ ggm_ppc  <- ggm_compare_ppc(Y1, Y2, Y3, type = "global", iter = 5000)
 plot(ggm_ppc, log = T)[[1]] +
 theme_minimal(base_size = 14)  +
 theme(legend.position = "none",  panel.grid.minor.x = element_blank())
+}
+\references{
+Williams, D. R., Rast, P., Pericchi, L. R., & Mulder, J. (2019). Comparing Gaussian Graphical
+Models with the Posterior Predictive Distribution and Bayesian Model Selection. \href{https://psyarxiv.com/yt386}{pre print}
 }

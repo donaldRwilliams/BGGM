@@ -1,4 +1,4 @@
-#' Title
+#' Plot Nodewise Leave-One-Out Cross-Validation
 #'
 #' @param x
 #' @param size

@@ -1,4 +1,4 @@
-#' Title
+#' Plot Edge Contrasts from the Estimation Based Methods
 #'
 #' @param x
 #' @param size

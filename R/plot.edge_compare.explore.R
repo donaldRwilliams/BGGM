@@ -1,4 +1,4 @@
-#' Title
+#' Plot Edge Contrasts from the Bayes Factor Based Methods
 #'
 #' @param x
 #' @param hjust1

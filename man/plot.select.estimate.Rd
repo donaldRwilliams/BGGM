@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.select.estimate.R
 \name{plot.select.estimate}
 \alias{plot.select.estimate}
-\title{Plot Estimation Based Graphs}
+\title{Plot Estimation Based Based Graphical Stuctures}
 \usage{
 \method{plot}{select.estimate}(x, type, lower_tri = TRUE,
   layout = "circle", node_outer = 10, node_inner = 9,
@@ -24,5 +24,5 @@
 \item{node_text_size}{node text size}
 }
 \description{
-Plot Estimation Based Graphs
+Plot Estimation Based Based Graphical Stuctures
 }

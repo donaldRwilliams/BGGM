@@ -2,13 +2,46 @@
 % Please edit documentation in R/explore.default.R
 \name{explore.default}
 \alias{explore.default}
-\title{Title}
+\title{Gaussian Graphical Models with Exploratory Bayesian Hypothesis Testing}
 \usage{
 \method{explore}{default}(X, prior_sd, iter = 5000, cores = 2)
 }
 \arguments{
-\item{cores}{}
+\item{X}{data matrix  (\emph{n} \times  \emph{p}).}
+
+\item{prior_sd}{hypothesized standard deviation for the edges or partial correlations.}
+
+\item{iter}{number of posterior samples.}
+
+\item{cores}{number of cores for parallel computing. The default is 2, but this can be adjusted.}
+}
+\value{
+object of class \code{explore}
 }
 \description{
-Title
+Learn the conditional (in)dependence structure with the Bayes factor computed from the matrix-F prior distribution. It is
+possible to test for only positive or negative edges, as well as two sided hypothesis testing (which is the customary approach). Further
+there is also an exhaustive option that provides the posterior probability of the null, greater than zero, and less than zero.
+}
+\note{
+After sampling from the posterior distribution, use \code{select} to determine the edge set and \code{plot} for visualizing the
+edge set.
+}
+\examples{
+
+# p = 5
+Y <- BGGM::bfi[,1:5]
+
+# fit model
+fit_bf <- explore(Y, prior_sd = 0.5,
+                 iter = 5000,
+                 cores = 2)
+
+
+# two.sided hypothesis testing
+E <- select(fit_bf, BF_cut = 3,
+            alternative = "two.sided")
+
+# 'network' plot
+plot(E, type = "network")
 }

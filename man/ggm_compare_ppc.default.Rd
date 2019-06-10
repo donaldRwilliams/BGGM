@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggm_compare_ppc.default.R
 \name{ggm_compare_ppc.default}
 \alias{ggm_compare_ppc.default}
-\title{Compare GGMs with Posterior Predictive KL-Divergence}
+\title{Compare GGMs with the Posterior Predictive Distribution}
 \usage{
 \method{ggm_compare_ppc}{default}(..., type = "global", iter = 5000,
   cores = 2)
@@ -14,20 +14,44 @@
 
 \item{iter}{number of replicated data sets. default is \code{iter = 1000}.}
 
-\item{cores}{Number of cores for parallel computing. The defaul is 2, but this can be adjusted.}
+\item{cores}{number of cores for parallel computing. The default is 2, but this can be adjusted.}
 }
 \value{
 object of class \code{ggm_compare_ppc}
 }
 \description{
-Compare GGMs with Posterior Predictive KL-Divergence
+Comparing any number of GGMs with the posterior predictive distribution. The method assume group equality, and the predictive check
+allows for testing whether that assumption should be modified--i.e., the GGMs are actually different. The current test statistic avaiable is
+Kullback–Leibler divergence, which in this case, can be understood as a likelihood ratio for multiariate normal distributions. There are
+two options: (1) 'global' and (2) 'nodewise.' The former tests the entire GGM, whereas the latter allows for testing specific nodes (variables)
+in the model.
+}
+\note{
+This method is Bayesian, as it relies on the posterior predictive distribution.
+That said, there are clear parallels to frequentist testing-e.g., assuming group
+equality and critical regions. Most importanly, this method CANNOT provide evidence
+for the null hypothesis. Thus it can only reject the unerlying assumption of group equality.
+For gaining (relative) evidence for the null hypothesis see X.
 }
 \examples{
 
-# Assume null is true
-Y1 <- MASS::mvrnorm(500, rep(0, 16), Sigma = BGGM::ptsd_cor1)
-Y2 <- MASS::mvrnorm(500, rep(0, 16), Sigma = BGGM::ptsd_cor1)
+Assume null is true
+Y1 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
+Y2 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
+Y3 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
 
+# global predictive check
+ggm_ppc <- ggm_compare_ppc(Y1, Y2, Y3,
+                           type = "global", iter = 5000)
+summary(ggm_ppc)
 
-ggm_ppc <- ggm_compare_ppc(Y1, Y2, iter = 1000)
+# nodewise predictive check
+ggm_ppc <- ggm_compare_ppc(Y1, Y2,
+                           type = "nodewise", iter = 5000)
+summary(ggm_ppc)
+
+}
+\references{
+Williams, D. R., Rast, P., Pericchi, L. R., & Mulder, J. (2019). Comparing Gaussian Graphical
+Models with the Posterior Predictive Distribution and Bayesian Model Selection. \href{https://psyarxiv.com/yt386}{pre print}
 }

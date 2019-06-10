@@ -33,11 +33,6 @@ ggm_compare_bf <- function(x, ...){
   UseMethod("ggm_compare_bf", x)
 }
 
-
-
-####################################
-############ generics ##############
-####################################
 summary.edge_compare.predict <- function(x, ...){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
@@ -128,53 +123,6 @@ print.loocv <- function(x,...){
 
 
 
-
-
-
-analytic_solve <- function(X){
-  # sample size
-  n <- nrow(X)
-  p <- ncol(X)
-  # centererd mat
-  X <- scale(X, scale = T)
-  # scale matrix
-  S <- t(X) %*% X
-  inv_mu <-  solve(S + diag(10^-5,  p)) * (n)
-  inv_var <-  (n + p + 1)*(solve(S + diag(10^-5, p) )^2 + tcrossprod(diag(solve(S + diag(10^-5, p)))))
-
-
-  inv_cor <- diag( 1 / sqrt((diag(inv_mu)))) %*% inv_mu %*% diag( 1 / sqrt((diag(inv_mu))) )
-  partials <- inv_cor * -1 + diag(2, p)
-  list(inv_mu = inv_mu, inv_var = inv_var, partial = partials)
-}
-
-
-
-
-
-
-
-
-# coef.estimate <- function(fit, node, ci_width,  samples = 1000){
-#   test <- beta_summary(fit, node = node, ci_width = ci_width, samples = samples)
-#   sums <- list()
-#   for(i in 1:max(node)){
-#
-#     sums[[i]] <- test[[i]][[1]]
-#     names(sums)[[i]] <-  paste("Predicting node", node[i])
-#   }
-#   cat("BGGM: Bayesian Gaussian Graphical Models \n")
-#   cat("--- \n")
-#   cat("Type: Inverse to Regression \n")
-#   cat("--- \n")
-#   cat("Call: \n")
-#   print(test$call)
-#   cat("--- \n")
-#   cat("Posterior Estimates: \n \n")
-#   name(sums) <- ""
-#   sums
-# }
-
 summary.predict <- function(x,  ...){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
@@ -255,10 +203,7 @@ print.predict <- function(x,  ...){
   cat("--- \n")
   cat("Call:\n")
   print(x$call)
-  # cat("--- \n")
-  # cat("Posterior Estimates: \n\n")
-  # print(x$summary_error, ...)
-}
+  }
 
 summary.estimate <- function(x){
   print(x)
@@ -426,16 +371,6 @@ summary.select.estimate <- function(x, summarize = F, ...){
   }
 }
 
-
-
-
-
-
-
-
-
-
-
 head.select.estimate <- function(x, summarize = F, nrow = 2, ...){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
@@ -575,64 +510,6 @@ head.select.estimate <- function(x, summarize = F, nrow = 2, ...){
   }
 }
 
-
-
-# summary.select.estimate <- function(x, ...){
-#   cat("BGGM: Bayesian Gaussian Graphical Models \n")
-#   cat("--- \n")
-#   if(!isFALSE(x$analytic)){
-#     cat("Type: Selected Graph (Analytic Solution) \n")
-#   } else{
-#     cat("Type: Selected Graph (Sampling) \n")
-#
-#   }
-#   if(is.null(x$rope)){
-#     cat("Credible Interval:", gsub("^.*\\.","", x$ci), "% \n")
-#     cat("Connectivity:", round(mean(x$adjacency[upper.tri(x$adjacency)]) * 100, 1), "% \n")
-#     cat("--- \n")
-#     cat("Call:\n")
-#     print(x$call)
-#     cat("--- \n")
-#     cat("Selected:\n \n")
-#     colnames( x$partials) <- 1:ncol(x$partials)
-#     row.names( x$partials) <- 1:ncol(x$partials)
-#     colnames( x$adjacency) <- 1:ncol(x$partials)
-#     row.names( x$adjacency) <- 1:ncol(x$partials)
-#     cat("Partial correlations \n \n")
-#     print(x$partials, digits = 2)
-#     cat("--- \n \n")
-#     cat("Adjacency \n \n")
-#     print(x$adjacency)
-#     cat("--- \n")
-#
-#   } else{
-#     cat("Probability:", x$prob, "\n")
-#     cat("Region of Practical Equivalence:", "[", -1 * x$rope, ", ", x$rope, "]", "\n", sep = "")
-#     cat("Connectivity:", round(mean(x$adjacency_non_zero[upper.tri(x$adjacency_non_zero)]) * 100, 1), "% \n")
-#     cat("--- \n")
-#     cat("Call:\n")
-#     print(x$call)
-#     cat("--- \n")
-#     cat("Selected:\n \n")
-#     colnames(x$partials_non_zero) <- 1:ncol(x$partials_non_zero)
-#     row.names(x$partials_non_zero) <- 1:ncol(x$partials_non_zero)
-#     cat("Partial correlations \n \n")
-#     print(x$partials_non_zero, digits = 2)
-#     cat("--- \n \n")
-#     cat("Adjacency non-zero \n \n")
-#     colnames(x$adjacency_non_zero) <- 1:ncol(x$partials_non_zero)
-#     rownames(x$adjacency_non_zero) <- 1:ncol(x$partials_non_zero)
-#     print(x$adjacency_non_zero)
-#     cat("--- \n \n")
-#     cat("Adjacency zero \n \n")
-#     colnames(x$adjacency_zero) <- 1:ncol(x$partials_non_zero)
-#     rownames(x$adjacency_zero) <- 1:ncol(x$partials_non_zero)
-#     print(x$adjacency_zero)
-#   }
-# }
-#
-#
-#
 
 print.select.estimate <- function(x, ...){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
@@ -1845,3 +1722,152 @@ summary.ggm_compare_ppc <- function(x, ...){
 }
 
 
+
+
+print.ggm_compare_bf <- function(x) {
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type: GGM Comparison (Bayesian Hypothesis Testing) \n")
+  p <- x$info$dat_info$p[1]
+  cat("Posterior Samples:", x$iter, "\n")
+  cat("Observations (total):", sum(x$info$dat_info$n), "\n")
+  cat("Variables (p):", p, "\n")
+  cat("Edges:", .5 * (p * (p-1)), "\n")
+  cat("Groups:", nrow(bf_ggm$info$dat_info), "\n")
+  cat("Delta:", x$delta, "\n")
+  cat("--- \n")
+  cat("Call: \n")
+  print(x$call)
+  cat("--- \n")
+  cat("Date:", date(), "\n")
+}
+
+summary.ggm_compare_bf <- function(x){
+  print.ggm_compare_bf(x)
+
+}
+
+
+select.ggm_compare_bf <- function(x, BF_cut = 3){
+
+  BF_10 <- 1/ x$BF_01
+
+  diag(BF_10) <- 0
+
+  adj_10 <- ifelse(BF_10 > BF_cut, 1, 0)
+
+  adj_01 <- ifelse(x$BF_01 > BF_cut, 1, 0)
+
+  BF_01_adj <- adj_01 * x$BF_01
+
+  BF_10_adj <- adj_10 * BF_10
+
+  returned_object <- list(BF_10 = BF_10,
+                          BF_01 = x$BF_01,
+                          BF_01_adj = BF_01_adj,
+                          BF_10_adj = BF_10_adj,
+                          adj_10 = adj_10,
+                          adj_01 = adj_01,
+                          call = match.call(),
+                          p = ncol(BF_10),
+                          iter = x$iter,
+                          info = x$info,
+                          BF = BF_cut)
+
+  class(returned_object) <- "select.ggm_compare_bf"
+  returned_object
+
+}
+
+summary.select.ggm_compare_bf <- function(x, type = "adj"){
+
+  edges <- .5 * (x$p * (x$p-1))
+
+  prop_alt <- sum( x$adj_10[upper.tri( x$adj_10 )]) / edges
+
+  prop_null <- sum( x$adj_01[upper.tri( x$adj_01 )]) / edges
+
+  incon <- 1 - (prop_alt + prop_null)
+
+  group <- nrow( x$info$dat_info )
+
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  # hypothesis testing
+  cat("Type: GGM Comparison (Bayesian Hypothesis Testing) \n")
+  cat("Bayes Factor: 3 \n")
+  cat("--- \n")
+  cat("Call: \n")
+  print(x$call)
+  cat("--- \n")
+  cat("Hypotheses: \n")
+  cat("H0",paste("rho_g", 1:group, "_ij", sep = "", collapse = " = "), "\n")
+  cat("H1", "'not H0'", "\n")
+  cat("--- \n")
+  cat("Evidence for H0:", round(prop_null * 100, 2), "%\n")
+  cat("Evidence for H1:", round(prop_alt * 100, 2), "%\n")
+  cat("Inconclusive:", round(incon * 100, 2), "%\n")
+
+  if(type == "adj"){
+    cat("--- \n\n")
+    cat("Adjancency (H0) \n \n")
+    temp_01 <- as.data.frame( x$adj_01)
+    colnames(temp_01) <- 1:ncol(temp_01)
+    print(temp_01)
+    cat("--- \n \n")
+    cat("Adjancency (H1) \n \n")
+    temp_10 <- as.data.frame( x$adj_10)
+    colnames(temp_10) <- 1:ncol(temp_10)
+    print(temp_10)
+    cat("--- \n")
+  }
+  if(type == "BF"){
+    cat("--- \n\n")
+    cat("Adjancency (H0) \n \n")
+    temp_01 <- as.data.frame( round(x$BF_01_adj,2))
+    colnames(temp_01) <- 1:ncol(temp_01)
+    print(temp_01)
+    cat("--- \n \n")
+    cat("Adjancency (H1) \n \n")
+    temp_10 <- as.data.frame(round( x$BF_10_adj,2))
+    colnames(temp_10) <- 1:ncol(temp_10)
+    print(temp_10)
+    cat("--- \n")
+  }
+  if(type == "none"){
+    cat("--- \n")
+  }
+
+
+}
+
+print.select.ggm_compare_bf <- function(x){
+
+  edges <- .5 * (x$p * (x$p-1))
+
+  prop_alt <- sum( x$adj_10[upper.tri( x$adj_10 )]) / edges
+
+  prop_null <- sum( x$adj_01[upper.tri( x$adj_01 )]) / edges
+
+  incon <- 1 - (prop_alt + prop_null)
+
+  group <- nrow( x$info$dat_info )
+
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  # hypothesis testing
+  cat("Type: GGM Comparison (Bayesian Hypothesis Testing) \n")
+  cat("Bayes Factor: 3 \n")
+  cat("--- \n")
+  cat("Call: \n")
+  print(x$call)
+  cat("--- \n")
+  cat("Hypotheses: \n")
+  cat("H0",paste("rho_g", 1:group, "_ij", sep = "", collapse = " = "), "\n")
+  cat("H1", "'not H0'", "\n")
+  cat("--- \n")
+  cat("Evidence for H0:", round(prop_null * 100, 2), "%\n")
+  cat("Evidence for H1:", round(prop_alt * 100, 2), "%\n")
+  cat("Inconclusive:", round(incon * 100, 2), "%\n")
+  cat("--- \n")
+}

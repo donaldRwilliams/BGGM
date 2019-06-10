@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.edge_compare.explore.R
 \name{plot.edge_compare.explore}
 \alias{plot.edge_compare.explore}
-\title{Title}
+\title{Plot Edge Contrasts from the Bayes Factor Based Methods}
 \usage{
 \method{plot}{edge_compare.explore}(x, stack = TRUE, hjust1 = -1,
   hjust2 = -1, hjust3 = -1, base_text = 14, leg_text = 10,
@@ -12,5 +12,5 @@
 \item{leg_text}{}
 }
 \description{
-Title
+Plot Edge Contrasts from the Bayes Factor Based Methods
 }

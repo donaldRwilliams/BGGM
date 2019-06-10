@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.estimate.R
 \name{plot.estimate}
 \alias{plot.estimate}
-\title{Title}
+\title{Plot Edges (Parial Correlation)}
 \usage{
 \method{plot}{estimate}(x, ci_width, size, width)
 }
@@ -10,5 +10,5 @@
 \item{width}{}
 }
 \description{
-Title
+Plot Edges (Parial Correlation)
 }

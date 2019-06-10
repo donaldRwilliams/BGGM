@@ -2,7 +2,7 @@
 % Please edit documentation in R/compare.estimate.R
 \name{edge_compare.estimate}
 \alias{edge_compare.estimate}
-\title{Edge Contrasts with Estimation Based Methods}
+\title{Edge (Partial COrrelation) Contrasts with Estimation Based Methods}
 \usage{
 \method{edge_compare}{estimate}(x, contrast, ci_width, rope = NULL)
 }
@@ -24,10 +24,12 @@ ci credible interval used in \code{edge_difference}
 
 rope region of practical equivalence used in \code{edge_difference}
 
-samples list of posterior samples of each contrast. Can be used for custom plot, or the object can be plotted with \code{plot}
+object of class \code{edge_compare.estimate}
 }
 \description{
-Allows for comparing partial correlations \emph{within} the same GGM--e.g., to determine the largest edge for each node.
+Allows for comparing partial correlations \emph{within} the same GGM--e.g., to determine the largest edge for each node. A difference can
+either be asessed with a credible interval, or the region of practical equivalence. The latter allows for assessing practical equivalence--i.e.,
+whether two edges have the same strength or partial correlation size.
 }
 \note{
 These contrasts are based on the posterior distribution, and credible intervals or the rope are used to determine differences. In the case of

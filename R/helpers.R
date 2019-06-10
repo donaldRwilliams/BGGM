@@ -20,6 +20,25 @@ get_lower_tri<-function(cormat){
 }
 
 
+analytic_solve <- function(X){
+  # sample size
+  n <- nrow(X)
+  p <- ncol(X)
+  # centererd mat
+  X <- scale(X, scale = T)
+  # scale matrix
+  S <- t(X) %*% X
+  inv_mu <-  solve(S + diag(10^-5,  p)) * (n)
+  inv_var <-  (n + p + 1)*(solve(S + diag(10^-5, p) )^2 + tcrossprod(diag(solve(S + diag(10^-5, p)))))
+
+
+  inv_cor <- diag( 1 / sqrt((diag(inv_mu)))) %*% inv_mu %*% diag( 1 / sqrt((diag(inv_mu))) )
+  partials <- inv_cor * -1 + diag(2, p)
+  list(inv_mu = inv_mu, inv_var = inv_var, partial = partials)
+}
+
+
+
 beta_summary <- function(x, node, ci_width, samples){
 
   # convert inverse to beta

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.select.explore.R
 \name{plot.select.explore}
 \alias{plot.select.explore}
-\title{Plot Exploratory (hypothesis testing) Based Graphs}
+\title{Plot Bayes Factor Based Graphical Stuctures}
 \usage{
 \method{plot}{select.explore}(x, type, lower_tri = TRUE,
   layout = "circle", node_outer = 10, node_inner = 9,

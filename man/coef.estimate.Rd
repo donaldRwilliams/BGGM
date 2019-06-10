@@ -18,7 +18,7 @@
 \item{...}{e.g., \code{digits}}
 }
 \value{
-summary of the implicit multiple regresion for \code{node}
+summary of the multiple regresion for \code{node}
 }
 \description{
 There is a direct correspondence between the covariance matrix and multiple regression. In the case of GGMs, it is possible
