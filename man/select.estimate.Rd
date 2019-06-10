@@ -20,7 +20,7 @@
 An object of class \code{select.estimate}
 }
 \description{
-#' @description This allows for not only estimating the conditional dependence structure, that is non-zero edges, but also the conditional \textbf{in}dependence
+This allows for not only estimating the conditional dependence structure, that is non-zero edges, but also the conditional \textbf{in}dependence
 structure (evidence for no relation). For the latter, the region of practical equivalence must be specified
 }
 \note{

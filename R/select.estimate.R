@@ -1,6 +1,6 @@
 #' Select Graphical Structure with Estimation Based Methods
 #'
-#'#' @description This allows for not only estimating the conditional dependence structure, that is non-zero edges, but also the conditional \textbf{in}dependence
+#' @description This allows for not only estimating the conditional dependence structure, that is non-zero edges, but also the conditional \textbf{in}dependence
 #' structure (evidence for no relation). For the latter, the region of practical equivalence must be specified
 #'
 #' @param x object of class \code{bayes_estimate}

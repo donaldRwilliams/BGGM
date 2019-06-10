@@ -79,7 +79,7 @@ This README is organized as follows:
     
     + [Posterior Predictive KL Divergence](#posterior-predictive-kl-divergence)
     
-    + Bayesian Model Selection
+    + [Bayesian Model Selection](#bayesian-model-selection)
 
 # Installation
 
@@ -726,5 +726,25 @@ plot(ggm_ppc2, log = T)[[1]] +
 ```
 
 
+## Bayesian Model Selection
+The following method uses the Bayes factor to test whether there is (relative) evidence for edge equality in any number of GGMs. The test is for each edge or partial 
+correlation in the GGMs. In the case of more than two groups, for example with, say, 4 groups, the method tests whether each edge is the same across all groups. The alternative ($\mathcal{H}_1$) is then the unrestricted model--i.e., not $\mathcal{H}_0$. This is implemented with 
 
- 
+```{r}
+# Assume null is true for all edges
+Y1 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
+Y2 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
+Y3 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
+
+# sample from posteriors and compute BF
+ggm_bf <- ggm_compare_bf(Y1, Y2, Y3, 
+                         prior_sd = .5, 
+                         iter = 5000, 
+                         cores = 2)
+
+# select with BF_cut = 3
+ggm_bf_sel <- select(ggm_bf, BF_cut = 3)
+
+# summary
+summary(ggm_bf_sel, type = "adj")
+```
