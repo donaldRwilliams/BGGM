@@ -1810,12 +1810,12 @@ summary.select.ggm_compare_bf <- function(x, type = "adj"){
 
   if(type == "adj"){
     cat("--- \n\n")
-    cat("Adjancency (H0) \n \n")
+    cat("Adjacency Matrix (H0) \n \n")
     temp_01 <- as.data.frame( x$adj_01)
     colnames(temp_01) <- 1:ncol(temp_01)
     print(temp_01)
     cat("--- \n \n")
-    cat("Adjancency (H1) \n \n")
+    cat("Adjacency Matrix (H1) \n \n")
     temp_10 <- as.data.frame( x$adj_10)
     colnames(temp_10) <- 1:ncol(temp_10)
     print(temp_10)
@@ -1823,12 +1823,12 @@ summary.select.ggm_compare_bf <- function(x, type = "adj"){
   }
   if(type == "BF"){
     cat("--- \n\n")
-    cat("Adjancency (H0) \n \n")
+    cat("Bayes Factor Matrix (H0) \n \n")
     temp_01 <- as.data.frame( round(x$BF_01_adj,2))
     colnames(temp_01) <- 1:ncol(temp_01)
     print(temp_01)
     cat("--- \n \n")
-    cat("Adjancency (H1) \n \n")
+    cat("Bayes Factor Matrix (H1) \n \n")
     temp_10 <- as.data.frame(round( x$BF_10_adj,2))
     colnames(temp_10) <- 1:ncol(temp_10)
     print(temp_10)
