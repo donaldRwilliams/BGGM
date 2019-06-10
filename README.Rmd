@@ -79,7 +79,7 @@ This README is organized as follows:
     
     + [Posterior Predictive KL Divergence](#posterior-predictive-kl-divergence)
     
-    + [Bayesian Model Selection](#bayesian-model-selection)
+    + [Bayesian Hypothesis Testing](#bayesian-hypothesis-testing)
 
 # Installation
 
@@ -726,7 +726,7 @@ plot(ggm_ppc2, log = T)[[1]] +
 ```
 
 
-## Bayesian Model Selection
+## Bayesian Hypothesis Testing
 The following method uses the Bayes factor to test whether there is (relative) evidence for edge equality in any number of GGMs. The test is for each edge or partial 
 correlation in the GGMs. In the case of more than two groups, for example with, say, 4 groups, the method tests whether each edge is the same across all groups. The alternative ($\mathcal{H}_1$) is then the unrestricted model--i.e., not $\mathcal{H}_0$. This is implemented with 
 
