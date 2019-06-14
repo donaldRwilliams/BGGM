@@ -83,7 +83,7 @@ This README is organized as follows:
        
         - [Exploratory Hypothesis Testing](#exploratory-hypothesis-testing)
        
-        - [Confirmatory Hypothesis Testing](#confirmatory-hypothesis-testing)
+        - [Group Confirmatory Hypothesis Testing](#group-confirmatory-hypothesis-testing)
 
 # Installation
 
@@ -756,7 +756,7 @@ ggm_bf_sel <- select(ggm_bf, BF_cut = 3)
 summary(ggm_bf_sel, type = "adj")
 ```
 
-### Confirmatory Hypothesis Testing
+### Group Confirmatory Hypothesis Testing
 The confirmatory methods described above can be extended to any number of groups.  For example, a researcher can test their expectations in, say, treatment vs. control groups, where certain edges are predicted to increase. This can then be compared to a model predicting those edges stayed the same--i.e.,
 
 $\mathcal{H}_1: (\rho_{1,2_{g1}} > \rho_{1,2_{g2}}) ,  (\rho_{1,3_{g1}} > \rho_{1,3_{g2}}), (\rho_{2,3_{g1}} > \rho_{2,3_{g2}})$ 
