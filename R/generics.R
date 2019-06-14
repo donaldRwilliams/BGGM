@@ -1614,9 +1614,9 @@ summary.confirm <- function(x, ...){
   cat("--- \n")
   cat("Type: Confirmatory Hypothesis Testing \n")
   cat("--- \n")
-  cat("Call:\n")
-  print(x$call)
-  cat("--- \n")
+  # cat("Call:\n")
+  # print(x$call)
+  # cat("--- \n")
   cat("Hypotheses: \n")
 
   if(length(x$hypotheses) == length(x$post_prob)){
@@ -1722,8 +1722,6 @@ summary.ggm_compare_ppc <- function(x, ...){
 }
 
 
-
-
 print.ggm_compare_bf <- function(x) {
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
@@ -1736,15 +1734,25 @@ print.ggm_compare_bf <- function(x) {
   cat("Groups:", nrow(bf_ggm$info$dat_info), "\n")
   cat("Delta:", x$delta, "\n")
   cat("--- \n")
-  cat("Call: \n")
-  print(x$call)
-  cat("--- \n")
-  cat("Date:", date(), "\n")
+  if(is.null(x$hypotheses)){
+    cat("Call: \n")
+    print(x$call)
+    cat("--- \n")
+    cat("Date:", date(), "\n")
+  }
+  if(isFALSE(is.null(x$hypotheses))){
+    cat("Date:", date(), "\n")
+  }
 }
 
 summary.ggm_compare_bf <- function(x){
-  print.ggm_compare_bf(x)
+  if(is.null(x$hypotheses)){
+    print.ggm_compare_bf(x)
+  } else{
 
+    class(x) <- "confirm"
+    summary(x)
+  }
 }
 
 
