@@ -37,6 +37,9 @@ Williams, D. R., & Mulder, J. (2019). Bayesian Hypothesis Testing for Gaussian G
 
 Williams, D. R., Rast, P., Pericchi, L. R., & Mulder, J. (2019). Comparing Gaussian Graphical Models with the Posterior Predictive Distribution and Bayesian Model Selection. ([pre-print](https://psyarxiv.com/yt386/))
 
+Williams, D. R., & Mulder, J. (2019). BGGM: A R Package for Bayesian Gaussian Graphical Models. ([pre-print](https://psyarxiv.com/3b5hf/))
+
+
 ## Outline
 
 This README is organized as follows:
