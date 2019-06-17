@@ -7,8 +7,28 @@
 #' @param prior_sd hypothesized standard deviation for the edges or partial correlations.
 #' @param iter number of posterior samples.
 #' @param cores number of cores for parallel computing. The default is 2, but this can be adjusted.
+#' @param hypothesis NULL
 #'
-#' @return an object of class \code{ggm_compare_bf}
+#' @return list of class \code{ggm_compare_bf}
+#' \itemize{
+#' \item \code{BF_01} Bayes factors in favor of the null hypothesis
+#' \item \code{p} number of variables
+#' \item  \code{info} list of information about the data matrices
+#'
+#' \itemize{
+#' \item \code{dat} list containing the data matrices
+#' \item \code{dat_info} sample size for each data matrix
+#' \item \code{pairwise} matrix of pairwise combinations
+#' }
+#' \item \code{iter} number of posterior and prior samples
+#' \item \code{call} match.call()
+#' \item \code{delta} hyperparameter of matrix-F prior distribution (corresponds to \code{prior_sd})
+#' }
+#'
+#' @note After fitting, use \code{select} to determine which partial correlations were different or the same (i.e., evidence for the null hypothesis of
+#' equality). This assumes \code{hypothesis = NULL}. If a hypothesis is tested, then use \code{summary} which provides
+#' information including the Bayes factors and posterior probabilities for each hypothesis.
+#'
 #' @export
 #'
 #'

@@ -9,12 +9,14 @@
 #' @param ci_width credible interval width
 #' @param rope region of practical equivalence
 #'
-#' @return returned_object data.frame of results. use \code{summary} or \code{head}
-#' @return call call used in \code{edge_difference}
-#' @return ci credible interval used in \code{edge_difference}
-#' @return rope region of practical equivalence used in \code{edge_difference}
-#'
-#' @return object of class \code{edge_compare.estimate}
+#' @return list of class \code{edge_compare.estimate}:
+#' \itemize{
+#' \item \code{edge_difference} data.frame summary of the edge contrasts
+#' \item \code{code} match.call()
+#' \item \code{ci} credible interval
+#' \item \code{rope} region of practical equivalence
+#' \item \code{samples} list of posterior samples for the contrasts
+#'}
 #'
 #' @note These contrasts are based on the posterior distribution, and credible intervals or the rope are used to determine differences. In the case of
 #' the rope, it is also possible to assess similarity between edges. The function \code{edge_compare} is a generic, and for using the Bayes factor,

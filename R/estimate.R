@@ -8,7 +8,33 @@
 #' @param samples number of posterior samples
 #' @param analytic analytic solution. see notes for futher details.
 #'
-#' @return  An object of class \code{estimate}.
+#' @return  list of class \code{estimate}:
+#'
+#' \code{analytic = TRUE}:
+#' \itemize{
+#' \item \code{fit} list of analytic solution estimates
+#' \itemize{
+#' \item \code{inv_mu} inverse covariance matrix (mean)
+#' \item \code{inv_var} inverse covariance matrix (variance)
+#' \item \code{partial} partial correlation matrix
+#' }
+#' \item \code{analytic} TRUE
+#' \item \code{call} match.call()
+#' \item \code{dat} data matrix
+#' \item \code{p} number of variables
+#' }
+#'
+#' \code{analytic = FALSE}:
+#' \itemize{
+#' \item \code{parcors_mat} partial correlation matrix
+#' \item \code{inv_mat} inverse covariance matrix
+#' \item \code{posterior samples} posterior samples for partial correlations and inverse covariance matrix
+#' \item \code{p} number of variables
+#' \item \code{dat} data matrix
+#' \item \code{iter} number of posterior samples
+#' \item \code{call} match.call()
+#' \item \code{analytic} FALSE
+#' }
 #'
 #' @export
 #'
@@ -19,6 +45,7 @@
 #' with p = 25, n = 2500 and 5,000 samples. There is one function that makes use of the analytic solution. Namely, \code{loocv} computes node-wise leave-one-out
 #' error (also analytically).
 #'
+#'see \code{methods("estimate")}
 
 #' @examples
 #'

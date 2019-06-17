@@ -1,27 +1,69 @@
 #' Confirmatory Hypothesis Testing
 #'
-#' @param x data matrix (\emph{n} \times  \emph{p})
+#' @description Traditionally, Gaussian graphical models are inherently exploratory. That is, automated model selection is performed. A key aspect of \strong{BGGM} is the ability to extend inference beyond exploratory and to
+#' confirmatory hypothesis testing. This is accomplished by testing equality and/or inequality contraints for sets of edges (partial correlations).
+#'
+#' @param x data matrix (\emph{n} $\times$  \emph{p})
 #' @param hypothesis hypotheses to be compared
 #' @param prior_sd hypothesized standard deviation for $\rho$
 #' @param iter posterior and prior samples. 25,000 is the default, as it results in a more stable Bayes factor than using, say, 5,000.
 #' @param cores number of cores for parallel computing. The defaul is 2, but this can be adjusted
 #'
-#' @return An object of class \code{confirm}
+#' @return list of class \code{confirm}:
+#'
+#' \itemize{
+#' \item \code{BF_matrix} matrix of Bayes factors for each hypothesis. Also includes the compliment
+#' \item \code{post_prob} posterior hypothesis probabilities
+#' \item \code{hypotheses} \code{hypothesis}
+#' \item \code{call} match.call()
+#' \item \code{p} number of variables
+#' \item \code{n} number of observations
+#' \item \code{iter} number of posterior samples
+#' \item \code{delta} hyperparameter of matrix-F prior distribution (corresponds to prior_sd)
+#' \item \code{parcors_mat} partial correlation matrix
+#' \item \code{returned_mats} contrast matrices
+#' }
+#'
+#'
+#'
+#'
+#'
 #' @export
 #'
 #' @note Currently inequality and equality restrictions can be tested. The former is an ordering the respective edge sizes,
 #' whereas the latter allows for testing whether certian edges are exactly the same.
+#'
+#' see \code{methods(class = "confirm")}
+#'
 #' @examples
 #'
 #'
-#' Y <- BGGM::bfi[,1:5]
+#' # p = 10
+#' Y <- BGGM::bfi[,1:10]
 #'
-#' hypothesis <- c("3--5 > 1--5 > 2--5;
-#'                 3--5 > 2--5 > 1--5")
+#' # hypothesis
+#' hypothesis <- c("1--2 > 1--3 > 1--4 > 1--5")
 #'
-#'                 test_order <-  confirm(x = x, hypothesis  = hypothesis,
-#'                 prior_sd = 0.5, iter = 50000,
-#'                 cores = 2)
+#' # test inequality contraint
+#' test_order <-  confirm(x = Y, hypothesis  = hypothesis,
+#'                       prior_sd = 0.5, iter = 50000,
+#'                       cores = 2)
+#' # summary
+#' summary(test_order)
+#'
+#'
+#'# test hypothesized directions
+#'
+#'# hypothesis
+#'hypothesis <- c("(1--2, 1--3, 1--4)  <  0 < (1--6)")
+#'
+#'# test directions
+#' test_directions <-  confirm(x = Y, hypothesis  = hypothesis,
+#'                       prior_sd = 0.5, iter = 50000,
+#'                       cores = 2)
+#'# summary
+#'summary(test_directions)
+
 confirm.default <- function(x, hypothesis, prior_sd, iter = 25000,  cores = 2){
 
   # code taken and adapted from (with permission):
@@ -381,8 +423,8 @@ confirm.default <- function(x, hypothesis, prior_sd, iter = 25000,  cores = 2){
     out <- list(BF_matrix = round(BF_matrix, digits = 3),
                 post_prob = out_hyp_prob,
                 hypotheses = hypothesis,
-                BF_computation = BF_computation,
-                BFu_CI = BFu_ci,
+                # BF_computation = BF_computation,
+                # BFu_CI = BFu_ci,
                 call = match.call(),
                 p = fit$p, n = nrow(fit$dat),
                 iter = fit$iter,

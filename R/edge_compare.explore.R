@@ -9,7 +9,14 @@
 #' @param contrast partial correlations to compare
 #' @param alternative \code{greater}, \code{less}, \code{two.sided}, or \code{exhaustive}
 #'
-#' @return An object of class \code{edge_compare.explore}
+#' @return list of class \code{edge_compare.explore}:
+#' \itemize{
+#' \item \code{results} data.frame summary of the edge contrasts
+#' \item \code{alternative} \code{greater}, \code{less}, \code{two.sided}, or \code{exhaustive}
+#' \item \code{call} match.call()
+#' }
+#'
+#'
 #' @export
 #'
 #' @examples

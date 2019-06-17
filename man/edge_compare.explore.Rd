@@ -14,7 +14,12 @@
 \item{alternative}{\code{greater}, \code{less}, \code{two.sided}, or \code{exhaustive}}
 }
 \value{
-An object of class \code{edge_compare.explore}
+list of class \code{edge_compare.explore}:
+\itemize{
+\item \code{results} data.frame summary of the edge contrasts
+\item \code{alternative} \code{greater}, \code{less}, \code{two.sided}, or \code{exhaustive}
+\item \code{call} match.call()
+}
 }
 \description{
 Allows for comparing partial correlations \emph{within} the same GGM--e.g., to determine the largest edge for each node. The differences are tested

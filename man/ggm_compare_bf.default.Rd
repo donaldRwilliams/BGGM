@@ -4,24 +4,45 @@
 \alias{ggm_compare_bf.default}
 \title{Compare GGMs with Bayesian Hypothesis Testing}
 \usage{
-\method{ggm_compare_bf}{default}(..., prior_sd, iter = 25000,
-  cores = 2)
+\method{ggm_compare_bf}{default}(..., prior_sd, hypothesis = NULL,
+  iter = 25000, cores = 2)
 }
 \arguments{
 \item{...}{data matrices (\emph{n} \times  \emph{p}). Requires at least two.}
 
 \item{prior_sd}{hypothesized standard deviation for the edges or partial correlations.}
 
+\item{hypothesis}{NULL}
+
 \item{iter}{number of posterior samples.}
 
 \item{cores}{number of cores for parallel computing. The default is 2, but this can be adjusted.}
 }
 \value{
-an object of class \code{ggm_compare_bf}
+list of class \code{ggm_compare_bf}
+\itemize{
+\item \code{BF_01} Bayes factors in favor of the null hypothesis
+\item \code{p} number of variables
+\item  \code{info} list of information about the data matrices
+
+\itemize{
+\item \code{dat} list containing the data matrices
+\item \code{dat_info} sample size for each data matrix
+\item \code{pairwise} matrix of pairwise combinations
+}
+\item \code{iter} number of posterior and prior samples
+\item \code{call} match.call()
+\item \code{delta} hyperparameter of matrix-F prior distribution (corresponds to \code{prior_sd})
+}
 }
 \description{
 Comparing any number of GGMs with Bayesian hypothesis testing (i.e., with the Bayes factor). This method allows for
 assessing (relative) evidence for edge equality or edges differences across any number of groups.
+}
+\note{
+After fitting, use \code{select} to determine which partial correlations were different or the same (i.e., evidence for the null hypothesis of
+equality). This assumes \code{hypothesis = NULL}. If a hypothesis is tested, then use \code{summary} which provides
+information including the Bayes factors and posterior probabilities for each hypothesis.
 }
 \examples{
 

@@ -4,15 +4,33 @@
 #' possible to test for only positive or negative edges, as well as two sided hypothesis testing (which is the customary approach). Further
 #' there is also an exhaustive option that provides the posterior probability of the null, greater than zero, and less than zero.
 #'
-#' @param X data matrix  (\emph{n} \times  \emph{p}).
+#' @param X data matrix  (\emph{n} $\times$  \emph{p}).
 #' @param iter number of posterior samples.
 #' @param cores number of cores for parallel computing. The default is 2, but this can be adjusted.
-#' @param prior_sd hypothesized standard deviation for the edges or partial correlations.
+#' @param prior_sd hypothesized standard deviation of the prior distribution.
 #'
-#' @return object of class \code{explore}
-#'
+#' @return list of class \code{explore}:
+#' \itemize{
+#' \item \code{parcors_mat} partial correlation matrix
+#' \item \code{parcors_sd} partial correlation standard deviations
+#' \item \code{samples} list of prior and posterior samples
+#' \itemize{
+#'  \item \code{fisher_z_post} Fisher z transformed posterior distributions (partial correlations)
+#'  \item  \code{pcor_post} partial correlation posterior distribtions (not tranformed)
+#'  \item \code{inv_cov_post} inverse covariance matrix posterior distribtions
+#'  \item \code{pcor_prior} partial correlation prior distribution
+#'  \item \code{fisher_z_prior}  Fisher z transformed prior distributions (partial correlations)
+#'  }
+#' \item \code{delta} hyperparameter of matrix-F prior distribution (corresponds to \code{prior_sd})
+#' \item \code{iter} number of posterior and prior samples
+#' \item \code{dat} data matrix
+#' \item \code{call} match.call()
+#' \item \code{p} number of variables
+#' \item \code{cores} number of cores
+#' \item \code{edge} number of estimated edges
+#' }
 #' @note After sampling from the posterior distribution, use \code{select} to determine the edge set and \code{plot} for visualizing the
-#' edge set.
+#' edge set. see \code{methods(class = "explore")}
 #'
 #' @export
 #'

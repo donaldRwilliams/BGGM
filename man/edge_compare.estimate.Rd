@@ -16,15 +16,14 @@
 \item{rope}{region of practical equivalence}
 }
 \value{
-returned_object data.frame of results. use \code{summary} or \code{head}
-
-call call used in \code{edge_difference}
-
-ci credible interval used in \code{edge_difference}
-
-rope region of practical equivalence used in \code{edge_difference}
-
-object of class \code{edge_compare.estimate}
+list of class \code{edge_compare.estimate}:
+\itemize{
+\item \code{edge_difference} data.frame summary of the edge contrasts
+\item \code{code} match.call()
+\item \code{ci} credible interval
+\item \code{rope} region of practical equivalence
+\item \code{samples} list of posterior samples for the contrasts
+}
 }
 \description{
 Allows for comparing partial correlations \emph{within} the same GGM--e.g., to determine the largest edge for each node. A difference can

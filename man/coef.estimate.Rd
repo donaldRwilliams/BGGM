@@ -18,12 +18,12 @@
 \item{...}{e.g., \code{digits}}
 }
 \value{
-summary of the multiple regresion for \code{node}
+summary of the multiple regresion coefficients for \code{node}
 }
 \description{
 There is a direct correspondence between the covariance matrix and multiple regression. In the case of GGMs, it is possible
 to estimate the edge set with multiple regression (i.e., neighborhood selection). In *BGGM*, the precision matrix is first sampled from, and then
-each draws is converted to the corresponding coefficient and error variance. This results in a posterior distribution. This function can be used
+each draws is converted to the corresponding coefficients and error variances. This results in a posterior distribution. This function can be used
 to perform Bayesian multiple regression.
 }
 \examples{
@@ -35,9 +35,5 @@ Y <- BGGM::bfi[,1:10]
 fit <- estimate(Y, samples = 5000)
 
 # precision to regression
-coefficients(fit, node = 1, ci_width = 0.95)
-
-# precision to regression
-
 coefficients(fit, node = 1, ci_width = 0.95)
 }

@@ -8,11 +8,72 @@
 #' @param alternative type of hypothesis (see notes)
 #' @param hyp_prob posterior probability threshold (see notes)
 #'
-#' @return An object of class \code{select.explore}
+
 #' @export
 #'
 #' @note The \code{alternative} can be either \code{greater}, \code{less}, \code{two.sided}, or \code{exhaustive}. The argument \code{hyp_prob} is used only
-#' when \code{alternative = hypothesis}. It is the posterior hypothesis probability used as the decision rule.
+#' when \code{alternative = hypothesis}. \code{greater} and \code{less} test directional hypotheses, and thus, the graphical structure will
+#' only included edges in that direction (i.e., positive or negative). \code{two.sided} is the customary approach, and test for the presence or
+#' absence of an edge. \code{exhaustive} tests negative vs. positive  vs. zero. Here \code{hyp_prob} is the posterior probability threshold for the respective
+#' hypotheses.
+#'
+#'
+#' @return list of class \code{select.explore}:
+#'
+#' \code{alternative = "two.sided"}:
+#' \itemize{
+#'  \item \code{partials_non_zero} selected partial correlation matrix
+#'  \item \code{pcor_mat} partial correlation matrix (non set to zero)
+#'  \item \code{pcor_sd} partial correlation standard deviations
+#'  \item \code{Adj_10} adjacency matrix for the selected edges (in favor of the \code{alternative})
+#'  \item \code{Adj_01} adjacency matrix for the null hypothesis  (conditional independence)
+#'  \item \code{BF_10} Bayes factors for \code{alternative}
+#'  \item \code{BF_01} Bayes factors for the null hypothesis
+#'  \item \code{BF_cut} evidentiary threshold
+#'  \item \code{alternative} \code{"two.sided"}
+#'  \item \code{code} \code{match.call()}
+#' }
+#'
+#' \code{alternative = "greater"}:
+#' \itemize{
+#'  \item \code{partials_positive} selected partial correlation matrix
+#'  \item \code{pcor_mat} partial correlation matrix (none set to zero)
+#'  \item \code{pcor_sd} partial correlation standard deviations
+#'  \item \code{Adj_20} adjacency matrix for the selected edges (in favor of the \code{alternative})
+#'  \item \code{Adj_01} adjacency matrix for the null hypothesis  (conditional independence)
+#'  \item \code{BF_20} Bayes factors for \code{alternative}
+#'  \item \code{BF_01} Bayes factors for the null hypothesis
+#'  \item \code{BF_cut} evidentiary threshold
+#'  \item \code{alternative} \code{"greater"}
+#'  \item \code{code} \code{match.call()}
+#' }
+#'
+#' \code{alternative = "less"}:
+#' \itemize{
+#'  \item \code{partials_negative} selected partial correlation matrix
+#'  \item \code{pcor_mat} partial correlation matrix (none set to zero)
+#'  \item \code{pcor_sd} partial correlation standard deviations
+#'  \item \code{Adj_20} adjacency matrix for the selected edges (in favor of the \code{alternative})
+#'  \item \code{Adj_01} adjacency matrix for the null hypothesis  (conditional independence)
+#'  \item \code{BF_20} Bayes factors for \code{alternative}
+#'  \item \code{BF_01} Bayes factors for the null hypothesis
+#'  \item \code{BF_cut} evidentiary threshold
+#'  \item \code{alternative} \code{"less"}
+#'  \item \code{code} \code{match.call()}
+#' }
+#'
+#' \code{alternative = "exhaustive"}
+#' \itemize{
+#' \item \code{post_prob} data.frame with posterior probabilites for each edge
+#' \item \code{neg_mat} adjacency matrix for negative edges
+#' \item \code{post_mat} adjacency matrix for positive edges
+#' \item \code{null_mat} adjacency matrix for zero  (conditional independence)
+#' \item \code{"alternative"} "exhaustive"
+#' \item \code{pcor_mat} partial correlation matrix (non set to zero)
+#' \item \code{pcor_sd} partial correlation standard deviations
+#' \item \code{code} \code{match.call()}
+#' \item \code{prob} \code{hyp_prob}
+#' }
 #'
 #' @examples
 #'
