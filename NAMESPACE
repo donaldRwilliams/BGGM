@@ -31,6 +31,7 @@ export(summary.select.estimate )
 export(plot.select.estimate)
 export(head.select.estimate)
 
+# edge compare (estimate)
 export(edge_compare)
 export(edge_compare.estimate)
 export(summary.edge_compare.estimate)
@@ -38,38 +39,38 @@ export(print.edge_compare.estimate)
 export(head.edge_compare.estimate)
 export(plot.edge_compare.estimate)
 
+# explore
 export(explore)
 export(explore.default)
 export(print.explore)
 export(summary.explore)
-
 export(select.explore)
 export(summary.select.explore)
 export(print.select.explore)
 export(head.select.explore)
 export(plot.select.explore)
 
-export(coef.estimate)
-export(hypothesis_plot)
-
+# edge compare explore
 export(edge_compare.explore)
 export(print.edge_compare.explore)
 export(summary.edge_compare.explore)
 export(head.edge_compare.explore)
 export(plot.edge_compare.explore)
 
+# confirmatory
 export(confirm)
 export(confirm.default)
 export(print.confirm)
 export(summary.confirm)
 
+# ggms predictive check
 export(ggm_compare_ppc)
 export(ggm_compare_ppc.default)
 export(print.ggm_compare_ppc)
 export(summary.ggm_compare_ppc)
 export(plot.ggm_compare_ppc)
 
-
+# ggms BF
 export(ggm_compare_bf)
 export(ggm_compare_bf.default)
 export(print.select.ggm_compare_bf)
@@ -80,7 +81,7 @@ export(print.ggm_compare_bf)
 export(summary.ggm_compare_bf)
 export(plot.select.ggm_compare_bf)
 
-
+# ggm pairwise edge differences
 export(ggm_compare_estimate)
 export(ggm_compare_estimate.default)
 export(summary.ggm_compare_estimate)
@@ -90,7 +91,13 @@ export(print.select.ggm_compare_estimate)
 export(summary.select.ggm_compare_estimate)
 export(plot.select.ggm_compare_estimate)
 
+# inv to regression
+export(coef.estimate)
 
+# hypothesis plot
+export(hypothesis_plot)
+
+# imports
 import(ggplot2)
 import(ggraph)
 
@@ -100,26 +107,3 @@ importFrom(mvnfast,  rmvn)
 importFrom(foreach, "%dopar%")
 importFrom(foreach, "foreach")
 
-#export(edge_compare.estimate)
-#export(print.edge_compare.estimate)
-#export(plot.edge_compare.estimate)
-#export(summary.compare.predict)
-#export(print.compare.predict)
-#export(plot.compare.predict)
-#export(coef.estimate)
-#export(compare)
-#export(edge_compare)
-#export(beta_summary)
-#export(performance_measures)
-#export(bayes_R2)
-#export(predictive_plot)
-#export(prediction_error)
-#export(bayes_explore)
-#export(explore_select)
-#export(KL)
-#export(QL)
-#export(unbiased_cov)
-#export(GGM_compare_ppc)
-#export(GGM_compare_bf)
-#export(delta_solve)
-#export(compare.predict)
