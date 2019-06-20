@@ -1814,5 +1814,68 @@ print.ggm_compare_estimate <- function(x) {
 
 summary.ggm_compare_estimate <- function(x){
   print(x)
+  cat("--- \n")
+  cat("note: see dat_results in the object of class ggm_compare_estimate for the pairwise contrasts")
+}
+
+
+print.select.ggm_compare_estimate <- function(x){
+
+  edges <- .5 * (x$p * (x$p-1))
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  # hypothesis testing
+  cat("Type: GGM Comparison (Estimation) \n")
+  if(x$type == "rope"){
+    contrasts <- length( x$mats_null )
+    cat("Probability:", x$prob, "\n")
+    cat("Region of Practical Equivalence:", "[", -1 * x$rope, ", ", x$rope, "]", "\n", sep = "")
+    cat("--- \n")
+    cat("Call: \n")
+    print(x$call)
+    cat("--- \n")
+    cat("Group Contrasts: \n \n")
+    for(i in 1:contrasts){
+
+      temp_zero <- x$mats_null[[i]][[1]]
+      temp_nonzero <- x$mats_diff[[i]][[1]]
+      prac_zero <-   mean(temp_zero[upper.tri(temp_zero)]) * 100
+      prac_nonzero <-   mean(temp_nonzero[upper.tri(temp_nonzero)]) * 100
+
+      cat(names(x$mats_null[[i]]),":", "\n", sep = "")
+      cat("Practically Equivalent:", round(prac_zero, 2), "% \n")
+      cat("Practically Different:", round(prac_nonzero, 2), "% \n")
+      cat("Undecided:", 1 - (round(prac_nonzero, 2)/100 + round(prac_zero, 2))/100, "% \n \n")
+      }
+  }
+
+  if(x$type == "ci"){
+    contrasts <- length( x$mats_diff )
+    cat("Credible Interval:", x$ci, "%" , "\n")
+    cat("--- \n")
+    cat("Call: \n")
+    print(x$call)
+    cat("--- \n")
+    cat("Group Contrasts: \n \n")
+    for(i in 1:contrasts){
+
+
+      temp_nonzero <- x$mats_diff[[i]][[1]]
+      prac_nonzero <-   mean(temp_nonzero[upper.tri(temp_nonzero)]) * 100
+
+      cat(names(x$mats_diff[[i]]),":", "\n", sep = "")
+      cat("Different:", round(prac_nonzero, 2), "% \n \n")
+    }
+  }
+
+  cat("--- \n")
 
 }
+
+
+summary.select.ggm_compare_estimate <- function(x){
+  print(x)
+
+  }
+
+

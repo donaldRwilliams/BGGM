@@ -64,7 +64,13 @@ beta_summary <- function(x, node, ci_width, samples){
 
 
 
-net_plot <- function(x, layout = "circle", mat_type, node_outer, node_inner, node_text_size, alpha = TRUE, labels = NULL){
+net_plot <- function(x, layout = "circle",
+                     mat_type,
+                     node_outer,
+                     node_inner,
+                     node_text_size,
+                     alpha = TRUE,
+                     labels = NULL){
 
   if(mat_type == "partials"){
   p <- ncol(x)
@@ -126,13 +132,23 @@ net_plot <- function(x, layout = "circle", mat_type, node_outer, node_inner, nod
 
   if(mat_type == "adj"){
     p <- ncol(x)
-    graph_cors <- igraph::graph_from_adjacency_matrix(adjmatrix  =  x)
+    if(sum(x[upper.tri(x)]) == 0){
+      graph_cors <- igraph::make_empty_graph(p, directed = T)
+      plt <- ggraph(graph_cors, layout = layout) +
+        guides(edge_color = "none") +
+        geom_node_point(color = "black", size = node_outer) +
+        geom_node_point(color = "white", size = node_inner)
+    }else{
+      graph_cors <- igraph::graph_from_adjacency_matrix(adjmatrix  =  x)
+      plt <- ggraph(graph_cors, layout = layout) +
+        geom_edge_link(color ="black") +
+        guides(edge_color = "none") +
+        geom_node_point(color = "black", size = node_outer) +
+        geom_node_point(color = "white", size = node_inner)
 
-    plt <- ggraph(graph_cors, layout = layout) +
-      geom_edge_link(color = "black") +
-      guides(edge_color = "none") +
-      geom_node_point(color = "black", size = node_outer) +
-      geom_node_point(color = "white", size = node_inner)
+    }
+
+
 
 
 

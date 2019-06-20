@@ -1,4 +1,4 @@
-#' Plot Estimation Based Based Graphical Stuctures
+#' Plot Estimation Based Graphical Stuctures
 #'
 #' @param x object of class \code{select.estimate}
 #' @param type \code{heatmap} or \code{network} plot
@@ -24,7 +24,7 @@ plot.select.estimate <- function(x, type,
 
   if(type == "heatmap"){
 
-    message("type = network arguments are ignored")
+   message("type = network arguments are ignored")
 
     if(is.null(x$rope)){
 

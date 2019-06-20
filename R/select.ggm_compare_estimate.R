@@ -36,11 +36,12 @@
 select.ggm_compare_estimate <- function(x, type, prob = NULL){
 
       contrasts <- length(x$dat_results)
-      mats <- replicate(contrasts, expr =   matrix(0,  x$p, x$p))
-      mats_adj <- list()
-      mat_temp <- matrix(0, x$p, x$p)
 
-      if(type ==  "ci"){
+      mats <- replicate(contrasts, expr =   matrix(0,  x$p, x$p))
+
+      mats_adj <- list()
+
+    if(type ==  "ci"){
 
         if(is.numeric(x$rope)) stop("rope cannot be used. please use type = 'rope' or use ci_width instead of the rope when estimating the models")
 
@@ -64,7 +65,11 @@ select.ggm_compare_estimate <- function(x, type, prob = NULL){
 
         returned_object <- list(mats_diff = mats_adj,
                                 type = type,
-                                prob = prob)
+                                prob = prob,
+                                call = match.call(),
+                                p = x$p,
+                                rope = x$rope,
+                                ci = x$ci_width)
 
 
         }
@@ -107,7 +112,11 @@ select.ggm_compare_estimate <- function(x, type, prob = NULL){
          returned_object <- list(mats_null = mats_adj,
                                  mats_diff = mats_adj_diff,
                                  type = type,
-                                 prob = prob)
+                                 prob = prob,
+                                 call = match.call(),
+                                 p = x$p,
+                                 rope = x$rope,
+                                 ci = x$ci_width)
  }
 
   class(returned_object) <- "select.ggm_compare_estimate"

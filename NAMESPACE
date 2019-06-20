@@ -78,12 +78,17 @@ export(print.select.ggm_compare_bf)
 export(select.ggm_compare_bf)
 export(print.ggm_compare_bf)
 export(summary.ggm_compare_bf)
+export(plot.select.ggm_compare_bf)
+
 
 export(ggm_compare_estimate)
 export(ggm_compare_estimate.default)
 export(summary.ggm_compare_estimate)
 export(print.ggm_compare_estimate)
 export(select.ggm_compare_estimate)
+export(print.select.ggm_compare_estimate)
+export(summary.select.ggm_compare_estimate)
+export(plot.select.ggm_compare_estimate)
 
 
 import(ggplot2)
