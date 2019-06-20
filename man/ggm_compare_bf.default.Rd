@@ -36,8 +36,9 @@ list of class \code{ggm_compare_bf}
 }
 }
 \description{
-Comparing any number of GGMs with Bayesian hypothesis testing (i.e., with the Bayes factor). This method allows for
-assessing (relative) evidence for edge equality or edges differences across any number of groups.
+Compare GGMs with the Bayes factor. This method allows for
+assessing (relative) evidence for edge equality or edges differences across any number of groups. Further, confirmatory hypothesis testing
+can be used to test predictions or expectations regarding difference or similiarities in different groups (e.g., male vs. female).
 }
 \note{
 After fitting, use \code{select} to determine which partial correlations were different or the same (i.e., evidence for the null hypothesis of

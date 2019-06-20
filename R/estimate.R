@@ -5,7 +5,7 @@
 #' distribution.
 #'
 #' @param x data matrix (\emph{n} $\times$  \emph{p}).
-#' @param samples number of posterior samples
+#' @param iter number of posterior samples
 #' @param analytic analytic solution. see notes for futher details.
 #'
 #' @return  list of class \code{estimate}:
@@ -61,7 +61,7 @@
 #' # plot
 #' plot(E, type = "network")
 
-estimate.default  <- function(x, samples = 5000, analytic = FALSE){
+estimate.default  <- function(x, iter = 5000, analytic = FALSE){
 
   # remove the NAs
   X <- na.omit(as.matrix(x))
@@ -84,9 +84,9 @@ estimate.default  <- function(x, samples = 5000, analytic = FALSE){
 
   if(isFALSE(analytic)){
   # store posterior samples
-  df_samps <- matrix(0, nrow = samples, ncol = cols_samps)
+  df_samps <- matrix(0, nrow = iter, ncol = cols_samps)
 
-  for(i in 1:samples){
+  for(i in 1:iter){
     # draw directly from Wishart
     inv_mat <- rWishart(1, n-1, solve(S))[,,1]
 
@@ -117,7 +117,7 @@ estimate.default  <- function(x, samples = 5000, analytic = FALSE){
                          posterior_samples = as.data.frame(df_samps),
                          p = ncol(x),
                          dat = X,
-                         iter = samples, call = match.call(),
+                         iter = iter, call = match.call(),
                          analytic = analytic)
   } else{
 

@@ -79,17 +79,19 @@ export(select.ggm_compare_bf)
 export(print.ggm_compare_bf)
 export(summary.ggm_compare_bf)
 
-
-
+export(ggm_compare_estimate)
+export(ggm_compare_estimate.default)
+export(summary.ggm_compare_estimate)
+export(print.ggm_compare_estimate)
 
 import(ggplot2)
 import(ggraph)
-
 
 importFrom(ggridges, geom_density_ridges)
 importFrom(ggridges, stat_density_ridges)
 importFrom(mvnfast, rmvn)
 importFrom(foreach, "%dopar%")
+importFrom(foreach, "foreach")
 
 #export(edge_compare.estimate)
 #export(print.edge_compare.estimate)
@@ -114,7 +116,3 @@ importFrom(foreach, "%dopar%")
 #export(GGM_compare_bf)
 #export(delta_solve)
 #export(compare.predict)
-
-
-
-

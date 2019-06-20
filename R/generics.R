@@ -1,4 +1,3 @@
-# generics
 ####################################
 ########## generics ################
 ####################################
@@ -13,8 +12,6 @@ edge_compare <- function(x, ...){
 compare <- function(x, ...){
   UseMethod("compare", x)
 }
-
-loocv <- function(x, ...) UseMethod("loocv", x)
 
 estimate <- function(x, ...) UseMethod("estimate")
 
@@ -32,6 +29,11 @@ ggm_compare_ppc <- function(x, ...){
 ggm_compare_bf <- function(x, ...){
   UseMethod("ggm_compare_bf", x)
 }
+
+ggm_compare_estimate <- function(x, ...){
+  UseMethod("ggm_compare_estimate", x)
+}
+
 
 summary.edge_compare.predict <- function(x, ...){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
@@ -1731,7 +1733,7 @@ print.ggm_compare_bf <- function(x) {
   cat("Observations (total):", sum(x$info$dat_info$n), "\n")
   cat("Variables (p):", p, "\n")
   cat("Edges:", .5 * (p * (p-1)), "\n")
-  cat("Groups:", nrow(bf_ggm$info$dat_info), "\n")
+  cat("Groups:", nrow(x$info$dat_info), "\n")
   cat("Delta:", x$delta, "\n")
   cat("--- \n")
   if(is.null(x$hypotheses)){
@@ -1878,4 +1880,33 @@ print.select.ggm_compare_bf <- function(x){
   cat("Evidence for H1:", round(prop_alt * 100, 2), "%\n")
   cat("Inconclusive:", round(incon * 100, 2), "%\n")
   cat("--- \n")
+}
+
+
+print.ggm_compare_estimate <- function(x) {
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type: GGM Comparison (Estimation) \n")
+  p <- x$info$dat_info$p[1]
+  cat("Posterior Samples:", x$iter, "\n")
+  cat("Observations (total):", sum(x$info$dat_info$n), "\n")
+  cat("Variables (p):", p, "\n")
+  cat("Edges:", .5 * (p * (p-1)), "\n")
+  cat("Groups:", nrow(x$info$dat_info), "\n")
+  cat("--- \n")
+  if(is.null(x$hypotheses)){
+    cat("Call: \n")
+    print(x$call)
+    cat("--- \n")
+    cat("Date:", date(), "\n")
+  }
+  if(isFALSE(is.null(x$hypotheses))){
+    cat("Date:", date(), "\n")
+  }
+}
+
+
+summary.ggm_compare_estimate <- function(x){
+  print(x)
+
 }

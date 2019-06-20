@@ -4,12 +4,12 @@
 \alias{estimate.default}
 \title{Gaussian Graphical Models with Credible Intervals or the Region of Practical Equivalence}
 \usage{
-\method{estimate}{default}(x, samples = 5000, analytic = FALSE)
+\method{estimate}{default}(x, iter = 5000, analytic = FALSE)
 }
 \arguments{
 \item{x}{data matrix (\emph{n} $\times$  \emph{p}).}
 
-\item{samples}{number of posterior samples}
+\item{iter}{number of posterior samples}
 
 \item{analytic}{analytic solution. see notes for futher details.}
 }

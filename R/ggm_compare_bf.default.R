@@ -1,7 +1,8 @@
 #' Compare GGMs with Bayesian Hypothesis Testing
 #'
-#' @description Comparing any number of GGMs with Bayesian hypothesis testing (i.e., with the Bayes factor). This method allows for
-#' assessing (relative) evidence for edge equality or edges differences across any number of groups.
+#' @description Compare GGMs with the Bayes factor. This method allows for
+#' assessing (relative) evidence for edge equality or edges differences across any number of groups. Further, confirmatory hypothesis testing
+#' can be used to test predictions or expectations regarding difference or similiarities in different groups (e.g., male vs. female).
 #'
 #' @param ... data matrices (\emph{n} \times  \emph{p}). Requires at least two.
 #' @param prior_sd hypothesized standard deviation for the edges or partial correlations.

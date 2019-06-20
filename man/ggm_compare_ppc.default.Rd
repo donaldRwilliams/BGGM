@@ -17,10 +17,28 @@
 \item{cores}{number of cores for parallel computing. The default is 2, but this can be adjusted.}
 }
 \value{
-object of class \code{ggm_compare_ppc}
+list of class \code{ggm_compare_ppc}:
+
+\itemize{
+\item \code{pvalue} posterior predictive p-values
+\item \code{obs_jsd} observed symmetric KL divergence (Jensen-Shannon divergence)
+\item \code{predictive_risk} list of predictive distributions
+\item  \code{info} list of information about the data matrices
+
+\itemize{
+\item \code{dat} list containing the data matrices
+\item \code{dat_info} sample size for each data matrix
+\item \code{pairwise} matrix of pairwise combinations
+}
+
+\item \code{names} contrast names (e.g.., Yg1  vs Yg2)
+\item \code{iter}  number of posterior samples
+\item \code{type} "global"
+\item \code{call} match.call()
+}
 }
 \description{
-Comparing any number of GGMs with the posterior predictive distribution. The method assume group equality, and the predictive check
+Compare GGMs with the posterior predictive distribution. The method assume group equality, and the predictive check
 allows for testing whether that assumption should be modified--i.e., the GGMs are actually different. The current test statistic avaiable is
 Kullback–Leibler divergence, which in this case, can be understood as a likelihood ratio for multiariate normal distributions. There are
 two options: (1) 'global' and (2) 'nodewise.' The former tests the entire GGM, whereas the latter allows for testing specific nodes (variables)
@@ -31,7 +49,9 @@ This method is Bayesian, as it relies on the posterior predictive distribution.
 That said, there are clear parallels to frequentist testing-e.g., assuming group
 equality and critical regions. Most importanly, this method CANNOT provide evidence
 for the null hypothesis. Thus it can only reject the unerlying assumption of group equality.
-For gaining (relative) evidence for the null hypothesis see X.
+For gaining (relative) evidence for the null hypothesis see \link[BGGM:ggm_compare_bf.default]{ggm_compare_bf}.
+
+see methods(class = "ggm_compare_ppc")
 }
 \examples{
 

@@ -9,23 +9,32 @@
 \arguments{
 \item{x}{fitted model}
 
-\item{ci_width}{credible interval width}
+\item{ci_width}{credible interval width for selected edges}
 
-\item{samples}{number of log-likelihood samples (see notes)}
+\item{samples}{number of samples (\code{analytic = FALSE})}
 
 \item{n_cl}{number of clusters (see notes)}
 }
 \value{
-Summary of prediction error
+list of class \code{loocv}:
+
+\itemize{
+
+\item \code{returned_object} data.frame summary of predictability
+\item \code{call} \code{match.call()}
+\item \code{samples} number of samples used for computing Bayesian loo
+}
 }
 \description{
-Nodewise Leave-One-Out Cross-Validation
+Assesses the predictability of each node in the "network" of GGM. Currently there are two options avaliable. The first is Bayesian
+leave-one-out cross-validation and has a measure of uncertainty, whereas the latter is based only on the point estimates and is known as PRESS
+(predicted residual sums of squares).
 }
 \note{
 This function can be used to compute leave-one-out prediction error analytically for each node in the selected graph. This uses the point estimates
 for the coefficients, and thus does not provide a measure of uncertainty. Becuase this solution is fast it allows for computing, say, prediction error
 while adjusting the \emph{p} to \emph{n} ratio. This can provide insight into overfitting. See here for the derivations:
- \href{https://robjhyndman.com/hyndsight/loocv-linear-models/}{fast cv}.
+ \href{https://robjhyndman.com/hyndsight/loocv-linear-models/}{analytic CV}.
 
  Ideally, Bayesian (approximate) leave-one-out (loo) cross-validation should be computed. This requires posterior samples, which provides a measure
  of uncertainty--i.e., a standard error. This is computationally more involved
@@ -34,8 +43,12 @@ while adjusting the \emph{p} to \emph{n} ratio. This can provide insight into ov
 
  This approach should \strong{not} be used to explicitly compare nodes, as each is fit to a different outcome. However, because the variables are on
  the same scale (standardized in advance), it is seems that one could infer which node in the graph is the easiest to predict.
+
+ methods(class = "loocv")
 }
 \examples{
+
+X <- BGGM::bfi[,1:5]
 
 ###########################
 ##### Bayesian loocv ######
