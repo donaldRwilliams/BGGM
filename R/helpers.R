@@ -64,7 +64,7 @@ beta_summary <- function(x, node, ci_width, samples){
 
 
 
-net_plot <- function(x, layout = "circle", mat_type, node_outer, node_inner, node_text_size, alpha = TRUE){
+net_plot <- function(x, layout = "circle", mat_type, node_outer, node_inner, node_text_size, alpha = TRUE, labels = NULL){
 
   if(mat_type == "partials"){
   p <- ncol(x)
@@ -77,7 +77,8 @@ net_plot <- function(x, layout = "circle", mat_type, node_outer, node_inner, nod
   graph_cors <- igraph::graph_from_data_frame(d = mlt_data, directed = FALSE)
 
   if(isTRUE(alpha)){
-  plt <- ggraph(graph_cors, layout = layout) +
+
+    plt <- ggraph(graph_cors, layout = layout) +
 
 
     geom_edge_link(aes(edge_width = abs(value), color = value)) +
@@ -90,14 +91,31 @@ net_plot <- function(x, layout = "circle", mat_type, node_outer, node_inner, nod
 
     geom_node_point(color = "black", size = node_outer) +
 
-    geom_node_point(color = "white", size = node_inner) +
+    geom_node_point(color = "white", size = node_inner)
 
-    geom_node_text(aes(label = 1:p), repel = FALSE, size = node_text_size) +
+  if(is.null(labels)){
+
+    plt <-  plt + geom_node_text(aes(label = 1:p), repel = FALSE, size = node_text_size) +
 
     theme_void() +
 
     coord_flip()
-  } else{
+
+  } else {
+    if(length(labels) != p) stop("labels needs to be of length p")
+    plt <-  plt + geom_node_text(aes(label = labels), repel = FALSE, size = node_text_size) +
+
+      theme_void() +
+
+      coord_flip()
+
+
+  }
+
+
+
+
+    } else{
 
 
 
@@ -110,15 +128,35 @@ net_plot <- function(x, layout = "circle", mat_type, node_outer, node_inner, nod
     p <- ncol(x)
     graph_cors <- igraph::graph_from_adjacency_matrix(adjmatrix  =  x)
 
-    plt <- ggraph(graph_cors, layout = "circle") +
+    plt <- ggraph(graph_cors, layout = layout) +
       geom_edge_link(color = "black") +
       guides(edge_color = "none") +
       geom_node_point(color = "black", size = node_outer) +
-      geom_node_point(color = "white", size = node_inner) +
-      geom_node_text(aes(label = 1:p), repel = FALSE, size = node_text_size) +
-      theme_void() +
-      # theme_graph(base_size = 12, title_face = "plain", base_family = 'Open Sans') +
-      coord_flip()
+      geom_node_point(color = "white", size = node_inner)
+
+
+
+
+    if(is.null(labels)){
+
+      plt <-  plt + geom_node_text(aes(label = 1:p), repel = FALSE, size = node_text_size) +
+
+        theme_void() +
+
+        coord_flip()
+
+    } else {
+      if(length(labels) != p) stop("labels needs to be of length p")
+      plt <-  plt + geom_node_text(aes(label = labels), repel = FALSE, size = node_text_size) +
+
+        theme_void() +
+
+        coord_flip()
+
+
+    }
+
+
 
 
   }

@@ -7,6 +7,7 @@
 #' @param node_outer border for node
 #' @param node_inner node size (see notes)
 #' @param node_text_size  node text size
+#' @param labels node labels. Default is 1:p, but can change to colnames(Y)
 #'
 #' @return
 #' @export
@@ -18,7 +19,8 @@ plot.select.estimate <- function(x, type,
                                  layout = "circle",
                                  node_outer = 10,
                                  node_inner = 9,
-                                 node_text_size = 8){
+                                 node_text_size = 8,
+                                 labels = NULL){
 
   if(type == "heatmap"){
 
@@ -98,9 +100,6 @@ plot.select.estimate <- function(x, type,
 
     }
 
-    # zeros$X1 <- as.factor(zeros$X1)
-    # zeros$value <- ifelse(x$in_rope > x$prob, 1, 0)
-
    plt2 <- ggplot(zeros, aes(x = as.factor(X2),
                               y = as.factor(X1),
                               fill = as.factor(value))) +
@@ -127,7 +126,8 @@ plot.select.estimate <- function(x, type,
                     mat_type = "partials",
                     node_outer = node_outer,
                     node_inner = node_inner,
-                    node_text_size = node_text_size)
+                    node_text_size = node_text_size,
+                    labels = labels)
 
 
   }
@@ -138,13 +138,15 @@ plot.select.estimate <- function(x, type,
                             mat_type = "partials",
                             node_outer = node_outer,
                             node_inner = node_inner,
-                            node_text_size = node_text_size)
+                            node_text_size = node_text_size,
+                            labels = labels)
     plt2 <- BGGM:::net_plot(x$adjacency_zero,
                             layout = layout,
                             mat_type = "adj",
                             node_outer = node_outer,
                             node_inner = node_inner,
-                            node_text_size = node_text_size)
+                            node_text_size = node_text_size,
+                            labels = labels)
 
 
 

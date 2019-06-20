@@ -10,9 +10,11 @@
 #'
 #' @examples
 ggm_compare_estimate.default <- function(..., iter = 5000,
-                                         ci_width = 0.95,
+                                         ci_width = NULL,
                                          rope = NULL){
 
+
+  if(is.null( ci_width) & is.null(rope)) stop("ci_width or rope must be specified")
   low <- (1 - ci_width) / 2
 
   up  <-  1 - low
@@ -119,7 +121,9 @@ ggm_compare_estimate.default <- function(..., iter = 5000,
                           p = p,
                           info = info,
                           iter = iter,
-                          call = match.call())
+                          call = match.call(),
+                          rope = rope,
+                          ci_width = ci_width)
 
   class(returned_object) <- "ggm_compare_estimate"
 

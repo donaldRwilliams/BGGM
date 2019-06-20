@@ -5,7 +5,7 @@
 \title{Compare Edges Between GGMs with the Posterior Distribution}
 \usage{
 \method{ggm_compare_estimate}{default}(..., iter = 5000,
-  ci_width = 0.95, rope = NULL)
+  ci_width = NULL, rope = NULL)
 }
 \arguments{
 \item{...}{data matrices (\emph{n} \times  \emph{p}). Requires at least two.}

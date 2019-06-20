@@ -6,7 +6,7 @@
 \usage{
 \method{plot}{select.estimate}(x, type, lower_tri = TRUE,
   layout = "circle", node_outer = 10, node_inner = 9,
-  node_text_size = 8)
+  node_text_size = 8, labels = NULL)
 }
 \arguments{
 \item{x}{object of class \code{select.estimate}}
@@ -22,6 +22,8 @@
 \item{node_inner}{node size (see notes)}
 
 \item{node_text_size}{node text size}
+
+\item{labels}{node labels. Default is 1:p, but can change to colnames(Y)}
 }
 \description{
 Plot Estimation Based Based Graphical Stuctures

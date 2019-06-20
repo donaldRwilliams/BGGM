@@ -83,13 +83,15 @@ export(ggm_compare_estimate)
 export(ggm_compare_estimate.default)
 export(summary.ggm_compare_estimate)
 export(print.ggm_compare_estimate)
+export(select.ggm_compare_estimate)
+
 
 import(ggplot2)
 import(ggraph)
 
 importFrom(ggridges, geom_density_ridges)
 importFrom(ggridges, stat_density_ridges)
-importFrom(mvnfast, rmvn)
+importFrom(mvnfast,  rmvn)
 importFrom(foreach, "%dopar%")
 importFrom(foreach, "foreach")
 
