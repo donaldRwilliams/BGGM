@@ -46,7 +46,6 @@
 #' error (also analytically).
 #'
 #'see \code{methods("estimate")}
-
 #' @examples
 #'
 #' # p = 5

@@ -207,7 +207,7 @@ A  key  feature  of **BGGM** is  extending  inference  beyond  identifying  non-
 Y <- BGGM::bfi[,1:10]
 
 # sample from posterior
-fit_sample <- estimate(Y, samples = 5000, analytic = F)
+fit_sample <- estimate(Y, iter = 5000, analytic = F)
 
 # select the graph
 E <- select(fit_sample, rope = 0.1, prob = 0.95)
@@ -298,7 +298,7 @@ The following is based on the correspondence between the elements of the precisi
 Y <- BGGM::bfi[,1:10]
 
 # sample posterior
-fit <- estimate(Y, samples = 5000)
+fit <- estimate(Y, iter = 5000)
 
 # precision to regression
 coefficients(fit, node = 1, ci_width = 0.95)
@@ -315,7 +315,7 @@ In-sample Bayesian $R^2$ is implemented with:
 Y_train <- BGGM::bfi[1:100,1:10]
 
 # fit to training data
-fit_train <- estimate(Y_train, samples = 5000)
+fit_train <- estimate(Y_train, iter = 5000)
 
 # compute Bayes R2
 train_R2 <- predict(fit_train,
@@ -361,7 +361,7 @@ Bayesian leave-one-out cross-validation is implemented with:
 Y <- BGGM::bfi[1:1000,1:10]
 
 # sample posterior
-fit_sample <- estimate(Y, samples = 5000)
+fit_sample <- estimate(Y, iter = 5000)
 
 # Bayesian LOO
 bayes_loo <- loocv(fit_sample)
