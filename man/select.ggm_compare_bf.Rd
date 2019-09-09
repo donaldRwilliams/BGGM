@@ -21,6 +21,7 @@ list of class \code{select.ggm_compare_bf}
 \item \code{BF_01_adj} Bayes factor adjacency matrix for the null hypothesis
 \item \code{adj_10} adjacency matrix for the selected edges (in favor of the "not equal")
 \item \code{adj_01} adjacency matrix for the selected edges (in favor of the null hypothesis)
+\item \code{pcor_mat_10} partial correlation matrix for the alternative ("not equal")
 }
 }
 \description{
