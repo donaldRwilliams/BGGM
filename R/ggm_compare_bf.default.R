@@ -46,6 +46,7 @@
 ggm_compare_bf.default <- function(..., prior_sd, hypothesis = NULL, iter = 25000, cores = 2){
 
   priorprob <- 1
+
   info <- BGGM:::Y_combine(...)
 
   groups <- length(info$dat)
@@ -79,6 +80,11 @@ ggm_compare_bf.default <- function(..., prior_sd, hypothesis = NULL, iter = 2500
     post_string <- list()
     prior_string <- list()
 
+
+
+      mu_diff <- list()
+
+
     for(i in 1:groups){
 
       post_string[[i]] <-   paste0("post_samps[[", i, "]][,",  1:edges, "]", sep = "")
@@ -89,7 +95,7 @@ ggm_compare_bf.default <- function(..., prior_sd, hypothesis = NULL, iter = 2500
 
     groups_as_words <- BGGM:::numbers2words(1:groups)
 
-    hyp <- paste( groups_as_words, sep = " ", collapse = "=")
+    hyp <- paste(groups_as_words, sep = " ", collapse = "=")
 
     framed <- BGGM:::framer(hyp)
 
@@ -133,19 +139,28 @@ ggm_compare_bf.default <- function(..., prior_sd, hypothesis = NULL, iter = 2500
         mvnfast::dmvn(X = t(mats$r_e), mu = mu0, sigma = s0, log = TRUE)
 
       BF[i] <- exp(log_BF)
-    }
+
+      if(groups == 2){
+        # BGGM:::z2r(post_mean) - BGGM:::z2r(post_mean)
+        mu_diff[[i]] <-  BGGM:::z2r(post_mean)[1] - BGGM:::z2r(post_mean)[2]
+
+      }
+
+      }
     BF_01 <- matrix(0, p, p)
 
     BF_01[upper.tri(BF_01)] <- BF
 
     BF_01 <- BGGM:::symmteric_mat(BF_01)
 
+
     returned_object <- list(BF_01 = BF_01,
                             p = p,
                             info = info,
                             iter = iter,
                             call = match.call(),
-                            delta = delta)
+                            delta = delta, groups = groups,
+                            mu_diff = mu_diff, re = mats$R_e )
 
   }
 

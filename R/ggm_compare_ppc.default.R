@@ -112,6 +112,8 @@ ggm_compare_ppc.default <- function(..., type = "global", iter = 5000, cores = 2
 
       y2 <- info$dat[info$pairwise[i,2]][[1]]
 
+      # y1 <- cov2cor(y1)
+      # y2 <- cov2cor(y2)
       obs <- 0.5 * BGGM:::KL(BGGM:::unbiased_cov(y1), BGGM:::unbiased_cov(y2)) +
              0.5 * BGGM:::KL(BGGM:::unbiased_cov(y2), BGGM:::unbiased_cov(y1))
 

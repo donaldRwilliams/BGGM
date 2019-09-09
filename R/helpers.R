@@ -14,6 +14,11 @@ delta_solve = function(x){
 
 }
 
+z2r <- function (z) {
+  (exp(2 * z) - 1)/(1 + exp(2 * z))
+}
+
+
 get_lower_tri<-function(cormat){
   cormat[upper.tri(cormat)] <- NA
   return(cormat)
@@ -483,6 +488,7 @@ unbiased_cov <- function(x){
   mle_cov <- n^-1 * t(x) %*% x
   solve(mle_cov)
 }
+
 
 
 

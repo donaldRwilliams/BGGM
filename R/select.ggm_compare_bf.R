@@ -55,6 +55,14 @@ select.ggm_compare_bf <- function(x, BF_cut = 3){
 
   BF_10_adj <- adj_10 * BF_10
 
+  pcor_mat <- matrix(0, x$p, x$p)
+  if(x$groups == 2){
+    pcor_mat[upper.tri(pcor_mat)] <- unlist(x$mu_diff)
+    pcor_mat <- BGGM:::symmteric_mat(pcor_mat)
+    pcor_mat <- adj_10 * pcor_mat
+
+    }
+
   returned_object <- list(BF_10 = BF_10,
                           BF_01 = x$BF_01,
                           BF_01_adj = BF_01_adj,
@@ -65,7 +73,8 @@ select.ggm_compare_bf <- function(x, BF_cut = 3){
                           p = ncol(BF_10),
                           iter = x$iter,
                           info = x$info,
-                          BF = BF_cut)
+                          BF = BF_cut,
+                          pcor_mat_10 = pcor_mat)
 
   class(returned_object) <- "select.ggm_compare_bf"
   returned_object
