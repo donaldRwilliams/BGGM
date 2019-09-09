@@ -486,7 +486,7 @@ unbiased_cov <- function(x){
   x <- scale(x)
   n <- nrow(x) - 1
   mle_cov <- n^-1 * t(x) %*% x
-  solve(mle_cov)
+  cov2cor(solve(mle_cov))
 }
 
 
