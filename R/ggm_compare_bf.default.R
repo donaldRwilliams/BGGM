@@ -43,7 +43,7 @@
 #' bf_ggm <- ggm_compare_bf(Y1, Y2, Y3, prior_sd = .5, iter = 2500, cores = 2)
 #' select( bf_ggm, BF_cut = 3)
 
-ggm_compare_bf.default <- function(..., prior_sd, hypothesis = NULL, iter = 25000, cores = 2){
+ggm_compare_bf.default <- function(..., prior_sd = 0.35, hypothesis = NULL, iter = 25000, cores = 2){
 
   priorprob <- 1
 
