@@ -1,30 +1,36 @@
+#' @importFrom stats coef cov2cor dnorm lm na.omit pnorm quantile rWishart sd qnorm
+#' @importFrom utils combn
+#' @importFrom foreach %dopar% foreach
+#' @import ggplot2
+#' @import ggraph
 compare_predict_helper <- function(x, ci_width){
   post_mean <- mean(x)
-  post_sd <- sd(x)
+  post_sd <- stats::sd(x)
   low <- (1 - ci_width) / 2
   up  <-  1 - low
-  interval <-  t(quantile(x, c(low, up)))
+  interval <-  t(stats::quantile(x, c(low, up)))
   summ <-  round(cbind.data.frame(post_mean = post_mean,
-                            post_sd = post_sd,
-                            interval), 3)
+                                  post_sd = post_sd,
+                                  interval), 3)
 }
 
+# delta give prior_sd
 delta_solve = function(x){
   (x^2)^-1 - 1
-
 }
 
+# fisher z to r
 z2r <- function (z) {
   (exp(2 * z) - 1)/(1 + exp(2 * z))
 }
 
-
+# lower triangle of matrix
 get_lower_tri<-function(cormat){
   cormat[upper.tri(cormat)] <- NA
   return(cormat)
 }
 
-
+# analytic solution
 analytic_solve <- function(X){
   # sample size
   n <- nrow(X)
@@ -35,19 +41,18 @@ analytic_solve <- function(X){
   S <- t(X) %*% X
   inv_mu <-  solve(S + diag(10^-5,  p)) * (n)
   inv_var <-  (n + p + 1)*(solve(S + diag(10^-5, p) )^2 + tcrossprod(diag(solve(S + diag(10^-5, p)))))
-
-
   inv_cor <- diag( 1 / sqrt((diag(inv_mu)))) %*% inv_mu %*% diag( 1 / sqrt((diag(inv_mu))) )
   partials <- inv_cor * -1 + diag(2, p)
-  list(inv_mu = inv_mu, inv_var = inv_var, partial = partials)
+  list(inv_mu = inv_mu,
+       inv_var = inv_var,
+       partial = partials)
 }
 
-
-
+# summarize coefficients
 beta_summary <- function(x, node, ci_width, samples){
 
   # convert inverse to beta
-  x <- BGGM:::inverse_2_beta(x, samples = samples)
+  x <- inverse_2_beta(x, samples = samples)
 
   # stop if not the correct class
   if(class(x) != "inverse_2_beta"){
@@ -58,16 +63,13 @@ beta_summary <- function(x, node, ci_width, samples){
   if(ci_width >= 1 | ci_width <= 0){
     stop("ci_width must be between 0 and 1")
   }
-  returned_object <- lapply(node, function(y) BGGM:::summary_beta_helper(node =  y,
+  returned_object <- lapply(node, function(y) summary_beta_helper(node =  y,
                                                                          x = x,
                                                                          ci_width))
   class(returned_object) <- "beta_summary"
-
   returned_object$call <- match.call()
   returned_object
 }
-
-
 
 net_plot <- function(x, layout = "circle",
                      mat_type,
@@ -77,6 +79,7 @@ net_plot <- function(x, layout = "circle",
                      alpha = TRUE,
                      labels = NULL){
 
+  value = NULL
   if(mat_type == "partials"){
   p <- ncol(x)
   colnames(x) <- 1:p
@@ -119,19 +122,10 @@ net_plot <- function(x, layout = "circle",
       theme_void() +
 
       coord_flip()
+    }
+  } else{
 
-
-  }
-
-
-
-
-    } else{
-
-
-
-
-  }
+    }
 
 }
 
@@ -152,12 +146,6 @@ net_plot <- function(x, layout = "circle",
         geom_node_point(color = "white", size = node_inner)
 
     }
-
-
-
-
-
-
     if(is.null(labels)){
 
       plt <-  plt + geom_node_text(aes(label = 1:p), repel = FALSE, size = node_text_size) +
@@ -173,19 +161,9 @@ net_plot <- function(x, layout = "circle",
         theme_void() +
 
         coord_flip()
-
-
     }
-
-
-
-
-  }
-
-
-   plt
-
-
+    }
+  plt
 }
 
 
@@ -198,7 +176,7 @@ rope_helper <- function(x, rope){
 ci_helper <- function(x, ci_width){
   low <- (1 - ci_width) / 2
   up  <-  1 - low
-  interval <-  quantile(x, c(low, up))
+  interval <-  stats::quantile(x, c(low, up))
   as.numeric(ifelse(interval[1] < 0 & interval[2] > 0, 0, 1))
 }
 
@@ -208,11 +186,11 @@ Mo_risk_help_node <- function(x, post,  n1, n2, p){
 
   inv_mat <- post[,,x]
 
-  Y_rep1 <- mvnfast::rmvn(n = n1,  mu = rep(0, p), sigma = cov2cor(solve(inv_mat)))
+  Y_rep1 <- mvnfast::rmvn(n = n1,  mu = rep(0, p), sigma = stats::cov2cor(solve(inv_mat)))
 
-  Y_rep2 <-  mvnfast::rmvn(n = n2, mu = rep(0, p), sigma = cov2cor(solve(inv_mat)))
+  Y_rep2 <-  mvnfast::rmvn(n = n2, mu = rep(0, p), sigma = stats::cov2cor(solve(inv_mat)))
 
-  jsd_node <- unlist(lapply(1:ncol(Y_rep1), function(z) BGGM:::node_jsd_help(z, Y_rep1, Y_rep2)))
+  jsd_node <- unlist(lapply(1:ncol(Y_rep1), function(z) node_jsd_help(z, Y_rep1, Y_rep2)))
 
   jsd_node
 
@@ -227,11 +205,12 @@ node_jsd_help <- function(x, Y_rep1, Y_rep2){
 
   Y_rep2 <- scale(Y_rep2)
 
-  pred1 <- Y_rep1[,-x]  %*%  BGGM:::beta_helper(Y_rep1, x)
+  pred1 <- Y_rep1[,-x]  %*% beta_helper(Y_rep1, x)
 
-  pred2 <- Y_rep2[,-x]  %*%  BGGM:::beta_helper(Y_rep2, x)
+  pred2 <- Y_rep2[,-x]  %*%  beta_helper(Y_rep2, x)
 
-  jsd_node <- (BGGM:::kl_func(var(pred1), var(pred2)) + BGGM:::kl_func(var(pred2), var(pred1))) * .5
+  jsd_node <- (kl_func(stats::var(pred1), stats::var(pred2)) +
+               kl_func(stats::var(pred2), stats::var(pred1))) * .5
 
   jsd_node
 
@@ -300,16 +279,16 @@ summary_beta_helper <- function(x, node, ci_width){
   beta <- apply(x$betas[[node]], 2, mean)
 
   # beta poster sd
-  post_sd <- apply(x$betas[[node]], 2, sd)
+  post_sd <- apply(x$betas[[node]], 2, stats::sd)
 
   # lower and upper of posterior
   beta_ci <- t(apply(x$betas[[node]], 2, quantile, probs = c(low, up)))
 
   # sd of the outcome
-  sd_y <- sd(x$data[,node])
+  sd_y <- stats::sd(x$data[,node])
 
   # sd of the predictors
-  sd_x <- apply(x$data[,-node], 2, sd)
+  sd_x <- apply(x$data[,-node], 2, stats::sd)
 
   # standardized (std) beta
   beta_std_temp <- x$betas[[node]] * (sd_x / sd_y)
@@ -318,7 +297,7 @@ summary_beta_helper <- function(x, node, ci_width){
   beta_std <- apply(beta_std_temp, 2, mean)
 
   # beta std posterior sd
-  beta_std_post_sd <- apply(beta_std_temp, 2, sd)
+  beta_std_post_sd <- apply(beta_std_temp, 2, stats::sd)
 
   # lower and upper of posterior
   beta_std_ci <- t(apply(beta_std_temp, 2,  quantile, probs = c(low, up)))
@@ -348,12 +327,12 @@ R2_helper <- function(ypred, y, ci_width) {
   low <- (1 - ci_width) / 2
   up  <-  1 - low
   e <- -1 * sweep(ypred, 2, y)
-  var_ypred <- apply(ypred, 1, var)
-  var_e <- apply(e, 1, var)
+  var_ypred <- apply(ypred, 1, stats::var)
+  var_e <- apply(e, 1, stats::var)
   r2 <- unlist(var_ypred / (var_ypred + var_e))
   ci <- quantile(r2, prob = c(low, up) )
   mu_r2 <- mean(r2)
-  sd_r2 <- sd(r2)
+  sd_r2 <- stats::sd(r2)
   summary_r2 <- c(post_mean = mu_r2, post_sd = sd_r2, ci)
   list(summary_r2 = summary_r2, R2 = r2)
 }
@@ -365,7 +344,7 @@ MSE_helper <- function(ypred, y, ci_width){
   mse <- apply(ypred, MARGIN = 1, function(x){mean((x - y)^2)})
   ci <- quantile(mse, prob = c(low, up) )
   mu_mse <- mean(mse)
-  sd_mse <- sd(mse)
+  sd_mse <- stats::sd(mse)
   summary_mse <- c(post_mean = mu_mse, post_sd = sd_mse, ci)
   list(summary_mse = summary_mse, MSE = mse)
 }
@@ -393,11 +372,11 @@ error_helper <- function(ypred, y, ci_width, measure, sigmas =  NULL) {
     out <- rowMeans(abs(all_residual))
   }
   if(measure == "kl"){
-    out <- BGGM:::kl_func(var(y), sigmas^2)
+    out <- kl_func(stats::var(y), sigmas^2)
     }
   ci <- quantile(out, prob = c(low, up) )
   mu_out <- mean(out)
-  sd_out <- sd(out)
+  sd_out <- stats::sd(out)
   summary <- c(post_mean = mu_out, post_sd = sd_out, ci)
   list(summary = summary, error = out)
 }
@@ -427,7 +406,7 @@ ppc_helper <- function(x, inv_g1, inv_cov, n, p){
 
   QL <-  QL(Theta = inv_g1, hatTheta = theta_rep)
 
-  FL <- sum((cov2cor(inv_g1) *-1 - cov2cor((theta_rep) * -1)^2))
+  FL <- sum((stats::cov2cor(inv_g1) *-1 - stats::cov2cor((theta_rep) * -1)^2))
 
   return <- list(KLD = KLD, JSD = JSD, QL = QL, FL = FL)
 }
@@ -486,7 +465,7 @@ unbiased_cov <- function(x){
   x <- scale(x)
   n <- nrow(x) - 1
   mle_cov <- n^-1 * t(x) %*% x
-  cov2cor(solve(mle_cov))
+  stats::cov2cor(solve(mle_cov))
 }
 
 
@@ -494,11 +473,11 @@ unbiased_cov <- function(x){
 
 Mo_risk_help <- function(x, post, n1, n2, p){
   inv_mat <- post[,,x]
-  Y_rep1 <-  mvnfast::rmvn(n = n1,  mu = rep(0, p), sigma = cov2cor(solve(inv_mat)))
-  Y_rep2 <-  mvnfast::rmvn(n = n2, mu = rep(0, p), sigma = cov2cor(solve(inv_mat)))
+  Y_rep1 <-  mvnfast::rmvn(n = n1,  mu = rep(0, p), sigma = stats::cov2cor(solve(inv_mat)))
+  Y_rep2 <-  mvnfast::rmvn(n = n2, mu = rep(0, p), sigma =  stats::cov2cor(solve(inv_mat)))
 
-  jsd <- 0.5 * BGGM:::KL(BGGM:::unbiased_cov(Y_rep1), BGGM:::unbiased_cov(Y_rep2)) +
-         0.5 *  BGGM:::KL(BGGM:::unbiased_cov(Y_rep2), BGGM:::unbiased_cov(Y_rep1))
+  jsd <- 0.5 *  KL(unbiased_cov(Y_rep1), unbiased_cov(Y_rep2)) +
+         0.5 *  KL(unbiased_cov(Y_rep2), unbiased_cov(Y_rep1))
 
   jsd
 }
@@ -563,9 +542,6 @@ sampling_helper = function(X,  nu, delta,  n_samples){
   mat_name <- matrix(unlist(lapply(col_names, function(x) paste(col_names,x, sep = ""))), p , p)
   mat_name_up <- mat_name[upper.tri(mat_name)]
   mat_name_low <- mat_name[lower.tri(mat_name)]
-
-
-
 
   # center the data
   Xhat <- X - rep(1,n)%*%t(apply(X,2,mean))
@@ -680,50 +656,50 @@ fisher_z <- function(rho){
 }
 
 sd_helper <- function(post_samples, prior_at_zero){
-  prior_at_zero /  dnorm(0, mean(post_samples), sd(post_samples))
+  prior_at_zero /  dnorm(0, mean(post_samples), stats::sd(post_samples))
 }
 
-equality_test <- function(X, nu, delta, type, pcor_names, hyp = NULL, n_samples, cores){
-  p <- ncol(X)
-  pcor_mat <- matrix(0, p, p)
-  if(is.null(colnames(X))){
-    stop("The variables must be named. These names cannot included numbers")
-
-  }
-  if(type == "inequality"){
-    if(is.null(hyp)){
-      stop("inequality constrained hypotheses must be specified")
-    }
-
-    samples <- sampling(X, nu = nu, delta = delta, n_samples = n_samples, cores)
-
-    ERr1 <- create_matrices(varnames = pcor_names, hyp = hyp)
-
-    prior <- do.call(rbind, lapply(samples, function(x)  x$fisher_z_prior[,pcor_names]))
-    post <- do.call(rbind, lapply(samples, function(x)  x$fisher_z_post[,pcor_names]))
-
-    Sigma0 <- cov(prior)
-    Sigma1 <- cov(post)
-
-    mu0 <- ERr1$inequality$R_i %*% colMeans(prior)
-    mu1 <- ERr1$inequality$R_i %*% colMeans(post)
-
-    s0 <- ERr1$inequality$R_i %*% Sigma0 %*% t(ERr1$inequality$R_i)
-    s1 <- ERr1$inequality$R_i %*% Sigma1 %*% t(ERr1$inequality$R_i)
-
-    prior_prob <- mvtnorm::pmvnorm(lower = as.vector(ERr1$inequality$r_i), upper = Inf,mean = as.vector(mu0),  sigma = s0)[1]
-    post_prob <- mvtnorm::pmvnorm(lower = as.vector(ERr1$inequality$r_i), upper = Inf,mean = as.vector(mu1),  sigma = s1)[1]
-
-
-    pcor_mat[lower.tri(pcor_mat)] <- colMeans(samples[[1]]$pcor_post)
-    pcor_mat[upper.tri(pcor_mat)] <- t(pcor_mat)[upper.tri(pcor_mat)]
-
-    colnames(pcor_mat) <- colnames(X)
-    results <- list(BF = post_prob / prior_prob)
-    results <- list(results = results,  pcor_mat = pcor_mat)
-  }
-  results
-}
+# equality_test <- function(X, nu, delta, type, pcor_names, hyp = NULL, n_samples, cores){
+#   p <- ncol(X)
+#   pcor_mat <- matrix(0, p, p)
+#   if(is.null(colnames(X))){
+#     stop("The variables must be named. These names cannot included numbers")
+#
+#   }
+#   if(type == "inequality"){
+#     if(is.null(hyp)){
+#       stop("inequality constrained hypotheses must be specified")
+#     }
+#
+#     samples <- sampling(X, nu = nu, delta = delta, n_samples = n_samples, cores)
+#
+#     ERr1 <- create_matrices(varnames = pcor_names, hyp = hyp)
+#
+#     prior <- do.call(rbind, lapply(samples, function(x)  x$fisher_z_prior[,pcor_names]))
+#     post <- do.call(rbind, lapply(samples, function(x)  x$fisher_z_post[,pcor_names]))
+#
+#     Sigma0 <- cov(prior)
+#     Sigma1 <- cov(post)
+#
+#     mu0 <- ERr1$inequality$R_i %*% colMeans(prior)
+#     mu1 <- ERr1$inequality$R_i %*% colMeans(post)
+#
+#     s0 <- ERr1$inequality$R_i %*% Sigma0 %*% t(ERr1$inequality$R_i)
+#     s1 <- ERr1$inequality$R_i %*% Sigma1 %*% t(ERr1$inequality$R_i)
+#
+#     prior_prob <- mvtnorm::pmvnorm(lower = as.vector(ERr1$inequality$r_i), upper = Inf,mean = as.vector(mu0),  sigma = s0)[1]
+#     post_prob <- mvtnorm::pmvnorm(lower = as.vector(ERr1$inequality$r_i), upper = Inf,mean = as.vector(mu1),  sigma = s1)[1]
+#
+#
+#     pcor_mat[lower.tri(pcor_mat)] <- colMeans(samples[[1]]$pcor_post)
+#     pcor_mat[upper.tri(pcor_mat)] <- t(pcor_mat)[upper.tri(pcor_mat)]
+#
+#     colnames(pcor_mat) <- colnames(X)
+#     results <- list(BF = post_prob / prior_prob)
+#     results <- list(results = results,  pcor_mat = pcor_mat)
+#   }
+#   results
+# }
 
 
 
@@ -1137,8 +1113,6 @@ samps_pcor_helper <- function(x, p){
   pcors
 }
 
-
-
 hyp_converter <- function(x){
 
   hyp_converted <- x
@@ -1150,8 +1124,8 @@ hyp_converter <- function(x){
   for(i in 1:length(extract_numbers)){
 
     temp <- noquote(extract_numbers[i])
-    words[i] <- BGGM:::numbers2words(as.numeric(temp))
-    hyp_converted <- sub(temp, BGGM:::numbers2words(as.numeric(temp)), hyp_converted)
+    words[i] <- numbers2words(as.numeric(temp))
+    hyp_converted <- sub(temp, numbers2words(as.numeric(temp)), hyp_converted)
 
 
   }
@@ -1159,4 +1133,37 @@ hyp_converter <- function(x){
   hyp_converted <- stringr::str_remove_all(hyp_converted, "--")
 
   list(hyp_converted = hyp_converted, words = words)
+}
+
+
+performance <- function(Estimate, True){
+
+  True <- as.matrix(True)
+  Estimate <- as.matrix(Estimate)
+
+  # True Negative
+  TN <- ifelse(True[upper.tri(True)] == 0 & Estimate[upper.tri(Estimate)] == 0, 1, 0); TN <- sum(TN)
+  # False Positive
+  FP <- ifelse(True[upper.tri(True)] == 0 & Estimate[upper.tri(Estimate)] != 0, 1, 0); FP <- sum(FP)
+  # True Positive
+  TP <- ifelse(True[upper.tri(True)] != 0 & Estimate[upper.tri(Estimate)] != 0, 1, 0); TP <- sum(TP)
+  # False Negatives
+  FN <- ifelse(True[upper.tri(True)] != 0 & Estimate[upper.tri(Estimate)] == 0, 1, 0); FN <- sum(FN)
+
+  Specificity <- TN/(TN + FP)
+  Sensitivity <- TP/(TP + FN)
+  Precision <- TP/(TP + FP)
+
+  Recall <- TP / (TP + FN)
+
+  F1_score <- 2 * ((Precision * Recall) / (Precision + Recall))
+
+  MCC <- (TP*TN - FP*FN)/sqrt((TP+FP)*(TP+FN)*(TN+FP)*(TN+FN))
+
+  results <- c(Specificity, Sensitivity, Precision, Recall,  F1_score, MCC)
+  results_name <- c("Specificity", "Sensitivity", "Precision", "Recall",  "F1_score", "MCC")
+  results <- cbind.data.frame(measure = results_name, score = results)
+  list(results = results)
+
+
 }
