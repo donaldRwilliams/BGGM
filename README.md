@@ -69,7 +69,7 @@ This README is organized as follows:
 Installation
 ============
 
-Note in preparation for submitting to CRAN, we ran into some issues with the submission guidelines. Hence, we are currently going through the functions one by one and finalizing them for a stable release.
+Note in preparation for submitting to CRAN, we ran into some issues with the submission guidelines. Hence, we are currently (as of 10/04/19) going through the functions one by one and finalizing them for a stable release.
 
 You can install BGGM from git hub with.
 
