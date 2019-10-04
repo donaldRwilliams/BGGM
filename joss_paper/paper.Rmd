@@ -1,0 +1,26 @@
+---
+title: 'BGGM: A R package for Gaussian Graphical Models'
+tags:
+  - R
+  - Gaussian graphical models
+  - Bayesian
+  - Bayes factor
+  - partial correlation
+authors:
+  - name: Donald R. Williams
+    affiliation: "Department of Psychology, University of California, Davis" # (Multiple affiliations must be quoted)
+  - name: Joris Mulder
+    affiliation: "Department of Methodology and Statistics, Tilburg University"
+date: 18 August 2019
+bibliography: paper.bib
+---
+
+# Summary
+
+Gaussian graphical models (GGM) allow for learning conditional independence structures that are encoded by partial correlations. Whereas there are several R packages for classical (i.e., frequentist) methods, there are only two that implement a Bayesian approach. These are exclusively focused on identifying the graphical structure. Thepackage **BGGM** not only contains novel Bayesian methods for this purpose, but it also includes Bayesian methodology for extending inference beyond identifying non-zero relations. **BGGM** is built around two Bayesian approaches for inference--estimation and hypothesis testing. The former focuses on the posterior distribution and includes extensions to assess predictability, as well as methodology to compare partial correlations. The latter includes methods for Bayesian hypothesis testing, in both exploratory and confirmatory contexts, with the novel matrix-$F$ prior distribution. This allows for testing order and equality constrained hypotheses, as well as a combination of both with the Bayes factor. Further, there are two approaches for comparing GGMs across any number of groups with either the posterior predictive distribution or with Bayesian hypothesis testing.
+
+# Estimation
+
+```{r}
+2 + 2
+```

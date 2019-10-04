@@ -302,7 +302,7 @@ summary_beta_helper <- function(x, node, ci_width){
   # lower and upper of posterior
   beta_std_ci <- t(apply(beta_std_temp, 2,  quantile, probs = c(low, up)))
 
-  returned_object <- round(cbind(node =  row_names[-node],
+  returned_object <- round(cbind(Node =  row_names[-node],
                                  beta,
                                  post_sd,
                                  beta_ci,
@@ -1102,7 +1102,6 @@ numbers2words <- function(x){
 }
 
 samps_inv_helper <- function(x, p){
-
   inv <- paste("cov_inv", paste(paste("[", paste( 1:p, x, sep = ","), sep = ""), "]", sep = ""), sep = "")
   inv
 }

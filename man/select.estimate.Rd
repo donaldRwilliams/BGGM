@@ -4,28 +4,30 @@
 \alias{select.estimate}
 \title{Select Graphical Structure with Estimation Based Methods}
 \usage{
-\method{select}{estimate}(x, ci_width = 0.95, rope = NULL,
-  prob = 0.975)
+\method{select}{estimate}(x, CrI = 0.95, rope = NULL, prob = 0.975,
+  ...)
 }
 \arguments{
 \item{x}{object of class \code{bayes_estimate}}
 
-\item{ci_width}{credible interval width used for the decision rule}
+\item{CrI}{credible interval width used for the decision rule}
 
 \item{rope}{region of practical equivalence}
 
 \item{prob}{posterior probability (see notes)}
+
+\item{...}{not currently used}
 }
 \value{
 An object of class \code{select.estimate}
 }
 \description{
-This allows for not only estimating the conditional dependence structure, that is non-zero edges, but also the conditional \textbf{in}dependence
+This allows for not only estimating the conditional dependence structure, that is non-zero edges, but also the conditional **in**dependence
 structure (evidence for no relation). For the latter, the region of practical equivalence must be specified
 }
 \note{
 The region of practical equivalence allows for assessing whether an edge is practically zero. In other words, conditional independence
-(\eqn{\rho = 0}). The agrument \code{prob} is then the posterior probability that must be in (practically zero edges) and out
+(\eqn{\rho = 0}). The argument \code{prob} is then the posterior probability that must be in (practically zero edges) and out
  (practically zero edges) of the rope.
 }
 \examples{
@@ -35,7 +37,7 @@ The region of practical equivalence allows for assessing whether an edge is prac
 Y <- BGGM::bfi[,1:5]
 
 # analytic solution
-fit_analytic <- estimate(Y, analytic = T)
+fit_analytic <- estimate(Y, analytic = TRUE)
 
 # select E
 E <- select(fit_analytic, ci_width = 0.95)

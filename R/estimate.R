@@ -1,12 +1,13 @@
 #' Gaussian Graphical Models with Credible Intervals or the Region of Practical Equivalence
 #'
 #' @description Learn the conditional (in)dependence structure with credible intervals or the region of practical equivalence.
-#' For the former, there is an analytic solution avaiable, whereas for the latter, samples are efficiently drawn from the posterior
+#' For the former, there is an analytic solution available, whereas for the latter, samples are efficiently drawn from the posterior
 #' distribution.
 #'
-#' @param x data matrix (\emph{n} $\times$  \emph{p}).
+#' @param x data matrix (\emph{n} by  \emph{p}).
 #' @param iter number of posterior samples
-#' @param analytic analytic solution. see notes for futher details.
+#' @param analytic analytic solution. see notes for further details.
+#' @param ... not used
 #'
 #' @return  list of class \code{estimate}:
 #'
@@ -36,7 +37,6 @@
 #' \item \code{analytic} FALSE
 #' }
 #'
-#' @export
 #'
 #'
 #' @note The default is to draws samples from the posterior distribution (\code{analytic = FALSE}). The samples are required for computing edge differences,
@@ -51,23 +51,22 @@
 #' # p = 5
 #' Y <- BGGM::bfi[,1:20]
 #'
-#' # analytic approach (sample by setting analytic = F)
-#' fit_analytic <- estimate(Y, analytic = T)
+#' # analytic approach (sample by setting analytic = FALSE)
+#' fit_analytic <- estimate(Y, analytic = TRUE)
 #'
 #' # select the graph (edge set E)
-#' E <- select(fit_analytic, ci_width = 0.95)
+#' #E <- select(fit_analytic, ci_width = 0.95)
 #'
 #' # plot
-#' plot(E, type = "network")
-
-estimate.default  <- function(x, iter = 5000, analytic = FALSE){
+#' #plot(E, type = "network")
+#' @export
+estimate.default  <- function(x, iter = 5000, analytic = FALSE, ...){
 
   # remove the NAs
   X <- na.omit(as.matrix(x))
 
   # mean center the data
   X <- scale(X, scale = T)
-
 
   # number of observations
   n <- nrow(X)
@@ -80,12 +79,14 @@ estimate.default  <- function(x, iter = 5000, analytic = FALSE){
 
   S <- t(X) %*% X
 
-
+  # sample from Wishart
   if(isFALSE(analytic)){
-  # store posterior samples
-  df_samps <- matrix(0, nrow = iter, ncol = cols_samps)
+
+    # store posterior samples
+    df_samps <- matrix(0, nrow = iter, ncol = cols_samps)
 
   for(i in 1:iter){
+
     # draw directly from Wishart
     inv_mat <- rWishart(1, n-1, solve(S))[,,1]
 
@@ -98,8 +99,8 @@ estimate.default  <- function(x, iter = 5000, analytic = FALSE){
   }
 
   # name the columns
-  inv_names <- unlist(lapply(1:p, function(x)  BGGM:::samps_inv_helper(x, p)))
-  pcor_names <-unlist(lapply(1:p, function(x)  BGGM:::samps_pcor_helper(x, p)))
+  inv_names <- unlist(lapply(1:p, function(x)  samps_inv_helper(x, p)))
+  pcor_names <-unlist(lapply(1:p, function(x)  samps_pcor_helper(x, p)))
 
   colnames(df_samps) <- c(inv_names, pcor_names)
 
@@ -120,16 +121,74 @@ estimate.default  <- function(x, iter = 5000, analytic = FALSE){
                          analytic = analytic)
   } else{
 
+    # analytic
+    fit <-  analytic_solve(X)
 
-    fit <-  BGGM:::analytic_solve(X)
-
-    returned_object <- list(fit = fit, analytic = analytic, call = match.call(), data = X, p = ncol(X))
-
+    returned_object <- list(fit = fit,
+                            analytic = analytic,
+                            call = match.call(),
+                            data = X,
+                            p = ncol(X))
     }
-
 class(returned_object) <- "estimate"
-
 return(returned_object)
 }
 
+#' @title S3 estimate method
+#' @name estimate
+#' @param ... currently not used
+#'
+#' @description S3 estimate method
+#' @seealso \code{\link{estimate.default}}
+#' @export
+estimate <- function(...) {
+  UseMethod("estimate")
+}
 
+#' @name print.estimate
+#' @title  Print method for \code{estimate.default} objects
+#'
+#' @param x An object of class \code{estimate}
+#'
+#' @param ... currently ignored
+#'
+#' @export
+print.estimate <- function(x, ...){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  # analytic == TRUE
+  if(!isFALSE( x$analytic)){
+    cat("Type: Estimation (Analytic Solution) \n")
+  }
+
+  # analytic  == FALSE
+  if(isFALSE( x$analytic)){
+    cat("Type: Estimation (Sampling) \n")
+  }
+  # number of iterations
+  cat("Posterior Samples:", x$iter, "\n")
+  # number of observations
+  cat("Observations (n):", nrow(x$dat), "\n")
+  # number of variables
+  cat("Variables (p):", x$p, "\n")
+  # number of edges
+  cat("Edges:", .5 * (x$p * (x$p-1)), "\n")
+  cat("--- \n")
+  cat("Call: \n")
+  print(x$call)
+  cat("--- \n")
+  cat("Date:", date(), "\n")
+}
+
+
+#' @name summary.estimate
+#' @title Summary method for \code{estimate.default} objects
+#'
+#' @param object An object of class \code{estimate}
+#'
+#' @param ... currently ignored
+#'
+#' @export
+summary.estimate <- function(object, ...){
+  print(object)
+}

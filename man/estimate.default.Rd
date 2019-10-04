@@ -4,14 +4,16 @@
 \alias{estimate.default}
 \title{Gaussian Graphical Models with Credible Intervals or the Region of Practical Equivalence}
 \usage{
-\method{estimate}{default}(x, iter = 5000, analytic = FALSE)
+\method{estimate}{default}(x, iter = 5000, analytic = FALSE, ...)
 }
 \arguments{
-\item{x}{data matrix (\emph{n} $\times$  \emph{p}).}
+\item{x}{data matrix (\emph{n} by  \emph{p}).}
 
 \item{iter}{number of posterior samples}
 
-\item{analytic}{analytic solution. see notes for futher details.}
+\item{analytic}{analytic solution. see notes for further details.}
+
+\item{...}{not used}
 }
 \value{
 list of class \code{estimate}:
@@ -44,7 +46,7 @@ list of class \code{estimate}:
 }
 \description{
 Learn the conditional (in)dependence structure with credible intervals or the region of practical equivalence.
-For the former, there is an analytic solution avaiable, whereas for the latter, samples are efficiently drawn from the posterior
+For the former, there is an analytic solution available, whereas for the latter, samples are efficiently drawn from the posterior
 distribution.
 }
 \note{
@@ -61,12 +63,12 @@ see \code{methods("estimate")}
 # p = 5
 Y <- BGGM::bfi[,1:20]
 
-# analytic approach (sample by setting analytic = F)
-fit_analytic <- estimate(Y, analytic = T)
+# analytic approach (sample by setting analytic = FALSE)
+fit_analytic <- estimate(Y, analytic = TRUE)
 
 # select the graph (edge set E)
-E <- select(fit_analytic, ci_width = 0.95)
+#E <- select(fit_analytic, ci_width = 0.95)
 
 # plot
-plot(E, type = "network")
+#plot(E, type = "network")
 }
