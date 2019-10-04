@@ -8,6 +8,8 @@
   ...)
 }
 \arguments{
+\item{object}{object of class \code{estimate} (analytic = F)}
+
 \item{node}{which node to summarize (i.e., the outcome)}
 
 \item{CrI}{credible interval used in the summary output}
@@ -15,8 +17,6 @@
 \item{iter}{number of samples used in the conversion.}
 
 \item{...}{e.g., \code{digits}}
-
-\item{fit}{object of class \code{estimate} (analytic = F)}
 }
 \value{
 summary of the multiple regression coefficients for \code{node}

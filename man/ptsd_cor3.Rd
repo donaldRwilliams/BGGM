@@ -31,7 +31,8 @@ The correlation matrix was estimated from 926 individuals.
 }
 \examples{
 data(ptsd_cor3)
-Y <- MASS::mvrnorm(n = 926, mu = rep(0, 16), Sigma = ptsd_cor3,  empirical = TRUE)
+Y <- MASS::mvrnorm(n = 926, mu = rep(0, 16),
+                   Sigma = ptsd_cor3,  empirical = TRUE)
 }
 \references{
 Fried, E. I., Eidhof, M. B., Palic, S., Costantini, G., Huisman-van Dijk, H. M., Bockting, C. L., ... & Karstoft, K. I. (2018).

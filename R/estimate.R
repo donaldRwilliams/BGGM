@@ -1,10 +1,10 @@
-#' Gaussian Graphical Models with Credible Intervals or the Region of Practical Equivalence
+#' @title GGMs with Credible Intervals or the Region of Practical Equivalence
 #'
 #' @description Learn the conditional (in)dependence structure with credible intervals or the region of practical equivalence.
 #' For the former, there is an analytic solution available, whereas for the latter, samples are efficiently drawn from the posterior
 #' distribution.
 #'
-#' @param x data matrix (\emph{n} by  \emph{p}).
+#' @param Y data matrix (\emph{n} by  \emph{p}).
 #' @param iter number of posterior samples
 #' @param analytic analytic solution. see notes for further details.
 #' @param ... not used
@@ -48,20 +48,20 @@
 #'see \code{methods("estimate")}
 #' @examples
 #'
-#' # p = 5
-#' Y <- BGGM::bfi[,1:20]
+#' # p = 20
+#' Y <- BGGM::bfi[, 1:5]
 #'
 #' # analytic approach (sample by setting analytic = FALSE)
 #' fit_analytic <- estimate(Y, analytic = TRUE)
 #'
 #' # select the graph (edge set E)
-#' #E <- select(fit_analytic, ci_width = 0.95)
+#' E <- select(fit_analytic, ci_width = 0.95)
 #'
-#' # plot
-#' #plot(E, type = "network")
 #' @export
-estimate.default  <- function(x, iter = 5000, analytic = FALSE, ...){
+estimate.default  <- function(Y, iter = 5000,
+                              analytic = FALSE, ...){
 
+  x <- Y
   # remove the NAs
   X <- na.omit(as.matrix(x))
 
@@ -77,6 +77,7 @@ estimate.default  <- function(x, iter = 5000, analytic = FALSE, ...){
   # number of columns inv + pcor
   cols_samps <- p^2 + p^2
 
+  # scatter matrix
   S <- t(X) %*% X
 
   # sample from Wishart
@@ -102,24 +103,25 @@ estimate.default  <- function(x, iter = 5000, analytic = FALSE, ...){
   inv_names <- unlist(lapply(1:p, function(x)  samps_inv_helper(x, p)))
   pcor_names <-unlist(lapply(1:p, function(x)  samps_pcor_helper(x, p)))
 
+  # name columns
   colnames(df_samps) <- c(inv_names, pcor_names)
 
-  parcor_mat <- matrix(0, ncol = ncol(x), ncol(x))
-  inv_mat <-  parcor_mat
+  # matrix for storage
+  parcor_mat <-  inv_mat <- matrix(0, ncol = p, p)
 
+  # posterior means (partials)
   parcor_mat[] <- colMeans(df_samps[,  grep("pcors", colnames(df_samps))])
   diag(parcor_mat) <- 0
 
+  # posterior means (inverse)
   inv_mat[]   <- colMeans(df_samps[,  grep("cov_inv", colnames(df_samps))])
 
-  returned_object  <- list(parcors_mat = parcor_mat,
-                         inv_mat = inv_mat,
-                         posterior_samples = as.data.frame(df_samps),
-                         p = ncol(x),
-                         dat = X,
-                         iter = iter, call = match.call(),
-                         analytic = analytic)
-  } else{
+  returned_object  <- list(parcors_mat = parcor_mat, inv_mat = inv_mat,
+                           posterior_samples = as.data.frame(df_samps),
+                           p = ncol(x), dat = X, iter = iter,
+                           call = match.call(), analytic = analytic)
+  # analytic solution
+  } else {
 
     # analytic
     fit <-  analytic_solve(X)
@@ -130,8 +132,10 @@ estimate.default  <- function(x, iter = 5000, analytic = FALSE, ...){
                             data = X,
                             p = ncol(X))
     }
-class(returned_object) <- "estimate"
-return(returned_object)
+
+  class(returned_object) <- "estimate"
+  return(returned_object)
+
 }
 
 #' @title S3 estimate method

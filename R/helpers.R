@@ -428,10 +428,8 @@ axis_ticks_helper <- function(x){
 
 KL = function(Theta,hatTheta){
 
-  # Kuismin, M., & Sillanpää, M. J. (2016). Use of Wishart prior and simple extensions for
+  # Kuismin, M., & Sillanpaa, M. J. (2016). Use of Wishart prior and simple extensions for
   # sparse precision matrix estimation. PloS one, 11(2), e0148171.
-
-
   p = ncol(Theta)
 
   invTheta = solve(Theta,diag(1,p))
@@ -445,7 +443,7 @@ KL = function(Theta,hatTheta){
 QL = function(Theta,hatTheta){
 
 
-  # Kuismin, M., & Sillanpää, M. J. (2016). Use of Wishart prior and simple extensions for
+  # Kuismin, M., & Sillanpaa, M. J. (2016). Use of Wishart prior and simple extensions for
   # sparse precision matrix estimation. PloS one, 11(2), e0148171.
 
   p = ncol(Theta)
@@ -636,169 +634,40 @@ sampling <- function(X, nu, delta, n_samples = 20000, cores = 4){
   # register parallel
   cl <- parallel::makeCluster(cores)
   doSNOW::registerDoSNOW(cl)
+
   # samples for each "chain"
   samps <- rep(round(n_samples / cores), cores)
-  chains = cores
-  # sample from priors and posteriors
-  samples <- foreach::foreach(i = 1:chains, .export = c("fisher_z", "sampling_helper",
-                                               "numbers2words",
-                                               "prior_helper", "post_helper")) %dopar%{
-                                                 sampling_helper(X = X, nu = nu, delta = delta,  n_samples = samps[i])
+  chains <- cores
 
-                                               }
+  # global variable
+  i <- 1
+
+  # sample from priors and posteriors
+  samples <- foreach::foreach(i = 1:chains,
+                              .export = c("fisher_z", "sampling_helper",
+                                          "numbers2words", "prior_helper", "post_helper")) %dopar% {
+                                                sampling_helper(X = X, nu = nu,
+                                                                delta = delta,
+                                                                n_samples = samps[i])
+                                            }
+  # stop cluster
   parallel::stopCluster(cl)
-  samples
+
+  return(samples)
 }
 
-
 fisher_z <- function(rho){
-  .5*log((1+rho)/(1-rho))
+  .5 * log(( 1 + rho )/ ( 1 - rho ))
 }
 
 sd_helper <- function(post_samples, prior_at_zero){
   prior_at_zero /  dnorm(0, mean(post_samples), stats::sd(post_samples))
 }
 
-# equality_test <- function(X, nu, delta, type, pcor_names, hyp = NULL, n_samples, cores){
-#   p <- ncol(X)
-#   pcor_mat <- matrix(0, p, p)
-#   if(is.null(colnames(X))){
-#     stop("The variables must be named. These names cannot included numbers")
-#
-#   }
-#   if(type == "inequality"){
-#     if(is.null(hyp)){
-#       stop("inequality constrained hypotheses must be specified")
-#     }
-#
-#     samples <- sampling(X, nu = nu, delta = delta, n_samples = n_samples, cores)
-#
-#     ERr1 <- create_matrices(varnames = pcor_names, hyp = hyp)
-#
-#     prior <- do.call(rbind, lapply(samples, function(x)  x$fisher_z_prior[,pcor_names]))
-#     post <- do.call(rbind, lapply(samples, function(x)  x$fisher_z_post[,pcor_names]))
-#
-#     Sigma0 <- cov(prior)
-#     Sigma1 <- cov(post)
-#
-#     mu0 <- ERr1$inequality$R_i %*% colMeans(prior)
-#     mu1 <- ERr1$inequality$R_i %*% colMeans(post)
-#
-#     s0 <- ERr1$inequality$R_i %*% Sigma0 %*% t(ERr1$inequality$R_i)
-#     s1 <- ERr1$inequality$R_i %*% Sigma1 %*% t(ERr1$inequality$R_i)
-#
-#     prior_prob <- mvtnorm::pmvnorm(lower = as.vector(ERr1$inequality$r_i), upper = Inf,mean = as.vector(mu0),  sigma = s0)[1]
-#     post_prob <- mvtnorm::pmvnorm(lower = as.vector(ERr1$inequality$r_i), upper = Inf,mean = as.vector(mu1),  sigma = s1)[1]
-#
-#
-#     pcor_mat[lower.tri(pcor_mat)] <- colMeans(samples[[1]]$pcor_post)
-#     pcor_mat[upper.tri(pcor_mat)] <- t(pcor_mat)[upper.tri(pcor_mat)]
-#
-#     colnames(pcor_mat) <- colnames(X)
-#     results <- list(BF = post_prob / prior_prob)
-#     results <- list(results = results,  pcor_mat = pcor_mat)
-#   }
-#   results
-# }
-
-
-
 pcor_name_helper <- function(x){
   keep_vars <-  unlist(strsplit(gsub("[^[:alnum:] ]", "", x), " +"))
   keep_vars
 }
-
-
-
-
-node_direct_helper_1 <- function(pcor_mat, adj_mat){
-  # function to replicate direction of nodes
-  # pcor_mat: full pcor mat from first network
-  # adj_mat: ae
-
-  # ensure the diagonal
-  diag(adj_mat) <- 0
-
-  # list to store hypotheses
-  hyp <- list()
-
-  for(i in 1:ncol(pcor_mat) ){
-
-    ith_row <- pcor_mat[i,] * adj_mat[i,]
-    ith_row_sign <- sign(ith_row)
-
-    # if only positive
-    if(sum(ith_row_sign == 1) != 0 & sum(ith_row_sign == -1) == 0){
-
-      # which is positive
-      which_positve <- which(ith_row_sign ==  1)
-
-      # change numbers to words
-      change_2_words <- numbers2words(which_positve)
-
-      # join i row to positive edges
-      join_ith_row <- paste(numbers2words(i), change_2_words, sep = "_")
-
-      # store
-      hyp[[i]] <-  paste("(", paste(join_ith_row, collapse = ", "), ")", "> 0")
-    }
-
-    if(sum(ith_row_sign == -1) != 0 & sum(ith_row_sign == 1) == 0){
-
-      # which is negative
-      which_negative <- which(ith_row_sign ==  -1)
-
-      # change numbers to words
-      change_2_words <- numbers2words(which_negative)
-
-      # join i row to positive edges
-      join_ith_row <- paste(numbers2words(i), change_2_words , sep = "_")
-
-      # store
-      hyp[[i]] <-  paste("(", paste(join_ith_row, collapse = ", "), ")", "> 0")
-
-    }
-
-
-
-    if(sum(ith_row_sign == -1) != 0 & sum(ith_row_sign == 1) != 0){
-
-      # which is positive
-      which_positve <- which(ith_row_sign ==  1)
-
-      # change numbers to words
-      change_2_words_pos <- numbers2words(which_positve)
-
-      # join i row to positive edges
-      join_ith_row_pos <- paste(numbers2words(i), change_2_words_pos,  sep = "_")
-
-      # store
-      hyp_pos <-  paste("(", paste(join_ith_row_pos, collapse = ", "), ")", "> 0")
-
-
-
-      # which is negative
-      which_negative <- which(ith_row_sign ==  -1)
-
-      # change numbers to words
-      change_2_words_neg <- numbers2words(which_negative)
-
-      # join i row to positive edges
-      join_ith_row_neg <- paste(numbers2words(i), change_2_words_neg , sep = "_")
-
-
-
-      hyp_neg <- paste(">", " ( ", paste(join_ith_row_neg, collapse = ", "), " )", sep = "")
-
-      hyp[[i]] <-  paste(hyp_pos, hyp_neg)
-
-    }
-
-  }
-
-  hyp
-}
-
 
 framer <- function(x){
   pos_comparisons <- unlist(gregexpr("[<>=]", x))

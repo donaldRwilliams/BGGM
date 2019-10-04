@@ -2,12 +2,12 @@
 % Please edit documentation in R/estimate.R
 \name{estimate.default}
 \alias{estimate.default}
-\title{Gaussian Graphical Models with Credible Intervals or the Region of Practical Equivalence}
+\title{GGMs with Credible Intervals or the Region of Practical Equivalence}
 \usage{
-\method{estimate}{default}(x, iter = 5000, analytic = FALSE, ...)
+\method{estimate}{default}(Y, iter = 5000, analytic = FALSE, ...)
 }
 \arguments{
-\item{x}{data matrix (\emph{n} by  \emph{p}).}
+\item{Y}{data matrix (\emph{n} by  \emph{p}).}
 
 \item{iter}{number of posterior samples}
 
@@ -60,15 +60,13 @@ see \code{methods("estimate")}
 }
 \examples{
 
-# p = 5
-Y <- BGGM::bfi[,1:20]
+# p = 20
+Y <- BGGM::bfi[, 1:5]
 
 # analytic approach (sample by setting analytic = FALSE)
 fit_analytic <- estimate(Y, analytic = TRUE)
 
 # select the graph (edge set E)
-#E <- select(fit_analytic, ci_width = 0.95)
+E <- select(fit_analytic, ci_width = 0.95)
 
-# plot
-#plot(E, type = "network")
 }

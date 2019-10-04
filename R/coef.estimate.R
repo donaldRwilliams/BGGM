@@ -5,7 +5,7 @@
 #' each draws is converted to the corresponding coefficients and error variances. This results in a posterior distribution. This function can be used
 #' to perform Bayesian multiple regression.
 #'
-#' @param fit object of class \code{estimate} (analytic = F)
+#' @param object object of class \code{estimate} (analytic = F)
 #' @param node which node to summarize (i.e., the outcome)
 #' @param CrI credible interval used in the summary output
 #' @param iter number of samples used in the conversion.
@@ -30,8 +30,8 @@ coef.estimate <- function(object, node = 1, CrI = 0.95, iter = 1000, ...){
   if(isTRUE(object$analytic)) stop("posterior samples are required (analytic = F)")
 
   # inverse to beta
-  inv_2_beta <- BGGM:::beta_summary(object, node = node,
-                                    ci_width = CrI, samples = iter)
+  inv_2_beta <- beta_summary(object, node = node,
+                             ci_width = CrI, samples = iter)
 
   # summary regression coefficients
   summary_inv_2_beta <- inv_2_beta[[1]][[1]][,1:5]
