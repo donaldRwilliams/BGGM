@@ -4,7 +4,7 @@
 #' @param iter number of posterior samples
 #' @param cred credible interval width used for the decision rule
 #' @param rope region of practical equivalence
-#'
+#' @export
 ggm_compare_estimate.default <- function(..., iter = 5000,
                                          cred = NULL,
                                          rope = NULL){
