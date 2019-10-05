@@ -4,7 +4,7 @@
 \alias{coef.estimate}
 \title{Precision Matrix to Multiple Regression}
 \usage{
-\method{coef}{estimate}(object, node = 1, CrI = 0.95, iter = 1000,
+\method{coef}{estimate}(object, node = 1, cred = 0.95, iter = 500,
   ...)
 }
 \arguments{
@@ -12,14 +12,29 @@
 
 \item{node}{which node to summarize (i.e., the outcome)}
 
-\item{CrI}{credible interval used in the summary output}
+\item{cred}{credible interval used in the summary output}
 
 \item{iter}{number of samples used in the conversion.}
 
 \item{...}{e.g., \code{digits}}
 }
 \value{
-summary of the multiple regression coefficients for \code{node}
+list of class \code{coef.estimate}:
+
+list \code{inv_2_beta}:
+\itemize{
+ \item \code{betas} posterior samples for the regression coefficients
+ \item \code{sigma} posterior samples for sigma (residual sd)
+ \item \code{call} \code{match.call()}
+}
+
+data frame \code{summary_inv_2_beta}:
+\itemize{
+\item summary of regression coefficients
+}
+
+
+\code{call} \code{match.call()}
 }
 \description{
 There is a direct correspondence between the covariance matrix and multiple regression. In the case of GGMs, it is possible
@@ -36,5 +51,5 @@ Y <- BGGM::bfi[,1:10]
 fit <- estimate(Y, iter = 5000)
 
 # precision to regression
-coefficients(fit, node = 1, ci_width = 0.95)
+coefficients(fit, node = 1, cred = 0.95)
 }

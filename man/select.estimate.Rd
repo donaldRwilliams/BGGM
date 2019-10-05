@@ -4,13 +4,13 @@
 \alias{select.estimate}
 \title{Select Graphical Structure with Estimation Based Methods}
 \usage{
-\method{select}{estimate}(object, CrI = 0.95, rope = NULL,
-  prob = 0.975, ...)
+\method{select}{estimate}(object, cred = 0.95, rope = NULL,
+  prob = 0.95, ...)
 }
 \arguments{
 \item{object}{object of class \code{estimate.default}}
 
-\item{CrI}{credible interval width used for the decision rule}
+\item{cred}{credible interval width used for the decision rule}
 
 \item{rope}{region of practical equivalence}
 
@@ -19,7 +19,39 @@
 \item{...}{not currently used}
 }
 \value{
-An object of class \code{select.estimate}
+An object of class \code{select.estimate}:
+
+\code{analytic = TRUE}:
+\itemize{
+\item \code{partials_non_zero} selected partial correlation matrix
+\item \code{adjacency_non_zero} adjacency matrix for the selected edges
+\item \code{ci} credible interval width
+\item \code{analytic} TRUE
+\item \code{pcors_samples} posterior samples
+}
+
+\code{analytic = FALSE}:
+\itemize{
+\item \code{partials_non_zero} selected partial correlation matrix
+\item \code{adjacency_non_zero} adjacency matrix for the selected edges
+\item \code{pcor_sd} posterior standard deviation
+\item \code{ci} credible interval width
+\item \code{rope} NULL
+
+}
+
+\code{credible interval}:
+\itemize{
+\item \code{partials_non_zero} selected partial correlation matrix  (outside of the rope)
+\item \code{adjacency_non_zero} adjacency matrix for the selected edges (outside of the rope)
+\item \code{partials_zero} partials in the rope
+\item \code{adjaceny_zero} adjacency in the rope
+\item \code{pcor_sd} posterior standard deviation
+\item \code{call} match.call()
+\item \code{rope} specified rope
+\item \code{in_rope} probability in the rope
+\item \code{pcors_samples} posterior samples
+}
 }
 \description{
 This allows for not only estimating the conditional dependence structure, that is non-zero edges, but also the conditional **in**dependence
