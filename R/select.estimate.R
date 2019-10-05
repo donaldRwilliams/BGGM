@@ -3,7 +3,7 @@
 #' @description This allows for not only estimating the conditional dependence structure, that is non-zero edges, but also the conditional **in**dependence
 #' structure (evidence for no relation). For the latter, the region of practical equivalence must be specified
 #'
-#' @param x object of class \code{bayes_estimate}
+#' @param object object of class \code{estimate.default}
 #' @param CrI credible interval width used for the decision rule
 #' @param rope region of practical equivalence
 #' @param prob posterior probability (see notes)
@@ -34,8 +34,9 @@
 #' # adjacency matrix
 #' E$adjacency_non_zero
 #' @export
-select.estimate <- function(x, CrI = 0.95, rope = NULL, prob = 0.975, ...){
+select.estimate <- function(object, CrI = 0.95, rope = NULL, prob = 0.975, ...){
 
+  x <- object
   ci_width <- CrI
 
   # check object class
@@ -116,12 +117,12 @@ select.estimate <- function(x, CrI = 0.95, rope = NULL, prob = 0.975, ...){
 #' @title S3 select method
 #' @name select
 #' @description S3 select method
-#' @param x object of class \code{estimate}
+#' @param object object of class \code{estimate}
 #' @param ... not currently used
 #' @seealso \code{\link{select.estimate}}
 #' @export
-select <- function(x,...){
-  UseMethod("select", x)
+select <- function(object,...){
+  UseMethod("select", object)
 }
 
 #' @name print.select.estimate

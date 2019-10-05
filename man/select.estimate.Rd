@@ -4,11 +4,11 @@
 \alias{select.estimate}
 \title{Select Graphical Structure with Estimation Based Methods}
 \usage{
-\method{select}{estimate}(x, CrI = 0.95, rope = NULL, prob = 0.975,
-  ...)
+\method{select}{estimate}(object, CrI = 0.95, rope = NULL,
+  prob = 0.975, ...)
 }
 \arguments{
-\item{x}{object of class \code{bayes_estimate}}
+\item{object}{object of class \code{estimate.default}}
 
 \item{CrI}{credible interval width used for the decision rule}
 

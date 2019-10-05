@@ -4,10 +4,10 @@
 \alias{select}
 \title{S3 select method}
 \usage{
-select(x, ...)
+select(object, ...)
 }
 \arguments{
-\item{x}{object of class \code{estimate}}
+\item{object}{object of class \code{estimate}}
 
 \item{...}{not currently used}
 }
