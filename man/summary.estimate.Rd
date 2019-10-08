@@ -4,13 +4,26 @@
 \alias{summary.estimate}
 \title{Summary method for \code{estimate.default} objects}
 \usage{
-\method{summary}{estimate}(object, ...)
+\method{summary}{estimate}(object, cred = 0.95, ...)
 }
 \arguments{
 \item{object}{An object of class \code{estimate}}
 
+\item{cred}{credible interval width}
+
 \item{...}{currently ignored}
+}
+\value{
+A list containing the summarized posterior distributions
+# data
+Y <- BGGM::bfi[, 1:5]
+# analytic approach (sample by setting analytic = FALSE)
+fit <- estimate(Y, analytic = TRUE)
+summary(fit)
 }
 \description{
 Summary method for \code{estimate.default} objects
+}
+\seealso{
+\code{\link{select.estimate}}
 }

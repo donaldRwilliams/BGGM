@@ -1,6 +1,6 @@
 #' @title GGMs with Credible Intervals or the Region of Practical Equivalence
 #'
-#' @description Learn the conditional (in)dependence structure with credible intervals or the region of practical equivalence.
+#' @description Estimate the conditional (in)dependence structure with credible intervals or the region of practical equivalence.
 #' For the former, there is an analytic solution available, whereas for the latter, samples are efficiently drawn from the posterior
 #' distribution.
 #'
@@ -153,9 +153,14 @@ estimate <- function(...) {
 #' @title  Print method for \code{estimate.default} objects
 #'
 #' @param x An object of class \code{estimate}
-#'
 #' @param ... currently ignored
-#'
+#' @seealso \code{\link{select.estimate}}
+#' @examples
+#' # data
+#' Y <- BGGM::bfi[, 1:5]
+#' # analytic approach (sample by setting analytic = FALSE)
+#' fit <- estimate(Y, analytic = TRUE)
+#' fit
 #' @export
 print.estimate <- function(x, ...){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
@@ -164,7 +169,6 @@ print.estimate <- function(x, ...){
   if(!isFALSE( x$analytic)){
     cat("Type: Estimation (Analytic Solution) \n")
   }
-
   # analytic  == FALSE
   if(isFALSE( x$analytic)){
     cat("Type: Estimation (Sampling) \n")
@@ -189,10 +193,111 @@ print.estimate <- function(x, ...){
 #' @title Summary method for \code{estimate.default} objects
 #'
 #' @param object An object of class \code{estimate}
-#'
+#' @seealso \code{\link{select.estimate}}
 #' @param ... currently ignored
-#'
+#' @param cred credible interval width
+#' @return A list containing the summarized posterior distributions
+#' # data
+#' Y <- BGGM::bfi[, 1:5]
+#' # analytic approach (sample by setting analytic = FALSE)
+#' fit <- estimate(Y, analytic = TRUE)
+#' summary(fit)
 #' @export
-summary.estimate <- function(object, ...){
-  print(object)
+summary.estimate <- function(object, cred = 0.95, ...) {
+
+  if (isTRUE(object$analytic)) {
+    returned_object <- list(object = object)
+    } else{
+
+    lb <- (1 - cred) / 2
+    ub <- 1 - lb
+
+    name_temp <- matrix(0, object$p, object$p)
+
+    edge_names <- unlist(lapply(1:object$p , function(x)
+      paste(1:object$p, x, sep = "--")))
+
+    name_temp[] <- edge_names
+    up_tri <- name_temp[upper.tri(name_temp)]
+
+    pcor_samples <-
+      object$posterior_samples[,  grep("pcors", colnames(object$posterior_samples))]
+
+    colnames(pcor_samples) <- edge_names
+    pcor_upper <- pcor_samples[, up_tri]
+
+    ci <- apply(
+      pcor_upper,
+      MARGIN = 2,
+      FUN = function(x) {
+        quantile(x, probs = c(lb, ub))
+      }
+    )
+    diff_mu <-
+      apply(pcor_upper, MARGIN = 2, mean)
+
+    diff_sd <-
+      apply(pcor_upper, MARGIN = 2, sd)
+
+    dat_results <-
+      data.frame(
+        edge = name_temp[upper.tri(name_temp)],
+        post_mean =  round(diff_mu, 3),
+        post_sd = round(diff_sd, 3),
+        ci = round(t(ci), 3)
+      )
+
+    colnames(dat_results) <- c(
+      "Edge",
+      "Estimate",
+      "Est.Error",
+      paste("lb.", gsub(
+        "*0.", "", formatC(round(cred, 4), format = 'f', digits = 2)
+      ), "%", sep = ""),
+      paste("ub.", gsub(
+        "*0.", "", formatC(round(cred, 4), format = 'f', digits = 2)
+      ), "%", sep = "")
+    )
+
+    returned_object <- list(dat_results = dat_results,
+                            object = object,
+                            pcor_samples = pcor_samples)
+  }
+
+  class(returned_object) <- "summary.estimate"
+  returned_object
+}
+
+#' @title Summary method for \code{summary.estimate} objects
+#' @name print.summary.estimate
+#'
+#' @param x An object of class \code{summary.estimate}
+#' @param ... currently ignored
+#' @seealso \code{\link{summary.estimate}}
+#' @export
+print.summary.estimate <- function(x, ...) {
+  # analytic == TRUE
+  if (isTRUE(x$object$analytic)) {
+    cat(print(x$object), "\n")
+    cat("note: posterior summary not available for analytic solution")
+  } else {
+    cat("BGGM: Bayesian Gaussian Graphical Models \n")
+    cat("--- \n")
+    # number of iterations
+    cat("Posterior Samples:", x$object$iter, "\n")
+    # number of observations
+    cat("Observations (n):", nrow(x$object$dat), "\n")
+    # number of variables
+    cat("Variables (p):", x$p, "\n")
+    # number of edges
+    cat("Edges:", .5 * (x$object$p * (x$object$p - 1)), "\n")
+    cat("--- \n")
+    cat("Call: \n")
+    print(x$object$call)
+    cat("--- \n")
+    cat("Estimates:\n\n")
+    print(x$dat_results, row.names = F)
+    cat("--- \n")
+
+  }
 }

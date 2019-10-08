@@ -14,3 +14,6 @@
 \description{
 Print method for \code{explore.default} objects
 }
+\seealso{
+\code{\link{explore.default}}
+}

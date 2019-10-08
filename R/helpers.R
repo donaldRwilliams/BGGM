@@ -488,11 +488,15 @@ Y_combine <- function(...){
 
   dat <- list(...)
 
-  dat <- lapply(1:length(dat), function(x) na.omit(dat))[[1]]
+  dat <- lapply(1:length(dat), function(x) na.omit(dat[[x]]))
 
-  dat_info <- lapply(1:length(dat), function(x) {p <- ncol(dat[[x]]);
-  n <- nrow(dat[[x]]);
-  data.frame(p = p, n = n)})
+  dat_info <- lapply(1:length(dat), function(x) {
+    p <- ncol(dat[[x]])
+
+    n <- nrow(dat[[x]])
+
+    data.frame(p = p, n = n)
+  })
 
   list(dat = dat, dat_info =  do.call(rbind, dat_info),
        pairwise = t(combn(1:length(dat), 2)))
@@ -1004,7 +1008,6 @@ hyp_converter <- function(x){
 
   list(hyp_converted = hyp_converted, words = words)
 }
-
 
 performance <- function(Estimate, True){
 

@@ -50,7 +50,24 @@ After sampling from the posterior distribution, use \code{select} to determine t
 edge set. see \code{methods(class = "explore")}
 }
 \examples{
-Y <- BGGM::bfi[, 1:5]
-# fit model
-fit_bf <- explore(Y)
+# p = 10
+Y <- BGGM::bfi[,1:10]
+
+# sample posterior
+fit <- explore(Y, iter = 5000)
+
+# select E
+E <- select(fit, BF_cut = 3)
+
+# summarize
+summary(E)
+
+# non-zero edges
+E$partials_non_zero
+
+# adjacency matrix
+E$Adj_10
+
+# null adjacency matrix
+E$Adj_01
 }

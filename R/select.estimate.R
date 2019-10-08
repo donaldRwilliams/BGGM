@@ -1,5 +1,5 @@
 #' Select Graphical Structure with Estimation Based Methods
-#'
+#' @name select.estimate
 #' @description This allows for not only estimating the conditional dependence structure, that is non-zero edges, but also the conditional **in**dependence
 #' structure (evidence for no relation). For the latter, the region of practical equivalence must be specified
 #'
@@ -151,9 +151,14 @@ select.estimate <- function(object, cred = 0.95, rope = NULL, prob = 0.95, ...){
 #' @title S3 select method
 #' @name select
 #' @description S3 select method
-#' @param object object of class \code{estimate}
+#' @param object object of class \code{estimate}, \code{explore}, or ..
 #' @param ... not currently used
-#' @seealso \code{\link{select.estimate}}
+#' @return \code{select} works with the following methods:
+#' \itemize{
+#' \item \code{\link{select.estimate}}
+#' \item \code{\link{select.explore}}
+#' \item \code{\link{select.ggm_compare_estimate}}
+#' }
 #' @export
 select <- function(object,...){
   UseMethod("select", object)
@@ -165,6 +170,7 @@ select <- function(object,...){
 #' @param x An object of class \code{select.estimate}
 #'
 #' @param ... currently ignored
+#' @seealso \code{\link{select.estimate}}
 #'
 #' @export
 print.select.estimate <- function(x, ...){
@@ -199,7 +205,7 @@ print.select.estimate <- function(x, ...){
 #' @param object An object of class \code{select.estimate}
 #' @param summarize if \code{TRUE} partial correlations and credible intervals are provided
 #' @param ... currently ignored
-#'
+#' @seealso \code{\link{select.estimate}}
 #' @export
 summary.select.estimate <- function(object, summarize = FALSE, ...){
   x <- object

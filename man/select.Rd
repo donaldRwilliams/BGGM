@@ -7,13 +7,18 @@
 select(object, ...)
 }
 \arguments{
-\item{object}{object of class \code{estimate}}
+\item{object}{object of class \code{estimate}, \code{explore}, or ..}
 
 \item{...}{not currently used}
 }
+\value{
+\code{select} works with the following methods:
+\itemize{
+\item \code{\link{select.estimate}}
+\item \code{\link{select.explore}}
+\item \code{\link{select.ggm_compare_estimate}}
+}
+}
 \description{
 S3 select method
-}
-\seealso{
-\code{\link{select.estimate}}
 }

@@ -14,3 +14,6 @@
 \description{
 Summary method for \code{coef.estimate} objects
 }
+\seealso{
+\code{\link{coef.estimate}}
+}

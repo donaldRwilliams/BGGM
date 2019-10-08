@@ -87,3 +87,25 @@ only included edges in that direction (i.e., positive or negative). \code{two.si
 absence of an edge. \code{exhaustive} tests negative vs. positive  vs. zero. Here \code{hyp_prob} is the posterior probability threshold for the respective
 hypotheses.
 }
+\examples{
+# p = 10
+Y <- BGGM::bfi[,1:10]
+
+# sample posterior
+fit <- explore(Y, iter = 5000)
+
+# select E
+E <- select(fit, BF_cut = 3)
+
+# summarize
+summary(E)
+
+# non-zero edges
+E$partials_non_zero
+
+# adjacency matrix
+E$Adj_10
+
+# null adjacency matrix
+E$Adj_01
+}

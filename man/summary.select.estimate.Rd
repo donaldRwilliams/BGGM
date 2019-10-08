@@ -16,3 +16,6 @@
 \description{
 Summary method for \code{select.estimate} objects
 }
+\seealso{
+\code{\link{select.estimate}}
+}

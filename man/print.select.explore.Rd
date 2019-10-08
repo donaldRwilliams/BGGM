@@ -16,3 +16,6 @@
 \description{
 Print method for \code{select.explore} objects
 }
+\seealso{
+\code{\link{select.explore}}
+}

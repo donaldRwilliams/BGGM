@@ -45,7 +45,7 @@ list of class \code{estimate}:
 }
 }
 \description{
-Learn the conditional (in)dependence structure with credible intervals or the region of practical equivalence.
+Estimate the conditional (in)dependence structure with credible intervals or the region of practical equivalence.
 For the former, there is an analytic solution available, whereas for the latter, samples are efficiently drawn from the posterior
 distribution.
 }

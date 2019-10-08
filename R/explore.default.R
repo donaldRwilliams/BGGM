@@ -1,5 +1,5 @@
 #' @title GGMs with Exploratory Bayesian Hypothesis Testing
-#'
+#' @name explore.default
 #' @description Learn the conditional (in)dependence structure with the Bayes factor computed from the matrix-F prior distribution. It is
 #' possible to test for only positive or negative edges, as well as two sided hypothesis testing (which is the customary approach). Further
 #' there is also an exhaustive option that provides the posterior probability of the null, greater than zero, and less than zero.
@@ -33,9 +33,26 @@
 #' @note After sampling from the posterior distribution, use \code{select} to determine the edge set and \code{plot} for visualizing the
 #' edge set. see \code{methods(class = "explore")}
 #' @examples
-#' Y <- BGGM::bfi[, 1:5]
-#' # fit model
-#' fit_bf <- explore(Y)
+#' # p = 10
+#' Y <- BGGM::bfi[,1:10]
+#'
+#' # sample posterior
+#' fit <- explore(Y, iter = 5000)
+#'
+#' # select E
+#' E <- select(fit, BF_cut = 3)
+#'
+#' # summarize
+#' summary(E)
+#'
+#' # non-zero edges
+#' E$partials_non_zero
+#'
+#' # adjacency matrix
+#' E$Adj_10
+#'
+#' # null adjacency matrix
+#' E$Adj_01
 #' @export
 explore.default <- function(Y, prior_sd = 0.25,
                             iter = 5000, cores = 2,...){
@@ -108,6 +125,7 @@ explore  <- function(...) {
 #' @title  Print method for \code{explore.default} objects
 #' @param x An object of class \code{explore}
 #' @param ... currently ignored
+#' @seealso \code{\link{explore.default}}
 #' @export
 print.explore <- function(x,...){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
@@ -129,6 +147,7 @@ print.explore <- function(x,...){
 #' @name summary.explore
 #' @title  Summary method for \code{explore.default} objects
 #' @param object An object of class \code{explore}
+#' @seealso \code{\link{explore.default}}
 #' @param ... currently ignored
 #' @export
 summary.explore <- function(object,...){

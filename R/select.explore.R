@@ -1,5 +1,5 @@
 #' Select Graphical Structure with the Bayes Factor
-#'
+#' @name select.explore
 #' @description This allows for not only estimating the conditional dependence structure, that is non-zero edges, but also the conditional \strong{in}dependence
 #' structure (evidence for no relation).
 #'
@@ -73,6 +73,27 @@
 #' \item \code{prob} \code{hyp_prob}
 #' }
 #'
+#' @examples
+#' # p = 10
+#' Y <- BGGM::bfi[,1:10]
+#'
+#' # sample posterior
+#' fit <- explore(Y, iter = 5000)
+#'
+#' # select E
+#' E <- select(fit, BF_cut = 3)
+#'
+#' # summarize
+#' summary(E)
+#'
+#' # non-zero edges
+#' E$partials_non_zero
+#'
+#' # adjacency matrix
+#' E$Adj_10
+#'
+#' # null adjacency matrix
+#' E$Adj_01
 #' @export
 select.explore <- function(object,
                            BF_cut = 3,
@@ -328,6 +349,7 @@ select.explore <- function(object,
 #' @param x An object of class \code{select.explore}
 #' @param summarize summarize connectivity
 #' @param ... currently ignored
+#' @seealso \code{\link{select.explore}}
 #' @export
 print.select.explore <- function(x, summarize = FALSE, ...){
   # name of package
@@ -386,7 +408,7 @@ print.select.explore <- function(x, summarize = FALSE, ...){
 #' @param log log scale for the Bayes factors (default is \code{TRUE})
 #' @param summarize if \code{TRUE} partial correlations and credible intervals are provided
 #' @param ... currently ignored
-#'
+#' @seealso \code{\link{select.explore}}
 #' @export
 summary.select.explore <- function(object, hyp = "H1",
                                    log = TRUE, summarize = FALSE, ...){

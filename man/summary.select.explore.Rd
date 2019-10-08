@@ -21,3 +21,6 @@
 \description{
 Summary method for \code{select.explore} objects
 }
+\seealso{
+\code{\link{select.explore}}
+}
