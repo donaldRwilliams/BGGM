@@ -89,7 +89,7 @@ print.coef.estimate <- function(x,...){
   r2 <- R2_helper(ypred, x$data[,x$node], ci_width = x$cred)
   cred_in <- stats::quantile(r2$R2, prob = c(lb, ub))
 
-  res_r2_summ <- data.frame(Estimate = mean(r2$R2), Est.Error = sd(r2$R2), t(cred_int))
+  res_r2_summ <- data.frame(Estimate = mean(r2$R2), Est.Error = sd(r2$R2), t(cred_in))
 
   colnames(res_sigma_summ) <- c("Estimate", "Est.Error",
                                 paste(c("lb.", "ub."), gsub("*0.","", x$call$cred), "%", sep = ""))
@@ -151,7 +151,7 @@ summary.coef.estimate <- function(object, ...){
   r2 <- R2_helper(ypred, object$data[,object$node], ci_width = object$cred)
   cred_in <- stats::quantile(r2$R2, prob = c(lb, ub))
 
-  res_r2_summ <- data.frame(Estimate = mean(r2$R2), Est.Error = sd(r2$R2), t(cred_int))
+  res_r2_summ <- data.frame(Estimate = mean(r2$R2), Est.Error = sd(r2$R2), t(cred_in))
 
   colnames(res_sigma_summ) <- c("Estimate", "Est.Error",
                                  paste(c("lb.", "ub."), gsub("*0.","", object$call$cred), "%", sep = ""))
