@@ -389,7 +389,6 @@ kl_func <- function(sigma_1, sigma_2){
 
 }
 
-
 ppc_helper <- function(x, inv_g1, inv_cov, n, p){
 
   inv_mat <- matrix(0, p , p)
