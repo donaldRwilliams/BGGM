@@ -51,6 +51,10 @@ ggm_compare_estimate.default <- function(..., iter = 5000){
 
   groups <- length(info$dat)
 
+  if(groups < 2){
+    stop("must have (at least) two groups")
+  }
+
   # precision matrix for each group
   inv_mat <- lapply(1:groups, function(x) {
 

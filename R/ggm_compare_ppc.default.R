@@ -65,7 +65,7 @@ ggm_compare_ppc.default <- function(..., type = "global", iter = 5000, cores = 2
     groups <- length(info$dat)
 
     if(groups < 2){
-      stop("must have two groups")
+      stop("must have (at least) two groups")
     }
 
     Y_G <- rbind(info$dat)
