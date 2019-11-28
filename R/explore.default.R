@@ -151,5 +151,65 @@ print.explore <- function(x,...){
 #' @param ... currently ignored
 #' @export
 summary.explore <- function(object,...){
- print(object)
+dat_results <- select(object,
+                BF_cut = 0,
+                alternative = "exhaustive")
+
+returned_object <- list(dat_results = dat_results,
+                        object = object)
+class(returned_object) <- "summary.explore"
+return(returned_object)
+}
+
+#' @title Summary method for \code{summary.explore} objects
+#' @name print.summary.explore
+#'
+#' @param x An object of class \code{summary.explore}
+#' @param ... currently ignored
+#' @seealso \code{\link{summary.explore}}
+#' @export
+print.summary.explore <- function(x,...){
+   summary(x$dat_results, summarize = TRUE)
+}
+
+#' Plot \code{summary.explore}
+#'
+#' @param x an object of class \code{summary.explore}
+#' @param ... currently ignored
+#'
+#' @return an object of class \code{ggplot}
+#' @export
+
+plot.summary.explore <- function(x,...){
+
+  not_h0 <-  1 - (x$dat_results$post_prob$prob_zero)
+  h0 <- (x$dat_results$post_prob$prob_zero)
+
+  test_dat <- data.frame(Edge = x$dat_results$post_prob$edge, probability = c(not_h0 - 0.5))
+
+  dat_temp <- test_dat[order(test_dat$probability, decreasing = T),]
+  dat_temp$Edge <-
+    factor(dat_temp$Edge,
+           levels = rev(dat_temp$Edge),
+           labels = rev(dat_temp$Edge))
+
+
+  ggplot(dat_temp, aes(x = Edge, y = probability)) +
+    geom_linerange(aes(x = Edge, ymin = 0, ymax = probability),
+                   position = position_dodge(width = 1)) +
+
+    scale_y_continuous(limits = c(-0.5, 0.5),
+                       labels = c(1, 0.5, 0, 0.5, 1)) +
+    geom_point(aes(x = Edge, y = probability),
+               position = position_dodge(width = 1)) +
+
+    ylab(
+      expression(
+        italic(H)[0] * symbol(' \254 ') * "Posterior Probability " * symbol('\256 ') *
+          "'not " * italic(H)[0] * "'"
+      )
+    ) +
+    geom_point(color = "blue", size = 1) +
+    geom_hline(yintercept = 0, linetype = "dotted") +
+    coord_flip()
 }

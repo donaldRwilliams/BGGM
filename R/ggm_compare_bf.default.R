@@ -166,7 +166,7 @@ ggm_compare_bf.default <- function(..., prior_sd = 0.35, iter = 25000, cores = 2
                             mu_diff = mu_diff,
                             post_samps = post_samps,
                             prior_samps = prior_samps,
-                            re = mats$R_e )
+                            re = mats$R_e)
 
 
 

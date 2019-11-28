@@ -288,7 +288,7 @@ print.summary.estimate <- function(x, ...) {
     # number of observations
     cat("Observations (n):", nrow(x$object$dat), "\n")
     # number of variables
-    cat("Variables (p):", x$p, "\n")
+    cat("Variables (p):", x$object$p, "\n")
     # number of edges
     cat("Edges:", .5 * (x$object$p * (x$object$p - 1)), "\n")
     cat("--- \n")
@@ -301,3 +301,34 @@ print.summary.estimate <- function(x, ...) {
 
   }
 }
+
+#' Plot \code{summary.estimate}
+#'
+#' @param x an object of class \code{summary.estimate}
+#' @param ... currently ignored
+#'
+#' @return an object of class \code{ggplot}
+#' @export
+plot.summary.estimate <- function(x, ...){
+
+  dat_temp <- x$dat_results[order(x$dat_results$Estimate,
+                                  decreasing = F), ]
+
+  dat_temp$Edge <-
+    factor(dat_temp$Edge,
+           levels = dat_temp$Edge,
+           labels = dat_temp$Edge)
+
+  dat_temp$selected <-
+    as.factor(ifelse(dat_temp[, 4] < 0 & dat_temp[, 5] > 0, 0, 1))
+
+  plt <- ggplot(dat_temp,
+                aes(x = Edge,
+                    y = Estimate,
+                    color = selected)) +
+    geom_point() +
+    geom_errorbar(aes(ymax = dat_temp[, 4],
+                      ymin = dat_temp[, 5]))
+ return(plt)
+ }
+

@@ -5,7 +5,7 @@
 \title{Select Graphical Structure with the Bayes Factor}
 \usage{
 \method{select}{explore}(object, BF_cut = 3, alternative = "two.sided",
-  hyp_prob = NULL, ...)
+  ...)
 }
 \arguments{
 \item{object}{object of class \code{explore.default}}
@@ -13,8 +13,6 @@
 \item{BF_cut}{evidentiary threshold}
 
 \item{alternative}{type of hypothesis (see notes)}
-
-\item{hyp_prob}{posterior probability threshold (see notes)}
 
 \item{...}{currently not used}
 }

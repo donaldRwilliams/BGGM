@@ -342,3 +342,225 @@ summary.select.estimate <- function(object, summarize = FALSE, ...){
     }
   }
 }
+
+#' Plot \code{select.estimate} Network
+#'
+#' @param x object of class \code{select.estimate}
+#' @param layout network layout (\link[sna]{gplot.layout})
+#' @param edge_colors color theme for positive and negative edges
+#' @param node_labels node labels
+#' @param node_labels_color node labels color
+#' @param node_groups node group indicator
+#' @param node_outer_size node border size
+#' @param node_inner_size node size
+#' @param ... additional arguments (\link[GGally]{ggnet2})
+#'
+#' @importFrom GGally ggnet2
+#' @importFrom ggplot2 ggtitle
+#' @importFrom network network.vertex.names<- set.edge.value set.edge.attribute %e% %v%<-
+#' @importFrom sna gplot.layout.circle
+#' @return object of class \code{ggplot}
+#' @export
+#'
+#' @examples
+#' Y <- BGGM::bfi[, 1:20]
+#'
+#' # analytic approach (sample by setting analytic = FALSE)
+#' fit_analytic <- estimate(Y, analytic = TRUE)
+#'
+#' # select the graph (edge set E)
+#' E <- select(fit_analytic, ci_width = 0.95)
+#'
+#' # plot
+#' plt <- plot(E,
+#'             node_labels = letters[1:20],
+#'             node_labels_color = "white",
+#'             node_groups = rep(c("1", "2", "3", "4"), each = 5),
+#'             edge_colors = "classic",
+#'             edge.alpha = 0.5, palette = "Set2")
+
+
+plot.select.estimate <-
+  function(x,
+           layout = "circle",
+           edge_colors = "classic",
+           node_labels = NULL,
+           node_labels_color = "black",
+           node_groups = NULL,
+           node_outer_size = 12,
+           node_inner_size = 11,
+           ...) {
+    label <- NULL
+    color <- NULL
+    # number of nodes
+    p <- ncol(x$adjacency_non_zero)
+
+    # network
+    net <- network::network(x$adjacency_non_zero)
+
+
+    # default labels
+    if (is.null(node_labels)) {
+      network::network.vertex.names(net) <- 1:p
+      # custom labels
+    } else {
+      # check label length
+      if (length(node_labels) != p) {
+        stop("labels must be of length p (number of nodes)")
+      }
+
+      network::network.vertex.names(net) <- node_labels
+    }
+    # set edge weights
+    network::set.edge.value(
+      x = net,
+      attrname =  "weights",
+      value = x$partials_non_zero
+    )
+    #
+    network::set.edge.value(
+      x = net,
+      attrname =  "abs_weights",
+      value = abs(x$partials_non_zero) * 10
+    )
+    #
+    #
+    if (edge_colors == "classic") {
+      network::set.edge.attribute(
+        x = net,
+        attrname = "edge_color",
+        value = ifelse(net %e% "weights" < 0,
+                       "brown3", "palegreen3")
+      )
+    } else if (edge_colors == "color_blind") {
+      network::set.edge.attribute(
+        x = net,
+        attrname = "edge_color",
+        value = ifelse(net %e% "weights" < 0,
+                       "#009E73", "#D55E00")
+      )
+    } else if (edge_colors == "vivid") {
+      network::set.edge.attribute(
+        x = net,
+        attrname = "edge_color",
+        value = ifelse(net %e% "weights" < 0,
+                       "darkorange1", "darkorchid4")
+      )
+
+    }
+
+    if (is.null(node_groups)) {
+      plt <- ggnet2(
+        net = net,
+        mode = layout,
+        node.color = "white",
+        edge.color = "edge_color",
+        edge.size = "abs_weights",
+        label = TRUE,
+        ...
+      ) +
+        geom_point(color = "black",
+                   size = node_outer_size,
+                   alpha = 1) +
+        geom_point(color = "white",
+                   size = node_inner_size,
+                   alpha = 1) +
+        geom_text(aes(label = label),
+                  color = node_labels_color)
+
+      plt <- list(plt = plt)
+
+    } else {
+      if (length(node_groups) != p) {
+        stop("labels must be of length p (number of nodes)")
+      }
+
+      net %v% "group" <- node_groups
+
+      plt <- ggnet2(
+        net = net,
+        mode = layout,
+        node.color = "group",
+        edge.color = "edge_color",
+        edge.size = "abs_weights",
+        label = TRUE,
+        ...
+      ) +
+        geom_point(aes(color = color),
+                   size = node_outer_size,
+                   alpha = 0.5) +
+        geom_point(aes(color = color),
+                   size = node_inner_size,
+                   alpha = 1) +
+        geom_text(aes(label = label),
+                  color = node_labels_color)
+
+      plt <- list(plt = plt)
+    }
+
+    if (!is.null(x$rope)) {
+      # network
+      net <- network::network(x$adjacency_zero, directed = FALSE)
+
+      # default labels
+      if (is.null(node_labels)) {
+        network::network.vertex.names(net) <- 1:p
+        # custom labels
+      } else {
+        # check label length
+        if (length(node_labels) != p) {
+          stop("labels must be of length p (number of nodes)")
+        }
+
+        network::network.vertex.names(net) <- node_labels
+      }
+
+
+      if (is.null(node_groups)) {
+        plt_null <- ggnet2(
+          net = net,
+          mode = layout,
+          node.color = "white",
+          label = TRUE
+        ) +
+          geom_point(color = "black",
+                     size = node_outer_size,
+                     alpha = 1) +
+          geom_point(color = "white",
+                     size = node_inner_size,
+                     alpha = 1) +
+          geom_text(aes(label = label),
+                    color = node_labels_color)
+
+        plt$plt_null <- plt_null
+
+      } else{
+        if (length(node_groups) != p) {
+          stop("labels must be of length p (number of nodes)")
+        }
+
+        net %v% "group" <- node_groups
+
+        plt_null <- ggnet2(
+          net = net,
+          mode = layout,
+          node.color = "group",
+          label = TRUE,
+          ...
+        ) +
+          geom_point(aes(color = color),
+                     size = node_outer_size,
+                     alpha = 0.5) +
+          geom_point(aes(color = color),
+                     size = node_inner_size,
+                     alpha = 1) +
+          geom_text(aes(label = label),
+                    color = node_labels_color)
+
+        plt$plt_null <- plt_null
+      }
+    }
+    return(plt)
+  }
+
+
