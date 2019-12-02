@@ -2,6 +2,7 @@ Package: BGGM
 Type: Package
 Title: Bayesian Gaussian Graphical Models
 Version: 1.0.0
+Date: 2019-12-01
 Authors@R: c(person("Donald", "Williams", email = "drwwilliams@ucdavis.edu", role = c("aut", "cre")),
              person("Joris", "Mulder", email = "J.Mulder3@uvt.nl", role = "aut"))
 Maintainer: Donald R. Williams <drwwilliams@ucdavis.edu>
@@ -15,7 +16,6 @@ Description: This package is described in Williams and Mulder (2019) and William
     in Williams (2018). The methods offer advantages compared to classical methods, in that a 
     measure of uncertainty is provided for all parameters. For example, each node has a 
     distribution for the variance explained. Measure of out-of-sample performance are also available. 
-    The model is selected with directional Bayes factors.
 Depends: R (>= 3.5.0)
 License: GPL-2
 Imports: 
