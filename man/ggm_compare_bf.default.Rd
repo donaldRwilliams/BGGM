@@ -31,6 +31,10 @@ list of class \code{ggm_compare_bf}
 \item \code{iter} number of posterior and prior samples
 \item \code{call} match.call()
 \item \code{delta} hyperparameter of matrix-F prior distribution (corresponds to \code{prior_sd})
+
+\item \code{groups} number of groups
+\item \code{post_samps} matrix of posterior samples
+\item \code{prior_samps} matrix of prior samples
 }
 }
 \description{
