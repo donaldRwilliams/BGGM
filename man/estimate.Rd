@@ -4,9 +4,15 @@
 \alias{estimate}
 \title{S3 estimate method}
 \usage{
-estimate(...)
+estimate(Y, iter = 500, analytic = FALSE, ...)
 }
 \arguments{
+\item{Y}{data matrix (\emph{n} by  \emph{p}).}
+
+\item{iter}{number of posterior samples}
+
+\item{analytic}{analytic solution. see notes for further details.}
+
 \item{...}{currently not used}
 }
 \description{

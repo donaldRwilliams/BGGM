@@ -140,12 +140,15 @@ estimate.default  <- function(Y, iter = 5000,
 
 #' @title S3 estimate method
 #' @name estimate
+#' @param Y data matrix (\emph{n} by  \emph{p}).
+#' @param iter number of posterior samples
+#' @param analytic analytic solution. see notes for further details.
 #' @param ... currently not used
 #'
 #' @description S3 estimate method
 #' @seealso \code{\link{estimate.default}}
 #' @export
-estimate <- function(...) {
+estimate <- function(Y, iter = 500, analytic = FALSE, ...) {
   UseMethod("estimate")
 }
 

@@ -45,7 +45,7 @@
 ggm_compare_estimate.default <- function(..., iter = 5000){
 
 
-  info <- Y_combine(...)
+  info <- Y_combine(Y1, Y2)
 
   p <- info$dat_info$p[1]
 
@@ -55,6 +55,8 @@ ggm_compare_estimate.default <- function(..., iter = 5000){
     stop("must have (at least) two groups")
   }
 
+  inv_mat <- list()
+
   # precision matrix for each group
   inv_mat <- lapply(1:groups, function(x) {
 
@@ -62,7 +64,7 @@ ggm_compare_estimate.default <- function(..., iter = 5000){
     Y <- info$dat[[x]]
 
     # scale data
-    Y <- scale(Y, scale = T)
+    Y <- as.matrix(scale(Y, scale = T))
 
     # scatter matrix
     S <- t(Y) %*% Y
@@ -70,8 +72,7 @@ ggm_compare_estimate.default <- function(..., iter = 5000){
     #
     n <- nrow(Y)
 
-    samps <-
-      rWishart(iter, n - 1, solve(S))
+    samps <- stats::rWishart(iter, n - 1, solve(S))
   })
 
   # partial storage
@@ -110,7 +111,7 @@ ggm_compare_estimate.default <- function(..., iter = 5000){
 
   }
 
-  # returned object
+  # # returned object
   returned_object <- list(
     pcors_diffs = pcors_diffs,
     p = p,
