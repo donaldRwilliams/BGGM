@@ -17,8 +17,6 @@
 \item{samples}{number of samples used to}
 
 \item{measure}{Bayesian R2 (R2) or mean squared error (MSE)}
-
-\item{selected}{selected graph with credible intervals}
 }
 \value{
 summary_error posterior mean, standard deviation, and credible interval for each variable

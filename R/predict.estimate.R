@@ -3,7 +3,6 @@
 #' @description Bayesian predictive error. The measures are computed with respect to the posterior distributions.
 #' This provides uncertainty for variance explained (Bayesian R2) and mean squared error.
 #' @param fit fitted object of class estimate
-#' @param selected selected graph with credible intervals
 #' @param test_data option test data set
 #' @param ci_width width of the measure
 #' @param samples number of samples used to
