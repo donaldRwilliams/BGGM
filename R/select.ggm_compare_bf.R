@@ -21,7 +21,7 @@
 #' \item \code{BF_01_adj} Bayes factor adjacency matrix for the null hypothesis
 #' \item \code{adj_10} adjacency matrix for the selected edges (in favor of the "not equal")
 #' \item \code{adj_01} adjacency matrix for the selected edges (in favor of the null hypothesis)
-#'\item \code{pcor_mat_10} partial correlation matrix for the alternative ("not equal")
+#' \item \code{pcor_mat_10} partial correlation matrix for the alternative ("not equal")
 #' }
 #'
 #' @export
@@ -140,4 +140,98 @@ summary.select.ggm_compare_bf <- function(object,...){
   cat("note: matrices (e.g., selected partial correlations) are in the select object")
 }
 
+
+
+#' @title Plot \code{select.ggm_compare_bf} Objects
+#'
+#' @description This function plots the selected graph when comparing GGMs with Bayesian hypothesis
+#' testing. There are two heatmap plots in total. The first includes egdes for which there was
+#' evidence for a diffirence. The second includes edges for which there is evidence for the null
+#' hypothesis of equality. The tiles in the heatmap correspond to the Bayes factor
+#'
+#'
+#' @param x object of class \code{select.ggm_compare_bf}
+#' @param H0_low tile color for the smallest Bayes factors in the null hypothesis heatmap
+#' @param H0_high tile color for the largest Bayes factors in the null hypothesis heatmap
+#' @param H1_low tile color for the smallest Bayes factors in the alternative hypothesis heatmap
+#' @param H1_high  tile color for the largest Bayes factors in the alternative hypothesis heatmap
+#' @param ... currently ignored
+#'
+#' @return list containing two \code{ggplot} objects
+#' @export
+#'
+#' @examples
+#' # group 1
+#' Y1 <- MASS::mvrnorm(500, mu = rep(0,16),
+#'                     Sigma =  BGGM::ptsd_cor2,
+#'                     empirical = FALSE)
+#'
+#' # group 2
+#' Y2 <- MASS::mvrnorm(500, mu = rep(0,16),
+#'                     Sigma =  BGGM::ptsd_cor2,
+#'                     empirical = FALSE)
+#' # fit model
+#' fit <- ggm_compare_bf(Y1, Y2,
+#'                      prior_sd = 0.20,
+#'                      iter = 1000,
+#'                      cores = 2)
+#' # select E
+#' E <- select(fit, BF_cut = 3)
+#'
+#' # plot E
+#' plot(E)
+plot.select.ggm_compare_bf <- function(x, H0_low = "lightblue",
+                                       H0_high = "purple",
+                                       H1_low = "yellow",
+                                       H1_high = "red", ...){
+
+  # make alternative matrix
+  alt_df <- reshape::melt(x$BF_10_adj)
+  alt_df$BF <- ifelse(alt_df$value == 0, NA, alt_df$value)
+
+  min_scale <- round(log(x$BF),2)
+
+  max_scale <- round(max(log(na.omit(alt_df$BF))),2)
+
+  alt_mat <- ggplot(data = alt_df, aes(x=as.factor(X1),
+                                       y = as.factor(X2),
+                                       fill=log(BF))) +
+    geom_tile() +
+    ylim(rev(levels(as.factor(alt_df$X1)))) +
+    scale_fill_continuous(low= H1_low,
+                          high= H1_high,
+                          guide="colorbar",
+                          na.value="white",
+                          limits = c(min_scale, max_scale),
+                          breaks = c(min_scale, max_scale)) +
+    ylab("") +
+    xlab("Alternative Hypothesis Matrix")
+
+  # make alternative matrix
+  null_df <- reshape::melt(x$BF_01_adj)
+  null_df$BF <- ifelse(null_df$value == 0, NA, null_df$value)
+
+  min_scale <- round(log(x$BF),2)
+
+  max_scale <- round(max(log(na.omit(null_df$BF))),2)
+
+  null_mat <- ggplot(data = null_df, aes(x=as.factor(X1),
+                                         y = as.factor(X2),
+                                         fill=log(BF))) +
+    geom_tile() +
+    ylim(rev(levels(as.factor(alt_df$X1)))) +
+    scale_fill_continuous(low = H0_low,
+                          high = H0_high,
+                          guide="colorbar",
+                          na.value="white",
+                          limits = c(min_scale, max_scale),
+                          breaks = c(min_scale, max_scale)) +
+    ylab("") +
+    xlab("Null Hypothesis Matrix")
+
+  returned_object <- list(alt_mat = alt_mat,
+                          null_mat = null_mat)
+
+  return(returned_object)
+}
 

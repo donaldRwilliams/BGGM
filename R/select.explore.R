@@ -737,6 +737,9 @@ summary.select.explore <- function(object, hyp = "H1",
 #' @param node_groups node group indicator
 #' @param node_outer_size node border size
 #' @param node_inner_size node size
+#' @param alpha edge transparency
+#' @param txt_size node text size
+#' @param edge_multiplier constant to change edge width (egde * edge_multiplier)
 #' @param ... additional arguments (\link[GGally]{ggnet2})
 #'
 #' @importFrom GGally ggnet2
@@ -760,8 +763,8 @@ summary.select.explore <- function(object, hyp = "H1",
 #'             node_labels = letters[1:20],
 #'             node_labels_color = "white",
 #'             node_groups = rep(c("1", "2", "3", "4"), each = 5),
-#'             edge_colors = "classic",
-#'             edge.alpha = 0.5, palette = "Set2")
+#'             edge_colors = "classic", txt_size = 8,
+#'             alpha = 0.5, palette = "Set2")
 
 plot.select.explore <-
   function(x,
@@ -772,6 +775,8 @@ plot.select.explore <-
            node_groups = NULL,
            node_outer_size = 12,
            node_inner_size = 11,
+           alpha = 0.50, txt_size = 8,
+           edge_multiplier = 1,
            ...) {
     label <- NULL
     color <- NULL
@@ -809,7 +814,7 @@ plot.select.explore <-
     network::set.edge.value(
       x = net,
       attrname =  "abs_weights",
-      value = abs(x$partials_non_zero) * 10
+      value = abs(x$partials_non_zero) * edge_multiplier
     )
     if (edge_colors == "classic") {
       network::set.edge.attribute(
@@ -837,22 +842,19 @@ plot.select.explore <-
 
     if (is.null(node_groups)) {
       plt <- ggnet2(
-        net = net,
+        net = net, edge.alpha = alpha,
         mode = layout,
-        node.color = "white",
+        node.size = node_outer_size,
+        node.color = "black",
         edge.color = "edge_color",
         edge.size = "abs_weights",
-        label = TRUE,
-        ...
-      ) +
-        geom_point(color = "black",
-                   size = node_outer_size,
-                   alpha = 1) +
+        label = TRUE) +
         geom_point(color = "white",
                    size = node_inner_size,
                    alpha = 1) +
         geom_text(aes(label = label),
-                  color = node_labels_color)
+                  color = node_labels_color,
+                  size = txt_size)
 
       plt <- list(plt = plt)
 
@@ -864,22 +866,23 @@ plot.select.explore <-
       net %v% "group" <- node_groups
 
       plt <- ggnet2(
-        net = net,
-        mode = layout,
-        node.color = "group",
+        net = net,edge.alpha = alpha,
+        mode = layout, node.size = node_outer_size,
+        node.color = "group", node.alpha = 0.5,
         edge.color = "edge_color",
         edge.size = "abs_weights",
         label = TRUE,
         ...
       ) +
-        geom_point(aes(color = color),
-                   size = node_outer_size,
-                   alpha = 0.5) +
+        # geom_point(aes(color = color),
+        #            size = node_outer_size,
+        #            alpha = 0.5) +
         geom_point(aes(color = color),
                    size = node_inner_size,
                    alpha = 1) +
         geom_text(aes(label = label),
-                  color = node_labels_color)
+                  color = node_labels_color,
+                  size = txt_size)
 
       plt <- list(plt = plt)
     }
@@ -904,19 +907,20 @@ plot.select.explore <-
 
       if (is.null(node_groups)) {
         plt_null <- ggnet2(
-          net = net,
-          mode = layout,
-          node.color = "white",
+          net = net, edge.alpha = alpha,
+          mode = layout, node.size = node_outer_size,
+          node.color = "black",
           label = TRUE
         ) +
-          geom_point(color = "black",
-                     size = node_outer_size,
-                     alpha = 1) +
+          # geom_point(color = "black",
+          #            size = node_outer_size,
+          #            alpha = 1) +
           geom_point(color = "white",
                      size = node_inner_size,
                      alpha = 1) +
           geom_text(aes(label = label),
-                    color = node_labels_color)
+                    color = node_labels_color,
+                    size = txt_size)
 
         plt$plt_null <- plt_null
 
@@ -928,20 +932,22 @@ plot.select.explore <-
         net %v% "group" <- node_groups
 
         plt_null <- ggnet2(
-          net = net,
-          mode = layout,
+          net = net,edge.alpha = alpha,
+          mode = layout, node.alpha = 0.5,
+          node.size = node_outer_size,
           node.color = "group",
           label = TRUE,
           ...
         ) +
-          geom_point(aes(color = color),
-                     size = node_outer_size,
-                     alpha = 0.5) +
+          # geom_point(aes(color = color),
+          #            size = node_outer_size,
+          #            alpha = 0.5) +
           geom_point(aes(color = color),
                      size = node_inner_size,
                      alpha = 1) +
           geom_text(aes(label = label),
-                    color = node_labels_color)
+                    color = node_labels_color,
+                    size = txt_size)
 
         plt$plt_null <- plt_null
       }
@@ -975,7 +981,7 @@ plot.select.explore <-
 
         network::set.edge.value(x = net,
                                 attrname =  "abs_weights",
-                                value = abs(w_pos) * 10)
+                                value = abs(w_pos) * edge_multiplier)
 
       if (edge_colors == "classic") {
         network::set.edge.attribute(
@@ -1002,21 +1008,23 @@ plot.select.explore <-
       }
 
         plt_pos <- ggnet2(
-          net = net,
+          net = net,edge.alpha = alpha,
           mode = layout,
-          node.color = "white",
+          node.size = node_outer_size,
+          node.color = "black",
           edge.color = "edge_color",
           edge.size = "abs_weights",
           label = TRUE
         ) +
-          geom_point(color = "black",
-                     size = node_outer_size,
-                     alpha = 1) +
+          # geom_point(color = "black",
+          #            size = node_outer_size,
+          #            alpha = 1) +
           geom_point(color = "white",
                      size = node_inner_size,
                      alpha = 1) +
           geom_text(aes(label = label),
-                    color = node_labels_color)
+                    color = node_labels_color,
+                    size = txt_size)
 
         # negative
         w_neg <- x$neg_mat * x$pcor_mat
@@ -1044,7 +1052,7 @@ plot.select.explore <-
         network::set.edge.value(
           x = net,
           attrname =  "abs_weights",
-          value = abs(w_neg) * 10
+          value = abs(w_neg) * edge_multiplier
         )
 
         if (edge_colors == "classic") {
@@ -1074,21 +1082,22 @@ plot.select.explore <-
 
 
         plt_neg <- ggnet2(
-          net = net,
-          mode = layout,
-          node.color = "white",
+          net = net, edge.alpha = alpha,
+          mode = layout, node.size = node_outer_size,
+          node.color = "black",
           edge.color = "edge_color",
           edge.size = "abs_weights",
           label = TRUE
         ) +
-          geom_point(color = "black",
-                     size = node_outer_size,
-                     alpha = 1) +
+          # geom_point(color = "black",
+          #            size = node_outer_size,
+          #            alpha = 1) +
           geom_point(color = "white",
                      size = node_inner_size,
                      alpha = 1) +
           geom_text(aes(label = label),
-                    color = node_labels_color)
+                    color = node_labels_color,
+                    size = txt_size)
 
 
 
@@ -1113,19 +1122,20 @@ plot.select.explore <-
 
 
         plt_null <- ggnet2(
-          net = net,
-          mode = layout,
+          net = net, edge.alpha = alpha,
+          mode = layout, node.size = node_outer_size,
           node.color = "white",
           label = TRUE
         ) +
-          geom_point(color = "black",
-                     size = node_outer_size,
-                     alpha = 1) +
+          # geom_point(color = "black",
+          #            size = node_outer_size,
+          #            alpha = 1) +
           geom_point(color = "white",
                      size = node_inner_size,
                      alpha = 1) +
           geom_text(aes(label = label),
-                    color = node_labels_color)
+                    color = node_labels_color,
+                    size = txt_size)
 
         plt <- list(plt_pos = plt_pos,
                     plt_neg = plt_neg,
@@ -1157,7 +1167,7 @@ plot.select.explore <-
           network::set.edge.value(
             x = net,
             attrname =  "abs_weights",
-            value = abs(w_pos) * 10
+            value = abs(w_pos) * edge_multiplier
           )
 
           if (edge_colors == "classic") {
@@ -1187,8 +1197,8 @@ plot.select.explore <-
 
 
           plt_pos <- ggnet2(
-            net = net,
-            mode = layout,
+            net = net, edge.alpha = alpha,
+            mode = layout, node.size = node_outer_size,
             node.color = "group",
             edge.color = "edge_color",
             edge.size = "abs_weights",
@@ -1201,7 +1211,8 @@ plot.select.explore <-
                        size = node_inner_size,
                        alpha = 1) +
             geom_text(aes(label = label),
-                      color = node_labels_color)
+                      color = node_labels_color,
+                      size = txt_size)
 
 
           # negative
@@ -1226,7 +1237,7 @@ plot.select.explore <-
           network::set.edge.value(
             x = net,
             attrname =  "abs_weights",
-            value = abs(w_neg) * 10
+            value = abs(w_neg) * edge_multiplier
           )
 
           if (edge_colors == "classic") {
@@ -1254,8 +1265,9 @@ plot.select.explore <-
           }
 
           plt_neg <- ggnet2(
-            net = net,
+            net = net, edge.alpha = alpha,
             mode = layout,
+            node.size = node_outer_size,
             node.color = "group",
             edge.color = "edge_color",
             edge.size = "abs_weights",
@@ -1268,7 +1280,8 @@ plot.select.explore <-
                        size = node_inner_size,
                        alpha = 1) +
             geom_text(aes(label = label),
-                      color = node_labels_color)
+                      color = node_labels_color,
+                      size = txt_size)
 
           # null
           net <- network::network(x$null_mat, directed = FALSE)
@@ -1300,8 +1313,8 @@ plot.select.explore <-
           }
 
           plt_null <- ggnet2(
-            net = net,
-            mode = layout,
+            net = net, edge.alpha = alpha,
+            mode = layout, node.size = node_outer_size,
             node.color = "group",
             label = TRUE,...
           ) +
@@ -1312,7 +1325,8 @@ plot.select.explore <-
                        size = node_inner_size,
                        alpha = 1) +
             geom_text(aes(label = label),
-                      color = node_labels_color)
+                      color = node_labels_color,
+                      size = txt_size)
 
           plt <- list(plt_pos = plt_pos,
                       plt_neg = plt_neg,

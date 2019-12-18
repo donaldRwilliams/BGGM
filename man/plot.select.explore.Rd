@@ -7,7 +7,8 @@
 \method{plot}{select.explore}(x, layout = "circle",
   edge_colors = "classic", node_labels = NULL,
   node_labels_color = "black", node_groups = NULL,
-  node_outer_size = 12, node_inner_size = 11, ...)
+  node_outer_size = 12, node_inner_size = 11, alpha = 0.5,
+  txt_size = 8, edge_multiplier = 1, ...)
 }
 \arguments{
 \item{x}{object of class \code{select.explore}}
@@ -25,6 +26,12 @@
 \item{node_outer_size}{node border size}
 
 \item{node_inner_size}{node size}
+
+\item{alpha}{edge transparency}
+
+\item{txt_size}{node text size}
+
+\item{edge_multiplier}{constant to change edge width (egde * edge_multiplier)}
 
 \item{...}{additional arguments (\link[GGally]{ggnet2})}
 }
@@ -49,6 +56,6 @@ plt <- plot(E,
             node_labels = letters[1:20],
             node_labels_color = "white",
             node_groups = rep(c("1", "2", "3", "4"), each = 5),
-            edge_colors = "classic",
-            edge.alpha = 0.5, palette = "Set2")
+            edge_colors = "classic", txt_size = 8,
+            alpha = 0.5, palette = "Set2")
 }

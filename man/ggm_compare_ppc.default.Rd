@@ -5,7 +5,7 @@
 \title{Compare GGMs with the Posterior Predictive Distribution}
 \usage{
 \method{ggm_compare_ppc}{default}(..., type = "global", iter = 5000,
-  cores = 2)
+  cores = 1)
 }
 \arguments{
 \item{...}{data matrices (\emph{n} by  \emph{p}). Requires at least two.}
@@ -54,7 +54,7 @@ For gaining (relative) evidence for the null hypothesis see..
 see methods(class = "ggm_compare_ppc")
 }
 \examples{
-
+\dontrun{
 # Assume null is true
 Y1 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
 Y2 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
@@ -64,4 +64,12 @@ Y3 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
 ggm_ppc <- ggm_compare_ppc(Y1, Y2, Y3,
                            type = "global", iter = 50)
 summary(ggm_ppc)
+
+plot(ggm_ppc)
+
+# nodewise
+ggm_ppc  <- ggm_compare_ppc(Y1, Y2, Y3, type = "nodewise", iter = 50)
+
+plot(ggm_ppc, log = TRUE)
+}
 }
