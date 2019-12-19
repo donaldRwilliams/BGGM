@@ -125,7 +125,7 @@ Note that $g1$ and $g2$ were used to keep the notation manageable. This procedur
 To demonstrate this method, we will first compare personality networks between males and females. This allows for determing whether the null hypothesis of group (males vs. females) equality can be rejected. These data are located in the **psych** package. 
 
 ```{r}
-
+library(psych)
 dat <- bfi 
 
 dat_males <- dat %>% 

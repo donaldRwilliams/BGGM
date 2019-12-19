@@ -22,3 +22,24 @@ library(dplyr)
 library(psych)
 library(ggplot2)
 
+## ---------------------------------------------------------------------------------------
+#  library(psych)
+#  dat <- bfi
+#  
+#  dat_males <- dat %>%
+#    filter(gender == 1) %>%
+#    select(1:25) %>%
+#    na.omit()
+#  
+#  dat_female <- dat %>%
+#    filter(gender == 2) %>%
+#    select(1:25) %>%
+#    na.omit()
+#  
+#  # fit model
+#  fit1 <- ggm_compare_ppc(dat_males,
+#                          dat_female,
+#                          iter = 500,
+#                          cores = 4)
+#  
+

@@ -178,7 +178,8 @@ T(\textbf{Y}_{1}, \textbf{Y}_2) = \text{JSD}\Big(E\{\textbf{R}^{\Theta}_{g1} | \
 <div id="personality-networks" class="section level2">
 <h2>Personality Networks</h2>
 <p>To demonstrate this method, we will first compare personality networks between males and females. This allows for determing whether the null hypothesis of group (males vs. females) equality can be rejected. These data are located in the <strong>psych</strong> package.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dat &lt;-<span class="st"> </span>bfi 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(psych)
+dat &lt;-<span class="st"> </span>bfi 
 
 dat_males &lt;-<span class="st"> </span>dat <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">filter</span>(gender <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span>
