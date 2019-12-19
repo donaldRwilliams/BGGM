@@ -4,7 +4,7 @@
 \alias{predict.estimate}
 \title{Nodewise In- and Out-of-Sample Predictive Accuracy}
 \usage{
-\method{predict}{estimate}(fit, test_data = NULL, ci_width,
+\method{predict}{estimate}(fit, test_data = NULL, ci_width = 0.95,
   samples = 1000, measure = c("R2", "MSE"))
 }
 \arguments{
@@ -12,7 +12,7 @@
 
 \item{test_data}{option test data set}
 
-\item{ci_width}{width of the measure}
+\item{ci_width}{select graph and width of prediction interval}
 
 \item{samples}{number of samples used to}
 
@@ -32,9 +32,6 @@ This provides uncertainty for variance explained (Bayesian R2) and mean squared 
 dat <- BGGM::ptsd
 fit <- estimate(dat, iter = 5000)
 
-# select graph
-selected <- select(fit, ci_width = 0.95)$adjacency_mat
-
 error <- predict(fit,
               measure = "MSE",
               test_data  = NULL,
@@ -53,7 +50,6 @@ train_dat <- BGGM::ptsd[1:200,]
 test_dat <- BGGM::ptsd[201:221,]
 fit_train <- estimate(train_dat, iter = 5000)
 
-selected <- select(fit_train, ci_width = 0.95)$adjacency_mat
 
 r2 <- predict(fit = fit_train,
               measure = "R2",

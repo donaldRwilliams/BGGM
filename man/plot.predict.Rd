@@ -32,14 +32,10 @@ x1 and x2. An example is provided below.
 \examples{
 
 dat <- BGGM::ptsd
-fit <- estimate(dat, samples)
-
-select graph
-selected <- select(fit, ci_width = 0.95)$adjacency_mat
+fit <- estimate(dat, iter = 5000)
 
 error <- predict(fit,
-              selected = selected,
-              measure = "MSE",
+              measure = "R2",
               test_data  = NULL,
               ci_width = 0.95,
               samples = 1000)
@@ -48,5 +44,5 @@ plt <- plot(error, size = 5, color = "red", width = 1)
 
 # plot can be changed further with ggplot--e.g., changing theme
 
-plt + theme_classic()
+plt
 }

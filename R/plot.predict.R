@@ -14,14 +14,10 @@
 #' @examples
 #'
 #' dat <- BGGM::ptsd
-#' fit <- estimate(dat, samples)
-#'
-#' select graph
-#' selected <- select(fit, ci_width = 0.95)$adjacency_mat
+#' fit <- estimate(dat, iter = 5000)
 #'
 #' error <- predict(fit,
-#'               selected = selected,
-#'               measure = "MSE",
+#'               measure = "R2",
 #'               test_data  = NULL,
 #'               ci_width = 0.95,
 #'               samples = 1000)
@@ -30,8 +26,13 @@
 #'
 #' # plot can be changed further with ggplot--e.g., changing theme
 #'
-#' plt + theme_classic()
-plot.predict <- function(x1,  x2 = NULL, size = 2, color = "red", width = .1, order = NULL){
+#' plt
+plot.predict <- function(x1,
+                         x2 = NULL,
+                         size = 2,
+                         color = "red",
+                         width = .1,
+                         order = NULL){
 
   if(is.null(x2)){
 

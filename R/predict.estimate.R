@@ -4,7 +4,7 @@
 #' This provides uncertainty for variance explained (Bayesian R2) and mean squared error.
 #' @param fit fitted object of class estimate
 #' @param test_data option test data set
-#' @param ci_width width of the measure
+#' @param ci_width select graph and width of prediction interval
 #' @param samples number of samples used to
 #' @param measure Bayesian R2 (R2) or mean squared error (MSE)
 #'
@@ -19,9 +19,6 @@
 #'
 #' dat <- BGGM::ptsd
 #' fit <- estimate(dat, iter = 5000)
-#'
-#' # select graph
-#' selected <- select(fit, ci_width = 0.95)$adjacency_mat
 #'
 #' error <- predict(fit,
 #'               measure = "MSE",
@@ -41,7 +38,6 @@
 #' test_dat <- BGGM::ptsd[201:221,]
 #' fit_train <- estimate(train_dat, iter = 5000)
 #'
-#' selected <- select(fit_train, ci_width = 0.95)$adjacency_mat
 #'
 #' r2 <- predict(fit = fit_train,
 #'               measure = "R2",
@@ -57,7 +53,11 @@
 #' plot(x2 = r2, x1 = error)
 #'
 
-predict.estimate <- function(fit, test_data = NULL, ci_width, samples = 1000, measure = c("R2", "MSE")){
+predict.estimate <- function(fit,
+                             test_data = NULL,
+                             ci_width = 0.95,
+                             samples = 1000,
+                             measure = c("R2", "MSE")){
 
     selected <- select(fit, ci_width = ci_width)$adjacency
 
@@ -207,43 +207,6 @@ summary.predict <- function(x,  ...){
   cat("--- \n")
 }
 
-
-#' Title
-#'
-#' @param x
-#' @param nrow
-#' @param ...
-#'
-#' @return
-#' @export
-#'
-#' @examples
-head.predict <- function(x, nrow,  ...){
-  cat("BGGM: Bayesian Gaussian Graphical Models \n")
-  cat("--- \n")
-  if(is.null(x$test_data)){
-    cat("Type: In-sample predictive accuracy \n")
-  } else{
-    cat("Type: Out-of-sample predictive accuracy \n")
-
-  }
-  if(x$measure == "R2"){
-    measure <-  "Variance Explained (R2) \n"
-  } else{
-    measure <-  "Mean Squared Error (MSE) \n"
-
-  }
-  cat("Measure:", measure)
-  cat("--- \n")
-  cat("Call:\n")
-  print(x$call)
-  cat("--- \n")
-  cat("Estimates: \n\n")
-  temp <- cbind.data.frame(node = 1:nrow(x$summary_error), x$summary_error)
-  rownames(temp) <- c()
-  print(temp[1:nrow,],  row.names = FALSE, ...)
-  cat("--- \n")
-}
 
 #' Title
 #'
