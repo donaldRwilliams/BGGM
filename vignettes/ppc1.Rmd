@@ -8,7 +8,7 @@ output:
     self_contained: no
 vignette: >
   %\VignetteIndexEntry{Comparing GGMs with the Posterior Predicive Distributions}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::knitr}
   \usepackage[utf8]{inputenc}
   \usepackage{amsmath}
 params:
