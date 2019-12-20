@@ -86,7 +86,7 @@ print.coef.estimate <- function(x,...){
   ypred <- t(apply(as.matrix(x$inv_2_beta$betas)[1:x$iter,], 1,
                    function(z)  z %*% t(as.matrix(x$data[,- x$node]))))
 
-  r2 <- BGGM:::R2_helper(ypred, x$data[,x$node], ci_width = x$cred)
+  r2 <- R2_helper(ypred, x$data[,x$node], ci_width = x$cred)
   cred_in <- stats::quantile(r2$R2, prob = c(lb, ub))
 
   res_r2_summ <- data.frame(Estimate = mean(r2$R2), Est.Error = sd(r2$R2), t(cred_in))
