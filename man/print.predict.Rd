@@ -2,13 +2,15 @@
 % Please edit documentation in R/predict.estimate.R
 \name{print.predict}
 \alias{print.predict}
-\title{Title}
+\title{Print Method for \code{predict} Objects}
 \usage{
 \method{print}{predict}(x, ...)
 }
 \arguments{
-\item{...}{}
+\item{x}{object of class \code{predict}}
+
+\item{...}{currently ignored}
 }
 \description{
-Title
+Print Method for \code{predict} Objects
 }

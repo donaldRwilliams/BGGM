@@ -3,3 +3,5 @@
 ^data-raw$
 ^doc$
 ^Meta$
+^README.Rmd
+^joss_paper

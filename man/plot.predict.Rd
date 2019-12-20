@@ -4,11 +4,11 @@
 \alias{plot.predict}
 \title{Predictive Plots for In- and Out-of-Sample Data}
 \usage{
-\method{plot}{predict}(x1, x2 = NULL, size = 2, color = "red",
-  width = 0.1, order = NULL)
+\method{plot}{predict}(x, x2 = NULL, size = 2, color = "red",
+  width = 0.1, order = NULL, ...)
 }
 \arguments{
-\item{x1}{object of class \code{predict}}
+\item{x}{object of class \code{predict}}
 
 \item{x2}{optional object of class \code{predict} (typically using \code{test_data})}
 
@@ -17,6 +17,11 @@
 \item{color}{geom_point color}
 
 \item{width}{geom_errorbar width}
+
+\item{order}{plotting order for the nodes (\code{"train"}
+or \code{"test"} error)}
+
+\item{...}{currently ignored}
 }
 \value{
 A baseline \code{ggplot} object. Further customization is possible. An example is provided below.
@@ -42,7 +47,7 @@ error <- predict(fit,
 
 plt <- plot(error, size = 5, color = "red", width = 1)
 
-# plot can be changed further with ggplot--e.g., changing theme
+# plot can be changed further with ggplot
 
 plt
 }

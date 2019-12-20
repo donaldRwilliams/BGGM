@@ -221,7 +221,6 @@ NULL
 #'   \item \code{o5} Will not probe deeply into a subject. (q_1964)
 #'   \item \code{gender} Males = 1, Females =2
 #'   \item \code{education} 1 = HS, 2 = finished HS, 3 = some college, 4 = college graduate 5 = graduate degree
-#'   \item \code{age} age in years
 #' }
 #'
 #' @docType data

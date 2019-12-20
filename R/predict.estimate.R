@@ -1,15 +1,21 @@
-#' Nodewise In- and Out-of-Sample Predictive Accuracy
+#' Nodewise In- and Out-of-Sample Predictability
 #'
-#' @description Bayesian predictive error. The measures are computed with respect to the posterior distributions.
+#' @description Bayesian predictability. The measures are computed with respect to the posterior distributions.
 #' This provides uncertainty for variance explained (Bayesian R2) and mean squared error.
-#' @param fit fitted object of class estimate
-#' @param test_data option test data set
-#' @param ci_width select graph and width of prediction interval
-#' @param samples number of samples used to
+#' @param object object of class \code{estimate}
+#' @param test_data optional test data set
+#' @param ci_width select graph and width of interval in the summary output
+#' @param iter number of posterior samples used to compute predictability
+#' (must be the same or less than the number of samples in the \code{estimate} object)
 #' @param measure Bayesian R2 (R2) or mean squared error (MSE)
+#' @param ... currently ignored
 #'
-#' @return summary_error posterior mean, standard deviation, and credible interval for each variable
-#' @return  posterior_samples list containing the computed measure for each posterior draw
+#' @return object of class \code{predict}
+#' \itemize{
+#' \item \code{summary_error} summarized predictability
+#' \item \code{poster_samples} list containing the posterior samples for each node
+#' }
+#'
 #' @export
 #'
 #' @references Gelman, A., Goodrich, B., Gabry, J., & Vehtari, A. (2017). R-squared for Bayesian regression models.
@@ -39,7 +45,7 @@
 #' fit_train <- estimate(train_dat, iter = 5000)
 #'
 #'
-#' r2 <- predict(fit = fit_train,
+#' r2 <- predict(fit_train,
 #'               measure = "R2",
 #'               test_data  = test_dat,
 #'               ci_width = 0.95,
@@ -50,17 +56,18 @@
 #' plot(r2)
 #'
 #' # plot test and training error
-#' plot(x2 = r2, x1 = error)
+#' plot(x = error, x2 = r2)
 #'
 
-predict.estimate <- function(fit,
+predict.estimate <- function(object,
                              test_data = NULL,
                              ci_width = 0.95,
-                             samples = 1000,
-                             measure = c("R2", "MSE")){
+                             iter = 1000,
+                             measure = "R2",
+                             ...){
 
     selected <- select(fit, ci_width = ci_width)$adjacency
-
+    samples <- iter
     # check class
     if(class(fit) != "estimate"){
       stop("must be of class estimate")
@@ -88,7 +95,7 @@ predict.estimate <- function(fit,
     summary <- post_samples <- list()
 
     # compute regression coefficients
-    betas <- BGGM:::inverse_2_beta(fit, samples = samples)$betas
+    betas <- inverse_2_beta(fit, samples = samples)$betas
 
     # predicted values for each regression model
     for(i in 1:fit$p){
@@ -106,7 +113,7 @@ predict.estimate <- function(fit,
         beta_select <- as.matrix(t(apply(betas[[i]], 1, function(x) x * row_select)))
 
         # column number as selected names
-        col_names <- BGGM:::name_helper(colnames(betas[[i]])[row_select == 1])
+        col_names <- name_helper(colnames(betas[[i]])[row_select == 1])
 
         # select the betas
         beta_select <- beta_select[,which(colMeans(as.matrix(beta_select)) != 0)]
@@ -119,14 +126,14 @@ predict.estimate <- function(fit,
 
         if(measure == "R2"){
         # compute error measure
-        r2 <- BGGM:::R2_helper(ypred = ypred, y = dat[,i], ci_width = 0.95)
+        r2 <- R2_helper(ypred = ypred, y = dat[,i], ci_width = 0.95)
         # store the sumamaries
         summary[[i]] <- t(data.frame(r2$summary_r2))
         # store the posterior samples
         post_samples[[i]] <- r2$R2
         }
         if(measure == "MSE"){
-          mse <- BGGM:::MSE_helper(ypred = ypred, y = dat[,i], ci_width = 0.95)
+          mse <- MSE_helper(ypred = ypred, y = dat[,i], ci_width = 0.95)
           summary[[i]] <- t(data.frame(mse$summary_mse))
           post_samples[[i]] <- mse$MSE
         }
@@ -156,13 +163,6 @@ predict.estimate <- function(fit,
     # assign class (used with other functions)
     class(returned_object) <- "predict"
 
-
-
-
-
-
-
-
     # returned object
     returned_object
 
@@ -171,16 +171,14 @@ predict.estimate <- function(fit,
 
 
 
-#' Title
+#' Summary Method for \code{predict} Objects
 #'
-#' @param x
-#' @param ...
+#' @param object object of class \code{predict}
+#' @param ... currently ignored
 #'
-#' @return
 #' @export
-#'
-#' @examples
-summary.predict <- function(x,  ...){
+summary.predict <- function(object,  ...){
+  x <- object
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
   if(is.null(x$test_data)){
@@ -201,39 +199,18 @@ summary.predict <- function(x,  ...){
   print(x$call)
   cat("--- \n")
   cat("Estimates: \n\n")
-  temp <- cbind.data.frame(node = 1:nrow(x$summary_error), x$summary_error)
+  temp <- cbind.data.frame(node = 1:nrow(x$summary_error),
+                           round(x$summary_error,3))
   rownames(temp) <- c()
   print(temp,  row.names = FALSE, ...)
   cat("--- \n")
 }
 
-
-#' Title
+#' Print Method for \code{predict} Objects
 #'
-#' @param x
-#' @param ...
-#'
-#' @return
+#' @param x object of class \code{predict}
+#' @param ... currently ignored
 #' @export
-#'
-#' @examples
 print.predict <- function(x,  ...){
-  cat("BGGM: Bayesian Gaussian Graphical Models \n")
-  cat("--- \n")
-  if(is.null(x$test_data)){
-    cat("Type: In-sample predictive accuracy \n")
-  } else{
-    cat("Type: Out-of-sample predictive accuracy \n")
-
-  }
-  if(x$measure == "R2"){
-    measure <-  "Variance Explained (R2) \n"
-  } else{
-    measure <-  "Mean Squared Error (MSE) \n"
-
-  }
-  cat("Measure:", measure)
-  cat("--- \n")
-  cat("Call:\n")
-  print(x$call)
+  summary(x)
 }

@@ -20,15 +20,15 @@
 #' @examples
 #'
 #' # data
-#'Y <- BGGM::bfi[1:500, 1:20]
+#'Y <- rsa[,-ncol(rsa)]
 #'
 #'# fit model
-#'fit_explore <- explore(Y)
+#'fit_explore <- explore(Y, iter = 1000)
 #'
 #'# select the graph (edge set E)
 #'E <- select(fit_explore)
 #'
-#'plot_adjacency(E$Adj_10, node_groups = BGGM:::csws_labels)
+#'plot_adjacency(E$Adj_10, node_groups = BGGM:::rsa_labels)
 plot_adjacency <-  function(x,  layout = "circle",
                             node_labels = NULL,
                             node_labels_color = "black",

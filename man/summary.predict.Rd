@@ -2,13 +2,15 @@
 % Please edit documentation in R/predict.estimate.R
 \name{summary.predict}
 \alias{summary.predict}
-\title{Title}
+\title{Summary Method for \code{predict} Objects}
 \usage{
-\method{summary}{predict}(x, ...)
+\method{summary}{predict}(object, ...)
 }
 \arguments{
-\item{...}{}
+\item{object}{object of class \code{predict}}
+
+\item{...}{currently ignored}
 }
 \description{
-Title
+Summary Method for \code{predict} Objects
 }

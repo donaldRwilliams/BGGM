@@ -2,29 +2,34 @@
 % Please edit documentation in R/predict.estimate.R
 \name{predict.estimate}
 \alias{predict.estimate}
-\title{Nodewise In- and Out-of-Sample Predictive Accuracy}
+\title{Nodewise In- and Out-of-Sample Predictability}
 \usage{
-\method{predict}{estimate}(fit, test_data = NULL, ci_width = 0.95,
-  samples = 1000, measure = c("R2", "MSE"))
+\method{predict}{estimate}(object, test_data = NULL, ci_width = 0.95,
+  iter = 1000, measure = "R2", ...)
 }
 \arguments{
-\item{fit}{fitted object of class estimate}
+\item{object}{object of class \code{estimate}}
 
-\item{test_data}{option test data set}
+\item{test_data}{optional test data set}
 
-\item{ci_width}{select graph and width of prediction interval}
+\item{ci_width}{select graph and width of interval in the summary output}
 
-\item{samples}{number of samples used to}
+\item{iter}{number of posterior samples used to compute predictability
+(must be the same or less than the number of samples in the \code{estimate} object)}
 
 \item{measure}{Bayesian R2 (R2) or mean squared error (MSE)}
+
+\item{...}{currently ignored}
 }
 \value{
-summary_error posterior mean, standard deviation, and credible interval for each variable
-
-posterior_samples list containing the computed measure for each posterior draw
+object of class \code{predict}
+\itemize{
+\item \code{summary_error} summarized predictability
+\item \code{poster_samples} list containing the posterior samples for each node
+}
 }
 \description{
-Bayesian predictive error. The measures are computed with respect to the posterior distributions.
+Bayesian predictability. The measures are computed with respect to the posterior distributions.
 This provides uncertainty for variance explained (Bayesian R2) and mean squared error.
 }
 \examples{
@@ -51,7 +56,7 @@ test_dat <- BGGM::ptsd[201:221,]
 fit_train <- estimate(train_dat, iter = 5000)
 
 
-r2 <- predict(fit = fit_train,
+r2 <- predict(fit_train,
               measure = "R2",
               test_data  = test_dat,
               ci_width = 0.95,
@@ -62,7 +67,7 @@ summary(r2)
 plot(r2)
 
 # plot test and training error
-plot(x2 = r2, x1 = error)
+plot(x = error, x2 = r2)
 
 }
 \references{

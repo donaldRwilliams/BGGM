@@ -402,10 +402,13 @@ print.summary.ggm_compare_ppc <- function(x, ...){
 #' # plot
 #' plot(ggm_ppc)
 #'
+#'\donttest{
 #'# nodewise
 #'ggm_ppc  <- ggm_compare_ppc(Y1, Y2, Y3, type = "nodewise", iter = 50)
 #'
 #' plot(ggm_ppc, log = TRUE)
+#' }
+
 plot.ggm_compare_ppc <- function(x,
                                  critical = 0.05,
                                  col_noncritical = "#84e184A0",

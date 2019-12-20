@@ -48,7 +48,12 @@ globalVariables(c('Y1','Y2',
                   'probability',
                   'cred.lb',
                   'sig',
-                  'hyp'))
+                  'hyp',
+                  'label',
+                  'color',
+                  'fit',
+                  'post_mean',
+                  'Error'))
 
 #' @importFrom stats coef cov2cor dnorm lm na.omit pnorm quantile rWishart sd qnorm
 #' @importFrom utils combn

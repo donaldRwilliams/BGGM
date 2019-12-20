@@ -72,7 +72,7 @@ print.coef.estimate <- function(x,...){
   res_sigma <- x$inv_2_beta$sigma
 
 
-  lb <- (1 - x$call$cred) / 2
+  lb <- (1 - x$cred) / 2
   ub <- 1 - lb
 
   cred_int <- stats::quantile(res_sigma, prob = c(lb, ub))
@@ -86,25 +86,23 @@ print.coef.estimate <- function(x,...){
   ypred <- t(apply(as.matrix(x$inv_2_beta$betas)[1:x$iter,], 1,
                    function(z)  z %*% t(as.matrix(x$data[,- x$node]))))
 
-  r2 <- R2_helper(ypred, x$data[,x$node], ci_width = x$cred)
+  r2 <- BGGM:::R2_helper(ypred, x$data[,x$node], ci_width = x$cred)
   cred_in <- stats::quantile(r2$R2, prob = c(lb, ub))
 
   res_r2_summ <- data.frame(Estimate = mean(r2$R2), Est.Error = sd(r2$R2), t(cred_in))
 
-  colnames(res_sigma_summ) <- c("Estimate", "Est.Error",
-                                paste(c("lb.", "ub."), gsub("*0.","", x$call$cred), "%", sep = ""))
+  colnames(res_sigma_summ) <- c("Estimate", "Est.Error", "CrI.lb", "CrI.ub")
 
-  colnames(res_r2_summ) <- c("Estimate", "Est.Error",
-                             paste(c("lb.", "ub."), gsub("*0.","", x$call$cred), "%", sep = ""))
+  colnames(res_r2_summ) <- c("Estimate", "Est.Error", "CrI.lb", "CrI.ub")
 
-  colnames(x$summary_inv_2_beta) <- c("Node", "Estimate", "Est.Error",
-                                           paste(c("lb.", "ub."), gsub("*0.","", x$call$cred), "%", sep = ""))
-
+  colnames(x$summary_inv_2_beta) <- c("Node", "Estimate",
+                                      "Est.Error", "CrI.lb",
+                                      "CrI.ub")
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
   cat("Type: Inverse to Regression \n")
-  cat("Credible Interval:",  gsub("*0.","", formatC( round(x$call$cred, 4), format='f', digits=2)), "% \n")
-  cat("Node:", x$call$node, "\n")
+  cat("Credible Interval:",  gsub("*0.","", formatC( round(x$cred, 4), format='f', digits=2)), "% \n")
+  cat("Node:", x$node, "\n")
   cat("--- \n")
   cat("Call: \n")
   print(x$call)
@@ -131,9 +129,8 @@ print.coef.estimate <- function(x,...){
 #'
 #' @export
 summary.coef.estimate <- function(object, ...){
+
   res_sigma <- object$inv_2_beta$sigma
-
-
   lb <- (1 - object$call$cred) / 2
   ub <- 1 - lb
 

@@ -1,10 +1,13 @@
 #' Predictive Plots for In- and Out-of-Sample Data
 #'
-#' @param x1 object of class \code{predict}
+#' @param x object of class \code{predict}
 #' @param x2 optional object of class \code{predict} (typically using \code{test_data})
 #' @param size geom_point size
 #' @param color geom_point color
 #' @param width geom_errorbar width
+#' @param order plotting order for the nodes (\code{"train"}
+#' or \code{"test"} error)
+#' @param ... currently ignored
 #'
 #' @return A baseline \code{ggplot} object. Further customization is possible. An example is provided below.
 #' @export
@@ -24,19 +27,21 @@
 #'
 #' plt <- plot(error, size = 5, color = "red", width = 1)
 #'
-#' # plot can be changed further with ggplot--e.g., changing theme
+#' # plot can be changed further with ggplot
 #'
 #' plt
-plot.predict <- function(x1,
+plot.predict <- function(x,
                          x2 = NULL,
                          size = 2,
                          color = "red",
                          width = .1,
-                         order = NULL){
+                         order = NULL, ...){
+
+
 
   if(is.null(x2)){
 
-  x <- x1
+  x <- x
 
   # column for nodes
   x$summary_error$node <- 1:x$p
@@ -90,29 +95,29 @@ plot.predict <- function(x1,
    if(!is.null(x2)){
 
      # if R2 do the following
-     if(x1$measure == "R2"){
+     if(x$measure == "R2"){
 
        # check that x2 is out-of-sample
        if(is.null(x2$test_data)) stop("x2 must be out-of-sample predictive accuracy")
 
-       x1$summary_error$node <- 1:x1$p
-       x1$summary_error$Error <- "train"
+       x$summary_error$node <- 1:x$p
+       x$summary_error$Error <- "train"
 
        x2$summary_error$node <- 1:x2$p
        x2$summary_error$Error <- "test"
 
        if(is.null(order) || order == "train") {
-       x1$summary_error$node <- factor(x1$summary_error$node,
-                                    levels = order(x1$summary_error$post_mean),
-                                    labels = order(x1$summary_error$post_mean))
+       x$summary_error$node <- factor(x$summary_error$node,
+                                    levels = order(x$summary_error$post_mean),
+                                    labels = order(x$summary_error$post_mean))
 
-       temp_dat <- rbind.data.frame(x1$summary_error, x2$summary_error)
+       temp_dat <- rbind.data.frame(x$summary_error, x2$summary_error)
        } else {
          x2$summary_error$node <- factor(x2$summary_error$node,
                                          levels = order(x2$summary_error$post_mean),
                                          labels = order(x2$summary_error$post_mean))
 
-         temp_dat <- rbind.data.frame(x2$summary_error, x1$summary_error)
+         temp_dat <- rbind.data.frame(x2$summary_error, x$summary_error)
          }
 
 
@@ -139,29 +144,29 @@ plot.predict <- function(x1,
 
      }
 
-     if(x1$measure == "MSE"){
+     if(x$measure == "MSE"){
 
        # check that x2 is out-of-sample
        if(is.null(x2$test_data)) stop("x2 must be out-of-sample predictive accuracy")
 
-       x1$summary_error$node <- 1:x1$p
-       x1$summary_error$Error <- "Train"
+       x$summary_error$node <- 1:x$p
+       x$summary_error$Error <- "Train"
 
        x2$summary_error$node <- 1:x2$p
        x2$summary_error$Error <- "test"
 
        if(is.null(order) || order == "train") {
-         x1$summary_error$node <- factor(x1$summary_error$node,
-                                         levels = order(x1$summary_error$post_mean),
-                                         labels = order(x1$summary_error$post_mean))
+         x$summary_error$node <- factor(x$summary_error$node,
+                                         levels = order(x$summary_error$post_mean),
+                                         labels = order(x$summary_error$post_mean))
 
-         temp_dat <- rbind.data.frame(x1$summary_error, x2$summary_error)
+         temp_dat <- rbind.data.frame(x$summary_error, x2$summary_error)
        } else {
          x2$summary_error$node <- factor(x2$summary_error$node,
                                          levels = order(x2$summary_error$post_mean),
                                          labels = order(x2$summary_error$post_mean))
 
-         temp_dat <- rbind.data.frame(x2$summary_error, x1$summary_error)
+         temp_dat <- rbind.data.frame(x2$summary_error, x$summary_error)
        }
 
 
