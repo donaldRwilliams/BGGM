@@ -147,6 +147,8 @@ ggplot(dat_res, aes(x = value, y = L1)) +
     ylab("Item") +
     xlab("Bayesian R2") +
     theme(panel.grid.minor = element_blank())
+
+plot(rnorm(10))
 ```
 
 Further customization options can be found [here][https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html].
