@@ -4,8 +4,7 @@
 \alias{select.estimate}
 \title{Select Graphical Structure with Estimation Based Methods}
 \usage{
-\method{select}{estimate}(object, cred = 0.95, rope = NULL,
-  prob = 0.95, ...)
+\method{select}{estimate}(object, cred = 0.95, rope = NULL, prob = 0.95, ...)
 }
 \arguments{
 \item{object}{object of class \code{estimate.default}}

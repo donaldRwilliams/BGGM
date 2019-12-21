@@ -4,8 +4,14 @@
 \alias{predict.estimate}
 \title{Nodewise In-and Out-of-Sample Predictability}
 \usage{
-\method{predict}{estimate}(object, test_data = NULL, cred = 0.95,
-  iter = 1000, measure = "R2", ...)
+\method{predict}{estimate}(
+  object,
+  test_data = NULL,
+  cred = 0.95,
+  iter = 1000,
+  measure = "R2",
+  ...
+)
 }
 \arguments{
 \item{object}{object of class \code{estimate}}

@@ -4,8 +4,7 @@
 \alias{explore.default}
 \title{GGMs with Exploratory Bayesian Hypothesis Testing}
 \usage{
-\method{explore}{default}(Y, prior_sd = 0.25, iter = 5000, cores = 2,
-  ...)
+\method{explore}{default}(Y, prior_sd = 0.25, iter = 5000, cores = 2, ...)
 }
 \arguments{
 \item{Y}{data matrix  (\emph{n} by  \emph{p}).}

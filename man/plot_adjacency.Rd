@@ -4,10 +4,18 @@
 \alias{plot_adjacency}
 \title{Plot Adjacency Matrix}
 \usage{
-plot_adjacency(x, layout = "circle", node_labels = NULL,
-  node_labels_color = "black", node_groups = NULL,
-  node_outer_size = 12, node_inner_size = 11, alpha = 0.5,
-  txt_size = 8, ...)
+plot_adjacency(
+  x,
+  layout = "circle",
+  node_labels = NULL,
+  node_labels_color = "black",
+  node_groups = NULL,
+  node_outer_size = 12,
+  node_inner_size = 11,
+  alpha = 0.5,
+  txt_size = 8,
+  ...
+)
 }
 \arguments{
 \item{x}{adjacency matrix}

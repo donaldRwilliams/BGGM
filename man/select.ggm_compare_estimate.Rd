@@ -4,8 +4,7 @@
 \alias{select.ggm_compare_estimate}
 \title{Edge Differences and (Practical) Equivalence Between GGMs}
 \usage{
-\method{select}{ggm_compare_estimate}(object, cred = 0.95, rope = NULL,
-  prob = 0.95, ...)
+\method{select}{ggm_compare_estimate}(object, cred = 0.95, rope = NULL, prob = 0.95, ...)
 }
 \arguments{
 \item{object}{object of class \code{ggm_compare_estimate}}

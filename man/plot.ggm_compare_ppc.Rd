@@ -4,9 +4,15 @@
 \alias{plot.ggm_compare_ppc}
 \title{Plot \code{ggm_compare_ppc} Objects}
 \usage{
-\method{plot}{ggm_compare_ppc}(x, critical = 0.05,
-  col_noncritical = "#84e184A0", col_critical = "red",
-  point_size = 2, log = FALSE, ...)
+\method{plot}{ggm_compare_ppc}(
+  x,
+  critical = 0.05,
+  col_noncritical = "#84e184A0",
+  col_critical = "red",
+  point_size = 2,
+  log = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{object of class \code{ggm_compare_ppc}}

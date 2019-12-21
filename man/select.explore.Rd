@@ -4,8 +4,7 @@
 \alias{select.explore}
 \title{Select Graphical Structure with the Bayes Factor}
 \usage{
-\method{select}{explore}(object, BF_cut = 3, alternative = "two.sided",
-  ...)
+\method{select}{explore}(object, BF_cut = 3, alternative = "two.sided", ...)
 }
 \arguments{
 \item{object}{object of class \code{explore.default}}

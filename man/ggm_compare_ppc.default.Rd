@@ -4,8 +4,7 @@
 \alias{ggm_compare_ppc.default}
 \title{Compare GGMs with the Posterior Predictive Distribution}
 \usage{
-\method{ggm_compare_ppc}{default}(..., type = "global", iter = 5000,
-  cores = 1)
+\method{ggm_compare_ppc}{default}(..., type = "global", iter = 5000, cores = 1)
 }
 \arguments{
 \item{...}{data matrices (\emph{n} by  \emph{p}). Requires at least two.}
