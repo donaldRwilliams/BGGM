@@ -70,7 +70,7 @@ Note `cred` serves as both the decision rule for selecting edges to include in  
 ### Summarize Node Predictability
 ```{r}
 # summary
-pred
+print(pred)
 ```
 
 ### Plotting Predictability
