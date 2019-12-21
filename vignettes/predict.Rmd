@@ -56,7 +56,7 @@ for computing network predictability.
 
 ```{r}
 # fit model
-fit <- estimate(dat, iter = 5000)
+fit <- estimate(dat, iter = 1000)
 ```
 
 ### Compute Bayesian Variance Explained
@@ -100,3 +100,7 @@ plot(pred) +
                                    hjust = .5, 
                                    vjust = .5))
 ```
+
+
+## Out-of-Sample Predictability
+It is also possible to assess out-of-sample predictability. By this I am referring to predicting new data that was not used to select the 
