@@ -1,0 +1,152 @@
+---
+title: "Predictability with Bayesian Variance Explained"
+author: "Donald R. Williams"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+  toc: yes
+vignette: >
+  %\VignetteIndexEntry{Predictability with Bayesian Variance Explained}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+  \usepackage{amsmath}
+params:
+  EVAL: !r identical(Sys.getenv("NOT_CRAN"), "true")
+---
+  
+```{r, SETTINGS-knitr, include=FALSE}
+stopifnot(require(knitr))
+options(width = 90)
+opts_chunk$set(
+ comment = NA,
+  message = FALSE,
+  warning = FALSE,
+  eval = if (isTRUE(exists("params"))) params$EVAL else FALSE,
+  dev = "png",
+  dpi = 150,
+  fig.asp = 0.8,
+  fig.width = 5,
+  out.width = "60%",
+  fig.align = "center"
+)
+```
+
+
+# Predictability
+This tutorial provides the *work flow* in **BGGM** for computing predictability in Gaussian graphical models. I will use data from a resilience questionnaire.
+
+```{r}
+# packages
+library(BGGM)
+library(ggplot2)
+
+# resilence data
+# remove gender variable
+dat <- subset(rsa, select = - gender)
+```
+
+Note that most of the data sets in **BGGM** include categorical variables such as gender. Thus it is important to check the documentation to ensure that only the relevant variables are included in the analysis.
+
+## In-Sample Predictability
+### Estimate the Network
+The first step is to estimate the network. This provides the necessary ingredients 
+for computing network predictability.
+
+```{r}
+# fit model
+fit <- estimate(dat, iter = 1000)
+```
+
+### Compute Bayesian Variance Explained
+Next the object `fit` is used to compute Bayesian variance explained.
+```{r}
+# predict
+pred <- predict(fit,  cred = 0.95)
+```
+
+Note `cred` serves as both the decision rule for selecting edges to include in  the network and summarizing the posterior distributions.
+
+### Summarize Node Predictability
+```{r}
+# summary
+print(pred)
+```
+
+### Plotting Predictability
+Most functions in **BGGM** have plots associated with them. In most cases, this 
+has been simplified by calling `plot`.
+
+```{r}
+# plot 
+plot(pred)
+```
+
+This is not the most attractive plot, which is by design. The returned object is a `ggplot` which can then be further customized. Here is an example with the items not colored according to their respective domain.
+
+```{r, out.width= '100%'}
+plot(pred) + 
+  xlab("Item") +
+  geom_point(aes(color = BGGM:::rsa_labels), 
+             size = 4) +
+   geom_point(size = 3, 
+              color = "white") +
+  scale_color_brewer(name = "Domain", 
+                     palette = "Set1") +
+  ggtitle("Predictability") +
+  coord_cartesian() +
+  theme(axis.text.x = element_text(angle = 60, 
+                                   hjust = .5, 
+                                   vjust = .5))
+```
+
+
+## Out-of-Sample Predictability
+It is also possible to assess out-of-sample predictability. By this I am referring to predicting new data (test data) that was not used to select the initial network (training data).
+
+```{r}
+# training data
+train_dat <- dat[1:600,]
+
+# testing data
+test_dat <- dat[601:675,]
+
+# fit model
+fit <- estimate(train_dat, iter = 1000)
+```
+
+This is the same as in-sample prediction. But now we included the test data in the predict call.
+```{r}
+pred <- predict(fit, 
+                test_data = test_dat, 
+                cred = 0.95)
+
+pred
+``` 
+
+The results can then be plotted.
+```{r}
+plot(pred) + 
+  ggtitle("Out-of-Sample Predictability")
+```
+
+## Custom plots
+There are a variety of cool plots that can be made. One such example is the so called ridgeline plot. This can be made by accessing the posterior samples in the `pred` object.
+
+```{r, fig.height=80}
+library(ggridges)
+library(ggplot2)
+dat_res <- reshape2::melt(pred$post_samples)
+
+dat_res$L1 <- factor(dat_res$L1, 
+                     labels = order(pred$summary_error$post_mean, decreasing = F), 
+                     levels = colnames(dat)[order(pred$summary_error$post_mean, decreasing = F)])
+
+ggplot(dat_res, aes(x = value, y = L1)) + 
+    geom_density_ridges(rel_min_height = 0.01) +
+    theme_bw() +
+    ylab("Item") +
+    xlab("Bayesian R2") +
+    theme(panel.grid.minor = element_blank())
+```
+
+Further customization options can be found [here][https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html].
