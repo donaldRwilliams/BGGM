@@ -71,8 +71,8 @@ print.coef.estimate <- function(x,...){
 
   res_sigma <- x$inv_2_beta$sigma
 
-
   lb <- (1 - x$cred) / 2
+
   ub <- 1 - lb
 
   cred_int <- stats::quantile(res_sigma, prob = c(lb, ub))
@@ -80,7 +80,6 @@ print.coef.estimate <- function(x,...){
   res_sigma_summ <- data.frame(Estimate = mean(res_sigma),
                                Est.Error = sd(res_sigma),
                                t(cred_int))
-
 
   # R2
   ypred <- t(apply(as.matrix(x$inv_2_beta$betas)[1:x$iter,], 1,

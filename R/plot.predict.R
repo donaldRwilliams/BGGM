@@ -37,19 +37,17 @@ plot.predict <- function(x,
                          width = .1,
                          order = NULL, ...){
 
-
-
+  # no out of sample
   if(is.null(x2)){
 
-  x <- x
+    # column for nodes
+    x$summary_error$node <- 1:x$p
 
-  # column for nodes
-  x$summary_error$node <- 1:x$p
-  # add ordered levels
-  x$summary_error$node <- factor(x$summary_error$node,
+    # add ordered levels
+    x$summary_error$node <- factor(x$summary_error$node,
                                levels = order(x$summary_error$post_mean),
                                labels = order(x$summary_error$post_mean))
-
+  # R2
   if(x$measure == "R2"){
   # column for nodes
   x$summary_error$node <- 1:x$p
@@ -69,13 +67,16 @@ plot.predict <- function(x,
     xlab("Node") +
     ylab(expression("Bayesian  "* R^2)) +
     theme_classic()
-}
-  if(x$measure == "MSE"){
-    # column for nodes
-    x$summary_error$node <- 1:x$p
 
-    # add ordered levels
-    x$summary_error$node <- factor(x$summary_error$node,
+  }
+    # mse
+    if(x$measure == "MSE"){
+
+      # column for nodes
+      x$summary_error$node <- 1:x$p
+
+      # add ordered levels
+      x$summary_error$node <- factor(x$summary_error$node,
                                  levels = rev(order(x$summary_error$post_mean)),
                                  labels = rev(order(x$summary_error$post_mean)))
 
@@ -107,35 +108,34 @@ plot.predict <- function(x,
        x2$summary_error$Error <- "test"
 
        if(is.null(order) || order == "train") {
-       x$summary_error$node <- factor(x$summary_error$node,
+
+         x$summary_error$node <- factor(x$summary_error$node,
                                     levels = order(x$summary_error$post_mean),
                                     labels = order(x$summary_error$post_mean))
 
-       temp_dat <- rbind.data.frame(x$summary_error, x2$summary_error)
+         temp_dat <- rbind.data.frame(x$summary_error,
+                                      x2$summary_error)
        } else {
+
          x2$summary_error$node <- factor(x2$summary_error$node,
                                          levels = order(x2$summary_error$post_mean),
                                          labels = order(x2$summary_error$post_mean))
 
          temp_dat <- rbind.data.frame(x2$summary_error, x$summary_error)
+
          }
 
-
-
-
-
-   plt <-  ggplot(temp_dat, aes(x = node,
-                                         y = post_mean,
-                                  group = Error)) +
-
-       geom_errorbar(aes(ymin =  temp_dat[,3],
-                         ymax =  temp_dat[,4]),
-                     width = width,
-                     position = position_dodge(1),
-                     color = "grey75") +
-       geom_point(position = position_dodge(1),
-                  aes(color = Error),
-                  size = 4) +
+       plt <-  ggplot(temp_dat, aes(x = node,
+                                    y = post_mean,
+                                    group = Error)) +
+         geom_errorbar(aes(ymin =  temp_dat[,3],
+                           ymax =  temp_dat[,4]),
+                       width = width,
+                       position = position_dodge(1),
+                       color = "grey75") +
+         geom_point(position = position_dodge(1),
+                    aes(color = Error),
+                    size = 4) +
        coord_flip() +
        xlab("Node") +
        ylab(expression("Bayesian  "* R^2)) +
@@ -147,8 +147,9 @@ plot.predict <- function(x,
      if(x$measure == "MSE"){
 
        # check that x2 is out-of-sample
-       if(is.null(x2$test_data)) stop("x2 must be out-of-sample predictive accuracy")
-
+       if(is.null(x2$test_data)) {
+         stop("x2 must be out-of-sample predictive accuracy")
+      }
        x$summary_error$node <- 1:x$p
        x$summary_error$Error <- "Train"
 
@@ -168,10 +169,6 @@ plot.predict <- function(x,
 
          temp_dat <- rbind.data.frame(x2$summary_error, x$summary_error)
        }
-
-
-
-
 
        plt <-  ggplot(temp_dat, aes(x = node,
                                     y = post_mean,

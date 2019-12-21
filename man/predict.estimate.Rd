@@ -2,9 +2,9 @@
 % Please edit documentation in R/predict.estimate.R
 \name{predict.estimate}
 \alias{predict.estimate}
-\title{Nodewise In- and Out-of-Sample Predictability}
+\title{Nodewise In-and Out-of-Sample Predictability}
 \usage{
-\method{predict}{estimate}(object, test_data = NULL, ci_width = 0.95,
+\method{predict}{estimate}(object, test_data = NULL, cred = 0.95,
   iter = 1000, measure = "R2", ...)
 }
 \arguments{
@@ -12,12 +12,12 @@
 
 \item{test_data}{optional test data set}
 
-\item{ci_width}{select graph and width of interval in the summary output}
+\item{cred}{select graph and width of interval in the summary output}
 
 \item{iter}{number of posterior samples used to compute predictability
 (must be the same or less than the number of samples in the \code{estimate} object)}
 
-\item{measure}{Bayesian R2 (R2) or mean squared error (MSE)}
+\item{measure}{Bayesian R2 (\code{"R2"}) or mean squared error (\code{"MSE"})}
 
 \item{...}{currently ignored}
 }
@@ -38,9 +38,9 @@ dat <- BGGM::ptsd
 fit <- estimate(dat, iter = 5000)
 
 error <- predict(fit,
-              measure = "MSE",
+              measure = "R2",
               test_data  = NULL,
-              ci_width = 0.95,
+              cred = 0.95,
               samples = 1000)
 
 summary(error)

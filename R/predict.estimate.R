@@ -1,13 +1,13 @@
-#' Nodewise In- and Out-of-Sample Predictability
+#' Nodewise In-and Out-of-Sample Predictability
 #'
 #' @description Bayesian predictability. The measures are computed with respect to the posterior distributions.
 #' This provides uncertainty for variance explained (Bayesian R2) and mean squared error.
 #' @param object object of class \code{estimate}
 #' @param test_data optional test data set
-#' @param ci_width select graph and width of interval in the summary output
+#' @param cred select graph and width of interval in the summary output
 #' @param iter number of posterior samples used to compute predictability
 #' (must be the same or less than the number of samples in the \code{estimate} object)
-#' @param measure Bayesian R2 (R2) or mean squared error (MSE)
+#' @param measure Bayesian R2 (\code{"R2"}) or mean squared error (\code{"MSE"})
 #' @param ... currently ignored
 #'
 #' @return object of class \code{predict}
@@ -27,9 +27,9 @@
 #' fit <- estimate(dat, iter = 5000)
 #'
 #' error <- predict(fit,
-#'               measure = "MSE",
+#'               measure = "R2",
 #'               test_data  = NULL,
-#'               ci_width = 0.95,
+#'               cred = 0.95,
 #'               samples = 1000)
 #'
 #' summary(error)
@@ -61,13 +61,16 @@
 
 predict.estimate <- function(object,
                              test_data = NULL,
-                             ci_width = 0.95,
+                             cred = 0.95,
                              iter = 1000,
                              measure = "R2",
                              ...){
 
-    selected <- select(fit, ci_width = ci_width)$adjacency
-    samples <- iter
+  samples <- iter
+  ci_width <- cred
+  fit <- object
+  selected <- select(fit, ci_width = ci_width)$adjacency
+
     # check class
     if(class(fit) != "estimate"){
       stop("must be of class estimate")
@@ -202,6 +205,8 @@ summary.predict <- function(object,  ...){
   temp <- cbind.data.frame(node = 1:nrow(x$summary_error),
                            round(x$summary_error,3))
   rownames(temp) <- c()
+  colnames(temp) <- c("Node", "Post.mean",
+                      "Post.sd", "Cred.lb", "Cred.ub")
   print(temp,  row.names = FALSE, ...)
   cat("--- \n")
 }
