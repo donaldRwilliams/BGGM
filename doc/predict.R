@@ -93,4 +93,6 @@ opts_chunk$set(
 #      ylab("Item") +
 #      xlab("Bayesian R2") +
 #      theme(panel.grid.minor = element_blank())
+#  
+#  plot(rnorm(10))
 
