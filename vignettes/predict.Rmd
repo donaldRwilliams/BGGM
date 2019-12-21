@@ -103,4 +103,52 @@ plot(pred) +
 
 
 ## Out-of-Sample Predictability
-It is also possible to assess out-of-sample predictability. By this I am referring to predicting new data that was not used to select the 
+It is also possible to assess out-of-sample predictability. By this I am referring to predicting new data (test data) that was not used to select the initial network (training data).
+
+```{r}
+# training data
+train_dat <- dat[1:600,]
+
+# testing data
+test_dat <- dat[601:675,]
+
+# fit model
+fit <- estimate(train_dat, iter = 1000)
+```
+
+This is the same as in-sample prediction. But now we included the test data in the predict call.
+```{r}
+pred <- predict(fit, 
+                test_data = test_dat, 
+                cred = 0.95)
+
+pred
+``` 
+
+The results can then be plotted.
+```{r}
+plot(pred) + 
+  ggtitle("Out-of-Sample Predictability")
+```
+
+## Custom plots
+There are a variety of cool plots that can be made. One such example is the so called ridgeline plot. This can be made by accessing the posterior samples in the `pred` object.
+
+```{r, fig.height=80}
+library(ggridges)
+library(ggplot2)
+dat_res <- reshape2::melt(pred$post_samples)
+
+dat_res$L1 <- factor(dat_res$L1, 
+                     labels = order(pred$summary_error$post_mean, decreasing = F), 
+                     levels = colnames(dat)[order(pred$summary_error$post_mean, decreasing = F)])
+
+ggplot(dat_res, aes(x = value, y = L1)) + 
+    geom_density_ridges(rel_min_height = 0.01) +
+    theme_bw() +
+    ylab("Item") +
+    xlab("Bayesian R2") +
+    theme(panel.grid.minor = element_blank())
+```
+
+Further customization options can be found [here][https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html].
