@@ -4,8 +4,7 @@
 \alias{summary.select.explore}
 \title{Summary method for \code{select.explore} objects}
 \usage{
-\method{summary}{select.explore}(object, hyp = "H1", log = TRUE,
-  summarize = FALSE, ...)
+\method{summary}{select.explore}(object, hyp = "H1", log = TRUE, summarize = FALSE, ...)
 }
 \arguments{
 \item{object}{An object of class \code{select.explore}}

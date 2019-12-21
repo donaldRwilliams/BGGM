@@ -4,8 +4,14 @@
 \alias{plot.select.ggm_compare_bf}
 \title{Plot \code{select.ggm_compare_bf} Objects}
 \usage{
-\method{plot}{select.ggm_compare_bf}(x, H0_low = "lightblue",
-  H0_high = "purple", H1_low = "yellow", H1_high = "red", ...)
+\method{plot}{select.ggm_compare_bf}(
+  x,
+  H0_low = "lightblue",
+  H0_high = "purple",
+  H1_low = "yellow",
+  H1_high = "red",
+  ...
+)
 }
 \arguments{
 \item{x}{object of class \code{select.ggm_compare_bf}}

@@ -4,11 +4,20 @@
 \alias{plot.select.explore}
 \title{Plot \code{select.explore} Network}
 \usage{
-\method{plot}{select.explore}(x, layout = "circle",
-  edge_colors = "classic", node_labels = NULL,
-  node_labels_color = "black", node_groups = NULL,
-  node_outer_size = 12, node_inner_size = 11, alpha = 0.5,
-  txt_size = 8, edge_multiplier = 1, ...)
+\method{plot}{select.explore}(
+  x,
+  layout = "circle",
+  edge_colors = "classic",
+  node_labels = NULL,
+  node_labels_color = "black",
+  node_groups = NULL,
+  node_outer_size = 12,
+  node_inner_size = 11,
+  alpha = 0.5,
+  txt_size = 8,
+  edge_multiplier = 1,
+  ...
+)
 }
 \arguments{
 \item{x}{object of class \code{select.explore}}

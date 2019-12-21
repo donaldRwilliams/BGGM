@@ -4,10 +4,17 @@
 \alias{plot.select.estimate}
 \title{Plot \code{select.estimate} Network}
 \usage{
-\method{plot}{select.estimate}(x, layout = "circle",
-  edge_colors = "classic", node_labels = NULL,
-  node_labels_color = "black", node_groups = NULL,
-  node_outer_size = 12, node_inner_size = 11, ...)
+\method{plot}{select.estimate}(
+  x,
+  layout = "circle",
+  edge_colors = "classic",
+  node_labels = NULL,
+  node_labels_color = "black",
+  node_groups = NULL,
+  node_outer_size = 12,
+  node_inner_size = 11,
+  ...
+)
 }
 \arguments{
 \item{x}{object of class \code{select.estimate}}
