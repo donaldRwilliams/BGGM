@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Donald R. Williams" />
+
+<meta name="date" content="2019-12-21" />
+
+<title>Comparing GGMs with the Posterior Predicive Distribution</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Comparing GGMs with the Posterior Predicive Distribution</h1>
+<h4 class="author">Donald R. Williams</h4>
+<h4 class="date">2019-12-21</h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction">Introduction</a><ul>
+<li><a href="#test-statistic-loss-function">Test Statistic (Loss Function)</a></li>
+</ul></li>
+<li><a href="#posterior-predictive-method">Posterior Predictive Method</a></li>
+<li><a href="#illustrative-example-1">Illustrative Example (1)</a><ul>
+<li><a href="#personality-networks">Personality Networks</a><ul>
+<li><a href="#summary">Summary</a></li>
+<li><a href="#plot">Plot</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#illustrative-example-2">Illustrative Example (2)</a><ul>
+<li><a href="#network-replicability">Network Replicability</a></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>The <strong>BGGM</strong> package provides several options for comparing Gaussian graphical model. The approach presented here is based on the posterior predictive distribution. The idea is that generated data from the fitted model should look like the observed data (<span class="math inline">\(\textbf{Y}\)</span>). In the case of a well fitting model, the replicated data, herein referred to as <span class="math inline">\(\textbf{Y}^{rep}\)</span>, can be viewed as data that could have been observed (but were not) or as predictive data of future observations (Rubin, 1984). We adopt the latter perspective. This is summarized in Gelman (2006):</p>
+<blockquote>
+<p>“as the data that would appear if the experiment that produced <span class="math inline">\(\textbf{Y}\)</span> today were replicated tomorrow with the same model, <span class="math inline">\(\mathcal{M}\)</span>, [and] the same (unknown) value of <span class="math inline">\(\theta\)</span> that produced <span class="math inline">\(\textbf{Y}\)</span> (pp. 737).”</p>
+</blockquote>
+<p>Our approach extends “experiments” to the more general “data generating process.” In the context of comparing GGM’s, say, between two groups, the approach is to first estimate the GGM (i.e., the precision matrix denoted <span class="math inline">\(\boldsymbol{\Theta}\)</span> ) conditional on all of the groups being equal. Then the posterior predictive distribution can be sampled from <span class="math inline">\(\boldsymbol{\Theta}\)</span>. <span class="math inline">\(\textbf{Y}^{rep}\)</span> then represents the data that we expect to observe in the future, assuming that the fitted model of group equality was the underlying data generating process.</p>
+<p>Assuming that each group <span class="math inline">\(g \in {1, ...,G}\)</span> is a realization from the same multivariate normal distribution, the null model is defined as</p>
+<p><span class="math display">\[
+\mathcal{M}_0 : \boldsymbol{\Theta}_1 = ... =  \boldsymbol{\Theta}_G
+\]</span></p>
+<p>The posterior for the common precision matrix <span class="math inline">\(\boldsymbol{\Theta}(= \boldsymbol{\Theta}_1 = . . . = \boldsymbol{\Theta}_G)\)</span>, given the observed data, can be written as <span class="math inline">\(p(\boldsymbol{\Theta}|\textbf{Y}^{obs}_1 , . . . , \textbf{Y}^{obs}_G, \mathcal{M}_0)\)</span>. Under <span class="math inline">\(\mathcal{M}_0\)</span>, a posterior draw (<span class="math inline">\(s\)</span>) for <span class="math inline">\(\boldsymbol{\Theta}^{(s)}\)</span> is in fact a posterior draw for the precision matrix in all groups, i.e., <span class="math inline">\(\boldsymbol{\Theta}^{(s)} = \boldsymbol{\Theta}^{(s)}_1,..., \boldsymbol{\Theta}^{(s)}_G\)</span>.</p>
+<p>In review, it was pointed out by Sacha Epskamp that focusing on the precision matrix is not ideal, because it includes the diagonal elements which are not all that important for network <em>infernece</em>. Hence, to address this concern, we followed the approach in X and normalized <span class="math inline">\(\boldsymbol{\Theta}\)</span> as</p>
+<p><span class="math display">\[
+\boldsymbol\Theta = \textbf{D}\textbf{R}^{\Theta}\textbf{D}
+\]</span> where <span class="math inline">\(\textbf{D}\)</span> is a diagonal matrix with <span class="math inline">\(\textbf{D}_{ii} = \sqrt{\boldsymbol{\Theta}}_{ii}\)</span> and <span class="math inline">\(\textbf{R}^{\Theta}\)</span> has <span class="math inline">\(r_{ij} = \Theta_{ij} / \sqrt{\Theta_{ii} \Theta_{jj}}\)</span> on the off-diagonals and 1 on the diagonal. This effectively separates out the diagonal elements of <span class="math inline">\(\boldsymbol{\Theta}\)</span>. Note <span class="math inline">\(\textbf{R}^{\Theta}\)</span> is <em>not</em> the partial correlation–that would require reversing the direction (<span class="math inline">\(\pm\)</span>) of <span class="math inline">\(r_{ij}\)</span>. However, we found that reversing the direction can result in ill-conditioned matrices. Hence <code>ggm_compare_ppc</code> currently makes use of the normalized precision matrix <span class="math inline">\(\textbf{R}^{\Theta}\)</span>.</p>
+<div id="test-statistic-loss-function" class="section level2">
+<h2>Test Statistic (Loss Function)</h2>
+<p>For the test-statistic, that is used to compare groups, we use a version of Kullback-Leibler divergence (KLD), which is also known as entropy loss (Kuismin &amp; Sillanpää, 2017), is proportional (i.e., by 12) to Stein’s loss for covariance matrices (e.g., equation (72) in: James &amp; Stein, 1961), and is the log likelihood ratio between two distributions (Eguchi &amp; Copas, 2006). Note that KLD has several motivations, for example maximizing the likelihood is equivalent to minimizing KLD between two distributions (Grewal, 2011). Further, in Bayesian contexts, it has been used for selecting models (Goutis, 1998; Piironen &amp; Vehtari, 2017) and prior distributions (Bernardo, 2005), variational inference (Blei, Kucukelbir, &amp; McAuliffee, 2017), and is known to be minimized by the Bayes factor (when used for model selection) in so-called <span class="math inline">\(\mathcal{M}\)</span>-open settings (Bernardo &amp; Smith, 2001; Yao, Vehtari, Simpson, &amp; Gelman, 2017).</p>
+<p>These uses have one common theme–i.e., assessing the entropy between distributions. However, KLD is not a true distance measure because it is asymmetric. As such, we use Jensen-Shannon divergence (JSD) which symmetrizes KLD (Nielsen, 2010). For, say, two groups, the test-statistic is then</p>
+<p><span class="math display">\[
+T(\textbf{Y}_{1}, \textbf{Y}_2) = \text{JSD}\Big(E\{\textbf{R}^{\Theta}_{g1} | \textbf{Y}_{g1}  \}, E\{\textbf{R}^{\Theta}_{g2} | \textbf{Y}_{g2}  \}\Big)
+\]</span> which is the average KLD in both directions-i.e.,</p>
+<p><span class="math display">\[
+\text{JSD} = \frac{1}{2}\Big[\text{KLD}(E\{\textbf{R}^{\Theta}_{g1} | \textbf{Y}_{g1}\}, \{\textbf{R}^{\Theta}_{g2} | \textbf{Y}_{g2}\}) + \text{KLD}(E\{\textbf{R}^{\Theta}_{g2} | \textbf{Y}_{g2}\}, \textbf{R}^{\Theta}_{g1} | \textbf{Y}_{g1})\Big]
+\]</span></p>
+<p>For a multivariate normal distribution KLD is defined as</p>
+<p><span class="math display">\[
+\text{KLD}(\textbf{R}^{\Theta}_{g1} || \textbf{R}^{\Theta}_{g2}) = \frac{1}{2}\Big[\text{tr}(\textbf{R}^{\Theta^{-1}}_{g1}\textbf{R}^{\Theta^{-1}}_{g2}) - \text{log}(|\textbf{R}^{\Theta^{-1}}_{g1} \textbf{R}^{\Theta}_{g1}|) - p  \Big]
+\]</span></p>
+<p>where <span class="math inline">\(p\)</span> is the number of variables. Note that inverting <span class="math inline">\(\textbf{R}^{\Theta}_{g1}\)</span> results in the covariance matrix and the expectation E[.] has been removed to simplify notation.</p>
+</div>
+</div>
+<div id="posterior-predictive-method" class="section level1">
+<h1>Posterior Predictive Method</h1>
+<p>To summarize, our method follows these steps:</p>
+<ol style="list-style-type: decimal">
+<li>Estimate <span class="math inline">\(p(\textbf{R}^{\Theta}|\textbf{Y}_1^{obs},\ldots,\textbf{Y}_G^{obs},\mathcal{M}_0)\)</span></li>
+<li>For each posterior sample (<span class="math inline">\(s\)</span>)</li>
+</ol>
+<ul>
+<li><span class="math inline">\(\textbf{R}^{\Theta^{(s)}}_g \rightarrow \textbf{Y}^{rep^{(s)}}_g\)</span>, for <span class="math inline">\(g \in \{1,..., G\}\)</span></li>
+<li>Compute <span class="math inline">\(\textbf{R}^{\Theta^{rep^{(s)}}}_g\)</span> as <span class="math inline">\((n - 1)\textbf{S}^{-1}\)</span>, where  is <span class="math inline">\(\textbf{Y}_{g}^{rep^{(s)}\prime}\)</span> <span class="math inline">\(\textbf{Y}_{g}^{rep^{(s)}}\)</span>, for <span class="math inline">\(g \in \{1,..., G\}\)</span></li>
+<li>For, say, two groups, compute the predictive entropy: <span class="math inline">\(\text{JSD}(E\{\textbf{R}^{\Theta^{rep^{(s)}}}_{g1} | \textbf{Y}^{rep^{(s)}}_{g1}\}, E\{\textbf{R}^{\Theta^{rep^{(s)}}}_{g2} | \textbf{Y}^{rep^{(s)}}_{g2}\} )\)</span></li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li>Compute the observed entropy:</li>
+</ol>
+<ul>
+<li><span class="math inline">\(\text{JSD}(E\{\textbf{R}^{\Theta^{obs}}_{g1} | \textbf{Y}_{g1}^{obs}\},E\{\textbf{R}^{\Theta^{obs}}_{g2} | \textbf{Y}_{g2}^{obs}\} )\)</span></li>
+</ul>
+<ol start="4" style="list-style-type: decimal">
+<li>Compute the posterior predictive <span class="math inline">\(p\)</span>-value.</li>
+</ol>
+<p>Note that <span class="math inline">\(g1\)</span> and <span class="math inline">\(g2\)</span> were used to keep the notation manageable. This procedure can apply to any number of groups. And the predictive <span class="math inline">\(p\)</span>-value is the proportion of the predictive distribution, assuming <span class="math inline">\(\mathcal{M}_0\)</span> is true (the groups are the same), that exceeds the observed JSD.</p>
+</div>
+<div id="illustrative-example-1" class="section level1">
+<h1>Illustrative Example (1)</h1>
+<div id="personality-networks" class="section level2">
+<h2>Personality Networks</h2>
+<p>To demonstrate this method, we will first compare personality networks between males and females. This allows for determing whether the null hypothesis of group (males vs. females) equality can be rejected. These data are located in the <strong>psych</strong> package.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">dat &lt;-<span class="st"> </span>BGGM<span class="op">::</span>bfi </a>
+<a class="sourceLine" id="cb1-2" title="2"></a>
+<a class="sourceLine" id="cb1-3" title="3">dat_males &lt;-<span class="st"> </span><span class="kw">subset</span>(dat, gender <span class="op">==</span><span class="st"> </span><span class="dv">1</span>)[,<span class="dv">1</span><span class="op">:</span><span class="dv">25</span>]</a>
+<a class="sourceLine" id="cb1-4" title="4"></a>
+<a class="sourceLine" id="cb1-5" title="5">dat_female &lt;-<span class="st"> </span><span class="kw">subset</span>(dat, gender <span class="op">==</span><span class="st"> </span><span class="dv">2</span>)[,<span class="dv">1</span><span class="op">:</span><span class="dv">25</span>]</a>
+<a class="sourceLine" id="cb1-6" title="6"></a>
+<a class="sourceLine" id="cb1-7" title="7"><span class="co"># fit model</span></a>
+<a class="sourceLine" id="cb1-8" title="8">fit1 &lt;-<span class="st"> </span><span class="kw">ggm_compare_ppc</span>(dat_males, </a>
+<a class="sourceLine" id="cb1-9" title="9">                        dat_female, </a>
+<a class="sourceLine" id="cb1-10" title="10">                        <span class="dt">iter =</span> <span class="dv">500</span>, </a>
+<a class="sourceLine" id="cb1-11" title="11">                        <span class="dt">cores =</span> <span class="dv">4</span>)</a></code></pre></div>
+<div id="summary" class="section level3">
+<h3>Summary</h3>
+<p>Once the model is finished, we can then use <code>summary</code>–i.e.,</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">summary</span>(fit1)</a></code></pre></div>
+<pre><code>BGGM: Bayesian Gaussian Graphical Models 
+--- 
+Type: GGM Comparison (Global Predictive Check) 
+Posterior Samples: 500 
+  Group 1: 805 
+  Group 2: 1631 
+Variables (p): 25 
+Edges: 300 
+--- 
+Call: 
+ggm_compare_ppc.default(dat_males, dat_female, iter = 500, cores = 4)
+--- 
+Estimates: 
+ 
+     contrast       KLD p_value
+ Y_g1 vs Y_g2 0.4424236       0
+--- 
+note: 
+p_value = p(T(Y_rep) &gt; T(y)|Y)
+KLD = (symmetric) Kullback-Leibler divergence</code></pre>
+<p>In this summary, the results are provided after <code>Estimate:</code>. The contrast is for which groups were compared. In this case, there were only two groups so there is one contrast. The third column provides the posterior predictive <span class="math inline">\(p\)</span>-value. In this case, because <span class="math inline">\(p\)</span>-value = 0, we can reject the null model <span class="math inline">\(\mathcal{M}_0\)</span> that assumes group equality. Hence, there is sufficient evidence to conclude that the personality networks for males and females are different from one another.</p>
+</div>
+<div id="plot" class="section level3">
+<h3>Plot</h3>
+<p>It is then possible to plot the predictive distribution and the observed value. This allows for visualizing the predictive approach–i.e.,</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">plot</span>(fit1, <span class="dt">critical =</span> <span class="fl">0.05</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb4-2" title="2"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>)</a></code></pre></div>
+<p><img src="data:image/png;base64,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" width="60%" style="display: block; margin: auto;" /></p>
+<p>This plot corresponds to the summary output, in that, as can be seen, the observed JSD (black point) far exceeds what we would expect if the groups were actually equal. The red area corresponds to the chosen <span class="math inline">\(\alpha\)</span> level. Hence, when the observed is within or beyond the critical region <span class="math inline">\(\mathcal{M}_0\)</span> (group equality), can be rejected.</p>
+</div>
+</div>
+</div>
+<div id="illustrative-example-2" class="section level1">
+<h1>Illustrative Example (2)</h1>
+<div id="network-replicability" class="section level2">
+<h2>Network Replicability</h2>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
