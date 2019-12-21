@@ -4,8 +4,7 @@
 \alias{coef.estimate}
 \title{Precision Matrix to Multiple Regression}
 \usage{
-\method{coef}{estimate}(object, node = 1, cred = 0.95, iter = 500,
-  ...)
+\method{coef}{estimate}(object, node = 1, cred = 0.95, iter = 500, ...)
 }
 \arguments{
 \item{object}{object of class \code{estimate} (analytic = F)}
