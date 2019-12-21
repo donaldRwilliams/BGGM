@@ -41,6 +41,7 @@ plot_adjacency <-  function(x,  layout = "circle",
 p <- ncol(x)
 net <- network::network(x, directed = FALSE)
 
+
 # default labels
 if (is.null(node_labels)) {
   network::network.vertex.names(net) <- 1:p
@@ -69,7 +70,7 @@ if (is.null(node_groups)) {
               color = node_labels_color,
               size = txt_size)
 
-  plt$plt_null <- plt_null
+
 
 } else{
   if (isFALSE(length(node_groups) == p)) {

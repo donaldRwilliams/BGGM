@@ -8,7 +8,7 @@ output:
 self_contained: no
 vignette: >
   %\VignetteIndexEntry{Predictability with Bayesian Variance Explained}
-  %\VignetteEngine{knitr::knitr}
+  %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
   \usepackage{amsmath}
 params:
