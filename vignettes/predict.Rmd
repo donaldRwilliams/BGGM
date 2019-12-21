@@ -5,7 +5,6 @@ date: "`r Sys.Date()`"
 output: 
   rmarkdown::html_vignette:
   toc: yes
-self_contained: no
 vignette: >
   %\VignetteIndexEntry{Predictability with Bayesian Variance Explained}
   %\VignetteEngine{knitr::rmarkdown}
