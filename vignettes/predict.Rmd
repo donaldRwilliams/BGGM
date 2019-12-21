@@ -18,15 +18,14 @@ params:
 stopifnot(require(knitr))
 options(width = 90)
 opts_chunk$set(
-  comment = NA,
+ comment = NA,
   message = FALSE,
   warning = FALSE,
-  cache = TRUE,
   eval = if (isTRUE(exists("params"))) params$EVAL else FALSE,
   dev = "png",
   dpi = 150,
   fig.asp = 0.8,
-  fig.width = 7,
+  fig.width = 5,
   out.width = "60%",
   fig.align = "center"
 )
