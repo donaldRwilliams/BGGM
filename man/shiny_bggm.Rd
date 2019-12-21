@@ -2,13 +2,15 @@
 % Please edit documentation in R/shiny_bggm.explore.R
 \name{shiny_bggm}
 \alias{shiny_bggm}
-\title{Title}
+\title{\code{shiny_bggm} Generic}
 \usage{
 shiny_bggm(object, ...)
 }
 \arguments{
-\item{...}{}
+\item{object}{object of class \code{explore}}
+
+\item{...}{currently ignored}
 }
 \description{
-Title
+\code{shiny_bggm} Generic
 }

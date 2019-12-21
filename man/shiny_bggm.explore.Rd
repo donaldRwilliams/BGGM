@@ -2,13 +2,26 @@
 % Please edit documentation in R/shiny_bggm.explore.R
 \name{shiny_bggm.explore}
 \alias{shiny_bggm.explore}
-\title{Title}
+\title{Shiny App for \code{explore} Objects}
 \usage{
 \method{shiny_bggm}{explore}(object, ...)
 }
 \arguments{
-\item{...}{}
+\item{object}{object of class \code{explore}}
+
+\item{...}{currently ignored}
 }
 \description{
-Title
+Shiny App for \code{explore} Objects
+}
+\examples{
+\donttest{
+fit <- explore(tas[,1:20],
+               prior_sd = 0.20,
+                iter = 5000)
+
+sel <- select(fit)
+
+shiny_bggm(fit)
+}
 }

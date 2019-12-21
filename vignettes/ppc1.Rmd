@@ -140,14 +140,14 @@ fit1 <- ggm_compare_ppc(dat_males,
 
 ### Summary
 Once the model is finished, we can then use `summary`--i.e.,
-```{r}
+```{r fit1}
 summary(fit1)
 ```
 In this summary, the results are provided after `Estimate:`. The contrast is for which groups were compared. In this case, there were only two groups so there is one contrast. The third column provides the posterior predictive $p$-value. In this case, because $p$-value = 0, we can reject the null model $\mathcal{M}_0$ that assumes group equality. Hence, there is sufficient evidence to conclude that the personality networks for males and females are different from one another.
 
 ### Plot
 It is then possible to plot the predictive distribution and the observed value. This allows for visualizing the predictive approach--i.e.,
-```{r}
+```{r }
 plot(fit1, critical = 0.05) + 
   theme_bw() + 
   theme(legend.position = "none")

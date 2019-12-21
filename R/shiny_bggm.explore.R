@@ -1,14 +1,22 @@
-#' Title
+#' Shiny App for \code{explore} Objects
 #'
-#' @param object
-#' @param ...
+#' @param object object of class \code{explore}
+#' @param ... currently ignored
 #'
-#' @return
 #' @export
 #' @import shiny
 #'
 #'
 #' @examples
+#' \donttest{
+#' fit <- explore(tas[,1:20],
+#'                prior_sd = 0.20,
+#'                 iter = 5000)
+#'
+#' sel <- select(fit)
+#'
+#' shiny_bggm(fit)
+#' }
 shiny_bggm.explore <- function(object,...){
   x <- object
 
@@ -103,15 +111,12 @@ shiny_bggm.explore <- function(object,...){
 }
 
 
-#' Title
+#' \code{shiny_bggm} Generic
 #'
-#' @param object
-#' @param ...
+#' @param object object of class \code{explore}
+#' @param ... currently ignored
 #'
-#' @return
 #' @export
-#'
-#' @examples
 shiny_bggm <- function(object,...){
   UseMethod("shiny_bggm", object)
 }
