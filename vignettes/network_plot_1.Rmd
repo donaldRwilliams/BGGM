@@ -63,12 +63,15 @@ library(ggplot2)
 # node names in white
 # node text size = 6
 # change node size
+# increase edge width
+# transparency
 plots <- plot(sel, layout = "circle", 
-              node_labels = letters[1:20], 
               node_labels_color = "white",
               node_groups = BGGM:::tas_labels, 
               txt_size = 6, node_outer_size = 11, 
-              node_inner_size = 8)
+              node_inner_size = 8, 
+              edge_multiplier = 5, 
+              alpha = 0.3)
  # remove legend name and set palette
 plots$plt + 
   scale_color_brewer(name = NULL, 
@@ -86,12 +89,15 @@ Nonetheless, here is an example of a different layout (many are available)
 
 ```{r}
 # add different layout
-plots <- plot(sel, layout = "fruchtermanreingold", 
+plots <- plot(sel, "fruchtermanreingold", 
               node_labels_color = "white",
               node_groups = BGGM:::tas_labels, 
               txt_size = 6, node_outer_size = 11, 
-              node_inner_size = 8)
+              node_inner_size = 8, 
+              edge_multiplier = 5, 
+              alpha = 0.3)
 
+# further customize
 plots$plt + 
   # remove legend name and set palette
   scale_color_brewer(name = NULL, 
