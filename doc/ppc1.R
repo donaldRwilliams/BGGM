@@ -1,14 +1,13 @@
 params <-
 list(EVAL = FALSE)
 
-## ---- SETTINGS-knitr, include=FALSE-----------------------------------------------------
+## ----include=FALSE----------------------------------------------------------------------
 stopifnot(require(knitr))
 options(width = 90)
 opts_chunk$set(
   comment = NA,
   message = FALSE,
   warning = FALSE,
-  cache = TRUE,
   eval = if (isTRUE(exists("params"))) params$EVAL else FALSE,
   dev = "png",
   dpi = 150,

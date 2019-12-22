@@ -1,7 +1,6 @@
 ---
 title: "Comparing GGMs with the Posterior Predicive Distribution"
 author: "Donald R. Williams"
-date: "`r Sys.Date()`"
 output: 
   rmarkdown::html_vignette:
     toc: yes
@@ -15,14 +14,13 @@ params:
 ---
 
 
-```{r, SETTINGS-knitr, include=FALSE}
+```{r include=FALSE}
 stopifnot(require(knitr))
 options(width = 90)
 opts_chunk$set(
   comment = NA,
   message = FALSE,
   warning = FALSE,
-  cache = TRUE,
   eval = if (isTRUE(exists("params"))) params$EVAL else FALSE,
   dev = "png",
   dpi = 150,
