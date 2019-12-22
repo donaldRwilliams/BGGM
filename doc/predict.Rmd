@@ -68,7 +68,7 @@ plot(pred)
 
 This is not the most attractive plot, which is by design. The returned object is a `ggplot` which can then be further customized. Here is an example with the items not colored according to their respective domain.
 
-```{r, out.width= '100%'}
+```{r}
 plot(pred) + 
   xlab("Item") +
   geom_point(aes(color = BGGM:::rsa_labels), 
@@ -117,7 +117,7 @@ plot(pred) +
 ## Custom plots
 There are a variety of cool plots that can be made. One such example is the so called ridgeline plot. This can be made by accessing the posterior samples in the `pred` object.
 
-```{r, fig.height=80}
+```{r}
 library(ggridges)
 library(ggplot2)
 dat_res <- reshape2::melt(pred$post_samples)

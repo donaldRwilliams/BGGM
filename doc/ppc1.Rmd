@@ -14,23 +14,10 @@ params:
 ---
 
 
-```{r include=FALSE}
-stopifnot(require(knitr))
-options(width = 90)
-opts_chunk$set(
-  comment = NA,
-  message = FALSE,
-  warning = FALSE,
-  eval = if (isTRUE(exists("params"))) params$EVAL else FALSE,
-  dev = "png",
-  dpi = 150,
-  fig.asp = 0.8,
-  fig.width = 5,
-  out.width = "60%",
-  fig.align = "center"
-  )
-library(BGGM)
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 7, fig.height = 7, fig.align = "center")
 library(ggplot2)
+library(BGGM)
 ```
 
 
