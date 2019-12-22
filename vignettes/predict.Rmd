@@ -1,10 +1,8 @@
 ---
 title: "Predictability with Bayesian Variance Explained"
 author: "Donald R. Williams"
-date: "`r Sys.Date()`"
 output: 
   rmarkdown::html_vignette:
-  toc: yes
 vignette: >
   %\VignetteIndexEntry{Predictability with Bayesian Variance Explained}
   %\VignetteEngine{knitr::rmarkdown}
@@ -13,24 +11,11 @@ vignette: >
 params:
   EVAL: !r identical(Sys.getenv("NOT_CRAN"), "true")
 ---
-  
-```{r, SETTINGS-knitr, include=FALSE}
-stopifnot(require(knitr))
-options(width = 90)
-opts_chunk$set(
- comment = NA,
-  message = FALSE,
-  warning = FALSE,
-  eval = if (isTRUE(exists("params"))) params$EVAL else FALSE,
-  dev = "png",
-  dpi = 150,
-  fig.asp = 0.8,
-  fig.width = 5,
-  out.width = "60%",
-  fig.align = "center"
-)
-```
 
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 7, fig.height = 7, fig.align = "center")
+library(ggplot2)
+```
 
 # Predictability
 This tutorial provides the *work flow* in **BGGM** for computing predictability in Gaussian graphical models. I will use data from a resilience questionnaire.
@@ -147,8 +132,6 @@ ggplot(dat_res, aes(x = value, y = L1)) +
     ylab("Item") +
     xlab("Bayesian R2") +
     theme(panel.grid.minor = element_blank())
-
-plot(rnorm(10))
 ```
 
 Further customization options can be found [here][https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html].
