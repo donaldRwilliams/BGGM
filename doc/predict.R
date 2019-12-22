@@ -30,7 +30,7 @@ print(pred)
 # plot 
 plot(pred)
 
-## -----------------------------------------------------------------------------
+## ---- message=FALSE, warning=FALSE--------------------------------------------
 plot(pred) + 
   xlab("Item") +
   geom_point(aes(color = BGGM:::rsa_labels), 
@@ -66,9 +66,8 @@ pred
 plot(pred) + 
   ggtitle("Out-of-Sample Predictability")
 
-## -----------------------------------------------------------------------------
+## ---- warning=FALSE, message=FALSE--------------------------------------------
 library(ggridges)
-library(ggplot2)
 dat_res <- reshape2::melt(pred$post_samples)
 
 dat_res$L1 <- factor(dat_res$L1, 
