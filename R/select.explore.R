@@ -939,9 +939,6 @@ plot.select.explore <-
           label = TRUE,
           ...
         ) +
-          # geom_point(aes(color = color),
-          #            size = node_outer_size,
-          #            alpha = 0.5) +
           geom_point(aes(color = color),
                      size = node_inner_size,
                      alpha = 1) +
@@ -952,7 +949,7 @@ plot.select.explore <-
         plt$plt_null <- plt_null
       }
     }
-    } else{
+  } else{
 
 
       p <-  ncol(x$neg_mat)

@@ -4,10 +4,12 @@
 \alias{plot.summary.estimate}
 \title{Plot \code{summary.estimate}}
 \usage{
-\method{plot}{summary.estimate}(x, ...)
+\method{plot}{summary.estimate}(x, width = 0, ...)
 }
 \arguments{
 \item{x}{an object of class \code{summary.estimate}}
+
+\item{width}{width of error bar cap}
 
 \item{...}{currently ignored}
 }

@@ -13,6 +13,9 @@
   node_groups = NULL,
   node_outer_size = 12,
   node_inner_size = 11,
+  alpha = 0.5,
+  txt_size = 8,
+  edge_multiplier = 1,
   ...
 )
 }

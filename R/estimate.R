@@ -292,11 +292,12 @@ print.summary.estimate <- function(x, ...) {
 #' Plot \code{summary.estimate}
 #'
 #' @param x an object of class \code{summary.estimate}
+#' @param width width of error bar cap
 #' @param ... currently ignored
 #'
 #' @return an object of class \code{ggplot}
 #' @export
-plot.summary.estimate <- function(x, ...){
+plot.summary.estimate <- function(x, width = 0,...){
 
   dat_temp <- x$dat_results[order(x$dat_results$Estimate,
                                   decreasing = F), ]
@@ -315,7 +316,8 @@ plot.summary.estimate <- function(x, ...){
                     color = selected)) +
     geom_point() +
     geom_errorbar(aes(ymax = dat_temp[, 4],
-                      ymin = dat_temp[, 5]))
+                      ymin = dat_temp[, 5]),
+                  width = width)
  return(plt)
  }
 

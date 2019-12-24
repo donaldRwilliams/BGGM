@@ -525,9 +525,6 @@ plot.select.estimate <-
           node.color = "black",
           label = TRUE
         ) +
-          # geom_point(color = "black",
-          #            size = node_outer_size,
-          #            alpha = 1) +
           geom_point(color = "white",
                      size = node_inner_size,
                      alpha = 1) +
@@ -551,9 +548,6 @@ plot.select.estimate <-
           label = TRUE,
           ...
         ) +
-          # geom_point(aes(color = color),
-          #            size = node_outer_size,
-          #            alpha = 0.5) +
           geom_point(aes(color = color),
                      size = node_inner_size,
                      alpha = 1) +
