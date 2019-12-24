@@ -58,10 +58,12 @@
 #' E <- select(fit_analytic, ci_width = 0.95)
 #'
 #' @export
-estimate.default  <- function(Y, iter = 5000,
-                              analytic = FALSE, ...){
+estimate  <- function(Y, iter = 5000,
+                      analytic = FALSE, ...){
 
+  # change to x
   x <- Y
+
   # remove the NAs
   X <- na.omit(as.matrix(x))
 
@@ -138,19 +140,6 @@ estimate.default  <- function(Y, iter = 5000,
 
 }
 
-#' @title S3 estimate method
-#' @name estimate
-#' @param Y data matrix (\emph{n} by  \emph{p}).
-#' @param iter number of posterior samples
-#' @param analytic analytic solution. see notes for further details.
-#' @param ... currently not used
-#'
-#' @description S3 estimate method
-#' @seealso \code{\link{estimate.default}}
-#' @export
-estimate <- function(Y, iter = 500, analytic = FALSE, ...) {
-  UseMethod("estimate")
-}
 
 #' @name print.estimate
 #' @title  Print method for \code{estimate.default} objects
@@ -210,7 +199,8 @@ summary.estimate <- function(object, cred = 0.95, ...) {
 
   if (isTRUE(object$analytic)) {
     returned_object <- list(object = object)
-    } else{
+
+    } else {
 
     lb <- (1 - cred) / 2
     ub <- 1 - lb
@@ -254,13 +244,7 @@ summary.estimate <- function(object, cred = 0.95, ...) {
       "Edge",
       "Estimate",
       "Est.Error",
-      paste("lb.", gsub(
-        "*0.", "", formatC(round(cred, 4), format = 'f', digits = 2)
-      ), "%", sep = ""),
-      paste("ub.", gsub(
-        "*0.", "", formatC(round(cred, 4), format = 'f', digits = 2)
-      ), "%", sep = "")
-    )
+      "Cred.lb", "Cred.ub")
 
     returned_object <- list(dat_results = dat_results,
                             object = object,

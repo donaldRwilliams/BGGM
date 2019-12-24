@@ -95,8 +95,8 @@ print.coef.estimate <- function(x,...){
   colnames(res_r2_summ) <- c("Estimate", "Est.Error", "CrI.lb", "CrI.ub")
 
   colnames(x$summary_inv_2_beta) <- c("Node", "Estimate",
-                                      "Est.Error", "CrI.lb",
-                                      "CrI.ub")
+                                      "Est.Error", "Cred.lb",
+                                      "Cred.ub")
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
   cat("Type: Inverse to Regression \n")
@@ -109,66 +109,6 @@ print.coef.estimate <- function(x,...){
   cat("Coefficients: \n \n")
   summary_inv_2_beta <- data.frame(x$summary_inv_2_beta,
                                    check.names = F)
-  print(summary_inv_2_beta, row.names = FALSE, ...)
-  cat("--- \n")
-  cat("Sigma:\n\n")
-  print(round(res_sigma_summ, 3), row.names = FALSE, ...)
-  cat("--- \n")
-  cat("Bayesian R2:\n\n")
-  print(round(res_r2_summ, 3), row.names = FALSE, ...)
-  cat("--- \n")
-}
-
-#' @name summary.coef.estimate
-#' @title  Summary method for \code{coef.estimate} objects
-#' @param object An object of class \code{coef.estimate}
-#' @param ... currently ignored
-#'
-#' @seealso \code{\link{coef.estimate}}
-#'
-#' @export
-summary.coef.estimate <- function(object, ...){
-
-  res_sigma <- object$inv_2_beta$sigma
-  lb <- (1 - object$call$cred) / 2
-  ub <- 1 - lb
-
-  cred_int <- stats::quantile(res_sigma, prob = c(lb, ub))
-
-  res_sigma_summ <- data.frame(Estimate = mean(res_sigma),
-                               Est.Error = sd(res_sigma),
-                               t(cred_int))
-
-
-  # R2
-  ypred <- t(apply(as.matrix(object$inv_2_beta$betas)[1:object$iter,], 1,
-                   function(x)  x %*% t(as.matrix(object$data[,- object$node]))))
-
-  r2 <- R2_helper(ypred, object$data[,object$node], ci_width = object$cred)
-  cred_in <- stats::quantile(r2$R2, prob = c(lb, ub))
-
-  res_r2_summ <- data.frame(Estimate = mean(r2$R2), Est.Error = sd(r2$R2), t(cred_in))
-
-  colnames(res_sigma_summ) <- c("Estimate", "Est.Error",
-                                 paste(c("lb.", "ub."), gsub("*0.","", object$call$cred), "%", sep = ""))
-
-  colnames(res_r2_summ) <- c("Estimate", "Est.Error",
-                             paste(c("lb.", "ub."), gsub("*0.","", object$call$cred), "%", sep = ""))
-
-  colnames(object$summary_inv_2_beta) <- c("Node", "Estimate", "Est.Error",
-                                     paste(c("lb.", "ub."), gsub("*0.","", object$call$cred), "%", sep = ""))
-  cat("BGGM: Bayesian Gaussian Graphical Models \n")
-  cat("--- \n")
-  cat("Type: Inverse to Regression \n")
-  cat("Credible Interval:",  gsub("*0.","", formatC( round(object$call$cred, 4), format='f', digits=2)), "% \n")
-  cat("Node:", object$call$node, "\n")
-  cat("--- \n")
-  cat("Call: \n")
-  print(object$call)
-  cat("--- \n")
-  cat("Coefficients: \n \n")
-  summary_inv_2_beta <- data.frame(object$summary_inv_2_beta,
-                                    check.names = F)
   print(summary_inv_2_beta, row.names = FALSE, ...)
   cat("--- \n")
   cat("Sigma:\n\n")
