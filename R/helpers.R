@@ -59,6 +59,23 @@ globalVariables(c('Y1','Y2',
 #' @importFrom utils combn
 #' @importFrom foreach %dopar% foreach
 #' @import ggplot2
+
+
+convert_colnames <- function(hyp, Y){
+  names_temp <- unlist(strsplit( strsplit(hyp, " ")[[1]], "--"))
+  names_temp <- paste(names_temp, collapse = " ")
+  names_temp <- unique(strsplit(gsub("[^[:alnum:] ]", "", names_temp), " +")[[1]])
+
+  if(!all(names_temp %in% colnames(Y))){
+    stop("node names not found in the data")
+  }
+  for(i in 1:length(names_temp)){
+    id <- which(names_temp[[i]]  == colnames(Y))
+    hyp <- gsub(x = hyp, pattern = names_temp[[i]],  replacement = id)
+  }
+  hyp
+}
+
 compare_predict_helper <- function(x, ci_width){
   post_mean <- mean(x)
   post_sd <- stats::sd(x)

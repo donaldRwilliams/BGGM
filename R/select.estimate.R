@@ -377,7 +377,7 @@ summary.select.estimate <- function(object, summarize = FALSE, ...){
 #'             node_labels_color = "white",
 #'             node_groups = rep(c("1", "2", "3", "4"), each = 5),
 #'             edge_colors = "classic",
-#'             edge.alpha = 0.5, palette = "Set2")
+#'             alpha = 0.5, palette = "Set2")
 
 
 plot.select.estimate <-

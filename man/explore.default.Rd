@@ -13,7 +13,7 @@
 
 \item{iter}{number of posterior samples.}
 
-\item{cores}{number of cores for parallel computing. The default is 2, but this can be adjusted.}
+\item{cores}{number of cores for parallel computing. The default is 2, but this can be changed.}
 
 \item{...}{currently not used}
 }

@@ -6,7 +6,7 @@
 #'
 #' @param Y data matrix  (\emph{n} by  \emph{p}).
 #' @param iter number of posterior samples.
-#' @param cores number of cores for parallel computing. The default is 2, but this can be adjusted.
+#' @param cores number of cores for parallel computing. The default is 2, but this can be changed.
 #' @param prior_sd hypothesized standard deviation of the prior distribution.
 #' @param ... currently not used
 #'
