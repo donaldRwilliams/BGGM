@@ -4,7 +4,7 @@
 \alias{plot.select.estimate}
 \title{Plot \code{select.estimate} Network}
 \usage{
-\method{plot}{select.estimate}(
+plot.select.estimate(
   x,
   layout = "circle",
   edge_colors = "classic",

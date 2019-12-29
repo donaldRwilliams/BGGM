@@ -4,7 +4,7 @@
 \alias{plot.select.explore}
 \title{Plot \code{select.explore} Network}
 \usage{
-\method{plot}{select.explore}(
+plot.select.explore(
   x,
   layout = "circle",
   edge_colors = "classic",

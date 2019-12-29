@@ -4,7 +4,7 @@
 \alias{plot.summary.estimate}
 \title{Plot \code{summary.estimate}}
 \usage{
-\method{plot}{summary.estimate}(x, width = 0, ...)
+plot.summary.estimate(x, width = 0, ...)
 }
 \arguments{
 \item{x}{an object of class \code{summary.estimate}}

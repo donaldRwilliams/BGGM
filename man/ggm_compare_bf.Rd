@@ -2,16 +2,56 @@
 % Please edit documentation in R/ggm_compare_bf.default.R
 \name{ggm_compare_bf}
 \alias{ggm_compare_bf}
-\title{S3 estimate method}
+\title{Compare GGMs with Bayesian Hypothesis Testing}
 \usage{
-ggm_compare_bf(...)
+ggm_compare_bf(..., prior_sd = 0.35, iter = 25000, cores = 2)
 }
 \arguments{
-\item{...}{currently not used}
+\item{...}{data matrices (\emph{n} by  \emph{p}). Requires at least two.}
+
+\item{prior_sd}{hypothesized standard deviation for the edges or partial correlations.}
+
+\item{iter}{number of posterior samples.}
+
+\item{cores}{number of cores for parallel computing. The default is 2, but this can be adjusted.}
+}
+\value{
+list of class \code{ggm_compare_bf}
+\itemize{
+\item \code{BF_01} Bayes factors in favor of the null hypothesis
+\item \code{p} number of variables
+\item  \code{info} list of information about the data matrices
+
+\itemize{
+\item \code{dat} list containing the data matrices
+\item \code{dat_info} sample size for each data matrix
+\item \code{pairwise} matrix of pairwise combinations
+}
+\item \code{iter} number of posterior and prior samples
+\item \code{call} match.call()
+\item \code{delta} hyperparameter of matrix-F prior distribution (corresponds to \code{prior_sd})
+
+\item \code{groups} number of groups
+\item \code{post_samps} matrix of posterior samples
+\item \code{prior_samps} matrix of prior samples
+}
 }
 \description{
-S3 estimate method
+Compare GGMs with the Bayes factor. This method allows for
+assessing (relative) evidence for edge equality or edges differences across any number of groups. Further, confirmatory hypothesis testing
+can be used to test predictions or expectations regarding difference or similarities in different groups (e.g., male vs. female).
 }
-\seealso{
-\code{\link{ggm_compare_bf.default}}
+\note{
+After fitting, use \code{select} to determine which partial correlations were different or the same (i.e., evidence for the null hypothesis of
+equality). This assumes \code{hypothesis = NULL}. If a hypothesis is tested, then use \code{summary} which provides
+information including the Bayes factors and posterior probabilities for each hypothesis.
+}
+\examples{
+
+# assume null is true
+Y1 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
+Y2 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
+Y3 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
+
+bf_ggm <- ggm_compare_bf(Y1, Y2, Y3, prior_sd = .5, iter = 500, cores = 2)
 }

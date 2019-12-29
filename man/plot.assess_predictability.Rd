@@ -4,7 +4,7 @@
 \alias{plot.assess_predictability}
 \title{Plot \code{assess_predictability} Objects}
 \usage{
-\method{plot}{assess_predictability}(x, ...)
+plot.assess_predictability(x, ...)
 }
 \arguments{
 \item{x}{object of class \code{assess_predictability}}

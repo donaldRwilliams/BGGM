@@ -4,7 +4,7 @@
 \alias{plot.select.ggm_compare_bf}
 \title{Plot \code{select.ggm_compare_bf} Objects}
 \usage{
-\method{plot}{select.ggm_compare_bf}(
+plot.select.ggm_compare_bf(
   x,
   H0_low = "lightblue",
   H0_high = "purple",

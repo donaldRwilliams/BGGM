@@ -1,5 +1,5 @@
 #' Compare GGMs with the Posterior Predictive Distribution
-#' @name ggm_compare_ppc.default
+#' @name ggm_compare_ppc
 #' @description Compare GGMs with the posterior predictive distribution. The method assume group equality, and the predictive check
 #' allows for testing whether that assumption should be modified--i.e., the GGMs are actually different. The current test statistic available is
 #' Kullback-Leibler divergence, which in this case, can be understood as a likelihood ratio for multivariate normal distributions. There are
@@ -226,18 +226,6 @@ ggm_compare_ppc.default <- function(..., type = "global", iter = 5000, cores = 1
 class(returned_object) <- "ggm_compare_ppc"
 returned_object
 
-}
-
-
-#' @title S3 estimate method
-#' @name ggm_compare_ppc
-#' @param ... currently not used
-#'
-#' @description S3 estimate method
-#' @seealso \code{\link{ggm_compare_ppc.default}}
-#' @export
-ggm_compare_ppc <- function(...) {
-  UseMethod("ggm_compare_ppc")
 }
 #' @name print.ggm_compare_ppc
 #' @title  Print method for \code{ggm_compare_ppc.default} objects

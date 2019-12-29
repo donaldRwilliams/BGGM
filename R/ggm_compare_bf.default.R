@@ -45,7 +45,7 @@
 #'
 #' bf_ggm <- ggm_compare_bf(Y1, Y2, Y3, prior_sd = .5, iter = 500, cores = 2)
 
-ggm_compare_bf.default <- function(..., prior_sd = 0.35, iter = 25000, cores = 2){
+ggm_compare_bf <- function(..., prior_sd = 0.35, iter = 25000, cores = 2){
 
   priorprob <- 1
 
@@ -172,25 +172,9 @@ ggm_compare_bf.default <- function(..., prior_sd = 0.35, iter = 25000, cores = 2
                             prior_samps = prior_samps,
                             re = mats$R_e)
 
-
-
-
-  class(returned_object) <- "ggm_compare_bf"
-  returned_object
+    class(returned_object) <- "ggm_compare_bf"
+    returned_object
 }
-
-
-#' @title S3 estimate method
-#' @name ggm_compare_bf
-#' @param ... currently not used
-#'
-#' @description S3 estimate method
-#' @seealso \code{\link{ggm_compare_bf.default}}
-#' @export
-ggm_compare_bf <- function(...) {
-  UseMethod("ggm_compare_bf")
-}
-
 
 #' @name print.ggm_compare_bf
 #' @title  Print method for \code{ggm_compare_bf} objects

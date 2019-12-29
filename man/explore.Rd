@@ -2,16 +2,71 @@
 % Please edit documentation in R/explore.default.R
 \name{explore}
 \alias{explore}
-\title{S3 explore method}
+\title{GGMs with Exploratory Bayesian Hypothesis Testing}
 \usage{
-explore(...)
+explore(Y, prior_sd = 0.25, iter = 5000, cores = 2, ...)
 }
 \arguments{
+\item{Y}{data matrix  (\emph{n} by  \emph{p}).}
+
+\item{prior_sd}{hypothesized standard deviation of the prior distribution.}
+
+\item{iter}{number of posterior samples.}
+
+\item{cores}{number of cores for parallel computing. The default is 2, but this can be changed.}
+
 \item{...}{currently not used}
 }
-\description{
-S3 explore method
+\value{
+list of class \code{explore}:
+\itemize{
+\item \code{parcors_mat} partial correlation matrix
+\item \code{parcors_sd} partial correlation standard deviations
+\item \code{samples} list of prior and posterior samples
+\itemize{
+ \item \code{fisher_z_post} Fisher z transformed posterior distributions (partial correlations)
+ \item  \code{pcor_post} partial correlation posterior distributions (not transformed)
+ \item \code{inv_cov_post} inverse covariance matrix posterior distribution
+ \item \code{pcor_prior} partial correlation prior distribution
+ \item \code{fisher_z_prior}  Fisher z transformed prior distributions (partial correlations)
+ }
+\item \code{delta} hyperparameter of matrix-F prior distribution (corresponds to \code{prior_sd})
+\item \code{iter} number of posterior and prior samples
+\item \code{dat} data matrix
+\item \code{call} match.call()
+\item \code{p} number of variables
+\item \code{cores} number of cores
+\item \code{edge} number of estimated edges
 }
-\seealso{
-\code{\link{explore.default}}
+}
+\description{
+Learn the conditional (in)dependence structure with the Bayes factor computed from the matrix-F prior distribution. It is
+possible to test for only positive or negative edges, as well as two sided hypothesis testing (which is the customary approach). Further
+there is also an exhaustive option that provides the posterior probability of the null, greater than zero, and less than zero.
+}
+\note{
+After sampling from the posterior distribution, use \code{select} to determine the edge set and \code{plot} for visualizing the
+edge set. see \code{methods(class = "explore")}
+}
+\examples{
+# p = 10
+Y <- BGGM::bfi[,1:10]
+
+# sample posterior
+fit <- explore(Y, iter = 5000)
+
+# select E
+E <- select(fit, BF_cut = 3)
+
+# summarize
+summary(E)
+
+# non-zero edges
+E$partials_non_zero
+
+# adjacency matrix
+E$Adj_10
+
+# null adjacency matrix
+E$Adj_01
 }

@@ -1,5 +1,5 @@
 #' @title GGMs with Exploratory Bayesian Hypothesis Testing
-#' @name explore.default
+#' @name explore
 #' @description Learn the conditional (in)dependence structure with the Bayes factor computed from the matrix-F prior distribution. It is
 #' possible to test for only positive or negative edges, as well as two sided hypothesis testing (which is the customary approach). Further
 #' there is also an exhaustive option that provides the posterior probability of the null, greater than zero, and less than zero.
@@ -54,7 +54,7 @@
 #' # null adjacency matrix
 #' E$Adj_01
 #' @export
-explore.default <- function(Y, prior_sd = 0.25,
+explore <- function(Y, prior_sd = 0.25,
                             iter = 5000, cores = 2,...){
   # rename
   X <- Y
@@ -108,18 +108,6 @@ explore.default <- function(Y, prior_sd = 0.25,
   return(returned_object)
 
 }
-
-#' @title S3 explore method
-#' @name explore
-#' @param ... currently not used
-#'
-#' @description S3 explore method
-#' @seealso \code{\link{explore.default}}
-#' @export
-explore  <- function(...) {
-  UseMethod("explore")
-}
-
 
 #' @name print.explore
 #' @title  Print method for \code{explore.default} objects
