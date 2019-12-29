@@ -33,6 +33,7 @@ Imports:
   reshape, 
   shiny, 
   MASS,
+  cowplot,
   stats,
   parallel
 Suggests: 

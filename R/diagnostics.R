@@ -6,6 +6,7 @@
 #'
 #' @param object object of class \code{estimate}
 #' @param ... currently ignored
+#' @importFrom cowplot plot_grid
 #'
 #' @return list of \code{ggplot} objects (a plot for each node)
 #' @export
