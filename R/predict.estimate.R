@@ -1,5 +1,5 @@
 #' Prediction from an \code{estimate} Object
-#'
+#' @name predict.estimate
 #' @param object object of class \code{estimate}
 #' @param iter iters used to compute the residuals
 #' @param cred credible interval used for summarizing
