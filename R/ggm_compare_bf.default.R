@@ -181,7 +181,7 @@ ggm_compare_bf <- function(..., prior_sd = 0.35, iter = 25000, cores = 2){
 #'
 #' @param x An object of class \code{ggm_compare_bf}
 #' @param ... currently ignored
-#' @seealso \code{\link{ggm_compare_bf.default}}
+#' @seealso \code{\link{ggm_compare_bf}}
 #' @export
 print.ggm_compare_bf <- function(x,...) {
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
@@ -211,11 +211,11 @@ print.ggm_compare_bf <- function(x,...) {
 }
 
 #' @name summary.ggm_compare_bf
-#' @title Summary method for \code{ggm_compare_bf.default} objects
+#' @title Summary method for \code{ggm_compare_bf} objects
 #'
 #' @param object An object of class \code{ggm_compare_bf}
 #' @param ... currently ignored
-#' @seealso \code{\link{ggm_compare_bf.default}}
+#' @seealso \code{\link{ggm_compare_bf}}
 #' @return A list containing the summarized posterior hypothesis probabilities
 #' @export
 summary.ggm_compare_bf <- function(object, ...) {
@@ -269,7 +269,7 @@ summary.ggm_compare_bf <- function(object, ...) {
 
 #' @param x An object of class \code{summary.ggm_compare_bf}
 #' @param ... currently ignored
-#' @seealso \code{\link{ggm_compare_bf.default}}
+#' @seealso \code{\link{ggm_compare_bf}}
 #' @export
 print.summary.ggm_compare_bf <- function(x, ...) {
   cat("BGGM: Bayesian Gaussian Graphical Models \n")

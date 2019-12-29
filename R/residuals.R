@@ -35,13 +35,13 @@ residuals.estimate <- function(object, iter = 500, cred = 0.95,...){
   resid_array <- array(0, dim = c(n, 4, p ),
                        dimnames = list(1:n,
                                        c("Post.mean", "Post.sd", "Cred.lb", "Cred.ub"),
-                                       paste0("node_", 1:20)))
+                                       paste0("node_", 1:p)))
 
   betas <- BGGM:::inverse_2_beta(object, samples = iter)
 
   for(i in 1:p){
     beta <- betas$betas[[i]]
-    pred <- t(sapply(1:iter, function(s) {dat[,-which_one] %*% t(beta[s,]) - dat[,which_one]}))
+    pred <- t(sapply(1:iter, function(s) {dat[,-i] %*% t(beta[s,]) - dat[,i]}))
     resid_array[,1,i] <- apply(pred, 2, mean)
     resid_array[,2,i] <- apply(pred, 2, sd)
     resid_array[,3:4,i] <- t(apply(pred, 2, quantile, prob = c(lb, ub)))

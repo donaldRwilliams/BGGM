@@ -110,10 +110,10 @@ explore <- function(Y, prior_sd = 0.25,
 }
 
 #' @name print.explore
-#' @title  Print method for \code{explore.default} objects
+#' @title  Print method for \code{explore} objects
 #' @param x An object of class \code{explore}
 #' @param ... currently ignored
-#' @seealso \code{\link{explore.default}}
+#' @seealso \code{\link{explore}}
 #' @export
 print.explore <- function(x,...){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
@@ -133,9 +133,9 @@ print.explore <- function(x,...){
 
 
 #' @name summary.explore
-#' @title  Summary method for \code{explore.default} objects
+#' @title  Summary method for \code{explore} objects
 #' @param object An object of class \code{explore}
-#' @seealso \code{\link{explore.default}}
+#' @seealso \code{\link{explore}}
 #' @param ... currently ignored
 #' @export
 summary.explore <- function(object,...){

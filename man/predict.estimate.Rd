@@ -2,81 +2,39 @@
 % Please edit documentation in R/predict.estimate.R
 \name{predict.estimate}
 \alias{predict.estimate}
-\title{Nodewise In-and Out-of-Sample Predictability}
+\title{Prediction from an \code{estimate} Object}
 \usage{
-\method{predict}{estimate}(
-  object,
-  test_data = NULL,
-  cred = 0.95,
-  iter = 1000,
-  measure = "R2",
-  ...
-)
+\method{predict}{estimate}(object, iter = 500, cred = 0.95, newdata = NULL, summary = TRUE, ...)
 }
 \arguments{
 \item{object}{object of class \code{estimate}}
 
-\item{test_data}{optional test data set}
+\item{iter}{iters used to compute the residuals}
 
-\item{cred}{select graph and width of interval in the summary output}
+\item{cred}{credible interval used for summarizing}
 
-\item{iter}{number of posterior samples used to compute predictability
-(must be the same or less than the number of samples in the \code{estimate} object)}
+\item{newdata}{an optional data frame for obtaining predictions (e.g., on test data)}
 
-\item{measure}{Bayesian R2 (\code{"R2"}) or mean squared error (\code{"MSE"})}
+\item{summary}{summarize the posterior samples (Default is \code{TRUE}).
+Setting it to \code{FALSE} can be used to then compute performance metrics.}
 
-\item{...}{currently ignored}
+\item{...}{}
 }
 \value{
-object of class \code{predict}
-\itemize{
-\item \code{summary_error} summarized predictability
-\item \code{poster_samples} list containing the posterior samples for each node
-}
+\code{summary = TRUE}: 3D array of dimensions n (observations),
+        4 (posterior summary),
+        p (number of nodes). \code{summary = FALSE}:
+        list containing predictions for each variable
+
+# data
+Y <- subset(tas, gender == "M")[,-ncol(tas)]
+
+# fit model
+fit <- estimate(Y1)
+
+# predict
+predict(fit)
 }
 \description{
-Bayesian predictability. The measures are computed with respect to the posterior distributions.
-This provides uncertainty for variance explained (Bayesian R2) and mean squared error.
-}
-\examples{
-
-dat <- BGGM::ptsd
-fit <- estimate(dat, iter = 5000)
-
-error <- predict(fit,
-              measure = "R2",
-              test_data  = NULL,
-              cred = 0.95,
-              samples = 1000)
-
-summary(error)
-
-plot(error)
-
-################################
-## training/test data example ##
-################################
-
-train_dat <- BGGM::ptsd[1:200,]
-test_dat <- BGGM::ptsd[201:221,]
-fit_train <- estimate(train_dat, iter = 5000)
-
-
-r2 <- predict(fit_train,
-              measure = "R2",
-              test_data  = test_dat,
-              ci_width = 0.95,
-              samples = 1000)
-
-summary(r2)
-
-plot(r2)
-
-# plot test and training error
-plot(x = error, x2 = r2)
-
-}
-\references{
-Gelman, A., Goodrich, B., Gabry, J., & Vehtari, A. (2017). R-squared for Bayesian regression models.
-            The American Statistician, (just-accepted), 1-6. \href{http://www.stat.columbia.edu/~gelman/research/unpublished/bayes_R2.pdf}{pre-print}
+Prediction from an \code{estimate} Object
 }

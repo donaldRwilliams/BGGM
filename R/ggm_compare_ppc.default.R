@@ -63,7 +63,7 @@
 #' plot(ggm_ppc, log = TRUE)
 #' }
 #' @export
-ggm_compare_ppc.default <- function(..., type = "global", iter = 5000, cores = 1){
+ggm_compare_ppc <- function(..., type = "global", iter = 5000, cores = 1){
 
   if(type == "global"){
 
@@ -267,7 +267,7 @@ print.ggm_compare_ppc <- function(x,...){
 #'
 #' @param object An object of class \code{ggm_compare_ppc}
 #' @param ... currently ignored
-#' @seealso \code{\link{ggm_compare_ppc.default}}
+#' @seealso \code{\link{ggm_compare_ppc}}
 #' @return A list containing the summarized results
 #' @export
 summary.ggm_compare_ppc <- function(object, ...){

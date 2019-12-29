@@ -18,5 +18,5 @@ A list containing the summarized results
 Summary method for \code{ggm_compare_ppc.default} objects
 }
 \seealso{
-\code{\link{ggm_compare_ppc.default}}
+\code{\link{ggm_compare_ppc}}
 }

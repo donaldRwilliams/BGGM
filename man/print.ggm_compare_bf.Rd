@@ -15,5 +15,5 @@
 Print method for \code{ggm_compare_bf} objects
 }
 \seealso{
-\code{\link{ggm_compare_bf.default}}
+\code{\link{ggm_compare_bf}}
 }

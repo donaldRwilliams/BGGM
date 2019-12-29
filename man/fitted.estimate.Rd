@@ -30,6 +30,6 @@ Y <- subset(tas, gender == "M")[,-ncol(tas)]
 # fit model
 fit <- estimate(Y1)
 
-# diagnostic plot
+# fitted values
 fitted(fit)
 }

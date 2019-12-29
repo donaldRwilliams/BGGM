@@ -2,7 +2,7 @@
 % Please edit documentation in R/explore.default.R
 \name{summary.explore}
 \alias{summary.explore}
-\title{Summary method for \code{explore.default} objects}
+\title{Summary method for \code{explore} objects}
 \usage{
 \method{summary}{explore}(object, ...)
 }
@@ -12,8 +12,8 @@
 \item{...}{currently ignored}
 }
 \description{
-Summary method for \code{explore.default} objects
+Summary method for \code{explore} objects
 }
 \seealso{
-\code{\link{explore.default}}
+\code{\link{explore}}
 }

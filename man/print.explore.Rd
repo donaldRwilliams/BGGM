@@ -2,7 +2,7 @@
 % Please edit documentation in R/explore.default.R
 \name{print.explore}
 \alias{print.explore}
-\title{Print method for \code{explore.default} objects}
+\title{Print method for \code{explore} objects}
 \usage{
 \method{print}{explore}(x, ...)
 }
@@ -12,8 +12,8 @@
 \item{...}{currently ignored}
 }
 \description{
-Print method for \code{explore.default} objects
+Print method for \code{explore} objects
 }
 \seealso{
-\code{\link{explore.default}}
+\code{\link{explore}}
 }

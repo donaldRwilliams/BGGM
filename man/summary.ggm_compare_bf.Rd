@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggm_compare_bf.default.R
 \name{summary.ggm_compare_bf}
 \alias{summary.ggm_compare_bf}
-\title{Summary method for \code{ggm_compare_bf.default} objects}
+\title{Summary method for \code{ggm_compare_bf} objects}
 \usage{
 \method{summary}{ggm_compare_bf}(object, ...)
 }
@@ -15,8 +15,8 @@
 A list containing the summarized posterior hypothesis probabilities
 }
 \description{
-Summary method for \code{ggm_compare_bf.default} objects
+Summary method for \code{ggm_compare_bf} objects
 }
 \seealso{
-\code{\link{ggm_compare_bf.default}}
+\code{\link{ggm_compare_bf}}
 }

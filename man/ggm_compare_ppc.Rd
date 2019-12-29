@@ -2,10 +2,9 @@
 % Please edit documentation in R/ggm_compare_ppc.default.R
 \name{ggm_compare_ppc}
 \alias{ggm_compare_ppc}
-\alias{ggm_compare_ppc.default}
 \title{Compare GGMs with the Posterior Predictive Distribution}
 \usage{
-\method{ggm_compare_ppc}{default}(..., type = "global", iter = 5000, cores = 1)
+ggm_compare_ppc(..., type = "global", iter = 5000, cores = 1)
 }
 \arguments{
 \item{...}{data matrices (\emph{n} by  \emph{p}). Requires at least two.}
