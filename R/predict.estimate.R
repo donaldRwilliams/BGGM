@@ -69,7 +69,7 @@ predict.estimate <- function(object,
   samples <- iter
   ci_width <- cred
   fit <- object
-  selected <- select(fit, ci_width = ci_width)$adjacency
+  selected <- select(fit, cred = ci_width)$adjacency
 
     # check class
     if(class(fit) != "estimate"){
@@ -129,14 +129,14 @@ predict.estimate <- function(object,
 
         if(measure == "R2"){
         # compute error measure
-        r2 <- R2_helper(ypred = ypred, y = dat[,i], ci_width = 0.95)
+        r2 <- R2_helper(ypred = ypred, y = dat[,i], ci_width = ci_width)
         # store the sumamaries
         summary[[i]] <- t(data.frame(r2$summary_r2))
         # store the posterior samples
         post_samples[[i]] <- r2$R2
         }
         if(measure == "MSE"){
-          mse <- MSE_helper(ypred = ypred, y = dat[,i], ci_width = 0.95)
+          mse <- MSE_helper(ypred = ypred, y = dat[,i], ci_width = ci_width)
           summary[[i]] <- t(data.frame(mse$summary_mse))
           post_samples[[i]] <- mse$MSE
         }
