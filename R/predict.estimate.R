@@ -49,7 +49,8 @@ predict.estimate <- function(object, iter = 500, cred = 0.95,
 
   predict_array <- array(0, dim = c(n, 4, p ),
                         dimnames = list(1:n,
-                                        c("Post.mean", "Post.sd", "Cred.lb", "Cred.ub"),
+                                        c("Post.mean", "Post.sd",
+                                          "Cred.lb", "Cred.ub"),
                                         paste0("node_", 1:p)))
 
   betas <- BGGM:::inverse_2_beta(object, samples = iter)

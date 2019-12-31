@@ -2,18 +2,38 @@
 % Please edit documentation in R/predictability.R
 \name{assess_predictability}
 \alias{assess_predictability}
-\title{Assess Predictability of \code{Predictability} Objects}
+\title{Assess Predictability}
 \usage{
-assess_predictability(..., contrast = "exhaustive", prob = 0.95)
+assess_predictability(...)
 }
 \arguments{
-\item{...}{object(s) of class \code{predictability}}
-
-\item{prob}{}
+\item{...}{object(s) of class \code{R2}}
 }
 \value{
-
+object of class \code{metric}
 }
 \description{
-Assess Predictability of \code{Predictability} Objects
+Assess Predictability
+}
+\examples{
+# two groups (males vs females)
+Y_m <- subset(tas, gender == "M")[,-ncol(tas)]
+Y_f <- subset(tas, gender == "F")[,-ncol(tas)]
+
+# fit models
+fit_m <- estimate(Y_m)
+fit_f <- estimate(Y_f)
+
+# r2
+r2_m <- bayes_R2(fit_m)
+r2_f <- bayes_R2(fit_f)
+
+# assess predictability
+assess_pred  <- assess_predictability(r2_m, r2_f)
+
+# summary
+assess_pred
+
+# plot (small rope value removes it from the plot )
+plot(assess_pred, rope = 0.001)
 }

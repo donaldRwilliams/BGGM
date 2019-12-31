@@ -2,7 +2,7 @@
 % Please edit documentation in R/metrics.R
 \name{mae}
 \alias{mae}
-\title{Mean Absolute Error for \code{predict.estimate} Objects}
+\title{Mean Absolute Error}
 \usage{
 mae(object, ...)
 }
@@ -15,7 +15,7 @@ mae(object, ...)
 
 }
 \description{
-Mean Absolute Error for \code{predict.estimate} Objects
+Mean Absolute Error
 }
 \examples{
 # data

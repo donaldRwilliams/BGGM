@@ -2,7 +2,7 @@
 % Please edit documentation in R/metrics.R
 \name{mape}
 \alias{mape}
-\title{Mean Absolute Percentage Error for \code{predict.estimate} Objects}
+\title{Mean Absolute Percentage Error}
 \usage{
 mape(object, ...)
 }
@@ -15,7 +15,7 @@ mape(object, ...)
 
 }
 \description{
-Mean Absolute Percentage Error for \code{predict.estimate} Objects
+Mean Absolute Percentage Error
 }
 \examples{
 # data

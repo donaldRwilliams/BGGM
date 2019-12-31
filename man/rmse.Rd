@@ -2,7 +2,7 @@
 % Please edit documentation in R/metrics.R
 \name{rmse}
 \alias{rmse}
-\title{Root Mean Square Error for \code{predict.estimate} Objects}
+\title{Root Mean Squared Error}
 \usage{
 rmse(object, ...)
 }
@@ -15,7 +15,7 @@ rmse(object, ...)
 
 }
 \description{
-Root Mean Square Error for \code{predict.estimate} Objects
+Root Mean Squared Error
 }
 \examples{
 # data
