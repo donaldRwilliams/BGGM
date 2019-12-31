@@ -5,6 +5,7 @@
 #' visually inspecting assumptions of the model (e.g., normality of the residuals, etc.)
 #'
 #' @param object object of class \code{estimate}
+#' @param iter  iterations used for computing residuals and fitted values
 #' @param ... currently ignored
 #' @importFrom cowplot plot_grid
 #'
@@ -27,8 +28,8 @@ diagnostics <- function(object, iter = 500,...){
   }
 
    p <- object$p
-  .resid <- residuals(object, iter = iter)
-  .fitted <- fitted(object, iter = iter)
+  .resid <- residuals(object, iter = iter, summary = TRUE)
+  .fitted <- fitted(object, iter = iter, summary = TRUE)
 
   for(i in 1:p){
 

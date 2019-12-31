@@ -25,16 +25,17 @@ Setting it to \code{FALSE} can be used to then compute performance metrics.}
         4 (posterior summary),
         p (number of nodes). \code{summary = FALSE}:
         list containing predictions for each variable
-
+}
+\description{
+Prediction from an \code{estimate} Object
+}
+\examples{
 # data
 Y <- subset(tas, gender == "M")[,-ncol(tas)]
 
 # fit model
-fit <- estimate(Y1)
+fit <- estimate(Y)
 
 # predict
 predict(fit)
-}
-\description{
-Prediction from an \code{estimate} Object
 }

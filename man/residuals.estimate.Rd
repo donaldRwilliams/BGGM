@@ -4,7 +4,7 @@
 \alias{residuals.estimate}
 \title{Residuals for \code{estimate} Objects}
 \usage{
-\method{residuals}{estimate}(object, iter = 500, cred = 0.95, ...)
+\method{residuals}{estimate}(object, iter = 500, cred = 0.95, summary = TRUE, ...)
 }
 \arguments{
 \item{object}{object of class \code{estimate}}
@@ -12,6 +12,8 @@
 \item{iter}{iters used to compute the residuals}
 
 \item{cred}{credible interval used for summarizing}
+
+\item{summary}{summarize the posterior samples (Default is \code{TRUE}).}
 
 \item{...}{currently ignored}
 }

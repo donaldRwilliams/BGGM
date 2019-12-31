@@ -9,6 +9,8 @@ diagnostics(object, iter = 500, ...)
 \arguments{
 \item{object}{object of class \code{estimate}}
 
+\item{iter}{iterations used for computing residuals and fitted values}
+
 \item{...}{currently ignored}
 }
 \value{

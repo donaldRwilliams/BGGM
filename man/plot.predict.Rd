@@ -4,15 +4,7 @@
 \alias{plot.predict}
 \title{Predictive Plots for In- and Out-of-Sample Data}
 \usage{
-plot.predict(
-  x,
-  x2 = NULL,
-  size = 2,
-  color = "red",
-  width = 0.1,
-  order = NULL,
-  ...
-)
+\method{plot}{predict}(x, x2 = NULL, size = 2, color = "red", width = 0.1, order = NULL, ...)
 }
 \arguments{
 \item{x}{object of class \code{predict}}

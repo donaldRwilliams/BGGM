@@ -13,12 +13,12 @@
 #'         p (number of nodes). \code{summary = FALSE}:
 #'         list containing predictions for each variable
 
-#'
+#' @examples
 #' # data
 #' Y <- subset(tas, gender == "M")[,-ncol(tas)]
 #'
 #' # fit model
-#' fit <- estimate(Y1)
+#' fit <- estimate(Y)
 #'
 #' # predict
 #' predict(fit)
@@ -82,8 +82,13 @@ predict.estimate <- function(object, iter = 500, cred = 0.95,
   class(returned_object) <- "predict.estimate"
 
   }
-
-  returned_object
+returned_object
 }
 
+
+print.predict.estimate <- function(x,...){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat()
+
+}
 

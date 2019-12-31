@@ -3,6 +3,8 @@
 #' @param object object of class \code{estimate}
 #' @param iter iters used to compute the residuals
 #' @param cred credible interval used for summarizing
+#' @param summary summarize the posterior samples (Default is \code{TRUE}).
+#'
 #' @param ... currently ignored
 #'
 #' @return 3D array of dimensions n (observations),
@@ -19,7 +21,10 @@
 #'
 #' # diagnostic plot
 #' residual(fit)
-residuals.estimate <- function(object, iter = 500, cred = 0.95,...){
+residuals.estimate <- function(object, iter = 500,
+                               cred = 0.95,
+                               summary = TRUE,
+                               ...){
 
 
   if(object$iter < iter){

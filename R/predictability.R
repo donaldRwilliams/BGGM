@@ -1,16 +1,35 @@
-#' Nodewise Predicatability
+#' Bayesian Variance Explained (R2)
+#'
+#' @description  Compute Bayesian R2. In contrast to the functions
+#' \code{\link{mse}}, \code{\link{mae}}, etc., this can be used to
+#' compare predictabiltiy between nodes within a network or between
+#' networks. Also, only posterior predictive R2 is implemented.
 #'
 #' @param object object of class \code{estimate}
-#' @param cred credible interval width used for the decision rule
+#' @param cred credible interval width used for selecting the network
 #' @param iter iterations used for computing R2
 #' @param cores number of cores for parallel computing
 #' @param ... currently ignored
 #'
-#' @return
+#' @return object of classes \code{bayes_R2} and \code{metric}
 #' @export
 #'
 #' @examples
-predictability <- function(object,
+#' # data
+#' Y <- subset(tas, gender == "M")[,-ncol(tas)]
+#'
+#' # fit model
+#' fit <- estimate(Y)
+#'
+#' # bayes R2
+#' r2 <- bayes_R2(fit)
+#'
+#' # print summary
+#' r2
+#'
+#' # plot
+#' plot(r2)
+bayes_R2 <- function(object,
                            cred = 0.95,
                            iter = 1000,
                            cores = 2,...){
@@ -21,44 +40,65 @@ predictability <- function(object,
 
   doSNOW::registerDoSNOW(cl)
 
-  adj <- BGGM::select(object, cred = cred)$adjacency_non_zero
+  adj <-  select(object, cred = cred)$adjacency_non_zero
 
-  betas <- BGGM:::inverse_2_beta(object, samples = iter)
+  betas <- inverse_2_beta(object, samples = iter)
 
-  # parallel::clusterExport(cl, varlist = c("R2_ppc"))
-
-  pred <- parallel::parLapply(cl = cl,
+ scores <- parallel::parLapply(cl = cl,
                               X = 1:p, function(x) R2_ppc(fit = object,
                                                           betas = betas,
                                                           adj = adj,
-                                                          which_one = x, sims = iter))
+                                                          which_one = x,
+                                                          sims = iter))
 
-  class(pred) <- "predictability"
-  pred
+ # returned object
+ returned_object <- list(scores = scores,
+                         type = "post.pred",
+                         metric = "bayes_R2",
+                         cred = cred)
+
+ class(returned_object) <- c("metric", "R2")
+
+ return(returned_object)
 
 }
 
-
-
-
-#' Assess Predictability of \code{Predictability} Objects
+#' Assess Predictability
 #'
-#' @param ... object(s) of class \code{predictability}
-#' @param contrast
-#' @param prob
+#' @param ... object(s) of class \code{R2}
 #'
-#' @return
+#' @return object of class \code{metric}
 #' @export
 #'
 #' @examples
-assess_predictability <-  function(..., contrast = "exhaustive",
-                                                  prob = 0.95){
-
+#' # two groups (males vs females)
+#' Y_m <- subset(tas, gender == "M")[,-ncol(tas)]
+#' Y_f <- subset(tas, gender == "F")[,-ncol(tas)]
+#'
+#' # fit models
+#' fit_m <- estimate(Y_m)
+#' fit_f <- estimate(Y_f)
+#'
+#' # r2
+#' r2_m <- bayes_R2(fit_m)
+#' r2_f <- bayes_R2(fit_f)
+#'
+#' # assess predictability
+#' assess_pred  <- assess_predictability(r2_m, r2_f)
+#'
+#' # summary
+#' assess_pred
+#'
+#' # plot (small rope value removes it from the plot )
+#' plot(assess_pred, rope = 0.001)
+assess_predictability <-  function(...){
 
   temp <- list(...)
-  cred <- 0.95
-  lb <- (1 - cred) / 2
-  ub <- 1 - lb
+
+  if(!all(sapply(temp, class)[2,] == "R2")){
+    stop("all object must be of class R2 (bayes_R2)")
+}
+
   groups <- length(temp)
 
   if(groups != 2){
@@ -68,51 +108,12 @@ assess_predictability <-  function(..., contrast = "exhaustive",
   g1 <- temp[[1]]
   g2 <- temp[[2]]
 
-  p <- length(g1)
+  p <- length(g1$scores)
 
-  diff <- lapply(1:p, function(x) {temp <- g1[[x]] - g2[[x]];
-  pp <- post_prob(temp);
-  ci <- quantile(pp, probs = c(lb, ub));
-  list(diff = temp, pp = pp, ci = ci)
-  })
-  class(diff) <- "assess_predictability"
-  diff
+  diff <- lapply(1:p, function(x) g1$scores[[x]] - g2$scores[[x]])
+  returned_object <- list(scores = diff,
+                          type = "post.pred",
+                          metric = "bayes_R2_diff")
+  class(returned_object) <- "metric"
+  returned_object
 }
-
-#' Plot \code{assess_predictability} Objects
-#'
-#' @param x object of class \code{assess_predictability}
-#' @param ...
-#' @importFrom ggridges stat_density_ridges
-#' @return
-#' @export
-#'
-#' @examples
-plot.assess_predictability <- function(x,...){
-
-  p <- length(x)
-
-  diffs <- lapply(1:p, function(z)  x[[z]]$diff)
-
-  dat <- reshape2::melt(diffs)
-  dat$L1 <- as.factor(dat$L1)
-
-  dat$L1 <- factor(dat$L1, labels = order(tapply(dat$value, dat$L1, mean)),
-                   levels = order(tapply(dat$value, dat$L1, mean)))
-
-
-
-
-  plt <- ggplot(dat, aes(x=value, y=as.factor(L1), fill=factor(..quantile..))) +
-    geom_vline(xintercept = 0, linetype = 'dotted') +
-    stat_density_ridges( rel_min_height = 0.01, geom = "density_ridges_gradient", calc_ecdf = TRUE, quantiles = c(0.025, 0.975)) +
-    scale_fill_manual(
-      name = "Probability", values = c("#FF0000A0", "#A0A0A0A0", "#0000FFA0"),
-      labels = c("(0, 0.025]", "(0.025, 0.975]", "(0.975, 1]")) +
-    theme_classic() +
-    theme(legend.position = "none",
-          panel.grid.major = element_line(color = "grey95"))
-  plt
-}
-
-
