@@ -65,6 +65,9 @@ bayes_R2 <- function(object,
 
 #' Assess Predictability
 #'
+#' Compare nodes within networks or between networks. Currently the only
+#' option available is Bayesian R2.
+#'
 #' @param ... object(s) of class \code{R2}
 #'
 #' @return object of class \code{metric}

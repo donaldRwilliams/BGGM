@@ -13,7 +13,8 @@ assess_predictability(...)
 object of class \code{metric}
 }
 \description{
-Assess Predictability
+Compare nodes within networks or between networks. Currently the only
+option available is Bayesian R2.
 }
 \examples{
 # two groups (males vs females)
