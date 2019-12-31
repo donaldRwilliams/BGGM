@@ -5,7 +5,7 @@ list(EVAL = FALSE)
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 7, fig.height = 7, fig.align = "center")
 library(ggplot2)
 
-## -----------------------------------------------------------------------------
+## ---- message = FALSE---------------------------------------------------------
 # packages
 library(BGGM)
 library(ggplot2)
@@ -20,64 +20,73 @@ fit <- estimate(dat, iter = 1000)
 
 ## -----------------------------------------------------------------------------
 # predict
-pred <- predict(fit,  cred = 0.95)
+pred <- predict(fit, summary = FALSE)
 
 ## -----------------------------------------------------------------------------
 # summary
-print(pred)
+error <- mse(pred)
 
 ## -----------------------------------------------------------------------------
 # plot 
-plot(pred)
+plot(error)
 
-## ---- message=FALSE, warning=FALSE--------------------------------------------
-plot(pred) + 
-  xlab("Item") +
-  geom_point(aes(color = BGGM:::rsa_labels), 
-             size = 4) +
-   geom_point(size = 3, 
-              color = "white") +
-  scale_color_brewer(name = "Domain", 
-                     palette = "Set1") +
+## -----------------------------------------------------------------------------
+plot(error) +
+  theme_bw() +
   ggtitle("Predictability") +
-  coord_cartesian() +
-  theme(axis.text.x = element_text(angle = 60, 
-                                   hjust = .5, 
-                                   vjust = .5))
+  ylab("Mean Squared Error") +
+  geom_point(size = 2, 
+             color = "black") +
+  geom_point(size = 1.5, 
+             color = "white")
+
+## ---- message=F---------------------------------------------------------------
+fitted_pred <- plot(error, type = "ridgeline", 
+     color = "red", 
+     alpha =  0.75, 
+     scale = 2) +
+  theme_bw() +
+  theme(legend.position = "none") +
+  ylab("Node") +
+  xlab("Mean Squared Error") +
+  ggtitle("Predictability")
+fitted_pred
 
 ## -----------------------------------------------------------------------------
-# training data
-train_dat <- dat[1:600,]
-
-# testing data
-test_dat <- dat[601:675,]
-
-# fit model
-fit <- estimate(train_dat, iter = 1000)
+pred <- posterior_predict(fit, iter = 250,
+                          summary = FALSE)
 
 ## -----------------------------------------------------------------------------
-pred <- predict(fit, 
-                test_data = test_dat, 
-                cred = 0.95)
+error <- mse(pred)
 
-pred
+# print summary
+error
 
 ## -----------------------------------------------------------------------------
-plot(pred) + 
-  ggtitle("Out-of-Sample Predictability")
+# plot 
+plot(error)
 
-## ---- warning=FALSE, message=FALSE--------------------------------------------
-library(ggridges)
-dat_res <- reshape2::melt(pred$post_samples)
+## ---- message=F---------------------------------------------------------------
+posterior_pred <- plot(error, type = "ridgeline", 
+     color = "red", 
+     alpha =  0.75, 
+     scale = 2) +
+  theme_bw() +
+  theme(legend.position = "none") +
+  ylab("Node") +
+  xlab("Mean Squared Error") +
+  ggtitle("Predictability")
+posterior_pred
 
-dat_res$L1 <- factor(dat_res$L1, 
-                     labels = order(pred$summary_error$post_mean, decreasing = F), 
-                     levels = colnames(dat)[order(pred$summary_error$post_mean, decreasing = F)])
+## ---- warning=F, message=F----------------------------------------------------
+top <- cowplot::plot_grid("", "", 
+                          labels = c("Fitted", 
+                              "Posterior Predictive"))
 
-ggplot(dat_res, aes(x = value, y = L1)) + 
-    geom_density_ridges(rel_min_height = 0.01) +
-    theme_bw() +
-    ylab("Item") +
-    xlab("Bayesian R2") +
-    theme(panel.grid.minor = element_blank())
+bottom <- cowplot::plot_grid(fitted_pred, 
+                             posterior_pred)
+
+cowplot::plot_grid(top, bottom, 
+                   nrow = 2, 
+                   rel_heights = c(1, 20))
 
