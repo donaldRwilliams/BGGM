@@ -12,7 +12,7 @@ mape(object, ...)
 \item{...}{currently ignored}
 }
 \value{
-
+object of class \code{metric}
 }
 \description{
 Mean Absolute Percentage Error

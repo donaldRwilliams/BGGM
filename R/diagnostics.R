@@ -13,15 +13,21 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' # data
 #' Y <- subset(tas, gender == "M")[,-ncol(tas)]
 #'
 #' # fit model
-#' fit <- estimate(Y1)
+#' fit <- estimate(Y)
 #'
-#' # diagnostic plot
-#' diagnostic_plot(fit)
+#' # diagnostic plot (iter = 10 as an example)
+#' diagnostics(fit, iter = 10)
+#'}
 diagnostics <- function(object, iter = 500,...){
+
+
+  oldw <- getOption("warn")
+  options(warn = -1)
 
   if(class(object) != "estimate"){
     stop("object must be of class estimate")
@@ -31,6 +37,7 @@ diagnostics <- function(object, iter = 500,...){
   .resid <- residuals(object, iter = iter, summary = TRUE)
   .fitted <- fitted(object, iter = iter, summary = TRUE)
 
+  plot <- list()
   for(i in 1:p){
 
     dat <- data.frame(.resid = .resid[,1,i], .fitted = .fitted[,1,i])
@@ -73,11 +80,13 @@ diagnostics <- function(object, iter = 500,...){
     suppressMessages(
       bottom <- cowplot::plot_grid(plot1, plot2, plot3, nrow = 1)
     )
+
+    suppressMessages(
     plot[[i]] <- cowplot::plot_grid("", bottom, nrow = 2,
                                     labels = paste("Node", i), rel_heights = c(1, 10))
-
+  )
 
   }
-
+  options(warn = oldw)
   plot
 }

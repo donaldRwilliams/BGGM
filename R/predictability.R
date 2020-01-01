@@ -22,7 +22,7 @@
 #' fit <- estimate(Y)
 #'
 #' # bayes R2
-#' r2 <- bayes_R2(fit)
+#' r2 <- bayes_R2(fit, iter = 50)
 #'
 #' # print summary
 #' r2
@@ -51,6 +51,8 @@ bayes_R2 <- function(object,
                                                           which_one = x,
                                                           sims = iter))
 
+ parallel::stopCluster(cl)
+
  # returned object
  returned_object <- list(scores = scores,
                          type = "post.pred",
@@ -74,6 +76,7 @@ bayes_R2 <- function(object,
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' # two groups (males vs females)
 #' Y_m <- subset(tas, gender == "M")[,-ncol(tas)]
 #' Y_f <- subset(tas, gender == "F")[,-ncol(tas)]
@@ -83,8 +86,8 @@ bayes_R2 <- function(object,
 #' fit_f <- estimate(Y_f)
 #'
 #' # r2
-#' r2_m <- bayes_R2(fit_m)
-#' r2_f <- bayes_R2(fit_f)
+#' r2_m <- bayes_R2(fit_m, iter = 50)
+#' r2_f <- bayes_R2(fit_f, iter = 50)
 #'
 #' # assess predictability
 #' assess_pred  <- assess_predictability(r2_m, r2_f)
@@ -94,6 +97,7 @@ bayes_R2 <- function(object,
 #'
 #' # plot (small rope value removes it from the plot )
 #' plot(assess_pred, rope = 0.001)
+#' }
 assess_predictability <-  function(...){
 
   temp <- list(...)

@@ -53,11 +53,18 @@ globalVariables(c('Y1','Y2',
                   'color',
                   'fit',
                   'post_mean',
-                  'Error'))
+                  'Error',
+                  'density', 'Node',
+                  'Post.mean',
+                  'L1', 'lag', 'acf',
+                  'iteration'))
 
-#' @importFrom stats coef cov2cor dnorm lm na.omit pnorm quantile rWishart sd qnorm
+#' @importFrom stats coef cov2cor var dnorm lm
+#' na.omit pnorm quantile rWishart
+#' sd qnorm residuals fitted density
 #' @importFrom utils combn
 #' @importFrom foreach %dopar% foreach
+#' @importFrom graphics plot
 #' @import ggplot2
 
 post_prob <- function(data){

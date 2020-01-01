@@ -78,7 +78,7 @@ select.ggm_compare_estimate <- function(object,
 
       # difference mean
       mat_temp_pcor[upper.tri(mat_temp_pcor)] <-
-        summ$dat_results[[i]]$Estimate
+        summ$dat_results[[i]]$Post.mean
 
       # selected pcors
       mat_temp_pcor <- mat_temp_pcor * mat_temp_adj

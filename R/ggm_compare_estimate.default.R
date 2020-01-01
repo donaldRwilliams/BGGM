@@ -1,7 +1,7 @@
 #' Compare Edges (Partial Correlations) Between GGMs with the Posterior Distribution
 #' @name ggm_compare_estimate.default
 #' @description Compare edges (partial correlations) that are estimated from groups to, say, detect differences or equivalences.
-#' @param ... data matrices (\emph{n} by  \emph{p}). Requires at least two.
+#' @param ... data matrices. Requires at least two.
 #' @param iter number of posterior samples
 #'
 #' @return
@@ -219,15 +219,11 @@ summary.ggm_compare_estimate <- function(object, cred = 0.95,...) {
 
     colnames(results_temp) <- c(
       "Edge",
-      "Estimate",
-      "Est.Error",
-      paste("lb.", gsub(
-        "*0.", "", formatC(round(cred, 4), format = 'f', digits = 2)
-      ), "%", sep = ""),
-      paste("ub.", gsub(
-        "*0.", "", formatC(round(cred, 4), format = 'f', digits = 2)
-      ), "%", sep = "")
-    )
+      "Post.mean",
+      "Post.sd",
+      "Cred.lb",
+      "Cred.ub"
+      )
     dat_results[[i]] <- results_temp
   }
   returned_object <- list(dat_results = dat_results,

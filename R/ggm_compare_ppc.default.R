@@ -1,5 +1,5 @@
 #' Compare GGMs with the Posterior Predictive Distribution
-#' @name ggm_compare_ppc
+#' @name ggm_compare_ppc.default
 #' @description Compare GGMs with the posterior predictive distribution. The method assume group equality, and the predictive check
 #' allows for testing whether that assumption should be modified--i.e., the GGMs are actually different. The current test statistic available is
 #' Kullback-Leibler divergence, which in this case, can be understood as a likelihood ratio for multivariate normal distributions. There are
@@ -227,6 +227,7 @@ class(returned_object) <- "ggm_compare_ppc"
 returned_object
 
 }
+
 #' @name print.ggm_compare_ppc
 #' @title  Print method for \code{ggm_compare_ppc.default} objects
 #'
@@ -374,7 +375,7 @@ print.summary.ggm_compare_ppc <- function(x, ...){
 #' assuming group equality and critical regions. Most importantly, this method CANNOT provide evidence for the null hypothesis. Thus it can only reject
 #' the underlying assumption of group equality. For gaining (relative) evidence for the null hypothesis see X.
 #'
-#' @export
+
 #'
 #' @importFrom ggridges stat_density_ridges
 #'
@@ -396,7 +397,7 @@ print.summary.ggm_compare_ppc <- function(x, ...){
 #'
 #' plot(ggm_ppc, log = TRUE)
 #' }
-
+#' @export
 plot.ggm_compare_ppc <- function(x,
                                  critical = 0.05,
                                  col_noncritical = "#84e184A0",

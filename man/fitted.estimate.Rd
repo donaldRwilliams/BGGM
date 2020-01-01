@@ -30,8 +30,8 @@ Fitted Values for \code{estimate} Objects
 Y <- subset(tas, gender == "M")[,-ncol(tas)]
 
 # fit model
-fit <- estimate(Y1)
+fit <- estimate(Y)
 
 # fitted values
-fitted(fit)
+fitted(fit, iter = 25)
 }

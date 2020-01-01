@@ -1,11 +1,23 @@
 #' Posterior Predictive Distribution for \code{estimate} Objects
 #'
 #' @inheritParams predict.estimate
+#' @importFrom stats rnorm
 #'
-#' @return
+#' @return \code{summary = TRUE}: 3D array of dimensions n (observations),
+#'         4 (posterior summary),
+#'         p (number of nodes). \code{summary = FALSE}:
+#'         list containing predictions for each variable
 #' @export
 #'
 #' @examples
+#' # data
+#' Y <- subset(tas, gender == "M")[,-ncol(tas)]
+#'
+#' # fit model
+#' fit <- estimate(Y)
+#'
+#' # predict
+#' posterior_predict(fit, iter = 25)
 posterior_predict <- function(object, iter = 500,
                               cred = 0.95, newdata = NULL,
                               summary = TRUE,...){
@@ -50,7 +62,7 @@ posterior_predict <- function(object, iter = 500,
     }
 
   # betas
-  betas <- BGGM:::inverse_2_beta(object, samples = iter)
+  betas <- inverse_2_beta(object, samples = iter)
 
   # summarize ?
   if(isTRUE(summary)){
@@ -72,7 +84,7 @@ posterior_predict <- function(object, iter = 500,
       sigma <- betas$sigmas[[i]]
 
       # posterior predictive
-      ppc <- t(sapply(1:iter, function(s) rnorm(n = n,
+      ppc <- t(sapply(1:iter, function(s) stats::rnorm(n = n,
                                           mean = dat[,-i] %*% t(beta[s,]),
                                           sd = sigma[s])))
 
@@ -98,7 +110,7 @@ posterior_predict <- function(object, iter = 500,
         sigma <- betas$sigmas[[i]]
 
         # posterior predictive
-        pred[[i]] <- t(sapply(1:iter, function(s) rnorm(n = n,
+        pred[[i]] <- t(sapply(1:iter, function(s) stats::rnorm(n = n,
                                               mean = dat[,-i] %*% t(beta[s,]),
                                               sd = sigma[s])))
         }
@@ -109,7 +121,21 @@ posterior_predict <- function(object, iter = 500,
   class(returned_object) <- "post.pred"
   return(returned_object)
 
+}
+
+#' Print Method for \code{post.pred} Objects
+#' @param x object of class \code{post.pred}
+#' @param ... currently ignored
+#' @export
+print.post.pred <- function(x,...){
+  if(length(x) != 2){
+    class(x) <- ""
+    x <- round(x, 3)
+    print(x)
+  } else {
+    cat("'summary = FALSE' not printed. See object contents")
   }
+}
 
 
 

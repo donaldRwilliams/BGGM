@@ -25,6 +25,7 @@
 #' }
 #'
 #' @importFrom MASS ginv
+#' @importFrom stats cov rbeta
 #' @export
 #'
 #' @note Currently inequality and equality restrictions can be tested. The former is an ordering the respective edge sizes,
@@ -33,7 +34,7 @@
 #' see \code{methods(class = "confirm")}
 #'
 #' @examples
-#'
+#' \donttest{
 #'
 #' # p = 10
 #' Y <- BGGM::bfi[,1:10]
@@ -60,7 +61,7 @@
 #'                       cores = 2)
 #'# summary
 #'summary(test_directions)
-
+#'}
 confirm <- function(Y, hypothesis, prior_sd = 0.25,
                     iter = 25000,  cores = 2){
 
@@ -84,14 +85,15 @@ confirm <- function(Y, hypothesis, prior_sd = 0.25,
     if(!all(names_check %in% colnames(Y))){
       stop("node names not found in the data")
     }
-    hyp <- convert_colnames(hyp = hypothesis, Y = Y)
+
+    hypothesis <- convert_colnames(hyp = hypothesis, Y = Y)
   }
 
   # convert hypotheses
-  hyp <- BGGM:::hyp_converter(hyp)$hyp_converted
+  hyp <- hyp_converter(hypothesis)$hyp_converted
 
   # fit model
-  fit <- explore.default(Y = Y, prior_sd = prior_sd,
+  fit <- explore(Y = Y, prior_sd = prior_sd,
                          iter = iter, cores = cores)
 
   # number of edges

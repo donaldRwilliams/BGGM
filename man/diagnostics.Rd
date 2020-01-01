@@ -22,12 +22,14 @@ provides diagnostic plots for inspecting the fitted regression models. This allo
 visually inspecting assumptions of the model (e.g., normality of the residuals, etc.)
 }
 \examples{
+\donttest{
 # data
 Y <- subset(tas, gender == "M")[,-ncol(tas)]
 
 # fit model
-fit <- estimate(Y1)
+fit <- estimate(Y)
 
-# diagnostic plot
-diagnostic_plot(fit)
+# diagnostic plot (iter = 10 as an example)
+diagnostics(fit, iter = 10)
+}
 }

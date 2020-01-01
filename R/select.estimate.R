@@ -353,6 +353,9 @@ summary.select.estimate <- function(object, summarize = FALSE, ...){
 #' @param node_groups node group indicator
 #' @param node_outer_size node border size
 #' @param node_inner_size node size
+#' @param alpha edge transparency
+#' @param txt_size node text size
+#' @param edge_multiplier constant to change edge width (egde * edge_multiplier)
 #' @param ... additional arguments (\link[GGally]{ggnet2})
 #'
 #' @importFrom GGally ggnet2

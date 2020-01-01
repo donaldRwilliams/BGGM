@@ -44,7 +44,7 @@ whereas the latter allows for testing whether certain edges are exactly the same
 see \code{methods(class = "confirm")}
 }
 \examples{
-
+\donttest{
 
 # p = 10
 Y <- BGGM::bfi[,1:10]
@@ -71,4 +71,5 @@ test_directions <-  confirm(Y = Y, hypothesis  = hypothesis,
                       cores = 2)
 # summary
 summary(test_directions)
+}
 }

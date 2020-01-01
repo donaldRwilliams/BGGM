@@ -36,6 +36,12 @@
 
 \item{node_inner_size}{node size}
 
+\item{alpha}{edge transparency}
+
+\item{txt_size}{node text size}
+
+\item{edge_multiplier}{constant to change edge width (egde * edge_multiplier)}
+
 \item{...}{additional arguments (\link[GGally]{ggnet2})}
 }
 \value{

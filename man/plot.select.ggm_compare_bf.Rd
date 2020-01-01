@@ -36,6 +36,7 @@ evidence for a diffirence. The second includes edges for which there is evidence
 hypothesis of equality. The tiles in the heatmap correspond to the Bayes factor
 }
 \examples{
+\donttest{
 # group 1
 Y1 <- MASS::mvrnorm(500, mu = rep(0,16),
                     Sigma =  BGGM::ptsd_cor2,
@@ -48,11 +49,12 @@ Y2 <- MASS::mvrnorm(500, mu = rep(0,16),
 # fit model
 fit <- ggm_compare_bf(Y1, Y2,
                      prior_sd = 0.20,
-                     iter = 1000,
+                     iter = 250,
                      cores = 2)
 # select E
 E <- select(fit, BF_cut = 3)
 
 # plot E
 plot(E)
+}
 }

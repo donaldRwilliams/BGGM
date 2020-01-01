@@ -6,13 +6,12 @@
 #' @param newdata an optional data frame for obtaining predictions (e.g., on test data)
 #' @param summary summarize the posterior samples (Default is \code{TRUE}).
 #' Setting it to \code{FALSE} can be used to then compute performance metrics.
-#' @param ...
+#' @param ... currently ignored
 #'
 #' @return \code{summary = TRUE}: 3D array of dimensions n (observations),
 #'         4 (posterior summary),
 #'         p (number of nodes). \code{summary = FALSE}:
 #'         list containing predictions for each variable
-
 #' @examples
 #' # data
 #' Y <- subset(tas, gender == "M")[,-ncol(tas)]
@@ -21,7 +20,7 @@
 #' fit <- estimate(Y)
 #'
 #' # predict
-#' predict(fit)
+#' predict(fit, iter = 25)
 #' @export
 predict.estimate <- function(object, iter = 500, cred = 0.95,
                              newdata = NULL, summary = TRUE,...){
@@ -53,7 +52,7 @@ predict.estimate <- function(object, iter = 500, cred = 0.95,
                                           "Cred.lb", "Cred.ub"),
                                         paste0("node_", 1:p)))
 
-  betas <- BGGM:::inverse_2_beta(object, samples = iter)
+  betas <- inverse_2_beta(object, samples = iter)
 
   if(isTRUE(summary)){
   for(i in 1:p){
@@ -87,9 +86,18 @@ returned_object
 }
 
 
+#' Print Method for \code{predict.estimate} Objects
+#'
+#' @param x object of class \code{predict.estimate}
+#' @param ... currently ignored
+#' @export
 print.predict.estimate <- function(x,...){
-  cat("BGGM: Bayesian Gaussian Graphical Models \n")
-  cat()
-
+  if(length(x) != 2){
+    class(x) <- ""
+    x <- round(x, 3)
+    print(x)
+  } else {
+    cat("'summary = FALSE' not printed. See object contents")
+  }
 }
 

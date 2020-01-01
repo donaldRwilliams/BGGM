@@ -39,7 +39,8 @@ mse <- function(object, ...){
   # predictions
   pred <- object$pred
 
-  if(class(object) == "predict.estimate"){
+  if(class(object) == "predict.estimate" |
+     class(object) == "fitted.estimate"){
 
     type <- class(object)
 
@@ -73,7 +74,7 @@ mse <- function(object, ...){
 #' Mean Absolute Error
 #' @name mae
 #' @inheritParams mse
-#' @return
+#' @return object of class \code{metric}
 #' @export
 #'
 #' @examples
@@ -99,7 +100,8 @@ mae <- function(object, ...){
   pred <- object$pred
 
 
-  if(class(object) == "predict.estimate"){
+  if(class(object) == "predict.estimate"|
+     class(object) == "fitted.estimate"){
 
     type <- class(object)
 
@@ -130,7 +132,7 @@ mae <- function(object, ...){
 #' Root Mean Squared Error
 #' @name rmse
 #' @inheritParams mse
-#' @return
+#' @return object of class \code{metric}
 #' @export
 #'
 #' @examples
@@ -155,7 +157,8 @@ rmse <- function(object, ...){
   # predictions
   pred <- object$pred
 
-  if(class(object) == "predict.estimate"){
+  if(class(object) == "predict.estimate"|
+     class(object) == "fitted.estimate"){
 
     type <- class(object)
 
@@ -188,7 +191,7 @@ rmse <- function(object, ...){
 #' @name mape
 #' @inheritParams mse
 #'
-#' @return
+#' @return object of class \code{metric}
 #' @export
 #'
 #' @examples
@@ -214,7 +217,8 @@ mape <- function(object, ...){
   pred <- object$pred
 
 
-  if(class(object) == "predict.estimate"){
+  if(class(object) == "predict.estimate" |
+     class(object) == "fitted.estimate"){
 
     type <- class(object)
 
@@ -250,8 +254,6 @@ mape <- function(object, ...){
 #' @param object object of class \code{metric}
 #' @param cred credible interval
 #' @param ... currently ignored
-#'
-#' @return
 #' @export
 summary.metric <- function(object, cred = 0.95, ...){
 
@@ -284,8 +286,6 @@ summary.metric <- function(object, cred = 0.95, ...){
 #' @param x object of class \code{summary.metric}
 #' @param digits digits used to round the values
 #' @param ... currently ignored
-#'
-#' @return
 #' @export
 print.summary.metric <- function(x, digits = 2,...){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
@@ -312,16 +312,12 @@ print.summary.metric <- function(x, digits = 2,...){
 #'
 #' @param x object of class \code{metric}
 #' @param ... currently ignored
-#'
-#' @return
 #' @export
 print.metric <- function(x,...){
   print(summary(x))
 }
 
-
 #' Plot \code{metric} Objects
-#'
 #' @param x object of class \code{metric}
 #' @param type \code{"error_bar"} or \code{"ridgeline"}
 #' @param cred credible interval

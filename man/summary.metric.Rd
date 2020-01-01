@@ -13,9 +13,6 @@
 
 \item{...}{currently ignored}
 }
-\value{
-
-}
 \description{
 Summary Method for \code{metric} Objects
 }

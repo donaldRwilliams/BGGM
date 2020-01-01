@@ -3,7 +3,7 @@
 #' @description Estimate the conditional (in)dependence structure with credible intervals or the region of practical equivalence.
 #' For the former, there is an analytic solution available, whereas for the latter, samples are efficiently drawn from the posterior
 #' distribution.
-#'
+#' @name estimate
 #' @param Y data matrix (\emph{n} by  \emph{p}).
 #' @param iter number of posterior samples
 #' @param analytic analytic solution. see notes for further details.
@@ -47,7 +47,6 @@
 #'
 #'see \code{methods("estimate")}
 #' @examples
-#'
 #' # p = 20
 #' Y <- BGGM::bfi[, 1:5]
 #'
@@ -139,7 +138,6 @@ estimate  <- function(Y, iter = 5000,
   return(returned_object)
 
 }
-
 
 #' @name print.estimate
 #' @title  Print method for \code{estimate.default} objects

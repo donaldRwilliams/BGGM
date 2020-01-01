@@ -161,6 +161,7 @@ summary.select.ggm_compare_bf <- function(object,...){
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' # group 1
 #' Y1 <- MASS::mvrnorm(500, mu = rep(0,16),
 #'                     Sigma =  BGGM::ptsd_cor2,
@@ -173,13 +174,14 @@ summary.select.ggm_compare_bf <- function(object,...){
 #' # fit model
 #' fit <- ggm_compare_bf(Y1, Y2,
 #'                      prior_sd = 0.20,
-#'                      iter = 1000,
+#'                      iter = 250,
 #'                      cores = 2)
 #' # select E
 #' E <- select(fit, BF_cut = 3)
 #'
 #' # plot E
 #' plot(E)
+#' }
 plot.select.ggm_compare_bf <- function(x, H0_low = "lightblue",
                                        H0_high = "purple",
                                        H1_low = "yellow",

@@ -11,10 +11,10 @@
 #' Y <- subset(tas, gender == "M")[,-ncol(tas)]
 #'
 #' # fit model
-#' fit <- estimate(Y1)
+#' fit <- estimate(Y)
 #'
 #' # fitted values
-#' fitted(fit)
+#' fitted(fit, iter = 25)
 fitted.estimate <- function(object, iter = 500,
                             cred = 0.95,
                             summary = TRUE,
@@ -31,7 +31,7 @@ fitted.estimate <- function(object, iter = 500,
   ub <- 1 - lb
 
 
-  betas <- BGGM:::inverse_2_beta(object, samples = iter)
+  betas <- inverse_2_beta(object, samples = iter)
 
   if(isTRUE(summary)){
 
@@ -54,17 +54,36 @@ fitted.estimate <- function(object, iter = 500,
   }
 
   returned_object <-  fitted_array
+  class(returned_object) <- "fitted.estimate"
 
   } else {
 
     pred <- list()
+
     for(i in 1:p){
       beta <- betas$betas[[i]]
-      pred[[x]] <- t(sapply(1:iter, function(s) {dat[,-i] %*% t(beta[s,])}))
-    }
-  returned_object <- pred
+      pred[[i]] <- t(sapply(1:iter, function(s) {dat[,-i] %*% t(beta[s,])}))
+
+      }
+
+    returned_object <- list(pred = pred, dat = dat)
+    class(returned_object) <- "fitted.estimate"
     }
 
 return(returned_object)
 
+}
+
+#' Print Method for \code{fitted.estimate} Objects
+#' @param x object of class \code{fitted.estimate}
+#' @param ... currently ignored
+#' @export
+print.fitted.estimate <- function(x,...){
+  if(length(x) != 2){
+    class(x) <- ""
+    x <- round(x, 3)
+    print(x)
+  } else {
+    cat("'summary = FALSE' not printed. See object contents")
+  }
 }

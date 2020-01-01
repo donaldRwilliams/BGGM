@@ -17,10 +17,10 @@
 #' Y <- subset(tas, gender == "M")[,-ncol(tas)]
 #'
 #' # fit model
-#' fit <- estimate(Y1)
+#' fit <- estimate(Y)
 #'
 #' # diagnostic plot
-#' residual(fit)
+#' residuals(fit, iter = 25)
 residuals.estimate <- function(object, iter = 500,
                                cred = 0.95,
                                summary = TRUE,
@@ -42,7 +42,7 @@ residuals.estimate <- function(object, iter = 500,
                                        c("Post.mean", "Post.sd", "Cred.lb", "Cred.ub"),
                                        paste0("node_", 1:p)))
 
-  betas <- BGGM:::inverse_2_beta(object, samples = iter)
+  betas <- inverse_2_beta(object, samples = iter)
 
   for(i in 1:p){
     beta <- betas$betas[[i]]

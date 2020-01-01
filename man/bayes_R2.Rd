@@ -34,7 +34,7 @@ Y <- subset(tas, gender == "M")[,-ncol(tas)]
 fit <- estimate(Y)
 
 # bayes R2
-r2 <- bayes_R2(fit)
+r2 <- bayes_R2(fit, iter = 50)
 
 # print summary
 r2

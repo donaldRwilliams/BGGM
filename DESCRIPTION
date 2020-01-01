@@ -30,12 +30,14 @@ Imports:
   pracma   (>= 2.2.5), 
   network (>= 1.15),
   sna,
-  reshape, 
+  reshape2, 
   shiny, 
   MASS,
   cowplot,
   stats,
-  parallel
+  parallel,
+  Matrix,
+  reshape
 Suggests: 
   knitr, 
   rmarkdown, 

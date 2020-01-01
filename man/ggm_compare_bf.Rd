@@ -47,7 +47,6 @@ equality). This assumes \code{hypothesis = NULL}. If a hypothesis is tested, the
 information including the Bayes factors and posterior probabilities for each hypothesis.
 }
 \examples{
-
 # assume null is true
 Y1 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
 Y2 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))

@@ -17,6 +17,7 @@ Compare nodes within networks or between networks. Currently the only
 option available is Bayesian R2.
 }
 \examples{
+\donttest{
 # two groups (males vs females)
 Y_m <- subset(tas, gender == "M")[,-ncol(tas)]
 Y_f <- subset(tas, gender == "F")[,-ncol(tas)]
@@ -26,8 +27,8 @@ fit_m <- estimate(Y_m)
 fit_f <- estimate(Y_f)
 
 # r2
-r2_m <- bayes_R2(fit_m)
-r2_f <- bayes_R2(fit_f)
+r2_m <- bayes_R2(fit_m, iter = 50)
+r2_f <- bayes_R2(fit_f, iter = 50)
 
 # assess predictability
 assess_pred  <- assess_predictability(r2_m, r2_f)
@@ -37,4 +38,5 @@ assess_pred
 
 # plot (small rope value removes it from the plot )
 plot(assess_pred, rope = 0.001)
+}
 }

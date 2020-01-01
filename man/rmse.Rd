@@ -12,7 +12,7 @@ rmse(object, ...)
 \item{...}{currently ignored}
 }
 \value{
-
+object of class \code{metric}
 }
 \description{
 Root Mean Squared Error

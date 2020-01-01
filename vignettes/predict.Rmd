@@ -48,7 +48,7 @@ fit <- estimate(dat, iter = 1000)
 Next the object `fit` is used to compute Bayesian variance explained.
 ```{r}
 # predict
-pred <- predict(fit, summary = FALSE)
+pred <- fitted(fit, summary = FALSE)
 ```
 
 Note `summary = FALSE` which returns the predicted samples for each posterior iteration. This is necessary to compute predictability.
@@ -56,9 +56,13 @@ Note `summary = FALSE` which returns the predicted samples for each posterior it
 ### Compute Predictability
 The next step is to compute predictability. There are several options available. In this case, I compute mean squared error.
 ```{r}
-# summary
 error <- mse(pred)
+
+# print summary
+error
 ```
+
+Note that the node numbers correspond to the column number in the data frame. Hence node 1 is the first column, etc.
 
 ### Plotting Predictability
 #### Error Bar Plot
@@ -116,12 +120,7 @@ pred <- posterior_predict(fit, iter = 250,
 The next step is to compute predictability. There are several options available. In this case, I compute mean squared error.
 ```{r}
 error <- mse(pred)
-
-# print summary
-error
 ```
-
-Note that the node numbers correspond to the column number in the data frame. Hence node 1 is the first column, etc.
 
 
 ### Plotting Predictability

@@ -11,9 +11,6 @@
 
 \item{...}{currently ignored}
 }
-\value{
-
-}
 \description{
 Print Method for \code{metric} Objects
 }

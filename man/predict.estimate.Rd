@@ -18,7 +18,7 @@
 \item{summary}{summarize the posterior samples (Default is \code{TRUE}).
 Setting it to \code{FALSE} can be used to then compute performance metrics.}
 
-\item{...}{}
+\item{...}{currently ignored}
 }
 \value{
 \code{summary = TRUE}: 3D array of dimensions n (observations),
@@ -37,5 +37,5 @@ Y <- subset(tas, gender == "M")[,-ncol(tas)]
 fit <- estimate(Y)
 
 # predict
-predict(fit)
+predict(fit, iter = 25)
 }

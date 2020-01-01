@@ -7,7 +7,7 @@
 \method{ggm_compare_estimate}{default}(..., iter = 5000)
 }
 \arguments{
-\item{...}{data matrices (\emph{n} by  \emph{p}). Requires at least two.}
+\item{...}{data matrices. Requires at least two.}
 
 \item{iter}{number of posterior samples}
 }
