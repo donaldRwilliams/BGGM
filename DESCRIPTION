@@ -29,6 +29,7 @@ Imports:
   GGally (>= 1.4.0),
   pracma   (>= 2.2.5), 
   network (>= 1.15),
+  bayesplot (>= 1.7.1),
   sna,
   reshape2, 
   shiny, 
