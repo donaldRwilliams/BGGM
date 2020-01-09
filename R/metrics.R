@@ -449,8 +449,8 @@ plot.metric <- function(x, type = "error_bar",
                                    "#A6A6A680",
                                    color)) +
       theme(legend.position = "none") +
-      xlab("Node") +
-      ylab(x$metric) +
+      ylab("Node") +
+      xlab(x$metric) +
       ggtitle(x$type)
 
   }

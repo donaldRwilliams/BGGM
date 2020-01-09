@@ -103,12 +103,14 @@ R2_ppc <- function(fit, betas, adj, which_one, sims){
 
 }
 
-
 convert_colnames <- function(hyp, Y){
   names_temp <- unlist(strsplit( strsplit(hyp, " ")[[1]], "--"))
   names_temp <- paste(names_temp, collapse = " ")
   names_temp <- unique(strsplit(gsub("[^[:alnum:] ]", "", names_temp), " +")[[1]])
 
+  if(any(names_temp == "0")){
+  names_temp <- names_temp[-which(names_temp == "0" )]
+  }
   if(!all(names_temp %in% colnames(Y))){
     stop("node names not found in the data")
   }

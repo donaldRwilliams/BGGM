@@ -28,6 +28,7 @@ pp_check.estimate <- function(object, iter,
                               ...){
 
 
+  dots <- list(stat = "sd")
   p <- object$p
   dat <- object$dat
 
@@ -61,7 +62,7 @@ pred <- posterior_predict(object,
 for(i in 1:p){
 
   ppc_args <- c(list(y = dat[,i],
-                   yrep = pred[[i]][1:iter,]), ...)
+                   yrep = pred[[i]][1:iter,]), dots)
 
   plt <- do.call(ppc_fun, ppc_args)
 

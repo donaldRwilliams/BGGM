@@ -77,6 +77,12 @@ confirm <- function(Y, hypothesis, prior_sd = 0.25,
   names_check <- paste(names_check, collapse = " ")
   names_check <- unique(strsplit(gsub("[^[:alnum:] ]", "", names_check), " +")[[1]])
 
+  if(any(names_check == "0")){
+    names_check <- names_check[-which(names_check == "0" )]
+  }
+
+
+
 
   if(any(names_check %in% colnames(Y))){
      if(any(grepl('[^[:alnum:]]', colnames(Y)))){
@@ -86,11 +92,14 @@ confirm <- function(Y, hypothesis, prior_sd = 0.25,
       stop("node names not found in the data")
     }
 
-    hypothesis <- convert_colnames(hyp = hypothesis, Y = Y)
+    hyp_temp <- convert_colnames(hyp = hypothesis, Y = Y)
+  } else {
+
+    hyp_temp <- hypothesis
   }
 
   # convert hypotheses
-  hyp <- hyp_converter(hypothesis)$hyp_converted
+  hyp <- hyp_converter(hyp_temp)$hyp_converted
 
   # fit model
   fit <- explore(Y = Y, prior_sd = prior_sd,
@@ -119,10 +128,12 @@ confirm <- function(Y, hypothesis, prior_sd = 0.25,
     # split hypotheses
     hyp_out <- if(length(hyp) > 1) c("X < 0", "X = 0", "X > 0") else unlist(strsplit(hyp2, split = ";"))
 
-    hypothesis <- gsub("[[:space:]]", "",  sub(pattern = "\n", "", unlist(strsplit(hypothesis, split = ";"))))
+    hypothesis <- gsub("[[:space:]]", "",
+                       sub(pattern = "\n", "",
+                           unlist(strsplit(hypothesis, split = ";"))))
 
-    for(no in seq_along(hyp_out)){
-      names(hyp_out)[no] <- paste0("H", no)
+    for(no in seq_along(hypothesis)){
+      names(hypothesis)[no] <- paste0("H", no)
       names(hypothesis)[no] <- paste0("H", no)
     }
 
@@ -154,11 +165,6 @@ confirm <- function(Y, hypothesis, prior_sd = 0.25,
       # which vars
       hyp_vars <- step2[grep("[a-zA-Z]+", step2)]
 
-      # # extract posterior samples
-      # post_hyp <- posterior_samples[, hyp_vars]
-      #
-      # # extract prior samples
-      # prior_hyp <- prior_samples[, hyp_vars]
 
 
       if(sum(hyp_vars %in% colnames(posterior_samples)) != length(hyp_vars)) {
@@ -244,7 +250,9 @@ confirm <- function(Y, hypothesis, prior_sd = 0.25,
 
           ci_draws_post <- ci_draws_prior <- NULL
 
-        } else { # hyp mat not full rank
+        }
+
+      if(mats$comparisons == "both comparisons")  { # hyp mat not full rank
 
           Sigma0 <- cov(prior_samples)
           Sigma1 <- cov(posterior_samples)

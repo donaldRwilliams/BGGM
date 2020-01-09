@@ -4,10 +4,12 @@
 \alias{plot.summary.estimate}
 \title{Plot \code{summary.estimate}}
 \usage{
-\method{plot}{summary.estimate}(x, width = 0, ...)
+\method{plot}{summary.estimate}(x, color = "black", width = 0, ...)
 }
 \arguments{
 \item{x}{an object of class \code{summary.estimate}}
+
+\item{color}{color of error bar}
 
 \item{width}{width of error bar cap}
 

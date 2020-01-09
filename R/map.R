@@ -22,7 +22,7 @@ map <- function(Y){
 
   map <- (n - p - 1) * solve(S)
 
-  pcor <- -1 * cov2cor(map) - diag(p)
+  pcor <- -1 * (cov2cor(map) - diag(p))
 
   betas <- lapply(1:p, function(z) -1 * (map[z,-z] / map[z,z]) )
   betas <- do.call(rbind, betas)

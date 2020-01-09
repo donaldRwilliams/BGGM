@@ -48,14 +48,12 @@ diagnostics <- function(object, iter = 500,...){
       geom_hline(yintercept = 0, col = "red", linetype = "dashed") +
       xlab("Fitted values") +
       ylab("Residuals") +
-      theme_bw() +
       ggtitle("Residuals vs. Fitted")
 
 
 
     plot2 <- ggplot(dat, aes(sample=.resid/sd(.resid)))+stat_qq() +
       stat_qq_line() +
-      theme_bw() +
       xlab("Theoretical Quantiles") +
       ylab("Standardized Residuals") +
       ggtitle("Normal Q-Q")
@@ -71,7 +69,6 @@ diagnostics <- function(object, iter = 500,...){
           col = 'red',
           alpha = 0.85,
         ) +
-        theme_bw() +
         ylab("Density") +
         ggtitle("Residual Histogram")
     )
