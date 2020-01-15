@@ -40,59 +40,56 @@ Williams, D. R., Rast, P., Pericchi, L. R., & Mulder, J. (2019). Comparing Gauss
 Williams, D. R., & Mulder, J. (2019). BGGM: A R Package for Bayesian Gaussian Graphical Models. ([pre-print](https://psyarxiv.com/3b5hf/))
 
 
-## Outline
+<!-- ## Outline -->
 
-This README is organized as follows:
+<!-- This README is organized as follows: -->
 
-* [Installation](#installation)
+<!-- * [Installation](#installation) -->
 
-* [Estimation](#estimation)
-    
-    + [Structure Learning (Estimation)](#structure-learning-estimation)
-    
-    + [Edge Differences (Estimation)](#edge-differences)
-    
-    + [Prediction](#prediction)
-        
-        - [Bayesian $R^2$](#bayesian-r2)
-        
-        - [Leave-One-Out Cross-Validation](#leave-one-out-cross-validation)
+<!-- * [Estimation](#estimation) -->
 
-* [Hypothesis Testing](#hypothesis-testing)
-    
-    + [Structure Learning (Bayes Factor)](#structure-learning-bayes-factor)
-        
-        - [Visualizing Scientific Expectations](#visualizing-scientific-expectations)
-        
-        - [Two-Sided Hypothesis Testing](#two-sided-testing)
-        
-        - [One-Sided Hypothesis Testing](#one-sided-testing)
-        
-        - [Exhaustive Hypothesis Testing](#exhaustive-hypothesis-testing)
-    
-    + [Edge Differences (Hypothesis Testing)](#edge-differences-hypothesis-testing)
-    
-    + [Confirmatory Hypothesis Testing](#confirmatory-hypothesis-testing)
-      
-        - [Order Constraints](#order-constraints)
-        
-        - [Equality Constraints](#equality-constraints)
+<!--     + [Structure Learning (Estimation)](#structure-learning-estimation) -->
 
-* [Comparing GGMs](#comparing-ggms)
-    
-    + [Posterior Predictive KL Divergence](#posterior-predictive-kl-divergence)
-    
-    + [Bayesian Hypothesis Testing](#bayesian-hypothesis-testing)
-       
-        - [Exploratory Hypothesis Testing](#exploratory-hypothesis-testing)
-       
-        - [Group Confirmatory Hypothesis Testing](#group-confirmatory-hypothesis-testing)
+<!--     + [Edge Differences (Estimation)](#edge-differences) -->
+
+<!--     + [Prediction](#prediction) -->
+
+<!--         - [Bayesian $R^2$](#bayesian-r2) -->
+
+<!--         - [Leave-One-Out Cross-Validation](#leave-one-out-cross-validation) -->
+
+<!-- * [Hypothesis Testing](#hypothesis-testing) -->
+
+<!--     + [Structure Learning (Bayes Factor)](#structure-learning-bayes-factor) -->
+
+<!--         - [Visualizing Scientific Expectations](#visualizing-scientific-expectations) -->
+
+<!--         - [Two-Sided Hypothesis Testing](#two-sided-testing) -->
+
+<!--         - [One-Sided Hypothesis Testing](#one-sided-testing) -->
+
+<!--         - [Exhaustive Hypothesis Testing](#exhaustive-hypothesis-testing) -->
+
+<!--     + [Edge Differences (Hypothesis Testing)](#edge-differences-hypothesis-testing) -->
+
+<!--     + [Confirmatory Hypothesis Testing](#confirmatory-hypothesis-testing) -->
+
+<!--         - [Order Constraints](#order-constraints) -->
+
+<!--         - [Equality Constraints](#equality-constraints) -->
+
+<!-- * [Comparing GGMs](#comparing-ggms) -->
+
+<!--     + [Posterior Predictive KL Divergence](#posterior-predictive-kl-divergence) -->
+
+<!--     + [Bayesian Hypothesis Testing](#bayesian-hypothesis-testing) -->
+
+<!--         - [Exploratory Hypothesis Testing](#exploratory-hypothesis-testing) -->
+
+<!--         - [Group Confirmatory Hypothesis Testing](#group-confirmatory-hypothesis-testing) -->
 
 # Installation
-
-Note in preparation for submitting to CRAN, we ran into some issues with the submission guidelines. Hence, we are currently (as of 10/04/19) going through the functions one by one and finalizing them for a stable release.
-
-You can install BGGM from git hub with.
+You can install BGGM from github as follows.
 
 ```{r gh-installation, eval = FALSE}
 # install.packages("devtools")
