@@ -20,7 +20,7 @@
 #' fit <- estimate(Y)
 #'
 #' # predict (note summary = FALSE)
-#' pred <- predict(fit, summary = FALSE)
+#' pred <- predict(fit, iter = 50, summary = FALSE)
 #'
 #' mse(pred)
 mse <- function(object, ...){
@@ -85,7 +85,7 @@ mse <- function(object, ...){
 #' fit <- estimate(Y)
 #'
 #' # predict (note summary = FALSE)
-#' pred <- predict(fit, summary = FALSE)
+#' pred <- predict(fit, iter = 50, summary = FALSE)
 #'
 #' mae(pred)
 mae <- function(object, ...){
@@ -143,7 +143,7 @@ mae <- function(object, ...){
 #' fit <- estimate(Y)
 #'
 #' # predict (note summary = FALSE)
-#' pred <- predict(fit, summary = FALSE)
+#' pred <- predict(fit, iter  = 50, summary = FALSE)
 #'
 #' rmse(pred)
 rmse <- function(object, ...){
@@ -202,7 +202,7 @@ rmse <- function(object, ...){
 #' fit <- estimate(Y)
 #'
 #' # predict (note summary = FALSE)
-#' pred <- predict(fit, summary = FALSE)
+#' pred <- predict(fit, iter = 50, summary = FALSE)
 #'
 #' mape(pred)
 mape <- function(object, ...){

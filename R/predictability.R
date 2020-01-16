@@ -15,6 +15,7 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' # data
 #' Y <- subset(tas, gender == "M")[,-ncol(tas)]
 #'
@@ -29,6 +30,7 @@
 #'
 #' # plot
 #' plot(r2)
+#' }
 bayes_R2 <- function(object,
                            cred = 0.95,
                            iter = 1000,
@@ -38,7 +40,7 @@ bayes_R2 <- function(object,
 
   cl <- parallel::makeCluster(cores)
 
-  doSNOW::registerDoSNOW(cl)
+  doParallel::registerDoParallel(cl)
 
   adj <-  select(object, cred = cred)$adjacency_non_zero
 

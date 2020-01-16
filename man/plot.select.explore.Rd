@@ -51,6 +51,7 @@ object of class \code{ggplot}
 Plot \code{select.explore} Network
 }
 \examples{
+\donttest{
 Y <- BGGM::bfi[1:500, 1:20]
 
 # fit model
@@ -60,6 +61,7 @@ fit_explore <- explore(Y)
 
 E <- select(fit_explore)
 
+
 # plot
 plt <- plot(E,
             node_labels = letters[1:20],
@@ -67,4 +69,5 @@ plt <- plot(E,
             node_groups = rep(c("1", "2", "3", "4"), each = 5),
             edge_colors = "classic", txt_size = 8,
             alpha = 0.5, palette = "Set2")
+}
 }

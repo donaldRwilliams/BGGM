@@ -26,6 +26,7 @@
 Fitted Values for \code{estimate} Objects
 }
 \examples{
+\donttest{
 # data
 Y <- subset(tas, gender == "M")[,-ncol(tas)]
 
@@ -34,4 +35,5 @@ fit <- estimate(Y)
 
 # fitted values
 fitted(fit, iter = 25)
+}
 }

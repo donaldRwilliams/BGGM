@@ -27,7 +27,7 @@
 #' @export
 #'
 #' @examples
-#'
+#' \donttest{
 #' Y1 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
 #' Y2 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
 #' Y3 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
@@ -41,6 +41,7 @@
 #'
 #' # summary
 #' summary(ggm_bf_sel)
+#' }
 
 select.ggm_compare_bf <- function(object, BF_cut = 3,...){
 
@@ -174,7 +175,7 @@ summary.select.ggm_compare_bf <- function(object,...){
 #' # fit model
 #' fit <- ggm_compare_bf(Y1, Y2,
 #'                      prior_sd = 0.20,
-#'                      iter = 250,
+#'                      iter = 50,
 #'                      cores = 2)
 #' # select E
 #' E <- select(fit, BF_cut = 3)

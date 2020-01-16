@@ -37,7 +37,7 @@ many groups are all the same. In this case, if there is evidence for the alterna
 from the others. Thus pairwise group contrasts could be used after testing the equality of more than two groups.
 }
 \examples{
-
+\donttest{
 Y1 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
 Y2 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
 Y3 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
@@ -51,4 +51,5 @@ ggm_bf_sel <- select(ggm_bf, BF_cut = 3)
 
 # summary
 summary(ggm_bf_sel)
+}
 }

@@ -163,12 +163,8 @@ ggm_compare_ppc <- function(..., type = "global", iter = 5000, cores = 1){
    obs_jsd <- list()
 
    cl <- parallel::makeCluster(cores)
-   # parallel::clusterExport(cl, varlist = c("Mo_risk_help_node",
-   #                                         "node_jsd_help",
-   #                                         "beta_helper",
-   #                                         "kl_func"))
 
-   doSNOW::registerDoSNOW(cl)
+   doParallel::registerDoParallel(cl)
 
    nms <- list()
 
@@ -352,7 +348,7 @@ print.summary.ggm_compare_ppc <- function(x, ...){
 
 #' Plot \code{ggm_compare_ppc} Objects
 #'
-#' @description Plot \href{https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html}{ggridges} for
+#' @description Plot \href{https://CRAN.R-project.org/package=ggridges/vignettes/introduction.html}{ggridges} for
 #' the GGM comparison with posterior predictive KL-divergence. The plots contain the predictive distribution, assuming group equality, as well as
 #' the observed KL-divergence. Further, the predictive distributions are conveniently colored to infer whether the null of group equality
 #' should be rejected. This is accomplished by having the critical region, corresponding to a desired 'significance' level, shaded in red.
@@ -373,7 +369,7 @@ print.summary.ggm_compare_ppc <- function(x, ...){
 #'
 #' @note This method is Bayesian, as it relies on the posterior predictive distribution. That said, there are clear parallels to frequentist testing-e.g.,
 #' assuming group equality and critical regions. Most importantly, this method CANNOT provide evidence for the null hypothesis. Thus it can only reject
-#' the underlying assumption of group equality. For gaining (relative) evidence for the null hypothesis see X.
+#' the underlying assumption of group equality..
 #'
 
 #'
@@ -514,8 +510,12 @@ plot.ggm_compare_ppc <- function(x,
 
         test <- reshape::melt( do.call(rbind, fit$predictive_risk[[i]]))
 
-        test$node <- factor(test$X2, levels = rev(1:fit$info$dat_info$p[1]), labels = rev(1:fit$info$dat_info$p[1]))
-        dat_obs$node <- factor(dat_obs$node, levels = rev(1:fit$info$dat_info$p[1]), labels = rev(1:fit$info$dat_info$p[1]))
+        test$node <- factor(test$X2,
+                            levels = rev(1:fit$info$dat_info$p[1]),
+                            labels = rev(1:fit$info$dat_info$p[1]))
+
+        dat_obs$node <- factor(dat_obs$node, levels = rev(1:fit$info$dat_info$p[1]),
+                               labels = rev(1:fit$info$dat_info$p[1]))
 
         plt[[i]] <- ggplot(test, aes(x = value,
                                      y = node,
@@ -524,7 +524,6 @@ plot.ggm_compare_ppc <- function(x,
                               calc_ecdf = TRUE,
                               quantiles = c(0.025, 1 - (critical))) +
           scale_fill_manual( values = c(col_noncritical, col_noncritical, col_critical)) +
-          # scale_y_discrete(limits = rev(levels(as.factor(test$X2)))) +
           geom_point(data = dat_obs, inherit.aes = F,  aes(x = ppc, y = node)) +
           # scale_y_discrete(limits = rev(levels(as.factor(dat_obs$node)))) +
           theme(legend.position = "none") +

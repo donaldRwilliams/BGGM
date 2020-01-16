@@ -49,7 +49,7 @@ Y2 <- MASS::mvrnorm(500, mu = rep(0,16),
 # fit model
 fit <- ggm_compare_bf(Y1, Y2,
                      prior_sd = 0.20,
-                     iter = 250,
+                     iter = 50,
                      cores = 2)
 # select E
 E <- select(fit, BF_cut = 3)

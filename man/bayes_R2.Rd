@@ -27,6 +27,7 @@ compare predictabiltiy between nodes within a network or between
 networks. Also, only posterior predictive R2 is implemented.
 }
 \examples{
+\donttest{
 # data
 Y <- subset(tas, gender == "M")[,-ncol(tas)]
 
@@ -41,4 +42,5 @@ r2
 
 # plot
 plot(r2)
+}
 }

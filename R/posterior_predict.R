@@ -10,6 +10,7 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' # data
 #' Y <- subset(tas, gender == "M")[,-ncol(tas)]
 #'
@@ -18,6 +19,7 @@
 #'
 #' # predict
 #' posterior_predict(fit, iter = 25)
+#' }
 posterior_predict <- function(object, iter = 500,
                               cred = 0.95, newdata = NULL,
                               summary = TRUE,...){

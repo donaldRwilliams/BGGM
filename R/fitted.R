@@ -7,6 +7,7 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' # data
 #' Y <- subset(tas, gender == "M")[,-ncol(tas)]
 #'
@@ -15,6 +16,7 @@
 #'
 #' # fitted values
 #' fitted(fit, iter = 25)
+#'}
 fitted.estimate <- function(object, iter = 500,
                             cred = 0.95,
                             summary = TRUE,

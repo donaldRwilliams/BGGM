@@ -33,7 +33,7 @@
 one object of class \code{ggplot} when \code{type = "global"}. One object for each pairwise contrast when \code{type = "nodewise"}
 }
 \description{
-Plot \href{https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html}{ggridges} for
+Plot \href{https://CRAN.R-project.org/package=ggridges/vignettes/introduction.html}{ggridges} for
 the GGM comparison with posterior predictive KL-divergence. The plots contain the predictive distribution, assuming group equality, as well as
 the observed KL-divergence. Further, the predictive distributions are conveniently colored to infer whether the null of group equality
 should be rejected. This is accomplished by having the critical region, corresponding to a desired 'significance' level, shaded in red.
@@ -42,7 +42,7 @@ Thus, if the observed value is in the red region, this suggests the null hypothe
 \note{
 This method is Bayesian, as it relies on the posterior predictive distribution. That said, there are clear parallels to frequentist testing-e.g.,
 assuming group equality and critical regions. Most importantly, this method CANNOT provide evidence for the null hypothesis. Thus it can only reject
-the underlying assumption of group equality. For gaining (relative) evidence for the null hypothesis see X.
+the underlying assumption of group equality..
 }
 \examples{
 # assume group equality

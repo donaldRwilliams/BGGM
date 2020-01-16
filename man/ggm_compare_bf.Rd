@@ -47,10 +47,12 @@ equality). This assumes \code{hypothesis = NULL}. If a hypothesis is tested, the
 information including the Bayes factors and posterior probabilities for each hypothesis.
 }
 \examples{
+\donttest{
 # assume null is true
 Y1 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
 Y2 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
 Y3 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
 
 bf_ggm <- ggm_compare_bf(Y1, Y2, Y3, prior_sd = .5, iter = 500, cores = 2)
+}
 }

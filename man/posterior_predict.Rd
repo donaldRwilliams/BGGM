@@ -37,6 +37,7 @@ Setting it to \code{FALSE} can be used to then compute performance metrics.}
 Posterior Predictive Distribution for \code{estimate} Objects
 }
 \examples{
+\donttest{
 # data
 Y <- subset(tas, gender == "M")[,-ncol(tas)]
 
@@ -45,4 +46,5 @@ fit <- estimate(Y)
 
 # predict
 posterior_predict(fit, iter = 25)
+}
 }

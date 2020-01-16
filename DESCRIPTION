@@ -2,26 +2,19 @@ Package: BGGM
 Type: Package
 Title: Bayesian Gaussian Graphical Models
 Version: 1.0.0
-Date: 2019-12-01
+Date: 2020-01-16
 Authors@R: c(person("Donald", "Williams", email = "drwwilliams@ucdavis.edu", role = c("aut", "cre")),
              person("Joris", "Mulder", email = "J.Mulder3@uvt.nl", role = "aut"))
-Maintainer: Donald R. Williams <drwwilliams@ucdavis.edu>
-Description: This package is described in Williams and Mulder (2019) and Williams (2018). 
-    The methods are separated into two Bayesian approaches for inference: hypothesis testing 
-    and estimation. The former is described in Williams and Mulder (2018a), and allows for 
-    testing for the presence of edges with the Bayes factor. One-sided hypothesis testing is 
-    also possible. These methods can also provide evidence for the null hypothesis. There are 
-    extensions for confirmatory hypothesis testing in GGMs, that can include inequality or 
-    equality constraints on the partial correlation. The estimation based methods are described 
-    in Williams (2018). The methods offer advantages compared to classical methods, in that a 
-    measure of uncertainty is provided for all parameters. For example, each node has a 
-    distribution for the variance explained. Measure of out-of-sample performance are also available. 
+Description: Fit Bayesian Gaussian graphical models. The methods are separated into 
+    two Bayesian approaches for inference: hypothesis testing and estimation. There are 
+    extensions for confirmatory hypothesis testing, comparing GGMs, and nodewise 
+    predictability.
 Depends: R (>= 3.5.0)
 License: GPL-2
 Imports: 
   mvnfast  (>= 0.2.5), 
   foreach  (>= 1.4.7), 
-  doSNOW   (>= 1.0.18), 
+  doParallel   (>= 1.0.15), 
   ggplot2  (>= 3.2.1), 
   mvtnorm  (>= 1.0.11), 
   stringr  (>= 1.4.0), 
@@ -30,15 +23,15 @@ Imports:
   pracma   (>= 2.2.5), 
   network (>= 1.15),
   bayesplot (>= 1.7.1),
-  sna,
-  reshape2, 
-  shiny, 
-  MASS,
-  cowplot,
+  sna (>= 2.5),
+  shiny (>= 1.4.0), 
+  reshape2 (>= 1.4.3),
+  cowplot (>= 1.0.0),
   stats,
   parallel,
   Matrix,
-  reshape
+  reshape,
+  MASS
 Suggests: 
   knitr, 
   rmarkdown, 

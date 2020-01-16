@@ -749,6 +749,7 @@ summary.select.explore <- function(object, hyp = "H1",
 #' @return object of class \code{ggplot}
 #' @export
 #' @examples
+#' \donttest{
 #' Y <- BGGM::bfi[1:500, 1:20]
 #'
 #' # fit model
@@ -758,6 +759,7 @@ summary.select.explore <- function(object, hyp = "H1",
 #'
 #' E <- select(fit_explore)
 #'
+#'
 #' # plot
 #' plt <- plot(E,
 #'             node_labels = letters[1:20],
@@ -765,7 +767,7 @@ summary.select.explore <- function(object, hyp = "H1",
 #'             node_groups = rep(c("1", "2", "3", "4"), each = 5),
 #'             edge_colors = "classic", txt_size = 8,
 #'             alpha = 0.5, palette = "Set2")
-
+#'}
 plot.select.explore <-
   function(x,
            layout = "circle",

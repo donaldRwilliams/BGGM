@@ -45,7 +45,7 @@ object of class \code{ggplot}
 Plot Adjacency Matrix
 }
 \examples{
-
+\donttest{
 # data
 Y <- rsa[,-ncol(rsa)]
 
@@ -56,4 +56,5 @@ fit_explore <- explore(Y, iter = 1000)
 E <- select(fit_explore)
 
 plot_adjacency(E$Adj_10, node_groups = BGGM:::rsa_labels)
+}
 }

@@ -25,7 +25,7 @@ Y <- subset(tas, gender == "M")[,-ncol(tas)]
 fit <- estimate(Y)
 
 # predict (note summary = FALSE)
-pred <- predict(fit, summary = FALSE)
+pred <- predict(fit, iter  = 50, summary = FALSE)
 
 rmse(pred)
 }
