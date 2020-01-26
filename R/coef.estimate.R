@@ -29,7 +29,6 @@
 #' \code{call} \code{match.call()}
 #'
 #' @examples
-#'
 #' # p = 10
 #' Y <- BGGM::bfi[,1:10]
 #'

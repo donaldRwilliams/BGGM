@@ -14,8 +14,11 @@
 map <- function(Y){
 
   x <- na.omit(Y)
+
   x <- scale(x, scale = FALSE)
+
   p <- ncol(x)
+
   n <- nrow(x)
 
   S <- t(x) %*% x
@@ -36,7 +39,6 @@ map <- function(Y){
 
   return(returned_object)
 }
-
 
 #' Print Method for \code{map} Objects
 #'

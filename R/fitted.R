@@ -63,6 +63,7 @@ fitted.estimate <- function(object, iter = 500,
     pred <- list()
 
     for(i in 1:p){
+
       beta <- betas$betas[[i]]
       pred[[i]] <- t(sapply(1:iter, function(s) {dat[,-i] %*% t(beta[s,])}))
 
@@ -70,6 +71,7 @@ fitted.estimate <- function(object, iter = 500,
 
     returned_object <- list(pred = pred, dat = dat)
     class(returned_object) <- "fitted.estimate"
+
     }
 
 return(returned_object)

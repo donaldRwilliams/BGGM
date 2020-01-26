@@ -26,6 +26,7 @@
 Residuals for \code{estimate} Objects
 }
 \examples{
+\donttest{
 # data
 Y <- subset(tas, gender == "M")[,-ncol(tas)]
 
@@ -34,4 +35,5 @@ fit <- estimate(Y)
 
 # diagnostic plot
 residuals(fit, iter = 25)
+}
 }

@@ -325,6 +325,7 @@ error_helper <- function(ypred, y, ci_width, measure, sigmas =  NULL) {
 
 
   all_residual <- sweep(ypred, 2, y)
+
   if(measure == "mse"){
     out <- rowMeans(all_residual^2)
   }
@@ -400,9 +401,8 @@ KL = function(Theta,hatTheta){
 }
 
 QL = function(Theta,hatTheta){
-
-
-  # Kuismin, M., & Sillanpaa, M. J. (2016). Use of Wishart prior and simple extensions for
+  # Kuismin, M., & Sillanpaa, M. J. (2016). Use of Wishart prior
+  # and simple extensions for
   # sparse precision matrix estimation. PloS one, 11(2), e0148171.
 
   p = ncol(Theta)
@@ -417,16 +417,12 @@ QL = function(Theta,hatTheta){
 
 }
 
-
 unbiased_cov <- function(x){
   x <- scale(x)
   n <- nrow(x) - 1
   mle_cov <- n^-1 * t(x) %*% x
   stats::cov2cor(solve(mle_cov))
 }
-
-
-
 
 Mo_risk_help <- function(x, post, n1, n2, p){
   inv_mat <- post[,,x]

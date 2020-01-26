@@ -42,7 +42,6 @@ each draws is converted to the corresponding coefficients and error variances. T
 to perform Bayesian multiple regression.
 }
 \examples{
-
 # p = 10
 Y <- BGGM::bfi[,1:10]
 

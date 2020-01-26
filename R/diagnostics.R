@@ -25,19 +25,23 @@
 #'}
 diagnostics <- function(object, iter = 500,...){
 
-
-  oldw <- getOption("warn")
-  options(warn = -1)
-
+  # check class
   if(class(object) != "estimate"){
     stop("object must be of class estimate")
   }
 
-   p <- object$p
+  # number of variables
+  p <- object$p
+
+  # residuals
   .resid <- residuals(object, iter = iter, summary = TRUE)
+
+  # fitted values
   .fitted <- fitted(object, iter = iter, summary = TRUE)
 
+  # storate plots
   plot <- list()
+
   for(i in 1:p){
 
     dat <- data.frame(.resid = .resid[,1,i], .fitted = .fitted[,1,i])
@@ -45,14 +49,15 @@ diagnostics <- function(object, iter = 500,...){
     plot1 <- ggplot(dat, aes(.fitted, .resid)) +
       geom_point() +
       stat_smooth(method="loess", se = FALSE) +
-      geom_hline(yintercept = 0, col = "red", linetype = "dashed") +
+      geom_hline(yintercept = 0,
+                 col = "red",
+                 linetype = "dashed") +
       xlab("Fitted values") +
       ylab("Residuals") +
       ggtitle("Residuals vs. Fitted")
 
-
-
-    plot2 <- ggplot(dat, aes(sample=.resid/sd(.resid)))+stat_qq() +
+    plot2 <- ggplot(dat, aes(sample=.resid/sd(.resid))) +
+      stat_qq() +
       stat_qq_line() +
       xlab("Theoretical Quantiles") +
       ylab("Standardized Residuals") +
@@ -64,7 +69,8 @@ diagnostics <- function(object, iter = 500,...){
         xlab("Residuals") +
         stat_function(
           fun = dnorm,
-          args = list(mean = mean(dat$.resid), sd = sd(dat$.resid)),
+          args = list(mean = mean(dat$.resid),
+                      sd = sd(dat$.resid)),
           lwd = 1.5,
           col = 'red',
           alpha = 0.85,
@@ -80,10 +86,11 @@ diagnostics <- function(object, iter = 500,...){
 
     suppressMessages(
     plot[[i]] <- cowplot::plot_grid("", bottom, nrow = 2,
-                                    labels = paste("Node", i), rel_heights = c(1, 10))
+                                    labels = paste("Node", i),
+                                    rel_heights = c(1, 10))
   )
 
   }
-  options(warn = oldw)
+
   plot
 }

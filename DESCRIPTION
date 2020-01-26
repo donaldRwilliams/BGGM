@@ -7,8 +7,12 @@ Authors@R: c(person("Donald", "Williams", email = "drwwilliams@ucdavis.edu", rol
              person("Joris", "Mulder", email = "J.Mulder3@uvt.nl", role = "aut"))
 Description: Fit Bayesian Gaussian graphical models. The methods are separated into 
     two Bayesian approaches for inference: hypothesis testing and estimation. There are 
-    extensions for confirmatory hypothesis testing, comparing GGMs, and nodewise 
-    predictability.
+    extensions for confirmatory hypothesis testing, comparing Gaussian graphical models, 
+    and node wise predictability. These methods were recently introduced in the Gaussian 
+    graphical model literature, including 
+    Williams (2019) <doi:10.31234/osf.io/x8dpr>, 
+    Williams and Mulder (2019) <doi:10.31234/osf.io/ypxd8>,
+    Williams, Rast, Pericchi, and Mulder (2019) <doi:10.31234/osf.io/yt386>.
 Depends: R (>= 3.5.0)
 License: GPL-2
 Imports: 

@@ -30,6 +30,7 @@ Setting it to \code{FALSE} can be used to then compute performance metrics.}
 Prediction from an \code{estimate} Object
 }
 \examples{
+\donttest{
 # data
 Y <- subset(tas, gender == "M")[,-ncol(tas)]
 
@@ -38,4 +39,5 @@ fit <- estimate(Y)
 
 # predict
 predict(fit, iter = 25)
+}
 }

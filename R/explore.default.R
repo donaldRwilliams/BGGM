@@ -37,7 +37,7 @@
 #' Y <- BGGM::bfi[,1:10]
 #'
 #' # sample posterior
-#' fit <- explore(Y, iter = 5000)
+#' fit <- explore(Y, iter = 500)
 #'
 #' # select E
 #' E <- select(fit, BF_cut = 3)

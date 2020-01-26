@@ -46,6 +46,7 @@ tail region (\code{type = "ridgeline"} ) color}
 Plot \code{metric} Objects
 }
 \examples{
+\donttest{
 # data
 Y <- subset(tas, gender == "M")[,-ncol(tas)]
 
@@ -61,4 +62,5 @@ error <- mse(pred)
 
 # plot
 plot(error)
+}
 }

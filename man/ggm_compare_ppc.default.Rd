@@ -54,7 +54,7 @@ For gaining (relative) evidence for the null hypothesis see..
 see methods(class = "ggm_compare_ppc")
 }
 \examples{
-\dontrun{
+\donttest{
 # Assume null is true
 Y1 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
 Y2 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))

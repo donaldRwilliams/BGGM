@@ -336,6 +336,7 @@ print.metric <- function(x,...){
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' # data
 #' Y <- subset(tas, gender == "M")[,-ncol(tas)]
 #'
@@ -351,6 +352,7 @@ print.metric <- function(x,...){
 #'
 #' # plot
 #' plot(error)
+#' }
 plot.metric <- function(x, type = "error_bar",
                         cred = 0.95, alpha = 0.5,
                         scale = 1, width = 0,

@@ -32,11 +32,6 @@ shiny_bggm.explore <- function(object,...){
   ui <-  fluidPage(
     titlePanel("BGGM"),
     selectInput("hyp","Hypothesis",choices=choices, selected = "greater"),
-    # selectInput("hyp", "Hypothesis:",
-    #             c("\u039C"= "two.sided",
-    #               "\u039C > 0" = "greater",
-    #               "\u039C < 0" = "less"),
-    #             selected = "greater"),
     fluidRow(column(10, sliderInput("cut_off",
                                     label = "Bayes Factor Threshold:",
                                     min = 3, max = 100, value = 3))),
@@ -114,7 +109,7 @@ shiny_bggm.explore <- function(object,...){
                                     palette = temp(), ...) +
             theme(legend.position = "none") +
             ggtitle("Inconclusive")
-          # #
+
           plts <- cowplot::plot_grid(plt_h1, plt_h0, plt_adj,
                                      rel_widths = c(1),
                                      nrow = 1)
@@ -130,52 +125,7 @@ shiny_bggm.explore <- function(object,...){
         req(plots())
         plots()
 
-        #   if(is.null(inputs_dots()$node_groups)){
-        #     plt_h1 <- plts()$plt +
-        #       theme(legend.position = "none") +
-        #       ggtitle("Conditional Dependence")
-        #     plt_h0 <- plts()$plt_null + theme(legend.position = "none") +
-        #       ggtitle("Conditional Independence")
-        #
-        #     plt_adj <- plot_adjacency(incon(), ... )
-        #
-        #     cowplot::plot_grid(plt_h1, plt_h0, plt_adj, nrow = 1)
-        #
-        #
-        #
-        #
-        # } else {
-        #
-        # plt_h1 <- plts()$plt +
-        #   theme(legend.position = "none") +
-        #   ggtitle("Conditional Dependence")
-        # plt_h0 <- plts()$plt_null + theme(legend.position = "none") +
-        #   ggtitle("Conditional Independence")
-        #
-        # plt_adj <- plot_adjacency(incon(), ... ) +
-        #   theme(legend.position = "top",
-        #         legend.direction = "vertical") +
-        #   scale_color_brewer(name = "",
-        #                      palette = temp())
-        #
-        # leg <- cowplot::get_legend(plt_adj)
-        #
-        # plt_adj <- plot_adjacency(incon(),
-        #                           palette = temp(), ...) +
-        #   theme(legend.position = "none") +
-        #   ggtitle("Inconclusive")
-        # # #
-        # plts <- cowplot::plot_grid(plt_h1, plt_h0, plt_adj,
-        #                            rel_widths = c(1),
-        #                            nrow = 1)
-        # cowplot::plot_grid(plts,
-        #                    leg,nrow = 1,
-        #                    rel_widths = c(5, 1))
-        #
-        # }
-
-      })
-      # }, height = 350, width = 1000)
+       })
 
       output$Download <- downloadHandler(
         filename = function(){

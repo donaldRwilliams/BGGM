@@ -13,6 +13,7 @@
 #'         p (number of nodes). \code{summary = FALSE}:
 #'         list containing predictions for each variable
 #' @examples
+#' \donttest{
 #' # data
 #' Y <- subset(tas, gender == "M")[,-ncol(tas)]
 #'
@@ -21,6 +22,7 @@
 #'
 #' # predict
 #' predict(fit, iter = 25)
+#' }
 #' @export
 predict.estimate <- function(object, iter = 500, cred = 0.95,
                              newdata = NULL, summary = TRUE,...){

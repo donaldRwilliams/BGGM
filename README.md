@@ -1,5 +1,7 @@
 
-<!-- ![](https://github.com/donaldRwilliams/BGGM/blob/master/man/figures/logo2.jpg) -->
+    ## Registered S3 method overwritten by 'GGally':
+    ##   method from   
+    ##   +.gg   ggplot2
 
 # Installation
 

@@ -320,6 +320,7 @@ plot.summary.estimate <- function(x, color = "black", width = 0,...){
                   color = color) +
     geom_point() +
     xlab("Index")
- return(plt)
+
+  return(plt)
  }
 

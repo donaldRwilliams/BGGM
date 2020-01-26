@@ -73,6 +73,7 @@
 #' }
 #'
 #' @examples
+#' \donttest{
 #' # p = 10
 #' Y <- BGGM::bfi[,1:10]
 #'
@@ -93,12 +94,15 @@
 #'
 #' # null adjacency matrix
 #' E$Adj_01
+#' }
 #' @export
 select.explore <- function(object,
                            BF_cut = 3,
                            alternative = "two.sided", ...){
   # rename
   x <- object
+
+  # hyp probability
   hyp_prob <- BF_cut / (BF_cut + 1)
 
   # posterior samples
@@ -111,6 +115,7 @@ select.explore <- function(object,
                                   lapply(1:x$cores, function(z)
                                   x$samples[[z]]$fisher_z_prior)))
 
+  # two sided testing
   if(alternative == "two.sided"){
 
     # matrices for storage
@@ -153,6 +158,8 @@ select.explore <- function(object,
                            alternative = alternative,
                            call = match.call())
   }
+
+  # one sided (greater)
   if(alternative == "greater"){
 
     # prior density
@@ -205,6 +212,8 @@ select.explore <- function(object,
 
 
   }
+
+  # one sided (less)
   if(alternative == "less")  {
 
     # prior density
@@ -256,6 +265,8 @@ select.explore <- function(object,
                            call = match.call())
 
   }
+
+  # exhaustive testing
   if(alternative == "exhaustive"){
 
     if(is.null(hyp_prob)){

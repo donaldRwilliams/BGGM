@@ -13,6 +13,7 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' # data
 #' Y <- subset(tas, gender == "M")[,-ncol(tas)]
 #'
@@ -21,6 +22,7 @@
 #'
 #' # diagnostic plot
 #' residuals(fit, iter = 25)
+#' }
 residuals.estimate <- function(object, iter = 500,
                                cred = 0.95,
                                summary = TRUE,

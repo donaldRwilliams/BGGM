@@ -10,10 +10,10 @@ knitr::opts_chunk$set(
   dev = "png",
   dpi = 500,
   fig.align = "center"
-)
+  )
+library(ggplot2)
+library(BGGM)
 ```
-
-<!-- ![](https://github.com/donaldRwilliams/BGGM/blob/master/man/figures/logo2.jpg) -->
 
 # Installation
 You can install BGGM from github as follows.

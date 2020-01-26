@@ -429,8 +429,6 @@ plot.select.estimate <-
       attrname =  "abs_weights",
       value = abs(x$partials_non_zero) * edge_multiplier
     )
-    #
-    #
     if (edge_colors == "classic") {
       network::set.edge.attribute(
         x = net,
@@ -489,9 +487,6 @@ plot.select.estimate <-
         label = TRUE,
         ...
       ) +
-        # geom_point(aes(color = color),
-        #            size = node_outer_size,
-        #            alpha = 0.5) +
         geom_point(aes(color = color),
                    size = node_inner_size,
                    alpha = 1) +

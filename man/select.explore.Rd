@@ -85,6 +85,7 @@ absence of an edge. \code{exhaustive} tests negative vs. positive  vs. zero. Her
 hypotheses.
 }
 \examples{
+\donttest{
 # p = 10
 Y <- BGGM::bfi[,1:10]
 
@@ -105,4 +106,5 @@ E$Adj_10
 
 # null adjacency matrix
 E$Adj_01
+}
 }
