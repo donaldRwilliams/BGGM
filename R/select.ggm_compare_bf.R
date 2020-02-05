@@ -107,7 +107,7 @@ print(x$object)
 summary.select.ggm_compare_bf <- function(object,...){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
-  cat("Type: GGM Compare with the Posterior Distribution\n")
+  cat("Type: GGM Compare with Bayesian Hypothesis Testing \n")
   # number of iterations
   p <- object$object$info$dat_info$p[1]
   cat("Posterior Samples:", object$object$iter, "\n")

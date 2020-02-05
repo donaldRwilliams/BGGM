@@ -9,7 +9,7 @@ explore(Y, prior_sd = 0.25, iter = 5000, cores = 2, ...)
 \arguments{
 \item{Y}{data matrix  (\emph{n} by  \emph{p}).}
 
-\item{prior_sd}{hypothesized standard deviation of the prior distribution.}
+\item{prior_sd}{hypothesized standard deviation for the edges or partial correlations}
 
 \item{iter}{number of posterior samples.}
 
