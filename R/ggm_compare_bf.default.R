@@ -43,9 +43,20 @@
 #' Y2 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
 #' Y3 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
 #'
-#' bf_ggm <- ggm_compare_bf(Y1, Y2, Y3, prior_sd = .5, iter = 500, cores = 2)
+#' # fit model
+#' bf_ggm <- ggm_compare_bf(Y1, Y2, Y3,
+#'                          prior_sd = .2,
+#'                          iter = 500, cores = 2)
+#'
+#' # select graph
+#' sel <- select(bf_ggm, BF_cut = 3)
+#'
+#' # plot
+#' plot(sel)
+#'
 #' }
-ggm_compare_bf <- function(..., prior_sd = 0.35, iter = 25000, cores = 2){
+ggm_compare_bf <- function(..., prior_sd = 0.20,
+                           iter = 25000, cores = 2){
 
   priorprob <- 1
 
