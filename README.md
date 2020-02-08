@@ -1,9 +1,11 @@
 
+# BGGM: Bayesian Gaussian Graphical Models
+
 [![CRAN
 Version](http://www.r-pkg.org/badges/version/BGGM)](https://cran.r-project.org/package=BGGM)
 [![Downloads](https://cranlogs.r-pkg.org/badges/BGGM)](https://cran.r-project.org/package=BGGM)
 
-# Summary
+## Summary
 
 Gaussian graphical models (GGM) allow for learning conditional
 (in)dependence structures that are encoded by partial correlations.
@@ -30,7 +32,7 @@ for comparing GGMs across any number of groups. The package also
 includes a suite of options for model checking. Together, **BGGM** is a
 comprehensive toolbox for Gaussian graphical modeling in `R`.
 
-# Installation
+## Installation
 
 You can install BGGM from github as follows.
 
@@ -294,7 +296,7 @@ note: equal hypothesis prior probabilities
 
 Note that `A1--A2` denotes the partial correlation between variables A1
 and A2. Any number of hypothesis can be tested. They just need to be
-separated by a a semi-colon, e.g., `hypothesis = c(A1--A2 > 0; A1--A2
+separated by a semi-colon, e.g., `hypothesis = c(A1--A2 > 0; A1--A2
 = 0)`, which also demonstrates that it is possible to simultaneously
 test both inequality (`>` or `<`) and equality (`=`) restrictions.
 
