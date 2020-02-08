@@ -15,11 +15,19 @@ library(ggplot2)
 library(BGGM)
 ```
 
-# Installation
-
 [![CRAN Version](http://www.r-pkg.org/badges/version/BGGM)](https://cran.r-project.org/package=BGGM)
 [![Downloads](https://cranlogs.r-pkg.org/badges/BGGM)](https://cran.r-project.org/package=BGGM)
 
+
+
+
+# Summary
+Gaussian graphical models (GGM) allow for learning conditional (in)dependence structures that are encoded by partial correlations. Whereas there are several `R` packages for classical methods [see @Kuismin2017, Table 1], there are only two that implement a Bayesian approach [@Leday2018; @Mohammadi2015a]. These are exclusively focused on identifying the graphical structure. The package **BGGM** not only contains novel Bayesian methods for this purpose, but it also includes Bayesian methodology for extending inference beyond identifying non-zero relations. 
+
+**BGGM** is built around two approaches for *Bayesian* inference--estimation and hypothesis testing. This distinction is arbitrary [see @Rouder2018], but is used to organize this work.  The former focuses on the posterior distribution and includes extensions to assess predictability [@Haslbeck2018], as well as methodology to compare partial correlations. The latter includes methods for Bayesian hypothesis testing, in both exploratory and confirmatory contexts, with the novel matrix-$F$ prior distribution [@Mulder2018]. This allows for testing the null hypothesis of conditional independence, as well as inequality and equality constrained hypotheses. Further, there are several approaches for comparing GGMs across any number of groups.  The package also includes a suite of options for model checking. Together, **BGGM** is a comprehensive toolbox for Gaussian graphical modeling in `R`. 
+
+
+# Installation
 You can install BGGM from github as follows.
 
 ```{r gh-installation, eval = FALSE}
@@ -27,10 +35,7 @@ You can install BGGM from github as follows.
 devtools::install_github("donaldRwilliams/BGGM")
 ```
 
-# Summary
-Gaussian graphical models (GGM) allow for learning conditional (in)dependence structures that are encoded by partial correlations. Whereas there are several `R` packages for classical methods [see @Kuismin2017, Table 1], there are only two that implement a Bayesian approach [@Leday2018; @Mohammadi2015a]. These are exclusively focused on identifying the graphical structure. The package **BGGM** not only contains novel Bayesian methods for this purpose, but it also includes Bayesian methodology for extending inference beyond identifying non-zero relations. 
 
-**BGGM** is built around two approaches for *Bayesian* inference--estimation and hypothesis testing. This distinction is arbitrary [see @Rouder2018], but is used to organize this work.  The former focuses on the posterior distribution and includes extensions to assess predictability [@Haslbeck2018], as well as methodology to compare partial correlations. The latter includes methods for Bayesian hypothesis testing, in both exploratory and confirmatory contexts, with the novel matrix-$F$ prior distribution [@Mulder2018]. This allows for testing the null hypothesis of conditional independence, as well as inequality and equality constrained hypotheses. Further, there are several approaches for comparing GGMs across any number of groups.  The package also includes a suite of options for model checking. Together, **BGGM** is a comprehensive toolbox for Gaussian graphical modeling in `R`. 
 
 ## Estimation
 There are two possibilities for *estimating* GGMs. The first is an analytic solution and the second samples from the posterior distribution [described in @Williams2018bayes]. Sampling is recommended because the samples are required for various functions in **BGGM** (e.g., posterior predictive checks and prediction). 

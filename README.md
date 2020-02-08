@@ -1,16 +1,7 @@
 
-# Installation
-
 [![CRAN
 Version](http://www.r-pkg.org/badges/version/BGGM)](https://cran.r-project.org/package=BGGM)
 [![Downloads](https://cranlogs.r-pkg.org/badges/BGGM)](https://cran.r-project.org/package=BGGM)
-
-You can install BGGM from github as follows.
-
-``` r
-# install.packages("devtools")
-devtools::install_github("donaldRwilliams/BGGM")
-```
 
 # Summary
 
@@ -38,6 +29,15 @@ equality constrained hypotheses. Further, there are several approaches
 for comparing GGMs across any number of groups. The package also
 includes a suite of options for model checking. Together, **BGGM** is a
 comprehensive toolbox for Gaussian graphical modeling in `R`.
+
+# Installation
+
+You can install BGGM from github as follows.
+
+``` r
+# install.packages("devtools")
+devtools::install_github("donaldRwilliams/BGGM")
+```
 
 ## Estimation
 
