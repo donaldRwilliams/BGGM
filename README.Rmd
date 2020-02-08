@@ -2,7 +2,7 @@
 output: github_document
 bibliography: joss_paper/paper.bib
 ---
-```{r, echo = FALSE}
+```{r, echo = FALSE, message=F}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -16,6 +16,10 @@ library(BGGM)
 ```
 
 # Installation
+
+[![CRAN Version](http://www.r-pkg.org/badges/version/BGGM)](https://cran.r-project.org/package=BGGM)
+[![Downloads](https://cranlogs.r-pkg.org/badges/BGGM)](https://cran.r-project.org/package=BGGM)
+
 You can install BGGM from github as follows.
 
 ```{r gh-installation, eval = FALSE}
