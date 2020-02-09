@@ -1,5 +1,5 @@
 
-<img src="joss_paper/hex.pdf" height="300"/>
+<img src="joss_paper/hex.png" width = 120/>
 
 # BGGM: Bayesian Gaussian Graphical Models
 
