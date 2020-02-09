@@ -15,6 +15,8 @@ library(ggplot2)
 library(BGGM)
 ```
 
+<img src="joss_paper/hex.pdf" height="300"/>
+
 # BGGM: Bayesian Gaussian Graphical Models
 
 [![CRAN Version](http://www.r-pkg.org/badges/version/BGGM)](https://cran.r-project.org/package=BGGM)

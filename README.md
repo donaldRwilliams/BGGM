@@ -1,4 +1,6 @@
 
+<img src="joss_paper/hex.pdf" height="300"/>
+
 # BGGM: Bayesian Gaussian Graphical Models
 
 [![CRAN
