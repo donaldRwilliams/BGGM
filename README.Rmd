@@ -35,8 +35,7 @@ Gaussian graphical models (GGM) allow for learning conditional (in)dependence st
 You can install BGGM from github as follows.
 
 ```{r gh-installation, eval = FALSE}
-# install.packages("devtools")
-devtools::install_github("donaldRwilliams/BGGM")
+install.packages("BGGM")
 ```
 
 
