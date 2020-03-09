@@ -22,7 +22,7 @@ date: 07 January 2020
 year: 2020
 bibliography: joss_paper/paper.bib
 output: rticles::joss_article
-csl: apa.csl
+csl: joss_paper/apa.csl
 journal: JOSS
 submitted: 07 January 2020
 published: (pre-print)

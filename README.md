@@ -39,8 +39,7 @@ comprehensive toolbox for Gaussian graphical modeling in `R`.
 You can install BGGM from github as follows.
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("donaldRwilliams/BGGM")
+install.packages("BGGM")
 ```
 
 ## Estimation
