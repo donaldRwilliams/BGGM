@@ -36,10 +36,19 @@ comprehensive toolbox for Gaussian graphical modeling in `R`.
 
 ## Installation
 
-You can install BGGM from github as follows.
+To install the latest release version from CRAN use
 
 ``` r
 install.packages("BGGM")
+```
+
+The current developmental version can be installed with
+
+``` r
+if (!requireNamespace("remotes")) {
+  install.packages("remotes")
+}
+remotes::install_github("donaldRwilliams/BGGM")
 ```
 
 ## Estimation
@@ -65,7 +74,7 @@ fit <- estimate(Y = Y,
                 iter = 1000)
 
 # select graph
-E <- select(fit_analytic, ci_width = 0.95)
+E <- select(fit, ci_width = 0.95)
 
 # summary
 summary(E)

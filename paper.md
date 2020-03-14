@@ -49,7 +49,7 @@ fit <- estimate(Y = Y,
                 iter = 1000)
 
 # select graph
-E <- select(fit_analytic, ci_width = 0.95)
+E <- select(fit, ci_width = 0.95)
 
 # summary
 summary(E)
