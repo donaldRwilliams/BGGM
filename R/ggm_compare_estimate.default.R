@@ -45,7 +45,7 @@
 ggm_compare_estimate.default <- function(..., iter = 5000){
 
 
-  info <- Y_combine(Y1, Y2)
+  info <- Y_combine(...)
 
   p <- info$dat_info$p[1]
 
