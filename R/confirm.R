@@ -69,7 +69,7 @@ confirm <- function(Y, hypothesis, prior_sd = 0.25,
   # https://github.com/Jaeoc/lmhyp
 
   # set prior prob to 1--i.e., equal
-  priorprob = 1
+  prior_prob = 1
 
   returned_mats <-list()
 
