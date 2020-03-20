@@ -69,12 +69,14 @@ confirm <- function(Y, hypothesis, prior_sd = 0.25,
   # https://github.com/Jaeoc/lmhyp
 
   # set prior prob to 1--i.e., equal
-  prior_prob = 1
+  priorprob = 1
 
   returned_mats <-list()
 
   names_check <- unlist(strsplit( strsplit(hypothesis, " ")[[1]], "--"))
+
   names_check <- paste(names_check, collapse = " ")
+
   names_check <- unique(strsplit(gsub("[^[:alnum:] ]", "", names_check), " +")[[1]])
 
   if(any(names_check == "0")){
@@ -92,14 +94,14 @@ confirm <- function(Y, hypothesis, prior_sd = 0.25,
       stop("node names not found in the data")
     }
 
-    hyp_temp <- convert_colnames(hyp = hypothesis, Y = Y)
+    hyp_temp <- BGGM:::convert_colnames(hyp = hypothesis, Y = Y)
   } else {
 
     hyp_temp <- hypothesis
   }
 
   # convert hypotheses
-  hyp <- hyp_converter(hyp_temp)$hyp_converted
+  hyp <- BGGM:::hyp_converter(hyp_temp)$hyp_converted
 
   # fit model
   fit <- explore(Y = Y, prior_sd = prior_sd,
@@ -179,9 +181,9 @@ confirm <- function(Y, hypothesis, prior_sd = 0.25,
       # check dupilicates
       if(any(duplicated(hyp_vars))) stop("Variables should occur only once in a hypothesis. Check semicolons.")
 
-      framed <- framer(hyp2)
+      framed <- BGGM:::framer(hyp2)
 
-      mats <- create_matrices(framed = framed, varnames = colnames(posterior_samples))
+      mats <- BGGM:::create_matrices(framed = framed, varnames = colnames(posterior_samples))
 
       returned_mats[[h]] <- mats
 
@@ -223,7 +225,7 @@ confirm <- function(Y, hypothesis, prior_sd = 0.25,
 
         ineq_marker <- ineq_marker + 1
 
-        if(Matrix::rankMatrix(mats$R_i)[[1]] == nrow(mats$R_i)){
+         if(Matrix::rankMatrix(mats$R_i)[[1]] == nrow(mats$R_i)){
 
           Sigma0 <- cov(prior_samples)
           Sigma1 <- cov(posterior_samples)
@@ -250,32 +252,34 @@ confirm <- function(Y, hypothesis, prior_sd = 0.25,
 
           ci_draws_post <- ci_draws_prior <- NULL
 
-        }
+         } else {
 
-      if(mats$comparisons == "both comparisons")  { # hyp mat not full rank
+           mcrep <- 1e+06
+           Sigma0 <- cov(prior_samples)
+           Sigma1 <- cov(posterior_samples)
 
-          Sigma0 <- cov(prior_samples)
-          Sigma1 <- cov(posterior_samples)
+           draws_post <- mvtnorm::rmvt(n = mcrep,
+                                       delta = colMeans(posterior_samples),
+                                       sigma =  Sigma1)
+           draws_prior <- mvtnorm::rmvt(n = mcrep, delta = mats$beta_zero,
+                                        sigma = Sigma1)
 
-          draws_post <- mvnfast::rmvn(1e+06, mu = colMeans(posterior_samples), sigma = Sigma1)
-          draws_prior <- mvnfast::rmvn(1e+06, mu = mats$beta_zero, sigma = Sigma0)
+           prior_prob <- mean(apply(draws_prior%*%t(mats$R_i) > rep(1, mcrep)%*%t(mats$r_i), 1, prod))
+           posterior_prob <- mean(apply(draws_post%*%t(mats$R_i) > rep(1, mcrep)%*%t(mats$r_i), 1, prod))
 
+           BF <- posterior_prob / prior_prob
 
-          prior_prob <- mean(apply(draws_prior%*%t(mats$R_i) > rep(1, 1e+06)%*%t(mats$r_i), 1, prod))
-          posterior_prob <- mean(apply(draws_post%*%t(mats$R_i) > rep(1, 1e+06)%*%t(mats$r_i), 1, prod))
+             #Credibility interval
+             x_post <- sum(apply(draws_post%*%t(mats$R_i) > rep(1, mcrep)%*%t(mats$r_i), 1, prod))
+             x_prior <- sum(apply(draws_prior%*%t(mats$R_i) > rep(1, mcrep)%*%t(mats$r_i), 1, prod))
+             ci_draws_post <- rbeta(1e4, x_post, 1 + mcrep - x_post)
+             ci_draws_prior <- rbeta(1e4, x_prior, 1 + mcrep - x_prior)
+             BF_draws <- ci_draws_post / ci_draws_prior
 
-          BF <- posterior_prob / prior_prob
+             ci_lb <- quantile(sort(BF_draws), 0.05)
+             ci_ub <- quantile(sort(BF_draws), 0.95)
 
-          #Credibility interval
-          x_post <- sum(apply(draws_post%*%t(mats$R_i) > rep(1, 1e+06)%*%t(mats$r_i), 1, prod))
-          x_prior <- sum(apply(draws_prior%*%t(mats$R_i) > rep(1, 1e+06)%*%t(mats$r_i), 1, prod))
-          ci_draws_post <- rbeta(1e4, x_post, 1 + 1e+06 - x_post)
-          ci_draws_prior <- rbeta(1e4, x_prior, 1 + 1e+06 - x_prior)
-          BF_draws <- ci_draws_post / ci_draws_prior
-
-          ci_lb <- quantile(sort(BF_draws), 0.05)
-          ci_ub <- quantile(sort(BF_draws), 0.95)
-        } # end of else
+         }
 
         c_i_e <- prior_prob
         f_i_e <- posterior_prob
@@ -302,7 +306,7 @@ confirm <- function(Y, hypothesis, prior_sd = 0.25,
     }
 
 
-    if(!is.null(BFip_posterior)){
+  if(!is.null(BFip_posterior)){
       if(length(BFip_posterior) == 1){
         BFc <- (1 - BFip_posterior) / (1 - BFip_prior)
         comp_fie <- (1 - BFip_posterior)
@@ -416,6 +420,7 @@ confirm <- function(Y, hypothesis, prior_sd = 0.25,
     }
 
   } #end exploratory loop
+
 
   if(length(hyp) > 1){
     matrix_post_prob <- matrix(do.call(rbind, list_post_prob), ncol = 3)
