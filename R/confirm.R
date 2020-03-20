@@ -279,7 +279,37 @@ confirm <- function(Y, hypothesis, prior_sd = 0.25,
              ci_lb <- quantile(sort(BF_draws), 0.05)
              ci_ub <- quantile(sort(BF_draws), 0.95)
 
-         }
+        }
+
+        if(mats$comparisons == "both comparisons") {
+          stop("inequality and equality constraints not currently supported")
+
+        }
+
+        # if(mats$comparisons == "both comparisons")  { # hyp mat not full rank
+        #
+        #   Sigma0 <- cov(prior_samples)
+        #   Sigma1 <- cov(posterior_samples)
+        #
+        #   draws_post <- mvnfast::rmvn(1e+06, mu = colMeans(posterior_samples), sigma = Sigma1)
+        #   draws_prior <- mvnfast::rmvn(1e+06, mu = mats$beta_zero, sigma = Sigma0)
+        #
+        #
+        #   prior_prob <- mean(apply(draws_prior%*%t(mats$R_i) > rep(1, mcrep)%*%t(mats$r_i), 1, prod))
+        #   posterior_prob <- mean(apply(draws_post%*%t(mats$R_i) > rep(1, mcrep)%*%t(mats$r_i), 1, prod))
+        #
+        #   BF <- posterior_prob / prior_prob
+        #
+        #   #Credibility interval
+        #   x_post <- sum(apply(draws_post%*%t(mats$R_i) > rep(1, mcrep)%*%t(mats$r_i), 1, prod))
+        #   x_prior <- sum(apply(draws_prior%*%t(mats$R_i) > rep(1, mcrep)%*%t(mats$r_i), 1, prod))
+        #   ci_draws_post <- rbeta(1e4, x_post, 1 + 1e+06 - x_post)
+        #   ci_draws_prior <- rbeta(1e4, x_prior, 1 + 1e+06 - x_prior)
+        #   BF_draws <- ci_draws_post / ci_draws_prior
+        #
+        #   ci_lb <- quantile(sort(BF_draws), 0.05)
+        #   ci_ub <- quantile(sort(BF_draws), 0.95)
+        # } # end of else
 
         c_i_e <- prior_prob
         f_i_e <- posterior_prob
