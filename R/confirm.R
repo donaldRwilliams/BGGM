@@ -1,6 +1,6 @@
 #' Confirmatory Hypothesis Testing
 #'
-#' @description Traditionally, Gaussian graphical models are inherently exploratory. That is, automated model selection is performed. A key aspect of \strong{BGGM} is the ability to extend inference beyond exploratory and to
+#' @description Traditionally, Gaussian graphical models (GGM) are inherently exploratory. That is, automated model selection is performed. A key aspect of \strong{BGGM} is the ability to extend inference beyond exploratory and to
 #' confirmatory hypothesis testing. This is accomplished by testing equality and/or inequality constraints for sets of edges (partial correlations).
 #'
 #' @param Y data matrix  (\emph{n} by  \emph{p}).
