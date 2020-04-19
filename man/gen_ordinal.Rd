@@ -24,3 +24,22 @@ population mean and covariance matrix.}
 \description{
 Generate Ordinal and Binary data
 }
+\examples{
+
+main <- BGGM::ptsd_cor1[1:5,1:5]
+p <- ncol(main)
+
+pcors <- -(cov2cor(solve(main)) -diag(p))
+diag(pcors) <- 1
+pcors <- ifelse(abs(pcors) < 0.05, 0, pcors)
+
+inv <-  -pcors
+diag(inv) <- 1
+cors <- cov2cor( solve(inv))
+
+# example data
+Y <- BGGM::gen_ordinal(n = 500, p = 5,
+                   levels = 2,
+                    cor_mat = cors,
+                    empirical = FALSE)
+}
