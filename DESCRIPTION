@@ -37,7 +37,8 @@ Imports:
     reshape,
     MASS,
     Rcpp (>= 1.0.4.6),
-    Rdpack
+    Rdpack,
+    BFpack
 Suggests: 
   knitr, 
   rmarkdown, 

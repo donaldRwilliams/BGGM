@@ -134,10 +134,13 @@ Rcpp::List mvn_continuous(arma::mat Y,
     S_Y = Y.t() * Y + I_k - beta.t() * S_X * beta;
 
     // sample Psi
-    Psi.slice(0) = wishrnd(inv(BMPinv + Theta.slice(0)), nuMP + deltaMP + k - 1);
+    // Psi.slice(0) = wishrnd(inv(BMPinv + Theta.slice(0)), nuMP + deltaMP + k - 1);
 
     // sample Theta
-    Theta.slice(0) =   wishrnd(inv(Psi.slice(0) + S_Y),  (deltaMP + k - 1) + (n - 1));
+    // Theta.slice(0) =   wishrnd(inv(Psi.slice(0) + S_Y),  (deltaMP + k - 1) + (n - 1));
+
+    // sample Theta
+    Theta.slice(0) =   wishrnd(inv(S_Y),  (n - 1));
 
     // Sigma
     Sigma.slice(0) = inv(Theta.slice(0));

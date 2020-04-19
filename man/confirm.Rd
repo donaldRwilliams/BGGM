@@ -2,20 +2,39 @@
 % Please edit documentation in R/confirm.R
 \name{confirm}
 \alias{confirm}
-\title{Confirmatory Hypothesis Testing}
+\title{Confirmatory Hypothesis Testing in GGMs}
 \usage{
-confirm(Y, hypothesis, prior_sd = 0.25, iter = 25000, cores = 2)
+confirm(
+  Y,
+  hypothesis,
+  prior_sd = 0.25,
+  formula = NULL,
+  data = NULL,
+  type = "continuous",
+  iter = 25000,
+  cores = 2
+)
 }
 \arguments{
-\item{Y}{data matrix  (\emph{n} by  \emph{p}).}
+\item{Y}{matrix (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).}
 
-\item{hypothesis}{hypothesis (or hypotheses) to be tested}
+\item{hypothesis}{character string. hypothesis (or hypotheses) to be tested. See notes for futher details.}
 
 \item{prior_sd}{hypothesized standard deviation of the prior distribution}
 
-\item{iter}{posterior and prior samples. 25,000 is the default, as it results in a more stable Bayes factor than using, say, 5,000.}
+\item{formula}{an object of class \code{\link[stats]{formula}}. This allows for including
+control variables in the model (e.g.,, \code{~ gender * education}).}
 
-\item{cores}{number of cores for parallel computing. The default is 2, but this can be adjusted}
+\item{data}{an optional data frame, list or environment (or an object coercible by \code{\link[base]{as.data.frame}})
+to a data frame containing the variables in \code{formula}. This is required when controlling for variables.}
+
+\item{type}{character string. Which type of data for \strong{Y} ? The options include \code{continuous},
+\code{binary}, or \code{ordinal}. See the note for further details.}
+
+\item{iter}{posterior and prior samples. 25,000 is the default, as it results in a more stable Bayes factor than
+using, say, 5,000.}
+
+\item{cores}{integer. How many cores for parallel computing ? (default is 2).}
 }
 \value{
 list of class \code{confirm}:
@@ -71,5 +90,13 @@ test_directions <-  confirm(Y = Y, hypothesis  = hypothesis,
                       cores = 2)
 # summary
 test_directions
+
+#############################
+######## Binary #############
+#############################
+
+
+
+
 }
 }

@@ -98,13 +98,16 @@
 #' @export
 select.explore <- function(object,
                            BF_cut = 3,
-                           alternative = "two.sided", ...){
+                           alternative = "two.sided",
+                           ...){
   # rename
   x <- object
 
   # hyp probability
   hyp_prob <- BF_cut / (BF_cut + 1)
 
+
+  if(x$type == "continuous"){
   # posterior samples
   posterior_samples <- do.call(rbind.data.frame,
                                lapply(1:x$cores, function(z)
@@ -114,6 +117,15 @@ select.explore <- function(object,
   prior_samples <- unlist(do.call(rbind.data.frame,
                                   lapply(1:x$cores, function(z)
                                   x$samples[[z]]$fisher_z_prior)))
+
+  } else if (x$type == "binary"){
+
+
+    posterior_samples <- x$samples$fisher_z_post
+
+    prior_samples <- x$samples$fisher_z_prior
+
+    }
 
   # two sided testing
   if(alternative == "two.sided"){
@@ -156,7 +168,8 @@ select.explore <- function(object,
                            BF_01 = BF_01_mat,
                            BF_cut = BF_cut,
                            alternative = alternative,
-                           call = match.call())
+                           call = match.call(),
+                           type = x$type)
   }
 
   # one sided (greater)
@@ -208,7 +221,8 @@ select.explore <- function(object,
                            BF_01 = BF_01_mat,
                            BF_cut = BF_cut,
                            alternative = alternative,
-                           call = match.call())
+                           call = match.call(),
+                           type = x$type)
 
 
   }
@@ -262,7 +276,8 @@ select.explore <- function(object,
                            BF_01 = BF_01_mat,
                            BF_cut = BF_cut,
                            alternative = alternative,
-                           call = match.call())
+                           call = match.call(),
+                           type = x$type)
 
   }
 
@@ -346,12 +361,13 @@ select.explore <- function(object,
                             pcor_mat = round(x$parcors_mat,3),
                             pcor_sd = round(x$parcors_sd, 3),
                             call = match.call(),
-                            prob = hyp_prob)
+                            prob = hyp_prob,
+                            type = x$type)
     }
 
   class(returned_object) <- c("BGGM",
-                              "explore",
-                              "select.explore")
+                              "select.explore",
+                              "explore")
   returned_object
 }
 

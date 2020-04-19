@@ -91,7 +91,9 @@ print.BGGM <- function(x,...){
   # explore methods
   if(is(x, "explore")){
 
-    if(is(x, "summary.explore")){
+    if(is(x, "default")){
+
+      if(is(x, "summary.explore")){
 
       print_summary_explore(x,...)
 
@@ -100,6 +102,7 @@ print.BGGM <- function(x,...){
       print_explore(x,...)
 
     }
+  }
 
     if(is(x, "select.explore")){
 

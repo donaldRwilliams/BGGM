@@ -9,56 +9,198 @@
 
 
 
+
+
+
+convert_hyps <- function(hypothesis, Y){
+
+  p <- ncol(Y)
+
+  col_names <- BGGM:::numbers2words(1:p)
+
+  mat_name_num <- sapply(1:p, function(x) paste0(1:p, "--", x, sep = ""))
+
+  mat_name_n2w <- sapply(col_names, function(x) paste(col_names,x, sep = ""))
+
+  mat_name_actual <- sapply(colnames(Y), function(x) paste0(colnames(Y), "--", x, sep = ""))
+
+  n_off_diag <- p*(p-1)*0.5
+
+  where <- lapply(1:n_off_diag, function(x) grep(mat_name_actual[upper.tri(diag(p))][x], hypothesis ))
+  where <- which(where == 1)
+
+  if(any(where)){
+
+    for (i in seq_along(where)) {
+      hypothesis <-  gsub(mat_name_actual[upper.tri(diag(p))][where[i]],
+                          replacement =  mat_name_n2w[upper.tri(diag(p))][where[i]], x = hypothesis )
+    }
+
+  } else if (!any(where)){
+
+    where <- lapply(1:n_off_diag, function(x) grep(mat_name_num[upper.tri(diag(p))][x], hypothesis ))
+    where <- which(where == 1)
+
+
+    for (i in seq_along(where)) {
+      hypothesis <-  gsub(mat_name_num[upper.tri(diag(p))][where[i]],
+                          replacement =  mat_name_n2w[upper.tri(diag(p))][where[i]], x = hypothesis )
+    }
+
+  } else {
+
+    stop("error in edge specification\n
+             Hints:\n
+             1) check that the first is smaller than the second (denoting the upper-triangular elements)-e.g., 1--2 and not 2--1\n
+             2) alternatively, the variable might not exist--e.g., p = 10 but 1--11 (11 > 10)")
+  }
+
+  hypothesis
+
+}
+
+
+
+prior_helper_2 <- function(p, delta , epsilon){
+
+  k <- p
+  nu <- 1/epsilon
+  parcorMat <- corMat <- ThetaMat <- SigmaMat <- array(0,dim=c(1e4,k,k))
+
+
+  for(s in 1:dim(parcorMat)[1]){
+
+    Psi <- rWishart(1,df = nu, Sigma = 1/nu*diag(k))[,,1]
+
+    Sigma <- rWishart(1,df=k-1+delta, Sigma=solve(Psi))[,,1]
+
+    Theta <- solve(Sigma)
+
+    ThetaMat[s,,] <- Theta
+    SigmaMat[s,,] <- Sigma
+
+    parcorMat[s,,] <- -diag(1/sqrt(diag(Theta)))%*%Theta%*%diag(1/sqrt(diag(Theta)))
+
+  }
+  parcorMat
+}
+
+
+sampling_helper_poly <- function(Y, delta, iter){
+
+
+  fit_mvn <- mvn_binary(Y, matrix(1, nrow = nrow(Y)),
+                        delta = delta,
+                        epsilon = 0.001,
+                        iter = iter,
+                        beta_prior = 0.0001,
+                        cutpoints = c(-Inf, 0, Inf) )
+
+  X <- Y
+
+  X <- as.matrix(X)
+  p <- ncol(X)
+  n <- nrow(X)
+  pcors <- (p * (p - 1))/2
+  col_names <- numbers2words(1:p)
+  mat_name <- matrix(unlist(lapply(col_names, function(x) paste(col_names,
+                                                                x, sep = ""))), p, p)
+  mat_name_up <- mat_name[upper.tri(mat_name)]
+  mat_name_low <- mat_name[lower.tri(mat_name)]
+
+  prior_samples <- prior_helper_2(p = p,
+                                  delta = delta,
+                                  epsilon = 0.0001)
+
+  pcor_store_up <- t(sapply(1:iter, function(x){
+    mat <- fit_mvn$pcors[,,x];
+    mat[upper.tri(mat)]
+  }
+  ))
+
+
+  pcor_store_low <- t(sapply(1:iter, function(x){
+    mat <- fit_mvn$pcors[,,x];
+    mat[lower.tri(mat)]
+  }
+  ))
+
+
+  prior_store_up <- t(sapply(1:iter, function(x){
+    mat <- prior_samples[x,,];
+    mat[upper.tri(mat)]
+  }
+  ))
+
+
+  prior_store_low <- t(sapply(1:iter, function(x){
+    mat <- prior_samples[x,,];
+    mat[lower.tri(mat)]
+  }
+  ))
+
+
+  fisher_z_post_up <- apply(pcor_store_up, 2, fisher_z)
+  fisher_z_post_low <- apply(pcor_store_low, 2, fisher_z)
+  fisher_z_prior_up <- apply(prior_store_up, 2, fisher_z)
+  fisher_z_prior_low <- apply(prior_store_low, 2, fisher_z)
+
+
+  colnames(fisher_z_prior_up) <- mat_name_up
+  colnames(fisher_z_post_up) <- mat_name_up
+  colnames(pcor_store_up) <- mat_name_up
+  colnames(fisher_z_prior_low) <- mat_name_low
+  colnames(fisher_z_post_low) <- mat_name_low
+  colnames(pcor_store_low) <- mat_name_low
+
+  list(fisher_z_post = cbind(fisher_z_post_up, fisher_z_post_low),
+       pcor_post = cbind(pcor_store_up, pcor_store_low), inv_cov_post = fit_mvn$Theta,
+       pcor_prior = cbind(prior_store_up, prior_store_low),
+       fisher_z_prior = cbind(fisher_z_prior_up, fisher_z_prior_low))
+
+
+}
+
+
+
 print_confirm <- function(x, ...){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
-  cat("Type: Confirmatory Hypothesis Testing \n")
+  cat("Type:",  x$type ,  "\n")
+  cat("--- \n")
+  cat("Posterior Samples:", x$iter, "\n")
+  cat("Observations (n):", nrow(x$dat), "\n")
+  cat("Variables (p):", x$p, "\n")
+  cat("Delta:", x$delta, "\n")
   cat("--- \n")
   cat("Call:\n")
   print(x$call)
   cat("--- \n")
-  cat("Hypotheses: \n")
+  cat("Hypotheses: \n\n")
+  hyps <- strsplit(x$hypothesis, ";")
+  n_hyps <- length(hyps[[1]])
 
-  if(length(x$hypotheses) == length(x$post_prob)){
-
-    hyps <- data.frame( t(t(names(x$post_prob))), c(t(x$hypotheses)))
-    colnames(hyps) <- NULL
-    print(hyps, row.names = F)
+  x$info$hypotheses[1:n_hyps] <- hyps[[1]]
+  n_hyps <- length(x$info$hypotheses)
+  for (h in seq_len(n_hyps)) {
+    cat(paste0("H", h,  ": ", gsub(" ", "", x$info$hypotheses[h])  ))
+    cat("\n")
   }
-
-
-
-  if(length(x$hypotheses) != length(x$post_prob)){
-
-    if(length(x$hypotheses) > 1){
-      hyps <- data.frame( t(t(names(x$post_prob))), c(t(x$hypotheses),
-                                                      paste("'not ", "H1-",
-                                                            length(x$hypotheses), "'", sep = "")))
-      colnames(hyps) <- NULL
-      print(hyps, row.names = FALSE, right = F)
-
-    } else{
-      hyps <- data.frame( t(t(names(x$post_prob))), c(t(x$hypotheses),
-                                                      paste("'not ", "H1", "'", sep = "")))
-      colnames(hyps) <- NULL
-      print(hyps, row.names = FALSE )
-
-    }
-
-  }
-
   cat("--- \n")
-  cat("Posterior prob: \n")
+  cat("Posterior prob: \n\n")
 
-  temp <- data.frame( (paste("p(", names(x$post_prob), "|Y) = ", round(x$post_prob, 4),  sep = "")))
-  colnames(temp) <- ""
+  for(h in seq_len(n_hyps)){
 
-  print(temp, row.names = F, right = F)
+    cat(paste0("p(H",h,"|data) = ", round(x$out_hyp_prob[h], 3 )  ))
+    cat("\n")
+  }
   cat("--- \n")
   cat('Bayes factor matrix: \n')
-  print(t(x$BF_matrix))
+  print(round(x$BF_matrix, 3))
   cat("--- \n")
   cat("note: equal hypothesis prior probabilities")
 }
+
+
 
 
 print_ggm_compare_bf <- function(object, ...) {
@@ -179,16 +321,12 @@ print_select_ggm_compare_bf <- function(x,...){
   cat("note: matrices (e.g., selected partial correlations) are in the select object")
 }
 
-
-
-
-
 print_select_explore <- function(x, hyp = "H1",
                                    log = TRUE, summarize = FALSE, ...){
 
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
-  cat("Type: Hypothesis Testing \n")
+  cat("Type:", x$type, "\n")
   cat("Alternative:", x$alternative, "\n")
 
   # exhaustive
@@ -2057,6 +2195,44 @@ performance <- function(Estimate, True){
 
 
 }
+
+################
+#taken and modified from the package orddata
+# under the GPL-2 licence
+rmvord_naiv <-  function(n, probs, Cors, empirical) {
+
+  q = length(probs)
+  categ_probs = 0
+  cumul_probs = list(0)
+  quant_probs = list(0)
+  means = 0
+  vars = 0
+
+  var.wt = function(x, w) {
+    m = weighted.mean(x = x, w = w)
+    sum((x[1:length(x)] - m)^2 * w[1:length(x)])
+  }
+
+  for (i in 1:q) {
+    categ_probs[i] = length(probs[[i]])
+    cumul_probs[[i]] = cumsum(1:categ_probs[i]/10^12 + probs[[i]])
+    cumul_probs[[i]][categ_probs[i]] = 1
+    quant_probs[[i]] = qnorm(p = cumul_probs[[i]], mean = 0,
+                             sd = 1)
+  }
+
+  retval = MASS::mvrnorm(n = n, mu = rep(0,q),
+                         Sigma = Cors,
+                         empirical = empirical)
+
+  for (i in 1:q) {
+    retval[, i] = cut(x = retval[, i], breaks = c(-1/0, quant_probs[[i]]),
+                      right = FALSE)
+  }
+  retval
+}
+
+
 
 csws_labels <- ifelse(1:35 %in% c(7,10,16,24,29),
                       "Family Support",

@@ -8,8 +8,8 @@ estimate(
   Y,
   formula = NULL,
   data = NULL,
-  iter = 5000,
   type = "continuous",
+  iter = 5000,
   analytic = FALSE,
   ep = 0.001,
   ...
@@ -24,10 +24,10 @@ control variables in the model (i.e., \code{~ gender}).}
 \item{data}{an optional data frame, list or environment (or an object coercible by \code{\link[base]{as.data.frame}})
 to a data frame containing the variables in \code{formula}. This is required when controlling for variables.}
 
-\item{iter}{number of iterations (posterior samples; defaults to 5000).}
-
 \item{type}{character string. Which type of data for \strong{Y} ? The options include \code{continuous},
 \code{binary}, or \code{ordinal}. See the note for further details.}
+
+\item{iter}{number of iterations (posterior samples; defaults to 5000).}
 
 \item{analytic}{logical. Should the analytic solution be computed (default is \code{FALSE})?}
 

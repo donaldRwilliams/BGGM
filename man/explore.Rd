@@ -4,14 +4,32 @@
 \alias{explore}
 \title{GGMs with Exploratory Bayesian Hypothesis Testing}
 \usage{
-explore(Y, prior_sd = 0.25, iter = 5000, cores = 2, ...)
+explore(
+  Y,
+  formula = NULL,
+  data = NULL,
+  type = "continuous",
+  prior_sd = 0.25,
+  iter = 5000,
+  cores = 2,
+  ...
+)
 }
 \arguments{
-\item{Y}{data matrix  (\emph{n} by  \emph{p}).}
+\item{Y}{matrix (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).}
+
+\item{formula}{an object of class \code{\link[stats]{formula}}. This allows for including
+control variables in the model (i.e., \code{~ gender}).}
+
+\item{data}{an optional data frame, list or environment (or an object coercible by \code{\link[base]{as.data.frame}})
+to a data frame containing the variables in \code{formula}. This is required when controlling for variables.}
+
+\item{type}{character string. Which type of data for \strong{Y} ? The options include \code{continuous},
+\code{binary}, or \code{ordinal}. See the note for further details.}
 
 \item{prior_sd}{hypothesized standard deviation for the edges or partial correlations}
 
-\item{iter}{number of posterior samples.}
+\item{iter}{number of iterations (posterior samples; defaults to 5000).}
 
 \item{cores}{number of cores for parallel computing. The default is 2, but this can be changed.}
 

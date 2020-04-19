@@ -98,8 +98,8 @@
 estimate  <- function(Y,
                       formula = NULL,
                       data = NULL,
-                      iter = 5000,
                       type = "continuous",
+                      iter = 5000,
                       analytic = FALSE, ep = 0.001,...){
 
 

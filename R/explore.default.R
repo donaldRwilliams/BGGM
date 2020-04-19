@@ -4,10 +4,23 @@
 #' possible to test for only positive or negative edges, as well as two sided hypothesis testing (which is the customary approach). Further
 #' there is also an exhaustive option that provides the posterior probability of the null, greater than zero, and less than zero.
 #'
-#' @param Y data matrix  (\emph{n} by  \emph{p}).
-#' @param iter number of posterior samples.
+#' @param Y  matrix (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).
+#'
+#' @param formula an object of class \code{\link[stats]{formula}}. This allows for including
+#' control variables in the model (i.e., \code{~ gender}).
+#'
+#' @param data an optional data frame, list or environment (or an object coercible by \code{\link[base]{as.data.frame}})
+#' to a data frame containing the variables in \code{formula}. This is required when controlling for variables.
+#'
+#' @param type character string. Which type of data for \strong{Y} ? The options include \code{continuous},
+#' \code{binary}, or \code{ordinal}. See the note for further details.
+#'
+#' @param iter number of iterations (posterior samples; defaults to 5000).
+#'
 #' @param cores number of cores for parallel computing. The default is 2, but this can be changed.
+#'
 #' @param prior_sd hypothesized standard deviation for the edges or partial correlations
+#'
 #' @param ... currently not used
 #'
 #' @return list of class \code{explore}:
@@ -54,8 +67,13 @@
 #' # null adjacency matrix
 #' E$Adj_01
 #' @export
-explore <- function(Y, prior_sd = 0.25,
-                            iter = 5000, cores = 2,...){
+explore <- function(Y,
+                    formula = NULL,
+                    data = NULL,
+                    type = "continuous",
+                    prior_sd = 0.25,
+                    iter = 5000,
+                    cores = 2,...){
   # rename
   X <- Y
 
@@ -74,6 +92,8 @@ explore <- function(Y, prior_sd = 0.25,
   # number of edges
   edges <- 0.5 * (p * (p -1))
 
+
+  if(type == "continuous"){
   # sample from posterior
   samples <- sampling(X, nu = 10000,
                       delta = delta, n_samples = iter,
@@ -102,9 +122,42 @@ explore <- function(Y, prior_sd = 0.25,
                           call = match.call(),
                           p = p,
                           cores = cores,
-                          edge = edges)
+                          edge = edges,
+                          type = type)
 
-  class(returned_object) <- c("BGGM",
+  } else if(type == "binary"){
+
+
+
+    samples <- sampling_helper_poly(Y, delta, iter)
+
+    posterior_samples <- samples$pcor_post
+
+    # posterior mean
+    parcors_mat[upper.tri(parcors_mat)] <- colMeans(posterior_samples)[1:edges]
+    pacors_mat <- BGGM:::symmteric_mat(parcors_mat)
+
+    # posterior sd
+    parcors_sd[upper.tri(parcors_sd)] <- apply(posterior_samples, 2, sd)[1:edges]
+    pacors_sd <- BGGM:::symmteric_mat(parcors_sd)
+
+    # returned object
+    returned_object <- list(parcors_mat = pacors_mat,
+                            parcors_sd = parcors_sd,
+                            samples = samples,
+                            delta = delta,
+                            iter = iter,
+                            dat = X,
+                            call = match.call(),
+                            p = p,
+                            cores = cores,
+                            edge = edges,
+                            type = type)
+
+
+  }
+
+  class(returned_object) <- c("BGGM", "default",
                               "explore")
   return(returned_object)
 
