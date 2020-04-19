@@ -56,7 +56,7 @@ fitted.estimate <- function(object, iter = 500,
   }
 
   returned_object <-  fitted_array
-  class(returned_object) <- "fitted.estimate"
+  class(returned_object) <- c("BGGM", "estimate", "fitted")
 
   } else {
 
@@ -70,7 +70,7 @@ fitted.estimate <- function(object, iter = 500,
       }
 
     returned_object <- list(pred = pred, dat = dat)
-    class(returned_object) <- "fitted.estimate"
+    class(returned_object) <- c("estimate", "fitted")
 
     }
 
@@ -78,16 +78,3 @@ return(returned_object)
 
 }
 
-#' Print Method for \code{fitted.estimate} Objects
-#' @param x object of class \code{fitted.estimate}
-#' @param ... currently ignored
-#' @export
-print.fitted.estimate <- function(x,...){
-  if(length(x) != 2){
-    class(x) <- ""
-    x <- round(x, 3)
-    print(x)
-  } else {
-    cat("'summary = FALSE' not printed. See object contents")
-  }
-}

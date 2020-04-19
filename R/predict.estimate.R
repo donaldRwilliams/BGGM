@@ -67,7 +67,7 @@ predict.estimate <- function(object, iter = 500, cred = 0.95,
 
   returned_object <-  predict_array
 
-  class(returned_object) <- "predict.estimate"
+  class(returned_object) <- c("BGGM", "estimate", "predict")
 
   } else {
 
@@ -81,25 +81,10 @@ predict.estimate <- function(object, iter = 500, cred = 0.95,
       }
 
   returned_object <- list(pred = pred, dat = dat)
-  class(returned_object) <- "predict.estimate"
+  class(returned_object) <- c("estimate", "predict")
 
   }
 returned_object
 }
 
-
-#' Print Method for \code{predict.estimate} Objects
-#'
-#' @param x object of class \code{predict.estimate}
-#' @param ... currently ignored
-#' @export
-print.predict.estimate <- function(x,...){
-  if(length(x) != 2){
-    class(x) <- ""
-    x <- round(x, 3)
-    print(x)
-  } else {
-    cat("'summary = FALSE' not printed. See object contents")
-  }
-}
 

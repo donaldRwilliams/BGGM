@@ -4,7 +4,1071 @@
 #' @importFrom utils combn
 #' @importFrom foreach %dopar% foreach
 #' @importFrom graphics plot
+#' @importFrom Rdpack reprompt
 #' @import ggplot2
+
+
+
+print_confirm <- function(x, ...){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("Type: Confirmatory Hypothesis Testing \n")
+  cat("--- \n")
+  cat("Call:\n")
+  print(x$call)
+  cat("--- \n")
+  cat("Hypotheses: \n")
+
+  if(length(x$hypotheses) == length(x$post_prob)){
+
+    hyps <- data.frame( t(t(names(x$post_prob))), c(t(x$hypotheses)))
+    colnames(hyps) <- NULL
+    print(hyps, row.names = F)
+  }
+
+
+
+  if(length(x$hypotheses) != length(x$post_prob)){
+
+    if(length(x$hypotheses) > 1){
+      hyps <- data.frame( t(t(names(x$post_prob))), c(t(x$hypotheses),
+                                                      paste("'not ", "H1-",
+                                                            length(x$hypotheses), "'", sep = "")))
+      colnames(hyps) <- NULL
+      print(hyps, row.names = FALSE, right = F)
+
+    } else{
+      hyps <- data.frame( t(t(names(x$post_prob))), c(t(x$hypotheses),
+                                                      paste("'not ", "H1", "'", sep = "")))
+      colnames(hyps) <- NULL
+      print(hyps, row.names = FALSE )
+
+    }
+
+  }
+
+  cat("--- \n")
+  cat("Posterior prob: \n")
+
+  temp <- data.frame( (paste("p(", names(x$post_prob), "|Y) = ", round(x$post_prob, 4),  sep = "")))
+  colnames(temp) <- ""
+
+  print(temp, row.names = F, right = F)
+  cat("--- \n")
+  cat('Bayes factor matrix: \n')
+  print(t(x$BF_matrix))
+  cat("--- \n")
+  cat("note: equal hypothesis prior probabilities")
+}
+
+
+print_ggm_compare_bf <- function(object, ...) {
+  x <- object
+  name_temp <- matrix(0, object$p, object$p)
+
+  name_temp[] <-
+    unlist(lapply(1:object$p , function(x)
+      paste(1:object$p, x, sep = "--")))
+
+  edge_name <- name_temp[upper.tri(name_temp)]
+
+  groups <- length(object$info$dat)
+
+  BF_10 <- 1 /  object$BF_01[upper.tri(object$BF_01)]
+  prob_H1 <- BF_10 / (1 + BF_10)
+  prob_H0 <- 1 - prob_H1
+
+  if (groups == 2) {
+    pcor_diff <- apply(object$post_samps[[1]], 2,  BGGM::fisher_z2r) -
+      apply(object$post_samps[[2]], 2,  BGGM::fisher_z2r)
+
+    sd_diff <- apply(pcor_diff, 2, sd)
+    results <- data.frame(
+      Edge = edge_name,
+      Estimate = round(unlist(object$mu_diff), 3),
+      Est.Error = round(sd_diff, 3),
+
+      Pr.H0 = round(prob_H0, 3),
+      Pr.H1 = round(prob_H1, 3)
+    )
+
+
+  } else {
+    results <- data.frame(
+      Edge = edge_name,
+
+      Pr.H0 = round(prob_H0, 3),
+      Pr.H1 = round(prob_H1, 3)
+    )
+
+  }
+  x <- list(results = results,
+                          object = object)
+  # class(returned_object) <- "summary.ggm_compare_bf"
+  # return(returned_object)
+
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type: GGM Compare with Bayesian Hypothesis Testing \n")
+  p <- x$object$info$dat_info$p[1]
+  cat("Posterior Samples:", x$object$iter, "\n")
+  cat("Observations: \n")
+  groups <- length(x$object$info$dat)
+  for (i in 1:groups) {
+    cat("  Group",
+        paste(i, ":", sep = "") ,
+        x$object$info$dat_info$n[[i]],
+        "\n")
+  }
+  cat("Variables (p):", p, "\n")
+  cat("Edges:", .5 * (p * (p - 1)), "\n")
+  cat("Groups:", nrow(x$object$info$dat_info), "\n")
+  cat("Prior SD:", x$object$prior_sd, "\n")
+  cat("--- \n")
+  if (is.null(x$hypotheses)) {
+    cat("Call: \n")
+    print(x$object$call)
+    cat("--- \n")
+  }
+  cat("Hypotheses:\n")
+  cat("H0: rho = 0\n")
+  cat("H1: rho != 0\n")
+  cat("--- \n")
+  cat("Estimates:\n")
+  print(x$results, row.names = F, ...)
+  cat("--- \n")
+
+}
+
+
+
+print_select_ggm_compare_bf <- function(x,...){
+  object <- x
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type: GGM Compare with Bayesian Hypothesis Testing \n")
+  # number of iterations
+  p <- object$object$info$dat_info$p[1]
+  cat("Posterior Samples:", object$object$iter, "\n")
+  cat("Observations: \n")
+  groups <- length(object$object$info$dat)
+  for (i in 1:groups) {
+    cat("  Group",
+        paste(i, ":", sep = "") ,
+        object$object$info$dat_info$n[[i]],
+        "\n")
+  }
+  # number of variables
+  cat("Variables (p):", object$object$p, "\n")
+  # number of edges
+  cat("Edges:", .5 * (object$object$p * (object$object$p-1)), "\n")
+  cat("--- \n")
+  cat("Call: \n")
+  print(object$call)
+  cat("--- \n")
+  cat("Selected:\n\n")
+  cat("Adjacency non-zero \n \n")
+  colnames(object$adj_10) <- 1:p
+  row.names(object$adj_10) <- 1:p
+  print(object$adj_10)
+  cat("\n")
+  cat("Adjacency zero \n \n")
+  colnames(object$adj_01) <- 1:p
+  row.names(object$adj_01) <- 1:p
+  print(object$adj_01)
+  cat("--- \n")
+  cat("note: matrices (e.g., selected partial correlations) are in the select object")
+}
+
+
+
+
+
+print_select_explore <- function(x, hyp = "H1",
+                                   log = TRUE, summarize = FALSE, ...){
+
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type: Hypothesis Testing \n")
+  cat("Alternative:", x$alternative, "\n")
+
+  # exhaustive
+  if(x$alternative == "exhaustive"){
+    cat("Posterior probability:", x$prob, "\n")
+    cat("--- \n")
+    cat("Call:\n")
+    print(x$call)
+    cat("--- \n")
+    if(!isFALSE(summarize)){
+
+      summ <-  cbind.data.frame(Edge = x$post_prob$edge,
+                                Estimate = x$pcor_mat[upper.tri(x$pcor_mat)],
+                                Est.Error = x$pcor_sd[upper.tri(x$pcor_sd)],
+                                "Pr.H0" = x$post_prob[,2],
+                                "Pr.H1" = x$post_prob[,3],
+                                "Pr.H2" = x$post_prob[,4])
+
+      cat("Hypotheses: \n")
+      cat("H0: rho = 0\nH1: rho > 0\nH2: rho < 0", "\n")
+      cat("--- \n")
+      cat("Estimates: \n \n ")
+      print(summ, row.names = FALSE, ...)
+      cat("--- \n")
+    } else{
+      if(hyp == "H1"){
+        cat("Hypothesis: \n")
+        cat("H1: rho > 0 \n")
+        cat("--- \n")
+        p <- ncol(x$pos_mat)
+        colnames(x$pos_mat) <- 1:p
+        row.names(x$pos_mat) <- 1:p
+        cat("Partial Correlations \n \n")
+        print(x$pcor_mat * ifelse(x$pos_mat > x$prob, 1, 0), ...)
+        cat("--- \n \n")
+        cat("Adjancency \n \n")
+        print(ifelse(x$pos_mat > x$prob, 1, 0), ...)
+        cat("--- \n")
+
+      }
+
+      if(hyp == "H0"){
+        cat("Hypothesis: \n")
+        cat("H0: rho = 0 \n")
+        cat("--- \n")
+        p <- ncol(x$null_mat)
+        colnames(x$null_mat) <- 1:p
+        row.names(x$null_mat) <- 1:p
+        cat("Partial Correlations \n \n")
+        print(x$pcor_mat * ifelse(x$null_mat > x$prob, 1, 0), ...)
+        cat("--- \n \n")
+        cat("Adjancency \n \n")
+        print(ifelse(x$null_mat > x$prob, 1, 0), ...)
+        cat("--- \n")
+
+      }
+
+      if(hyp == "H2"){
+        cat("Hypothesis: \n")
+        cat("H0: rho < 0 \n")
+        cat("--- \n")
+        p <- ncol(x$neg_mat)
+        colnames(x$neg_mat) <- 1:p
+        row.names(x$neg_mat) <- 1:p
+        cat("Partial Correlations \n \n")
+        print(x$pcor_mat * ifelse(x$neg_mat > x$prob, 1, 0), ...)
+        cat("--- \n \n")
+        cat("Adjancency \n \n")
+        print(ifelse(x$neg_mat > x$prob, 1, 0), ...)
+        cat("--- \n")
+      }
+    }
+  }
+
+  # greater than
+  if(x$alternative == "greater"){
+    cat("Bayes Factor:", x$BF_cut, "\n")
+    if(isFALSE(summarize)){
+      cat("Connectivity:", round(mean(x$Adj_20[upper.tri(x$Adj_20)]) * 100, 1), "% \n")
+
+    }
+    cat("--- \n")
+    cat("Call:\n")
+    print(x$call)
+    cat("--- \n")
+
+    if(!isFALSE(summarize)){
+      p <- ncol(x$pcor_mat)
+      mat_names <- matrix(0, p, p)
+
+      edge_name <-
+
+        mat_names[] <-  unlist(lapply(1:p, function(z) paste(1:p, z, sep = "--")))
+
+      if(log == TRUE){
+        summ <-  cbind.data.frame(Edge = mat_names[upper.tri(mat_names)],
+                                  Estimate = x$pcor_mat[upper.tri(x$pcor_mat)],
+                                  Est.Error = x$pcor_sd[upper.tri(x$pcor_sd)],
+                                  "BF 20" = log(x$BF_20[upper.tri(x$BF_20)]),
+                                  "BF 01" = log(x$BF_01[upper.tri(x$BF_01)]))
+      } else{
+
+        summ <-  cbind.data.frame(Edge = mat_names[upper.tri(mat_names)],
+                                  Estimate = x$pcor_mat[upper.tri(x$pcor_mat)],
+                                  Est.Error = x$pcor_sd[upper.tri(x$pcor_sd)],
+                                  "BF 20" = x$BF_20[upper.tri(x$BF_20)],
+                                  "BF 01" = x$BF_01[upper.tri(x$BF_01)])
+      }
+
+      cat("Hypotheses: \n")
+      cat("H0: rho = 0\nH1: rho > 0", "\n")
+      cat("--- \n")
+      cat("Estimates: \n \n ")
+      print(summ, row.names = FALSE, ...)
+      cat("--- \n")
+      cat("note: BF 20 is a one-sided Bayes factor for H1 \n")
+      cat("--- \n")
+    } else{
+      if(hyp == "H1"){
+
+        cat("Hypothesis: \n")
+        cat("H1: rho > 0 \n")
+        cat("--- \n")
+        p <- ncol(x$partials_positive)
+        colnames(x$partials_positive) <- 1:p
+        row.names(x$partials_positive) <- 1:p
+        cat("Partial Correlations \n \n")
+        print(x$partials_positive, ...)
+        cat("--- \n \n")
+        cat("Adjancency (positive) \n \n")
+        colnames(x$Adj_20) <- 1:p
+        row.names(x$Adj_20) <- 1:p
+        print(x$Adj_20, ...)
+        cat("--- \n")
+      }
+
+
+      if(hyp == "H0"){
+
+        cat("Hypothesis: \n")
+        cat("H0: rho = 0 \n")
+        cat("--- \n")
+        p <- ncol(x$pcor_mat)
+        colnames(x$pcor_mat) <- 1:p
+        row.names(x$pcor_mat) <- 1:p
+        cat("Partial Correlations \n \n")
+        print(x$pcor_mat * x$Adj_01, ...)
+        cat("--- \n \n")
+        cat("Adjancency (null) \n \n")
+        colnames(x$Adj_01) <- 1:p
+        row.names(x$Adj_01) <- 1:p
+        print(x$Adj_01, ...)
+        cat("--- \n")
+      }
+    }
+  }
+  # less than
+  if(x$alternative == "less"){
+    cat("Bayes Factor:", x$BF_cut, "\n")
+    if(isFALSE(summarize)){
+      cat("Connectivity:", round(mean(x$Adj_20[upper.tri(x$Adj_20)]) * 100, 1), "% \n")
+    }
+    cat("--- \n")
+    cat("Call:\n")
+    print(x$call)
+    cat("--- \n")
+
+    if(!isFALSE(summarize)){
+      p <- ncol(x$pcor_mat)
+      mat_names <- matrix(0, p, p)
+
+      # edge_name <- unlist(lapply(1:p, function(z) paste(1:p, z, sep = "--")))
+
+      mat_names[] <-  unlist(lapply(1:p, function(z) paste(1:p, z, sep = "--")))
+
+      if(log == TRUE){
+        summ <-  cbind.data.frame(Edge = mat_names[upper.tri(mat_names)],
+                                  Estimate = x$pcor_mat[upper.tri(x$pcor_mat)],
+                                  Est.Error = x$pcor_sd[upper.tri(x$pcor_sd)],
+                                  "BF 20" = log(x$BF_20[upper.tri(x$BF_20)]),
+                                  "BF 01" = log(x$BF_01[upper.tri(x$BF_01)]))
+      } else{
+
+        summ <-  cbind.data.frame(Edge = mat_names[upper.tri(mat_names)],
+                                  Estimate = x$pcor_mat[upper.tri(x$pcor_mat)],
+                                  Est.Error = x$pcor_sd[upper.tri(x$pcor_sd)],
+                                  "BF 20" = x$BF_20[upper.tri(x$BF_20)],
+                                  "BF 01" = x$BF_01[upper.tri(x$BF_01)])
+      }
+
+      cat("Hypotheses: \n")
+      cat("H0: rho = 0\nH1: rho < 0", "\n")
+      cat("--- \n")
+      cat("Estimates: \n \n ")
+      print(summ, row.names = FALSE, ...)
+      cat("--- \n")
+      cat("note: BF 20 is a one-sided Bayes factor for H1 \n")
+      cat("--- \n")
+    }
+
+    else{
+      if(hyp == "H1"){
+        cat("Hypothesis: \n")
+        cat("H1: rho < 0 \n")
+        cat("--- \n")
+        p <- ncol(x$partials_negative)
+        colnames(x$partials_negative) <- 1:p
+        row.names(x$partials_negative) <- 1:p
+        cat("Partial Correlations \n \n")
+        print(x$partials_negative, ...)
+        cat("--- \n \n")
+        cat("Adjancency (negative) \n \n")
+        colnames(x$Adj_20) <- 1:p
+        row.names(x$Adj_20) <- 1:p
+        print(x$Adj_20, ...)
+        cat("--- \n")
+      }
+
+      if(hyp == "H0"){
+        cat("Hypothesis: \n")
+        cat("H0: rho = 0 \n")
+        cat("--- \n")
+        p <- ncol(x$pcor_mat)
+        colnames(x$pcor_mat) <- 1:p
+        row.names(x$pcor_mat) <- 1:p
+        cat("Partial Correlations \n \n")
+        print(x$pcor_mat * x$Adj_01, ...)
+        cat("--- \n \n")
+        cat("Adjancency (null) \n \n")
+        colnames(x$Adj_01) <- 1:p
+        row.names(x$Adj_01) <- 1:p
+        print(x$Adj_01, ...)
+        cat("--- \n")
+      }
+    }
+  }
+
+  if(x$alternative == "two.sided"){
+    cat("Bayes Factor:", x$BF_cut, "\n")
+    if(isFALSE(summarize)){
+      if(hyp == "H1"){
+        cat("Connectivity:", round(mean(x$Adj_10[upper.tri(x$Adj_10)]) * 100, 1), "% \n")
+      } else{
+        cat("Connectivity:", round(mean(x$Adj_01[upper.tri(x$Adj_01)]) * 100, 1), "% \n")
+      }
+
+    }
+    cat("--- \n")
+    cat("Call:\n")
+    print(x$call)
+    cat("--- \n")
+    if (!isFALSE(summarize)) {
+      p <- ncol(x$pcor_mat)
+      mat_names <- matrix(0, p, p)
+      mat_names[] <-  unlist(lapply(1:p, function(z) paste(1:p, z, sep = "--")))
+      if(log == TRUE){
+        summ <-  cbind.data.frame(Edge = mat_names[upper.tri(mat_names)],
+                                  Estimate = x$pcor_mat[upper.tri(x$pcor_mat)],
+                                  Est.Error = x$pcor_sd[upper.tri(x$pcor_sd)],
+                                  "BF 10" = log(x$BF_10[upper.tri(x$BF_10)]))
+      } else {
+        summ <-  cbind.data.frame(Edge = mat_names[upper.tri(mat_names)],
+                                  Estimate = x$pcor_mat[upper.tri(x$pcor_mat)],
+                                  Est.Error = x$pcor_sd[upper.tri(x$pcor_sd)],
+                                  "BF 10" = x$BF_10[upper.tri(x$BF_10)])
+      }
+      cat("Hypotheses: \n")
+      cat("H0: rho = 0\nH1: rho != 0", "\n")
+      cat("--- \n")
+      cat("Estimates: \n \n ")
+      print(summ, row.names = FALSE, ...)
+      cat("--- \n")
+      cat("note: BF_10 is evidence in favor of H1")
+    } else {
+      if(hyp == "H1"){
+        cat("Hypothesis: \n")
+        cat("H1: rho != 0 \n")
+        cat("--- \n")
+        p <- ncol(x$partials_non_zero)
+        colnames(x$partials_non_zero) <- 1:p
+        row.names(x$partials_non_zero) <- 1:p
+        cat("Partial Correlations \n \n")
+        print(x$partials_non_zero)
+        cat("--- \n \n")
+        cat("Adjancency (non-zero) \n \n")
+        colnames(x$Adj_10) <- 1:p
+        row.names(x$Adj_10) <- 1:p
+        print(x$Adj_10)
+        cat("--- \n")
+      }
+      if(hyp == "H0"){
+        cat("Hypothesis: \n")
+        cat("H0: rho = 0 \n")
+        cat("--- \n")
+        p <- ncol(x$pcor_mat)
+        colnames(x$pcor_mat) <- 1:p
+        row.names(x$pcor_mat) <- 1:p
+        cat("Partial Correlations \n \n")
+        print(x$pcor_mat * x$Adj_01, ...)
+        cat("--- \n \n")
+        cat("Adjancency (null) \n \n")
+        colnames(x$Adj_01) <- 1:p
+        row.names(x$Adj_01) <- 1:p
+        print(x$Adj_01, ...)
+        cat("--- \n")
+        cat("note: connectivity reflects conditionally independent relations")
+      }
+    }
+  }
+}
+
+
+print_summary_explore <- function(x,...){
+  summary(x$dat_results, summarize = TRUE)
+}
+
+
+print_explore <- function(x,...){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type: Hypothesis Testing (Exploratory) \n")
+  cat("Posterior Samples:", x$iter, "\n")
+  cat("Observations (n):", nrow(x$dat), "\n")
+  cat("Variables (p):", x$p, "\n")
+  cat("Edges:", .5 * (x$p * (x$p-1)), "\n")
+  cat("Delta:", x$delta, "\n")
+  cat("--- \n")
+  cat("Call: \n")
+  print(x$call)
+  cat("--- \n")
+  cat("Date:", date(), "\n")
+}
+
+
+
+
+print_select_ggm_compare_estimate <- function(x,...){
+  object <- x
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type: GGM Compare with the Posterior Distribution\n")
+  # number of iterations
+  cat("Posterior Samples:", object$object$iter, "\n")
+  if (is.null(object$rope)) {
+
+    cat("Credible Interval:",  gsub("*0.","", formatC( round(object$cred, 4), format='f', digits=2)), "% \n")
+
+  } else {
+
+    cat("Probability:", object$prob, "\n")
+    cat("Region of Practical Equivalence:", "[", -1 * object$rope, ", ", object$rope, "]", "\n", sep = "")
+  }
+  # number of observations
+  cat("Observations (n):\n")
+  groups <- length(object$object$info$dat)
+  for(i in 1:groups){
+    cat("  Group", paste( i, ":", sep = "") , object$object$info$dat_info$n[[i]], "\n")
+  }
+  # number of variables
+  cat("Variables (p):", object$object$p, "\n")
+  # number of edges
+  cat("Edges:", .5 * (object$object$p * (object$object$p-1)), "\n")
+  cat("--- \n")
+  cat("Call: \n")
+  print(object$call)
+  cat("--- \n")
+  cat("Selected:\n\n")
+  cat("Partial Correlations \n\n")
+  if(is.null(object$rope)){
+    for(i in 1:length(object$mat_adj)){
+      cat(names(object$mat_adj)[[i]], "\n")
+
+      print(object$mat_pcor[[i]])
+      cat("\n")
+    }
+  } else {
+    for(i in 1:length(object$mat_in_adj)){
+      cat(names(object$mat_in_adj)[[i]], "\n")
+
+      print(object$mat_out_pcor[[i]])
+      cat("\n")
+    }
+    cat("--- \n")
+    cat("note: null matrices in the select object")
+  }
+}
+
+
+print_select_estimate <- function(x, summarize = FALSE, ...){
+  # x <- object
+  p <- ncol(x$partials_non_zero)
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  if(!is.null(x$analytic)){
+    cat("Type: Selected Graph (Analytic Solution) \n")
+  } else{
+    cat("Type: ", x$type, "\n")
+
+  }
+
+  if(isFALSE(summarize)){
+    if(is.null(x$rope)){
+      cat("Credible Interval:",  gsub("*0.","", formatC( round(x$ci, 4), format='f', digits=2)), "% \n")
+      cat("Connectivity:", round(mean(x$adjacency_non_zero[upper.tri(x$adjacency_non_zero)]) * 100, 1), "% \n")
+      cat("--- \n")
+      cat("Call:\n")
+      print(x$call)
+      cat("--- \n")
+      cat("Selected:\n \n")
+      colnames( x$partials_non_zero)  <- 1:p
+      row.names( x$partials_non_zero) <- 1:p
+      colnames( x$partials_non_zero)  <- 1:p
+      row.names( x$partials_non_zero) <- 1:p
+      cat("Partial correlations \n \n")
+      print(x$partials_non_zero, digits = 2)
+      cat("--- \n \n")
+      cat("Adjacency \n \n")
+      colnames(x$adjacency_non_zero) <- 1:p
+      row.names(x$adjacency_non_zero) <- 1:p
+      print(x$adjacency_non_zero)
+      cat("--- \n")
+
+    } else{
+      cat("Probability:", x$prob, "\n")
+      cat("Region of Practical Equivalence:", "[", -1 * x$rope, ", ", x$rope, "]", "\n", sep = "")
+      cat("Connectivity:", round(mean(x$adjacency_non_zero[upper.tri(x$adjacency_non_zero)]) * 100, 1), "% \n")
+      cat("--- \n")
+      cat("Call:\n")
+      print(x$call)
+      cat("--- \n")
+      cat("Selected:\n \n")
+      colnames(x$partials_non_zero) <- 1:p
+      row.names(x$partials_non_zero) <- 1:p
+      cat("Partial correlations \n \n")
+      print(x$partials_non_zero, digits = 2)
+      cat("--- \n \n")
+      cat("Adjacency non-zero \n \n")
+      colnames(x$adjacency_non_zero) <- 1:p
+      rownames(x$adjacency_non_zero) <- 1:p
+      print(x$adjacency_non_zero)
+      cat("--- \n \n")
+      cat("Adjacency zero \n \n")
+      colnames(x$adjacency_zero) <- 1:p
+      rownames(x$adjacency_zero) <- 1:p
+      print(x$adjacency_zero)
+    }
+  }
+  if(isTRUE(summarize)){
+    if(isTRUE(x$analytic)){
+      stop("summary not available for the analytic solution")
+    }
+    if(is.null(x$rope)){
+      p <- ncol(x$partials_non_zero)
+      mat_names <- mu_mat <- ci_low <- ci_up <- mat_temp <- matrix(0, p, p)
+      mat_names[] <-  unlist(lapply(1:p, function(z) paste(1:p, z, sep = "--")))
+
+      low <- (1 - x$ci) / 2
+      up  <-  1 - low
+
+      mu_mat[] <-  colMeans(x$pcor_samples)
+      sd <-  x$pcor_sd[upper.tri(x$pcor_sd)]
+      cis <- apply(x$pcor_samples, 2, quantile, c(low, up))
+      ci_low[] <- cis[1,]
+      ci_up[] <- cis[2,]
+
+      summ <- data.frame(edge = mat_names[upper.tri(mat_names)],
+                         post_mean = mu_mat[upper.tri(mu_mat)],
+                         post_sd = x$pcor_sd[upper.tri(x$pcor_sd)],
+                         temp1 = ci_low[upper.tri(ci_low)],
+                         temp2 = ci_up[upper.tri(ci_up)],
+                         check.names = F)
+
+      colnames(summ) <- c("Edge", "Estimate", "Est.Error",  paste(c("lb.", "ub."),
+                                                                  gsub("*0.","", formatC( round(x$ci, 4), format='f', digits=2)), "%", sep = ""))
+      cat("Credible Interval:", gsub("^.*\\.","", x$ci), "% \n")
+      cat("Connectivity:", round(mean(x$adjacency_non_zero[upper.tri(x$adjacency_non_zero)]) * 100, 1), "% \n")
+      cat("--- \n")
+      cat("Call:\n")
+      print(x$call)
+      cat("--- \n")
+      cat("Estimates: \n \n")
+      print(summ, row.names = F,...)
+      cat("--- \n")
+
+    }else{
+      cat("Probability:", x$prob, "\n")
+      cat("Region of Practical Equivalence:", "[", -1 * x$rope, ", ", x$rope, "]", "\n", sep = "")
+      cat("Connectivity:", round(mean(x$adjacency_non_zero[upper.tri(x$adjacency_non_zero)]) * 100, 1), "% \n")
+      cat("--- \n")
+      cat("Call:\n")
+      print(x$call)
+      cat("--- \n")
+      cat("Pr.out: post prob outside of rope \n")
+      cat("Pr.in: post prob inside of rope \n")
+      cat("--- \n")
+
+      p <- ncol(x$partials_non_zero)
+      mat_names <- mu_mat <- rope_in  <- matrix(0, p, p)
+      mat_names[] <-  unlist(lapply(1:p, function(z) paste(1:p, z, sep = "--")))
+
+      low <- (1 - x$ci) / 2
+      up  <-  1 - low
+
+      mu_mat[] <-  colMeans(x$pcor_samples)
+      sd <-  x$pcor_sd[upper.tri(x$pcor_sd)]
+
+      rope_in[] <- x$in_rope
+
+      cat("Estimates: \n \n")
+      summ <- data.frame(edge = mat_names[upper.tri(mat_names)],
+                         post_mean = mu_mat[upper.tri(mu_mat)],
+                         post_sd = x$pcor_sd[upper.tri(x$pcor_sd)],
+                         "pr_out" = 1 - rope_in[upper.tri(rope_in)],
+                         "pr_in" = rope_in[upper.tri(rope_in)],
+                         check.names = F)
+
+      colnames(summ) <- c("Edge", "Estimate",
+                          "Est.Error",  "Pr.out", "Pr.in")
+      print(summ, row.names = F,...)
+      cat("--- \n")
+    }
+  }
+}
+# print_select_estimate <- function(x, ...){
+#   cat("BGGM: Bayesian Gaussian Graphical Models \n")
+#   cat("--- \n")
+#   if(is.numeric(x$rope)){
+#     cat("Type: Selected Graph (Sampling) \n")
+#   } else{
+#     cat("Type: Selected Graph (Analytic Solution) \n")
+#   }
+#   if(is.null(x$rope)){
+#     cat("Credible Interval:", gsub("^.*\\.","", x$ci), "% \n")
+#     cat("Connectivity:", round(mean(x$adjacency[upper.tri(x$adjacency)]) * 100, 1), "% \n")
+#     cat("--- \n")
+#     cat("Call:\n")
+#     print(x$call)
+#     cat("--- \n")
+#   } else{
+#     cat("Probability:", x$prob, "\n")
+#     cat("Region of Practical Equivalence:", "[", -1 * x$rope, ", ", x$rope, "]", "\n", sep = "")
+#     cat("Connectivity:", round(mean(x$adjacency_non_zero[upper.tri(x$adjacency_non_zero)]) * 100, 1), "% \n")
+#     cat("--- \n")
+#     cat("Call:\n")
+#     print(x$call)
+#     cat("--- \n")
+#   }
+# }
+
+
+print_summary_estimate <- function(x, ...) {
+  # analytic == TRUE
+  if (isTRUE(x$object$analytic)) {
+    cat(print(x$object), "\n")
+    cat("note: posterior summary not available for analytic solution")
+  } else {
+    cat("BGGM: Bayesian Gaussian Graphical Models \n")
+    cat("--- \n")
+    # number of iterations
+    cat("Posterior Samples:", x$object$iter, "\n")
+    # number of observations
+    cat("Observations (n):", nrow(x$object$dat), "\n")
+    # number of variables
+    cat("Variables (p):", x$object$p, "\n")
+    # number of edges
+    cat("Edges:", .5 * (x$object$p * (x$object$p - 1)), "\n")
+    cat("--- \n")
+    cat("Call: \n")
+    print(x$object$call)
+    cat("--- \n")
+    cat("Estimates:\n\n")
+    print(x$dat_results, row.names = F)
+    cat("--- \n")
+
+  }
+}
+
+
+
+print_post_pred <- function(x,...){
+  if(length(x) != 2){
+    class(x) <- ""
+    x <- round(x, 3)
+    print(x)
+  } else {
+    cat("'summary = FALSE' not printed. See object contents")
+  }
+}
+
+
+
+
+print_summary_metric <- function(x, digits = 2,...){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  if(x$metric == "bayes_R2"){
+    cat("Metric:", "Bayes R2\n")
+  } else if(x$metric == "bayes_R2_diff"){
+    cat("Metric:", "Bayes R2 Difference \n")
+  } else {
+    cat("Metric:", x$metric, "\n")
+
+  }
+  cat("Type:", x$type, "\n")
+  cat("Credible Interval:", x$cred, "\n")
+  cat("--- \n")
+  cat("Estimates:\n\n")
+  dat <- x$summary
+  colnames(dat) <- c(colnames(dat)[1:3], "Cred.lb", "Cred.ub")
+  print(as.data.frame( sapply(dat , round, digits)),
+        row.names = FALSE)
+}
+
+
+
+
+
+
+print_summary_ggm_compare_ppc <- function(x, ...){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  if(x$object$type == "nodewise"){
+    cat("Type: GGM Comparison (Nodewise Predictive Check) \n")
+  } else{
+    cat("Type: GGM Comparison (Global Predictive Check) \n")
+  }
+  p <- x$object$info$dat_info$p[1]
+  cat("Posterior Samples:", x$object$iter, "\n")
+
+  groups <- length(x$object$info$dat)
+  for (i in 1:groups) {
+    cat("  Group",
+        paste(i, ":", sep = "") ,
+        x$object$info$dat_info$n[[i]],
+        "\n")
+  }
+  cat("Variables (p):", p, "\n")
+  cat("Edges:", .5 * (p * (p-1)), "\n")
+  cat("--- \n")
+  cat("Call: \n")
+  print(x$object$call)
+  cat("--- \n")
+  cat("Estimates: \n \n")
+  if(x$object$type == "global"){
+    print(x$results, right = T, row.names = F,...)
+    cat("--- \n")
+    cat("note: \np_value = p(T(Y_rep) > T(y)|Y)\nKLD = (symmetric) Kullback-Leibler divergence")
+  }
+  if(x$object$type == "nodewise"){
+    for(i in 1:length(x$object$obs_jsd)){
+      cat(do.call(rbind, x$object$names)[[i]], "\n")
+      print(   x$results[[i]],  row.names = F, ...)
+      cat("\n")
+    }
+
+    cat("--- \n")
+    cat("note: \np_value = p(T(Y_rep) > T(y)|Y)\nKLD = (symmetric) Kullback-Leibler divergence")
+  }
+}
+
+
+print_summary_ggm_estimate_compare <- function(x,...){
+
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type: GGM Compare with the Posterior Distribution\n")
+  # number of iterations
+  cat("Posterior Samples:", x$object$iter, "\n")
+  # number of observations
+  cat("Observations (n):\n")
+  groups <- length(x$object$info$dat)
+  for (i in 1:groups) {
+    cat("  Group",
+        paste(i, ":", sep = "") ,
+        x$object$info$dat_info$n[[i]],
+        "\n")
+  }
+  # number of variables
+  cat("Variables (p):", x$object$p, "\n")
+  # number of edges
+  cat("Edges:", .5 * (x$object$p * (x$object$p - 1)), "\n")
+  cat("--- \n")
+  cat("Call: \n")
+  print(x$object$call)
+  cat("--- \n")
+  cat("Estimates:\n")
+  for (i in 1:nrow(x$object$info$pairwise)) {
+    cat("\n", names(x$object$pcors_diffs[[i]]), "\n")
+
+    print(x$dat_results[[i]], row.names = FALSE,...)
+
+  }
+  cat("--- \n")
+}
+
+
+
+
+
+
+
+summary_ggm_compare_ppc <- function(object, ...){
+
+  p <- object$info$dat_info$p[1]
+
+  if (object$type == "global") {
+    results <- data.frame(
+      contrast = do.call(rbind, object$names),
+      KLD =  do.call(rbind, object$obs_jsd),
+      p_value = object$pvalue
+    )
+  }
+  if (object$type == "nodewise") {
+    results <- list()
+    for (i in 1:length(object$obs_jsd)) {
+      results[[i]] <-
+        data.frame(
+          node = 1:p ,
+          KLD =  round(do.call(rbind, object$obs_jsd[[i]]), 3),
+          p_value = unlist(object$pvalue[[i]])
+        )
+      names(results)[[i]] <- object$names[[i]]
+    }
+  }
+
+  returned_object <- list(results = results,
+                          object = object)
+}
+
+
+print_ggm_compare_ppc <- function(x,...){
+
+  print_summary_ggm_compare_ppc((summary_ggm_compare_ppc(x)))
+}
+
+
+
+
+print_ggm_compare <- function(x, ...){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type: GGM Compare with the Posterior Distribution\n")
+  # number of iterations
+  cat("Posterior Samples:", x$iter, "\n")
+  # number of observations
+  cat("Observations (n):\n")
+  groups <- length(x$info$dat)
+  for(i in 1:groups){
+    cat("  Group", paste( i, ":", sep = "") , x$info$dat_info$n[[i]], "\n")
+  }
+  # number of variables
+  cat("Variables (p):", x$p, "\n")
+  # number of edges
+  cat("Edges:", .5 * (x$p * (x$p-1)), "\n")
+  cat("--- \n")
+  cat("Call: \n")
+  print(x$call)
+  cat("--- \n")
+  cat("Date:", date(), "\n")
+}
+
+
+
+print_coef <- function(x,...){
+
+  res_sigma <- x$inv_2_beta$sigma
+
+  lb <- (1 - x$cred) / 2
+
+  ub <- 1 - lb
+
+  cred_int <- stats::quantile(res_sigma, prob = c(lb, ub))
+
+  res_sigma_summ <- data.frame(Estimate = mean(res_sigma),
+                               Est.Error = sd(res_sigma),
+                               t(cred_int))
+
+  # R2
+  ypred <- t(apply(as.matrix(x$inv_2_beta$betas)[1:x$iter,], 1,
+                   function(z)  z %*% t(as.matrix(x$data[,- x$node]))))
+
+  r2 <- R2_helper(ypred, x$data[,x$node], ci_width = x$cred)
+  cred_in <- stats::quantile(r2$R2, prob = c(lb, ub))
+
+  res_r2_summ <- data.frame(Estimate = mean(r2$R2), Est.Error = sd(r2$R2), t(cred_in))
+
+  colnames(res_sigma_summ) <- c("Estimate", "Est.Error", "CrI.lb", "CrI.ub")
+
+  colnames(res_r2_summ) <- c("Estimate", "Est.Error", "CrI.lb", "CrI.ub")
+
+  colnames(x$summary_inv_2_beta) <- c("Node", "Estimate",
+                                      "Est.Error", "Cred.lb",
+                                      "Cred.ub")
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type: Inverse to Regression \n")
+  cat("Credible Interval:",  gsub("*0.","", formatC( round(x$cred, 4), format='f', digits=2)), "% \n")
+  cat("Node:", x$node, "\n")
+  cat("--- \n")
+  cat("Call: \n")
+  print(x$call)
+  cat("--- \n")
+  cat("Coefficients: \n \n")
+  summary_inv_2_beta <- data.frame(x$summary_inv_2_beta,
+                                   check.names = F)
+  print(summary_inv_2_beta, row.names = FALSE, ...)
+  cat("--- \n")
+  cat("Sigma:\n\n")
+  print(round(res_sigma_summ, 3), row.names = FALSE, ...)
+  cat("--- \n")
+  cat("Bayesian R2:\n\n")
+  print(round(res_r2_summ, 3), row.names = FALSE, ...)
+  cat("--- \n")
+}
+
+
+print_map <- function(x,...){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Method: Maximum A Posteriori \n")
+  cat("--- \n")
+  print(x$pcor)
+}
+
+
+
+print_fitted <- function(x,...){
+  if(length(x) == 2){
+
+    cat("'summary = FALSE' not printed. See object contents")
+
+  } else {
+
+    class(x) <- ""
+    x <- round(x, 3)
+    print(x)
+  }
+}
+
+print_predict <- function(x,...){
+  if(length(x) == 2){
+
+    cat("'summary = FALSE' not printed. See object contents")
+
+  } else {
+
+    class(x) <- ""
+    x <- round(x, 3)
+    print(x)
+  }
+}
+
+
+print_estimate <- function(x, ...){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  # analytic == TRUE
+  if(!isFALSE( x$analytic)){
+    cat("Type: Estimation (Analytic Solution) \n")
+  }
+  # analytic  == FALSE
+  if(isFALSE( x$analytic)){
+    cat("Type:", x$type, "\n")
+  }
+  # number of iterations
+  cat("Posterior Samples:", x$iter, "\n")
+  # number of observations
+  cat("Observations (n):", nrow(x$dat), "\n")
+  # number of variables
+  cat("Variables (p):", x$p, "\n")
+  # number of edges
+  cat("Edges:", .5 * (x$p * (x$p-1)), "\n")
+  cat("--- \n")
+  cat("Call: \n")
+  print(x$call)
+  cat("--- \n")
+  cat("Date:", date(), "\n")
+}
+
+
 
 post_prob <- function(data){
   p1 <- sum(data>0)/length(data)

@@ -7,7 +7,7 @@
 bf_groups(..., prior_sd = 0.35, hypothesis = NULL, iter = 25000, cores = 2)
 }
 \arguments{
-\item{...}{data matrices (\emph{n} \times  \emph{p}). Requires at least two.}
+\item{...}{data matrices (\emph{n} by \emph{p}). Requires at least two.}
 
 \item{prior_sd}{hypothesized standard deviation for the edges or partial correlations.}
 

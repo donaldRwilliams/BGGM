@@ -25,7 +25,7 @@ posterior_predict <- function(object, iter = 500,
                               summary = TRUE,...){
 
   # check for object class
-  if(class(object) != "estimate"){
+  if(!is(object, "estimate")){
     stop("object must be of class estimate")
   }
 
@@ -120,24 +120,9 @@ posterior_predict <- function(object, iter = 500,
   returned_object <- list(pred = pred, dat = dat)
 
   }
-  class(returned_object) <- "post.pred"
+  class(returned_object) <- c("BGGM",
+                              "estimate",
+                              "post.pred")
   return(returned_object)
 
 }
-
-#' Print Method for \code{post.pred} Objects
-#' @param x object of class \code{post.pred}
-#' @param ... currently ignored
-#' @export
-print.post.pred <- function(x,...){
-  if(length(x) != 2){
-    class(x) <- ""
-    x <- round(x, 3)
-    print(x)
-  } else {
-    cat("'summary = FALSE' not printed. See object contents")
-  }
-}
-
-
-

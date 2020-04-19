@@ -1,5 +1,6 @@
 #' Bayesian Variance Explained (R2)
 #'
+#' @name bayes_R2
 #' @description  Compute Bayesian R2. In contrast to the functions
 #' \code{\link{mse}}, \code{\link{mae}}, etc., this can be used to
 #' compare predictabiltiy between nodes within a network or between
@@ -69,7 +70,9 @@ bayes_R2 <- function(object,
 
 #' Assess Predictability
 #'
-#' Compare nodes within networks or between networks. Currently the only
+#' @name test.R2
+#'
+#' @description  Compare nodes within networks or between networks. Currently the only
 #' option available is Bayesian R2.
 #'
 #' @param ... object(s) of class \code{R2}

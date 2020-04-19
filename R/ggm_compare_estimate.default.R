@@ -1,8 +1,17 @@
-#' Compare Edges (Partial Correlations) Between GGMs with the Posterior Distribution
-#' @name ggm_compare_estimate.default
-#' @description Compare edges (partial correlations) that are estimated from groups to, say, detect differences or equivalences.
-#' @param ... data matrices. Requires at least two.
-#' @param iter number of posterior samples
+#' Compare Partial Correlations with the Posterior Distribution
+#' @name ggm_compare_estimate
+#'
+#' @description Compare edges (partial correlations) that are estimated from groups to, say, detect a differences or equivalence.
+#'
+#' @param ... matrices (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).
+#' Requires at least two.
+#'
+#' @param type character string. Which type of data for \strong{Y} ? The options include \code{continuous},
+#' \code{binary}, or \code{ordinal}. See the note for further details.
+#'
+#' @param iter number of iterations (posterior samples; defaults to 5000).
+#'
+#' @param analytic logical. Should the analytic solution be computed (default is \code{FALSE}) ?
 #'
 #' @return
 #' A list of class \code{ggm_compare_estimate} containing:
@@ -42,9 +51,16 @@
 #' # adjacency matrix
 #' sel$mat_adj
 #' @export
-ggm_compare_estimate.default <- function(..., iter = 5000){
+ggm_compare_estimate <- function(..., type = "continuous",
+                                 analytic = FALSE,
+                                 iter = 5000){
 
 
+
+  if(type != "continuous"){
+    stop("binary and ordinal will be implemented soon.")
+
+  }
   info <- Y_combine(...)
 
   p <- info$dat_info$p[1]
@@ -120,52 +136,13 @@ ggm_compare_estimate.default <- function(..., iter = 5000){
     call = match.call()
   )
 
-  class(returned_object) <- "ggm_compare_estimate"
+  class(returned_object) <- c("BGGM",
+                              "ggm_compare_estimate",
+                              "estimate")
   returned_object
 
 }
 
-#' @title S3 estimate method
-#' @name ggm_compare_estimate
-#' @param ... currently not used
-#'
-#' @description S3 estimate method
-#' @seealso \code{\link{ggm_compare_estimate.default}}
-#' @export
-ggm_compare_estimate <- function(...) {
-  UseMethod("ggm_compare_estimate")
-}
-
-
-#' @name print.ggm_compare_estimate
-#' @title  Print method for \code{ggm_compare_estimate} objects
-#'
-#' @param x An object of class \code{ggm_compare_estimate}
-#' @param ... currently ignored
-#' @seealso \code{\link{ggm_compare_estimate.default}}
-#' @export
-print.ggm_compare_estimate <- function(x, ...){
-  cat("BGGM: Bayesian Gaussian Graphical Models \n")
-  cat("--- \n")
-  cat("Type: GGM Compare with the Posterior Distribution\n")
-  # number of iterations
-  cat("Posterior Samples:", x$iter, "\n")
-  # number of observations
-  cat("Observations (n):\n")
-  groups <- length(x$info$dat)
-  for(i in 1:groups){
-    cat("  Group", paste( i, ":", sep = "") , x$info$dat_info$n[[i]], "\n")
-  }
-  # number of variables
-  cat("Variables (p):", x$p, "\n")
-  # number of edges
-  cat("Edges:", .5 * (x$p * (x$p-1)), "\n")
-  cat("--- \n")
-  cat("Call: \n")
-  print(x$call)
-  cat("--- \n")
-  cat("Date:", date(), "\n")
-}
 
 #' @name summary.ggm_compare_estimate
 #' @title Summary method for \code{ggm_compare_estimate.default} objects
@@ -228,58 +205,11 @@ summary.ggm_compare_estimate <- function(object, cred = 0.95,...) {
   }
   returned_object <- list(dat_results = dat_results,
                           object = object)
-  class(returned_object) <- "summary.ggm_estimate_compare"
+  class(returned_object) <- c("BGGM",
+                              "summary",
+                              "ggm_compare_estimate",
+                               "estimate")
   returned_object
 }
 
 
-#' @title Summary method for \code{summary.ggm_compare_estimate} objects
-#' @name print.summary.ggm_estimate_compare
-
-#' @param x An object of class \code{summary.ggm_compare_estimate}
-#' @param ... currently ignored
-#' @seealso \code{\link{ggm_compare_estimate.default}}
-#' @examples
-#' # data
-#' Y1 <- BGGM::bfi[1:500,1:5]
-#' Y2 <- BGGM::bfi[501:1000, 1:5]
-#'
-#' # fit model
-#' fit <- ggm_compare_estimate(Y1, Y2)
-#'
-#' # posterior summary of differences
-#' summary(fit)
-#' @export
-print.summary.ggm_estimate_compare <- function(x,...){
-
-  cat("BGGM: Bayesian Gaussian Graphical Models \n")
-  cat("--- \n")
-  cat("Type: GGM Compare with the Posterior Distribution\n")
-  # number of iterations
-  cat("Posterior Samples:", x$object$iter, "\n")
-  # number of observations
-  cat("Observations (n):\n")
-  groups <- length(x$object$info$dat)
-  for (i in 1:groups) {
-    cat("  Group",
-        paste(i, ":", sep = "") ,
-        x$object$info$dat_info$n[[i]],
-        "\n")
-  }
-  # number of variables
-  cat("Variables (p):", x$object$p, "\n")
-  # number of edges
-  cat("Edges:", .5 * (x$object$p * (x$object$p - 1)), "\n")
-  cat("--- \n")
-  cat("Call: \n")
-  print(x$object$call)
-  cat("--- \n")
-  cat("Estimates:\n")
-  for (i in 1:nrow(x$object$info$pairwise)) {
-    cat("\n", names(x$object$pcors_diffs[[i]]), "\n")
-
-    print(x$dat_results[[i]], row.names = FALSE,...)
-
-  }
-  cat("--- \n")
-}

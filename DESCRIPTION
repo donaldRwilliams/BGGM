@@ -16,31 +16,35 @@ Description: Fit Bayesian Gaussian graphical models. The methods are separated i
 Depends: R (>= 3.5.0)
 License: GPL-2
 Imports: 
-  mvnfast  (>= 0.2.5), 
-  foreach  (>= 1.4.7), 
-  doParallel   (>= 1.0.15), 
-  ggplot2  (>= 3.2.1), 
-  mvtnorm  (>= 1.0.11), 
-  stringr  (>= 1.4.0), 
-  ggridges (>= 0.5.1), 
-  GGally (>= 1.4.0),
-  pracma   (>= 2.2.5), 
-  network (>= 1.15),
-  bayesplot (>= 1.7.1),
-  sna (>= 2.5),
-  shiny (>= 1.4.0), 
-  reshape2 (>= 1.4.3),
-  cowplot (>= 1.0.0),
-  stats,
-  parallel,
-  Matrix,
-  reshape,
-  MASS
+    mvnfast (>= 0.2.5),
+    foreach (>= 1.4.7),
+    doParallel (>= 1.0.15),
+    ggplot2 (>= 3.2.1),
+    mvtnorm (>= 1.0.11),
+    stringr (>= 1.4.0),
+    ggridges (>= 0.5.1),
+    GGally (>= 1.4.0),
+    pracma (>= 2.2.5),
+    network (>= 1.15),
+    bayesplot (>= 1.7.1),
+    sna (>= 2.5),
+    shiny (>= 1.4.0),
+    reshape2 (>= 1.4.3),
+    cowplot (>= 1.0.0),
+    stats,
+    parallel,
+    Matrix,
+    reshape,
+    MASS,
+    Rcpp (>= 1.0.4.6),
+    Rdpack
 Suggests: 
   knitr, 
   rmarkdown, 
   dplyr
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
 VignetteBuilder: knitr
+LinkingTo: Rcpp, RcppArmadillo, RcppDist
+RdMacros: Rdpack

@@ -500,9 +500,12 @@ NULL
 #' Structured style: items 23, 28, 30
 #'
 #' @docType data
+#'
 #' @keywords datasets
 #' @name rsa
+#'
 #' @usage data("rsa")
+#'
 #' @examples
 #' data("rsa")
 #'
@@ -513,4 +516,100 @@ NULL
 #' Scale for Adults in 675 university students. Epidemiology and psychiatric sciences, 1-9.
 #' @format A data frame with 28 variables and 1973 observations (5 point Likert scale)
 NULL
+
+
+#' Sachs Network
+#'
+#' Protein Expression In Human Immune System Cells
+#'
+#' @name sachs
+#'
+#'
+#'
+#' @docType data
+#'
+#' @keywords datasets
+#'
+#' @usage data("sachs")
+#'
+#' @examples
+#' data("sachs")
+#'
+#' @format A data frame containing 7466 cells (n = 7466) and flow cytometry
+#'  measurements of 11 (p = 11) phosphorylated proteins and phospholipids
+#'
+#'  @references
+#'  Sachs, K., Gifford, D., Jaakkola, T., Sorger, P., & Lauffenburger, D. A. (2002).
+#'  Bayesian network approach to cell signaling pathway modeling. Sci. STKE, 2002(148), pe38-pe38.
+NULL
+
+#' Autism and Obssesive Compulsive Disorder
+#'
+#' A correlation matrix with 17 variables in total (autsim: 9; OCD: 8).
+#' The sample size was 213.
+#'
+#'
+#' \strong{Autism}:
+#'
+#' \itemize{
+#'   \item \code{CI}  Circumscribed interests
+#'   \item \code{UP}  Unusual preoccupations
+#'   \item \code{RO}  Repetitive use of objects or interests in parts of objects
+#'   \item \code{CR}  Compulsions and/or rituals
+#'   \item \code{CI}  Unusual sensory interests
+#'   \item \code{SM}  Complex mannerisms or stereotyped body movements
+#'   \item \code{SU}  Stereotyped utterances/delayed echolalia
+#'   \item \code{NIL} Neologisms and/or idiosyncratic language
+#'   \item \code{VR}  Verbal rituals
+#' }
+#'
+#'   \itemize{
+#'
+#'   \strong{OCD}
+#'
+#'
+#'   \item \code{CD} Concern with things touched due to dirt/bacteria
+#'   \item \code{TB} Thoughts of doing something bad around others
+#'   \item \code{CT} Continual thoughts that do not go away
+#'   \item \code{HP} Belief that someone/higher power put reoccurring thoughts in their head
+#'   \item \code{CW} Continual washing
+#'   \item \code{CCh} Continual checking CntCheck
+#'   \item \code{CC} Continual counting/repeating
+#'   \item \code{RD} Repeatedly do things until it feels good or just right
+#' }
+#'
+#'
+#' @docType data
+#'
+#' @keywords datasets
+#' @name asd_ocd
+#'
+#' @usage data("asd_ocd")
+#'
+#' @examples
+#' data("asd_ocd")
+#'
+#' # generate continuous
+#' Y <- MASS::mvrnorm(n = 213,
+#'                    mu = rep(0, 17),
+#'                    Sigma = autism_ocd,
+#'                    empirical = TRUE)
+#'
+#' # generate ordinal
+#'
+#' @format A correlation matrix including 17 variables. These data were measured on a 4 level likert scale.
+#'
+#' @references
+#' Jones, P. J., Ma, R., & McNally, R. J. (2019). Bridge centrality: A network approach
+#' to understanding comorbidity. Multivariate behavioral research, 1-15.
+#'
+#' Ruzzano, L., Borsboom, D., & Geurts, H. M. (2015).
+#' Repetitive behaviors in autism and obsessive-compulsive
+#' disorder: New perspectives from a network analysis.
+#' Journal of Autism and Developmental Disorders, 45(1),
+#' 192–202. doi:10.1007/s10803-014-2204-9
+NULL
+
+
+
 

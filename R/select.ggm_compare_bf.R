@@ -80,67 +80,12 @@ select.ggm_compare_bf <- function(object, BF_cut = 3,...){
                           pcor_mat_10 = pcor_mat,
                           object = object)
 
-  class(returned_object) <- "select.ggm_compare_bf"
+  class(returned_object) <- c("BGGM",
+                              "explore",
+                              "select.ggm_compare_bf")
   returned_object
 
 }
-
-
-#' @name print.select.ggm_compare_bf
-#' @title  Print method for \code{select.ggm_compare_bf} objects
-#'
-#' @param x An object of class \code{select.ggm_compare_bf}
-#' @param ... currently ignored
-#' @seealso \code{\link{select.ggm_compare_bf}}
-#' @export
-print.select.ggm_compare_bf <- function(x,...){
-print(x$object)
-}
-
-#' @name summary.select.ggm_compare_bf
-#' @title  Print method for \code{select.ggm_compare_bf} objects
-#'
-#' @param object An object of class \code{select.ggm_compare_bf}
-#' @param ... currently ignored
-#' @seealso \code{\link{select.ggm_compare_bf}}
-#' @export
-summary.select.ggm_compare_bf <- function(object,...){
-  cat("BGGM: Bayesian Gaussian Graphical Models \n")
-  cat("--- \n")
-  cat("Type: GGM Compare with Bayesian Hypothesis Testing \n")
-  # number of iterations
-  p <- object$object$info$dat_info$p[1]
-  cat("Posterior Samples:", object$object$iter, "\n")
-  cat("Observations: \n")
-  groups <- length(object$object$info$dat)
-  for (i in 1:groups) {
-    cat("  Group",
-        paste(i, ":", sep = "") ,
-        object$object$info$dat_info$n[[i]],
-        "\n")
-  }
-  # number of variables
-  cat("Variables (p):", object$object$p, "\n")
-  # number of edges
-  cat("Edges:", .5 * (object$object$p * (object$object$p-1)), "\n")
-  cat("--- \n")
-  cat("Call: \n")
-  print(object$call)
-  cat("--- \n")
-  cat("Selected:\n\n")
-  cat("Adjacency non-zero \n \n")
-  colnames(object$adj_10) <- 1:p
-  row.names(object$adj_10) <- 1:p
-  print(object$adj_10)
-  cat("\n")
-  cat("Adjacency zero \n \n")
-  colnames(object$adj_01) <- 1:p
-  row.names(object$adj_01) <- 1:p
-  print(object$adj_01)
-  cat("--- \n")
-  cat("note: matrices (e.g., selected partial correlations) are in the select object")
-}
-
 
 
 #' @title Plot \code{select.ggm_compare_bf} Objects

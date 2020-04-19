@@ -47,17 +47,17 @@ mse <- function(object, ...){
     # scores
     scores <- lapply(1:p, function(x) colMeans((t(pred[[x]]) - dat[,x])^2))
 
-    } else if (class(object) == "post.pred"){
+  } else if (class(object) == "post.pred"){
 
-      type <- class(object)
+    type <- class(object)
 
-      scores <- lapply(1:p, function(x) colMeans((t(pred[[x]]) - dat[,x])^2))
+    scores <- lapply(1:p, function(x) colMeans((t(pred[[x]]) - dat[,x])^2))
 
-    } else {
+  } else {
 
-      stop("object class not supported (must be predict.estimate or post.pred)")
+    stop("object class not supported (must be predict.estimate or post.pred)")
 
-      }
+  }
 
 
   # returned object
@@ -69,7 +69,7 @@ mse <- function(object, ...){
 
   return(returned_object)
 
-  }
+}
 
 #' Mean Absolute Error
 #' @name mae
@@ -100,15 +100,15 @@ mae <- function(object, ...){
   pred <- object$pred
 
 
-  if(class(object) == "predict.estimate"|
-     class(object) == "fitted.estimate"){
+  if(is(object, "predict")|
+     is(object, "fitted")){
 
     type <- class(object)
 
     # scores
     scores <- lapply(1:p, function(x) colMeans(abs(t(pred[[x]]) - dat[,x])))
 
-  } else if (class(object) == "post.pred"){
+  } else if (is(object, "post.pred")){
 
     type <- class(object)
 
@@ -125,7 +125,7 @@ mae <- function(object, ...){
                           metric = "mae",
                           type = type)
 
-  class(returned_object) <- "metric"
+  class(returned_object) <- c("BGGM", "metric", "estimate")
   return(returned_object)
 }
 
@@ -243,7 +243,7 @@ mape <- function(object, ...){
                           metric = "mape",
                           type = type)
 
-  class(returned_object) <- "metric"
+  class(returned_object) <- c("BGGM",  "metric", "estimate")
   return(returned_object)
 
 }
@@ -277,45 +277,14 @@ summary.metric <- function(object, cred = 0.95, ...){
                           type = object$type,
                           iter = iter,
                           cred = cred)
-  class(returned_object) <- c("summary.metric", "data.frame")
+  class(returned_object) <- c("BGGM", "metric",
+                              "estimate",
+                              "summary",
+                              "data.frame")
   returned_object
 }
 
-#' Print Method for \code{summary.metric} Object
-#'
-#' @param x object of class \code{summary.metric}
-#' @param digits digits used to round the values
-#' @param ... currently ignored
-#' @export
-print.summary.metric <- function(x, digits = 2,...){
-  cat("BGGM: Bayesian Gaussian Graphical Models \n")
-  cat("--- \n")
-  if(x$metric == "bayes_R2"){
-  cat("Metric:", "Bayes R2\n")
-  } else if(x$metric == "bayes_R2_diff"){
-    cat("Metric:", "Bayes R2 Difference \n")
-  } else {
-    cat("Metric:", x$metric, "\n")
 
-  }
-  cat("Type:", x$type, "\n")
-  cat("Credible Interval:", x$cred, "\n")
-  cat("--- \n")
-  cat("Estimates:\n\n")
-  dat <- x$summary
-  colnames(dat) <- c(colnames(dat)[1:3], "Cred.lb", "Cred.ub")
-  print(as.data.frame( sapply(dat , round, digits)),
-        row.names = FALSE)
-}
-
-#' Print Method for \code{metric} Objects
-#'
-#' @param x object of class \code{metric}
-#' @param ... currently ignored
-#' @export
-print.metric <- function(x,...){
-  print(summary(x))
-}
 
 #' Plot \code{metric} Objects
 #' @param x object of class \code{metric}
@@ -375,29 +344,29 @@ plot.metric <- function(x, type = "error_bar",
 
     } else {
 
-    # add ordered levels
-    temp$Node <- factor(temp$Node,
-                        levels = rev(order(temp$Post.mean)),
-                        labels =rev(order(temp$Post.mean)))
+      # add ordered levels
+      temp$Node <- factor(temp$Node,
+                          levels = rev(order(temp$Post.mean)),
+                          labels =rev(order(temp$Post.mean)))
 
     }
     # plot
     plt <- ggplot(temp, aes(x = Node,
                             y = Post.mean))
 
-      if(x$metric == "bayes_R2_diff"){
+    if(x$metric == "bayes_R2_diff"){
 
-       plt <- plt + annotate("rect", xmin = -Inf,
-                             xmax = Inf, ymin = -rope,
-                             ymax =rope,
-                             alpha = .1)
+      plt <- plt + annotate("rect", xmin = -Inf,
+                            xmax = Inf, ymin = -rope,
+                            ymax =rope,
+                            alpha = .1)
 
 
-      }
+    }
 
     plt <- plt + geom_errorbar(aes(ymin =  temp[,4],
-                        ymax =  temp[,5]),
-                    width = width) +
+                                   ymax =  temp[,5]),
+                               width = width) +
       geom_point(size = size,
                  color = color) +
       coord_flip() +
@@ -407,7 +376,7 @@ plot.metric <- function(x, type = "error_bar",
 
 
 
-    } else if (type == "ridgeline"){
+  } else if (type == "ridgeline"){
 
     lb <- (1 - cred) / 2
     ub <- 1 - lb
@@ -431,21 +400,21 @@ plot.metric <- function(x, type = "error_bar",
                            y = as.factor(L1),
                            fill=factor(..quantile..)))
 
-      if(x$metric == "bayes_R2_diff"){
+    if(x$metric == "bayes_R2_diff"){
 
-        plt <- plt + annotate("rect", ymin = -Inf,
-                              ymax = Inf, xmin = -rope,
-                              xmax =rope,
-                              alpha = .1)
+      plt <- plt + annotate("rect", ymin = -Inf,
+                            ymax = Inf, xmin = -rope,
+                            xmax =rope,
+                            alpha = .1)
 
 
-      }
+    }
 
-     plt <- plt + stat_density_ridges(rel_min_height = 0.01,
-                          scale = scale,
-                          geom = "density_ridges_gradient",
-                          calc_ecdf = TRUE,
-                          quantiles = c(lb, ub)) +
+    plt <- plt + stat_density_ridges(rel_min_height = 0.01,
+                                     scale = scale,
+                                     geom = "density_ridges_gradient",
+                                     calc_ecdf = TRUE,
+                                     quantiles = c(lb, ub)) +
       scale_fill_manual(name = "Probability",
                         values = c(color,
                                    "#A6A6A680",

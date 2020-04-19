@@ -35,19 +35,8 @@ map <- function(Y){
                           betas = betas,
                           dat = x)
 
-  class(returned_object) <- "map"
+  class(returned_object) <- c("BGGM", "estimate", "map")
 
   return(returned_object)
 }
 
-#' Print Method for \code{map} Objects
-#'
-#' @param x object of class map
-#' @param ... currently ignored
-#' @export
-print.map <- function(x,...){
-  cat("BGGM: Bayesian Gaussian Graphical Models \n")
-  cat("--- \n")
-  cat("Method: Maximum A Posteriori")
-  print(x$pcor)
-}

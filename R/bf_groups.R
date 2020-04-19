@@ -4,7 +4,7 @@
 #' assessing (relative) evidence for edge equality or edges differences across any number of groups. Further, confirmatory hypothesis testing
 #' can be used to test predictions or expectations regarding difference or similarities in different groups (e.g., male vs. female).
 #'
-#' @param ... data matrices (\emph{n} \times  \emph{p}). Requires at least two.
+#' @param ... data matrices (\emph{n} by \emph{p}). Requires at least two.
 #' @param prior_sd hypothesized standard deviation for the edges or partial correlations.
 #' @param iter number of posterior samples.
 #' @param cores number of cores for parallel computing. The default is 2, but this can be adjusted.

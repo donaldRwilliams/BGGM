@@ -1,5 +1,5 @@
 #' Compare GGMs with the Posterior Predictive Distribution
-#' @name ggm_compare_ppc.default
+#' @name ggm_compare_ppc
 #' @description Compare GGMs with the posterior predictive distribution. The method assume group equality, and the predictive check
 #' allows for testing whether that assumption should be modified--i.e., the GGMs are actually different. The current test statistic available is
 #' Kullback-Leibler divergence, which in this case, can be understood as a likelihood ratio for multivariate normal distributions. There are
@@ -219,132 +219,13 @@ ggm_compare_ppc <- function(..., type = "global", iter = 5000, cores = 1){
                           call = match.call())
 }
 
-class(returned_object) <- "ggm_compare_ppc"
+class(returned_object) <- c("BGGM", "estimate", "ggm_compare_ppc")
 returned_object
 
 }
 
-#' @name print.ggm_compare_ppc
-#' @title  Print method for \code{ggm_compare_ppc.default} objects
-#'
-#' @param x An object of class \code{ggm_compare_ppc}
-#' @param ... currently ignored
-#' @export
-print.ggm_compare_ppc <- function(x,...){
-  cat("BGGM: Bayesian Gaussian Graphical Models \n")
-  cat("--- \n")
-  if(x$type == "nodewise"){
-    cat("Type: GGM Compare (Nodewise Predictive Check) \n")
-  } else{
-    cat("Type: GGM Compare (Global Predictive Check) \n")
-  }
-  p <- x$info$dat_info$p[1]
-  cat("Posterior Samples:", x$iter, "\n")
-
-  groups <- length(x$info$dat)
-  for (i in 1:groups) {
-    cat("  Group",
-        paste(i, ":", sep = "") ,
-        x$info$dat_info$n[[i]],
-        "\n")
-  }
-  # cat("Observations (total):", sum(x$info$dat_info$n), "\n")
-  cat("Variables (p):", p, "\n")
-  cat("Edges:", .5 * (p * (p-1)), "\n")
-  cat("--- \n")
-  cat("Call: \n")
-  print(x$call)
-  cat("--- \n")
-  cat("Date:", date(), "\n")
-}
 
 
-#' @name summary.ggm_compare_ppc
-#' @title Summary method for \code{ggm_compare_ppc.default} objects
-#'
-#' @param object An object of class \code{ggm_compare_ppc}
-#' @param ... currently ignored
-#' @seealso \code{\link{ggm_compare_ppc}}
-#' @return A list containing the summarized results
-#' @export
-summary.ggm_compare_ppc <- function(object, ...){
-
-  p <- object$info$dat_info$p[1]
-
-  if (object$type == "global") {
-    results <- data.frame(
-      contrast = do.call(rbind, object$names),
-      KLD =  do.call(rbind, object$obs_jsd),
-      p_value = object$pvalue
-    )
-  }
-  if (object$type == "nodewise") {
-    results <- list()
-    for (i in 1:length(object$obs_jsd)) {
-      results[[i]] <-
-        data.frame(
-          node = 1:p ,
-          KLD =  round(do.call(rbind, object$obs_jsd[[i]]), 3),
-          p_value = unlist(object$pvalue[[i]])
-        )
-      names(results)[[i]] <- object$names[[i]]
-    }
-  }
-
-  returned_object <- list(results = results,
-                          object = object)
-  class(returned_object) <- "summary.ggm_compare_ppc"
-  return(returned_object)
-}
-
-
-#' @name print.summary.ggm_compare_ppc
-#' @title Summary method for \code{summary.ggm_compare_ppc} objects
-#' @param x An object of class \code{summary.ggm_compare_ppc}
-#' @param ... currently ignored
-#' @seealso \code{\link{summary.ggm_compare_ppc}}
-#' @export
-print.summary.ggm_compare_ppc <- function(x, ...){
-  cat("BGGM: Bayesian Gaussian Graphical Models \n")
-  cat("--- \n")
-  if(x$object$type == "nodewise"){
-    cat("Type: GGM Comparison (Nodewise Predictive Check) \n")
-  } else{
-    cat("Type: GGM Comparison (Global Predictive Check) \n")
-  }
-  p <- x$object$info$dat_info$p[1]
-  cat("Posterior Samples:", x$object$iter, "\n")
-
-  groups <- length(x$object$info$dat)
-  for (i in 1:groups) {
-    cat("  Group",
-        paste(i, ":", sep = "") ,
-        x$object$info$dat_info$n[[i]],
-        "\n")
-  }
-  cat("Variables (p):", p, "\n")
-  cat("Edges:", .5 * (p * (p-1)), "\n")
-  cat("--- \n")
-  cat("Call: \n")
-  print(x$object$call)
-  cat("--- \n")
-  cat("Estimates: \n \n")
-  if(x$object$type == "global"){
-    print(x$results, right = T, row.names = F,...)
-    cat("--- \n")
-    cat("note: \np_value = p(T(Y_rep) > T(y)|Y)\nKLD = (symmetric) Kullback-Leibler divergence")
-  }
-  if(x$object$type == "nodewise"){
-    for(i in 1:length(x$object$obs_jsd)){
-      cat(do.call(rbind, x$object$names)[[i]], "\n")
-      print(   x$results[[i]],  row.names = F, ...)
-      cat("\n")
-    }
-
-    cat("--- \n")
-    cat("note: \np_value = p(T(Y_rep) > T(y)|Y)\nKLD = (symmetric) Kullback-Leibler divergence")
-  }
-}
 
 #' Plot \code{ggm_compare_ppc} Objects
 #'

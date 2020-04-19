@@ -34,7 +34,7 @@ list of class \code{confirm}:
 }
 }
 \description{
-Traditionally, Gaussian graphical models are inherently exploratory. That is, automated model selection is performed. A key aspect of \strong{BGGM} is the ability to extend inference beyond exploratory and to
+Traditionally, Gaussian graphical models (GGM) are inherently exploratory. That is, automated model selection is performed. A key aspect of \strong{BGGM} is the ability to extend inference beyond exploratory and to
 confirmatory hypothesis testing. This is accomplished by testing equality and/or inequality constraints for sets of edges (partial correlations).
 }
 \note{
@@ -70,6 +70,6 @@ test_directions <-  confirm(Y = Y, hypothesis  = hypothesis,
                       prior_sd = 0.5, iter = 50000,
                       cores = 2)
 # summary
-summary(test_directions)
+test_directions
 }
 }

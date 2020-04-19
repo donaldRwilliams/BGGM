@@ -104,31 +104,10 @@ explore <- function(Y, prior_sd = 0.25,
                           cores = cores,
                           edge = edges)
 
-  class(returned_object) <- "explore"
+  class(returned_object) <- c("BGGM",
+                              "explore")
   return(returned_object)
 
-}
-
-#' @name print.explore
-#' @title  Print method for \code{explore} objects
-#' @param x An object of class \code{explore}
-#' @param ... currently ignored
-#' @seealso \code{\link{explore}}
-#' @export
-print.explore <- function(x,...){
-  cat("BGGM: Bayesian Gaussian Graphical Models \n")
-  cat("--- \n")
-  cat("Type: Hypothesis Testing (Exploratory) \n")
-  cat("Posterior Samples:", x$iter, "\n")
-  cat("Observations (n):", nrow(x$dat), "\n")
-  cat("Variables (p):", x$p, "\n")
-  cat("Edges:", .5 * (x$p * (x$p-1)), "\n")
-  cat("Delta:", x$delta, "\n")
-  cat("--- \n")
-  cat("Call: \n")
-  print(x$call)
-  cat("--- \n")
-  cat("Date:", date(), "\n")
 }
 
 
@@ -145,20 +124,13 @@ dat_results <- select(object,
 
 returned_object <- list(dat_results = dat_results,
                         object = object)
-class(returned_object) <- "summary.explore"
+
+class(returned_object) <- c("BGGM",
+                           "explore",
+                           "summary.explore")
 return(returned_object)
 }
 
-#' @title Summary method for \code{summary.explore} objects
-#' @name print.summary.explore
-#'
-#' @param x An object of class \code{summary.explore}
-#' @param ... currently ignored
-#' @seealso \code{\link{summary.explore}}
-#' @export
-print.summary.explore <- function(x,...){
-   summary(x$dat_results, summarize = TRUE)
-}
 
 #' Plot \code{summary.explore}
 #'
