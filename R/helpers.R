@@ -33,7 +33,7 @@ convert_hyps <- function(hypothesis, Y){
 
     for (i in seq_along(where)) {
       hypothesis <-  gsub(mat_name_actual[upper.tri(diag(p))][where[i]],
-                          replacement =  mat_name_n2w[upper.tri(diag(p))][where[i]], x = hypothesis )
+                     replacement =  mat_name_n2w[upper.tri(diag(p))][where[i]], x = hypothesis )
     }
 
   } else if (!any(where)){

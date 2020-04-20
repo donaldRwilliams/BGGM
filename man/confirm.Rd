@@ -29,7 +29,7 @@ control variables in the model (e.g.,, \code{~ gender * education}).}
 to a data frame containing the variables in \code{formula}. This is required when controlling for variables.}
 
 \item{type}{character string. Which type of data for \strong{Y} ? The options include \code{continuous},
-\code{binary}, or \code{ordinal}. See the note for further details.}
+\code{binary}, \code{ordinal}, or \code{mixed}. See the note for further details.}
 
 \item{iter}{posterior and prior samples. 25,000 is the default, as it results in a more stable Bayes factor than
 using, say, 5,000.}
@@ -53,12 +53,51 @@ list of class \code{confirm}:
 }
 }
 \description{
-Traditionally, Gaussian graphical models (GGM) are inherently exploratory. That is, automated model selection is performed. A key aspect of \strong{BGGM} is the ability to extend inference beyond exploratory and to
-confirmatory hypothesis testing. This is accomplished by testing equality and/or inequality constraints for sets of edges (partial correlations).
+Confirmatory hypothesis testing in GGMs, for, say, comparing formalized models encoding
+scienctific expectations. Hypotheses are expressed as equality and/or ineqaulity contraints on the
+partial correlations of interest. Here the focus is \emph{not} on determining the graph (see \code{\link{explore}}) but testing specific hypotheses related to
+the conditional (in)dependence structure. These methods were introduced in \insertCite{Williams2019_bf;textual}{BGGM}.
 }
 \note{
-Currently inequality and equality restrictions can be tested. The former is an ordering the respective edge sizes,
-whereas the latter allows for testing whether certain edges are exactly the same.
+\strong{Interpretation of conditional (in)dependence models for latent data:}
+
+A  tetrachoric correlation (binary data) is a special case of a polychoric correlation (ordinal data). Both relations are
+between "theorized normally distributed continuous latent variables"
+(\href{https://en.wikipedia.org/wiki/Polychoric_correlation}{Wikipedia})
+In both instances, the correpsonding partial correlation between observed variables is conditioned
+on the remaining variables in the \emph{latent} space. This implies that interpration is much the same as
+for continuous data, but with respect to latent variables. We refer interested reader to
+\insertCite{@page 2364, section 2.2, in  @webb2008bayesian;textual}{BGGM}.
+
+
+\strong{Hypothesis Examples:}
+
+The hypotheses can be written either with the respective column names or numbers. For example, \code{1--2} denotes the
+relation between variables in column 1 and 2. Note that these must correspond to the upper triangular elements of the correlation
+matrix. This is accomplished by ensuring that the first number is smaller than the second number. This also applies when using
+column names (e.g., in reference to the column number).
+
+One hypothesis:
+\itemize{
+
+\item  To test whether some relations are larger than others, while others are expected to be equal, this can be writting as
+
+ \code{hyp <-  c(1--2 > 1--3  = 1--4 > 0)},
+
+ where there is an addition additional contraint that all effects are expected to be positive. This is then compared to the complement.
+}
+
+More than one hypothesis:
+\itemize{
+
+\item The above hypothesis can also be compared to, say, a null model by using ";" to seperate the hypotheses, for example,
+
+\code{hyp <-  c(1--2 > 1--3  = 1--4 > 0; 1--2 = 1--3  = 1--4 = 0)}.
+
+Any number of hypotheses can be tested.
+}
+
+
 
 see \code{methods(class = "confirm")}
 }
@@ -99,4 +138,7 @@ test_directions
 
 
 }
+}
+\references{
+\insertAllCited{}
 }

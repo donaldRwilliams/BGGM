@@ -95,9 +95,6 @@ Rcpp::List mvn_continuous(arma::mat Y,
     // sample Theta
     Theta.slice(0) =   wishrnd(inv(Psi.slice(0) + S_Y),  (deltaMP + k - 1) + (n - 1));
 
-    // sample Theta
-    // Theta.slice(0) =   wishrnd(inv(S_Y),  (n - 1));
-
     // Sigma
     Sigma.slice(0) = inv(Theta.slice(0));
 

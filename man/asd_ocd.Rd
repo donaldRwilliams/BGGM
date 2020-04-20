@@ -51,7 +51,6 @@ Y <- MASS::mvrnorm(n = 213,
                    Sigma = autism_ocd,
                    empirical = TRUE)
 
-# generate ordinal
 
 }
 \references{

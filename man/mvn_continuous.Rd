@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{mvn_continuous}
 \alias{mvn_continuous}
-\title{Encapsulates a double}
+\title{multivariate regression}
 \description{
-Encapsulates a double
+multivariate regression
 }

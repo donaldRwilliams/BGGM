@@ -543,6 +543,8 @@ NULL
 #'  Bayesian network approach to cell signaling pathway modeling. Sci. STKE, 2002(148), pe38-pe38.
 NULL
 
+
+
 #' Autism and Obssesive Compulsive Disorder
 #'
 #' A correlation matrix with 17 variables in total (autsim: 9; OCD: 8).
@@ -595,7 +597,6 @@ NULL
 #'                    Sigma = autism_ocd,
 #'                    empirical = TRUE)
 #'
-#' # generate ordinal
 #'
 #' @format A correlation matrix including 17 variables. These data were measured on a 4 level likert scale.
 #'
@@ -612,4 +613,144 @@ NULL
 
 
 
+#' Depression and Anxiety (Time 1)
+#'
+#' A data frame containing 403 observations (n = 403) and 16 variables (p = 16) measured on the 4-point
+#' likert scale (depression: 9; anxiety: 7).
+#'
+#' \strong{Depression}:
+#'
+#' \itemize{
+#'   \item \code{PHQ1}  Little interest or pleasure in doing things?
+#'   \item \code{PHQ2}  Feeling down, depressed, or hopeless?
+#'   \item \code{PHQ3}  Trouble falling or staying asleep, or sleeping too much?
+#'   \item \code{PHQ4}  Feeling tired or having little energy?
+#'   \item \code{PHQ5}  Poor appetite or overeating?
+#'   \item \code{PHQ6} Feeling bad about yourself — or that you are a failure or have let
+#'                     yourself or your family down?
+#'   \item \code{PHQ7}  Trouble concentrating on things, such as reading the newspaper or
+#'                      watching television?
+#'   \item \code{PHQ8} Moving or speaking so slowly that other people could have noticed? Or so
+#'                     fidgety or restless that you have been moving a lot more than usual?
+#'   \item \code{PHQ9}  Thoughts that you would be better off dead, or thoughts of hurting yourself
+#'                      in some way?
+#' }
+#'
+#'   \itemize{
+#'
+#'   \strong{Anxiety}
+#'
+#'
+#'   \item \code{GAD1} Feeling nervous, anxious, or on edge
+#'   \item \code{GAD2} Not being able to stop or control worrying
+#'   \item \code{GAD3} Worrying too much about different things
+#'   \item \code{GAD4} Trouble relaxing
+#'   \item \code{GAD5} Being so restless that it's hard to sit still
+#'   \item \code{GAD6} Becoming easily annoyed or irritable
+#'   \item \code{GAD7} Feeling afraid as if something awful might happen
+#' }
+#'
+#'
+#' @docType data
+#'
+#' @keywords datasets
+#' @name depression_anxiety_t1
+#'
+#' @usage data("depression_anxiety_t1")
+#'
+#' @format A data frame containing 403 observations (n = 7466) and 16 variables (p = 16) measured on the 4-point
+#' likert scale.
+#'
+#' @examples
+#' data("depression_anxiety_t1")
+#' labels<- c("interest", "down", "sleep",
+#'             "tired", "appetite", "selfest",
+#'            "concen", "psychmtr", "suicid",
+#'            "nervous", "unctrworry", "worrylot",
+#'            "relax", "restless", "irritable", "awful")
+#'
+#'
+#' @references
+#' Forbes, M. K., Baillie, A. J., & Schniering, C. A. (2016). A structural equation modeling
+#' analysis of the relationships between depression,anxiety, and sexual problems over time.
+#' The Journal of Sex Research, 53(8), 942-954.
+#'
+#' Forbes, M. K., Wright, A. G., Markon, K. E., & Krueger, R. F. (2019). Quantifying the reliability and replicability of psychopathology network characteristics.
+#' Multivariate behavioral research, 1-19.
+#'
+#' Jones, P. J., Williams, D. R., & McNally, R. J. (2019). Sampling variability is not nonreplication:
+#' a Bayesian reanalysis of Forbes, Wright, Markon, & Krueger.
+NULL
 
+
+
+
+
+#' Depression and Anxiety (Time 2)
+#'
+#' A data frame containing 403 observations (n = 403) and 16 variables (p = 16) measured on the 4-point
+#' likert scale  (depression: 9; anxiety: 7).
+#'
+#' \strong{Depression}:
+#'
+#' \itemize{
+#'   \item \code{PHQ1}  Little interest or pleasure in doing things?
+#'   \item \code{PHQ2}  Feeling down, depressed, or hopeless?
+#'   \item \code{PHQ3}  Trouble falling or staying asleep, or sleeping too much?
+#'   \item \code{PHQ4}  Feeling tired or having little energy?
+#'   \item \code{PHQ5}  Poor appetite or overeating?
+#'   \item \code{PHQ6} Feeling bad about yourself — or that you are a failure or have let
+#'                     yourself or your family down?
+#'   \item \code{PHQ7}  Trouble concentrating on things, such as reading the newspaper or
+#'                      watching television?
+#'   \item \code{PHQ8} Moving or speaking so slowly that other people could have noticed? Or so
+#'                     fidgety or restless that you have been moving a lot more than usual?
+#'   \item \code{PHQ9}  Thoughts that you would be better off dead, or thoughts of hurting yourself
+#'                      in some way?
+#' }
+#'
+#'   \itemize{
+#'
+#'   \strong{Anxiety}
+#'
+#'
+#'   \item \code{GAD1} Feeling nervous, anxious, or on edge
+#'   \item \code{GAD2} Not being able to stop or control worrying
+#'   \item \code{GAD3} Worrying too much about different things
+#'   \item \code{GAD4} Trouble relaxing
+#'   \item \code{GAD5} Being so restless that it's hard to sit still
+#'   \item \code{GAD6} Becoming easily annoyed or irritable
+#'   \item \code{GAD7} Feeling afraid as if something awful might happen
+#' }
+#'
+#'
+#' @docType data
+#'
+#' @keywords datasets
+#' @name depression_anxiety_t2
+#'
+#' @usage data("depression_anxiety_t2")
+#'
+#' @format A data frame containing 403 observations (n = 7466) and 16 variables (p = 16) measured on the 4-point
+#' likert scale.
+#'
+#' @examples
+#' data("depression_anxiety_t2")
+#' labels<- c("interest", "down", "sleep",
+#'             "tired", "appetite", "selfest",
+#'            "concen", "psychmtr", "suicid",
+#'            "nervous", "unctrworry", "worrylot",
+#'            "relax", "restless", "irritable", "awful")
+#'
+#'
+#' @references
+#' Forbes, M. K., Baillie, A. J., & Schniering, C. A. (2016). A structural equation modeling
+#' analysis of the relationships between depression,anxiety, and sexual problems over time.
+#' The Journal of Sex Research, 53(8), 942-954.
+#'
+#' Forbes, M. K., Wright, A. G., Markon, K. E., & Krueger, R. F. (2019). Quantifying the reliability and replicability of psychopathology network characteristics.
+#' Multivariate behavioral research, 1-19.
+#'
+#' Jones, P. J., Williams, D. R., & McNally, R. J. (2019). Sampling variability is not nonreplication:
+#' a Bayesian reanalysis of Forbes, Wright, Markon, & Krueger.
+NULL

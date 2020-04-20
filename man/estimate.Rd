@@ -25,7 +25,7 @@ control variables in the model (i.e., \code{~ gender}).}
 to a data frame containing the variables in \code{formula}. This is required when controlling for variables.}
 
 \item{type}{character string. Which type of data for \strong{Y} ? The options include \code{continuous},
-\code{binary}, or \code{ordinal}. See the note for further details.}
+\code{binary}, \code{ordinal}, or \code{mixed}. See the note for further details.}
 
 \item{iter}{number of iterations (posterior samples; defaults to 5000).}
 

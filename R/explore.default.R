@@ -3,6 +3,7 @@
 #' @description Learn the conditional (in)dependence structure with the Bayes factor computed from the matrix-F prior distribution. It is
 #' possible to test for only positive or negative edges, as well as two sided hypothesis testing (which is the customary approach). Further
 #' there is also an exhaustive option that provides the posterior probability of the null, greater than zero, and less than zero.
+#' These methods were introduced in \insertCite{Williams2019_bf;textual}{BGGM}.
 #'
 #' @param Y  matrix (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).
 #'
@@ -13,7 +14,7 @@
 #' to a data frame containing the variables in \code{formula}. This is required when controlling for variables.
 #'
 #' @param type character string. Which type of data for \strong{Y} ? The options include \code{continuous},
-#' \code{binary}, or \code{ordinal}. See the note for further details.
+#' \code{binary}, \code{ordinal}, or \code{mixed}. See the note for further details.
 #'
 #' @param iter number of iterations (posterior samples; defaults to 5000).
 #'
@@ -21,7 +22,10 @@
 #'
 #' @param prior_sd hypothesized standard deviation for the edges or partial correlations
 #'
-#' @param ... currently not used
+#' @param ... currently ignored.
+#'
+#' @references
+#' \insertAllCited{}
 #'
 #' @return list of class \code{explore}:
 #' \itemize{
@@ -43,8 +47,23 @@
 #' \item \code{cores} number of cores
 #' \item \code{edge} number of estimated edges
 #' }
+#'
+#'
+#'
+#'
 #' @note After sampling from the posterior distribution, use \code{select} to determine the edge set and \code{plot} for visualizing the
 #' edge set. see \code{methods(class = "explore")}
+#'
+#' \strong{Interpretation of conditional (in)dependence models for latent data:}
+#'
+#' A  tetrachoric correlation (binary data) is a special case of a polychoric correlation (ordinal data). Both relations are
+#' between "theorized normally distributed continuous latent variables"
+#' (\href{https://en.wikipedia.org/wiki/Polychoric_correlation}{Wikipedia})
+#' In both instances, the correpsonding partial correlation between observed variables is conditioned
+#' on the remaining variables in the \emph{latent} space. This implies that interpration is much the same as
+#' for continuous data, but with respect to latent variables. We refer interested reader to
+#' \insertCite{@page 2364, section 2.2, in  @webb2008bayesian;textual}{BGGM}.
+#'
 #' @examples
 #' # p = 10
 #' Y <- BGGM::bfi[,1:10]

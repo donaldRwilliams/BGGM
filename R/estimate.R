@@ -16,7 +16,7 @@
 #' to a data frame containing the variables in \code{formula}. This is required when controlling for variables.
 #'
 #' @param type character string. Which type of data for \strong{Y} ? The options include \code{continuous},
-#' \code{binary}, or \code{ordinal}. See the note for further details.
+#' \code{binary}, \code{ordinal}, or \code{mixed}. See the note for further details.
 #'
 #' @param iter number of iterations (posterior samples; defaults to 5000).
 #'
