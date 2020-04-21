@@ -6,9 +6,9 @@
 
 using namespace Rcpp;
 
-// mvn_continuous
-Rcpp::List mvn_continuous(arma::mat Y, arma::mat X, float delta, float epsilon, int iter);
-RcppExport SEXP _BGGM_mvn_continuous(SEXP YSEXP, SEXP XSEXP, SEXP deltaSEXP, SEXP epsilonSEXP, SEXP iterSEXP) {
+// mv_continuous
+Rcpp::List mv_continuous(arma::mat Y, arma::mat X, float delta, float epsilon, int iter);
+RcppExport SEXP _BGGM_mv_continuous(SEXP YSEXP, SEXP XSEXP, SEXP deltaSEXP, SEXP epsilonSEXP, SEXP iterSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -17,7 +17,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< float >::type delta(deltaSEXP);
     Rcpp::traits::input_parameter< float >::type epsilon(epsilonSEXP);
     Rcpp::traits::input_parameter< int >::type iter(iterSEXP);
-    rcpp_result_gen = Rcpp::wrap(mvn_continuous(Y, X, delta, epsilon, iter));
+    rcpp_result_gen = Rcpp::wrap(mv_continuous(Y, X, delta, epsilon, iter));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -36,9 +36,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// mvn_binary
-Rcpp::List mvn_binary(arma::mat Y, arma::mat X, float delta, float epsilon, int iter, float beta_prior, arma::rowvec cutpoints);
-RcppExport SEXP _BGGM_mvn_binary(SEXP YSEXP, SEXP XSEXP, SEXP deltaSEXP, SEXP epsilonSEXP, SEXP iterSEXP, SEXP beta_priorSEXP, SEXP cutpointsSEXP) {
+// mv_binary
+Rcpp::List mv_binary(arma::mat Y, arma::mat X, float delta, float epsilon, int iter, float beta_prior, arma::rowvec cutpoints);
+RcppExport SEXP _BGGM_mv_binary(SEXP YSEXP, SEXP XSEXP, SEXP deltaSEXP, SEXP epsilonSEXP, SEXP iterSEXP, SEXP beta_priorSEXP, SEXP cutpointsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -49,15 +49,114 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type iter(iterSEXP);
     Rcpp::traits::input_parameter< float >::type beta_prior(beta_priorSEXP);
     Rcpp::traits::input_parameter< arma::rowvec >::type cutpoints(cutpointsSEXP);
-    rcpp_result_gen = Rcpp::wrap(mvn_binary(Y, X, delta, epsilon, iter, beta_prior, cutpoints));
+    rcpp_result_gen = Rcpp::wrap(mv_binary(Y, X, delta, epsilon, iter, beta_prior, cutpoints));
+    return rcpp_result_gen;
+END_RCPP
+}
+// Sigma_i_not_i
+arma::mat Sigma_i_not_i(arma::mat x, int index);
+RcppExport SEXP _BGGM_Sigma_i_not_i(SEXP xSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type index(indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(Sigma_i_not_i(x, index));
+    return rcpp_result_gen;
+END_RCPP
+}
+// select_col
+arma::vec select_col(arma::mat x, int index);
+RcppExport SEXP _BGGM_select_col(SEXP xSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type index(indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(select_col(x, index));
+    return rcpp_result_gen;
+END_RCPP
+}
+// select_row
+arma::mat select_row(arma::mat x, int index);
+RcppExport SEXP _BGGM_select_row(SEXP xSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type index(indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(select_row(x, index));
+    return rcpp_result_gen;
+END_RCPP
+}
+// remove_row
+arma::mat remove_row(arma::mat x, int which);
+RcppExport SEXP _BGGM_remove_row(SEXP xSEXP, SEXP whichSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type which(whichSEXP);
+    rcpp_result_gen = Rcpp::wrap(remove_row(x, which));
+    return rcpp_result_gen;
+END_RCPP
+}
+// remove_col
+arma::mat remove_col(arma::mat x, int index);
+RcppExport SEXP _BGGM_remove_col(SEXP xSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type index(indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(remove_col(x, index));
+    return rcpp_result_gen;
+END_RCPP
+}
+// mv_ordinal_cowles
+Rcpp::List mv_ordinal_cowles(arma::mat Y, arma::mat X, float delta, float epsilon, int iter, float MH);
+RcppExport SEXP _BGGM_mv_ordinal_cowles(SEXP YSEXP, SEXP XSEXP, SEXP deltaSEXP, SEXP epsilonSEXP, SEXP iterSEXP, SEXP MHSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type X(XSEXP);
+    Rcpp::traits::input_parameter< float >::type delta(deltaSEXP);
+    Rcpp::traits::input_parameter< float >::type epsilon(epsilonSEXP);
+    Rcpp::traits::input_parameter< int >::type iter(iterSEXP);
+    Rcpp::traits::input_parameter< float >::type MH(MHSEXP);
+    rcpp_result_gen = Rcpp::wrap(mv_ordinal_cowles(Y, X, delta, epsilon, iter, MH));
+    return rcpp_result_gen;
+END_RCPP
+}
+// mv_ordinal_albert
+Rcpp::List mv_ordinal_albert(arma::mat Y, arma::mat X, int iter, float delta, float epsilon, int K);
+RcppExport SEXP _BGGM_mv_ordinal_albert(SEXP YSEXP, SEXP XSEXP, SEXP iterSEXP, SEXP deltaSEXP, SEXP epsilonSEXP, SEXP KSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type X(XSEXP);
+    Rcpp::traits::input_parameter< int >::type iter(iterSEXP);
+    Rcpp::traits::input_parameter< float >::type delta(deltaSEXP);
+    Rcpp::traits::input_parameter< float >::type epsilon(epsilonSEXP);
+    Rcpp::traits::input_parameter< int >::type K(KSEXP);
+    rcpp_result_gen = Rcpp::wrap(mv_ordinal_albert(Y, X, iter, delta, epsilon, K));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_BGGM_mvn_continuous", (DL_FUNC) &_BGGM_mvn_continuous, 5},
+    {"_BGGM_mv_continuous", (DL_FUNC) &_BGGM_mv_continuous, 5},
     {"_BGGM_trunc_mvn", (DL_FUNC) &_BGGM_trunc_mvn, 5},
-    {"_BGGM_mvn_binary", (DL_FUNC) &_BGGM_mvn_binary, 7},
+    {"_BGGM_mv_binary", (DL_FUNC) &_BGGM_mv_binary, 7},
+    {"_BGGM_Sigma_i_not_i", (DL_FUNC) &_BGGM_Sigma_i_not_i, 2},
+    {"_BGGM_select_col", (DL_FUNC) &_BGGM_select_col, 2},
+    {"_BGGM_select_row", (DL_FUNC) &_BGGM_select_row, 2},
+    {"_BGGM_remove_row", (DL_FUNC) &_BGGM_remove_row, 2},
+    {"_BGGM_remove_col", (DL_FUNC) &_BGGM_remove_col, 2},
+    {"_BGGM_mv_ordinal_cowles", (DL_FUNC) &_BGGM_mv_ordinal_cowles, 6},
+    {"_BGGM_mv_ordinal_albert", (DL_FUNC) &_BGGM_mv_ordinal_albert, 6},
     {NULL, NULL, 0}
 };
 

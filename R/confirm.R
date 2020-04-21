@@ -164,9 +164,9 @@ confirm <- function(Y, hypothesis,
                                lapply(1:fit$cores, function(z)
                                  fit$samples[[z]]$fisher_z_prior))[1:edges]
 
-  } else if( type == "binary"){
+  } else if( type == "binary" | type == "ordinal"){
 
-    samples <- sampling_helper_poly(Y, delta, iter)
+    samples <- sampling_helper_poly(Y, delta, iter, type)
 
     posterior_samples <- samples$fisher_z_post[,1:edges]
 

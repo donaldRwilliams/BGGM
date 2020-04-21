@@ -304,8 +304,67 @@ estimate  <- function(Y,
 
     } # end no control
 
+# end of binary
+  } else if(type == "ordinal") {
 
-} # end binary
+
+
+    if(is.null(formula)){
+
+      control <- "no_control"
+
+      p <- ncol(Y)
+
+      # matrix for storage
+      pcor_mat <-  inv_mat <- matrix(0, ncol = p, p)
+
+      # name the columns
+      inv_names <- unlist(lapply(1:p, function(x)  samps_inv_helper(x, p)))
+      pcor_names <-unlist(lapply(1:p, function(x)  samps_pcor_helper(x, p)))
+
+      X_pred <- model.matrix(~1, data = as.data.frame( Y))
+
+      fit_mvn <- mvn_ordinal(Y, X_pred,
+                            delta = 20,
+                            epsilon = ep,
+                            iter = iter + 50,
+                            MH = 0.001)
+
+
+
+      inv_cov <- matrix(as.numeric( fit_mvn$Theta[,,51:(iter+50)]),
+                        nrow = iter, ncol = p^2, byrow = TRUE )
+
+      pcors <- matrix(as.numeric( fit_mvn$pcors[,,51:(iter+50)]),
+                      nrow = iter, ncol = p^2, byrow = TRUE)
+      #
+      df_samps <- cbind(inv_cov, pcors)
+      #
+      colnames(df_samps) <- c(inv_names, pcor_names)
+
+      # posterior means (partials)
+      pcor_mat[] <- colMeans(df_samps[,  grep("pcors", colnames(df_samps))])
+      diag(pcor_mat) <- 0
+
+      # posterior means (inverse)
+      inv_mat[]   <- colMeans(df_samps[,  grep("cov_inv", colnames(df_samps))])
+
+      returned_object  <- list(pcor_mat = pcor_mat,
+                               inv_mat = inv_mat,
+                               posterior_samples = as.data.frame(df_samps),
+                               p = p, dat = Y,
+                               iter = iter,
+                               call = match.call(),
+                               analytic = analytic,
+                               betas = fit_mvn$beta,
+                               coef_names = colnames(X_pred),
+                               control = control,
+                               type = type)
+
+    } # end no control
+
+
+}
 
 
 

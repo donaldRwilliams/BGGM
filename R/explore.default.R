@@ -148,7 +148,7 @@ explore <- function(Y,
 
 
 
-    samples <- sampling_helper_poly(Y, delta, iter)
+    samples <- sampling_helper_poly(Y, delta, iter, type = type)
 
     posterior_samples <- samples$pcor_post
 
@@ -173,6 +173,33 @@ explore <- function(Y,
                             edge = edges,
                             type = type)
 
+
+  } else if(type == "ordinal"){
+
+    samples <- sampling_helper_poly(Y, delta, iter, type = type)
+
+    posterior_samples <- samples$pcor_post
+
+    # posterior mean
+    parcors_mat[upper.tri(parcors_mat)] <- colMeans(posterior_samples)[1:edges]
+    pacors_mat <- BGGM:::symmteric_mat(parcors_mat)
+
+    # posterior sd
+    parcors_sd[upper.tri(parcors_sd)] <- apply(posterior_samples, 2, sd)[1:edges]
+    pacors_sd <- BGGM:::symmteric_mat(parcors_sd)
+
+    # returned object
+    returned_object <- list(parcors_mat = pacors_mat,
+                            parcors_sd = parcors_sd,
+                            samples = samples,
+                            delta = delta,
+                            iter = iter,
+                            dat = X,
+                            call = match.call(),
+                            p = p,
+                            cores = cores,
+                            edge = edges,
+                            type = type)
 
   }
 

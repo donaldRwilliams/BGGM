@@ -7,11 +7,11 @@
 
 
 //' @title multivariate regression
-//' @name mvn_continuous
+//' @name mv_continuous
 //' @export
 
 // [[Rcpp::export]]
-Rcpp::List mvn_continuous(arma::mat Y,
+Rcpp::List mv_continuous(arma::mat Y,
                           arma::mat X,
                           float delta,
                           float epsilon,
@@ -233,12 +233,12 @@ Rcpp::List trunc_mvn(arma::mat mu,
 
 
 //' @title testing binary
-//' @name mvn_binary
+//' @name mv_binary
 //' @export
 
 // binary sampler
 // [[Rcpp::export]]
-Rcpp::List mvn_binary(arma::mat Y,
+Rcpp::List mv_binary(arma::mat Y,
                       arma::mat X,
                       float delta,
                       float epsilon,
@@ -422,3 +422,611 @@ Rcpp::List mvn_binary(arma::mat Y,
   return  ret;
 }
 
+
+
+// [[Rcpp::export]]
+arma::mat Sigma_i_not_i(arma::mat x, int index) {
+  arma::mat sub_x = x.row(index);
+  sub_x.shed_col(index);
+  return(sub_x);
+}
+
+
+// [[Rcpp::export]]
+arma::vec select_col(arma::mat x, int index){
+  arma::vec z = x.col(index);
+  return(z);
+}
+
+// [[Rcpp::export]]
+arma::mat select_row(arma::mat x, int index){
+  arma::mat z = x.row(index);
+  return(z);
+}
+
+// [[Rcpp::export]]
+arma::mat remove_row(arma::mat x, int which){
+  x.shed_row(which);
+  return(x);
+}
+
+// [[Rcpp::export]]
+arma::mat remove_col(arma::mat x, int index){
+  x.shed_col(index);
+  return(x);
+}
+
+
+//' @title testing ordinal cowles for thresholds
+//' @name mv_ordinal_cowles
+//' @export
+
+// ordinal sampler
+// [[Rcpp::export]]
+Rcpp::List mv_ordinal_cowles(arma::mat Y,
+                           arma::mat X,
+                           float delta,
+                           float epsilon,
+                           int iter, float MH) {
+
+  // number of rows
+  float n = Y.n_rows;
+
+  // number of columns
+  int k = Y.n_cols;
+
+  // number of predictors
+  int p = X.n_cols;
+
+  int nu = 1/ epsilon;
+  // #nu in Mulder & Pericchi (2018) formula (30) line 1.
+  int nuMP = delta + k - 1 ;
+
+  // #delta in Mulder & Pericchi (2018) formula (30) line 1.
+  int deltaMP = nu - k + 1 ;
+
+  // k by k identity mat
+  arma::mat  I_k(k, k, arma::fill::eye);
+
+  // p by p identity mat
+  arma::mat  I_p(p, p, arma::fill::eye);
+
+  // scatter matrix X' * X
+  arma::mat S_X(X.t() * X + I_p * 0.000001);
+
+  // inv S_X
+  arma::mat Sinv_X(inv(S_X));
+
+  // Psi update
+  arma::cube Psi(k, k, 1, arma::fill::zeros);
+
+  // scatter matrix dependent variables
+  arma::mat S_Y(k, k, arma::fill::zeros);
+  arma::mat B(epsilon * I_k);
+  arma::mat BMP(inv(B));
+  arma::mat BMPinv(inv(BMP));
+
+  // precison matrix
+  arma::cube Theta(k, k, 1, arma::fill::zeros);
+  arma::cube Theta_mcmc(k, k, iter, arma::fill::zeros);
+
+  // partial correlations
+  arma::mat pcors(k,k);
+  arma::cube pcors_mcmc(k, k, iter, arma::fill::zeros);
+
+  // correlations
+  arma::mat  cors(k,k);
+  arma::cube cors_mcmc(k, k, iter, arma::fill::zeros);
+
+
+  // covariance matrix
+  arma::cube Sigma(k, k, 1, arma::fill::zeros);
+  arma::cube Sigma_mcmc(k, k, iter, arma::fill::zeros);
+
+  // coefficients
+  arma::mat beta(p, k, arma::fill::zeros);
+  arma::cube beta_mcmc(p, k, iter,  arma::fill::zeros);
+
+  // latent update
+  arma::cube z0(n, k, 1,  arma::fill::zeros);
+
+  // expanded latent data
+  arma::mat w(n, k, arma::fill::zeros);
+
+  // x hat
+  arma::cube Xbhat(n, k,  1, arma::fill::zeros);
+
+  // Rinv update
+  arma::cube Rinv(k, k, 1, arma::fill::zeros);
+
+  // coefficients
+  arma::mat M(p, k, arma::fill::zeros);
+
+  // Rinv update
+  arma::cube R(k, k, 1, arma::fill::zeros);
+
+
+  // Dinv update
+  arma::cube Dinv(k, k, 1, arma::fill::zeros);
+
+  // Dinv update
+  arma::mat D(k, k, arma::fill::eye);
+
+  // ordinal levels
+  arma::vec n_levels = unique(Y.col(0));
+
+  // MH step acceptence
+  arma::vec acc(k, arma::fill::zeros);
+
+  Rinv.slice(0).fill(arma::fill::eye);
+  R.slice(0).fill(arma::fill::eye);
+  Dinv.slice(0).fill(arma::fill::eye);
+  Psi.slice(0).fill(arma::fill::eye);
+  Sigma.slice(0).fill(arma::fill::eye);
+
+  // range
+  Rcpp::Range thresh_sampled =  Rcpp::seq(min(Y.col(0)) + 1, max(Y.col(0)) - 1);
+
+  // threshold holders
+  arma::cube  thresh_mat(k, n_levels.size() + 1, 1, arma::fill::zeros);
+  arma::cube c_thresh_mat(k, n_levels.size() + 1, 1, arma::fill::zeros);
+
+  // set ends to -Inf and Inf
+  thresh_mat.slice(0).col(0).fill(-arma::datum::inf);
+  thresh_mat.slice(0).col(n_levels.size()).fill(arma::datum::inf);
+  c_thresh_mat.slice(0).col(0).fill(-arma::datum::inf);
+  c_thresh_mat.slice(0).col(n_levels.size()).fill(arma::datum::inf);
+
+  // story thresholds
+  arma::cube thresh_mcmc(k, n_levels.size() + 1, iter);
+
+  // MH R ratio
+  arma::mat R_numer(n, k);
+  arma::mat R_denom(n, k);
+
+  arma::mat mm(n,1);
+  arma::mat ss(1,1);
+
+
+  // draw coefs conditional on w
+  arma::mat gamma(p, k, arma::fill::zeros);
+
+  // starting thresholds
+  for(int i = 0; i < max(Y.col(0)) - 1; ++i){
+    for(int j = 0; j < k; ++j){
+      thresh_mat(j, i + 2, 0) = R::qnorm5(sum(Y.col(j) <= thresh_sampled[i]) / n,
+                 -R::qnorm5(sum(Y.col(j) == 1) / n, 0, 1, TRUE, FALSE), 1, TRUE, FALSE);
+    }
+  }
+
+  // start sampling
+  for(int s = 0; s < iter; ++s){
+
+    Rcpp::checkUserInterrupt();
+
+    // multivariate data
+    for(int i = 0; i < k; ++i){
+
+      arma::mat mm = Xbhat.slice(0).col(i).t() +
+        Sigma_i_not_i(R.slice(0), i) *
+        inv(remove_row(remove_col(R.slice(0), i), i)) *
+        (remove_col(z0.slice(0), i).t() - remove_col(Xbhat.slice(0), i).t());
+
+      arma::vec ss = select_row(R.slice(0), i).col(i) -
+        Sigma_i_not_i(R.slice(0), i) *
+        inv(remove_row(remove_col(R.slice(0), i), i)) *
+        Sigma_i_not_i(R.slice(0), i).t();
+
+      // generate latent data
+      for(int j = 0; j < n; ++j){
+
+        z0.slice(0).row(j).col(i) = R::qnorm(R::runif(
+          // minimum
+          R::pnorm(thresh_mat.slice(0)(i , (Y.col(i)[j] - 1)), mm(j), sqrt(ss(0)), TRUE, FALSE),
+
+          // maximum
+          R::pnorm(thresh_mat.slice(0)(i , Y.col(i)[j]), mm(j), sqrt(ss(0)), TRUE, FALSE)),
+
+          // location and scale
+          mm(j), sqrt(ss(0)), TRUE, FALSE);
+      }
+    }
+
+    for(int i = 0; i < max(Y.col(0)) - 1; ++i){
+      for(int j = 0; j < k ; ++j){
+        arma::mat slice_c_thresh = thresh_mat.slice(0);
+        c_thresh_mat(j, i+2, 0) = R::qnorm5(R::runif(R::pnorm(0,  slice_c_thresh(j , thresh_sampled[i]), MH, TRUE, FALSE), 1),
+                     slice_c_thresh(j , thresh_sampled[i]), MH, TRUE, FALSE);
+      }
+    }
+
+    for(int j = 0; j < n; ++j){
+
+      for(int i = 0; i < k; ++i){
+
+
+        R_numer(j, i) =  (R::pnorm5(c_thresh_mat(i , Y.col(i)[j], 0) - mm(j), 0, 1, TRUE, FALSE) -
+          R::pnorm5(c_thresh_mat(i , Y.col(i)[j]-1 , 0) - mm(j), 0, 1, TRUE, FALSE));
+
+        R_denom(j, i) = (R::pnorm5(thresh_mat(i , Y.col(i)[j], 0) - mm(j), 0, 1, TRUE, FALSE) -
+          R::pnorm5(thresh_mat(i , Y.col(i)[j] -1, 0) - mm(j), 0, 1, TRUE, FALSE));
+      }
+    }
+
+
+
+    // remove nan
+    R_numer.replace(arma::datum::nan, 0);
+    R_denom.replace(arma::datum::nan, 0);
+
+
+    // block update for each variable
+    for(int j = 0; j < k; j ++){
+      if(accu(log(R_numer.col(j) / R_denom.col(j))) > log(R::runif(0, 1))){
+        // acceptence
+        acc(j) = acc(j) + 1;
+        // block update
+        thresh_mat.slice(0).row(j) = c_thresh_mat.slice(0).row(j);
+      }
+    }
+
+
+
+    for(int i = 0; i < k; ++i){
+      D.row(i).col(i) = sqrt(1 / R::rgamma((deltaMP + k - 1) / 2,
+                   2 / arma::conv_to<double>::from(Rinv.slice(0).row(i).col(i))));
+    }
+
+    // expand latent data
+    w = z0.slice(0) * D;
+
+    // coefficients
+    M = Sinv_X * X.t() * w;
+
+    // gamma
+    gamma = reshape(mvnrnd(reshape(M, k * p , 1),
+                           kron(Sigma.slice(0), Sinv_X)),
+                           p, k);
+
+    // expanded coefficients
+    beta  = gamma * Dinv.slice(0);
+
+    // update Yhat
+    Xbhat.slice(0) = X * beta;
+
+    // error scatter matrix
+    S_Y =   w.t() * w + I_k - M.t() * S_X * M;
+
+    // } while (det(S_Y) < 0);
+
+    // sample Psi
+    Psi.slice(0) = wishrnd(inv(BMPinv + Theta.slice(0)), nuMP + deltaMP + k - 1);
+
+    // sample Theta
+    Theta.slice(0) =   wishrnd(inv(Psi.slice(0) + S_Y),  (deltaMP + k - 1) + (n - 1));
+
+    // sigma
+    Sigma.slice(0) = inv(Theta.slice(0));
+
+    // correlation
+    cors =  diagmat(1 / sqrt(Sigma.slice(0).diag())) *
+      Sigma.slice(0) *
+      diagmat(1 / sqrt(Sigma.slice(0).diag()));
+
+    // partial correlations
+    pcors = diagmat(1 / sqrt(Theta.slice(0).diag())) *
+      Theta.slice(0) *
+      diagmat(1 / sqrt(Theta.slice(0).diag()));
+
+    // update Dinv
+    Dinv.slice(0)  = inv(diagmat(sqrt(Sigma.slice(0).diag())));
+
+    // inverse correlation matrix
+    Rinv.slice(0)   = inv(cors);
+
+    // update correlation matrix
+    R.slice(0) = cors;
+
+    beta_mcmc.slice(s) =reshape(beta, p,k);
+    pcors_mcmc.slice(s) =  -(pcors - I_k);
+    cors_mcmc.slice(s) =  cors;
+    Sigma_mcmc.slice(s) = Sigma.slice(0);
+    Theta_mcmc.slice(s) = Theta.slice(0);
+    thresh_mcmc.slice(s) = thresh_mat.slice(0);
+
+  }
+
+  ////////////////////////////////////////////
+
+  Rcpp::List ret;
+  ret["pcors"] = pcors_mcmc;
+  ret["cors"] =  cors_mcmc;
+  ret["beta"] = beta_mcmc;
+  ret["Theta"] = Theta_mcmc;
+  ret["Sigma"] = Sigma_mcmc;
+  ret["acc"]  = acc;
+  ret["thresh"]  = thresh_mcmc;
+  return  ret;
+}
+
+
+
+//' @title testing ordinal albert and chibbs for thresholds
+//' @name mv_ordinal_albert
+//' @export
+
+// ordinal sampler
+// [[Rcpp::export]]
+Rcpp::List mv_ordinal_albert(arma::mat Y,
+                          arma::mat X,
+                          int iter,
+                          float delta,
+                          float epsilon,
+                          int K){
+
+
+  // number of rows
+  float n = Y.n_rows;
+
+  // number of columns
+  int k = Y.n_cols;
+
+  // number of predictors
+  int p = X.n_cols;
+
+
+  // ordinal levels
+  // int K = unique(Y.col(0));
+
+  int nu = 1/ epsilon;
+  // #nu in Mulder & Pericchi (2018) formula (30) line 1.
+  int nuMP = delta + k - 1 ;
+
+  // #delta in Mulder & Pericchi (2018) formula (30) line 1.
+  int deltaMP = nu - k + 1 ;
+
+  // k by k identity mat
+  arma::mat  I_k(k, k, arma::fill::eye);
+
+  // p by p identity mat
+  arma::mat  I_p(p, p, arma::fill::eye);
+
+  // scatter matrix X' * X
+  arma::mat S_X(X.t() * X + I_p * 0.001);
+
+  // inv S_X
+  arma::mat Sinv_X(inv(S_X));
+
+  // Psi update
+  arma::cube Psi(k, k, 1, arma::fill::zeros);
+
+  // scatter matrix dependent variables
+  arma::mat S_Y(k, k, arma::fill::zeros);
+  arma::mat B(epsilon * I_k);
+  arma::mat BMP(inv(B));
+  arma::mat BMPinv(inv(BMP));
+
+  // precison matrix
+  arma::cube Theta(k, k, 1, arma::fill::zeros);
+  arma::cube Theta_mcmc(k, k, iter, arma::fill::zeros);
+
+  // partial correlations
+  arma::mat pcors(k,k);
+  arma::cube pcors_mcmc(k, k, iter, arma::fill::zeros);
+
+  // correlations
+  arma::mat  cors(k,k);
+  arma::cube cors_mcmc(k, k, iter, arma::fill::zeros);
+
+
+  // covariance matrix
+  arma::cube Sigma(k, k, 1, arma::fill::zeros);
+  arma::cube Sigma_mcmc(k, k, iter, arma::fill::zeros);
+
+  // coefficients
+  arma::mat beta(p, k, arma::fill::zeros);
+  arma::cube beta_mcmc(p, k, iter,  arma::fill::zeros);
+
+  // latent update
+  arma::cube z0(n, k, 1,  arma::fill::zeros);
+
+  // expanded latent data
+  arma::mat w(n, k, arma::fill::zeros);
+
+  // x hat
+  arma::cube Xbhat(n, k,  1, arma::fill::zeros);
+
+  // Rinv update
+  arma::cube Rinv(k, k, 1, arma::fill::zeros);
+
+  // coefficients
+  arma::mat M(p, k, arma::fill::zeros);
+
+  // Rinv update
+  arma::cube R(k, k, 1, arma::fill::zeros);
+
+
+  // Dinv update
+  arma::cube Dinv(k, k, 1, arma::fill::zeros);
+
+  // Dinv update
+  arma::mat D(k, k, arma::fill::eye);
+
+  // ordinal levels
+  arma::vec n_levels = unique(Y.col(0));
+
+  Rinv.slice(0).fill(arma::fill::eye);
+  R.slice(0).fill(arma::fill::eye);
+  Dinv.slice(0).fill(arma::fill::eye);
+  Psi.slice(0).fill(arma::fill::eye);
+  Sigma.slice(0).fill(arma::fill::eye);
+
+ // draw coefs conditional on w
+  arma::mat gamma(p, k, arma::fill::zeros);
+
+
+  arma::cube thresh(iter, K+1, k, arma::fill::zeros);
+
+  for(int i = 0; i < k; ++i){
+    thresh.slice(i).col(0).fill(-arma::datum::inf);
+    thresh.slice(i).col(K).fill(arma::datum::inf);
+  }
+
+  for(int i = 0; i < (K-2); ++i){
+    for(int j = 0; j < k; ++j){
+      thresh.slice(j).col(i+2).fill(i+1);
+    }
+  }
+
+  // store thresholds
+  arma::mat thresh_mcmc(K+1,iter, arma::fill::zeros);
+
+  arma::mat mm(n,1);
+  arma::mat ss(1,1);
+
+  for(int s = 1; s < iter; ++s ){
+
+    Rcpp::checkUserInterrupt();
+
+    for(int i = 0; i < k; ++i){
+
+      mm = Xbhat.slice(0).col(i).t() +
+        Sigma_i_not_i(R.slice(0), i) *
+        inv(remove_row(remove_col(R.slice(0), i), i)) *
+        (remove_col(z0.slice(0), i).t() - remove_col(Xbhat.slice(0), i).t());
+
+      ss = select_row(R.slice(0), i).col(i) -
+        Sigma_i_not_i(R.slice(0), i) *
+        inv(remove_row(remove_col(R.slice(0), i), i)) *
+        Sigma_i_not_i(R.slice(0), i).t();
+
+
+
+      // Rcpp::checkUserInterrupt();
+
+      if(s == 1){
+        // generate latent data
+        for(int j = 0; j < n; ++j){
+
+          z0.slice(0).row(j).col(i) = R::qnorm(R::runif(
+            // minimum
+            R::pnorm(thresh.slice(i)(0 , (Y.col(i)[j] - 1)), mm(j), sqrt(ss(0)), TRUE, FALSE),
+
+            // maximum
+            R::pnorm(thresh.slice(i)(0 , Y.col(i)[j]), mm(j), sqrt(ss(0)), TRUE, FALSE)),
+
+            // location and scale
+            mm(j), sqrt(ss(0)), TRUE, FALSE);
+        }
+
+
+      } else{
+
+
+        for(int i = 0; i < k; ++i){
+
+          for(int j = 2; j < (K); ++j){
+            arma::vec lb = {select_col(z0.slice(0), i).elem(find(Y.col(i) == j)).max(), thresh.slice(i)(s-1, j-1) };
+            arma::vec ub = {select_col(z0.slice(0), i).elem(find(Y.col(i) == j+1)).min(), thresh.slice(i)(s-1, j+1) };
+            arma::vec v = Rcpp::runif(1,  lb.max(), ub.min());
+            thresh.slice(i).row(s).col(j) =  arma::conv_to<double>::from(v);
+
+          }
+        }
+
+        // generate latent data
+        for(int j = 0; j < n; ++j){
+
+          z0.slice(0).row(j).col(i) = R::qnorm(R::runif(
+            // minimum
+            R::pnorm(thresh.slice(i)(s , (Y.col(i)[j] - 1)), mm(j), sqrt(ss(0)), TRUE, FALSE),
+
+            // maximum
+            R::pnorm(thresh.slice(i)(s  , Y.col(i)[j]), mm(j), sqrt(ss(0)), TRUE, FALSE)),
+
+            // location and scale
+            mm(j), sqrt(ss(0)), TRUE, FALSE);
+        }
+
+
+      }
+
+    }
+
+    for(int i = 0; i < k; ++i){
+      D.row(i).col(i) = sqrt(1 / R::rgamma((delta + k - 1) / 2,
+                   2 / arma::conv_to<double>::from(Rinv.slice(0).row(i).col(i))));
+    }
+
+    // expand latent data
+    w = z0.slice(0) * D;
+
+    // coefficients
+    M = Sinv_X * X.t() * w;
+
+    // gamma
+    gamma = reshape(mvnrnd(reshape(M, k * p , 1),
+                           kron(Sigma.slice(0), Sinv_X)),
+                           p, k);
+
+    // expanded coefficients
+    beta  = gamma * Dinv.slice(0);
+
+    // update Yhat
+    Xbhat.slice(0) = X * beta;
+
+    // error scatter matrix
+    S_Y =   w.t() * w + I_k - M.t() * S_X * M;
+
+    // } while (det(S_Y) < 0);
+
+    // sample Psi
+    Psi.slice(0) = wishrnd(inv(BMPinv + Theta.slice(0)), nuMP + deltaMP + k - 1);
+
+    // sample Theta
+    Theta.slice(0) =   wishrnd(inv(  S_Y),  (deltaMP + k - 1) + (n - 1));
+
+    // sigma
+    Sigma.slice(0) = inv(Theta.slice(0));
+
+    // correlation
+    cors =  diagmat(1 / sqrt(Sigma.slice(0).diag())) *
+      Sigma.slice(0) *
+      diagmat(1 / sqrt(Sigma.slice(0).diag()));
+
+    // partial correlations
+    pcors = diagmat(1 / sqrt(Theta.slice(0).diag())) *
+      Theta.slice(0) *
+      diagmat(1 / sqrt(Theta.slice(0).diag()));
+
+    // update Dinv
+    Dinv.slice(0)  = inv(diagmat(sqrt(Sigma.slice(0).diag())));
+
+    // inverse correlation matrix
+    Rinv.slice(0)   = inv(cors);
+
+    // update correlation matrix
+    R.slice(0) = cors;
+
+    beta_mcmc.slice(s) =reshape(beta, p,k);
+    pcors_mcmc.slice(s) =  -(pcors - I_k);
+    cors_mcmc.slice(s) =  cors;
+    Sigma_mcmc.slice(s) = Sigma.slice(0);
+    Theta_mcmc.slice(s) = Theta.slice(0);
+    // thresh.row(s) = thresh.slice(0).row(s);
+
+  }
+
+  ////////////////////////////////////////////
+
+  Rcpp::List ret;
+  ret["pcors"] = pcors_mcmc;
+  ret["cors"] =  cors_mcmc;
+  ret["beta"] = beta_mcmc;
+  ret["Theta"] = Theta_mcmc;
+  ret["Sigma"] = Sigma_mcmc;
+  ret["thresh"]  = thresh;
+  return  ret;
+
+
+}
