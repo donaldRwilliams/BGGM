@@ -145,12 +145,12 @@ ggm_compare_estimate <- function(..., type = "continuous",
 
 
 #' @name summary.ggm_compare_estimate
-#' @title Summary method for \code{ggm_compare_estimate.default} objects
+#' @title Summary method for \code{ggm_compare_estimate} objects
 #'
 #' @param object An object of class \code{ggm_compare_estimate}
 #' @param cred credible interval width
 #' @param ... currently ignored
-#' @seealso \code{\link{ggm_compare_estimate.default}}
+#' @seealso \code{\link{ggm_compare_estimate}}
 #' @return A list containing the summarized posterior distributions
 #' @examples
 #' # data
