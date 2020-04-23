@@ -9,6 +9,7 @@ explore(
   formula = NULL,
   data = NULL,
   type = "continuous",
+  mixed_type = NULL,
   prior_sd = 0.25,
   iter = 5000,
   cores = 2,
@@ -25,7 +26,11 @@ control variables in the model (i.e., \code{~ gender}).}
 to a data frame containing the variables in \code{formula}. This is required when controlling for variables.}
 
 \item{type}{character string. Which type of data for \strong{Y} ? The options include \code{continuous},
-\code{binary}, \code{ordinal}, or \code{mixed}. See the note for further details.}
+\code{binary}, \code{ordinal}, or \code{mixed} (semi-parametric copula). See the note for further details.}
+
+\item{mixed_type}{numeric vector. An indicator of length p for which varibles should be treated as ranks.
+(1 for rank and 0 to assume normality). The default is currently (dev version) to treat all integer variables
+as ranks when \code{type = "mixed"} and \code{NULL} otherwise. See note for further details.}
 
 \item{prior_sd}{hypothesized standard deviation for the edges or partial correlations}
 

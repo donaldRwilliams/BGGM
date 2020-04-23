@@ -18,9 +18,16 @@
 #' @param type character string. Which type of data for \strong{Y} ? The options include \code{continuous},
 #' \code{binary}, \code{ordinal}, or \code{mixed}. See the note for further details.
 #'
+#' @param mixed_type numeric vector. An indicator of length p for which varibles should be treated as ranks.
+#' (1 for rank and 0 to assume normality). The default is currently to treat all integer variables as ranks
+#' when \code{type = "mixed"} and \code{NULL} otherwise. See note for further details.
+#'
+#' Treating continous data as ranks is computationally expensive and can be avoided by assuming normality.
+#'
 #' @param iter number of iterations (posterior samples; defaults to 5000).
 #'
 #' @param analytic logical. Should the analytic solution be computed (default is \code{FALSE})?
+#'
 #'
 #' @param ... currently ignored.
 #'
@@ -99,8 +106,10 @@ estimate  <- function(Y,
                       formula = NULL,
                       data = NULL,
                       type = "continuous",
+                      mixed_type = NULL,
                       iter = 5000,
-                      analytic = FALSE, ep = 0.001, mixed_type = NULL,...){
+                      analytic = FALSE,
+                      ep = 0.001,...){
 
 
 

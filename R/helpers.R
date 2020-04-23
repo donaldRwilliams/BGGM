@@ -99,7 +99,7 @@ prior_helper_2 <- function(p, delta , epsilon){
 }
 
 
-sampling_helper_poly <- function(Y, delta, iter, type){
+sampling_helper_poly <- function(Y, delta, iter, type, mixed_type= NULL){
 
   if(type == "binary"){
 
@@ -116,6 +116,33 @@ sampling_helper_poly <- function(Y, delta, iter, type){
                           delta = delta,
                           epsilon = 0.1,
                           iter = iter, MH = 0.001)
+
+  } else if(type == "mixed"){
+
+
+
+    rank_vars <- rank_helper(Y)
+
+    if(is.null(mixed_type)) {
+
+      idx = colMeans(round(Y) == Y)
+      idx = ifelse(idx == 1, 1, 0)
+
+    } else {
+
+      idx = mixed_type
+
+    }
+
+    fit_mvn <- copula(z0_start = rank_vars$z0_start,
+                      levels = rank_vars$levels,
+                      K = rank_vars$K,
+                      Sigma_start = rank_vars$Sigma_start,
+                      iter = iter,
+                      delta = delta,
+                      epsilon = 0.1,
+                      idx = idx)
+
 
   }
 
@@ -135,14 +162,14 @@ sampling_helper_poly <- function(Y, delta, iter, type){
                                   delta = delta,
                                   epsilon = 0.0001)
 
-  pcor_store_up <- t(sapply(1:iter, function(x){
+  pcor_store_up <- t(sapply(50:iter, function(x){
     mat <- fit_mvn$pcors[,,x];
     mat[upper.tri(mat)]
   }
   ))
 
 
-  pcor_store_low <- t(sapply(1:iter, function(x){
+  pcor_store_low <- t(sapply(50:iter, function(x){
     mat <- fit_mvn$pcors[,,x];
     mat[lower.tri(mat)]
   }

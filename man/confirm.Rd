@@ -11,6 +11,7 @@ confirm(
   formula = NULL,
   data = NULL,
   type = "continuous",
+  mixed_type = NULL,
   iter = 25000,
   cores = 2
 )
@@ -20,7 +21,7 @@ confirm(
 
 \item{hypothesis}{character string. hypothesis (or hypotheses) to be tested. See notes for futher details.}
 
-\item{prior_sd}{hypothesized standard deviation of the prior distribution}
+\item{prior_sd}{hypothesized standard deviation of the prior distribution.}
 
 \item{formula}{an object of class \code{\link[stats]{formula}}. This allows for including
 control variables in the model (e.g.,, \code{~ gender * education}).}
@@ -30,6 +31,10 @@ to a data frame containing the variables in \code{formula}. This is required whe
 
 \item{type}{character string. Which type of data for \strong{Y} ? The options include \code{continuous},
 \code{binary}, \code{ordinal}, or \code{mixed}. See the note for further details.}
+
+\item{mixed_type}{numeric vector of length \emph{p}. An indicator for which varibles should be treated as ranks.
+(1 for rank and 0 to assume normality). The default is currently (dev version) to treat all integer variables
+as ranks when \code{type = "mixed"} and \code{NULL} otherwise. See note for further details.}
 
 \item{iter}{posterior and prior samples. 25,000 is the default, as it results in a more stable Bayes factor than
 using, say, 5,000.}
