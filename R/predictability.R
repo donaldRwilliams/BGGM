@@ -47,7 +47,7 @@ bayes_R2 <- function(object,
 
   betas <- inverse_2_beta(object, samples = iter)
 
- scores <- parallel::parLapply(cl = cl,
+  scores <- parallel::parLapply(cl = cl,
                               X = 1:p, function(x) R2_ppc(fit = object,
                                                           betas = betas,
                                                           adj = adj,
@@ -62,7 +62,7 @@ bayes_R2 <- function(object,
                          metric = "bayes_R2",
                          cred = cred)
 
- class(returned_object) <- c("metric", "R2")
+ class(returned_object) <- c("BGGM", "metric",  "R2", "estimate")
 
  return(returned_object)
 

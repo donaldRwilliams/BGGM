@@ -900,31 +900,6 @@ print_select_estimate <- function(x, summarize = FALSE, ...){
     }
   }
 }
-# print_select_estimate <- function(x, ...){
-#   cat("BGGM: Bayesian Gaussian Graphical Models \n")
-#   cat("--- \n")
-#   if(is.numeric(x$rope)){
-#     cat("Type: Selected Graph (Sampling) \n")
-#   } else{
-#     cat("Type: Selected Graph (Analytic Solution) \n")
-#   }
-#   if(is.null(x$rope)){
-#     cat("Credible Interval:", gsub("^.*\\.","", x$ci), "% \n")
-#     cat("Connectivity:", round(mean(x$adjacency[upper.tri(x$adjacency)]) * 100, 1), "% \n")
-#     cat("--- \n")
-#     cat("Call:\n")
-#     print(x$call)
-#     cat("--- \n")
-#   } else{
-#     cat("Probability:", x$prob, "\n")
-#     cat("Region of Practical Equivalence:", "[", -1 * x$rope, ", ", x$rope, "]", "\n", sep = "")
-#     cat("Connectivity:", round(mean(x$adjacency_non_zero[upper.tri(x$adjacency_non_zero)]) * 100, 1), "% \n")
-#     cat("--- \n")
-#     cat("Call:\n")
-#     print(x$call)
-#     cat("--- \n")
-#   }
-# }
 
 
 print_summary_estimate <- function(x, ...) {

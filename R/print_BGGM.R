@@ -57,16 +57,27 @@ print.BGGM <- function(x,...){
 
     } else if(is(x, "metric")) {
 
+
+
       if(is(x, "summary")){
 
         print_summary_metric(x)
 
       } else {
 
+
+
+        if(is(x, "R2")){
+
+          print_summary_metric(summary(x, ...))
+
+        } else {
+
+
         print_summary_metric(summary(x, ...))
 
       }
-
+}
       # end metric
     }  else if(is(x, "summary.estimate")){
 
