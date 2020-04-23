@@ -378,9 +378,6 @@ estimate  <- function(Y,
     inv_names <- unlist(lapply(1:p, function(x)  samps_inv_helper(x, p)))
     pcor_names <-unlist(lapply(1:p, function(x)  samps_pcor_helper(x, p)))
 
-    X_pred <- model.matrix(~1, data = as.data.frame( Y))
-
-
     rank_vars <- rank_helper(Y)
 
     if(is.null(mixed_type)) {
@@ -398,7 +395,7 @@ estimate  <- function(Y,
                       levels = rank_vars$levels,
                       K = rank_vars$K,
                       Sigma_start = rank_vars$Sigma_start,
-                      iter = iter,
+                      iter = iter + 50,
                       delta = 20,
                       epsilon = 0.1,
                       idx = idx)
