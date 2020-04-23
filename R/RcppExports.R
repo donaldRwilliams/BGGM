@@ -21,6 +21,11 @@ NULL
 #' @export
 NULL
 
+#' @title testing copula GGM
+#' @name copula
+#' @export
+NULL
+
 mv_continuous <- function(Y, X, delta, epsilon, iter) {
     .Call('_BGGM_mv_continuous', PACKAGE = 'BGGM', Y, X, delta, epsilon, iter)
 }
@@ -59,5 +64,9 @@ mv_ordinal_cowles <- function(Y, X, delta, epsilon, iter, MH) {
 
 mv_ordinal_albert <- function(Y, X, iter, delta, epsilon, K) {
     .Call('_BGGM_mv_ordinal_albert', PACKAGE = 'BGGM', Y, X, iter, delta, epsilon, K)
+}
+
+copula <- function(z0_start, levels, K, Sigma_start, iter, delta, epsilon, idx) {
+    .Call('_BGGM_copula', PACKAGE = 'BGGM', z0_start, levels, K, Sigma_start, iter, delta, epsilon, idx)
 }
 

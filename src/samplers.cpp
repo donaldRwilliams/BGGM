@@ -947,11 +947,8 @@ Rcpp::List mv_ordinal_albert(arma::mat Y,
             // location and scale
             mm(j), sqrt(ss(0)), TRUE, FALSE);
         }
-
-
+        }
       }
-
-    }
 
     for(int i = 0; i < k; ++i){
       D.row(i).col(i) = sqrt(1 / R::rgamma((delta + k - 1) / 2,
@@ -1029,4 +1026,173 @@ Rcpp::List mv_ordinal_albert(arma::mat Y,
   return  ret;
 
 
+}
+
+
+//' @title testing copula GGM
+//' @name copula
+//' @export
+
+// mixed data sampler
+// [[Rcpp::export]]
+Rcpp::List  copula(arma::mat z0_start,
+                   arma::mat levels,
+                   arma::vec K,
+                   arma::mat Sigma_start,
+                   int iter,
+                   float delta,
+                   float epsilon,
+                   arma::vec idx) {
+
+  // adapted from hoff 2008 for Bayesian hypothesis testing
+  // with the matrix-F prior distribution for Theta
+
+  // z0: latent data
+  // levels: data matrix as sorted levels
+  // K: levels in each columns
+
+  // number of rows
+  float n = z0_start.n_rows;
+
+  // number of columns
+  int k = z0_start.n_cols;
+
+  // k by k identity mat
+  arma::mat  I_k(k, k, arma::fill::eye);
+
+  int nu = 1/ epsilon;
+  // // #nu in Mulder & Pericchi (2018) formula (30) line 1.
+  int nuMP = delta + k - 1 ;
+  //
+  // // #delta in Mulder & Pericchi (2018) formula (30) line 1.
+  int deltaMP = nu - k + 1 ;
+
+  arma::uvec where ;
+
+  // latent update
+  arma::cube z0(n, k, 1,  arma::fill::zeros);
+
+  z0.slice(0) = z0_start;
+  //
+  arma::cube zmcmc(n, k, iter, arma::fill::zeros);
+  // Psi update
+  arma::cube Psi(k, k, 1, arma::fill::zeros);
+
+  // scatter matrix dependent variables
+  arma::mat S_Y(k, k, arma::fill::zeros);
+  arma::mat B(epsilon * I_k);
+  arma::mat BMP(inv(B));
+  arma::mat BMPinv(inv(BMP));
+
+  arma::cube Sigma(k, k, 1, arma::fill::zeros);
+  Sigma.slice(0) = Sigma_start;
+
+  // precison matrix
+  arma::cube Theta(k, k, 1, arma::fill::zeros);
+  arma::cube Theta_mcmc(k, k, iter, arma::fill::zeros);
+
+  // partial correlations
+  arma::mat pcors(k,k);
+  arma::cube pcors_mcmc(k, k, iter, arma::fill::zeros);
+
+  // correlations
+  arma::mat  cors(k,k);
+  arma::cube cors_mcmc(k, k, iter, arma::fill::zeros);
+
+  // covariance matrix
+  Sigma.slice(0) = Sigma_start;
+  arma::cube Sigma_mcmc(k, k, iter, arma::fill::zeros);
+
+  arma::vec lb(1);
+  arma::vec ub(1);
+
+  arma::mat mm(n,1);
+  arma::mat ss(1,1);
+
+  for(int  s = 1; s < iter; ++s){
+
+    for(int i = 0; i < k; ++i){
+
+      mm = Sigma_i_not_i(Sigma.slice(0), i) *
+        inv(remove_row(remove_col(Sigma.slice(0), i), i)) *
+        remove_col(z0.slice(0), i).t();
+
+      ss = select_row(Sigma.slice(0), i).col(i) -
+        Sigma_i_not_i(Sigma.slice(0), i) *
+        inv(remove_row(remove_col(Sigma.slice(0), i), i)) *
+        Sigma_i_not_i(Sigma.slice(0), i).t();
+
+      // sample latent data (0  = assumed continuous)
+      if(idx(i) == 1){
+
+        for(int r = 1; r  < K[i]+1; ++r){
+
+          arma::uvec where = find(levels.col(i) == r );
+
+          arma::mat temp1 = arma::conv_to<arma::mat>::from(where);
+
+          int r_levels = temp1.n_elem;
+
+          arma::vec lb_check =  {select_col(z0.slice(0), i).elem(find(levels.col(i) == (r - 1)))};
+          arma::vec ub_check =  {select_col(z0.slice(0), i).elem(find(levels.col(i) == (r + 1)))};
+
+          // Equation X in X
+          if(lb_check.n_elem == 0){
+            lb.fill(-arma::datum::inf);
+          } else {
+            lb.fill(lb_check.max());
+          }
+
+          if(ub_check.n_elem == 0){
+            ub.fill(arma::datum::inf);
+          } else {
+            ub.fill(ub_check.min());
+          }
+
+          for(int l = 0; l < r_levels; ++l){
+
+            z0.slice(0).col(i).row(temp1(l)) = R::qnorm(R::runif(
+              R::pnorm(arma::conv_to<double>::from(lb),  mm(temp1(l)), sqrt(ss(0)), TRUE, FALSE),
+              R::pnorm(arma::conv_to<double>::from(ub),  mm(temp1(l)), sqrt(ss(0)), TRUE, FALSE)),
+              mm(temp1(l)), sqrt(ss(0)), TRUE, FALSE);
+          }
+        }
+      }
+    }
+
+    // novel matrix-F prior distribution
+    // scatter matrix
+    S_Y = z0.slice(0).t() * z0.slice(0);
+
+    Psi.slice(0) = wishrnd(inv(BMPinv + Theta.slice(0)), nuMP + deltaMP + k - 1);
+
+    // sample Theta
+    Theta.slice(0) =   wishrnd(inv(Psi.slice(0) + S_Y),  (deltaMP + k - 1) + (n - 1));
+
+    // sigma
+    Sigma.slice(0) = inv(Theta.slice(0));
+
+    // correlation
+    cors =  diagmat(1 / sqrt(Sigma.slice(0).diag())) *
+      Sigma.slice(0) *
+      diagmat(1 / sqrt(Sigma.slice(0).diag()));
+
+    // partial correlations
+    pcors = diagmat(1 / sqrt(Theta.slice(0).diag())) *
+      Theta.slice(0) *
+      diagmat(1 / sqrt(Theta.slice(0).diag()));
+
+    pcors_mcmc.slice(s) =  -(pcors - I_k);
+    cors_mcmc.slice(s) =  cors;
+    Sigma_mcmc.slice(s) = Sigma.slice(0);
+    Theta_mcmc.slice(s) = Theta.slice(0);
+  }
+
+
+  Rcpp::List ret;
+  ret["pcors"] = pcors_mcmc;
+  ret["cors"] =  cors_mcmc;
+  ret["Theta"] = Theta_mcmc;
+  ret["Sigma"] = Sigma_mcmc;
+  return ret;
 }

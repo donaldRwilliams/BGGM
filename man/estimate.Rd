@@ -12,6 +12,7 @@ estimate(
   iter = 5000,
   analytic = FALSE,
   ep = 0.001,
+  mixed_type = NULL,
   ...
 )
 }

@@ -8,6 +8,23 @@
 #' @import ggplot2
 
 
+rank_helper <- function(Y){
+
+  # adapted from hoff (2008). See documentation.
+  p <- ncol(Y)
+  levels  <- apply(Y, 2, function(x) {match(x, sort(unique(x)))})
+  K <-  apply(levels, 2, max, na.rm = TRUE)
+  ranks <- apply(Y, 2, rank, ties.method = "max", na.last = "keep")
+  n_complete <- apply(!is.na(ranks), 2, sum)
+  U <- t(t(ranks)/(n_complete + 1))
+  Z <- qnorm(U)
+  S <- diag(p)
+  list(K = K, levels = levels, Sigma_start = S, z0_start = Z)
+
+}
+
+
+
 convert_hyps <- function(hypothesis, Y){
 
   p <- ncol(Y)
