@@ -5,7 +5,7 @@
 #' correlations. Testing strength (e.g., differences or confirmatory testing of order contraints) is
 #' implemented in \code{test.centrality}.
 #'
-#' @name centrality.BGGM
+#' @name centrality
 #'
 #' @param object an object of class \code{estimate} or \code{explore}. All data types (e.g., ordinal, binary, etc.)
 #'               are supported.
@@ -16,9 +16,7 @@
 #' @param cluster charcter string. Which clusters or communities do the nodes belong to? This is
 #'                required when \code{type = bridge_stength}.
 #'
-#' @param select logical. Should strength be condtional on the selected model (default set to \code{NULL})? Note
-#'                 that is might seem desirable to compute strength from only the selected edges. However, this
-#'                 presents challenges for making statistical inference. See note for further details.
+#' @param select logical. Should strength be condtional on the selected model (default set to \code{NULL})? See note for further details.
 #'
 #' @param cred numeric. Credible interval width used for selecting the graph with an \code{estimate}
 #'             object (default is \code{0.95}).
@@ -46,30 +44,31 @@
 #'
 #' The default setting is \code{select = FALSE}. This means that \emph{all} of the partial correlation for a given
 #' node are summed and not only those that were determined to be non-zero. Although it may seem that including only
-#' the selected edges leads to desirable "inference," this is not the case. This would create a problem known
-#' as model selection bias that arises when \emph{conditioning} on the selected model \insertCite{@leeb2006can}{BGGM} .
+#' the selected edges leads to desirable "inference," there is an important caveat to consider.
+#' This induces a problem known as model selection bias that arises when \emph{conditioning} on the selected model..
 #'
 #' To make sense of this, note that:
 #'
 #' \enumerate{
 #' \item To be selected, the partial correlations must far enough way from zero.
-#' \item As a result of 1, this means that edges will often be upward biased when they are only considered
-#'          when they are selected \insertCite{@more specifically a truncated sampling distribution, p. 5 in  @leeb2006can}{BGGM}
-#' \item This then can translate into strength also having issues when only computing it from the selected edges.
+#' \item As a result of 1, edges will often be upward biased becauase they are only considered
+#'       when they are selected \insertCite{@more specifically a truncated sampling distribution, p. 5 in  @leeb2006can}{BGGM}
+#' \item This can translate into strength also having issues when computing it from only the selected edges.
 #' }
 #'
-#' Overcoming this issue is an active area of research that is often called 'selective' or 'post-selection' inference
+#' Overcoming this issue is often called 'selective' or 'post-selection' inference
 #' (see the references in \href{http://bactra.org/notebooks/post-model-selection-inference.html}{weblink}).
-#' However, a viable and simple approach is to \strong{not condition} strength on the selected model (i.e., \code{select = FALSE}).
-#' This then readily allows for comparing the sum of partial correlations, say, differences in bridge strength. In future
-#' versions (> 2.0), the option \code{select = FALSE} may be removed altogether due to the innate proclivity to compare estimates
-#' visually (\code{plot.centrality}).
+#' A viable and simple approach is to \strong{not condition} strength on the selected model
+#' (i.e., \code{select = FALSE}). This readily allows for comparing the sum of partial correlations
+#' (e.g., differences in bridge strength). In future versions, the option \code{select = FALSE} may be removed
+#' altogether due to the innate proclivity to compare estimates visually (plot.centrality). These implicit
+#' comparisons should directly be tested with (see \code{test.centrality}) that  requires \code{select = FALSE}.
 #'
 #'
 #'
 #' @return object of class \code{BGGM} and \code{centrality}
 #' @export
-centrality.BGGM <- function(object,
+centrality <- function(object,
                             type = "strength",
                             cluster = NULL,
                             select = FALSE,
@@ -86,6 +85,7 @@ centrality.BGGM <- function(object,
 
       pcor_samples <- object$posterior_samples[,  grep("pcors", colnames(object$posterior_samples))]
 
+      if(type == "strength"){
       # names of partrials in matrix
       mat_names <- matrix(0, nrow = p, ncol = p)
       mat_names[] <- colnames(pcor_samples)
@@ -96,29 +96,91 @@ centrality.BGGM <- function(object,
         rowSums(edges *  apply(edges, 2, sign))
         })
 
+      # compute bayesian bridge strength
+      } else if(type == "bridge_strength"){
+        # number of variables
+        p <- object$p
+
+        # check cluster length
+        if(cluster != p){
+
+          stop("cluster must be of length p (the number of variables)")
+
+          }
+
+        cl <- cluster
+
+        mat_temp <- matrix(0,p, p)
+        mat_names[] <- cl
+        mat_names <- t(mat_names)
+
+        strength <- lapply(1:p, function(x) {
+          edges <- pcor_samples[,paste0("pcors[",x, ",", which(mat_names[x,] != cl[x]), "]")]
+          rowSums(edges * apply(edges, 2, sign))
+        })
+        }
 
       # warnging: conditional on selected model !
   } else {
 
-   warning(paste("\n`select = TRUE`. please do not attempt to make",
-                 "statistical infernece from the `selected` edges",
-                 "(e.g., noting differences). See note for futher details.", sep = "\n"))
-
-
     object <- select(object, cred = cred)
+
 
     # selected edges
     adj <- object$adjacency_non_zero
     diag(adj) <- 0
     p <- ncol(adj)
 
+    if(type == "strength"){
+
     mat_names <- matrix(0, nrow = p, ncol = p)
     mat_names[] <- colnames(object$pcor_sample)
 
     strength <-  lapply(1:p, FUN = function(x) {
-      edges <- object$pcor_samples[,mat_names[x, adj[x,] == 1 ]]
-      rowSums(edges *  apply(edges, 2, sign))
+
+      edges <- as.matrix(object$pcor_samples[,mat_names[x, adj[x,] == 1 ]])
+              rowSums(edges *  apply(edges, 2, sign))
       })
+
+    } else if (type == "bridge_strength"){
+
+
+      # check cluster length
+      if(cluster != p){
+
+        stop("cluster must be of length p (the number of variables)")
+
+      }
+
+      cl <- cluster
+
+      mat_temp <- matrix(0,p, p)
+      mat_names[] <- cl
+      mat_names <- t(mat_names)
+
+
+      strength <- lapply(1:p, FUN = function(x) {
+
+
+
+        selected_bridge <-  which(adj[x,  ] == 1)[which(adj[x,  ] == 1) %in%   which(mat_names[x,] != cl[x] )]
+
+        if(length(selected_bridge) == 0){
+
+          0
+
+        } else {
+
+          edges <- as.matrix(pcor_samples[,paste0("pcors[",x, ",", selected_bridge , "]")])
+
+          rowSums(edges * apply(edges, 2, sign))
+
+          }
+        })
+
+    }
+
+
     } # end of selection
 
     # end selecte.estimate

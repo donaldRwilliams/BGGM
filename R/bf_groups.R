@@ -30,6 +30,9 @@
 #' equality). This assumes \code{hypothesis = NULL}. If a hypothesis is tested, then use \code{summary} which provides
 #' information including the Bayes factors and posterior probabilities for each hypothesis.
 #'
+#' @export
+#'
+#'
 bf_groups <- function(..., prior_sd = 0.35,
                       hypothesis = NULL,
                       iter = 25000, cores = 2){

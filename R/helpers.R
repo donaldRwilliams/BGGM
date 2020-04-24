@@ -8,26 +8,6 @@
 #' @import ggplot2
 
 
-rank_helper <- function(Y){
-
-  # adapted from hoff (2008). See documentation.
-  p <- ncol(Y)
-  levels  <- apply(Y, 2, function(x) {match(x, sort(unique(x)))})
-  K <-  apply(levels, 2, max, na.rm = TRUE)
-  ranks <- apply(Y, 2, rank, ties.method = "max", na.last = "keep")
-  n_complete <- apply(!is.na(ranks), 2, sum)
-  U <- t(t(ranks)/(n_complete + 1))
-  Z <- qnorm(U)
-  S <- diag(p)
-  list(K = K,
-       levels = levels,
-       Sigma_start = S,
-       z0_start = Z)
-
-}
-
-
-
 convert_hyps <- function(hypothesis, Y){
 
   p <- ncol(Y)
@@ -102,7 +82,7 @@ prior_helper_2 <- function(p, delta , epsilon){
 }
 
 
-sampling_helper_poly <- function(Y, delta, iter, type, mixed_type= NULL){
+sampling_helper_poly <- function(Y, delta, iter, type){
 
   if(type == "binary"){
 
@@ -119,33 +99,6 @@ sampling_helper_poly <- function(Y, delta, iter, type, mixed_type= NULL){
                           delta = delta,
                           epsilon = 0.1,
                           iter = iter, MH = 0.001)
-
-  } else if(type == "mixed"){
-
-
-
-    rank_vars <- rank_helper(Y)
-
-    if(is.null(mixed_type)) {
-
-      idx = colMeans(round(Y) == Y)
-      idx = ifelse(idx == 1, 1, 0)
-
-    } else {
-
-      idx = mixed_type
-
-    }
-
-    fit_mvn <- copula(z0_start = rank_vars$z0_start,
-                      levels = rank_vars$levels,
-                      K = rank_vars$K,
-                      Sigma_start = rank_vars$Sigma_start,
-                      iter = iter,
-                      delta = delta,
-                      epsilon = 0.1,
-                      idx = idx)
-
 
   }
 
@@ -165,14 +118,14 @@ sampling_helper_poly <- function(Y, delta, iter, type, mixed_type= NULL){
                                   delta = delta,
                                   epsilon = 0.0001)
 
-  pcor_store_up <- t(sapply(50:iter, function(x){
+  pcor_store_up <- t(sapply(1:iter, function(x){
     mat <- fit_mvn$pcors[,,x];
     mat[upper.tri(mat)]
   }
   ))
 
 
-  pcor_store_low <- t(sapply(50:iter, function(x){
+  pcor_store_low <- t(sapply(1:iter, function(x){
     mat <- fit_mvn$pcors[,,x];
     mat[lower.tri(mat)]
   }
@@ -475,7 +428,6 @@ print_select_explore <- function(x, hyp = "H1",
         mat_names[] <-  unlist(lapply(1:p, function(z) paste(1:p, z, sep = "--")))
 
       if(log == TRUE){
-
         summ <-  cbind.data.frame(Edge = mat_names[upper.tri(mat_names)],
                                   Estimate = x$pcor_mat[upper.tri(x$pcor_mat)],
                                   Est.Error = x$pcor_sd[upper.tri(x$pcor_sd)],
@@ -904,6 +856,31 @@ print_select_estimate <- function(x, summarize = FALSE, ...){
     }
   }
 }
+# print_select_estimate <- function(x, ...){
+#   cat("BGGM: Bayesian Gaussian Graphical Models \n")
+#   cat("--- \n")
+#   if(is.numeric(x$rope)){
+#     cat("Type: Selected Graph (Sampling) \n")
+#   } else{
+#     cat("Type: Selected Graph (Analytic Solution) \n")
+#   }
+#   if(is.null(x$rope)){
+#     cat("Credible Interval:", gsub("^.*\\.","", x$ci), "% \n")
+#     cat("Connectivity:", round(mean(x$adjacency[upper.tri(x$adjacency)]) * 100, 1), "% \n")
+#     cat("--- \n")
+#     cat("Call:\n")
+#     print(x$call)
+#     cat("--- \n")
+#   } else{
+#     cat("Probability:", x$prob, "\n")
+#     cat("Region of Practical Equivalence:", "[", -1 * x$rope, ", ", x$rope, "]", "\n", sep = "")
+#     cat("Connectivity:", round(mean(x$adjacency_non_zero[upper.tri(x$adjacency_non_zero)]) * 100, 1), "% \n")
+#     cat("--- \n")
+#     cat("Call:\n")
+#     print(x$call)
+#     cat("--- \n")
+#   }
+# }
 
 
 print_summary_estimate <- function(x, ...) {

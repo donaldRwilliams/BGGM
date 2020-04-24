@@ -18,16 +18,9 @@
 #' @param type character string. Which type of data for \strong{Y} ? The options include \code{continuous},
 #' \code{binary}, \code{ordinal}, or \code{mixed}. See the note for further details.
 #'
-#' @param mixed_type numeric vector. An indicator of length p for which varibles should be treated as ranks.
-#' (1 for rank and 0 to assume normality). The default is currently to treat all integer variables as ranks
-#' when \code{type = "mixed"} and \code{NULL} otherwise. See note for further details.
-#'
-#' Treating continous data as ranks is computationally expensive and can be avoided by assuming normality.
-#'
 #' @param iter number of iterations (posterior samples; defaults to 5000).
 #'
 #' @param analytic logical. Should the analytic solution be computed (default is \code{FALSE})?
-#'
 #'
 #' @param ... currently ignored.
 #'
@@ -106,10 +99,8 @@ estimate  <- function(Y,
                       formula = NULL,
                       data = NULL,
                       type = "continuous",
-                      mixed_type = NULL,
                       iter = 5000,
-                      analytic = FALSE,
-                      ep = 0.001,...){
+                      analytic = FALSE, ep = 0.001,...){
 
 
 
@@ -373,72 +364,7 @@ estimate  <- function(Y,
     } # end no control
 
 
-  } else if (type == "mixed"){
-
-
-    control <- "no_control"
-
-    p <- ncol(Y)
-
-    # matrix for storage
-    pcor_mat <-  inv_mat <- matrix(0, ncol = p, p)
-
-    # name the columns
-    inv_names <- unlist(lapply(1:p, function(x)  samps_inv_helper(x, p)))
-    pcor_names <-unlist(lapply(1:p, function(x)  samps_pcor_helper(x, p)))
-
-    rank_vars <- rank_helper(Y)
-
-    if(is.null(mixed_type)) {
-
-      idx = colMeans(round(Y) == Y)
-      idx = ifelse(idx == 1, 1, 0)
-
-    } else {
-
-      idx = mixed_type
-
-    }
-
-    fit_mvn <- copula(z0_start = rank_vars$z0_start,
-                      levels = rank_vars$levels,
-                      K = rank_vars$K,
-                      Sigma_start = rank_vars$Sigma_start,
-                      iter = iter + 50,
-                      delta = 20,
-                      epsilon = 0.1,
-                      idx = idx)
-
-
-    inv_cov <- matrix(as.numeric( fit_mvn$Theta[,,51:(iter+50)]),
-                      nrow = iter, ncol = p^2, byrow = TRUE )
-
-    pcors <- matrix(as.numeric( fit_mvn$pcors[,,51:(iter+50)]),
-                    nrow = iter, ncol = p^2, byrow = TRUE)
-    #
-    df_samps <- cbind(inv_cov, pcors)
-    #
-    colnames(df_samps) <- c(inv_names, pcor_names)
-
-    # posterior means (partials)
-    pcor_mat[] <- colMeans(df_samps[,  grep("pcors", colnames(df_samps))])
-    diag(pcor_mat) <- 0
-
-    # posterior means (inverse)
-    inv_mat[]   <- colMeans(df_samps[,  grep("cov_inv", colnames(df_samps))])
-
-    returned_object  <- list(pcor_mat = pcor_mat,
-                             inv_mat = inv_mat,
-                             posterior_samples = as.data.frame(df_samps),
-                             p = p, dat = Y,
-                             iter = iter,
-                             call = match.call(),
-                             analytic = analytic,
-                             betas = fit_mvn$beta,
-                             coef_names = colnames(X_pred),
-                             control = control,
-                             type = type)
-  } # end of mixed
+}
 
 
 

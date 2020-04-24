@@ -118,7 +118,7 @@ select.explore <- function(object,
                                   lapply(1:x$cores, function(z)
                                   x$samples[[z]]$fisher_z_prior)))
 
-  } else if (x$type == "binary" | x$type == "ordinal" | x$type == "mixed"){
+  } else if (x$type == "binary" | x$type == "ordinal"){
 
 
     posterior_samples <- x$samples$fisher_z_post

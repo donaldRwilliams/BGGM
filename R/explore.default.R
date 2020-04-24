@@ -14,11 +14,7 @@
 #' to a data frame containing the variables in \code{formula}. This is required when controlling for variables.
 #'
 #' @param type character string. Which type of data for \strong{Y} ? The options include \code{continuous},
-#' \code{binary}, \code{ordinal}, or \code{mixed} (semi-parametric copula). See the note for further details.
-#'
-#' @param mixed_type numeric vector. An indicator of length p for which varibles should be treated as ranks.
-#' (1 for rank and 0 to assume normality). The default is currently (dev version) to treat all integer variables
-#' as ranks when \code{type = "mixed"} and \code{NULL} otherwise. See note for further details.
+#' \code{binary}, \code{ordinal}, or \code{mixed}. See the note for further details.
 #'
 #' @param iter number of iterations (posterior samples; defaults to 5000).
 #'
@@ -94,7 +90,6 @@ explore <- function(Y,
                     formula = NULL,
                     data = NULL,
                     type = "continuous",
-                    mixed_type = NULL,
                     prior_sd = 0.25,
                     iter = 5000,
                     cores = 2,...){
@@ -206,52 +201,7 @@ explore <- function(Y,
                             edge = edges,
                             type = type)
 
-  } else if (type == "mixed"){
-
-
-    if(is.null(mixed_type)) {
-
-      idx = colMeans(round(Y) == Y)
-      idx = ifelse(idx == 1, 1, 0)
-
-    } else {
-
-      idx = mixed_type
-
-    }
-
-
-
-    samples <- sampling_helper_poly(Y, delta, iter, type = type, mixed_type = idx)
-
-    posterior_samples <- samples$pcor_post
-
-    # posterior mean
-    parcors_mat[upper.tri(parcors_mat)] <- colMeans(posterior_samples)[1:edges]
-    pacors_mat <- BGGM:::symmteric_mat(parcors_mat)
-
-    # posterior sd
-    parcors_sd[upper.tri(parcors_sd)] <- apply(posterior_samples, 2, sd)[1:edges]
-    pacors_sd <- BGGM:::symmteric_mat(parcors_sd)
-
-    # returned object
-    returned_object <- list(parcors_mat = pacors_mat,
-                            parcors_sd = parcors_sd,
-                            samples = samples,
-                            delta = delta,
-                            iter = iter,
-                            dat = X,
-                            call = match.call(),
-                            p = p,
-                            cores = cores,
-                            edge = edges,
-                            type = type)
-
-
   }
-
-
-
 
   class(returned_object) <- c("BGGM", "default",
                               "explore")

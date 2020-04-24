@@ -145,24 +145,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// copula
-Rcpp::List copula(arma::mat z0_start, arma::mat levels, arma::vec K, arma::mat Sigma_start, int iter, float delta, float epsilon, arma::vec idx);
-RcppExport SEXP _BGGM_copula(SEXP z0_startSEXP, SEXP levelsSEXP, SEXP KSEXP, SEXP Sigma_startSEXP, SEXP iterSEXP, SEXP deltaSEXP, SEXP epsilonSEXP, SEXP idxSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type z0_start(z0_startSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type levels(levelsSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type K(KSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type Sigma_start(Sigma_startSEXP);
-    Rcpp::traits::input_parameter< int >::type iter(iterSEXP);
-    Rcpp::traits::input_parameter< float >::type delta(deltaSEXP);
-    Rcpp::traits::input_parameter< float >::type epsilon(epsilonSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type idx(idxSEXP);
-    rcpp_result_gen = Rcpp::wrap(copula(z0_start, levels, K, Sigma_start, iter, delta, epsilon, idx));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_BGGM_mv_continuous", (DL_FUNC) &_BGGM_mv_continuous, 5},
@@ -175,7 +157,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_BGGM_remove_col", (DL_FUNC) &_BGGM_remove_col, 2},
     {"_BGGM_mv_ordinal_cowles", (DL_FUNC) &_BGGM_mv_ordinal_cowles, 6},
     {"_BGGM_mv_ordinal_albert", (DL_FUNC) &_BGGM_mv_ordinal_albert, 6},
-    {"_BGGM_copula", (DL_FUNC) &_BGGM_copula, 8},
     {NULL, NULL, 0}
 };
 

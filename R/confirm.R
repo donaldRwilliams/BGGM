@@ -9,7 +9,7 @@
 #'
 #' @param hypothesis character string. hypothesis (or hypotheses) to be tested. See notes for futher details.
 #'
-#' @param prior_sd hypothesized standard deviation of the prior distribution.
+#' @param prior_sd hypothesized standard deviation of the prior distribution
 #'
 #' @param formula an object of class \code{\link[stats]{formula}}. This allows for including
 #' control variables in the model (e.g.,, \code{~ gender * education}).
@@ -19,10 +19,6 @@
 #'
 #' @param type character string. Which type of data for \strong{Y} ? The options include \code{continuous},
 #' \code{binary}, \code{ordinal}, or \code{mixed}. See the note for further details.
-#'
-#' @param mixed_type numeric vector of length \emph{p}. An indicator for which varibles should be treated as ranks.
-#' (1 for rank and 0 to assume normality). The default is currently (dev version) to treat all integer variables
-#' as ranks when \code{type = "mixed"} and \code{NULL} otherwise. See note for further details.
 #'
 #' @param iter posterior and prior samples. 25,000 is the default, as it results in a more stable Bayes factor than
 #' using, say, 5,000.
@@ -138,7 +134,6 @@ confirm <- function(Y, hypothesis,
                     formula = NULL,
                     data = NULL,
                     type = "continuous",
-                    mixed_type = NULL,
                     iter = 25000,
                     cores = 2){
 
@@ -169,35 +164,9 @@ confirm <- function(Y, hypothesis,
                                lapply(1:fit$cores, function(z)
                                  fit$samples[[z]]$fisher_z_prior))[1:edges]
 
-  } else if( type == "binary" | type == "ordinal" | type == "mixed"){
+  } else if( type == "binary" | type == "ordinal"){
 
-    if(type != "mixed"){
     samples <- sampling_helper_poly(Y, delta, iter, type)
-    } else {
-
-
-      if(is.null(mixed_type)) {
-
-        idx = colMeans(round(Y) == Y)
-
-        idx = ifelse(idx == 1, 1, 0)
-
-      } else {
-
-        idx = mixed_type
-
-      }
-
-
-
-      samples <- sampling_helper_poly(Y, delta, iter,
-                                      type = type,
-                                      mixed_type = idx)
-
-
-
-    }
-
 
     posterior_samples <- samples$fisher_z_post[,1:edges]
 
