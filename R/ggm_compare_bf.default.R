@@ -75,7 +75,6 @@ ggm_compare_bf <- function(..., prior_sd = 0.20,
                                                          n_samples = iter,
                                                          cores = cores))
 
-  # p
   p <- info$dat_info$p[1]
 
   edges <- 0.5 * (p * (p -1))
