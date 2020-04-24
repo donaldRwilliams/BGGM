@@ -1717,13 +1717,18 @@ colnames_helper <- function(x, col_names){
 }
 
 sampling_helper = function(X,  nu, delta,  n_samples){
+
   X <- as.matrix(X)
+
   # number of variables
   p <- ncol(X)
+
   # number of observations
   n <- nrow(X)
+
   # number of partial correlations
   pcors <- (p * (p - 1)) / 2
+
   # names for the partial correlations
   col_names <- numbers2words(1:p)
 
@@ -1742,22 +1747,28 @@ sampling_helper = function(X,  nu, delta,  n_samples){
   inv_cov_store <-  array(NA, c(p, p, n_samples))
 
   # initial values
-  Psi <- b_inv <- diag(p)
+  Psi <- b_inv <- sigma_inv <- diag(p)
 
   for(i in 1:n_samples){
+
     # draw from posterior
-    post <- post_helper(S = S, n = n, nu = nu, p = p, delta = delta, Psi = Psi, b_inv = b_inv * 10000)
+    post <- post_helper(S = S, n = n,
+                        nu = nu, p = p,
+                        delta = delta,
+                        Psi = Psi,
+                        sigma_inv = sigma_inv)
     # store partials
     pcor_store_up[i,] <- post$pcors_post_up
     pcor_store_low[i,] <- post$pcors_post_low
     # store the inverse
     inv_cov_store[,,i] <- post$sigma_inv
     # draw from prior and store
-    prior_samps <- prior_helper(nu = nu, delta = delta, p = p)
+    prior_samps <- prior_helper(delta = delta, p = p)
     prior_store_up[i,] <- prior_samps$pcors_prior_up
     prior_store_low[i, ] <- prior_samps$pcors_prior_up
     # Psi
     Psi <- post$Psi
+    sigma_inv <- post$sigma_inv
   }
 
   # transform posterior samples
@@ -1787,29 +1798,44 @@ sampling_helper = function(X,  nu, delta,  n_samples){
        fisher_z_prior =cbind(fisher_z_prior_up, fisher_z_prior_low))
 }
 
-prior_helper <- function(nu, p, delta){
-  # sample from inverse Wishart
-  inv_wish_prior <- solve(rWishart(1, df =  delta + p - 1, diag(p) * 1000)[,,1], tol = 1e-20)
+prior_helper <- function(p, delta){
 
-  # sample from Wishart
-  sigma_inv_prior <- rWishart(1, df = nu, inv_wish_prior)[,,1]
+  I_p <- diag(p)
 
-  # partical correlation matrix
+  nu <- 1/0.001
+
+  Psi <-  rWishart(1, df = nu, I_p * 0.001)[,,1]
+
+  sigma_inv_prior <- solve(rWishart(1, df = p - 1 + delta, solve(Psi))[,,1])
+
   pcor_mat_prior <- - diag(1/sqrt(diag(sigma_inv_prior)))%*%sigma_inv_prior%*%diag(1/sqrt(diag(sigma_inv_prior)))
+
   pcors_prior_up <- pcor_mat_prior[upper.tri(pcor_mat_prior)]
   pcors_prior_low <- pcor_mat_prior[lower.tri(pcor_mat_prior)]
 
-  list(pcors_prior_up = pcors_prior_up, pcors_prior_low = pcors_prior_low)
+  list(pcors_prior_up = pcors_prior_up,
+       pcors_prior_low = pcors_prior_low)
 }
 
 
 
-post_helper <- function(S, n, nu, p, delta, Psi, b_inv){
-  # precision matrix
-  sigma_inv <- rWishart(1, delta + n - 1, solve(Psi+S,  tol =  1e-20))[,,1]
+post_helper <- function(S, n, nu, p, delta, Psi, b_inv, sigma_inv){
 
+  nu = 1 / 0.001
+  delta = delta
+  B <- diag(p) * 0.001
+  nuMP <- delta + delta - 1
+  deltaMP <- nu - p + 1
+
+  BMP <- solve(B)
+  BMPinv <- solve(BMP)
   # Psi
-  Psi <- rWishart(1, nu + delta + p - 2, solve(sigma_inv + b_inv,  tol  = 1e-20))[,,1]
+  Psi <- rWishart(1, nuMP + deltaMP + p - 1, solve(sigma_inv + BMPinv,  tol  = 1e-20))[,,1]
+
+  # precision matrix
+  sigma_inv <- rWishart(1, (deltaMP + p - 1) + (n - 1), solve(Psi+S,  tol =  1e-20))[,,1]
+
+
 
   # partial correlation matrix
   pcor_mat <- - diag(1/sqrt(diag(sigma_inv)))%*%sigma_inv%*%diag(1/sqrt(diag(sigma_inv)))
@@ -1817,7 +1843,8 @@ post_helper <- function(S, n, nu, p, delta, Psi, b_inv){
   pcors_post_low = pcor_mat[lower.tri(pcor_mat)]
 
   # returned list
-  list(pcors_post_up = pcors_post_up, pcors_post_low = pcors_post_low, sigma_inv = sigma_inv, Psi = Psi)
+  list(pcors_post_up = pcors_post_up,
+       pcors_post_low = pcors_post_low, sigma_inv = sigma_inv, Psi = Psi)
 }
 
 sampling <- function(X, nu, delta, n_samples = 20000, cores = 4){

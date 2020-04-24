@@ -51,7 +51,8 @@
 #' # adjacency matrix
 #' sel$mat_adj
 #' @export
-ggm_compare_estimate <- function(..., type = "continuous",
+ggm_compare_estimate <- function(...,
+                                 type = "continuous",
                                  analytic = FALSE,
                                  iter = 5000){
 
@@ -88,7 +89,7 @@ ggm_compare_estimate <- function(..., type = "continuous",
     #
     n <- nrow(Y)
 
-    samps <- stats::rWishart(iter, n - 1, solve(S))
+    samps <- stats::rWishart(iter, n + p + 2, solve(S + p * diag(p)))
   })
 
   # partial storage
