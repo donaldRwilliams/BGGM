@@ -1,0 +1,144 @@
+---
+title: "Comparing GGMs with the Posterior Predicive Distribution"
+author: "Donald R. Williams"
+output: 
+  rmarkdown::html_vignette:
+    toc: yes
+vignette: >
+  %\VignetteIndexEntry{Comparing GGMs with the Posterior Predicive Distributions}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+  \usepackage{amsmath}
+params:
+  EVAL: !r identical(Sys.getenv("NOT_CRAN"), "true")
+---
+
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 7, fig.height = 7, fig.align = "center")
+library(ggplot2)
+library(BGGM)
+```
+
+
+# Introduction
+
+The **BGGM** package provides several options for comparing Gaussian graphical model. The approach presented 
+here is based on the posterior predictive distribution. The idea is that generated data from the fitted model should look like the observed data ($\textbf{Y}$). In the case of a well fitting model, the replicated data, herein referred to as $\textbf{Y}^{rep}$, can be viewed as data that could have been observed (but were not) or as predictive data of future observations (Rubin, 1984). We adopt the latter perspective. This is summarized in Gelman (2006):
+
+
+> “as the data that would appear if the experiment that produced $\textbf{Y}$ today were replicated
+tomorrow with the same model, $\mathcal{M}$, [and] the same (unknown) value of $\theta$ that produced $\textbf{Y}$ (pp. 737).”
+
+
+Our approach extends "experiments" to the more general “data generating process." In
+the context of comparing GGM’s, say, between two groups, the approach is to first estimate the
+GGM (i.e., the precision matrix denoted $\boldsymbol{\Theta}$ ) conditional on all of the groups being equal. Then the posterior predictive distribution can be sampled from $\boldsymbol{\Theta}$. $\textbf{Y}^{rep}$ then represents the data that we expect to observe in the future, assuming that the fitted model of group equality was the underlying data generating
+process.
+
+Assuming that each group $g \in {1, ...,G}$ is a realization from the same multivariate normal
+distribution, the null model is defined as
+
+$$
+\mathcal{M}_0 : \boldsymbol{\Theta}_1 = ... =  \boldsymbol{\Theta}_G
+$$
+
+The posterior for the common precision matrix $\boldsymbol{\Theta}(= \boldsymbol{\Theta}_1 = . . . = \boldsymbol{\Theta}_G)$, given the observed data,
+can be written as $p(\boldsymbol{\Theta}|\textbf{Y}^{obs}_1 , . . . , \textbf{Y}^{obs}_G, \mathcal{M}_0)$. Under $\mathcal{M}_0$, a posterior draw ($s$) for $\boldsymbol{\Theta}^{(s)}$ is in fact a posterior draw for the precision matrix in all groups, i.e.,   $\boldsymbol{\Theta}^{(s)} = \boldsymbol{\Theta}^{(s)}_1,..., \boldsymbol{\Theta}^{(s)}_G$.
+
+
+In review, it was pointed out by Sacha Epskamp that focusing on the precision matrix is not ideal, because it includes the diagonal elements which are not all that important for network *infernece*. Hence, to address this concern, we followed the approach in X and normalized $\boldsymbol{\Theta}$ as
+
+$$
+\boldsymbol\Theta = \textbf{D}\textbf{R}^{\Theta}\textbf{D}
+$$
+where $\textbf{D}$ is a diagonal matrix with $\textbf{D}_{ii} =  \sqrt{\boldsymbol{\Theta}}_{ii}$ and $\textbf{R}^{\Theta}$ has $r_{ij} = \Theta_{ij} / \sqrt{\Theta_{ii} \Theta_{jj}}$ on the off-diagonals and 1 on the diagonal. This effectively separates out the diagonal elements of $\boldsymbol{\Theta}$. Note $\textbf{R}^{\Theta}$ is *not* the partial correlation--that would require reversing the direction ($\pm$) of $r_{ij}$. However, we found that reversing the direction can result in ill-conditioned matrices. Hence `ggm_compare_ppc` currently makes use of the normalized precision matrix $\textbf{R}^{\Theta}$.
+
+
+## Test Statistic (Loss Function)
+For the test-statistic, that is used to compare groups, we use a version of Kullback-Leibler divergence (KLD), which is also known as entropy loss (Kuismin & Sillanpää, 2017), is proportional (i.e., by 12) to Stein’s loss for covariance matrices (e.g., equation (72) in: James & Stein, 1961), and is the log likelihood ratio between two distributions (Eguchi & Copas, 2006). Note that KLD has several motivations, for example maximizing the
+likelihood is equivalent to minimizing KLD between two distributions (Grewal, 2011). Further, in
+Bayesian contexts, it has been used for selecting models (Goutis, 1998; Piironen & Vehtari, 2017)
+and prior distributions (Bernardo, 2005), variational inference (Blei, Kucukelbir, & McAuliffee,
+2017), and is known to be minimized by the Bayes factor (when used for model selection) in
+so-called $\mathcal{M}$-open settings (Bernardo & Smith, 2001; Yao, Vehtari, Simpson, & Gelman, 2017).
+
+These uses have one common theme–i.e., assessing the entropy between distributions.
+However, KLD is not a true distance measure because it is asymmetric. As such, we use
+Jensen-Shannon divergence (JSD) which symmetrizes KLD (Nielsen, 2010). For, say, two groups, the test-statistic is then
+
+$$
+T(\textbf{Y}_{1}, \textbf{Y}_2) = \text{JSD}\Big(E\{\textbf{R}^{\Theta}_{g1} | \textbf{Y}_{g1}  \}, E\{\textbf{R}^{\Theta}_{g2} | \textbf{Y}_{g2}  \}\Big)
+$$
+which is the average KLD in both directions-i.e.,
+
+
+$$
+\text{JSD} = \frac{1}{2}\Big[\text{KLD}(E\{\textbf{R}^{\Theta}_{g1} | \textbf{Y}_{g1}\}, \{\textbf{R}^{\Theta}_{g2} | \textbf{Y}_{g2}\}) + \text{KLD}(E\{\textbf{R}^{\Theta}_{g2} | \textbf{Y}_{g2}\}, \textbf{R}^{\Theta}_{g1} | \textbf{Y}_{g1})\Big]
+$$
+
+For a multivariate normal distribution KLD is defined as
+
+$$
+\text{KLD}(\textbf{R}^{\Theta}_{g1} || \textbf{R}^{\Theta}_{g2}) = \frac{1}{2}\Big[\text{tr}(\textbf{R}^{\Theta^{-1}}_{g1}\textbf{R}^{\Theta^{-1}}_{g2}) - \text{log}(|\textbf{R}^{\Theta^{-1}}_{g1} \textbf{R}^{\Theta}_{g1}|) - p  \Big]
+$$
+
+where $p$ is the number of variables. Note that inverting $\textbf{R}^{\Theta}_{g1}$ results in the covariance matrix and the expectation E[.] has been removed to simplify notation.
+
+
+# Posterior Predictive Method
+To summarize, our method follows these steps:
+
+1. Estimate $p(\textbf{R}^{\Theta}|\textbf{Y}_1^{obs},\ldots,\textbf{Y}_G^{obs},\mathcal{M}_0)$
+2. For each posterior sample ($s$)
++  $\textbf{R}^{\Theta^{(s)}}_g \rightarrow \textbf{Y}^{rep^{(s)}}_g$, for $g \in \{1,..., G\}$
++  Compute $\textbf{R}^{\Theta^{rep^{(s)}}}_g$ as $(n - 1)\textbf{S}^{-1}$, where \textbf{S} is 
+    $\textbf{Y}_{g}^{rep^{(s)}\prime}$  $\textbf{Y}_{g}^{rep^{(s)}}$, for $g \in \{1,..., G\}$
++ For, say, two groups, compute the predictive entropy:   $\text{JSD}(E\{\textbf{R}^{\Theta^{rep^{(s)}}}_{g1} | \textbf{Y}^{rep^{(s)}}_{g1}\},  E\{\textbf{R}^{\Theta^{rep^{(s)}}}_{g2} | \textbf{Y}^{rep^{(s)}}_{g2}\} )$
+3. Compute the observed entropy:
++ $\text{JSD}(E\{\textbf{R}^{\Theta^{obs}}_{g1} | \textbf{Y}_{g1}^{obs}\},E\{\textbf{R}^{\Theta^{obs}}_{g2} | \textbf{Y}_{g2}^{obs}\} )$ 
+4. Compute the posterior predictive $p$-value.
+
+Note that $g1$ and $g2$ were used to keep the notation manageable. This procedure can apply to any number of groups. And the predictive $p$-value is the proportion of the predictive distribution, assuming $\mathcal{M}_0$ is true (the groups are the same), that exceeds the observed JSD. 
+
+
+# Illustrative Example (1)
+## Personality Networks
+To demonstrate this method, we will first compare personality networks between males and females. This allows for determing whether the null hypothesis of group (males vs. females) equality can be rejected. These data are located in the **psych** package. 
+
+```{r}
+dat <- BGGM::bfi 
+
+dat_males <- subset(dat, gender == 1)[,1:25]
+
+dat_female <- subset(dat, gender == 2)[,1:25]
+
+# fit model
+fit1 <- ggm_compare_ppc(dat_males, 
+                        dat_female, 
+                        iter = 500, 
+                        cores = 4)
+
+```
+
+
+### Summary
+Once the model is finished, we can then use `summary`--i.e.,
+```{r fit1}
+summary(fit1)
+```
+In this summary, the results are provided after `Estimate:`. The contrast is for which groups were compared. In this case, there were only two groups so there is one contrast. The third column provides the posterior predictive $p$-value. In this case, because $p$-value = 0, we can reject the null model $\mathcal{M}_0$ that assumes group equality. Hence, there is sufficient evidence to conclude that the personality networks for males and females are different from one another.
+
+### Plot
+It is then possible to plot the predictive distribution and the observed value. This allows for visualizing the predictive approach--i.e.,
+```{r }
+plot(fit1, critical = 0.05) + 
+  theme_bw() + 
+  theme(legend.position = "none")
+```
+
+This plot corresponds to the summary output, in that, as can be seen, the observed JSD (black point) far exceeds what we would expect if the groups were actually equal. The red area corresponds to the chosen $\alpha$ level. Hence, when the observed is within or beyond the critical region $\mathcal{M}_0$ (group equality), can be rejected.
+
+# Illustrative Example (2)
+## Network Replicability
+
