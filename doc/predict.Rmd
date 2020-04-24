@@ -1,0 +1,175 @@
+---
+title: "Predictability: Part One"
+author: "Donald R. Williams"
+output: 
+  rmarkdown::html_vignette:
+vignette: >
+  %\VignetteIndexEntry{Predictability: Part One}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+  \usepackage{amsmath}
+params:
+  EVAL: !r identical(Sys.getenv("NOT_CRAN"), "true")
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 7, fig.height = 7, fig.align = "center")
+library(ggplot2)
+```
+
+# Predictability
+This tutorial provides the *work flow* in **BGGM** for computing predictability in Gaussian graphical models. I will use data from a resilience questionnaire.
+
+There are two options for computing predictability. The first simply assesses the error from the predicted values for each posterior sample. This results in a distribution of predictive error. I refer to this as *fitted* predictability as it is computed from the fitted values. The additional method, described below, is more Bayesian in spirit. It computes the error from the posterior predictive distribution (replicated data sets from the model).
+
+```{r, message = FALSE}
+# packages
+library(BGGM)
+library(ggplot2)
+
+# resilence data
+# remove gender variable
+dat <- subset(rsa, select = - gender)
+```
+
+Note that most of the data sets in **BGGM** include categorical variables such as gender. Thus it is important to check the documentation to ensure that only the relevant variables are included in the analysis.
+
+## Fitted Predictability
+### Estimate the Network
+The first step is to estimate the network. This provides the necessary ingredients 
+for computing network predictability.
+
+```{r}
+# fit model
+fit <- estimate(dat, iter = 1000)
+```
+
+### Compute Predictions
+Next the object `fit` is used to compute Bayesian variance explained.
+```{r}
+# predict
+pred <- fitted(fit, summary = FALSE)
+```
+
+Note `summary = FALSE` which returns the predicted samples for each posterior iteration. This is necessary to compute predictability.
+
+### Compute Predictability
+The next step is to compute predictability. There are several options available. In this case, I compute mean squared error.
+```{r}
+error <- mse(pred)
+
+# print summary
+error
+```
+
+Note that the node numbers correspond to the column number in the data frame. Hence node 1 is the first column, etc.
+
+### Plotting Predictability
+#### Error Bar Plot
+Most functions in **BGGM** have plots associated with them. In most cases, this 
+has been simplified by calling `plot`.
+
+```{r}
+# plot 
+plot(error)
+```
+
+This is not the most attractive plot, which is by design. The returned object is a `ggplot` which can then be further customized. 
+
+```{r}
+plot(error) +
+  theme_bw() +
+  ggtitle("Predictability") +
+  ylab("Mean Squared Error") +
+  geom_point(size = 2, 
+             color = "black") +
+  geom_point(size = 1.5, 
+             color = "white")
+```
+
+#### Ridgeline Plot
+It is also possible to visualize predictability with ridgelines plots.
+```{r, message=F}
+fitted_pred <- plot(error, type = "ridgeline", 
+     color = "red", 
+     alpha =  0.75, 
+     scale = 2) +
+  theme_bw() +
+  theme(legend.position = "none") +
+  ylab("Node") +
+  xlab("Mean Squared Error") +
+  ggtitle("Predictability")
+fitted_pred
+```
+
+
+
+## Posterior Predictive Predictability
+This is implemeted with the same functions as fitted predictability. The only difference how the prediction are computed. 
+
+### Compute Predictions
+```{r}
+pred <- posterior_predict(fit, iter = 250,
+                          summary = FALSE)
+```
+
+
+
+
+### Compute Predictability
+The next step is to compute predictability. There are several options available. In this case, I compute mean squared error.
+```{r}
+error <- mse(pred)
+```
+
+
+### Plotting Predictability
+#### Error Bar Plot
+Most functions in **BGGM** have plots associated with them. In most cases, this 
+has been simplified by calling `plot`.
+
+```{r}
+# plot 
+plot(error)
+```
+
+This is not the most attractive plot, which is by design. The returned object is a `ggplot` which can then be further customized. 
+
+
+#### Ridgeline Plot
+It is also possible to visualize predictability with ridgelines plots.
+```{r, message=F}
+posterior_pred <- plot(error, type = "ridgeline", 
+     color = "red", 
+     alpha =  0.75, 
+     scale = 2) +
+  theme_bw() +
+  theme(legend.position = "none") +
+  ylab("Node") +
+  xlab("Mean Squared Error") +
+  ggtitle("Predictability")
+posterior_pred
+```
+
+## Fitted vs. Posterior Predictive Predictability
+Note that the posterior predictive method account for uncertainty in the distribution of future data. Hence, the error will not only be larger but there will be more
+uncertainty, for example, 
+
+```{r, warning=F, message=F}
+top <- cowplot::plot_grid("", "", 
+                          labels = c("Fitted", 
+                              "Posterior Predictive"))
+
+bottom <- cowplot::plot_grid(fitted_pred, 
+                             posterior_pred)
+
+cowplot::plot_grid(top, bottom, 
+                   nrow = 2, 
+                   rel_heights = c(1, 20))
+```
+
+
+## Alternative Metrics
+Currently there are five metrics implemented in **BGGM**: (1) mean squared error (mse); (2) root mean squared error (rmse); (3) mean absolute error (mae); (4) mean absolute percentage error (mape)
+
+The fifth metric is Bayesian variance explained. This is the focus of another vignette. And there will be a paper introudcing methodology that allows for comparing Bayesian $R^2$ within and between networks.
