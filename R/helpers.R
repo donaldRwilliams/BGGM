@@ -19,7 +19,10 @@ rank_helper <- function(Y){
   U <- t(t(ranks)/(n_complete + 1))
   Z <- qnorm(U)
   S <- diag(p)
-  list(K = K, levels = levels, Sigma_start = S, z0_start = Z)
+  list(K = K,
+       levels = levels,
+       Sigma_start = S,
+       z0_start = Z)
 
 }
 
@@ -472,6 +475,7 @@ print_select_explore <- function(x, hyp = "H1",
         mat_names[] <-  unlist(lapply(1:p, function(z) paste(1:p, z, sep = "--")))
 
       if(log == TRUE){
+
         summ <-  cbind.data.frame(Edge = mat_names[upper.tri(mat_names)],
                                   Estimate = x$pcor_mat[upper.tri(x$pcor_mat)],
                                   Est.Error = x$pcor_sd[upper.tri(x$pcor_sd)],
