@@ -25,6 +25,7 @@ library(BGGM)
 
 
 
+
 ## Summary
 Gaussian graphical models (GGM) allow for learning conditional (in)dependence structures that are encoded by partial correlations. Whereas there are several `R` packages for classical methods [see @Kuismin2017, Table 1], there are only two that implement a Bayesian approach [@Leday2018; @Mohammadi2015a]. These are exclusively focused on identifying the graphical structure. The package **BGGM** not only contains novel Bayesian methods for this purpose, but it also includes Bayesian methodology for extending inference beyond identifying non-zero relations. 
 
@@ -46,6 +47,10 @@ if (!requireNamespace("remotes")) {
 }
 remotes::install_github("donaldRwilliams/BGGM")
 ```
+
+Note that currently all the methods being extended to ordinal, binary, and mixed data (as of April 2020). Further, all the functions are being changed to `c++`. These are much more effecient, in some case reducing the 
+computing time from 20 seconds to 1 second. Hence, the developmental version is a work in progress. We
+hope to have version `2.0.0` of BGGM submitted to CRAN by the end of May, 2020.
 
 
 ## Estimation
