@@ -77,8 +77,6 @@ select.ggm_compare_estimate <- function(object,
       mean_diff[[x]] * adj[[x]]
       })
 
-
-
     returned_object <- list(mean_diff = mean_diff,
                             pcor_adj = pcor_adj,
                             adj = adj,
@@ -91,29 +89,41 @@ select.ggm_compare_estimate <- function(object,
 
 
       # analytic
+      critical <- abs(qnorm((1 - cred) / 2))
 
-      lapply(1:contrasts, function(x)   )
+      adj <- lapply(1:contrasts, function(x)  {
 
-      c
-
-      (1- pnorm(1.96)) * 2
-
+        ifelse(object$z_stat[[x]] > critical, 1, 0)
 
 
+        })
 
-    }
+      pcor_adj <- lapply(1:contrasts, function(x){
 
-    } else {
+        object$diff[[x]] * adj[[x]]
+
+        })
+
+      returned_object <- list(adj = adj,
+                              pcor_adj = pcor_adj,
+                              adj = adj,
+                              call = match.call(),
+                              object = object,
+                              rope = rope,
+                              cred = cred)
+
+      } # end analytic
+
+
+    } else { # for rope. future direction
 
       stop("rope is not currently implemented.")
 
-
-
-  }
+      }
 
   class(returned_object) <- c("BGGM",
                               "select.ggm_compare_estimate",
-                             "estimate")
+                              "estimate")
   return(returned_object)
 
 }

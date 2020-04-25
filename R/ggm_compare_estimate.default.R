@@ -73,85 +73,91 @@ ggm_compare_estimate <- function(...,
 
     }
 
+    if(!analytic){
 
-  if(!analytic){
+      delta <- delta_solve(prior_sd)
 
-    delta <- delta_solve(prior_sd)
+      post_samp <- lapply(1:groups, function(x) {
 
-    post_samp <- lapply(1:groups, function(x){
+        Y <- info$dat[[x]]
 
-    Y <- info$dat[[x]]
-
-     .Call('_BGGM_Theta_continuous',
-                        PACKAGE = 'BGGM',
-                        Y = Y,
-                        iter = iter + 50,
-                        delta = delta,
-                        epsilon = 0.1,
-                        prior_only = 0,
-                        explore = 1)$pcors
+        .Call(
+          '_BGGM_Theta_continuous',
+          PACKAGE = 'BGGM',
+          Y = Y,
+          iter = iter + 50,
+          delta = delta,
+          epsilon = 0.1,
+          prior_only = 0,
+          explore = 1
+        )$pcors
     })
 
-   diff <- lapply(1:comparisons, function(x) {
+      diff <- lapply(1:comparisons, function(x) {
+        contrast <- info$pairwise[x, ]
 
-     contrast <- info$pairwise[x,]
-
-     post_samp[[contrast[[1]]]][,,(51:iter + 50)] - post_samp[[contrast[[2]]]][,,(51:iter + 50)]
-
-     })
-
-
-    names(diff)  <- sapply(1:comparisons,function(x)  paste("Y_g",
-                                          info$pairwise[x,],
-                                          sep = "",
-                                          collapse = " - "))
-
-
-    analytic <- FALSE
-    type <- "continuous"
-
-    # returned object
-    returned_object <- list(
-      diff = diff,
-      p = p,
-      info = info,
-      iter = iter,
-      analytic = analytic,
-      type = type,
-      call = match.call()
-    )
-
-    } else {
-
-      z_stat <- lapply(1:comparisons, function(x){
-
-        contrast <- info$pairwise[x,]
-
-        g1 <- analytic_solve(info$dat[[contrast[[1]]]])
-        g2 <- analytic_solve(info$dat[[contrast[[2]]]])
-
-        z_stat <- abs((g1$inv_map - g2$inv_map) /   sqrt(g1$inv_var + g2$inv_var))
-
-        })
-
-
-      diff <- lapply(1:comparisons, function(x){
-
-        contrast <- info$pairwise[x,]
-
-        g1 <- analytic_solve(info$dat[[contrast[[1]]]])
-        g2 <- analytic_solve(info$dat[[contrast[[2]]]])
-
-          (g1$pcor_mat - g2$pcor_mat)
+        post_samp[[contrast[[1]]]][, , (51:iter + 50)] - post_samp[[contrast[[2]]]][, , (51:iter + 50)]
 
       })
 
 
+      names(diff)  <- sapply(1:comparisons, function(x)
+        paste("Y_g",
+              info$pairwise[x, ],
+              sep = "",
+              collapse = " - "))
 
-      names(z_stat)  <- sapply(1:comparisons,function(x)  paste("Y_g",
-                                                              info$pairwise[x,],
-                                                              sep = "",
-                                                              collapse = " - "))
+
+      analytic <- FALSE
+      type <- "continuous"
+
+      # returned object
+      returned_object <- list(
+        diff = diff,
+        p = p,
+        info = info,
+        iter = iter,
+        analytic = analytic,
+        type = type,
+        call = match.call()
+      )
+
+    } else {
+
+      z_stat <- lapply(1:comparisons, function(x) {
+        contrast <- info$pairwise[x, ]
+
+        g1 <- analytic_solve(info$dat[[contrast[[1]]]])
+        g2 <- analytic_solve(info$dat[[contrast[[2]]]])
+
+        z_stat <-
+          abs((g1$inv_map - g2$inv_map) /   sqrt(g1$inv_var + g2$inv_var))
+
+      })
+
+
+      diff <- lapply(1:comparisons, function(x) {
+        contrast <- info$pairwise[x, ]
+
+        g1 <- analytic_solve(info$dat[[contrast[[1]]]])
+        g2 <- analytic_solve(info$dat[[contrast[[2]]]])
+
+        (g1$pcor_mat - g2$pcor_mat)
+
+      })
+
+      names(diff)  <- sapply(1:comparisons, function(x)
+        paste("Y_g",
+              info$pairwise[x, ],
+              sep = "",
+              collapse = " - "))
+
+      names(z_stat)  <-
+        sapply(1:comparisons, function(x)
+          paste("Y_g",
+                info$pairwise[x, ],
+                sep = "",
+                collapse = " - "))
 
 
       returned_object <- list(
@@ -162,7 +168,8 @@ ggm_compare_estimate <- function(...,
         iter = iter,
         type = type,
         analytic = analytic,
-        call = match.call())
+        call = match.call()
+      )
     }
   } else {
 

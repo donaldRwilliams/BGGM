@@ -377,44 +377,33 @@ print_ggm_compare_bf <- function(object, ...) {
 }
 
 
-
-print_select_ggm_compare_bf <- function(x,...){
+print_select_ggm_compare_estimate <- function(x,...){
   object <- x
+  comparisons <- length(object$pcor_adj)
+  p <- ncol(object$pcor_adj[[1]])
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
-  cat("Type: GGM Compare with Bayesian Hypothesis Testing \n")
-  # number of iterations
-  p <- object$object$info$dat_info$p[1]
+  cat("Type:", object$object$type, "\n")
+  cat("Analytic:", object$object$analytic, "\n")
   cat("Posterior Samples:", object$object$iter, "\n")
-  cat("Observations: \n")
-  groups <- length(object$object$info$dat)
-  for (i in 1:groups) {
-    cat("  Group",
-        paste(i, ":", sep = "") ,
-        object$object$info$dat_info$n[[i]],
-        "\n")
-  }
-  # number of variables
-  cat("Variables (p):", object$object$p, "\n")
-  # number of edges
-  cat("Edges:", .5 * (object$object$p * (object$object$p-1)), "\n")
+  cat("Credible Interval:",  gsub("*0.","", formatC( round(object$cred, 4), format='f', digits=2)), "% \n")
   cat("--- \n")
   cat("Call: \n")
-  print(object$call)
+  print(object$object$call)
   cat("--- \n")
   cat("Selected:\n\n")
-  cat("Adjacency non-zero \n \n")
-  colnames(object$adj_10) <- 1:p
-  row.names(object$adj_10) <- 1:p
-  print(object$adj_10)
-  cat("\n")
-  cat("Adjacency zero \n \n")
-  colnames(object$adj_01) <- 1:p
-  row.names(object$adj_01) <- 1:p
-  print(object$adj_01)
-  cat("--- \n")
-  cat("note: matrices (e.g., selected partial correlations) are in the select object")
+  for(i in 1:comparisons){
+
+    cat(names(object$object$diff)[i], "\n")
+    mat <- object$pcor_adj[[i]]
+    colnames(mat) <- 1:p
+    row.names(mat) <- 1:p
+    print(round(mat, 3))
+    cat("--- \n\n")
+  }
 }
+
+
 
 print_select_explore <- function(x,
                                  ...){
@@ -496,7 +485,6 @@ print_summary_explore <- function(x,...){
   summary(x$dat_results, summarize = TRUE)
 }
 
-
 print_explore <- function(x,...){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
@@ -512,61 +500,6 @@ print_explore <- function(x,...){
   cat("--- \n")
   cat("Date:", date(), "\n")
 }
-
-
-
-
-print_select_ggm_compare_estimate <- function(x,...){
-  object <- x
-  cat("BGGM: Bayesian Gaussian Graphical Models \n")
-  cat("--- \n")
-  cat("Type: GGM Compare with the Posterior Distribution\n")
-  # number of iterations
-  cat("Posterior Samples:", object$object$iter, "\n")
-  if (is.null(object$rope)) {
-
-    cat("Credible Interval:",  gsub("*0.","", formatC( round(object$cred, 4), format='f', digits=2)), "% \n")
-
-  } else {
-
-    cat("Probability:", object$prob, "\n")
-    cat("Region of Practical Equivalence:", "[", -1 * object$rope, ", ", object$rope, "]", "\n", sep = "")
-  }
-  # number of observations
-  cat("Observations (n):\n")
-  groups <- length(object$object$info$dat)
-  for(i in 1:groups){
-    cat("  Group", paste( i, ":", sep = "") , object$object$info$dat_info$n[[i]], "\n")
-  }
-  # number of variables
-  cat("Variables (p):", object$object$p, "\n")
-  # number of edges
-  cat("Edges:", .5 * (object$object$p * (object$object$p-1)), "\n")
-  cat("--- \n")
-  cat("Call: \n")
-  print(object$call)
-  cat("--- \n")
-  cat("Selected:\n\n")
-  cat("Partial Correlations \n\n")
-  if(is.null(object$rope)){
-    for(i in 1:length(object$mat_adj)){
-      cat(names(object$mat_adj)[[i]], "\n")
-
-      print(object$mat_pcor[[i]])
-      cat("\n")
-    }
-  } else {
-    for(i in 1:length(object$mat_in_adj)){
-      cat(names(object$mat_in_adj)[[i]], "\n")
-
-      print(object$mat_out_pcor[[i]])
-      cat("\n")
-    }
-    cat("--- \n")
-    cat("note: null matrices in the select object")
-  }
-}
-
 
 print_select_estimate <- function(x, summarize = FALSE, ...){
 
