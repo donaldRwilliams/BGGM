@@ -863,7 +863,7 @@ print_ggm_compare <- function(x, ...){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
   cat("Type:",  x$type, "\n")
-  cat("Analytic:" x$analytic, "\n")
+  cat("Analytic:", x$analytic, "\n")
   # number of iterations
   cat("Posterior Samples:", x$iter, "\n")
   # number of observations

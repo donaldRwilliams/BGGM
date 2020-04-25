@@ -60,7 +60,7 @@ ggm_compare_bf <- function(..., prior_sd = 0.20,
 
   priorprob <- 1
 
-  info <- Y_combine(Y1, Y2)
+  info <- BGGM:::Y_combine(Y1, Y2)
 
   groups <- length(info$dat)
 
