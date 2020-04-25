@@ -51,6 +51,13 @@ if (!requireNamespace("remotes")) {
 remotes::install_github("donaldRwilliams/BGGM")
 ```
 
+Note that currently all of the methods are being extended to ordinal,
+binary, and mixed data (as of April 2020). Further, all the functions
+are being changed to `c++`. These are much more effecient, in some case
+reducing the computing time from 20 seconds to 1 second. Hence, the
+developmental version is a work in progress. We hope to have version
+`2.0.0` of BGGM submitted to CRAN by the end of May, 2020.
+
 ## Estimation
 
 There are two possibilities for *estimating* GGMs. The first is an
