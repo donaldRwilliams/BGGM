@@ -862,7 +862,8 @@ print_ggm_compare_ppc <- function(x,...){
 print_ggm_compare <- function(x, ...){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
-  cat("Type: GGM Compare with the Posterior Distribution\n")
+  cat("Type:",  x$type, "\n")
+  cat("Analytic:" x$analytic, "\n")
   # number of iterations
   cat("Posterior Samples:", x$iter, "\n")
   # number of observations
