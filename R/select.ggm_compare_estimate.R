@@ -51,7 +51,9 @@ select.ggm_compare_estimate <- function(object,
   # number of contrasts
   contrasts <- nrow(object$info$pairwise)
 
-  if(!rope){
+  if(is.null(rope)){
+
+    if(isFALSE(object$analytic)){
 
     lb <- (1 - cred) / 2
     ub <- 1 - lb
@@ -82,9 +84,24 @@ select.ggm_compare_estimate <- function(object,
                             adj = adj,
                             call = match.call(),
                             object = object,
-                            rope  = rope,
-                            cred = cred,
-                            prob = prob)
+                            rope = rope,
+                            cred = cred)
+
+    } else {
+
+
+      # analytic
+
+      lapply(1:contrasts, function(x)   )
+
+      c
+
+      (1- pnorm(1.96)) * 2
+
+
+
+
+    }
 
     } else {
 

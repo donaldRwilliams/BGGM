@@ -57,19 +57,15 @@ ggm_compare_estimate <- function(...,
                                  prior_sd = 0.25,
                                  iter = 5000){
 
-  if(type != "continuous"){
+  if(type == "continuous"){
 
-    stop("binary, ordinal, and mixed data will be implemented soon.")
+    info <- Y_combine(...)
 
-  }
+    p <- info$dat_info$p[1]
 
-  info <- Y_combine(...)
+    groups <- length(info$dat)
 
-  p <- info$dat_info$p[1]
-
-  groups <- length(info$dat)
-
-  comparisons <- nrow(info$pairwise)
+    comparisons <- nrow(info$pairwise)
 
   if(groups < 2){
 
@@ -111,17 +107,33 @@ ggm_compare_estimate <- function(...,
                                           collapse = " - "))
 
 
+    analytic <- FALSE
+    type <- "continuous"
+
     # returned object
     returned_object <- list(
       diff = diff,
       p = p,
       info = info,
       iter = iter,
-      analytic = FALSE,
+      analytic = analytic,
+      type = type,
       call = match.call()
     )
 
     } else {
+
+      z_stat <- lapply(1:comparisons, function(x){
+
+        contrast <- info$pairwise[x,]
+
+        g1 <- analytic_solve(info$dat[[contrast[[1]]]])
+        g2 <- analytic_solve(info$dat[[contrast[[2]]]])
+
+        z_stat <- abs((g1$inv_map - g2$inv_map) /   sqrt(g1$inv_var + g2$inv_var))
+
+        })
+
 
       diff <- lapply(1:comparisons, function(x){
 
@@ -130,11 +142,13 @@ ggm_compare_estimate <- function(...,
         g1 <- analytic_solve(info$dat[[contrast[[1]]]])
         g2 <- analytic_solve(info$dat[[contrast[[2]]]])
 
-        z_stat <- abs((one$inv_map - two$inv_map) /   sqrt(one$inv_var + two$inv_var))
+          (g1$pcor_mat - g2$pcor_mat)
 
-        })
+      })
 
-      names(diff)  <- sapply(1:comparisons,function(x)  paste("Y_g",
+
+
+      names(z_stat)  <- sapply(1:comparisons,function(x)  paste("Y_g",
                                                               info$pairwise[x,],
                                                               sep = "",
                                                               collapse = " - "))
@@ -142,15 +156,21 @@ ggm_compare_estimate <- function(...,
 
       returned_object <- list(
         z_stat = z_stat,
+        diff = diff,
         p = p,
         info = info,
         iter = iter,
+        type = type,
         analytic = analytic,
-        call = match.call()
-      )
-      }
+        call = match.call())
+    }
+  } else {
 
-  class(returned_object) <- c("BGGM",
+    stop("type not supported. ordinal, binary, and mixed data will be implemented soon.")
+
+  }
+
+    class(returned_object) <- c("BGGM",
                               "ggm_compare_estimate",
                               "estimate")
   returned_object
