@@ -389,8 +389,9 @@ print_select_explore <- function(x,
   cat("Alternative:", x$alternative, "\n")
   if(x$alternative == "two.sided"){
   cat("Bayes Factor:", x$BF_cut, "\n")
-  cat("--- \n")
+
   }
+  cat("--- \n")
   cat("Call:\n")
   print(x$call)
   cat("--- \n")
@@ -405,7 +406,7 @@ print_select_explore <- function(x,
     colnames( x$pcor_mat_zero) <- 1:p
     row.names(x$pcor_mat_zero) <- 1:p
     cat("Partial Correlations:\n\n")
-    print(x$pcor_mat_zero)
+    print(round(x$pcor_mat_zero, 2))
     cat("--- \n")
     cat("Adjacency:\n\n")
     print(x$Adj_10)
@@ -419,7 +420,7 @@ print_select_explore <- function(x,
       colnames( x$pcor_mat_zero) <- 1:p
       row.names(x$pcor_mat_zero) <- 1:p
       cat("Partial Correlations:\n\n")
-      print(x$pcor_mat_zero)
+      print(round(x$pcor_mat_zero, 2))
       cat("--- \n")
       cat("Adjacency:\n\n")
       print(x$Adj_20)
@@ -434,7 +435,7 @@ print_select_explore <- function(x,
     colnames( x$pcor_mat_zero) <- 1:p
     row.names(x$pcor_mat_zero) <- 1:p
     cat("Partial Correlations:\n\n")
-    print(x$pcor_mat_zero)
+    print(round(x$pcor_mat_zero, 2))
     cat("--- \n")
     cat("Adjacency:\n\n")
     print(x$Adj_20)
@@ -443,14 +444,13 @@ print_select_explore <- function(x,
 
     cat("H0: rho = 0\nH1: rho > 0\nH2: rho < 0", "\n")
     cat("--- \n")
-    cat("--- \n")
-    cat("Summary:\n")
+    cat("Summary:\n\n")
     dat <- x$post_prob
     dat$prob_zero <- round(dat$prob_zero, 3)
     dat$prob_greater <- round(dat$prob_greater, 3)
     dat$prob_less <- round(dat$prob_less, 3)
     colnames(dat) <- c("Relation", "Pr.H0", "Pr.H1", "Pr.H2")
-    print(dat, row.names = FALSE)
+    print(dat, row.names = FALSE, right = FALSE)
     cat("--- \n")
     }
 }
