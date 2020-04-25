@@ -116,7 +116,6 @@ explore <- function(Y,
   # number of edges
   edges <- 0.5 * (p * (p -1))
 
-
   if(type == "continuous"){
 
     # remove mean

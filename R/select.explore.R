@@ -343,6 +343,98 @@ select.explore <- function(object,
 }
 
 
+
+
+#' Summary Method for \code{select.explore} Objects
+#'
+#' @param object object of class \code{select.explore}.
+#'
+#' @return a data frame including the posterior mean, standard deviation,
+#' and posterior hypothesis probabilities for each relation.
+#' @export
+summary.select.explore <- function(object){
+
+  x <- object
+  p <- ncol(x$pcor_mat)
+  mat_names <- matrix(0, p, p)
+
+  mat_names[] <-  unlist(lapply(1:p,
+                                FUN = function(z) paste(1:p, z, sep = "--")))
+
+  if(x$alternative == "two.sided"){
+
+    post_mean <- x$pcor_mat[upper.tri(x$pcor_mat)]
+    post_sd <-  x$pcor_sd[upper.tri(x$pcor_sd)]
+    prob_H1 <- x$BF_10[upper.tri(x$BF_10)] / (x$BF_10[upper.tri(x$BF_10)] + 1)
+    prob_H0 <- 1 - prob_H1
+    summ <-  data.frame(
+      Relation = mat_names[upper.tri(mat_names)],
+      Post.mean = post_mean,
+      Post.sd = post_sd,
+      Pr.H0 = round(prob_H0, 3),
+      Pr.H1 = round(prob_H1, 3)
+    )
+
+  } else if (x$alternative == "greater"){
+
+    post_mean <- x$pcor_mat[upper.tri(x$pcor_mat)]
+    post_sd <-  x$pcor_sd[upper.tri(x$pcor_sd)]
+    prob_H1 <- x$BF_20[upper.tri(x$BF_20)] / (x$BF_20[upper.tri(x$BF_20)] + 1)
+    prob_H0 <- 1 - prob_H1
+    summ <-  data.frame(
+      Relation = mat_names[upper.tri(mat_names)],
+      Post.mean = post_mean,
+      Post.sd = post_sd,
+      Pr.H0 = round(prob_H0, 3),
+      Pr.H1 = round(prob_H1, 3)
+    )
+
+
+
+  } else if (x$alternative == "less" | x$alternative == "greater"){
+
+    post_mean <- x$pcor_mat[upper.tri(x$pcor_mat)]
+    post_sd <-  x$pcor_sd[upper.tri(x$pcor_sd)]
+    prob_H1 <- x$BF_20[upper.tri(x$BF_20)] / (x$BF_20[upper.tri(x$BF_20)] + 1)
+    prob_H0 <- 1 - prob_H1
+    summ <-  data.frame(
+      Relation = mat_names[upper.tri(mat_names)],
+      Post.mean = post_mean,
+      Post.sd = post_sd,
+      Pr.H0 = round(prob_H0, 3),
+      Pr.H1 = round(prob_H1, 3)
+    )
+
+
+
+  } else {
+
+    summ <- cbind.data.frame( x$post_prob[,1],
+                              x$pcor_mat[upper.tri(x$pcor_mat)],
+                              x$pcor_sd[upper.tri(x$pcor_sd)],
+                              round(x$post_prob[,2:4], 3))
+
+    colnames(summ) <- c("Relation",
+                        "Post.mean",
+                        "Post.sd",
+                        "Pr.H0",
+                        "Pr.H1",
+                        "Pr.H2")
+
+
+  }
+
+  returned_object <- list(summary = summ, object = object)
+
+  class(returned_object) <- c("BGGM",
+                              "explore", "select.explore",
+                              "summary")
+  returned_object
+
+
+}
+
+
 #' Plot \code{select.explore} Network
 #'
 #' @param x object of class \code{select.explore}

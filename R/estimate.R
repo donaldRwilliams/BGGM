@@ -153,8 +153,10 @@ estimate  <- function(Y,
 
   for(i in 1:iter){
 
+    B <- diag(ncol(Y)) * 0.0001
+
     # draw directly from Wishart
-    inv_mat <- rWishart(1, n-1, solve(S))[,,1]
+    inv_mat <- rWishart(1, n + (p + 2), solve(S + B))[,,1]
 
     # compute partial correlations
     pcor_mat <-   -1 * cov2cor(inv_mat)

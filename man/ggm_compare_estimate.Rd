@@ -4,7 +4,13 @@
 \alias{ggm_compare_estimate}
 \title{Compare Partial Correlations with the Posterior Distribution}
 \usage{
-ggm_compare_estimate(..., type = "continuous", analytic = FALSE, iter = 5000)
+ggm_compare_estimate(
+  ...,
+  type = "continuous",
+  analytic = FALSE,
+  prior_sd = 0.25,
+  iter = 5000
+)
 }
 \arguments{
 \item{...}{matrices (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).

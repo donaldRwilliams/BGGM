@@ -13,6 +13,7 @@ explore(
   prior_sd = 0.25,
   iter = 5000,
   cores = 2,
+  seed = 1,
   ...
 )
 }

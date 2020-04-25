@@ -220,6 +220,43 @@ sampling_helper_poly <- function(Y, delta, iter, type, mixed_type= NULL){
 }
 
 
+print_summary_select_explore <- function(x,...){
+
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type:", x$object$type, "\n")
+  cat("Alternative:", x$object$alternative, "\n")
+  cat("--- \n")
+  cat("Call:\n")
+  print(x$object$call)
+  cat("--- \n")
+  cat("Hypotheses: \n")
+
+  if(x$object$alternative == "two.sided"){
+
+    cat("H0: rho = 0\nH1: rho != 0", "\n")
+
+  } else if (x$object$alternative == "greater"){
+
+    cat("H0: rho = 0\nH1: rho > 0", "\n")
+
+  } else if (x$object$alternative == "less"){
+
+    cat("H0: rho = 0\nH1: rho < 0", "\n")
+
+  } else {
+
+    cat("H0: rho = 0\nH1: rho > 0\nH2: rho < 0", "\n")
+
+  }
+
+  cat("--- \n\n")
+
+  print(x$summary, right = FALSE, row.names = FALSE)
+
+
+}
+
 
 print_confirm <- function(x, ...){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
@@ -1117,18 +1154,33 @@ get_lower_tri<-function(cormat){
 analytic_solve <- function(X){
   # sample size
   n <- nrow(X)
+
+  # variables
   p <- ncol(X)
+
   # centererd mat
   X <- scale(X, scale = T)
-  # scale matrix
+
+  # scatter matrix
   S <- t(X) %*% X
-  inv_mu <-  solve(S + diag(10^-5,  p)) * (n)
-  inv_var <-  (n + p + 1)*(solve(S + diag(10^-5, p) )^2 + tcrossprod(diag(solve(S + diag(10^-5, p)))))
-  inv_cor <- diag( 1 / sqrt((diag(inv_mu)))) %*% inv_mu %*% diag( 1 / sqrt((diag(inv_mu))) )
-  partials <- inv_cor * -1 + diag(2, p)
-  list(inv_mu = inv_mu,
+
+  # degrees of freedom
+  df = p
+
+  # map estimate
+  inv_map <-  solve(S + diag(10^-5,  p)) * (n + df - p - 1)
+
+  # posterior variane
+  inv_var <-  (n + df + 1) * (solve(S + diag(0.1^5, p) )^2 + tcrossprod(diag(solve(S + diag(0.1^5, p)))))
+
+  # inverse correlation matrix
+  inv_cor <- diag( 1 / sqrt((diag(inv_map)))) %*% inv_map %*% diag( 1 / sqrt((diag(inv_map))) )
+
+  pcor_mat <- -(inv_cor - diag(p))
+
+  list(inv_map = inv_map,
        inv_var = inv_var,
-       partial = partials)
+       pcor_mat = pcor_mat)
 }
 
 # summarize coefficients

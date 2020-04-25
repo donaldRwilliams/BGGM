@@ -2,9 +2,9 @@
 % Please edit documentation in R/select.ggm_compare_estimate.R
 \name{select.ggm_compare_estimate}
 \alias{select.ggm_compare_estimate}
-\title{Edge Differences and (Practical) Equivalence Between GGMs}
+\title{Select Partial Correlattion Differences for \code{ggm_compare_estimate} Objects}
 \usage{
-\method{select}{ggm_compare_estimate}(object, cred = 0.95, rope = NULL, prob = 0.95, ...)
+\method{select}{ggm_compare_estimate}(object, cred = 0.95, rope = NULL, ...)
 }
 \arguments{
 \item{object}{object of class \code{ggm_compare_estimate}}
@@ -12,8 +12,6 @@
 \item{cred}{credible interval width used for the decision rule}
 
 \item{rope}{region of practical equivalence}
-
-\item{prob}{posterior probability (see notes)}
 
 \item{...}{not currently used}
 }
@@ -31,12 +29,7 @@ A list of class \code{select.ggm_compare_estimate}:
 }
 }
 \description{
-Edge Differences and (Practical) Equivalence Between GGMs
-}
-\note{
-\code{prob} (posterior probability) is the decision rule for the rope. For example, with \code{rope = 0.1}
-and \code{prob = 0.95}, differences require that 95 \% of the posterior exlcudes +- 0.1,
-whereas equivalence requires that 95 \% of the posterior is within  +- 0.1.
+Select Partial Correlattion Differences for \code{ggm_compare_estimate} Objects
 }
 \examples{
 # data

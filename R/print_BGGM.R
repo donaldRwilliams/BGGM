@@ -117,8 +117,20 @@ print.BGGM <- function(x,...){
 
     if(is(x, "select.explore")){
 
+      if(is(x, "summary")){
+
+
+        print_summary_select_explore(x, ...)
+
+
+        } else {
+
       print_select_explore(x, ...)
+      }
+
     }
+
+
 
     if(is(x, "select.ggm_compare_bf")){
 

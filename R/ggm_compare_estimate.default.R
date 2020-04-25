@@ -54,88 +54,101 @@
 ggm_compare_estimate <- function(...,
                                  type = "continuous",
                                  analytic = FALSE,
+                                 prior_sd = 0.25,
                                  iter = 5000){
 
-
-
   if(type != "continuous"){
-    stop("binary and ordinal will be implemented soon.")
+
+    stop("binary, ordinal, and mixed data will be implemented soon.")
 
   }
+
   info <- Y_combine(...)
 
   p <- info$dat_info$p[1]
 
   groups <- length(info$dat)
 
+  comparisons <- nrow(info$pairwise)
+
   if(groups < 2){
+
     stop("must have (at least) two groups")
-  }
 
-  inv_mat <- list()
+    }
 
-  # precision matrix for each group
-  inv_mat <- lapply(1:groups, function(x) {
 
-    # data
+  if(!analytic){
+
+    delta <- delta_solve(prior_sd)
+
+    post_samp <- lapply(1:groups, function(x){
+
     Y <- info$dat[[x]]
 
-    # scale data
-    Y <- as.matrix(scale(Y, scale = T))
+     .Call('_BGGM_Theta_continuous',
+                        PACKAGE = 'BGGM',
+                        Y = Y,
+                        iter = iter + 50,
+                        delta = delta,
+                        epsilon = 0.1,
+                        prior_only = 0,
+                        explore = 1)$pcors
+    })
 
-    # scatter matrix
-    S <- t(Y) %*% Y
+   diff <- lapply(1:comparisons, function(x) {
 
-    #
-    n <- nrow(Y)
+     contrast <- info$pairwise[x,]
 
-    samps <- stats::rWishart(iter, n + p + 2, solve(S + p * diag(p)))
-  })
+     post_samp[[contrast[[1]]]][,,(51:iter + 50)] - post_samp[[contrast[[2]]]][,,(51:iter + 50)]
 
-  # partial storage
-  pcors <- list()
+     })
 
-  for (i in 1:groups) {
 
-    # partials for each group
-    temp <-
-      lapply(1:iter, function(x) {
-        pcors <-  cov2cor(inv_mat[[i]][, , x])
-        pcors[upper.tri(pcors)] * -1
-      })
+    names(diff)  <- sapply(1:comparisons,function(x)  paste("Y_g",
+                                          info$pairwise[x,],
+                                          sep = "",
+                                          collapse = " - "))
 
-    # partials into list
-    pcors[[i]] <- do.call(rbind, temp)
 
-  }
+    # returned object
+    returned_object <- list(
+      diff = diff,
+      p = p,
+      info = info,
+      iter = iter,
+      analytic = FALSE,
+      call = match.call()
+    )
 
-  # partial difference storage
-  pcors_diffs <- list()
+    } else {
 
-  for (i in 1:nrow(info$pairwise)) {
+      diff <- lapply(1:comparisons, function(x){
 
-    # pairwise contrast
-    temp <- info$pairwise[i, ]
+        contrast <- info$pairwise[x,]
 
-    # difference
-    diff <- list(pcors[[temp[1]]] - pcors[[temp[2]]])
+        g1 <- analytic_solve(info$dat[[contrast[[1]]]])
+        g2 <- analytic_solve(info$dat[[contrast[[2]]]])
 
-    # name difference
-    names(diff) <- paste("Y_g", temp, sep = "", collapse = " - ")
+        z_stat <- abs((one$inv_map - two$inv_map) /   sqrt(one$inv_var + two$inv_var))
 
-    # store difference
-    pcors_diffs[[i]] <- diff
+        })
 
-  }
+      names(diff)  <- sapply(1:comparisons,function(x)  paste("Y_g",
+                                                              info$pairwise[x,],
+                                                              sep = "",
+                                                              collapse = " - "))
 
-  # # returned object
-  returned_object <- list(
-    pcors_diffs = pcors_diffs,
-    p = p,
-    info = info,
-    iter = iter,
-    call = match.call()
-  )
+
+      returned_object <- list(
+        z_stat = z_stat,
+        p = p,
+        info = info,
+        iter = iter,
+        analytic = analytic,
+        call = match.call()
+      )
+      }
 
   class(returned_object) <- c("BGGM",
                               "ggm_compare_estimate",
