@@ -27,7 +27,7 @@ rank_helper <- function(Y){
 }
 
 
-
+# convert hypothesis to words
 convert_hyps <- function(hypothesis, Y){
 
   p <- ncol(Y)
@@ -40,9 +40,10 @@ convert_hyps <- function(hypothesis, Y){
 
   mat_name_actual <- sapply(colnames(Y), function(x) paste0(colnames(Y), "--", x, sep = ""))
 
-  n_off_diag <- p*(p-1)*0.5
+  n_off_diag <- p *( p - 1)*0.5
 
   where <- lapply(1:n_off_diag, function(x) grep(mat_name_actual[upper.tri(diag(p))][x], hypothesis ))
+
   where <- which(where == 1)
 
   if(any(where)){
@@ -80,8 +81,10 @@ convert_hyps <- function(hypothesis, Y){
 prior_helper_2 <- function(p, delta , epsilon){
 
   k <- p
+
   nu <- 1/epsilon
-  parcorMat <- corMat <- ThetaMat <- SigmaMat <- array(0,dim=c(1e4,k,k))
+
+  parcorMat <- corMat <- ThetaMat <- SigmaMat <- array(0, dim=c(1e4 , k , k))
 
 
   for(s in 1:dim(parcorMat)[1]){
@@ -106,7 +109,7 @@ sampling_helper_poly <- function(Y, delta, iter, type, mixed_type= NULL){
 
   if(type == "binary"){
 
-  fit_mvn <- mvn_binary(Y, matrix(1, nrow = nrow(Y)),
+  fit_mvn <- mv_binary(Y, matrix(1, nrow = nrow(Y)),
                         delta = delta,
                         epsilon = 0.001,
                         iter = iter,
@@ -115,10 +118,12 @@ sampling_helper_poly <- function(Y, delta, iter, type, mixed_type= NULL){
 
   } else if(type == "ordinal"){
 
-    fit_mvn <- mvn_ordinal(Y, matrix(1, nrow = nrow(Y)),
+    K <- max(apply(Y, 2, FUN = function(x) {max(unique(Y))} ))
+
+    fit_mvn <- mv_ordinal_albert(Y, matrix(1, nrow = nrow(Y)),
                           delta = delta,
                           epsilon = 0.1,
-                          iter = iter, MH = 0.001)
+                          iter = iter, K = K)
 
   } else if(type == "mixed"){
 
@@ -374,324 +379,81 @@ print_select_ggm_compare_bf <- function(x,...){
   cat("note: matrices (e.g., selected partial correlations) are in the select object")
 }
 
-print_select_explore <- function(x, hyp = "H1",
-                                   log = TRUE, summarize = FALSE, ...){
+print_select_explore <- function(x,
+                                 ...){
 
+  p <- ncol(x$pcor_mat_zero)
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
   cat("Type:", x$type, "\n")
   cat("Alternative:", x$alternative, "\n")
-
-  # exhaustive
-  if(x$alternative == "exhaustive"){
-    cat("Posterior probability:", x$prob, "\n")
-    cat("--- \n")
-    cat("Call:\n")
-    print(x$call)
-    cat("--- \n")
-    if(!isFALSE(summarize)){
-
-      summ <-  cbind.data.frame(Edge = x$post_prob$edge,
-                                Estimate = x$pcor_mat[upper.tri(x$pcor_mat)],
-                                Est.Error = x$pcor_sd[upper.tri(x$pcor_sd)],
-                                "Pr.H0" = x$post_prob[,2],
-                                "Pr.H1" = x$post_prob[,3],
-                                "Pr.H2" = x$post_prob[,4])
-
-      cat("Hypotheses: \n")
-      cat("H0: rho = 0\nH1: rho > 0\nH2: rho < 0", "\n")
-      cat("--- \n")
-      cat("Estimates: \n \n ")
-      print(summ, row.names = FALSE, ...)
-      cat("--- \n")
-    } else{
-      if(hyp == "H1"){
-        cat("Hypothesis: \n")
-        cat("H1: rho > 0 \n")
-        cat("--- \n")
-        p <- ncol(x$pos_mat)
-        colnames(x$pos_mat) <- 1:p
-        row.names(x$pos_mat) <- 1:p
-        cat("Partial Correlations \n \n")
-        print(x$pcor_mat * ifelse(x$pos_mat > x$prob, 1, 0), ...)
-        cat("--- \n \n")
-        cat("Adjancency \n \n")
-        print(ifelse(x$pos_mat > x$prob, 1, 0), ...)
-        cat("--- \n")
-
-      }
-
-      if(hyp == "H0"){
-        cat("Hypothesis: \n")
-        cat("H0: rho = 0 \n")
-        cat("--- \n")
-        p <- ncol(x$null_mat)
-        colnames(x$null_mat) <- 1:p
-        row.names(x$null_mat) <- 1:p
-        cat("Partial Correlations \n \n")
-        print(x$pcor_mat * ifelse(x$null_mat > x$prob, 1, 0), ...)
-        cat("--- \n \n")
-        cat("Adjancency \n \n")
-        print(ifelse(x$null_mat > x$prob, 1, 0), ...)
-        cat("--- \n")
-
-      }
-
-      if(hyp == "H2"){
-        cat("Hypothesis: \n")
-        cat("H0: rho < 0 \n")
-        cat("--- \n")
-        p <- ncol(x$neg_mat)
-        colnames(x$neg_mat) <- 1:p
-        row.names(x$neg_mat) <- 1:p
-        cat("Partial Correlations \n \n")
-        print(x$pcor_mat * ifelse(x$neg_mat > x$prob, 1, 0), ...)
-        cat("--- \n \n")
-        cat("Adjancency \n \n")
-        print(ifelse(x$neg_mat > x$prob, 1, 0), ...)
-        cat("--- \n")
-      }
-    }
+  if(x$alternative == "two.sided"){
+  cat("Bayes Factor:", x$BF_cut, "\n")
+  cat("--- \n")
   }
-
-  # greater than
-  if(x$alternative == "greater"){
-    cat("Bayes Factor:", x$BF_cut, "\n")
-    if(isFALSE(summarize)){
-      cat("Connectivity:", round(mean(x$Adj_20[upper.tri(x$Adj_20)]) * 100, 1), "% \n")
-
-    }
-    cat("--- \n")
-    cat("Call:\n")
-    print(x$call)
-    cat("--- \n")
-
-    if(!isFALSE(summarize)){
-      p <- ncol(x$pcor_mat)
-      mat_names <- matrix(0, p, p)
-
-      edge_name <-
-
-        mat_names[] <-  unlist(lapply(1:p, function(z) paste(1:p, z, sep = "--")))
-
-      if(log == TRUE){
-
-        summ <-  cbind.data.frame(Edge = mat_names[upper.tri(mat_names)],
-                                  Estimate = x$pcor_mat[upper.tri(x$pcor_mat)],
-                                  Est.Error = x$pcor_sd[upper.tri(x$pcor_sd)],
-                                  "BF 20" = log(x$BF_20[upper.tri(x$BF_20)]),
-                                  "BF 01" = log(x$BF_01[upper.tri(x$BF_01)]))
-      } else{
-
-        summ <-  cbind.data.frame(Edge = mat_names[upper.tri(mat_names)],
-                                  Estimate = x$pcor_mat[upper.tri(x$pcor_mat)],
-                                  Est.Error = x$pcor_sd[upper.tri(x$pcor_sd)],
-                                  "BF 20" = x$BF_20[upper.tri(x$BF_20)],
-                                  "BF 01" = x$BF_01[upper.tri(x$BF_01)])
-      }
-
-      cat("Hypotheses: \n")
-      cat("H0: rho = 0\nH1: rho > 0", "\n")
-      cat("--- \n")
-      cat("Estimates: \n \n ")
-      print(summ, row.names = FALSE, ...)
-      cat("--- \n")
-      cat("note: BF 20 is a one-sided Bayes factor for H1 \n")
-      cat("--- \n")
-    } else{
-      if(hyp == "H1"){
-
-        cat("Hypothesis: \n")
-        cat("H1: rho > 0 \n")
-        cat("--- \n")
-        p <- ncol(x$partials_positive)
-        colnames(x$partials_positive) <- 1:p
-        row.names(x$partials_positive) <- 1:p
-        cat("Partial Correlations \n \n")
-        print(x$partials_positive, ...)
-        cat("--- \n \n")
-        cat("Adjancency (positive) \n \n")
-        colnames(x$Adj_20) <- 1:p
-        row.names(x$Adj_20) <- 1:p
-        print(x$Adj_20, ...)
-        cat("--- \n")
-      }
-
-
-      if(hyp == "H0"){
-
-        cat("Hypothesis: \n")
-        cat("H0: rho = 0 \n")
-        cat("--- \n")
-        p <- ncol(x$pcor_mat)
-        colnames(x$pcor_mat) <- 1:p
-        row.names(x$pcor_mat) <- 1:p
-        cat("Partial Correlations \n \n")
-        print(x$pcor_mat * x$Adj_01, ...)
-        cat("--- \n \n")
-        cat("Adjancency (null) \n \n")
-        colnames(x$Adj_01) <- 1:p
-        row.names(x$Adj_01) <- 1:p
-        print(x$Adj_01, ...)
-        cat("--- \n")
-      }
-    }
-  }
-  # less than
-  if(x$alternative == "less"){
-    cat("Bayes Factor:", x$BF_cut, "\n")
-    if(isFALSE(summarize)){
-      cat("Connectivity:", round(mean(x$Adj_20[upper.tri(x$Adj_20)]) * 100, 1), "% \n")
-    }
-    cat("--- \n")
-    cat("Call:\n")
-    print(x$call)
-    cat("--- \n")
-
-    if(!isFALSE(summarize)){
-      p <- ncol(x$pcor_mat)
-      mat_names <- matrix(0, p, p)
-
-      # edge_name <- unlist(lapply(1:p, function(z) paste(1:p, z, sep = "--")))
-
-      mat_names[] <-  unlist(lapply(1:p, function(z) paste(1:p, z, sep = "--")))
-
-      if(log == TRUE){
-        summ <-  cbind.data.frame(Edge = mat_names[upper.tri(mat_names)],
-                                  Estimate = x$pcor_mat[upper.tri(x$pcor_mat)],
-                                  Est.Error = x$pcor_sd[upper.tri(x$pcor_sd)],
-                                  "BF 20" = log(x$BF_20[upper.tri(x$BF_20)]),
-                                  "BF 01" = log(x$BF_01[upper.tri(x$BF_01)]))
-      } else{
-
-        summ <-  cbind.data.frame(Edge = mat_names[upper.tri(mat_names)],
-                                  Estimate = x$pcor_mat[upper.tri(x$pcor_mat)],
-                                  Est.Error = x$pcor_sd[upper.tri(x$pcor_sd)],
-                                  "BF 20" = x$BF_20[upper.tri(x$BF_20)],
-                                  "BF 01" = x$BF_01[upper.tri(x$BF_01)])
-      }
-
-      cat("Hypotheses: \n")
-      cat("H0: rho = 0\nH1: rho < 0", "\n")
-      cat("--- \n")
-      cat("Estimates: \n \n ")
-      print(summ, row.names = FALSE, ...)
-      cat("--- \n")
-      cat("note: BF 20 is a one-sided Bayes factor for H1 \n")
-      cat("--- \n")
-    }
-
-    else{
-      if(hyp == "H1"){
-        cat("Hypothesis: \n")
-        cat("H1: rho < 0 \n")
-        cat("--- \n")
-        p <- ncol(x$partials_negative)
-        colnames(x$partials_negative) <- 1:p
-        row.names(x$partials_negative) <- 1:p
-        cat("Partial Correlations \n \n")
-        print(x$partials_negative, ...)
-        cat("--- \n \n")
-        cat("Adjancency (negative) \n \n")
-        colnames(x$Adj_20) <- 1:p
-        row.names(x$Adj_20) <- 1:p
-        print(x$Adj_20, ...)
-        cat("--- \n")
-      }
-
-      if(hyp == "H0"){
-        cat("Hypothesis: \n")
-        cat("H0: rho = 0 \n")
-        cat("--- \n")
-        p <- ncol(x$pcor_mat)
-        colnames(x$pcor_mat) <- 1:p
-        row.names(x$pcor_mat) <- 1:p
-        cat("Partial Correlations \n \n")
-        print(x$pcor_mat * x$Adj_01, ...)
-        cat("--- \n \n")
-        cat("Adjancency (null) \n \n")
-        colnames(x$Adj_01) <- 1:p
-        row.names(x$Adj_01) <- 1:p
-        print(x$Adj_01, ...)
-        cat("--- \n")
-      }
-    }
-  }
+  cat("Call:\n")
+  print(x$call)
+  cat("--- \n")
+  cat("Hypotheses: \n")
 
   if(x$alternative == "two.sided"){
-    cat("Bayes Factor:", x$BF_cut, "\n")
-    if(isFALSE(summarize)){
-      if(hyp == "H1"){
-        cat("Connectivity:", round(mean(x$Adj_10[upper.tri(x$Adj_10)]) * 100, 1), "% \n")
-      } else{
-        cat("Connectivity:", round(mean(x$Adj_01[upper.tri(x$Adj_01)]) * 100, 1), "% \n")
-      }
 
-    }
+    cat("H0: rho = 0\nH1: rho != 0", "\n")
     cat("--- \n")
-    cat("Call:\n")
-    print(x$call)
+    colnames(x$Adj_10) <- 1:p
+    row.names(x$Adj_10) <- 1:p
+    colnames( x$pcor_mat_zero) <- 1:p
+    row.names(x$pcor_mat_zero) <- 1:p
+    cat("Partial Correlations:\n\n")
+    print(x$pcor_mat_zero)
     cat("--- \n")
-    if (!isFALSE(summarize)) {
-      p <- ncol(x$pcor_mat)
-      mat_names <- matrix(0, p, p)
-      mat_names[] <-  unlist(lapply(1:p, function(z) paste(1:p, z, sep = "--")))
-      if(log == TRUE){
-        summ <-  cbind.data.frame(Edge = mat_names[upper.tri(mat_names)],
-                                  Estimate = x$pcor_mat[upper.tri(x$pcor_mat)],
-                                  Est.Error = x$pcor_sd[upper.tri(x$pcor_sd)],
-                                  "BF 10" = log(x$BF_10[upper.tri(x$BF_10)]))
-      } else {
-        summ <-  cbind.data.frame(Edge = mat_names[upper.tri(mat_names)],
-                                  Estimate = x$pcor_mat[upper.tri(x$pcor_mat)],
-                                  Est.Error = x$pcor_sd[upper.tri(x$pcor_sd)],
-                                  "BF 10" = x$BF_10[upper.tri(x$BF_10)])
-      }
-      cat("Hypotheses: \n")
-      cat("H0: rho = 0\nH1: rho != 0", "\n")
+    cat("Adjacency:\n\n")
+    print(x$Adj_10)
+    cat("--- \n")
+    } else if (x$alternative == "greater"){
+
+      cat("H0: rho = 0\nH1: rho > 0", "\n")
       cat("--- \n")
-      cat("Estimates: \n \n ")
-      print(summ, row.names = FALSE, ...)
+      colnames(x$Adj_20) <- 1:p
+      row.names(x$Adj_20) <- 1:p
+      colnames( x$pcor_mat_zero) <- 1:p
+      row.names(x$pcor_mat_zero) <- 1:p
+      cat("Partial Correlations:\n\n")
+      print(x$pcor_mat_zero)
       cat("--- \n")
-      cat("note: BF_10 is evidence in favor of H1")
-    } else {
-      if(hyp == "H1"){
-        cat("Hypothesis: \n")
-        cat("H1: rho != 0 \n")
-        cat("--- \n")
-        p <- ncol(x$partials_non_zero)
-        colnames(x$partials_non_zero) <- 1:p
-        row.names(x$partials_non_zero) <- 1:p
-        cat("Partial Correlations \n \n")
-        print(x$partials_non_zero)
-        cat("--- \n \n")
-        cat("Adjancency (non-zero) \n \n")
-        colnames(x$Adj_10) <- 1:p
-        row.names(x$Adj_10) <- 1:p
-        print(x$Adj_10)
-        cat("--- \n")
-      }
-      if(hyp == "H0"){
-        cat("Hypothesis: \n")
-        cat("H0: rho = 0 \n")
-        cat("--- \n")
-        p <- ncol(x$pcor_mat)
-        colnames(x$pcor_mat) <- 1:p
-        row.names(x$pcor_mat) <- 1:p
-        cat("Partial Correlations \n \n")
-        print(x$pcor_mat * x$Adj_01, ...)
-        cat("--- \n \n")
-        cat("Adjancency (null) \n \n")
-        colnames(x$Adj_01) <- 1:p
-        row.names(x$Adj_01) <- 1:p
-        print(x$Adj_01, ...)
-        cat("--- \n")
-        cat("note: connectivity reflects conditionally independent relations")
-      }
+      cat("Adjacency:\n\n")
+      print(x$Adj_20)
+      cat("--- \n")
+
+  } else if (x$alternative == "less"){
+
+    cat("H0: rho = 0\nH1: rho < 0", "\n")
+    cat("--- \n")
+    colnames(x$Adj_20) <- 1:p
+    row.names(x$Adj_20) <- 1:p
+    colnames( x$pcor_mat_zero) <- 1:p
+    row.names(x$pcor_mat_zero) <- 1:p
+    cat("Partial Correlations:\n\n")
+    print(x$pcor_mat_zero)
+    cat("--- \n")
+    cat("Adjacency:\n\n")
+    print(x$Adj_20)
+    cat("--- \n")
+  } else {
+
+    cat("H0: rho = 0\nH1: rho > 0\nH2: rho < 0", "\n")
+    cat("--- \n")
+    cat("--- \n")
+    cat("Summary:\n")
+    dat <- x$post_prob
+    dat$prob_zero <- round(dat$prob_zero, 3)
+    dat$prob_greater <- round(dat$prob_greater, 3)
+    dat$prob_less <- round(dat$prob_less, 3)
+    colnames(dat) <- c("Relation", "Pr.H0", "Pr.H1", "Pr.H2")
+    print(dat, row.names = FALSE)
+    cat("--- \n")
     }
-  }
 }
-
 
 print_summary_explore <- function(x,...){
   summary(x$dat_results, summarize = TRUE)
@@ -770,30 +532,34 @@ print_select_ggm_compare_estimate <- function(x,...){
 
 
 print_select_estimate <- function(x, summarize = FALSE, ...){
-  # x <- object
+
   p <- ncol(x$partials_non_zero)
+
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
-  if(!is.null(x$analytic)){
+
+  if (!is.null(x$analytic)) {
     cat("Type: Selected Graph (Analytic Solution) \n")
   } else{
     cat("Type: ", x$type, "\n")
 
   }
 
-  if(isFALSE(summarize)){
-    if(is.null(x$rope)){
-      cat("Credible Interval:",  gsub("*0.","", formatC( round(x$ci, 4), format='f', digits=2)), "% \n")
+  if(isFALSE(summarize)) {
+    if (is.null(x$rope)) {
+      cat("Credible Interval:",  gsub("*0.", "", formatC(
+        round(x$ci, 4), format = 'f', digits = 2
+      )), "% \n")
       cat("Connectivity:", round(mean(x$adjacency_non_zero[upper.tri(x$adjacency_non_zero)]) * 100, 1), "% \n")
       cat("--- \n")
       cat("Call:\n")
       print(x$call)
       cat("--- \n")
       cat("Selected:\n \n")
-      colnames( x$partials_non_zero)  <- 1:p
-      row.names( x$partials_non_zero) <- 1:p
-      colnames( x$partials_non_zero)  <- 1:p
-      row.names( x$partials_non_zero) <- 1:p
+      colnames(x$partials_non_zero)  <- 1:p
+      row.names(x$partials_non_zero) <- 1:p
+      colnames(x$partials_non_zero)  <- 1:p
+      row.names(x$partials_non_zero) <- 1:p
       cat("Partial correlations \n \n")
       print(x$partials_non_zero, digits = 2)
       cat("--- \n \n")
@@ -805,7 +571,14 @@ print_select_estimate <- function(x, summarize = FALSE, ...){
 
     } else{
       cat("Probability:", x$prob, "\n")
-      cat("Region of Practical Equivalence:", "[", -1 * x$rope, ", ", x$rope, "]", "\n", sep = "")
+      cat("Region of Practical Equivalence:",
+          "[",
+          -1 * x$rope,
+          ", ",
+          x$rope,
+          "]",
+          "\n",
+          sep = "")
       cat("Connectivity:", round(mean(x$adjacency_non_zero[upper.tri(x$adjacency_non_zero)]) * 100, 1), "% \n")
       cat("--- \n")
       cat("Call:\n")
@@ -828,14 +601,17 @@ print_select_estimate <- function(x, summarize = FALSE, ...){
       print(x$adjacency_zero)
     }
   }
-  if(isTRUE(summarize)){
-    if(isTRUE(x$analytic)){
+  if (isTRUE(summarize)) {
+    if (isTRUE(x$analytic)) {
       stop("summary not available for the analytic solution")
     }
-    if(is.null(x$rope)){
+    if (is.null(x$rope)) {
       p <- ncol(x$partials_non_zero)
-      mat_names <- mu_mat <- ci_low <- ci_up <- mat_temp <- matrix(0, p, p)
-      mat_names[] <-  unlist(lapply(1:p, function(z) paste(1:p, z, sep = "--")))
+      mat_names <-
+        mu_mat <- ci_low <- ci_up <- mat_temp <- matrix(0, p, p)
+      mat_names[] <-
+        unlist(lapply(1:p, function(z)
+          paste(1:p, z, sep = "--")))
 
       low <- (1 - x$ci) / 2
       up  <-  1 - low
@@ -843,31 +619,46 @@ print_select_estimate <- function(x, summarize = FALSE, ...){
       mu_mat[] <-  colMeans(x$pcor_samples)
       sd <-  x$pcor_sd[upper.tri(x$pcor_sd)]
       cis <- apply(x$pcor_samples, 2, quantile, c(low, up))
-      ci_low[] <- cis[1,]
-      ci_up[] <- cis[2,]
+      ci_low[] <- cis[1, ]
+      ci_up[] <- cis[2, ]
 
-      summ <- data.frame(edge = mat_names[upper.tri(mat_names)],
-                         post_mean = mu_mat[upper.tri(mu_mat)],
-                         post_sd = x$pcor_sd[upper.tri(x$pcor_sd)],
-                         temp1 = ci_low[upper.tri(ci_low)],
-                         temp2 = ci_up[upper.tri(ci_up)],
-                         check.names = F)
+      summ <- data.frame(
+        edge = mat_names[upper.tri(mat_names)],
+        post_mean = mu_mat[upper.tri(mu_mat)],
+        post_sd = x$pcor_sd[upper.tri(x$pcor_sd)],
+        temp1 = ci_low[upper.tri(ci_low)],
+        temp2 = ci_up[upper.tri(ci_up)],
+        check.names = F
+      )
 
-      colnames(summ) <- c("Edge", "Estimate", "Est.Error",  paste(c("lb.", "ub."),
-                                                                  gsub("*0.","", formatC( round(x$ci, 4), format='f', digits=2)), "%", sep = ""))
-      cat("Credible Interval:", gsub("^.*\\.","", x$ci), "% \n")
+      colnames(summ) <-
+        c("Edge",
+          "Estimate",
+          "Est.Error",
+          paste(c("lb.", "ub."),
+                gsub(
+                  "*0.", "", formatC(round(x$ci, 4), format = 'f', digits = 2)
+                ), "%", sep = ""))
+      cat("Credible Interval:", gsub("^.*\\.", "", x$ci), "% \n")
       cat("Connectivity:", round(mean(x$adjacency_non_zero[upper.tri(x$adjacency_non_zero)]) * 100, 1), "% \n")
       cat("--- \n")
       cat("Call:\n")
       print(x$call)
       cat("--- \n")
       cat("Estimates: \n \n")
-      print(summ, row.names = F,...)
+      print(summ, row.names = F, ...)
       cat("--- \n")
 
-    }else{
+    } else{
       cat("Probability:", x$prob, "\n")
-      cat("Region of Practical Equivalence:", "[", -1 * x$rope, ", ", x$rope, "]", "\n", sep = "")
+      cat("Region of Practical Equivalence:",
+          "[",
+          -1 * x$rope,
+          ", ",
+          x$rope,
+          "]",
+          "\n",
+          sep = "")
       cat("Connectivity:", round(mean(x$adjacency_non_zero[upper.tri(x$adjacency_non_zero)]) * 100, 1), "% \n")
       cat("--- \n")
       cat("Call:\n")
@@ -879,7 +670,9 @@ print_select_estimate <- function(x, summarize = FALSE, ...){
 
       p <- ncol(x$partials_non_zero)
       mat_names <- mu_mat <- rope_in  <- matrix(0, p, p)
-      mat_names[] <-  unlist(lapply(1:p, function(z) paste(1:p, z, sep = "--")))
+      mat_names[] <-
+        unlist(lapply(1:p, function(z)
+          paste(1:p, z, sep = "--")))
 
       low <- (1 - x$ci) / 2
       up  <-  1 - low
@@ -890,16 +683,18 @@ print_select_estimate <- function(x, summarize = FALSE, ...){
       rope_in[] <- x$in_rope
 
       cat("Estimates: \n \n")
-      summ <- data.frame(edge = mat_names[upper.tri(mat_names)],
-                         post_mean = mu_mat[upper.tri(mu_mat)],
-                         post_sd = x$pcor_sd[upper.tri(x$pcor_sd)],
-                         "pr_out" = 1 - rope_in[upper.tri(rope_in)],
-                         "pr_in" = rope_in[upper.tri(rope_in)],
-                         check.names = F)
+      summ <- data.frame(
+        edge = mat_names[upper.tri(mat_names)],
+        post_mean = mu_mat[upper.tri(mu_mat)],
+        post_sd = x$pcor_sd[upper.tri(x$pcor_sd)],
+        "pr_out" = 1 - rope_in[upper.tri(rope_in)],
+        "pr_in" = rope_in[upper.tri(rope_in)],
+        check.names = F
+      )
 
       colnames(summ) <- c("Edge", "Estimate",
                           "Est.Error",  "Pr.out", "Pr.in")
-      print(summ, row.names = F,...)
+      print(summ, row.names = F, ...)
       cat("--- \n")
     }
   }
@@ -2136,6 +1931,9 @@ word2num <- function(word){
   return(list(word,out))
 }
 
+
+
+
 numbers2words <- function(x){
   ## Function by John Fox found here:
   ## http://tolstoy.newcastle.edu.au/R/help/05/04/2715.html
@@ -2187,14 +1985,19 @@ numbers2words <- function(x){
   helper(x)
 }
 
+
+# make names for inverse
 samps_inv_helper <- function(x, p){
-  inv <- paste("cov_inv", paste(paste("[", paste( 1:p, x, sep = ","), sep = ""), "]", sep = ""), sep = "")
+  inv <- paste("cov_inv", paste(paste("[", paste( 1:p, x, sep = ","),
+                                      sep = ""), "]", sep = ""), sep = "")
   inv
 }
 
+# make names for partials
 samps_pcor_helper <- function(x, p){
 
-  pcors <- paste("pcors", paste(paste("[", paste( 1:p, x, sep = ","), sep = ""), "]", sep = ""), sep = "")
+  pcors <- paste("pcors", paste(paste("[", paste( 1:p, x, sep = ","),
+                                      sep = ""), "]", sep = ""), sep = "")
   pcors
 }
 
@@ -2220,22 +2023,29 @@ hyp_converter <- function(x){
   list(hyp_converted = hyp_converted, words = words)
 }
 
+
 performance <- function(Estimate, True){
 
   True <- as.matrix(True)
+
   Estimate <- as.matrix(Estimate)
 
   # True Negative
   TN <- ifelse(True[upper.tri(True)] == 0 & Estimate[upper.tri(Estimate)] == 0, 1, 0); TN <- sum(TN)
+
   # False Positive
   FP <- ifelse(True[upper.tri(True)] == 0 & Estimate[upper.tri(Estimate)] != 0, 1, 0); FP <- sum(FP)
+
   # True Positive
   TP <- ifelse(True[upper.tri(True)] != 0 & Estimate[upper.tri(Estimate)] != 0, 1, 0); TP <- sum(TP)
+
   # False Negatives
   FN <- ifelse(True[upper.tri(True)] != 0 & Estimate[upper.tri(Estimate)] == 0, 1, 0); FN <- sum(FN)
 
   Specificity <- TN/(TN + FP)
+
   Sensitivity <- TP/(TP + FN)
+
   Precision <- TP/(TP + FP)
 
   Recall <- TP / (TP + FN)
@@ -2244,8 +2054,20 @@ performance <- function(Estimate, True){
 
   MCC <- (TP*TN - FP*FN)/sqrt((TP+FP)*(TP+FN)*(TN+FP)*(TN+FN))
 
-  results <- c(Specificity, Sensitivity, Precision, Recall,  F1_score, MCC)
-  results_name <- c("Specificity", "Sensitivity", "Precision", "Recall",  "F1_score", "MCC")
+  results <- c(Specificity,
+               Sensitivity,
+               Precision,
+               Recall,
+               F1_score,
+               MCC)
+
+  results_name <- c("Specificity",
+                    "Sensitivity",
+                    "Precision",
+                    "Recall",
+                    "F1_score",
+                    "MCC")
+
   results <- cbind.data.frame(measure = results_name, score = results)
   list(results = results)
 
@@ -2253,7 +2075,7 @@ performance <- function(Estimate, True){
 }
 
 ################
-#taken and modified from the package orddata
+# taken and modified from the package orddata
 # under the GPL-2 licence
 rmvord_naiv <-  function(n, probs, Cors, empirical) {
 

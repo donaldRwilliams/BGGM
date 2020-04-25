@@ -97,57 +97,63 @@ explore <- function(Y,
                     mixed_type = NULL,
                     prior_sd = 0.25,
                     iter = 5000,
-                    cores = 2,...){
-  # rename
-  X <- Y
+                    cores = 2,
+                    seed = 1,...){
+
+
+  # set seed
+  set.seed(seed)
 
   # delta parameter
   delta <- delta_solve(prior_sd)
 
   # remove NAs
-  X <- na.omit(X)
+  Y <- na.omit(Y)
 
   # number of columns
-  p <- ncol(X)
-
-  # matrices for storage
-  parcors_mat <- parcors_sd <- matrix(0, p, p)
+  p <- ncol(Y)
 
   # number of edges
   edges <- 0.5 * (p * (p -1))
 
 
   if(type == "continuous"){
-  # sample from posterior
-  samples <- sampling(X, nu = 10000,
-                      delta = delta, n_samples = iter,
-                      cores = cores)
 
-  # extract posterior samples (each "chain")
-  posterior_samples <- do.call(rbind.data.frame,
-                               lapply(1:cores, function(x)
-                                 samples[[x]]$pcor_post))
+    # remove mean
+    Y <- scale(Y, scale = F)
+
+    post_samp <- .Call('_BGGM_Theta_continuous',
+                       PACKAGE = 'BGGM',
+                       Y = Y,
+                       iter = iter + 50,
+                       delta = delta,
+                       epsilon = 0.001,
+                       prior_only = 0,
+                       explore = 1)
+
+    prior_samp <- .Call('_BGGM_Theta_continuous',
+                        PACKAGE = 'BGGM',
+                        Y = Y,
+                        iter = iter,
+                        delta = delta,
+                        epsilon = 0.001,
+                        prior_only = 1,
+                        explore = 1)
 
   # posterior mean
-  parcors_mat[upper.tri(parcors_mat)] <- colMeans(posterior_samples)[1:edges]
-  pacors_mat <- symmteric_mat(parcors_mat)
-
-  # posterior sd
-  parcors_sd[upper.tri(parcors_sd)] <- apply(posterior_samples, 2, sd)[1:edges]
-  pacors_sd <- symmteric_mat(parcors_sd)
+  pcor_mat <- apply(post_samp$pcors[,,51:(iter+50)], 1:2, mean)
 
   # returned object
-  returned_object <- list(parcors_mat = pacors_mat,
-                          parcors_sd = parcors_sd,
-                          samples = samples,
-                          delta = delta,
-                          iter = iter,
-                          dat = X,
-                          call = match.call(),
-                          p = p,
-                          cores = cores,
-                          edge = edges,
-                          type = type)
+  returned_object <- list(pcor_mat = pcor_mat,
+                            post_samp = post_samp,
+                            prior_samp = prior_samp,
+                            delta = delta,
+                            iter = iter,
+                            dat = Y,
+                            call = match.call(),
+                            p = p,
+                            edge = edges,
+                            type = type)
 
   } else if(type == "binary"){
 

@@ -108,17 +108,16 @@ select.explore <- function(object,
 
 
   if(x$type == "continuous"){
-  # posterior samples
-  posterior_samples <- do.call(rbind.data.frame,
-                               lapply(1:x$cores, function(z)
-                                 x$samples[[z]]$fisher_z_post))
 
-  # prior samples
-  prior_samples <- unlist(do.call(rbind.data.frame,
-                                  lapply(1:x$cores, function(z)
-                                  x$samples[[z]]$fisher_z_prior)))
+    # posterior samples
+    post_samp <- x$post_samp
 
-  } else if (x$type == "binary" | x$type == "ordinal" | x$type == "mixed"){
+    # prior samples
+    prior_samp <- x$prior_samp
+
+    } else if (x$type == "binary" |
+               x$type == "ordinal" |
+               x$type == "mixed"){
 
 
     posterior_samples <- x$samples$fisher_z_post
@@ -130,38 +129,33 @@ select.explore <- function(object,
   # two sided testing
   if(alternative == "two.sided"){
 
-    # matrices for storage
-    BF_10_mat <- BF_01_mat <- matrix(0, x$p, x$p)
+    # posterior
+    post_sd <- apply(post_samp$fisher_z[,,(51:x$iter)], 1:2, sd)
+    post_mean  <- x$pcor_mat
+    post_dens <- dnorm(0, post_mean, post_sd )
 
-    # prior density
-    prior_dens <- dnorm(0, mean(prior_samples), sd(prior_samples))
+    # prior
+    prior_sd <- apply(prior_samp$fisher_z[,,(51:x$iter)], 1:2, sd)
+    prior_dens <- dnorm(0, 0, mean(prior_sd))
 
-    # BF for alternative
-    BF_10 <- apply(posterior_samples, MARGIN = 2,
-                   FUN = function(z){ prior_dens / dnorm(0, mean(z), sd(z)) })
-
-    # BF for null
-    BF_01 <- 1 / BF_10
-
-    # alternative BF mat
-    BF_10_mat[upper.tri(BF_10_mat)] <- BF_10[1:x$edge]
-    BF_10_mat <- symmteric_mat(BF_10_mat)
-
-    # null BF mat
+    # BF
+    BF_10_mat <- prior_dens / post_dens
     BF_01_mat <- 1 / BF_10_mat
     diag(BF_01_mat) <- 0
+    diag(BF_10_mat) <- 0
 
-    # selected edges (alternative)
+    # selected: alternative
     Adj_10 <- ifelse(BF_10_mat > BF_cut, 1, 0)
 
-    # selected edges (null)
+    # selected: null
     Adj_01 <- ifelse(BF_10_mat < 1 / BF_cut, 1, 0)
     diag(Adj_01) <- 0
+    diag(Adj_10) <- 0
 
     # returned object
-    returned_object = list(partials_non_zero = x$parcors_mat * Adj_10,
-                           pcor_mat = round(x$parcors_mat,3),
-                           pcor_sd = round(x$parcors_sd,3),
+    returned_object = list(pcor_mat_zero = post_mean * Adj_10,
+                           pcor_mat = round(post_mean, 3),
+                           pcor_sd = round(post_sd, 3),
                            Adj_10 = Adj_10,
                            Adj_01 = Adj_01,
                            BF_10 = BF_10_mat,
@@ -170,199 +164,176 @@ select.explore <- function(object,
                            alternative = alternative,
                            call = match.call(),
                            type = x$type)
-  }
 
-  # one sided (greater)
-  if(alternative == "greater"){
+    # one sided greater
+    } else if(alternative == "greater"){
 
-    # prior density
-    prior_dens <- dnorm(0, mean(prior_samples), sd(prior_samples))
+      # posterior
+      post_sd <- apply(post_samp$fisher_z[,,(51:x$iter)], 1:2, sd)
+      post_mean  <- x$pcor_mat
+      post_dens <- dnorm(0, post_mean, post_sd )
 
-    # matrices for storage
-    BF_20_mat <- BF_01_mat <- matrix(0, x$p, x$p)
+      # prior
+      prior_sd <- apply(prior_samp$fisher_z[,,(51:x$iter)], 1:2, sd)
+      prior_dens <- dnorm(0, 0, mean(prior_sd))
 
-    # BF for alternative
-    BF_10 <- apply(posterior_samples, MARGIN = 2,
-                   FUN = function(z){ prior_dens / dnorm(0, mean(z), sd(z)) })
+      # BF (two sided)
+      BF_10_mat <- prior_dens / post_dens
 
-    # density greater than zero
-    dens_greater <-  apply(posterior_samples, MARGIN = 2,
-                           FUN = function(z){ (1  - pnorm(0, mean(z), sd(z))) * 2 })
+      # BF one sided
+      BF_20_mat <-  BF_10_mat * ((1 - pnorm(0, post_mean, post_sd)) * 2)
 
-    # one sided BF
-    BF_20 <- dens_greater * (BF_10)
+      # BF null
+      BF_02_mat <- 1 / BF_20_mat
+      diag(BF_02_mat) <- 0
+      diag(BF_20_mat) <- 0
 
-    # BF null
-    BF_01 <- 1 / BF_10
+      # selected edges (alternative)
+      Adj_20 <- ifelse(BF_20_mat > BF_cut, 1, 0)
 
-    # alternative BF mat
-    BF_20_mat[upper.tri(BF_20_mat)] <- BF_20[1:x$edge]
-    BF_20_mat <- symmteric_mat(BF_20_mat)
+      # selected edges (null)
+      Adj_02 <- ifelse(BF_02_mat > BF_cut, 1, 0)
+      diag(Adj_02) <- 0
+      diag(Adj_20) <- 0
 
-    # null BF mat
-    BF_01_mat[upper.tri(BF_01_mat)] <- BF_01[1:x$edge]
-    BF_01_mat <- symmteric_mat(BF_01_mat)
-    diag(BF_01_mat) <- 0
+      # returned object
+      returned_object = list(
+        pcor_mat_zero = post_mean * Adj_20,
+        pcor_mat = round(post_mean, 3),
+        pcor_sd = round(post_sd, 3),
+        Adj_20 = Adj_20,
+        Adj_02 = Adj_02,
+        BF_20 = BF_20_mat,
+        BF_02 = BF_02_mat,
+        BF_cut = BF_cut,
+        alternative = alternative,
+        call = match.call(),
+        type = x$type
+      )
 
-    # selected edges (alternative)
-    Adj_20 <- ifelse(BF_20_mat > BF_cut, 1, 0)
+    # one side less
+    } else if(alternative == "less")  {
 
-    # selected edges (null)
-    Adj_01 <- ifelse(BF_01_mat > BF_cut, 1, 0)
-    diag(Adj_01) <- 0
+      # posterior
+      post_sd <- apply(post_samp$fisher_z[,,(51:x$iter)], 1:2, sd)
+      post_mean  <- x$pcor_mat
+      post_dens <- dnorm(0, post_mean, post_sd )
 
-    # returned object
-    returned_object = list(partials_positive = x$parcors_mat * Adj_20,
-                           pcor_mat = round(x$parcors_mat,3),
-                           pcor_sd = round(x$parcors_sd,3),
-                           Adj_01 = Adj_01,
-                           Adj_20 =  Adj_20,
-                           BF_20 = BF_20_mat,
-                           BF_01 = BF_01_mat,
-                           BF_cut = BF_cut,
-                           alternative = alternative,
-                           call = match.call(),
-                           type = x$type)
+      # prior
+      prior_sd <- apply(prior_samp$fisher_z[,,(51:x$iter)], 1:2, sd)
+      prior_dens <- dnorm(0, 0, mean(prior_sd))
+
+      # BF (two sided)
+      BF_10_mat <- prior_dens / post_dens
+
+      # BF one sided
+      BF_20_mat <- BF_10_mat * (pnorm(0, post_mean, post_sd) * 2)
+
+      # BF null
+      BF_02_mat <- 1 / BF_20_mat
+      diag(BF_02_mat) <- 0
+      diag(BF_20_mat) <- 0
+
+      # selected edges (alternative)
+      Adj_20 <- ifelse(BF_20_mat > BF_cut, 1, 0)
+
+      # selected edges (null)
+      Adj_02 <- ifelse(BF_02_mat > BF_cut, 1, 0)
+      diag(Adj_02) <- 0
+      diag(Adj_20) <- 0
+
+      # returned object
+      returned_object = list(
+        pcor_mat_zero = post_mean * Adj_20,
+        pcor_mat = round(post_mean, 3),
+        pcor_sd = round(post_sd, 3),
+        Adj_20 = Adj_20,
+        Adj_02 = Adj_02,
+        BF_20 = BF_20_mat,
+        BF_02 = BF_02_mat,
+        BF_cut = BF_cut,
+        alternative = alternative,
+        call = match.call(),
+        type = x$type
+      )
+
+      # exhaustive testing
+      } else if (alternative == "exhaustive")
+
+        if(alternative == "exhaustive"){
+
+          if(is.null(hyp_prob)){
+
+            stop("posterior probability must be specificed \n for exhaustive hypothesis testing")
+
+            }
 
 
-  }
+          mat_names <-  matrix(0, x$p, x$p)
 
-  # one sided (less)
-  if(alternative == "less")  {
+          # matrix names
+          mat_names[] <-  unlist(lapply(1:x$p,
+                                        FUN = function(z) paste(1:x$p, z, sep = "--")))
 
-    # prior density
-    prior_dens <- dnorm(0, mean(prior_samples), sd(prior_samples))
+          # posterior
+          post_sd <- apply(post_samp$fisher_z[,,(51:x$iter)], 1:2, sd)
+          post_mean  <- x$pcor_mat
+          post_dens <- dnorm(0, post_mean, post_sd)
 
-    # matrices for storage
-    BF_20_mat <- BF_01_mat <- matrix(0, x$p, x$p)
+          # prior
+          prior_sd <- apply(prior_samp$fisher_z[,,(51:x$iter)], 1:2, sd)
+          prior_dens <- dnorm(0, 0, mean(prior_sd))
 
-    # BF for alternative
-    BF_10 <- apply(posterior_samples, MARGIN = 2,
-                   FUN = function(z){ prior_dens / dnorm(0, mean(z), sd(z)) })
+          # BF (two sided)
+          BF_10_mat <- prior_dens / post_dens
 
-    # density less than zero
-    dens_less <-  apply(posterior_samples, MARGIN = 2,
-                        FUN = function(z){ (pnorm(0, mean(z), sd(z))) * 2 })
+          # BF less
+          BF_less <- BF_10_mat  * (pnorm(0, post_mean, post_sd) * 2)
+          BF_greater <-  BF_10_mat * ((1 - pnorm(0, post_mean, post_sd)) * 2)
 
-    # one sided BF
-    BF_20 <- dens_less * (BF_10)
+          # BF null
+          BF_null <- 1 / BF_10_mat
 
-    # BF null
-    BF_01 <- 1 / BF_10
+          prob_null <-  BF_null / (BF_null + BF_greater + BF_less)
+          prob_greater <-  BF_greater / (BF_null + BF_greater + BF_less)
+          prob_less <-  BF_less / (BF_null + BF_greater + BF_less)
 
-    # alternative BF mat
-    BF_20_mat[upper.tri(BF_20_mat)] <- BF_20[1:x$edge]
-    BF_20_mat <- symmteric_mat(BF_20_mat)
+          prob_mat <-  prob_null + prob_greater + prob_less
 
-    # null BF mat
-    BF_01_mat[upper.tri(BF_01_mat)] <- BF_01[1:x$edge]
-    BF_01_mat <- symmteric_mat(BF_01_mat)
-    diag(BF_01_mat) <- 0
+          prob_dat = data.frame(edge = mat_names[upper.tri(mat_names)],
+                                prob_zero = prob_null[upper.tri(prob_null)],
+                                prob_greater = prob_greater[upper.tri(prob_greater)],
+                                prob_less = prob_less[upper.tri(prob_less)])
 
-    # selected edges (alternative)
-    Adj_20 <- ifelse(BF_20_mat > BF_cut, 1, 0)
+          # no rownames
+          row.names(prob_dat) <- c()
 
-    # selected edges (null)
-    Adj_01 <- ifelse(BF_01_mat > BF_cut, 1, 0)
-    diag(Adj_01) <- 0
+          # selected  (null)
+          null_mat <- ifelse(prob_null > hyp_prob, 1, 0)
 
-    # returned object
-    returned_object = list(partials_negative = x$parcors_mat * Adj_20,
-                           pcor_mat = round(x$parcors_mat,3),
-                           pcor_sd = round(x$parcors_sd, 3),
-                           Adj_01 = Adj_01,
-                           Adj_20 = Adj_20,
-                           BF_20 = BF_20_mat,
-                           BF_01 = BF_01_mat,
-                           BF_cut = BF_cut,
-                           alternative = alternative,
-                           call = match.call(),
-                           type = x$type)
+          # selected (positive)
+          pos_mat <-  ifelse(prob_greater > hyp_prob, 1, 0)
 
-  }
 
-  # exhaustive testing
-  if(alternative == "exhaustive"){
+          # selected  (negative)
+          neg_mat <-  ifelse(prob_less > hyp_prob, 1, 0)
 
-    if(is.null(hyp_prob)){
-      stop("posterior probability must be specificed \n for exhaustive hypothesis testing")
+          # negative edges
+          returned_object <- list(
+            post_prob = prob_dat,
+            neg_mat = neg_mat,
+            pos_mat = pos_mat,
+            null_mat = null_mat,
+            alternative = alternative,
+            pcor_mat = round(post_mean, 3),
+            pcor_sd = round(post_sd, 3),
+            call = match.call(),
+            prob = hyp_prob,
+            type = x$type
+          )
+        } else {
 
-    }
-
-    # matrices for storage
-    mat_names <- null_mat <- pos_mat <- neg_mat <- matrix(0, x$p, x$p)
-
-    # matrix names
-    mat_names[] <-  unlist(lapply(1:x$p,
-                                  FUN = function(z) paste(1:x$p, z, sep = "--")))
-
-    # prior density
-    prior_dens <- dnorm(0, mean(prior_samples), sd(prior_samples))
-
-    # two sided BF
-    BF_10 <- apply(posterior_samples, MARGIN = 2,
-                   FUN = function(z){ prior_dens / dnorm(0, mean(z), sd(z)) })
-
-    # density less than zero
-    dens_less <-  apply(posterior_samples, MARGIN = 2,
-                        FUN = function(z){ (pnorm(0, mean(z), sd(z))) * 2 })
-
-    # BF less than zero
-    BF_less <- dens_less * (BF_10)
-
-    # BF null
-    BF_01 <- 1 / BF_10
-
-    # density greater than zero
-    dens_greater <-  apply(posterior_samples, MARGIN = 2,
-                           FUN = function(z){ (1  - pnorm(0, mean(z), sd(z))) * 2 })
-
-    # BF greater than zero
-    BF_greater <- dens_greater * (BF_10)
-
-    # combine BFs
-    BF_mat <- data.frame(BF_01 = BF_01,
-                         BF_greater = BF_greater,
-                         BF_less = BF_less)
-
-    # posterior hypothesis probabilities
-    post_prob <-  data.frame(t(apply(BF_mat, 1, FUN = function(x) { round(x / sum(x),3) })))
-
-    # column names
-    colnames(post_prob) <- c("prob_zero", "prob_greater", "prob_less")
-
-    # no rownames
-    row.names(post_prob) <- c()
-
-    # round
-    post_prob <-  round(post_prob, 3)
-
-    # combine probabilities and edge names
-    post_prob <- cbind.data.frame(edge = mat_names[upper.tri(mat_names)], post_prob)[1:x$edge,]
-
-    # selected edges (null)
-    null_mat[upper.tri(null_mat)] <- ifelse(post_prob$prob_zero > hyp_prob, 1, 0)
-    null_mat <- symmteric_mat(null_mat)
-
-    # selected edges (positive)
-    pos_mat[upper.tri(pos_mat)] <-  ifelse(post_prob$prob_greater >  hyp_prob, 1, 0)
-    pos_mat <- symmteric_mat(pos_mat)
-
-    # selected edges (negative)
-    neg_mat[upper.tri(neg_mat)]  <-  ifelse(post_prob$prob_less > hyp_prob, 1 , 0)
-    neg_mat <- symmteric_mat(neg_mat)
-
-    # negative edges
-    returned_object <- list(post_prob = post_prob,
-                            neg_mat = neg_mat,
-                            pos_mat = pos_mat,
-                            null_mat = null_mat,
-                            alternative = alternative,
-                            pcor_mat = round(x$parcors_mat,3),
-                            pcor_sd = round(x$parcors_sd, 3),
-                            call = match.call(),
-                            prob = hyp_prob,
-                            type = x$type)
+          stop("alternative not supported. see documentation")
     }
 
   class(returned_object) <- c("BGGM",

@@ -65,8 +65,10 @@ ggm_compare_bf <- function(..., prior_sd = 0.20,
   groups <- length(info$dat)
 
   if(groups < 2){
+
     stop("must have (at least) two groups")
-  }
+
+    }
 
   delta <- delta_solve(prior_sd)
 
@@ -89,17 +91,11 @@ ggm_compare_bf <- function(..., prior_sd = 0.20,
     post_samps[[i]] <- do.call(rbind.data.frame,  lapply(1:cores, function(x)   fits[[i]][[x]]$fisher_z_post[,1:edges]))
 
   }
+  post_string <- list()
+  prior_string <- list()
 
-
-
-
-    post_string <- list()
-    prior_string <- list()
-
-
-
-    mu_diff <- list()
-    sd_diff <- list()
+  mu_diff <- list()
+  sd_diff <- list()
 
     for(i in 1:groups){
 
@@ -122,6 +118,7 @@ ggm_compare_bf <- function(..., prior_sd = 0.20,
     prior_string <- do.call(rbind, prior_string)
 
     BF <- NA
+
     for(i in 1:edges){
 
       # temporary string
@@ -152,7 +149,7 @@ ggm_compare_bf <- function(..., prior_sd = 0.20,
 
       # bayes factor
       log_BF <- mvnfast::dmvn(X = t(mats$r_e), mu = mu1, sigma = s1, log = TRUE) -
-        mvnfast::dmvn(X = t(mats$r_e), mu = mu0, sigma = s0, log = TRUE)
+                mvnfast::dmvn(X = t(mats$r_e), mu = mu0, sigma = s0, log = TRUE)
 
       BF[i] <- exp(log_BF)
 
