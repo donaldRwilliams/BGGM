@@ -2,23 +2,25 @@
 % Please edit documentation in R/ggm_compare_bf.default.R
 \name{ggm_compare_bf}
 \alias{ggm_compare_bf}
-\title{Compare GGMs with Bayesian Hypothesis Testing}
+\title{Compare GGMs: Exploratory Bayesian Hypothesis Testing}
 \usage{
 ggm_compare_bf(..., prior_sd = 0.2, iter = 5000, seed = 1)
 }
 \arguments{
-\item{...}{data matrices (\emph{n} by  \emph{p}). Requires at least two.}
+\item{...}{at least two matrices (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).}
 
-\item{prior_sd}{hypothesized standard deviation for the edges or partial correlations.}
+\item{prior_sd}{The scale of the prior distribution (centered at zero), in reference to a beta distribtuion.
+The `default` is 0.25. See note for further details.}
 
-\item{iter}{number of posterior samples.}
+\item{iter}{number of iterations (posterior samples; defaults to 5000).}
 
-\item{cores}{number of cores for parallel computing. The default is 2, but this can be adjusted.}
+\item{seed}{The seed for random number generation (default set to \code{1})}
 }
 \value{
 list of class \code{ggm_compare_bf}
 \itemize{
-\item \code{BF_01} Bayes factors in favor of the null hypothesis
+\item \code{BF_01}  Bayes factors in favor of the null hypothesis.
+\item \code{pcor_diff} partial correlation difference (for two groups only)
 \item \code{p} number of variables
 \item  \code{info} list of information about the data matrices
 
@@ -32,19 +34,35 @@ list of class \code{ggm_compare_bf}
 \item \code{delta} hyperparameter of matrix-F prior distribution (corresponds to \code{prior_sd})
 
 \item \code{groups} number of groups
-\item \code{post_samps} matrix of posterior samples
-\item \code{prior_samps} matrix of prior samples
+\item \code{post_samp} matrix of posterior samples
 }
 }
 \description{
-Compare GGMs with the Bayes factor. This method allows for
-assessing (relative) evidence for edge equality or edges differences across any number of groups. Further, confirmatory hypothesis testing
-can be used to test predictions or expectations regarding difference or similarities in different groups (e.g., male vs. female).
+Compare Gaussian graphical models with (exploratory) Bayesian hypothesis testing using the matrix-F prior
+distribution \insertCite{Mulder2018}{BGGM}. A test for each partial correlation in the model for any number of groups.
+This provides evidence for the null hypothesis of no difference and the alternative hypothesis
+of difference. With more than two groups, the test is for \emph{all} groups simultaneously (i.e., the relation is the same or different in all groups).
+This method was introduced in \insertCite{williams2020comparing;textual}{BGGM}. For confirmatory hypothesis testing see
+\code{confirm_groups}.
 }
 \note{
-After fitting, use \code{select} to determine which partial correlations were different or the same (i.e., evidence for the null hypothesis of
-equality). This assumes \code{hypothesis = NULL}. If a hypothesis is tested, then use \code{summary} which provides
-information including the Bayes factors and posterior probabilities for each hypothesis.
+\strong{More than Two Groups:}
+
+ It is possible to compare any number of group. This does \emph{not} provide pairwise differences. Rather, the test
+ is for all group, say, that each partial correlation is the same in each. This is analagous to an ANOVA--an
+ `omnibus` test that does not indicate which groups are different. A follow up test would be required for this purpose.
+
+
+
+\strong{A Note on Defaults:}
+
+The `default` for \code{prior_sd} is 0.25. This can and should be changed to reflect the hypothesized difference.
+If differences are expected to be small the \code{prior_sd} should be set to a smaller value (e.g., 0.15).
+This might raise concerns of the `correct` prior.` Note, however, that the interpretation remains unchanged: which hypothesis better
+predicts the observed data. \insertCite{@p. 777, in  @Kass1995}{BGGM}
+
+If the desired inference is \emph{not} (relative) evidence between models, the method in \code{\link{ggm_compare_estimate}}
+(for each partial correlation ) or  \code{\link{ggm_compare_ppc}} (a global test) can be used.
 }
 \examples{
 \donttest{

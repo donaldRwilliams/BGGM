@@ -64,7 +64,8 @@ list of class \code{explore}:
 }
 }
 \description{
-Learn the conditional (in)dependence structure with the Bayes factor computed from the matrix-F prior distribution. It is
+Learn the conditional (in)dependence structure with the Bayes factor using the matrix-F prior distribution
+\insertCite{Mulder2018}{BGGM}. It is
 possible to test for only positive or negative edges, as well as two sided hypothesis testing (which is the customary approach). Further
 there is also an exhaustive option that provides the posterior probability of the null, greater than zero, and less than zero.
 These methods were introduced in \insertCite{Williams2019_bf;textual}{BGGM}.

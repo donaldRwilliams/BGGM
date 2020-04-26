@@ -2158,3 +2158,34 @@ globalVariables(c('Y1','Y2',
                   'Post.mean',
                   'L1', 'lag', 'acf',
                   'iteration'))
+
+
+
+gen_pcors <- function (p = 20, edge_prob = 0.3, lb = 0.05, ub = 0.3) {
+  d <- -1
+  trys <- 0
+  while (d < 0) {
+    trys <- trys + 1
+    effects <- p * (p - 1) * 0.5
+    mat <- matrix(1, p, p)
+    prob_zero <- 1 - edge_prob
+    pool <- c(rep(0, effects * prob_zero), runif(effects *
+                                                   edge_prob, lb, ub))
+    if (length(pool) != effects) {
+      pool <- c(0, pool)
+    }
+    mat[upper.tri(mat)] <- sample(pool, size = effects)
+    pcs <- BGGM:::symmteric_mat(mat)
+    pcs <- -pcs
+    diag(pcs) <- -diag(pcs)
+    d <- det(pcs)
+  }
+  cors <- cov2cor(solve(pcs))
+  inv <- solve(cors)
+  pcors <- cov2cor(inv) * -1
+  diag(pcors) <- 1
+  adj <- ifelse(pcs == 0, 0, 1)
+  returned_object <- list(pcors = pcors, cors = cors, trys = trys,
+                          pcs = pcs, adj = adj)
+  returned_object
+}
