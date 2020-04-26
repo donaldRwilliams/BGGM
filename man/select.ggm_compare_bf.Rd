@@ -2,16 +2,16 @@
 % Please edit documentation in R/select.ggm_compare_bf.R
 \name{select.ggm_compare_bf}
 \alias{select.ggm_compare_bf}
-\title{Select Graphical Structure with the Bayes Factor}
+\title{Select Partial Correlattion Differences for \code{ggm_compare_bf} Objects}
 \usage{
-\method{select}{ggm_compare_bf}(object, BF_cut = 3, ...)
+\method{select}{ggm_compare_bf}(object, post_prob = 0.5, ...)
 }
 \arguments{
-\item{object}{object of class \code{ggm_compare_bf}}
+\item{object}{object of class \code{ggm_compare_bf}.}
 
-\item{BF_cut}{evidentiary threshold}
+\item{post_prob}{numeric. Posterior `inclusion` probability.  The default is set to 0.50.}
 
-\item{...}{currently ignored}
+\item{...}{not currently used.}
 }
 \value{
 list of class \code{select.ggm_compare_bf}
@@ -27,14 +27,7 @@ list of class \code{select.ggm_compare_bf}
 }
 }
 \description{
-Compare GGMs with the Bayes factor. This method allows for
-assessing (relative) evidence for edge equality or edges differences across any number of groups. Further, confirmatory hypothesis testing
-can be used to test predictions or expectations regarding difference or similarities in different groups (e.g., male vs. female).
-}
-\note{
-The test provides relative evidence for whether all groups have the same edge strength (for each edge in the model). It is possible to test whether
-many groups are all the same. In this case, if there is evidence for the alternative (not equal), information is not immediately available for which group differs
-from the others. Thus pairwise group contrasts could be used after testing the equality of more than two groups.
+Select Partial Correlattion Differences for \code{ggm_compare_bf} Objects
 }
 \examples{
 \donttest{

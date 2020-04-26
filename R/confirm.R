@@ -139,71 +139,70 @@ confirm <- function(Y, hypothesis,
                     data = NULL,
                     type = "continuous",
                     mixed_type = NULL,
-                    iter = 25000,
-                    cores = 2){
+                    iter = 25000){
 
-  # set prior prob to 1--i.e., equal
-  priorprob = 1
+
+  if(type != "continuous"){
+
+    stop("dev version: ordinal, binary, and mixed data will be implemented soon")
+
+    }
+
+  Y <- as.matrix(scale(na.omit(Y), scale = F))
+
+  priorprob <- 1
 
   # hyperparameter
-  delta <- delta_solve(prior_sd)
+  delta <- BGGM:::delta_solve(prior_sd)
 
   # variables
   p <- ncol(Y)
 
+  # I_p
+  I_p <- diag(p)
+
   # number of edges
-  edges <- p*(p-1)*0.5
+  pcors <- p*(p-1)*0.5
 
-  if(type == "continuous"){
-  fit <- explore(Y,  prior_sd = prior_sd,
-                 iter = iter,  cores = cores)
+  # sample posterior
+  post_samp <- .Call(
+    '_BGGM_Theta_continuous',
+    PACKAGE = 'BGGM',
+    Y = Y,
+    iter = iter + 50,
+    delta = delta,
+    epsilon = 0.01,
+    prior_only = 0,
+    explore = 1
+  )
 
+  # sample prior
+  prior_samp <- .Call(
+    '_BGGM_Theta_continuous',
+    PACKAGE = 'BGGM',
+    Y = Y,
+    iter = 10000,
+    delta = delta,
+    epsilon = 0.01,
+    prior_only = 1,
+    explore = 0
+  )$fisher_z
 
-  # posterior
-  posterior_samples <- do.call(rbind.data.frame,
-                               lapply(1:fit$cores, function(z)
-                                 fit$samples[[z]]$fisher_z_post))[1:edges]
+  col_names <- BGGM:::numbers2words(1:p)
 
-  # prior samples
-  prior_samples <-  do.call(rbind.data.frame,
-                               lapply(1:fit$cores, function(z)
-                                 fit$samples[[z]]$fisher_z_prior))[1:edges]
+  mat_name <- sapply(col_names, function(x) paste(col_names,x, sep = ""))[upper.tri(I_p)]
 
-  } else if( type == "binary" | type == "ordinal" | type == "mixed"){
+  posterior_samples <- matrix(post_samp$fisher_z[, , 51:(iter+50)][upper.tri(I_p)],
+                              iter, pcors,
+                              byrow = TRUE)
 
-    if(type != "mixed"){
-    samples <- sampling_helper_poly(Y, delta, iter, type)
-    } else {
+  prior_samples <- matrix(prior_samp[,,][upper.tri(I_p)],iter, pcors, byrow = TRUE)
 
+  colMeans(posterior_samples)
 
-      if(is.null(mixed_type)) {
+  colnames(posterior_samples) <- mat_name
 
-        idx = colMeans(round(Y) == Y)
-
-        idx = ifelse(idx == 1, 1, 0)
-
-      } else {
-
-        idx = mixed_type
-
-      }
-
-
-
-      samples <- sampling_helper_poly(Y, delta, iter,
-                                      type = type,
-                                      mixed_type = idx)
-
-
-
-    }
-
-
-    posterior_samples <- samples$fisher_z_post[,1:edges]
-
-    prior_samples <- samples$fisher_z_prior[,1:edges]
-
-  }
+  colnames(prior_samples) <- mat_name
 
   prior_mu <- colMeans(prior_samples)
 
@@ -215,14 +214,15 @@ confirm <- function(Y, hypothesis,
 
   BFprior <- BF(prior_mu,
                 Sigma = prior_cov,
-                hypothesis = convert_hyps(hypothesis, Y = Y),
+                hypothesis = BGGM:::convert_hyps(hypothesis, Y = Y),
                 n = 1)
 
 
   BFpost <- BF(post_mu,
                Sigma = post_cov,
-               hypothesis = convert_hyps(hypothesis, Y = Y),
+               hypothesis = BGGM:::convert_hyps(hypothesis, Y = Y),
                n = 1)
+
 
   # number of hypotheses
   n_hyps <- nrow(BFpost$BFtable_confirmatory)
@@ -247,7 +247,6 @@ confirm <- function(Y, hypothesis,
 
   BF_matrix[is.nan(BF_matrix)] <- 0
   diag(BF_matrix) <- 1
-  BF_matrix
 
   BF_matrix <- t(BF_matrix) / (BF_matrix)
 

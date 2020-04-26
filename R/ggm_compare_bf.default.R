@@ -29,6 +29,9 @@
 #'
 #' @param seed The seed for random number generation (default set to \code{1}).
 #'
+#' @references
+#' \insertAllCited{}
+#'
 #'
 #' @return list of class \code{ggm_compare_bf}
 #' \itemize{
@@ -134,7 +137,7 @@ ggm_compare_bf <- function(...,
   # sample posterior
   post_samp <- lapply(1:groups, function(x) {
 
-    Y <- info$dat[[x]]
+    Y <- as.matrix(scale(info$dat[[x]], scale = FALSE))
 
     .Call(
       '_BGGM_Theta_continuous',

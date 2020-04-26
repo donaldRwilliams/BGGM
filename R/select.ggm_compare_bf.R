@@ -1,15 +1,10 @@
 #' Select Partial Correlattion Differences for \code{ggm_compare_bf} Objects
 #'
-#'
-#'
 #' @param object object of class \code{ggm_compare_bf}.
 #'
 #' @param post_prob numeric. Posterior `inclusion` probability.  The default is set to 0.50.
 #'
 #' @param ... not currently used.
-#' @note The test provides relative evidence for whether all groups have the same edge strength (for each edge in the model). It is possible to test whether
-#' many groups are all the same. In this case, if there is evidence for the alternative (not equal), information is not immediately available for which group differs
-#' from the others. Thus pairwise group contrasts could be used after testing the equality of more than two groups.
 #'
 #' @return list of class \code{select.ggm_compare_bf}
 #'
@@ -46,7 +41,7 @@ select.ggm_compare_bf <- function(object, post_prob = 0.50,...){
 
   x <- object
 
-  BF_cut = (1 - post_prob) / (1 - post_prob)
+  BF_cut = (post_prob) / (1 - post_prob)
 
   BF_10 <- 1/ x$BF_01
 
