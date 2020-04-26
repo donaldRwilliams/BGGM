@@ -55,129 +55,150 @@
 #' plot(sel)
 #'
 #' }
-ggm_compare_bf <- function(..., prior_sd = 0.20,
-                           iter = 25000, cores = 2){
+ggm_compare_bf <- function(...,
+                           prior_sd = 0.20,
+                           iter = 5000,
+                           cores = 2){
 
-  priorprob <- 1
+  # group info (e.g., n, p, etc)
+  info <- BGGM:::Y_combine(Y1, Y2, Y3)
 
-  info <- BGGM:::Y_combine(Y1, Y2)
-
-  groups <- length(info$dat)
-
-  if(groups < 2){
-
-    stop("must have (at least) two groups")
-
-    }
-
-  delta <- delta_solve(prior_sd)
-
-  fits <- lapply(1:groups, function(x)   sampling(info$dat[[x]], nu = 10000,
-                                                         delta = delta,
-                                                         n_samples = iter,
-                                                         cores = cores))
-
+  # number of variables
   p <- info$dat_info$p[1]
 
-  edges <- 0.5 * (p * (p -1))
+  # groups
+  groups <- length(info$dat)
 
-  prior_samps <- list()
-  post_samps <- list()
-
-  for(i in 1:groups){
-
-    prior_samps[[i]] <- do.call(rbind.data.frame, lapply(1:cores, function(x)   fits[[i]][[x]]$fisher_z_prior[,1:edges]))
-
-    post_samps[[i]] <- do.call(rbind.data.frame,  lapply(1:cores, function(x)   fits[[i]][[x]]$fisher_z_post[,1:edges]))
-
-  }
-  post_string <- list()
-  prior_string <- list()
-
-  mu_diff <- list()
-  sd_diff <- list()
-
-    for(i in 1:groups){
-
-      post_string[[i]] <-   paste0("post_samps[[", i, "]][,",  1:edges, "]", sep = "")
-
-      prior_string[[i]] <-   paste0("prior_samps[[", i, "]][,",  1:edges, "]", sep = "")
-
+  # check at least two groups
+  if(groups < 2){
+    stop("must have (at least) two groups")
     }
 
-    groups_as_words <- numbers2words(1:groups)
+  # matrix-F hyperparameter
+  delta <- BGGM:::delta_solve(prior_sd)
 
-    hyp <- paste(groups_as_words, sep = " ", collapse = "=")
+  # sample posterior
+  post_samp <- lapply(1:groups, function(x) {
 
-    framed <- framer(hyp)
+    Y <- info$dat[[x]]
 
-    mats <- create_matrices(framed = framed, varnames = groups_as_words)
+    .Call(
+      '_BGGM_Theta_continuous',
+      PACKAGE = 'BGGM',
+      Y = Y,
+      iter = iter + 50,
+      delta = delta,
+      epsilon = 0.1,
+      prior_only = 0,
+      explore = 1
+    )
+  })
 
 
-    post_string <- do.call(rbind, post_string)
-    prior_string <- do.call(rbind, prior_string)
+  # matrix dimensions for prior
+  Y_dummy <- matrix(rnorm( groups * (groups+1) ),
+                    nrow = groups+1, ncol = groups)
 
-    BF <- NA
+  # sample prior
+  prior_samp <- lapply(1:groups, function(x) {
 
-    for(i in 1:edges){
+    # Y <- info$dat[[x]]
 
-      # temporary string
-      temp_string <- paste("cov(cbind(", paste(post_string[,i], sep = " ", collapse = ","), "))")
+    .Call(
+      '_BGGM_Theta_continuous',
+      PACKAGE = 'BGGM',
+      Y = Y_dummy,
+      iter = 10000,
+      delta = delta,
+      epsilon = 0.1,
+      prior_only = 1,
+      explore = 0
+    )$fisher_z
+  })
 
-      # posterior covariance
-      cov_post <- eval(parse( text = temp_string))
+  # store pcor diff
+  pcor_diff <- BF_01_mat <- matrix(0, p, p)
 
-      # temporary string
-      temp_string <- paste("colMeans(cbind(", paste(post_string[,i], sep = " ", collapse = ","), "))")
+  # upper triangular elements
+  indices <- which(upper.tri(diag(p)), arr.ind = TRUE )
 
-      # posterior mean
-      post_mean <- eval(parse( text = temp_string))
+  # make contrast matrices
+  ## words for compatability
+  groups_as_words <- numbers2words(1:groups)
 
-      # temporary string
-      temp_string <- paste("cov(cbind(", paste(prior_string[,i], sep = " ", collapse = ","), "))")
+  ## hypotheses
+  hyp <- paste(groups_as_words, sep = " ", collapse = "=")
 
-      # prior covariance
-      cov_prior <- eval(parse( text = temp_string))
+  ## `framed` hypotheses
+  framed <- framer(hyp)
 
-      # tranformed posterior
-      mu1 <- mats$R_e %*% post_mean
-      s1 <- mats$R_e %*% cov_post %*% t(mats$R_e)
+  ## contrast matrices
+  mats <- create_matrices(framed = framed,
+                          varnames = groups_as_words)
 
-      # transformed prior
-      mu0 <- mats$R_e %*% rep(0, groups)
-      s0 <- mats$R_e %*% cov_prior %*% t(mats$R_e)
 
-      # bayes factor
-      log_BF <- mvnfast::dmvn(X = t(mats$r_e), mu = mu1, sigma = s1, log = TRUE) -
-                mvnfast::dmvn(X = t(mats$r_e), mu = mu0, sigma = s0, log = TRUE)
+  # loop through upper triangular
+  for(i in seq_len(nrow(indices))){
 
-      BF[i] <- exp(log_BF)
+    rho_ij <- indices[i,]
 
-      if(groups == 2){
-        mu_diff[[i]] <-  z2r(post_mean)[1] - z2r(post_mean)[2]
-        sd_diff[[i]] <- sqrt(s1)
+    # start
+    post_group <-  post_samp[[1]]$fisher_z[ rho_ij[1], rho_ij[2], (51:(iter + 50))]
+    prior_group <-  prior_samp[[1]][ 1, 2,]
+
+    # combined groups
+    for(j in 2:(groups)){
+      post_group <-  cbind(post_group,  post_samp[[j]]$fisher_z[ rho_ij[1], rho_ij[2], (51:(iter + 50))])
+      prior_group <-  cbind(prior_group,  prior_samp[[j]][1, 2,])
+      }
+
+    # posterior covariance
+    cov_post <- cov(post_group)
+
+    # prior covariance
+    cov_prior <- cov(prior_group)
+
+    # posterior mean
+    post_mean <- colMeans(post_group)
+
+    # tranformed posterior
+    mu_post <- mats$R_e %*% post_mean
+    s_post <- mats$R_e %*% cov_post %*% t(mats$R_e)
+
+    # transformed prior
+    mu_prior <- mats$R_e %*% rep(0, groups)
+    s_prior <- mats$R_e %*% cov_prior %*% t(mats$R_e)
+
+    # bayes factor
+    log_BF <- mvtnorm::dmvnorm(x = t(mats$r_e),
+                                 mean = mu_post,
+                                 sigma = s_post,
+                                 log = TRUE) -
+                mvtnorm::dmvnorm(x = t(mats$r_e),
+                                 mean = mu_prior,
+                                 sigma = s_prior,
+                                 log = TRUE)
+
+    BF_01_mat[ rho_ij[1], rho_ij[2] ] <- exp(log_BF)
+
+    if(groups == 2){
+      pcor_diff[ rho_ij[1], rho_ij[2] ] <-  (z2r(post_mean)[1] - z2r(post_mean)[2])
         }
+  }
 
-    }
-    BF_01 <- matrix(0, p, p)
+  BF_01 <- BGGM:::symmteric_mat(BF_01_mat)
+  pcor_diff <- BGGM:::symmteric_mat(pcor_diff)
 
-    BF_01[upper.tri(BF_01)] <- BF
-
-    BF_01 <- symmteric_mat(BF_01)
-
-
-    returned_object <- list(BF_01 = BF_01,
-                            p = p,
-                            info = info,
-                            iter = iter,
-                            prior_sd = prior_sd,
-                            call = match.call(),
-                            delta = delta,
-                            groups = groups,
-                            mu_diff = mu_diff,
-                            post_samps = post_samps,
-                            prior_samps = prior_samps,
-                            re = mats$R_e)
+  returned_object <- list(BF_01 = BF_01,
+                          info = info,
+                          iter = iter,
+                          prior_sd = prior_sd,
+                          call = match.call(),
+                          delta = delta,
+                          groups = groups,
+                          pcor_diff = pcor_diff,
+                          post_samp = post_samp,
+                          p = p)
 
     class(returned_object) <- c("BGGM",
                                 "ggm_compare_bf",
