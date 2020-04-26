@@ -1,5 +1,7 @@
 #' @title GGMs with Exploratory Bayesian Hypothesis Testing
+#'
 #' @name explore
+#'
 #' @description Learn the conditional (in)dependence structure with the Bayes factor computed from the matrix-F prior distribution. It is
 #' possible to test for only positive or negative edges, as well as two sided hypothesis testing (which is the customary approach). Further
 #' there is also an exhaustive option that provides the posterior probability of the null, greater than zero, and less than zero.

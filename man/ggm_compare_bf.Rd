@@ -4,7 +4,7 @@
 \alias{ggm_compare_bf}
 \title{Compare GGMs with Bayesian Hypothesis Testing}
 \usage{
-ggm_compare_bf(..., prior_sd = 0.2, iter = 25000, cores = 2)
+ggm_compare_bf(..., prior_sd = 0.2, iter = 5000, seed = 1)
 }
 \arguments{
 \item{...}{data matrices (\emph{n} by  \emph{p}). Requires at least two.}

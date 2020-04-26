@@ -58,10 +58,10 @@
 ggm_compare_bf <- function(...,
                            prior_sd = 0.20,
                            iter = 5000,
-                           cores = 2){
+                           seed = 1){
 
   # group info (e.g., n, p, etc)
-  info <- BGGM:::Y_combine(Y1, Y2, Y3)
+  info <- BGGM:::Y_combine(...)
 
   # number of variables
   p <- info$dat_info$p[1]
