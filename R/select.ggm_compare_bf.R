@@ -1,13 +1,12 @@
-#' Select Graphical Structure with the Bayes Factor
-#'
-#' @description Compare GGMs with the Bayes factor. This method allows for
-#' assessing (relative) evidence for edge equality or edges differences across any number of groups. Further, confirmatory hypothesis testing
-#' can be used to test predictions or expectations regarding difference or similarities in different groups (e.g., male vs. female).
+#' Select Partial Correlattion Differences for \code{ggm_compare_bf} Objects
 #'
 #'
-#' @param object object of class \code{ggm_compare_bf}
-#' @param BF_cut evidentiary threshold
-#' @param ... currently ignored
+#'
+#' @param object object of class \code{ggm_compare_bf}.
+#'
+#' @param post_prob numeric. Posterior `inclusion` probability.  The default is set to 0.50.
+#'
+#' @param ... not currently used.
 #' @note The test provides relative evidence for whether all groups have the same edge strength (for each edge in the model). It is possible to test whether
 #' many groups are all the same. In this case, if there is evidence for the alternative (not equal), information is not immediately available for which group differs
 #' from the others. Thus pairwise group contrasts could be used after testing the equality of more than two groups.
@@ -43,9 +42,12 @@
 #' summary(ggm_bf_sel)
 #' }
 
-select.ggm_compare_bf <- function(object, BF_cut = 3,...){
+select.ggm_compare_bf <- function(object, post_prob = 0.50,...){
 
   x <- object
+
+  BF_cut = (1 - post_prob) / (1 - post_prob)
+
   BF_10 <- 1/ x$BF_01
 
   diag(BF_10) <- 0
@@ -59,10 +61,10 @@ select.ggm_compare_bf <- function(object, BF_cut = 3,...){
   BF_10_adj <- adj_10 * BF_10
 
   pcor_mat <- matrix(0, x$p, x$p)
+
   if(x$groups == 2){
-    pcor_mat[upper.tri(pcor_mat)] <- unlist(x$mu_diff)
-    pcor_mat <- symmteric_mat(pcor_mat)
-    pcor_mat <- adj_10 * pcor_mat
+
+    pcor_mat <- adj_10 * x$pcor_diff
 
     }
 
@@ -76,7 +78,7 @@ select.ggm_compare_bf <- function(object, BF_cut = 3,...){
                           p = ncol(BF_10),
                           iter = x$iter,
                           info = x$info,
-                          BF = BF_cut,
+                          post_prob = post_prob,
                           pcor_mat_10 = pcor_mat,
                           object = object)
 

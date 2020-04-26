@@ -140,10 +140,16 @@ print.BGGM <- function(x,...){
 
     if(is(x, "ggm_compare_bf")){
 
+      if(is(x, "summary")){
+
+        print_summary_ggm_compare_bf(x, ...)
+
+      } else {
+
       print_ggm_compare_bf(x, ...)
 
     }
-
+}
   } # end of explore
 
   if(is(x, "confirm")){

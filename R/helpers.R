@@ -257,30 +257,47 @@ print_summary_select_explore <- function(x,...){
 
 }
 
-
 print_confirm <- function(x, ...){
+
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
+
   cat("Type:",  x$type ,  "\n")
+
   cat("--- \n")
+
   cat("Posterior Samples:", x$iter, "\n")
+
   cat("Observations (n):", nrow(x$dat), "\n")
+
   cat("Variables (p):", x$p, "\n")
+
   cat("Delta:", x$delta, "\n")
+
   cat("--- \n")
+
   cat("Call:\n")
+
   print(x$call)
+
   cat("--- \n")
+
   cat("Hypotheses: \n\n")
+
   hyps <- strsplit(x$hypothesis, ";")
+
   n_hyps <- length(hyps[[1]])
 
   x$info$hypotheses[1:n_hyps] <- hyps[[1]]
+
   n_hyps <- length(x$info$hypotheses)
+
   for (h in seq_len(n_hyps)) {
     cat(paste0("H", h,  ": ", gsub(" ", "", x$info$hypotheses[h])  ))
     cat("\n")
   }
+
   cat("--- \n")
+
   cat("Posterior prob: \n\n")
 
   for(h in seq_len(n_hyps)){
@@ -288,93 +305,124 @@ print_confirm <- function(x, ...){
     cat(paste0("p(H",h,"|data) = ", round(x$out_hyp_prob[h], 3 )  ))
     cat("\n")
   }
+
   cat("--- \n")
+
   cat('Bayes factor matrix: \n')
+
   print(round(x$BF_matrix, 3))
+
   cat("--- \n")
+
   cat("note: equal hypothesis prior probabilities")
 }
 
 
-
-
-print_ggm_compare_bf <- function(object, ...) {
-  x <- object
-  name_temp <- matrix(0, object$p, object$p)
-
-  name_temp[] <-
-    unlist(lapply(1:object$p , function(x)
-      paste(1:object$p, x, sep = "--")))
-
-  edge_name <- name_temp[upper.tri(name_temp)]
-
-  groups <- length(object$info$dat)
-
-  BF_10 <- 1 /  object$BF_01[upper.tri(object$BF_01)]
-  prob_H1 <- BF_10 / (1 + BF_10)
-  prob_H0 <- 1 - prob_H1
-
-  if (groups == 2) {
-    pcor_diff <- apply(object$post_samps[[1]], 2,  BGGM::fisher_z2r) -
-      apply(object$post_samps[[2]], 2,  BGGM::fisher_z2r)
-
-    sd_diff <- apply(pcor_diff, 2, sd)
-    results <- data.frame(
-      Edge = edge_name,
-      Estimate = round(unlist(object$mu_diff), 3),
-      Est.Error = round(sd_diff, 3),
-
-      Pr.H0 = round(prob_H0, 3),
-      Pr.H1 = round(prob_H1, 3)
-    )
-
-
-  } else {
-    results <- data.frame(
-      Edge = edge_name,
-
-      Pr.H0 = round(prob_H0, 3),
-      Pr.H1 = round(prob_H1, 3)
-    )
-
-  }
-  x <- list(results = results,
-                          object = object)
-  # class(returned_object) <- "summary.ggm_compare_bf"
-  # return(returned_object)
-
+print_summary_ggm_compare_bf <- function(x, ...){
+  groups <- x$object$groups
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
-  cat("Type: GGM Compare with Bayesian Hypothesis Testing \n")
-  p <- x$object$info$dat_info$p[1]
+  cat("Type:",  x$object$type, "\n")
+  # number of iterations
   cat("Posterior Samples:", x$object$iter, "\n")
-  cat("Observations: \n")
+  # number of observations
+  cat("Observations (n):\n")
   groups <- length(x$object$info$dat)
-  for (i in 1:groups) {
-    cat("  Group",
-        paste(i, ":", sep = "") ,
-        x$object$info$dat_info$n[[i]],
-        "\n")
+  for(i in 1:groups){
+    cat("  Group", paste( i, ":", sep = "") , x$object$info$dat_info$n[[i]], "\n")
   }
-  cat("Variables (p):", p, "\n")
-  cat("Edges:", .5 * (p * (p - 1)), "\n")
-  cat("Groups:", nrow(x$object$info$dat_info), "\n")
-  cat("Prior SD:", x$object$prior_sd, "\n")
+  # number of variables
+  cat("Variables (p):", x$object$p, "\n")
+  # number of edges
+  cat("Relations:", .5 * (x$object$p * (x$object$p-1)), "\n")
+  cat("Delta:", x$object$delta, "\n")
   cat("--- \n")
-  if (is.null(x$hypotheses)) {
-    cat("Call: \n")
-    print(x$object$call)
+  cat("Call: \n")
+  print(x$object$call)
+  cat("--- \n")
+  cat("Hypotheses:\n")
+  cat("H0:", paste0("rho_g", 1:groups, collapse = " = "), "\n")
+  cat("H1:", paste0("rho_g", 1:groups, collapse = " - "), " = 0\n")
+  cat("--- \n\n")
+
+  print(x$results, right = FALSE, row.names = FALSE)
+  cat("--- \n")
+}
+
+
+
+
+print_select_ggm_compare_bf <- function(x,...){
+
+  groups <- x$object$groups
+  p <- x$p
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type:",  x$object$type, "\n")
+  # number of iterations
+  cat("Posterior Samples:", x$object$iter, "\n")
+  # number of observations
+  cat("Observations (n):\n")
+  groups <- length(x$object$info$dat)
+  for(i in 1:groups){
+    cat("  Group", paste( i, ":", sep = "") , x$object$info$dat_info$n[[i]], "\n")
+  }
+  # number of variables
+  cat("Variables (p):", x$object$p, "\n")
+  # number of edges
+  cat("Relations:", .5 * (x$object$p * (x$object$p-1)), "\n")
+  cat("Delta:", x$object$delta, "\n")
+  cat("--- \n")
+  cat("Call: \n")
+  print(x$object$call)
+  cat("--- \n")
+  cat("Hypotheses:\n")
+  cat("H0:", paste0("rho_g", 1:groups, collapse = " = "), "\n")
+  cat("H1:", paste0("rho_g", 1:groups, collapse = " - "), " = 0\n")
+  cat("--- \n\n")
+  if(groups ==2){
+    cat("Partial Correlations:\n\n")
+    colnames(x$pcor_mat_10) <- 1:p
+    row.names(x$pcor_mat_10) <- 1:p
+    print(round(x$pcor_mat_10, 2))
     cat("--- \n")
   }
-  cat("Hypotheses:\n")
-  cat("H0: rho = 0\n")
-  cat("H1: rho != 0\n")
-  cat("--- \n")
-  cat("Estimates:\n")
-  print(x$results, row.names = F, ...)
-  cat("--- \n")
+  cat("Adjacency:\n\n")
+  colnames(x$adj_10) <- 1:p
+  row.names(x$adj_10) <- 1:p
+  print(round(x$adj_10, 2))
 
 }
+
+
+print_ggm_compare_bf <- function(x, ...){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type:",  x$type, "\n")
+  # number of iterations
+  cat("Posterior Samples:", x$iter, "\n")
+  # number of observations
+  cat("Observations (n):\n")
+  groups <- length(x$info$dat)
+  for(i in 1:groups){
+    cat("  Group", paste( i, ":", sep = "") , x$info$dat_info$n[[i]], "\n")
+  }
+  # number of variables
+  cat("Variables (p):", x$p, "\n")
+  # number of edges
+  cat("Relations:", .5 * (x$p * (x$p-1)), "\n")
+  cat("Delta:", x$delta, "\n")
+  cat("--- \n")
+  cat("Call: \n")
+  print(x$call)
+  cat("--- \n")
+  cat("Hypotheses:\n")
+  cat("H0:", paste0("rho_g", 1:groups, collapse = " = "), "\n")
+  cat("H1:", paste0("rho_g", 1:groups, collapse = " - "), " = 0\n")
+  cat("--- \n")
+  cat("Date:", date(), "\n")
+}
+
 
 
 print_select_ggm_compare_estimate <- function(x,...){
@@ -500,6 +548,8 @@ print_explore <- function(x,...){
   cat("--- \n")
   cat("Date:", date(), "\n")
 }
+
+
 
 print_select_estimate <- function(x, summarize = FALSE, ...){
 

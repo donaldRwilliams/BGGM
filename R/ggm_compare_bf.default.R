@@ -9,8 +9,21 @@
 #'
 #' @param ... at least two matrices (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).
 #'
+#' @param formula an object of class \code{\link[stats]{formula}}. This allows for including
+#' control variables in the model (i.e., \code{~ gender}).
+#'
+#' @param data an optional data frame, list or environment (or an object coercible by \code{\link[base]{as.data.frame}})
+#' to a data frame containing the variables in \code{formula}. This is required when controlling for variables.
+#'
 #' @param prior_sd The scale of the prior distribution (centered at zero), in reference to a beta distribtuion.
 #' The `default` is 0.25. See note for further details.
+#'
+#' @param type character string. Which type of data for \strong{Y} ? The options include \code{continuous},
+#' \code{binary}, or \code{ordinal}. See the note for further details.
+#'
+#' @param mixed_type numeric vector. An indicator of length p for which varibles should be treated as ranks.
+#' (1 for rank and 0 to assume normality). The default is currently (dev version) to treat all integer variables
+#' as ranks when \code{type = "mixed"} and \code{NULL} otherwise. See note for further details.
 #'
 #' @param iter number of iterations (posterior samples; defaults to 5000).
 #'
@@ -45,17 +58,29 @@
 #'  is for all group, say, that each partial correlation is the same in each. This is analagous to an ANOVA--an
 #'  `omnibus` test that does not indicate which groups are different. A follow up test would be required for this purpose.
 #'
-#'
-#'
 #' \strong{A Note on Defaults:}
 #'
 #' The `default` for \code{prior_sd} is 0.25. This can and should be changed to reflect the hypothesized difference.
-#' If differences are expected to be small the \code{prior_sd} should be set to a smaller value (e.g., 0.15).
+#' If differences are expected to be small \code{prior_sd} should be set to a smaller value (e.g., 0.15).
 #' This might raise concerns of the `correct` prior.` Note, however, that the interpretation remains unchanged: which hypothesis better
 #' predicts the observed data. \insertCite{@p. 777, in  @Kass1995}{BGGM}
 #'
 #' If the desired inference is \emph{not} (relative) evidence between models, the method in \code{\link{ggm_compare_estimate}}
 #' (for each partial correlation ) or  \code{\link{ggm_compare_ppc}} (a global test) can be used.
+#'
+#'
+#' \strong{Interpretation of conditional (in)dependence models for latent data:}
+#'
+#' A  tetrachoric correlation (binary data) is a special case of a polychoric correlation (ordinal data). Both relations are
+#' between "theorized normally distributed continuous latent variables"
+#' (\href{https://en.wikipedia.org/wiki/Polychoric_correlation}{Wikipedia})
+#' In both instances, the correpsonding partial correlation between observed variables is conditioned
+#' on the remaining variables in the \emph{latent} space. This implies that interpration is much the same as
+#' for continuous data, but with respect to latent variables. We refer interested reader to
+#' \insertCite{@page 2364, section 2.2, in  @webb2008bayesian;textual}{BGGM}.
+#'
+#'
+#' \strong{Mixed Data:}
 #'
 #'
 #' @export
@@ -81,6 +106,10 @@
 #'
 #' }
 ggm_compare_bf <- function(...,
+                           formula = NULL,
+                           data = NULL,
+                           type = "continuous",
+                           mixed_type = NULL,
                            prior_sd = 0.20,
                            iter = 5000,
                            seed = 1){
@@ -223,6 +252,7 @@ ggm_compare_bf <- function(...,
                           groups = groups,
                           pcor_diff = pcor_diff,
                           post_samp = post_samp,
+                          type = type,
                           p = p)
 
     class(returned_object) <- c("BGGM",
