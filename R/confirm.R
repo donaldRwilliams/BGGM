@@ -1,4 +1,4 @@
-#' Confirmatory Hypothesis Testing in GGMs
+#' Confirmatory Hypothesis Testing
 #'
 #' @description Confirmatory hypothesis testing in GGMs, for, say, comparing formalized models encoding
 #' scienctific expectations. Hypotheses are expressed as equality and/or ineqaulity contraints on the

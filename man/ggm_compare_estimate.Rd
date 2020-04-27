@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggm_compare_estimate.default.R
 \name{ggm_compare_estimate}
 \alias{ggm_compare_estimate}
-\title{Compare Partial Correlations with the Posterior Distribution}
+\title{GGM Compare: Estimate}
 \usage{
 ggm_compare_estimate(
   ...,

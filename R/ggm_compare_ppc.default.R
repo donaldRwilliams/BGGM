@@ -1,5 +1,7 @@
-#' Compare GGMs with the Posterior Predictive Distribution
+#' GGM Compare: Posterior Predictive Distribution
+#'
 #' @name ggm_compare_ppc
+#'
 #' @description Compare GGMs with the posterior predictive distribution. The method assume group equality, and the predictive check
 #' allows for testing whether that assumption should be modified--i.e., the GGMs are actually different. The current test statistic available is
 #' Kullback-Leibler divergence, which in this case, can be understood as a likelihood ratio for multivariate normal distributions. There are

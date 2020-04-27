@@ -27,6 +27,15 @@ rank_helper <- function(Y){
 }
 
 
+
+group_hyp_helper <- function(hyp, x){
+
+  hyp <- gsub(BGGM:::hyp_converter(BGGM:::convert_hyps(hypothesis = hypothesis, cbind(x)))$hyp_converted,
+              pattern = "_", replacement = "")
+  hyp
+}
+
+
 # convert hypothesis to words
 convert_hyps <- function(hypothesis, Y){
 
@@ -257,6 +266,71 @@ print_summary_select_explore <- function(x,...){
 
 }
 
+print_ggm_confirm <- function(x, ...){
+  groups <- x$groups
+  info <- x$info_dat
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+
+  cat("Type:",  x$type ,  "\n")
+
+  cat("--- \n")
+
+  cat("Posterior Samples:", x$iter, "\n")
+
+  for(i in 1:groups){
+    cat("  Group", paste( i, ":", sep = "") ,info$dat_info$n[[i]], "\n")
+  }
+  # number of variables
+  cat("Variables (p):", x$p, "\n")
+  # number of edges
+  cat("Relations:", .5 * (x$p * (x$p-1)), "\n")
+  cat("Delta:", x$delta, "\n")
+  cat("--- \n")
+
+  cat("Call:\n")
+
+  print(x$call)
+
+  cat("--- \n")
+
+  cat("Hypotheses: \n\n")
+
+  hyps <- strsplit(x$hypothesis, ";")
+
+  n_hyps <- length(hyps[[1]])
+
+  x$info$hypotheses[1:n_hyps] <- hyps[[1]]
+
+  n_hyps <- length(x$info$hypotheses)
+
+  for (h in seq_len(n_hyps)) {
+    cat(paste0("H", h,  ": ", gsub(" ", "", x$info$hypotheses[h])  ))
+    cat("\n")
+  }
+
+  cat("--- \n")
+
+  cat("Posterior prob: \n\n")
+
+  for(h in seq_len(n_hyps)){
+
+    cat(paste0("p(H",h,"|data) = ", round(x$out_hyp_prob[h], 3 )  ))
+    cat("\n")
+  }
+
+  cat("--- \n")
+
+  cat('Bayes factor matrix: \n')
+
+  print(round(x$BF_matrix, 3))
+
+  cat("--- \n")
+
+  cat("note: equal hypothesis prior probabilities")
+}
+
+
+
 print_confirm <- function(x, ...){
 
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
@@ -316,6 +390,9 @@ print_confirm <- function(x, ...){
 
   cat("note: equal hypothesis prior probabilities")
 }
+
+
+
 
 
 print_summary_ggm_compare_bf <- function(x, ...){

@@ -154,8 +154,15 @@ print.BGGM <- function(x,...){
 
   if(is(x, "confirm")){
 
-    print_confirm(x, ...)
+    if(is(x, "ggm_compare_confirm")){
 
+      print_ggm_confirm(x , ...)
+
+
+    } else {
+
+    print_confirm(x, ...)
+    }
   }  # end confirm
 
   }

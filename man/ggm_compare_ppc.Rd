@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggm_compare_ppc.default.R
 \name{ggm_compare_ppc}
 \alias{ggm_compare_ppc}
-\title{Compare GGMs with the Posterior Predictive Distribution}
+\title{GGM Compare: Posterior Predictive Distribution}
 \usage{
 ggm_compare_ppc(..., type = "global", iter = 5000, cores = 1)
 }

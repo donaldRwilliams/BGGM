@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimate.R
 \name{estimate}
 \alias{estimate}
-\title{Bayesian Estimation of Gaussian Graphical Models}
+\title{GGM: Estimation}
 \usage{
 estimate(
   Y,

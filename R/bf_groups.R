@@ -34,8 +34,6 @@ bf_groups <- function(..., prior_sd = 0.35,
                       hypothesis = NULL,
                       iter = 25000, cores = 2){
 
-  priorprob <- 1
-
   info <- BGGM:::Y_combine(...)
 
   groups <- length(info$dat)
@@ -64,94 +62,7 @@ bf_groups <- function(..., prior_sd = 0.35,
   }
 
 
-  if(is.null(hypothesis)){
 
-    post_string <- list()
-    prior_string <- list()
-
-
-
-    mu_diff <- list()
-
-
-    for(i in 1:groups){
-
-      post_string[[i]] <-   paste0("post_samps[[", i, "]][,",  1:edges, "]", sep = "")
-
-      prior_string[[i]] <-   paste0("prior_samps[[", i, "]][,",  1:edges, "]", sep = "")
-
-    }
-
-    groups_as_words <- BGGM:::numbers2words(1:groups)
-
-    hyp <- paste(groups_as_words, sep = " ", collapse = "=")
-
-    framed <- BGGM:::framer(hyp)
-
-    mats <- BGGM:::create_matrices(framed = framed, varnames = groups_as_words)
-
-
-    post_string <- do.call(rbind, post_string)
-    prior_string <- do.call(rbind, prior_string)
-
-    BF <- NA
-    for(i in 1:edges){
-
-      # temporary string
-      temp_string <- paste("cov(cbind(", paste(post_string[,i], sep = " ", collapse = ","), "))")
-
-      # posterior covariance
-      cov_post <- eval(parse( text = temp_string))
-
-      # temporary string
-      temp_string <- paste("colMeans(cbind(", paste(post_string[,i], sep = " ", collapse = ","), "))")
-
-      # posterior mean
-      post_mean <- eval(parse( text = temp_string))
-
-      # temporary string
-      temp_string <- paste("cov(cbind(", paste(prior_string[,i], sep = " ", collapse = ","), "))")
-
-      # prior covariance
-      cov_prior <- eval(parse( text = temp_string))
-
-      # tranformed posterior
-      mu1 <- mats$R_e %*% post_mean
-      s1 <- mats$R_e %*% cov_post %*% t(mats$R_e)
-
-      # transformed prior
-      mu0 <- mats$R_e %*% rep(0, groups)
-      s0 <- mats$R_e %*% cov_prior %*% t(mats$R_e)
-
-      # bayes factor
-      log_BF <- mvnfast::dmvn(X = t(mats$r_e), mu = mu1, sigma = s1, log = TRUE) -
-        mvnfast::dmvn(X = t(mats$r_e), mu = mu0, sigma = s0, log = TRUE)
-
-      BF[i] <- exp(log_BF)
-
-      if(groups == 2){
-        # BGGM:::z2r(post_mean) - BGGM:::z2r(post_mean)
-        mu_diff[[i]] <-  BGGM:::z2r(post_mean)[1] - BGGM:::z2r(post_mean)[2]
-
-      }
-
-    }
-    BF_01 <- matrix(0, p, p)
-
-    BF_01[upper.tri(BF_01)] <- BF
-
-    BF_01 <- BGGM:::symmteric_mat(BF_01)
-
-
-    returned_object <- list(BF_01 = BF_01,
-                            p = p,
-                            info = info,
-                            iter = iter,
-                            call = match.call(),
-                            delta = delta, groups = groups,
-                            mu_diff = mu_diff, re = mats$R_e )
-
-  }
 
   if(!is.null(hypothesis)){
 
@@ -168,7 +79,11 @@ bf_groups <- function(..., prior_sd = 0.35,
     returned_mats <-list()
 
     hyp <- BGGM:::hyp_converter(hypothesis)$hyp_converted
-    hyp <- gsub( hyp, pattern = "_", replacement = "")
+    hyp <- gsub( BGGM:::hyp_converter(hypothesis)$hyp_converted, pattern = "_", replacement = "")
+
+
+
+
 
     for(loop in seq_along(hyp)){
       # remove spaces

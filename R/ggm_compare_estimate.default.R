@@ -1,4 +1,5 @@
-#' Compare Partial Correlations with the Posterior Distribution
+#' GGM Compare: Estimate
+#'
 #' @name ggm_compare_estimate
 #'
 #' @description Compare edges (partial correlations) that are estimated from groups to, say, detect a differences or equivalence.

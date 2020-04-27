@@ -1,4 +1,4 @@
-#' Compare GGMs: Exploratory Bayesian Hypothesis Testing
+#' GGM Compare: Exploratory Hypothesis Testing
 #'
 #' @description Compare Gaussian graphical models with (exploratory) Bayesian hypothesis testing using the matrix-F prior
 #' distribution \insertCite{Mulder2018}{BGGM}. A test for each partial correlation in the model for any number of groups.
@@ -108,7 +108,7 @@
 #' plot(sel)
 #'
 #' }
-ggm_compare_bf <- function(...,
+ggm_compare_explore <- function(...,
                            formula = NULL,
                            data = NULL,
                            type = "continuous",

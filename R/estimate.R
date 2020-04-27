@@ -1,4 +1,4 @@
-#' @title Bayesian Estimation of Gaussian Graphical Models
+#' @title GGM: Estimation
 #'
 #' @description Estimate the conditional (in)dependence with either an analytic solution or efficiently
 #' sampling from the posterior distribution. These methods were introduced in \insertCite{Williams2019;textual}{BGGM}.

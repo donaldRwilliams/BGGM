@@ -1,4 +1,4 @@
-#' @title GGMs with Exploratory Bayesian Hypothesis Testing
+#' @title GGM: Exploratory Bayesian Hypothesis Testing
 #'
 #' @name explore
 #'

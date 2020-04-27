@@ -2,7 +2,7 @@
 % Please edit documentation in R/explore.default.R
 \name{explore}
 \alias{explore}
-\title{GGMs with Exploratory Bayesian Hypothesis Testing}
+\title{GGM: Exploratory Bayesian Hypothesis Testing}
 \usage{
 explore(
   Y,

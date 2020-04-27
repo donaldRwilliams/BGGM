@@ -2,7 +2,7 @@
 % Please edit documentation in R/confirm.R
 \name{confirm}
 \alias{confirm}
-\title{Confirmatory Hypothesis Testing in GGMs}
+\title{Confirmatory Hypothesis Testing}
 \usage{
 confirm(
   Y,
@@ -13,7 +13,7 @@ confirm(
   type = "continuous",
   mixed_type = NULL,
   iter = 25000,
-  cores = 2
+  seed = 1
 )
 }
 \arguments{
@@ -39,7 +39,7 @@ as ranks when \code{type = "mixed"} and \code{NULL} otherwise. See note for furt
 \item{iter}{posterior and prior samples. 25,000 is the default, as it results in a more stable Bayes factor than
 using, say, 5,000.}
 
-\item{cores}{integer. How many cores for parallel computing ? (default is 2).}
+\item{seed}{The seed for random number generation (default set to \code{1}).}
 }
 \value{
 list of class \code{confirm}:
