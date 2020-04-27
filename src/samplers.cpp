@@ -19,7 +19,7 @@ Rcpp::List Theta_continuous(arma::mat Y,
                             int iter,
                             float delta,
                             float epsilon,
-                            int prior_only, int explore ) {
+                            int prior_only, int explore) {
 
 
   // note p changed to k to be consistent

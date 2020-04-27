@@ -27,7 +27,7 @@
 #' @param iter posterior and prior samples. 25,000 is the default, as it results in a more stable Bayes factor than
 #' using, say, 5,000.
 #'
-#' @param cores integer. How many cores for parallel computing ? (default is 2).
+#' @param seed The seed for random number generation (default set to \code{1}).
 #'
 #' @references
 #' \insertAllCited{}
@@ -139,8 +139,10 @@ confirm <- function(Y, hypothesis,
                     data = NULL,
                     type = "continuous",
                     mixed_type = NULL,
-                    iter = 25000){
+                    iter = 25000, seed = 1){
 
+  # set seed
+  set.seed(seed)
 
   if(type != "continuous"){
 
@@ -198,7 +200,6 @@ confirm <- function(Y, hypothesis,
 
   prior_samples <- matrix(prior_samp[,,][upper.tri(I_p)],iter, pcors, byrow = TRUE)
 
-  colMeans(posterior_samples)
 
   colnames(posterior_samples) <- mat_name
 
