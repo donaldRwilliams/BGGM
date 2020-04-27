@@ -6,20 +6,37 @@
 \usage{
 ggm_compare_estimate(
   ...,
+  formula = NULL,
+  data = NULL,
   type = "continuous",
+  mixed_type = NULL,
   analytic = FALSE,
   prior_sd = 0.25,
-  iter = 5000
+  iter = 5000,
+  seed = 1
 )
 }
 \arguments{
 \item{...}{matrices (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).
 Requires at least two.}
 
+\item{formula}{an object of class \code{\link[stats]{formula}}. This allows for including
+control variables in the model (i.e., \code{~ gender}).}
+
+\item{data}{an optional data frame, list or environment (or an object coercible by \code{\link[base]{as.data.frame}})
+to a data frame containing the variables in \code{formula}. This is required when controlling for variables.}
+
 \item{type}{character string. Which type of data for \strong{Y} ? The options include \code{continuous},
 \code{binary}, or \code{ordinal}. See the note for further details.}
 
+\item{mixed_type}{numeric vector. An indicator of length p for which varibles should be treated as ranks.
+(1 for rank and 0 to assume normality). The default is currently (dev version) to treat all integer variables
+as ranks when \code{type = "mixed"} and \code{NULL} otherwise. See note for further details.}
+
 \item{analytic}{logical. Should the analytic solution be computed (default is \code{FALSE}) ?}
+
+\item{prior_sd}{The scale of the prior distribution (centered at zero), in reference to a beta distribtuion.
+The `default` is 0.25. See note for further details.}
 
 \item{iter}{number of iterations (posterior samples; defaults to 5000).}
 }

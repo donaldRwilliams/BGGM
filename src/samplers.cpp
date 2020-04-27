@@ -11,15 +11,14 @@
 // graphical models:  Conditional independence and order constraints.
 
 // matrix F for the precision matrix
-//' @title Testing mat F
-//' @name Theta_continuous
 
 // [[Rcpp::export]]
 Rcpp::List Theta_continuous(arma::mat Y,
                             int iter,
                             float delta,
                             float epsilon,
-                            int prior_only, int explore) {
+                            int prior_only,
+                            int explore) {
 
 
   // note p changed to k to be consistent
@@ -151,13 +150,6 @@ Rcpp::List Theta_continuous(arma::mat Y,
 }
 
 
-
-
-
-//' @title multivariate regression
-//' @name mv_continuous
-//' @export
-
 // [[Rcpp::export]]
 Rcpp::List mv_continuous(arma::mat Y,
                           arma::mat X,
@@ -264,12 +256,15 @@ Rcpp::List mv_continuous(arma::mat Y,
     Theta_mcmc.slice(s) = Theta.slice(0);
   }
 
+  arma::cube fisher_z = atanh(pcors_mcmc);
+
   Rcpp::List ret;
   ret["pcors"] = pcors_mcmc;
   ret["cors"] =  cors_mcmc;
   ret["beta"] = beta_mcmc;
   ret["Theta"] = Theta_mcmc;
   ret["Sigma"] = Sigma_mcmc;
+  ret["fisher_z"] = fisher_z;
   return ret;
 }
 
@@ -378,11 +373,6 @@ Rcpp::List trunc_mvn(arma::mat mu,
   ret["zr"] = zr;
   return  ret;
 }
-
-
-//' @title testing binary
-//' @name mv_binary
-//' @export
 
 // binary sampler
 // [[Rcpp::export]]
@@ -561,12 +551,15 @@ Rcpp::List mv_binary(arma::mat Y,
     Theta_mcmc.slice(s) = Theta.slice(0);
   }
 
+  arma::cube fisher_z = atanh(pcors_mcmc);
+
   Rcpp::List ret;
   ret["pcors"] = pcors_mcmc;
   ret["cors"] =  cors_mcmc;
   ret["beta"] = beta_mcmc;
   ret["Theta"] = Theta_mcmc;
   ret["Sigma"] = Sigma_mcmc;
+  ret["fisher_z"] = fisher_z;
   return  ret;
 }
 
@@ -604,10 +597,6 @@ arma::mat remove_col(arma::mat x, int index){
   return(x);
 }
 
-
-//' @title testing ordinal cowles for thresholds
-//' @name mv_ordinal_cowles
-//' @export
 
 // ordinal sampler
 // [[Rcpp::export]]
@@ -897,12 +886,6 @@ Rcpp::List mv_ordinal_cowles(arma::mat Y,
   return  ret;
 }
 
-
-
-//' @title testing ordinal albert and chibbs for thresholds
-//' @name mv_ordinal_albert
-//' @export
-
 // ordinal sampler
 // [[Rcpp::export]]
 Rcpp::List mv_ordinal_albert(arma::mat Y,
@@ -1176,10 +1159,6 @@ Rcpp::List mv_ordinal_albert(arma::mat Y,
 
 }
 
-
-//' @title testing copula GGM
-//' @name copula
-//' @export
 
 // mixed data sampler
 // [[Rcpp::export]]

@@ -1584,9 +1584,7 @@ Y_combine <- function(...){
 
   dat_info <- lapply(1:length(dat), function(x) {
     p <- ncol(dat[[x]])
-
     n <- nrow(dat[[x]])
-
     data.frame(p = p, n = n)
   })
 
