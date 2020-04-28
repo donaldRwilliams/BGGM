@@ -466,7 +466,7 @@ summary.ggm_compare_estimate <- function(object,
   returned_object <- list(dat_results = dat_results,
                           object = object)
   class(returned_object) <- c("BGGM",
-                              "summary", "summary_estimate",
+                              "summary", "summary.ggm_compare_estimate",
                               "ggm_compare_estimate",
                               "estimate")
   returned_object
@@ -534,3 +534,54 @@ print_summary_ggm_estimate_compare <- function(x,...){
   }
   cat("--- \n")
 }
+
+
+
+
+
+#' Plot \code{summary.ggm_compare_estimate} Objects
+#'
+#' @param x an object of class \code{estimate} or \code{ggm_compare_estimate}
+#' @param color color of error bar
+#' @param width width of error bar cap
+#' @param ... currently ignored
+#'
+#' @return an object of class \code{ggplot}
+#' @export
+plot.summary.ggm_compare_estimate <- function(x, color = "black",
+                                  size = 2,
+                                  width = 0, ...){
+
+  n_plt  <- length(x$dat_results)
+
+  # plots
+  lapply(1:seq_len(n_plt), function(i){
+
+    dat_temp <- x$dat_results[[i]][order(x$dat_results[[i]]$Post.mean,
+                                         decreasing = F), ]
+
+    dat_temp$Relation <-
+      factor(dat_temp$Relation,
+             levels = dat_temp$Relation,
+             labels = dat_temp$Relation)
+
+
+    ggplot(dat_temp,
+           aes(x = Relation,
+               y = Post.mean)) +
+
+      geom_errorbar(aes(ymax = dat_temp[, 4],
+                        ymin = dat_temp[, 5]),
+                    width = width,
+                    color = color) +
+      geom_point(size = size) +
+      xlab("Index") +
+      theme(axis.text.x = element_text(
+        angle = 90,
+        vjust = 0.5,
+        hjust = 1
+      )) +
+      ggtitle(paste(names(x$object$diff)))
+  })
+}
+

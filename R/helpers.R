@@ -739,33 +739,6 @@ print_select_estimate <- function(x, summarize = FALSE, ...){
 }
 
 
-print_summary_estimate <- function(x, ...) {
-  # analytic == TRUE
-  if (isTRUE(x$object$analytic)) {
-    cat(print(x$object), "\n")
-    cat("note: posterior summary not available for analytic solution")
-  } else {
-    cat("BGGM: Bayesian Gaussian Graphical Models \n")
-    cat("--- \n")
-    # number of iterations
-    cat("Posterior Samples:", x$object$iter, "\n")
-    # number of observations
-    cat("Observations (n):", nrow(x$object$dat), "\n")
-    # number of variables
-    cat("Variables (p):", x$object$p, "\n")
-    # number of edges
-    cat("Edges:", .5 * (x$object$p * (x$object$p - 1)), "\n")
-    cat("--- \n")
-    cat("Call: \n")
-    print(x$object$call)
-    cat("--- \n")
-    cat("Estimates:\n\n")
-    print(x$dat_results, row.names = F)
-    cat("--- \n")
-
-  }
-}
-
 
 
 print_post_pred <- function(x,...){
@@ -983,35 +956,6 @@ print_predict <- function(x,...){
     print(x)
   }
 }
-
-
-print_estimate <- function(x, ...){
-  cat("BGGM: Bayesian Gaussian Graphical Models \n")
-  cat("--- \n")
-  # analytic == TRUE
-  if(!isFALSE( x$analytic)){
-    cat("Type: Estimation (Analytic Solution) \n")
-  }
-  # analytic  == FALSE
-  if(isFALSE( x$analytic)){
-    cat("Type:", x$type, "\n")
-  }
-  # number of iterations
-  cat("Posterior Samples:", x$iter, "\n")
-  # number of observations
-  cat("Observations (n):", nrow(x$dat), "\n")
-  # number of variables
-  cat("Variables (p):", x$p, "\n")
-  # number of edges
-  cat("Edges:", .5 * (x$p * (x$p-1)), "\n")
-  cat("--- \n")
-  cat("Call: \n")
-  print(x$call)
-  cat("--- \n")
-  cat("Date:", date(), "\n")
-}
-
-
 
 post_prob <- function(data){
   p1 <- sum(data>0)/length(data)

@@ -4,17 +4,20 @@
 \alias{summary.estimate}
 \title{Summary method for \code{estimate.default} objects}
 \usage{
-\method{summary}{estimate}(object, cred = 0.95, ...)
+\method{summary}{estimate}(object, col_names = TRUE, cred = 0.95, ...)
 }
 \arguments{
-\item{object}{An object of class \code{estimate}}
+\item{object}{an object of class \code{estimate}}
+
+\item{col_names}{logical. Should the summary include the column names (default is \code{TRUE})?
+Setting to \code{FALSE} includes the column numbers (e.g., \code{1--2}).}
 
 \item{cred}{credible interval width}
 
 \item{...}{currently ignored}
 }
 \value{
-A list containing the summarized posterior distributions
+a list containing the summarized posterior distributions
 # data
 Y <- BGGM::bfi[, 1:5]
 # analytic approach (sample by setting analytic = FALSE)

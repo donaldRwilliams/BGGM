@@ -28,6 +28,8 @@
 #'
 #' @param analytic logical. Should the analytic solution be computed (default is \code{FALSE})?
 #'
+#' @param seed The seed for random number generation (default set to \code{1}).
+#'
 #'
 #' @param ... currently ignored.
 #'
@@ -81,13 +83,13 @@
 #'
 #' \strong{Interpretation of conditional (in)dependence models for latent data:}
 #'
-#' A  tetrachoric correlation (binary data) is a special case of a polychoric correlation (ordinal data). Both relations are
-#' between "theorized normally distributed continuous latent variables"
-#' (\href{https://en.wikipedia.org/wiki/Polychoric_correlation}{Wikipedia})
-#' In both instances, the correpsonding partial correlation between observed variables is conditioned
-#' on the remaining variables in the \emph{latent} space. This implies that interpration is much the same as
-#' for continuous data, but with respect to latent variables. We refer interested reader to
-#' \insertCite{@page 2364, section 2.2, in  @webb2008bayesian;textual}{BGGM}.
+#' A  tetrachoric correlation (binary data) is a special case of a polychoric correlation (ordinal data).
+#' Both relations are between "theorized normally distributed continuous latent variables"
+#' (\href{https://en.wikipedia.org/wiki/Polychoric_correlation}{Wikipedia}). In both instances,
+#' the correpsonding partial correlation between observed variables is conditioned
+#' on the remaining variables in the \emph{latent} space. This implies that interpration
+#' is much the same as for continuous data, but with respect to latent variables.
+#' We refer interested reader to \insertCite{@page 2364, section 2.2, in  @webb2008bayesian;textual}{BGGM}.
 #'
 #'
 #' see \code{methods("estimate")}
@@ -107,430 +109,356 @@ estimate  <- function(Y,
                       data = NULL,
                       type = "continuous",
                       mixed_type = NULL,
-                      iter = 5000,
                       analytic = FALSE,
-                      ep = 0.001,...){
+                      prior_sd = 0.25,
+                      iter = 5000,
+                      seed = 1,
+                      ...){
+
+  # set seed
+  set.seed(seed)
+
+  # obervations
+  n <- nrow(Y)
+
+  # nodes
+  p <- ncol(Y)
+
+  # na omit
+  Y <- as.matrix(na.omit(Y))
+
+  # delta rho ~ beta(delta/2, delta/2)
+  delta <- delta_solve(prior_sd)
+
+  # sample posterior
+  if(!analytic){
+
+    # continuous
+    if(type == "continuous"){
+
+      # scale Y
+      Y <- scale(Y, scale = T)
+
+      # no control
+      if(is.null(formula)){
+
+        # posterior sample
+        post_samp <- .Call(
+          '_BGGM_Theta_continuous',
+          PACKAGE = 'BGGM',
+          Y = Y,
+          iter = iter + 50,
+          delta = delta,
+          epsilon = 0.1,
+          prior_only = 0,
+          explore = 1
+          )
+
+        # control for variables
+        } else {
+
+        # model matrix
+        X <- model.matrix(formula, data)
+
+        # posterior sample
+        post_samp <- .Call(
+          "_BGGM_mv_continuous",
+          Y = Y,
+          X = X,
+          delta = delta,
+          epsilon = 0.1,
+          iter = iter + 50
+        )
+
+    } # end control
+
+      # binary
+    } else if (type == "binary"){
 
 
+      # intercept only
+      if(is.null(formula)){
+        X <- matrix(1, n, 1)
+        # model matrix
+      } else {
 
-  if(type == "continuous"){
-  # change to x
-  x <- Y
+        X <- model.matrix(formula, data)
 
-  # remove the NAs
-  X <- na.omit(as.matrix(x))
+      }
 
-  # mean center the data
-  X <- scale(X, scale = T)
+      # posterior sample
+      post_samp <-  .Call(
+        "_BGGM_mv_binary",
+        Y = Y,
+        X = X,
+        delta = delta,
+        epsilon = 0.1,
+        iter = iter + 50,
+        beta_prior = 0.0001,
+        cutpoints = c(-Inf, 0, Inf)
+      )
 
+      # ordinal
+      } else if(type == "ordinal"){
 
-  # number of observations
-  n <- nrow(X)
+      # intercept only
+      if(is.null(formula)){
+        X <- matrix(1, n, 1)
 
-  # number of columns
-  p <- ncol(X)
+        } else {
 
+        # model matrix
+        X <- model.matrix(formula, data)
 
-  if(is.null(formula)){
+      }
+        # categories
+        K <- max(apply(Y, 2, function(x) { length(unique(x))   } ))
 
-  control <- "no_control"
+        # call c ++
+        post_samp <- .Call(
+          "_BGGM_mv_ordinal_albert",
+          Y = Y,
+          X = X,
+          iter = iter + 50,
+          delta = delta,
+          epsilon = 0.1,
+          K = K
+        )
 
-  # scatter matrix
-  S <- t(X) %*% X
+        } else if(type == "mixed"){
 
-  # sample from Wishart
-  if(isFALSE(analytic)){
+          # no control variables allowed
+          if(!is.null(formula)){
+            warning("formula ignored for mixed data at this time")
+            formula <- NULL
+            }
 
-    # number of columns inv + pcor
-    cols_samps <- p^2 + p^2
+          # default for ranks
+          if(is.null(mixed_type)) {
+            idx = colMeans(round(Y) == Y)
+            idx = ifelse(idx == 1, 1, 0)
+            # user defined
+            } else {
+              idx = mixed_type
+              }
 
-    # name the columns
-    inv_names <- unlist(lapply(1:p, function(x)  samps_inv_helper(x, p)))
-    pcor_names <-unlist(lapply(1:p, function(x)  samps_pcor_helper(x, p)))
+      # rank following hoff (2008)
+      rank_vars <- rank_helper(Y)
 
-    # store posterior samples
-    df_samps <- matrix(0, nrow = iter, ncol = cols_samps)
+      post_samp <- .Call(
+        "_BGGM_copula",
+        z0_start = rank_vars$z0_start,
+        levels = rank_vars$levels,
+        K = rank_vars$K,
+        Sigma_start = rank_vars$Sigma_start,
+        iter = iter + 50,
+        delta = delta,
+        epsilon = 0.1,
+        idx = idx
+      )
 
-  for(i in 1:iter){
+      } else {
+        stop("'type' not supported: must be continuous, binary, ordinal, or mixed.")
+      }
 
-    B <- diag(ncol(Y)) * 0.0001
+    pcor_mat <- round(apply(post_samp$pcors[,,51:(iter + 50)], 1:2, mean), 3)
+    pcor_sd <- round(apply(post_samp$pcors[,,51:(iter + 50)], 1:2, sd), 3)
 
-    # draw directly from Wishart
-    inv_mat <- rWishart(1, n + (p + 2), solve(S + B))[,,1]
-
-    # compute partial correlations
-    pcor_mat <-   -1 * cov2cor(inv_mat)
-
-    # into the $i$th row
-    df_samps[i,1:cols_samps] <- c(as.numeric(inv_mat), as.numeric(pcor_mat))
-
-  }
-
-  # name columns
-  colnames(df_samps) <- c(inv_names, pcor_names)
-
-  # matrix for storage
-  pcor_mat <-  inv_mat <- matrix(0, ncol = p, p)
-
-  # posterior means (partials)
-  pcor_mat[] <- colMeans(df_samps[,  grep("pcors", colnames(df_samps))])
-  diag(pcor_mat) <- 0
-
-  # posterior means (inverse)
-  inv_mat[]   <- colMeans(df_samps[,  grep("cov_inv", colnames(df_samps))])
-
-  returned_object  <- list(pcor_mat = pcor_mat,
-                           inv_mat = inv_mat,
-                           posterior_samples = as.data.frame(df_samps),
-                           p = p, dat = X,
-                           iter = iter,
-                           call = match.call(),
-                           analytic = analytic,
-                           control = control,
-                           type = type)
-
-
-  # analytic solution
-  } else {
-
-    # analytic
-    fit <-  analytic_solve(X)
-
-    returned_object <- list(fit = fit,
+    results <- list(pcor_mat = pcor_mat,
+                            pcor_sd = pcor_sd,
                             analytic = analytic,
+                            formula = formula,
+                            post_samp = post_samp,
+                            type = type,
+                            iter = iter,
+                            Y = Y,
                             call = match.call(),
-                            dat = X,
                             p = p,
-                            control = control,
-                            type = type)
+                            n = n)
 
-
- }
-
-  } else {
-
-    control <- "control"
-
-    # matrix for storage
-    pcor_mat <-  inv_mat <- matrix(0, ncol = p, p)
-
-    # name the columns
-    inv_names <- unlist(lapply(1:p, function(x)  samps_inv_helper(x, p)))
-    pcor_names <-unlist(lapply(1:p, function(x)  samps_pcor_helper(x, p)))
-
-    X_pred <- model.matrix(formula, as.data.frame(data))
-
-    fit_mvn <- mvn_continuous(X, X_pred,
-                              delta = 20,
-                                      epsilon = 0.0001,
-                                      iter = iter + 50)
-
-
-
-    inv_cov <- matrix(as.numeric( fit_mvn$Theta[,,51:(iter+50)]),
-                   nrow = iter, ncol = p^2, byrow = TRUE )
-
-    pcors <- matrix(as.numeric( fit_mvn$pcors[,,51:(iter+50)]),
-                      nrow = iter, ncol = p^2, byrow = TRUE)
-    #
-    df_samps <- cbind(inv_cov, pcors)
-    #
-    colnames(df_samps) <- c(inv_names, pcor_names)
-
-    # posterior means (partials)
-    pcor_mat[] <- colMeans(df_samps[,  grep("pcors", colnames(df_samps))])
-    diag(pcor_mat) <- 0
-
-    # posterior means (inverse)
-    inv_mat[]   <- colMeans(df_samps[,  grep("cov_inv", colnames(df_samps))])
-
-    returned_object  <- list(pcor_mat = pcor_mat,
-                             inv_mat = inv_mat,
-                             posterior_samples = as.data.frame(df_samps),
-                             p = p, dat = X,
-                             iter = iter,
-                             call = match.call(),
-                             analytic = analytic,
-                             betas = fit_mvn$beta,
-                             coef_names = colnames(X_pred),
-                             control = control,
-                             type = type)
-    }
-
-  } else if(type == "binary"){
-
-
-    if(is.null(formula)){
-
-      control <- "no_control"
-
-      p <- ncol(Y)
-
-      # matrix for storage
-      pcor_mat <-  inv_mat <- matrix(0, ncol = p, p)
-
-      # name the columns
-      inv_names <- unlist(lapply(1:p, function(x)  samps_inv_helper(x, p)))
-      pcor_names <-unlist(lapply(1:p, function(x)  samps_pcor_helper(x, p)))
-
-      X_pred <- model.matrix(~1, data = as.data.frame( Y))
-
-      fit_mvn <- mvn_binary(Y, X_pred,
-                              delta = 20,
-                              epsilon = ep,
-                              iter = iter + 50,
-                          beta_prior = 0.0001,
-                          cutpoints = c(-Inf, 0, Inf))
-
-
-
-    inv_cov <- matrix(as.numeric( fit_mvn$Theta[,,51:(iter+50)]),
-                      nrow = iter, ncol = p^2, byrow = TRUE )
-
-    pcors <- matrix(as.numeric( fit_mvn$pcors[,,51:(iter+50)]),
-                    nrow = iter, ncol = p^2, byrow = TRUE)
-    #
-    df_samps <- cbind(inv_cov, pcors)
-    #
-    colnames(df_samps) <- c(inv_names, pcor_names)
-
-    # posterior means (partials)
-    pcor_mat[] <- colMeans(df_samps[,  grep("pcors", colnames(df_samps))])
-    diag(pcor_mat) <- 0
-
-    # posterior means (inverse)
-    inv_mat[]   <- colMeans(df_samps[,  grep("cov_inv", colnames(df_samps))])
-
-    returned_object  <- list(pcor_mat = pcor_mat,
-                             inv_mat = inv_mat,
-                             posterior_samples = as.data.frame(df_samps),
-                             p = p, dat = Y,
-                             iter = iter,
-                             call = match.call(),
-                             analytic = analytic,
-                             betas = fit_mvn$beta,
-                             coef_names = colnames(X_pred),
-                             control = control,
-                             type = type)
-
-    } # end no control
-
-# end of binary
-  } else if(type == "ordinal") {
-
-
-
-    if(is.null(formula)){
-
-      control <- "no_control"
-
-      p <- ncol(Y)
-
-      # matrix for storage
-      pcor_mat <-  inv_mat <- matrix(0, ncol = p, p)
-
-      # name the columns
-      inv_names <- unlist(lapply(1:p, function(x)  samps_inv_helper(x, p)))
-      pcor_names <-unlist(lapply(1:p, function(x)  samps_pcor_helper(x, p)))
-
-      X_pred <- model.matrix(~1, data = as.data.frame( Y))
-
-      fit_mvn <- mvn_ordinal(Y, X_pred,
-                            delta = 20,
-                            epsilon = ep,
-                            iter = iter + 50,
-                            MH = 0.001)
-
-
-
-      inv_cov <- matrix(as.numeric( fit_mvn$Theta[,,51:(iter+50)]),
-                        nrow = iter, ncol = p^2, byrow = TRUE )
-
-      pcors <- matrix(as.numeric( fit_mvn$pcors[,,51:(iter+50)]),
-                      nrow = iter, ncol = p^2, byrow = TRUE)
-      #
-      df_samps <- cbind(inv_cov, pcors)
-      #
-      colnames(df_samps) <- c(inv_names, pcor_names)
-
-      # posterior means (partials)
-      pcor_mat[] <- colMeans(df_samps[,  grep("pcors", colnames(df_samps))])
-      diag(pcor_mat) <- 0
-
-      # posterior means (inverse)
-      inv_mat[]   <- colMeans(df_samps[,  grep("cov_inv", colnames(df_samps))])
-
-      returned_object  <- list(pcor_mat = pcor_mat,
-                               inv_mat = inv_mat,
-                               posterior_samples = as.data.frame(df_samps),
-                               p = p, dat = Y,
-                               iter = iter,
-                               call = match.call(),
-                               analytic = analytic,
-                               betas = fit_mvn$beta,
-                               coef_names = colnames(X_pred),
-                               control = control,
-                               type = type)
-
-    } # end no control
-
-
-  } else if (type == "mixed"){
-
-
-    control <- "no_control"
-
-    p <- ncol(Y)
-
-    # matrix for storage
-    pcor_mat <-  inv_mat <- matrix(0, ncol = p, p)
-
-    # name the columns
-    inv_names <- unlist(lapply(1:p, function(x)  samps_inv_helper(x, p)))
-    pcor_names <-unlist(lapply(1:p, function(x)  samps_pcor_helper(x, p)))
-
-    rank_vars <- rank_helper(Y)
-
-    if(is.null(mixed_type)) {
-
-      idx = colMeans(round(Y) == Y)
-      idx = ifelse(idx == 1, 1, 0)
-
+    #  analytic
     } else {
 
-      idx = mixed_type
+      if(type != "continuous"){
+        warning("analytic solution only available for 'type = continuous'")
+        type <- "continuous"
+        }
 
-    }
+    formula <- NULL
+    analytic_fit <- analytic_solve(Y)
+    results <- list(pcor_mat = analytic_fit$pcor_mat,
+                    analytic_fit = analytic_fit,
+                    analytic = analytic,
+                    formula = formula,
+                    type = type,
+                    iter = iter,
+                    Y = Y,
+                    call = match.call(),
+                    p = p,
+                    n = n)
 
-    fit_mvn <- copula(z0_start = rank_vars$z0_start,
-                      levels = rank_vars$levels,
-                      K = rank_vars$K,
-                      Sigma_start = rank_vars$Sigma_start,
-                      iter = iter + 50,
-                      delta = 20,
-                      epsilon = 0.1,
-                      idx = idx)
+    } # end analytic
 
-
-    inv_cov <- matrix(as.numeric( fit_mvn$Theta[,,51:(iter+50)]),
-                      nrow = iter, ncol = p^2, byrow = TRUE )
-
-    pcors <- matrix(as.numeric( fit_mvn$pcors[,,51:(iter+50)]),
-                    nrow = iter, ncol = p^2, byrow = TRUE)
-    #
-    df_samps <- cbind(inv_cov, pcors)
-    #
-    colnames(df_samps) <- c(inv_names, pcor_names)
-
-    # posterior means (partials)
-    pcor_mat[] <- colMeans(df_samps[,  grep("pcors", colnames(df_samps))])
-    diag(pcor_mat) <- 0
-
-    # posterior means (inverse)
-    inv_mat[]   <- colMeans(df_samps[,  grep("cov_inv", colnames(df_samps))])
-
-    returned_object  <- list(pcor_mat = pcor_mat,
-                             inv_mat = inv_mat,
-                             posterior_samples = as.data.frame(df_samps),
-                             p = p, dat = Y,
-                             iter = iter,
-                             call = match.call(),
-                             analytic = analytic,
-                             betas = fit_mvn$beta,
-                             coef_names = colnames(X_pred),
-                             control = control,
-                             type = type)
-  } # end of mixed
-
-
-
+  returned_object <- results
   class(returned_object) <- c("BGGM", "estimate", "default")
   return(returned_object)
 
-
-}
+  }
 
 #' @name summary.estimate
 #' @title Summary method for \code{estimate.default} objects
 #'
-#' @param object An object of class \code{estimate}
-#' @seealso \code{\link{select.estimate}}
-#' @param ... currently ignored
+#' @param object an object of class \code{estimate}
+#'
+#' @param col_names logical. Should the summary include the column names (default is \code{TRUE})?
+#'                  Setting to \code{FALSE} includes the column numbers (e.g., \code{1--2}).
+#'
 #' @param cred credible interval width
-#' @return A list containing the summarized posterior distributions
+#' @param ... currently ignored
+
+
+#' @seealso \code{\link{select.estimate}}
+#' @return a list containing the summarized posterior distributions
 #' # data
 #' Y <- BGGM::bfi[, 1:5]
 #' # analytic approach (sample by setting analytic = FALSE)
 #' fit <- estimate(Y, analytic = TRUE)
 #' summary(fit)
 #' @export
-summary.estimate <- function(object, cred = 0.95, ...) {
+summary.estimate <- function(object,
+                             col_names = TRUE,
+                             cred = 0.95, ...) {
 
-  if (isTRUE(object$analytic)) {
-    returned_object <- list(object = object)
+  # nodes
+  p <- object$p
 
-    } else {
+  # identity matrix
+  I_p <- diag(p)
 
-    lb <- (1 - cred) / 2
-    ub <- 1 - lb
+  # lower bound
+  lb <- (1 - cred) / 2
 
-    name_temp <- matrix(0, object$p, object$p)
+  # upper bound
+  ub <- 1 - lb
 
-    edge_names <- unlist(lapply(1:object$p , function(x)
-      paste(1:object$p, x, sep = "--")))
+  # column names
+  cn <-  colnames(object$Y)
 
-    name_temp[] <- edge_names
-    up_tri <- name_temp[upper.tri(name_temp)]
 
-    pcor_samples <-
-      object$posterior_samples[,  grep("pcors", colnames(object$posterior_samples))]
+  if(col_names | is.null(cn)){
 
-    colnames(pcor_samples) <- edge_names
-    pcor_upper <- pcor_samples[, up_tri]
+    mat_names <-  sapply(cn , function(x) paste(cn, x, sep = "--"))[upper.tri(I_p)]
 
-    ci <- apply(
-      pcor_upper,
-      MARGIN = 2,
-      FUN = function(x) {
-        quantile(x, probs = c(lb, ub))
-      }
+  } else {
+
+    mat_names <- sapply(1:p , function(x) paste(1:p, x, sep = "--"))[upper.tri(I_p)]
+
+  }
+
+
+  if(isFALSE(object$analytic)){
+  post_mean <- round(apply( object$post_samp$pcors[,, 51:(object$iter + 50) ], 1:2, mean), 3)[upper.tri(I_p)]
+
+  post_sd  <- round(apply( object$post_samp$pcors[,, 51:(object$iter + 50) ], 1:2, sd), 3)[upper.tri(I_p)]
+
+  post_lb <- round(apply( object$post_samp$pcors[,, 51:(object$iter + 50) ], 1:2, quantile, lb), 3)[upper.tri(I_p)]
+
+  post_ub <- round(apply( object$post_samp$pcors[,, 51:(object$iter + 50) ], 1:2, quantile, ub), 3)[upper.tri(I_p)]
+
+
+
+  dat_results <-
+    data.frame(
+      relation = mat_names,
+      post_mean =  post_mean,
+      post_sd = post_sd,
+      post_lb = post_lb,
+      post_ub = post_ub
     )
-    diff_mu <-
-      apply(pcor_upper, MARGIN = 2, mean)
 
-    diff_sd <-
-      apply(pcor_upper, MARGIN = 2, sd)
+  colnames(dat_results) <- c(
+    "Relation",
+    "Post.mean",
+    "Post.sd",
+    "Cred.lb",
+    "Cred.ub")
+
+  } else {
 
     dat_results <-
       data.frame(
-        edge = name_temp[upper.tri(name_temp)],
-        post_mean =  round(diff_mu, 3),
-        post_sd = round(diff_sd, 3),
-        ci = round(t(ci), 3)
+        relation = mat_names,
+        post_mean =  object$pcor_mat[upper.tri(I_p)]
       )
 
     colnames(dat_results) <- c(
-      "Edge",
-      "Estimate",
-      "Est.Error",
-      "Cred.lb", "Cred.ub")
+      "Relation",
+      "Post.mean")
 
-    returned_object <- list(dat_results = dat_results,
-                            object = object,
-                            pcor_samples = pcor_samples)
   }
 
-  class(returned_object) <- c("BGGM", "estimate",
-                              "summary_estimate",
-                              "summary.estimate")
-  returned_object
+
+  returned_object <- list(dat_results = dat_results,
+                          object = object)
+
+
+class(returned_object) <- c("BGGM", "estimate",
+                            "summary_estimate",
+                            "summary.estimate")
+returned_object
+}
+
+
+print_summary_estimate <- function(x, ...) {
+    cat("BGGM: Bayesian Gaussian Graphical Models \n")
+    cat("--- \n")
+    cat("Type:",  x$object$type, "\n")
+    cat("Analytic:", x$object$analytic, "\n")
+    cat("Formula:", paste(as.character(fit$formula), collapse = " "), "\n")
+    # number of iterations
+    cat("Posterior Samples:", x$object$iter, "\n")
+    # number of observations
+    cat("Observations (n):\n")
+    # number of variables
+    cat("Nodes (p):", x$object$p, "\n")
+    # number of edges
+    cat("Relations:", .5 * (x$object$p * (x$object$p - 1)), "\n")
+    cat("--- \n")
+    cat("Call: \n")
+    print(x$object$call)
+    cat("--- \n")
+    cat("Estimates:\n")
+    print(x$dat_results, row.names = F)
+    cat("--- \n")
+}
+
+
+print_estimate <- function(x, ...){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type:",  x$type, "\n")
+  cat("Analytic:", x$analytic, "\n")
+  cat("Formula:", paste(as.character(fit$formula), collapse = " "), "\n")
+  # number of iterations
+  cat("Posterior Samples:", x$iter, "\n")
+  # number of observations
+  cat("Observations (n):\n")
+  # number of variables
+  cat("Nodes (p):", x$p, "\n")
+  # number of edges
+  cat("Relations:", .5 * (x$p * (x$p-1)), "\n")
+  cat("--- \n")
+  cat("Call: \n")
+  print(x$call)
+  cat("--- \n")
+  cat("Date:", date(), "\n")
 }
 
 
 
-#' Plot \code{summary_estimate} Objects
+#' Plot \code{summary.estimate} Objects
 #'
-#' @param x an object of class \code{estimate} or \code{ggm_compare_estimate}
+#' @param x an object of class \code{summary.estimate}
 #' @param color color of error bar
 #' @param width width of error bar cap
 #' @param ... currently ignored
@@ -541,12 +469,7 @@ plot.summary_estimate <- function(x, color = "black",
                                   size = 2,
                                   width = 0, ...){
 
-  n_plt  <- length(x$dat_results)
-
-  # plots
-  lapply(1:seq_len(n_plt), function(i){
-
-    dat_temp <- x$dat_results[[i]][order(x$dat_results[[i]]$Post.mean,
+    dat_temp <- x$dat_results[order(x$dat_results$Post.mean,
                                          decreasing = F), ]
 
     dat_temp$Relation <-
@@ -555,6 +478,7 @@ plot.summary_estimate <- function(x, color = "black",
              labels = dat_temp$Relation)
 
 
+   if(isFALSE(x$object$analytic)){
     ggplot(dat_temp,
            aes(x = Relation,
                y = Post.mean)) +
@@ -569,7 +493,18 @@ plot.summary_estimate <- function(x, color = "black",
         angle = 90,
         vjust = 0.5,
         hjust = 1
-      )) +
-      ggtitle(paste(names(x$object$diff)))
-  })
+      ))
+   } else {
+
+     ggplot(dat_temp,
+            aes(x = Relation,
+                y = Post.mean)) +
+       geom_point(size = size) +
+       xlab("Index") +
+       theme(axis.text.x = element_text(
+         angle = 90,
+         vjust = 0.5,
+         hjust = 1
+       ))
+     }
 }

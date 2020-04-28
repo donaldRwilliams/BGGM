@@ -10,9 +10,10 @@ estimate(
   data = NULL,
   type = "continuous",
   mixed_type = NULL,
-  iter = 5000,
   analytic = FALSE,
-  ep = 0.001,
+  prior_sd = 0.25,
+  iter = 5000,
+  seed = 1,
   ...
 )
 }
@@ -34,9 +35,11 @@ when \code{type = "mixed"} and \code{NULL} otherwise. See note for further detai
 
 Treating continous data as ranks is computationally expensive and can be avoided by assuming normality.}
 
+\item{analytic}{logical. Should the analytic solution be computed (default is \code{FALSE})?}
+
 \item{iter}{number of iterations (posterior samples; defaults to 5000).}
 
-\item{analytic}{logical. Should the analytic solution be computed (default is \code{FALSE})?}
+\item{seed}{The seed for random number generation (default set to \code{1}).}
 
 \item{...}{currently ignored.}
 }
@@ -93,13 +96,13 @@ an estimate of the conditional independence structure (null effects).
 
 \strong{Interpretation of conditional (in)dependence models for latent data:}
 
-A  tetrachoric correlation (binary data) is a special case of a polychoric correlation (ordinal data). Both relations are
-between "theorized normally distributed continuous latent variables"
-(\href{https://en.wikipedia.org/wiki/Polychoric_correlation}{Wikipedia})
-In both instances, the correpsonding partial correlation between observed variables is conditioned
-on the remaining variables in the \emph{latent} space. This implies that interpration is much the same as
-for continuous data, but with respect to latent variables. We refer interested reader to
-\insertCite{@page 2364, section 2.2, in  @webb2008bayesian;textual}{BGGM}.
+A  tetrachoric correlation (binary data) is a special case of a polychoric correlation (ordinal data).
+Both relations are between "theorized normally distributed continuous latent variables"
+(\href{https://en.wikipedia.org/wiki/Polychoric_correlation}{Wikipedia}). In both instances,
+the correpsonding partial correlation between observed variables is conditioned
+on the remaining variables in the \emph{latent} space. This implies that interpration
+is much the same as for continuous data, but with respect to latent variables.
+We refer interested reader to \insertCite{@page 2364, section 2.2, in  @webb2008bayesian;textual}{BGGM}.
 
 
 see \code{methods("estimate")}

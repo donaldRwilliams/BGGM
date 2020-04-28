@@ -2,12 +2,12 @@
 % Please edit documentation in R/estimate.R
 \name{plot.summary_estimate}
 \alias{plot.summary_estimate}
-\title{Plot \code{summary_estimate} Objects}
+\title{Plot \code{summary.estimate} Objects}
 \usage{
 \method{plot}{summary_estimate}(x, color = "black", size = 2, width = 0, ...)
 }
 \arguments{
-\item{x}{an object of class \code{estimate} or \code{ggm_compare_estimate}}
+\item{x}{an object of class \code{summary.estimate}}
 
 \item{color}{color of error bar}
 
@@ -19,5 +19,5 @@
 an object of class \code{ggplot}
 }
 \description{
-Plot \code{summary_estimate} Objects
+Plot \code{summary.estimate} Objects
 }
