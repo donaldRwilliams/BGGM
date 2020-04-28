@@ -2,64 +2,47 @@
 % Please edit documentation in R/select.estimate.R
 \name{select.estimate}
 \alias{select.estimate}
-\title{Select Graphical Structure with Estimation Based Methods}
+\title{GGM Selection: Estimation}
 \usage{
-\method{select}{estimate}(object, cred = 0.95, rope = NULL, prob = 0.95, ...)
+\method{select}{estimate}(object, cred = 0.95, alternative = "greater")
 }
 \arguments{
 \item{object}{object of class \code{estimate.default}}
 
 \item{cred}{credible interval width used for the decision rule}
 
-\item{rope}{region of practical equivalence}
-
-\item{prob}{posterior probability (see notes)}
+\item{alternative}{a character string specifying the alternative hypothesis,
+must be one of "two.sided", "greater" (default) or "less".
+See note for futher details.}
 
 \item{...}{not currently used}
 }
 \value{
 An object of class \code{select.estimate}:
 
-\code{analytic = TRUE}:
 \itemize{
-\item \code{partials_non_zero} selected partial correlation matrix
-\item \code{adjacency_non_zero} adjacency matrix for the selected edges
+\item \code{pcor_adj} selected partial correlation matrix
+\item \code{adj} adjacency matrix for the selected edges
 \item \code{ci} credible interval width
-\item \code{analytic} TRUE
-\item \code{pcors_samples} posterior samples
-}
-
-\code{analytic = FALSE}:
-\itemize{
-\item \code{partials_non_zero} selected partial correlation matrix
-\item \code{adjacency_non_zero} adjacency matrix for the selected edges
-\item \code{pcor_sd} posterior standard deviation
-\item \code{ci} credible interval width
-\item \code{rope} NULL
-
-}
-
-\code{credible interval}:
-\itemize{
-\item \code{partials_non_zero} selected partial correlation matrix  (outside of the rope)
-\item \code{adjacency_non_zero} adjacency matrix for the selected edges (outside of the rope)
-\item \code{partials_zero} partials in the rope
-\item \code{adjaceny_zero} adjacency in the rope
-\item \code{pcor_sd} posterior standard deviation
-\item \code{call} match.call()
-\item \code{rope} specified rope
-\item \code{in_rope} probability in the rope
-\item \code{pcors_samples} posterior samples
+\item \code{object} object of class \code{estimate}
 }
 }
 \description{
-This allows for not only estimating the conditional dependence structure, that is non-zero edges, but also the conditional **in**dependence
-structure (evidence for no relation). For the latter, the region of practical equivalence must be specified
+Select the edge set for \code{estimate} objects. The graph is determined with
+the posterior distribution, in particular credible interval exclusion of zero. This
+corresponds to a directional posterior probability \insertCite{Marsman2017a}{BGGM}. For example,
+the probability (conditional on the model) of a positive edge is at least 97.5% when the 95%
+credible interval excludes zero.
 }
 \note{
-The region of practical equivalence allows for assessing whether an edge is practically zero. In other words, conditional independence
-(\eqn{\rho = 0}). The argument \code{prob} is then the posterior probability that must be in (practically zero edges) and out
- (practically zero edges) of the rope.
+\strong{Alternative Default:}
+
+This package was built for the social-behavioral sciences in particular. In these applications, there is
+strong theory that expects \emp{all} effects to be positive. This is known as a "positive manifold" and
+this notion has a rich tradition in psychometrics. Hence, by default this expecation is included into graph selection
+(\code{alternative = "greater"}). This results in the estimted structure including only positive edges. Further
+details can be found at the blog "Dealing with Negative (Red) Edges in Psychological Networks: Frequentist Edition"
+(\href{https://donaldrwilliams.github.io/2020/03/29/dealing-with-negative-red-edges-in-psychological-networks-frequentist-edition/}{link})
 }
 \examples{
 
@@ -78,4 +61,7 @@ E$partials_non_zero
 
 # adjacency matrix
 E$adjacency_non_zero
+}
+\references{
+\insertAllCited{}
 }

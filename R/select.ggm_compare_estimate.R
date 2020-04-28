@@ -55,11 +55,10 @@ select.ggm_compare_estimate <- function(object,
 
     if(isFALSE(object$analytic)){
 
-    lb <- (1 - cred) / 2
-    ub <- 1 - lb
-    x <- 1
+      lb <- (1 - cred) / 2
+      ub <- 1 - lb
 
-    mean_diff <- lapply(1:contrasts, function(x){
+      mean_diff <- lapply(1:contrasts, function(x){
 
       apply(object$diff[[x]]  , 1:2, mean)
 
