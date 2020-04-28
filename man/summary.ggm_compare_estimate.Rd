@@ -4,10 +4,13 @@
 \alias{summary.ggm_compare_estimate}
 \title{Summary method for \code{ggm_compare_estimate} objects}
 \usage{
-\method{summary}{ggm_compare_estimate}(object, cred = 0.95, ...)
+\method{summary}{ggm_compare_estimate}(object, col_names = TRUE, cred = 0.95, ...)
 }
 \arguments{
-\item{object}{An object of class \code{ggm_compare_estimate}}
+\item{object}{an object of class \code{ggm_compare_estimate}}
+
+\item{col_names}{logical. Should the summary include the column names (default is \code{TRUE})?
+Setting to \code{FALSE} includes the column numbers (e.g., \code{1--2}).}
 
 \item{cred}{credible interval width}
 

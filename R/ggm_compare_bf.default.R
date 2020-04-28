@@ -25,6 +25,8 @@
 #' (1 for rank and 0 to assume normality). The default is currently (dev version) to treat all integer variables
 #' as ranks when \code{type = "mixed"} and \code{NULL} otherwise. See note for further details.
 #'
+#' @param analytic logical. Should the analytic solution be computed (default is \code{FALSE}) ? See note for details.
+#'
 #' @param iter number of iterations (posterior samples; defaults to 5000).
 #'
 #' @param seed The seed for random number generation (default set to \code{1}).
@@ -113,15 +115,23 @@ ggm_compare_explore <- function(...,
                            data = NULL,
                            type = "continuous",
                            mixed_type = NULL,
+                           analytic = FALSE,
                            prior_sd = 0.20,
                            iter = 5000,
                            seed = 1){
+
+
+  # set seed
+  set.seed(seed)
 
   # group info (e.g., n, p, etc)
   info <- BGGM:::Y_combine(...)
 
   # number of variables
   p <- info$dat_info$p[1]
+
+  # number of observation
+  n = info$dat_info$n[1]
 
   # groups
   groups <- length(info$dat)
@@ -134,7 +144,13 @@ ggm_compare_explore <- function(...,
   # matrix-F hyperparameter
   delta <- BGGM:::delta_solve(prior_sd)
 
-  # sample posterior
+  if(!analytic){
+
+  if(type == "continuous"){
+
+      if(is.null(formula)){
+
+      # sample posterior
   post_samp <- lapply(1:groups, function(x) {
 
     Y <- as.matrix(scale(info$dat[[x]], scale = FALSE))
@@ -150,6 +166,146 @@ ggm_compare_explore <- function(...,
       explore = 1
     )
   })
+
+  # control for variables
+  } else {
+
+    # model matrix
+    X <- model.matrix(formula, data)
+
+    # posterior sample
+    post_samp <- lapply(1:groups, function(x) {
+
+      # data Y_gj
+      Y <- as.matrix(scale(info$dat[[x]], scale = F))
+
+      .Call(
+        "_BGGM_mv_continuous",
+        Y = Y,
+        X = X,
+        delta = delta,
+        epsilon = 0.1,
+        iter = iter + 50
+      )
+    })
+  }
+
+  } else if (type == "binary") {
+
+
+    # intercept only
+    if(is.null(formula)){
+
+      X <- matrix(1, n, 1)
+
+      # model matrix
+    } else {
+
+      X <- model.matrix(formula, data)
+
+    }
+
+
+    # posterior sample
+    post_samp <- lapply(1:groups, function(x) {
+
+      # Y_gj
+      Y <- as.matrix(info$dat[[x]])
+
+      .Call(
+        "_BGGM_mv_binary",
+        Y = Y,
+        X = X,
+        delta = delta,
+        epsilon = 0.1,
+        iter = iter + 50,
+        beta_prior = 0.0001,
+        cutpoints = c(-Inf, 0, Inf)
+      )
+    })
+
+  } else if(type == "ordinal"){
+
+    # intercept only
+    if(is.null(formula)){
+
+      X <- matrix(1, n, 1)
+
+    } else {
+
+      # model matrix
+      X <- model.matrix(formula, data)
+
+    }
+
+    # posterior sample
+    post_samp <- lapply(1:groups, function(x) {
+
+      # Y_gj
+      Y <- as.matrix(info$dat[[x]])
+
+      # categories
+      K <- max(apply(Y, 2, function(x) { length(unique(x))   } ))
+
+      # call c ++
+      .Call("_BGGM_mv_ordinal_albert",
+            Y = Y,
+            X = X,
+            iter = iter + 50,
+            delta = delta,
+            epsilon = 0.1,
+            K = K)
+    })
+
+    } else if (type == "mixed") {
+
+    # no control variables allowed
+    if(!is.null(formula)){
+
+      warning("formula ignored for mixed data at this time")
+      formula <- NULL
+    }
+
+    # posterior samples
+    post_samp <- lapply(1:groups, function(x) {
+
+      # Y_gj
+      Y <- as.matrix(info$dat[[x]])
+
+      # default for ranks
+      if(is.null(mixed_type)) {
+
+        idx = colMeans(round(Y) == Y)
+        idx = ifelse(idx == 1, 1, 0)
+
+        # user defined
+      } else {
+
+        idx = mixed_type
+
+      }
+
+      # rank following hoff (2008)
+      rank_vars <- rank_helper(Y)
+
+      .Call("_BGGM_copula",
+            z0_start = rank_vars$z0_start,
+            levels = rank_vars$levels,
+            K = rank_vars$K,
+            Sigma_start = rank_vars$Sigma_start,
+            iter = iter + 50,
+            delta = delta,
+            epsilon = 0.1,
+            idx = idx)
+      })
+
+    } else {
+
+      stop("'type' not supported: must be continuous, binary, ordinal, or mixed.")
+
+      }
+
+
 
 
   # matrix dimensions for prior
@@ -172,6 +328,10 @@ ggm_compare_explore <- function(...,
       explore = 0
     )$fisher_z
   })
+
+
+
+
 
   # store pcor diff
   pcor_diff <- BF_01_mat <- matrix(0, p, p)
@@ -258,9 +418,203 @@ ggm_compare_explore <- function(...,
                           type = type,
                           p = p)
 
+  # analytic solution
+  } else {
+
+    stop("analytic not currently implemented")
+
+  }
+
+
+
     class(returned_object) <- c("BGGM",
-                                "ggm_compare_bf",
+                                "ggm_compare_explore",
                                 "explore")
     returned_object
 }
+
+
+
+print_summary_ggm_compare_bf <- function(x, ...){
+  groups <- x$object$groups
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type:",  x$object$type, "\n")
+  # number of iterations
+  cat("Posterior Samples:", x$object$iter, "\n")
+  # number of observations
+  cat("Observations (n):\n")
+  groups <- length(x$object$info$dat)
+  for(i in 1:groups){
+    cat("  Group", paste( i, ":", sep = "") , x$object$info$dat_info$n[[i]], "\n")
+  }
+  # number of variables
+  cat("Variables (p):", x$object$p, "\n")
+  # number of edges
+  cat("Relations:", .5 * (x$object$p * (x$object$p-1)), "\n")
+  cat("Delta:", x$object$delta, "\n")
+  cat("--- \n")
+  cat("Call: \n")
+  print(x$object$call)
+  cat("--- \n")
+  cat("Hypotheses:\n")
+  cat("H0:", paste0("rho_g", 1:groups, collapse = " = "), "\n")
+  cat("H1:", paste0("rho_g", 1:groups, collapse = " - "), " = 0\n")
+  cat("--- \n\n")
+
+  print(x$results, right = FALSE, row.names = FALSE)
+  cat("--- \n")
+}
+
+
+
+print_ggm_compare_bf <- function(x, ...){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type:",  x$type, "\n")
+  # number of iterations
+  cat("Posterior Samples:", x$iter, "\n")
+  # number of observations
+  cat("Observations (n):\n")
+  groups <- length(x$info$dat)
+  for(i in 1:groups){
+    cat("  Group", paste( i, ":", sep = "") , x$info$dat_info$n[[i]], "\n")
+  }
+  # number of variables
+  cat("Variables (p):", x$p, "\n")
+  # number of edges
+  cat("Relations:", .5 * (x$p * (x$p-1)), "\n")
+  cat("Delta:", x$delta, "\n")
+  cat("--- \n")
+  cat("Call: \n")
+  print(x$call)
+  cat("--- \n")
+  cat("Hypotheses:\n")
+  cat("H0:", paste0("rho_g", 1:groups, collapse = " = "), "\n")
+  cat("H1:", paste0("rho_g", 1:groups, collapse = " - "), " = 0\n")
+  cat("--- \n")
+  cat("Date:", date(), "\n")
+}
+
+
+
+
+#' Summary Method for \code{ggm_compare_explore} Objects
+#'
+#' @description Summarize the posterior hypothesis probabilities
+#'
+#' @param object object of class \code{ggm_compare_explore}
+#' @param col_names logical. Should the summary include the column names (default is \code{TRUE})?
+#'                  Setting to \code{FALSE} includes the column numbers (e.g., \code{1--2}).
+#'
+#' @param ... currently ignored
+#'
+#' @return
+#' @export
+#'
+#' @examples
+summary.ggm_compare_explore <- function(object,
+                                        col_names = TRUE,
+                                        ...){
+
+  # nodes
+  p <- object$p
+
+  # identity matrix
+  I_p <- diag(p)
+
+  # prob null
+  prob_H0 <-   round(object$BF_01 / (object$BF_01 + 1), 3)
+
+  # prob h1
+  prob_H1 <-   round(1 - prob_H0, 3)
+
+  # column names
+  cn <-  colnames(object$info$dat[[1]])
+
+
+  if(!isTRUE(col_names) | is.null(cn)){
+
+    mat_names <- sapply(1:p , function(x) paste(1:p, x, sep = "--"))[upper.tri(I_p)]
+
+  } else {
+
+
+    mat_names <-  sapply(cn , function(x) paste(cn, x, sep = "--"))[upper.tri(I_p)]
+
+  }
+
+
+
+  if(object$groups == 2){
+  post_mean <- round(object$pcor_diff[upper.tri(I_p)], 3)
+
+  post_sd <- round(apply(object$post_samp[[1]]$pcors -
+                          object$post_samp[[2]]$pcors, 1:2, sd)[upper.tri(I_p)], 3)
+
+
+  results <- data.frame(Relation = mat_names,
+                                Post.mean = post_mean,
+                                Post.sd = post_sd,
+                                Pr.H0 = prob_H0[upper.tri(I_p)],
+                                Pr.H1 = prob_H1[upper.tri(I_p)])
+
+
+  } else {
+
+    results <- data.frame(Relation = mat_names,
+                          Pr.H0 = prob_H0[upper.tri(I_p)],
+                          Pr.H1 = prob_H1[upper.tri(I_p)])
+
+
+  }
+  returned_object <- list(results = results,
+                          object = object)
+
+  class(returned_object) <- c("BGGM",
+                              "ggm_compare_explore",
+                              "summary.ggm_compare_explore",
+                              "explore")
+  returned_object
+}
+
+
+
+#' GGM Compare: Plot \code{ggm_compare_explore] Object}
+#'
+#' @description Visualize posterior hypothesis probabilities.
+#'
+#' @param x object of class \code{ggm_compare_explore}
+#' @param size numeric. Size of the points.
+#' @param color string. Color of the points.
+#'
+#' @return
+#' @export
+#'
+plot.summary.ggm_compare_explore <- function(x, size = 2, color = "black"){
+
+
+  dat_temp <- x$results[order(x$results$Pr.H1,
+                              decreasing = F), ]
+
+  dat_temp$Relation <-
+    factor(dat_temp$Relation,
+           levels = dat_temp$Relation,
+           labels = dat_temp$Relation)
+
+
+  ggplot(dat_temp,
+         aes(x = Relation,
+             y = Pr.H1)) +
+    geom_point(size = size, color = color) +
+
+    theme(axis.text.x = element_text(
+      angle = 90,
+      vjust = 0.5,
+      hjust = 1
+    )) +
+    coord_flip()
+
+}
+
 

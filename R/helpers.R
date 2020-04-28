@@ -395,37 +395,6 @@ print_confirm <- function(x, ...){
 
 
 
-print_summary_ggm_compare_bf <- function(x, ...){
-  groups <- x$object$groups
-  cat("BGGM: Bayesian Gaussian Graphical Models \n")
-  cat("--- \n")
-  cat("Type:",  x$object$type, "\n")
-  # number of iterations
-  cat("Posterior Samples:", x$object$iter, "\n")
-  # number of observations
-  cat("Observations (n):\n")
-  groups <- length(x$object$info$dat)
-  for(i in 1:groups){
-    cat("  Group", paste( i, ":", sep = "") , x$object$info$dat_info$n[[i]], "\n")
-  }
-  # number of variables
-  cat("Variables (p):", x$object$p, "\n")
-  # number of edges
-  cat("Relations:", .5 * (x$object$p * (x$object$p-1)), "\n")
-  cat("Delta:", x$object$delta, "\n")
-  cat("--- \n")
-  cat("Call: \n")
-  print(x$object$call)
-  cat("--- \n")
-  cat("Hypotheses:\n")
-  cat("H0:", paste0("rho_g", 1:groups, collapse = " = "), "\n")
-  cat("H1:", paste0("rho_g", 1:groups, collapse = " - "), " = 0\n")
-  cat("--- \n\n")
-
-  print(x$results, right = FALSE, row.names = FALSE)
-  cat("--- \n")
-}
-
 
 
 
@@ -471,34 +440,6 @@ print_select_ggm_compare_bf <- function(x,...){
 
 }
 
-
-print_ggm_compare_bf <- function(x, ...){
-  cat("BGGM: Bayesian Gaussian Graphical Models \n")
-  cat("--- \n")
-  cat("Type:",  x$type, "\n")
-  # number of iterations
-  cat("Posterior Samples:", x$iter, "\n")
-  # number of observations
-  cat("Observations (n):\n")
-  groups <- length(x$info$dat)
-  for(i in 1:groups){
-    cat("  Group", paste( i, ":", sep = "") , x$info$dat_info$n[[i]], "\n")
-  }
-  # number of variables
-  cat("Variables (p):", x$p, "\n")
-  # number of edges
-  cat("Relations:", .5 * (x$p * (x$p-1)), "\n")
-  cat("Delta:", x$delta, "\n")
-  cat("--- \n")
-  cat("Call: \n")
-  print(x$call)
-  cat("--- \n")
-  cat("Hypotheses:\n")
-  cat("H0:", paste0("rho_g", 1:groups, collapse = " = "), "\n")
-  cat("H1:", paste0("rho_g", 1:groups, collapse = " - "), " = 0\n")
-  cat("--- \n")
-  cat("Date:", date(), "\n")
-}
 
 
 
@@ -909,41 +850,6 @@ print_summary_ggm_compare_ppc <- function(x, ...){
 }
 
 
-print_summary_ggm_estimate_compare <- function(x,...){
-
-  cat("BGGM: Bayesian Gaussian Graphical Models \n")
-  cat("--- \n")
-  cat("Type: GGM Compare with the Posterior Distribution\n")
-  # number of iterations
-  cat("Posterior Samples:", x$object$iter, "\n")
-  # number of observations
-  cat("Observations (n):\n")
-  groups <- length(x$object$info$dat)
-  for (i in 1:groups) {
-    cat("  Group",
-        paste(i, ":", sep = "") ,
-        x$object$info$dat_info$n[[i]],
-        "\n")
-  }
-  # number of variables
-  cat("Variables (p):", x$object$p, "\n")
-  # number of edges
-  cat("Edges:", .5 * (x$object$p * (x$object$p - 1)), "\n")
-  cat("--- \n")
-  cat("Call: \n")
-  print(x$object$call)
-  cat("--- \n")
-  cat("Estimates:\n")
-  for (i in 1:nrow(x$object$info$pairwise)) {
-    cat("\n", names(x$object$pcors_diffs[[i]]), "\n")
-
-    print(x$dat_results[[i]], row.names = FALSE,...)
-
-  }
-  cat("--- \n")
-}
-
-
 
 
 
@@ -986,29 +892,6 @@ print_ggm_compare_ppc <- function(x,...){
 
 
 
-print_ggm_compare <- function(x, ...){
-  cat("BGGM: Bayesian Gaussian Graphical Models \n")
-  cat("--- \n")
-  cat("Type:",  x$type, "\n")
-  cat("Analytic:", x$analytic, "\n")
-  # number of iterations
-  cat("Posterior Samples:", x$iter, "\n")
-  # number of observations
-  cat("Observations (n):\n")
-  groups <- length(x$info$dat)
-  for(i in 1:groups){
-    cat("  Group", paste( i, ":", sep = "") , x$info$dat_info$n[[i]], "\n")
-  }
-  # number of variables
-  cat("Variables (p):", x$p, "\n")
-  # number of edges
-  cat("Edges:", .5 * (x$p * (x$p-1)), "\n")
-  cat("--- \n")
-  cat("Call: \n")
-  print(x$call)
-  cat("--- \n")
-  cat("Date:", date(), "\n")
-}
 
 
 

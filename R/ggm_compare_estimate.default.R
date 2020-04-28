@@ -27,6 +27,8 @@
 #'
 #' @param analytic logical. Should the analytic solution be computed (default is \code{FALSE}) ?
 #'
+#' @param seed The seed for random number generation (default set to \code{1}).
+#'
 #' @return
 #' A list of class \code{ggm_compare_estimate} containing:
 #'  \itemize{
@@ -75,7 +77,6 @@ ggm_compare_estimate <- function(...,
                                  iter = 5000,
                                  seed = 1){
 
-
   # set seed
   set.seed(seed)
 
@@ -103,26 +104,30 @@ ggm_compare_estimate <- function(...,
 
   # sample
   if(!analytic){
+
     # continuous
+
     if(type == "continuous"){
+
       # no control variables
       if(is.null(formula)){
 
         # posterior sample
         post_samp <- lapply(1:groups, function(x) {
 
-        Y <- as.matrix(scale(info$dat[[x]], scale = F))
+          # data Y_gj
+          Y <- as.matrix(scale(info$dat[[x]], scale = F))
 
-        .Call(
-          '_BGGM_Theta_continuous',
-          PACKAGE = 'BGGM',
-          Y = Y,
-          iter = iter + 50,
-          delta = delta,
-          epsilon = 0.1,
-          prior_only = 0,
-          explore = 1
-        )$pcors
+          .Call(
+            '_BGGM_Theta_continuous',
+            PACKAGE = 'BGGM',
+            Y = Y,
+            iter = iter + 50,
+            delta = delta,
+            epsilon = 0.1,
+            prior_only = 0,
+            explore = 1
+          )$pcors
         })
 
         # control for variables
@@ -131,8 +136,10 @@ ggm_compare_estimate <- function(...,
           # model matrix
           X <- model.matrix(formula, data)
 
+          # posterior sample
           post_samp <- lapply(1:groups, function(x) {
 
+            # data Y_gj
             Y <- as.matrix(scale(info$dat[[x]], scale = F))
 
             .Call(
@@ -143,27 +150,28 @@ ggm_compare_estimate <- function(...,
               epsilon = 0.1,
               iter = iter + 50
             )$pcors
-
           })
+        }
 
-          }
-
+      # binary data
       } else if(type == "binary") {
 
-
+        # intercept only
         if(is.null(formula)){
 
           X <- matrix(1, n, 1)
 
+          # model matrix
           } else {
 
-            # model matrix
             X <- model.matrix(formula, data)
 
             }
 
+        # posterior sample
         post_samp <- lapply(1:groups, function(x) {
 
+          # Y_gj
           Y <- as.matrix(info$dat[[x]])
 
           .Call(
@@ -176,8 +184,7 @@ ggm_compare_estimate <- function(...,
             beta_prior = 0.0001,
             cutpoints = c(-Inf, 0, Inf)
           )$pcors
-
-        })
+          })
 
       } else if(type == "ordinal"){
 
@@ -193,12 +200,16 @@ ggm_compare_estimate <- function(...,
 
         }
 
+        # posterior sample
         post_samp <- lapply(1:groups, function(x) {
 
+          # Y_gj
           Y <- as.matrix(info$dat[[x]])
 
+          # categories
           K <- max(apply(Y, 2, function(x) { length(unique(x))   } ))
 
+          # call c ++
           .Call("_BGGM_mv_ordinal_albert",
               Y = Y + 1,
               X = X,
@@ -206,43 +217,41 @@ ggm_compare_estimate <- function(...,
               delta = delta,
               epsilon = 0.1,
               K = K)$pcors
-        })
+          })
 
-      } else if(type == "mixed"){
+        # mixed data
+        } else if(type == "mixed"){
 
+          # no control variables allowed
+          if(!is.null(formula)){
 
-        if(!is.null(formula)){
+            warning("formula ignored for mixed data at this time")
+            formula <- NULL
+            }
 
-          warning("formula ignored for mixed data at this time")
+          # posterior samples
+          post_samp <- lapply(1:groups, function(x) {
 
-          formula <- NULL
+            # Y_gj
+            Y <- as.matrix(info$dat[[x]])
 
-          }
+            # default for ranks
+            if(is.null(mixed_type)) {
 
+              idx = colMeans(round(Y) == Y)
+              idx = ifelse(idx == 1, 1, 0)
 
+              # user defined
+              } else {
 
-        post_samp <- lapply(1:groups, function(x) {
+                idx = mixed_type
 
-          Y <- as.matrix(info$dat[[x]])
+                }
 
-          # default for ranks
-          if(is.null(mixed_type)) {
+            # rank following hoff (2008)
+            rank_vars <- rank_helper(Y)
 
-            idx = colMeans(round(Y) == Y)
-            idx = ifelse(idx == 1, 1, 0)
-
-            # user defined
-          } else {
-
-            idx = mixed_type
-
-          }
-
-
-          # rank following hoff (2008)
-          rank_vars <- rank_helper(Y)
-
-          .Call("_BGGM_copula",
+            .Call("_BGGM_copula",
                 z0_start = rank_vars$z0_start,
                 levels = rank_vars$levels,
                 K = rank_vars$K,
@@ -251,19 +260,19 @@ ggm_compare_estimate <- function(...,
                 delta = delta,
                 epsilon = 0.1,
                 idx = idx)$pcors
-          })
+            })
 
-        } else {
-          stop("'type' not supported: must be continuous, binary, ordinal, or mixed.")
-          }
+          } else {
 
+            stop("'type' not supported: must be continuous, binary, ordinal, or mixed.")
 
+            }
 
+    diff <- lapply(1:comparisons, function(x) {
 
-      diff <- lapply(1:comparisons, function(x) {
-        contrast <- info$pairwise[x, ]
+      contrast <- info$pairwise[x, ]
 
-        post_samp[[contrast[[1]]]][, , 51:(iter + 50)] - post_samp[[contrast[[2]]]][, , 51:(iter + 50)]
+      post_samp[[contrast[[1]]]][, , 51:(iter + 50)] - post_samp[[contrast[[2]]]][, , 51:(iter + 50)]
 
       })
 
@@ -359,9 +368,14 @@ ggm_compare_estimate <- function(...,
 
 
 #' @name summary.ggm_compare_estimate
+#'
 #' @title Summary method for \code{ggm_compare_estimate} objects
 #'
-#' @param object An object of class \code{ggm_compare_estimate}
+#' @param object an object of class \code{ggm_compare_estimate}
+#'
+#' @param col_names logical. Should the summary include the column names (default is \code{TRUE})?
+#'                  Setting to \code{FALSE} includes the column numbers (e.g., \code{1--2}).
+#'
 #' @param cred credible interval width
 #' @param ... currently ignored
 #' @seealso \code{\link{ggm_compare_estimate}}
@@ -378,55 +392,145 @@ ggm_compare_estimate <- function(...,
 #' summary(fit)
 #'
 #' @export
-summary.ggm_compare_estimate <- function(object, cred = 0.95,...) {
+summary.ggm_compare_estimate <- function(object,
+                                         col_names = TRUE,
+                                         cred = 0.95,...) {
 
+  # nodes
+  p <- object$p
+
+  # identity matrix
+  I_p <- diag(p)
+
+  # lower bound
   lb <- (1 - cred) / 2
-  ub <- 1 - lb
-  name_temp <- matrix(0, object$p, object$p)
 
-  name_temp[] <-
-    unlist(lapply(1:object$p , function(x)
-      paste(1:object$p, x, sep = "--")))
+  # upper bound
+  ub <- 1 - lb
+
+  # relation names
+  name_mat <- matrix(0, p, p)
+
+  # number of comparisons
+  comparisons <- length(names(object$diff))
+
+  # column names
+  cn <-  colnames(object$info$dat[[1]])
+
+
+  if(col_names | is.null(cn)){
+
+    mat_names <-  sapply(cn , function(x) paste(cn, x, sep = "--"))[upper.tri(I_p)]
+
+    } else {
+
+      mat_names <- sapply(1:p , function(x) paste(1:p, x, sep = "--"))[upper.tri(I_p)]
+
+      }
 
   dat_results <- list()
 
-  for (i in 1:nrow(object$info$pairwise)) {
+  # summary for comparison i
+  for(i in seq_len(comparisons)){
 
-    ci <- apply(object$pcors_diffs[[i]][[1]], MARGIN = 2,
-                FUN = function(x){ quantile(x, probs = c(lb, ub)) })
-    diff_mu <-
-      apply(object$pcors_diffs[[i]][[1]], MARGIN = 2, mean)
+    post_mean <- round(apply( object$diff[[i]], 1:2, mean), 3)[upper.tri(I_p)]
 
-    diff_sd <-
-      apply(object$pcors_diffs[[i]][[1]], MARGIN = 2, sd)
+    post_sd  <- round(apply( object$diff[[i]], 1:2, sd), 3)[upper.tri(I_p)]
 
-    results_temp <-
+    post_lb <- round(apply( object$diff[[i]], 1:2, quantile, lb), 3)[upper.tri(I_p)]
+
+    post_ub <- round(apply( object$diff[[i]], 1:2, quantile, ub), 3)[upper.tri(I_p)]
+
+
+    results_i <-
       data.frame(
-        edge = name_temp[upper.tri(name_temp)],
-        post_mean =  round(diff_mu, 3),
-        post_sd = round(diff_sd, 3),
-        ci = round(t(ci), 3)
+        relation = mat_names,
+        post_mean =  post_mean,
+        post_sd = post_sd,
+        post_lb = post_lb,
+        post_ub = post_ub
       )
 
-    colnames(results_temp) <- c(
-      "Edge",
+    colnames(results_i) <- c(
+      "Relation",
       "Post.mean",
       "Post.sd",
       "Cred.lb",
       "Cred.ub"
-      )
-    dat_results[[i]] <- results_temp
+    )
+
+
+    dat_results[[i]] <- results_i
   }
+
   returned_object <- list(dat_results = dat_results,
                           object = object)
   class(returned_object) <- c("BGGM",
-                              "summary",
+                              "summary", "summary_estimate",
                               "ggm_compare_estimate",
-                               "estimate")
+                              "estimate")
   returned_object
 }
 
+# print ggm compare
+print_ggm_compare <- function(x, ...){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type:",  x$type, "\n")
+  cat("Analytic:", x$analytic, "\n")
+  cat("Formula:", paste(as.character(fit$formula), collapse = " "), "\n")
+  # number of iterations
+  cat("Posterior Samples:", x$iter, "\n")
+  # number of observations
+  cat("Observations (n):\n")
+  groups <- length(x$info$dat)
+  for(i in 1:groups){
+    cat("  Group", paste( i, ":", sep = "") , x$info$dat_info$n[[i]], "\n")
+  }
+  # number of variables
+  cat("Nodes (p):", x$p, "\n")
+  # number of edges
+  cat("Relations:", .5 * (x$p * (x$p-1)), "\n")
+  cat("--- \n")
+  cat("Call: \n")
+  print(x$call)
+  cat("--- \n")
+  cat("Date:", date(), "\n")
+}
 
+# print summary
+print_summary_ggm_estimate_compare <- function(x,...){
 
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type:",  x$object$type, "\n")
+  cat("Analytic:", x$object$analytic, "\n")
+  cat("Formula:", paste(as.character(fit$formula), collapse = " "), "\n")
+ # number of iterations
+  cat("Posterior Samples:", x$object$iter, "\n")
+  # number of observations
+  cat("Observations (n):\n")
+  groups <- length(x$object$info$dat)
+  for (i in 1:groups) {
+    cat("  Group",
+        paste(i, ":", sep = "") ,
+        x$object$info$dat_info$n[[i]],
+        "\n")
+  }
+  # number of variables
+  cat("Nodes (p):", x$object$p, "\n")
+  # number of edges
+  cat("Relations:", .5 * (x$object$p * (x$object$p - 1)), "\n")
+  cat("--- \n")
+  cat("Call: \n")
+  print(x$object$call)
+  cat("--- \n")
+  cat("Estimates:\n")
+  for (i in 1:nrow(x$object$info$pairwise)) {
+    cat("\n", names(x$object$pcors_diffs[[i]]), "\n")
 
+    print(x$dat_results[[i]], right = FALSE, row.names = FALSE,...)
 
+  }
+  cat("--- \n")
+}

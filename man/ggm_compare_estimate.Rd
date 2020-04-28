@@ -39,6 +39,8 @@ as ranks when \code{type = "mixed"} and \code{NULL} otherwise. See note for furt
 The `default` is 0.25. See note for further details.}
 
 \item{iter}{number of iterations (posterior samples; defaults to 5000).}
+
+\item{seed}{The seed for random number generation (default set to \code{1}).}
 }
 \value{
 A list of class \code{ggm_compare_estimate} containing:

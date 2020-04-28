@@ -275,9 +275,11 @@ explore <- function(Y,
 #' @param ... currently ignored
 #' @export
 summary.explore <- function(object,...){
-dat_results <- select(object,
-                BF_cut = 0,
-                alternative = "exhaustive")
+
+  dat_results <- select(object,
+                      BF_cut = 0,
+                      alternative =
+                      "exhaustive")
 
 returned_object <- list(dat_results = dat_results,
                         object = object)

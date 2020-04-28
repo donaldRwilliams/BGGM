@@ -138,11 +138,11 @@ print.BGGM <- function(x,...){
     }
 
 
-    if(is(x, "ggm_compare_bf")){
+    if(is(x, "ggm_compare_explore")){
 
-      if(is(x, "summary")){
+      if(is(x, "summary.ggm_compare_explore")){
 
-        print_summary_ggm_compare_bf(x, ...)
+        print_summary_ggm_compare_bf(x)
 
       } else {
 

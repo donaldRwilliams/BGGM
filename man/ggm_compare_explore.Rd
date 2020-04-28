@@ -10,6 +10,7 @@ ggm_compare_explore(
   data = NULL,
   type = "continuous",
   mixed_type = NULL,
+  analytic = FALSE,
   prior_sd = 0.2,
   iter = 5000,
   seed = 1
@@ -30,6 +31,8 @@ to a data frame containing the variables in \code{formula}. This is required whe
 \item{mixed_type}{numeric vector. An indicator of length p for which varibles should be treated as ranks.
 (1 for rank and 0 to assume normality). The default is currently (dev version) to treat all integer variables
 as ranks when \code{type = "mixed"} and \code{NULL} otherwise. See note for further details.}
+
+\item{analytic}{logical. Should the analytic solution be computed (default is \code{FALSE}) ? See note for details.}
 
 \item{prior_sd}{The scale of the prior distribution (centered at zero), in reference to a beta distribtuion.
 The `default` is 0.25. See note for further details.}

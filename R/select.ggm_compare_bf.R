@@ -37,7 +37,7 @@
 #' summary(ggm_bf_sel)
 #' }
 
-select.ggm_compare_bf <- function(object, post_prob = 0.50,...){
+select.ggm_compare_explore <- function(object, post_prob = 0.50,...){
 
   x <- object
 

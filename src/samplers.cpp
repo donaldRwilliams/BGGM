@@ -1147,6 +1147,8 @@ Rcpp::List mv_ordinal_albert(arma::mat Y,
 
   ////////////////////////////////////////////
 
+  arma::cube fisher_z = atanh(pcors_mcmc);
+
   Rcpp::List ret;
   ret["pcors"] = pcors_mcmc;
   ret["cors"] =  cors_mcmc;
@@ -1154,6 +1156,7 @@ Rcpp::List mv_ordinal_albert(arma::mat Y,
   ret["Theta"] = Theta_mcmc;
   ret["Sigma"] = Sigma_mcmc;
   ret["thresh"]  = thresh;
+  ret["fisher_z"] = fisher_z;
   return  ret;
 
 
@@ -1315,12 +1318,14 @@ Rcpp::List  copula(arma::mat z0_start,
     Theta_mcmc.slice(s) = Theta.slice(0);
   }
 
+  arma::cube fisher_z = atanh(pcors_mcmc);
 
   Rcpp::List ret;
   ret["pcors"] = pcors_mcmc;
   ret["cors"] =  cors_mcmc;
   ret["Theta"] = Theta_mcmc;
   ret["Sigma"] = Sigma_mcmc;
+  ret["fisher_z"] = fisher_z;
   return ret;
 }
 
