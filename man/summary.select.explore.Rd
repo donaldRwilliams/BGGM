@@ -4,7 +4,7 @@
 \alias{summary.select.explore}
 \title{Summary Method for \code{select.explore} Objects}
 \usage{
-\method{summary}{select.explore}(object)
+\method{summary}{select.explore}(object, col_names = TRUE)
 }
 \arguments{
 \item{object}{object of class \code{select.explore}.}

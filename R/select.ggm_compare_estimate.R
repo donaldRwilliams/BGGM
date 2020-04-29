@@ -129,3 +129,30 @@ select.ggm_compare_estimate <- function(object,
 
 
 
+print_select_ggm_compare_estimate <- function(x,...){
+  object <- x
+  comparisons <- length(object$pcor_adj)
+  p <- ncol(object$pcor_adj[[1]])
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type:", object$object$type, "\n")
+  cat("Analytic:", object$object$analytic, "\n")
+  cat("Posterior Samples:", object$object$iter, "\n")
+  cat("Credible Interval:",  gsub("*0.","", formatC( round(object$cred, 4), format='f', digits=2)), "% \n")
+  cat("--- \n")
+  cat("Call: \n")
+  print(object$object$call)
+  cat("--- \n")
+  cat("Selected:\n\n")
+  for(i in 1:comparisons){
+
+    cat(names(object$object$diff)[i], "\n")
+    mat <- object$pcor_adj[[i]]
+    colnames(mat) <- 1:p
+    row.names(mat) <- 1:p
+    print(round(mat, 3))
+    cat("--- \n\n")
+  }
+}
+
+

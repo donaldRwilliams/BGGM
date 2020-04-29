@@ -12,8 +12,7 @@ ggm_compare_estimate(
   mixed_type = NULL,
   analytic = FALSE,
   prior_sd = 0.25,
-  iter = 5000,
-  seed = 1
+  iter = 5000
 )
 }
 \arguments{

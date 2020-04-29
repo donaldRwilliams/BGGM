@@ -10,6 +10,7 @@ explore(
   data = NULL,
   type = "continuous",
   mixed_type = NULL,
+  analytic = FALSE,
   prior_sd = 0.25,
   iter = 5000,
   cores = 2,

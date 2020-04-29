@@ -98,14 +98,15 @@ explore <- function(Y,
                     data = NULL,
                     type = "continuous",
                     mixed_type = NULL,
+                    analytic = FALSE,
                     prior_sd = 0.25,
                     iter = 5000,
                     cores = 2,
                     seed = 1,...){
 
 
-  # set seed
-  set.seed(seed)
+  # # set seed
+  # set.seed(seed)
 
   # delta parameter
   delta <- delta_solve(prior_sd)
@@ -116,156 +117,205 @@ explore <- function(Y,
   # number of columns
   p <- ncol(Y)
 
-  # number of edges
-  edges <- 0.5 * (p * (p -1))
+  # number of rows
+  n <- nrow(Y)
 
+  if(!analytic){
+
+  # continuous
   if(type == "continuous"){
 
-    # remove mean
-    Y <- scale(Y, scale = F)
+    # scale Y
+    Y <- scale(Y, scale = T)
 
-    post_samp <- .Call('_BGGM_Theta_continuous',
-                       PACKAGE = 'BGGM',
-                       Y = Y,
-                       iter = iter + 50,
-                       delta = delta,
-                       epsilon = 0.001,
-                       prior_only = 0,
-                       explore = 1)
+    # no control
+    if(is.null(formula)){
 
-    prior_samp <- .Call('_BGGM_Theta_continuous',
-                        PACKAGE = 'BGGM',
-                        Y = Y,
-                        iter = iter,
-                        delta = delta,
-                        epsilon = 0.001,
-                        prior_only = 1,
-                        explore = 1)
+      # posterior sample
+      post_samp <- .Call(
+        '_BGGM_Theta_continuous',
+        PACKAGE = 'BGGM',
+        Y = Y,
+        iter = iter + 50,
+        delta = delta,
+        epsilon = 0.1,
+        prior_only = 0,
+        explore = 1
+      )
 
-  # posterior mean
-  pcor_mat <- apply(post_samp$pcors[,,51:(iter+50)], 1:2, mean)
-
-  # returned object
-  returned_object <- list(pcor_mat = pcor_mat,
-                            post_samp = post_samp,
-                            prior_samp = prior_samp,
-                            delta = delta,
-                            iter = iter,
-                            dat = Y,
-                            call = match.call(),
-                            p = p,
-                            edge = edges,
-                            type = type)
-
-  } else if(type == "binary"){
-
-
-
-    samples <- sampling_helper_poly(Y, delta, iter, type = type)
-
-    posterior_samples <- samples$pcor_post
-
-    # posterior mean
-    parcors_mat[upper.tri(parcors_mat)] <- colMeans(posterior_samples)[1:edges]
-    pacors_mat <- BGGM:::symmteric_mat(parcors_mat)
-
-    # posterior sd
-    parcors_sd[upper.tri(parcors_sd)] <- apply(posterior_samples, 2, sd)[1:edges]
-    pacors_sd <- BGGM:::symmteric_mat(parcors_sd)
-
-    # returned object
-    returned_object <- list(parcors_mat = pacors_mat,
-                            parcors_sd = parcors_sd,
-                            samples = samples,
-                            delta = delta,
-                            iter = iter,
-                            dat = X,
-                            call = match.call(),
-                            p = p,
-                            cores = cores,
-                            edge = edges,
-                            type = type)
-
-
-  } else if(type == "ordinal"){
-
-    samples <- sampling_helper_poly(Y, delta, iter, type = type)
-
-    posterior_samples <- samples$pcor_post
-
-    # posterior mean
-    parcors_mat[upper.tri(parcors_mat)] <- colMeans(posterior_samples)[1:edges]
-    pacors_mat <- BGGM:::symmteric_mat(parcors_mat)
-
-    # posterior sd
-    parcors_sd[upper.tri(parcors_sd)] <- apply(posterior_samples, 2, sd)[1:edges]
-    pacors_sd <- BGGM:::symmteric_mat(parcors_sd)
-
-    # returned object
-    returned_object <- list(parcors_mat = pacors_mat,
-                            parcors_sd = parcors_sd,
-                            samples = samples,
-                            delta = delta,
-                            iter = iter,
-                            dat = X,
-                            call = match.call(),
-                            p = p,
-                            cores = cores,
-                            edge = edges,
-                            type = type)
-
-  } else if (type == "mixed"){
-
-
-    if(is.null(mixed_type)) {
-
-      idx = colMeans(round(Y) == Y)
-      idx = ifelse(idx == 1, 1, 0)
-
+      # control for variables
     } else {
 
-      idx = mixed_type
+      # model matrix
+      X <- model.matrix(formula, data)
+
+      # posterior sample
+      post_samp <- .Call(
+        "_BGGM_mv_continuous",
+        Y = Y,
+        X = X,
+        delta = delta,
+        epsilon = 0.1,
+        iter = iter + 50
+      )
+
+    } # end control
+
+    # binary
+  } else if (type == "binary"){
+
+
+    # intercept only
+    if(is.null(formula)){
+      X <- matrix(1, n, 1)
+      # model matrix
+    } else {
+
+      X <- model.matrix(formula, data)
 
     }
 
+    # posterior sample
+    post_samp <-  .Call(
+      "_BGGM_mv_binary",
+      Y = Y,
+      X = X,
+      delta = delta,
+      epsilon = 0.1,
+      iter = iter + 50,
+      beta_prior = 0.0001,
+      cutpoints = c(-Inf, 0, Inf)
+    )
 
+    # ordinal
+  } else if(type == "ordinal"){
 
-    samples <- sampling_helper_poly(Y, delta, iter, type = type, mixed_type = idx)
+    # intercept only
+    if(is.null(formula)){
+      X <- matrix(1, n, 1)
 
-    posterior_samples <- samples$pcor_post
+    } else {
 
-    # posterior mean
-    parcors_mat[upper.tri(parcors_mat)] <- colMeans(posterior_samples)[1:edges]
-    pacors_mat <- BGGM:::symmteric_mat(parcors_mat)
+      # model matrix
+      X <- model.matrix(formula, data)
 
-    # posterior sd
-    parcors_sd[upper.tri(parcors_sd)] <- apply(posterior_samples, 2, sd)[1:edges]
-    pacors_sd <- BGGM:::symmteric_mat(parcors_sd)
+    }
+    # categories
+    K <- max(apply(Y, 2, function(x) { length(unique(x))   } ))
 
-    # returned object
-    returned_object <- list(parcors_mat = pacors_mat,
-                            parcors_sd = parcors_sd,
-                            samples = samples,
-                            delta = delta,
-                            iter = iter,
-                            dat = X,
-                            call = match.call(),
-                            p = p,
-                            cores = cores,
-                            edge = edges,
-                            type = type)
+    # call c ++
+    post_samp <- .Call(
+      "_BGGM_mv_ordinal_albert",
+      Y = Y,
+      X = X,
+      iter = iter + 50,
+      delta = delta,
+      epsilon = 0.1,
+      K = K
+    )
 
+  } else if(type == "mixed"){
 
+    # no control variables allowed
+    if(!is.null(formula)){
+      warning("formula ignored for mixed data at this time")
+      formula <- NULL
+    }
+
+    # default for ranks
+    if(is.null(mixed_type)) {
+      idx = colMeans(round(Y) == Y)
+      idx = ifelse(idx == 1, 1, 0)
+      # user defined
+    } else {
+      idx = mixed_type
+    }
+
+    # rank following hoff (2008)
+    rank_vars <- rank_helper(Y)
+
+    post_samp <- .Call(
+      "_BGGM_copula",
+      z0_start = rank_vars$z0_start,
+      levels = rank_vars$levels,
+      K = rank_vars$K,
+      Sigma_start = rank_vars$Sigma_start,
+      iter = iter + 50,
+      delta = delta,
+      epsilon = 0.1,
+      idx = idx
+    )
+
+  } else {
+    stop("'type' not supported: must be continuous, binary, ordinal, or mixed.")
   }
 
+  # matrix dimensions for prior
+  Y_dummy <- matrix(rnorm( 10 * 3 ),
+                    nrow = 10, ncol = 3)
+
+  prior_samp <- .Call('_BGGM_Theta_continuous',
+                      PACKAGE = 'BGGM',
+                      Y = Y_dummy,
+                      iter = iter,
+                      delta = delta,
+                      epsilon = 0.001,
+                      prior_only = 1,
+                      explore = 1)
 
 
 
+
+  pcor_mat <- round(apply(post_samp$pcors[,,51:(iter + 50)], 1:2, mean), 3)
+  pcor_sd <- round(apply(post_samp$pcors[,,51:(iter + 50)], 1:2, sd), 3)
+
+  returned_object <- list(
+    pcor_mat = pcor_mat,
+    pcor_sd = pcor_sd,
+    analytic = analytic,
+    formula = formula,
+    post_samp = post_samp,
+    prior_samp = prior_samp,
+    type = type,
+    iter = iter,
+    Y = Y,
+    call = match.call(),
+    p = p,
+    n = n
+  )
+  }else {
+    stop("analytic solution not currently available")
+    }
+
+  returned_object
   class(returned_object) <- c("BGGM", "default",
-                              "explore")
+  "explore")
   return(returned_object)
-
 }
+
+
+
+print_explore <- function(x,...){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type:",  x$type, "\n")
+  cat("Analytic:", x$analytic, "\n")
+  cat("Formula:", paste(as.character(fit$formula), collapse = " "), "\n")
+  # number of iterations
+  cat("Posterior Samples:", x$iter, "\n")
+  # number of observations
+  cat("Observations (n):", x$n,  "\n")
+  # number of variables
+  cat("Nodes (p):", x$p, "\n")
+  # number of edges
+  cat("Relations:", .5 * (x$p * (x$p-1)), "\n")
+  cat("--- \n")
+  cat("Call: \n")
+  print(x$call)
+  cat("--- \n")
+  cat("Date:", date(), "\n")
+}
+
 
 
 #' @name summary.explore

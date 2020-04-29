@@ -107,7 +107,7 @@ select.explore <- function(object,
   hyp_prob <- BF_cut / (BF_cut + 1)
 
 
-  if(x$type == "continuous"){
+
 
     # posterior samples
     post_samp <- x$post_samp
@@ -115,16 +115,7 @@ select.explore <- function(object,
     # prior samples
     prior_samp <- x$prior_samp
 
-    } else if (x$type == "binary" |
-               x$type == "ordinal" |
-               x$type == "mixed"){
 
-
-    posterior_samples <- x$samples$fisher_z_post
-
-    prior_samples <- x$samples$fisher_z_prior
-
-    }
 
   # two sided testing
   if(alternative == "two.sided"){
@@ -163,7 +154,11 @@ select.explore <- function(object,
                            BF_cut = BF_cut,
                            alternative = alternative,
                            call = match.call(),
-                           type = x$type)
+                           type = x$type,
+                           formula = x$formula,
+                           analytic = x$analytic,
+                           object = object
+                           )
 
     # one sided greater
     } else if(alternative == "greater"){
@@ -208,7 +203,10 @@ select.explore <- function(object,
         BF_cut = BF_cut,
         alternative = alternative,
         call = match.call(),
-        type = x$type
+        type = x$type,
+        formula = x$formula,
+        analytic = x$analytic,
+        object = object
       )
 
     # one side less
@@ -254,7 +252,10 @@ select.explore <- function(object,
         BF_cut = BF_cut,
         alternative = alternative,
         call = match.call(),
-        type = x$type
+        type = x$type,
+        formula = x$formula,
+        analytic = x$analytic,
+        object = object
       )
 
       # exhaustive testing
@@ -329,7 +330,10 @@ select.explore <- function(object,
             pcor_sd = round(post_sd, 3),
             call = match.call(),
             prob = hyp_prob,
-            type = x$type
+            type = x$type,
+            formula = x$formula,
+            analytic = x$analytic,
+            object = object
           )
         } else {
 
@@ -338,10 +342,91 @@ select.explore <- function(object,
 
   class(returned_object) <- c("BGGM",
                               "select.explore",
-                              "explore")
+                              "explore",
+                              "select")
   returned_object
 }
 
+
+
+
+print_select_explore <- function(x,
+                                 ...){
+
+  p <- ncol(x$pcor_mat_zero)
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type:", x$type, "\n")
+  cat("Analytic:", x$analytic, "\n")
+  cat("Formula:", paste(as.character(fit$formula), collapse = " "), "\n")
+  cat("Alternative:", x$alternative, "\n")
+  if(x$alternative == "two.sided"){
+    cat("Bayes Factor:", x$BF_cut, "\n")
+
+  }
+  cat("--- \n")
+  cat("Call:\n")
+  print(x$call)
+  cat("--- \n")
+  cat("Hypotheses: \n")
+
+  if(x$alternative == "two.sided"){
+
+    cat("H0: rho = 0\nH1: rho != 0", "\n")
+    cat("--- \n")
+    colnames(x$Adj_10) <- 1:p
+    row.names(x$Adj_10) <- 1:p
+    colnames( x$pcor_mat_zero) <- 1:p
+    row.names(x$pcor_mat_zero) <- 1:p
+    cat("Partial Correlations:\n\n")
+    print(round(x$pcor_mat_zero, 2))
+    cat("--- \n")
+    cat("Adjacency:\n\n")
+    print(x$Adj_10)
+    cat("--- \n")
+  } else if (x$alternative == "greater"){
+
+    cat("H0: rho = 0\nH1: rho > 0", "\n")
+    cat("--- \n")
+    colnames(x$Adj_20) <- 1:p
+    row.names(x$Adj_20) <- 1:p
+    colnames( x$pcor_mat_zero) <- 1:p
+    row.names(x$pcor_mat_zero) <- 1:p
+    cat("Partial Correlations:\n\n")
+    print(round(x$pcor_mat_zero, 2))
+    cat("--- \n")
+    cat("Adjacency:\n\n")
+    print(x$Adj_20)
+    cat("--- \n")
+
+  } else if (x$alternative == "less"){
+
+    cat("H0: rho = 0\nH1: rho < 0", "\n")
+    cat("--- \n")
+    colnames(x$Adj_20) <- 1:p
+    row.names(x$Adj_20) <- 1:p
+    colnames( x$pcor_mat_zero) <- 1:p
+    row.names(x$pcor_mat_zero) <- 1:p
+    cat("Partial Correlations:\n\n")
+    print(round(x$pcor_mat_zero, 2))
+    cat("--- \n")
+    cat("Adjacency:\n\n")
+    print(x$Adj_20)
+    cat("--- \n")
+  } else {
+
+    cat("H0: rho = 0\nH1: rho > 0\nH2: rho < 0", "\n")
+    cat("--- \n")
+    cat("Summary:\n\n")
+    dat <- x$post_prob
+    dat$prob_zero <- round(dat$prob_zero, 3)
+    dat$prob_greater <- round(dat$prob_greater, 3)
+    dat$prob_less <- round(dat$prob_less, 3)
+    colnames(dat) <- c("Relation", "Pr.H0", "Pr.H1", "Pr.H2")
+    print(dat, row.names = FALSE, right = FALSE)
+    cat("--- \n")
+  }
+}
 
 
 
@@ -352,14 +437,30 @@ select.explore <- function(object,
 #' @return a data frame including the posterior mean, standard deviation,
 #' and posterior hypothesis probabilities for each relation.
 #' @export
-summary.select.explore <- function(object){
+summary.select.explore <- function(object, col_names = TRUE){
 
   x <- object
-  p <- ncol(x$pcor_mat)
-  mat_names <- matrix(0, p, p)
 
-  mat_names[] <-  unlist(lapply(1:p,
-                                FUN = function(z) paste(1:p, z, sep = "--")))
+  p <- ncol(x$pcor_mat)
+
+  I_p <- diag(p)
+
+  # column names
+  cn <-  colnames(object$object$Y)
+
+
+  if(!isTRUE(col_names) | is.null(cn)){
+
+    mat_names <- sapply(1:p , function(x) paste(1:p, x, sep = "--"))[upper.tri(I_p)]
+
+  } else {
+
+
+    mat_names <-  sapply(cn , function(x) paste(cn, x, sep = "--"))[upper.tri(I_p)]
+
+  }
+
+
 
   if(x$alternative == "two.sided"){
 
@@ -368,7 +469,7 @@ summary.select.explore <- function(object){
     prob_H1 <- x$BF_10[upper.tri(x$BF_10)] / (x$BF_10[upper.tri(x$BF_10)] + 1)
     prob_H0 <- 1 - prob_H1
     summ <-  data.frame(
-      Relation = mat_names[upper.tri(mat_names)],
+      Relation = mat_names,
       Post.mean = post_mean,
       Post.sd = post_sd,
       Pr.H0 = round(prob_H0, 3),
@@ -382,7 +483,7 @@ summary.select.explore <- function(object){
     prob_H1 <- x$BF_20[upper.tri(x$BF_20)] / (x$BF_20[upper.tri(x$BF_20)] + 1)
     prob_H0 <- 1 - prob_H1
     summ <-  data.frame(
-      Relation = mat_names[upper.tri(mat_names)],
+      Relation = mat_names,
       Post.mean = post_mean,
       Post.sd = post_sd,
       Pr.H0 = round(prob_H0, 3),
@@ -426,7 +527,7 @@ summary.select.explore <- function(object){
 
   returned_object <- list(summary = summ, object = object)
 
-  class(returned_object) <- c("BGGM",
+  class(returned_object) <- c("BGGM", "summary.select.explore",
                               "explore", "select.explore",
                               "summary")
   returned_object
@@ -435,611 +536,76 @@ summary.select.explore <- function(object){
 }
 
 
-#' Plot \code{select.explore} Network
+
+print_summary_select_explore <- function(x,...){
+
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type:", x$object$type, "\n")
+  cat("Alternative:", x$object$alternative, "\n")
+  cat("--- \n")
+  cat("Call:\n")
+  print(x$object$call)
+  cat("--- \n")
+  cat("Hypotheses: \n")
+
+  if(x$object$alternative == "two.sided"){
+
+    cat("H0: rho = 0\nH1: rho != 0", "\n")
+
+  } else if (x$object$alternative == "greater"){
+
+    cat("H0: rho = 0\nH1: rho > 0", "\n")
+
+  } else if (x$object$alternative == "less"){
+
+    cat("H0: rho = 0\nH1: rho < 0", "\n")
+
+  } else {
+
+    cat("H0: rho = 0\nH1: rho > 0\nH2: rho < 0", "\n")
+
+  }
+
+  cat("--- \n\n")
+
+  print(x$summary, right = FALSE, row.names = FALSE)
+
+
+}
+
+
+#' GGM: Plot \code{summary.select.explore] Objects}
 #'
-#' @param x object of class \code{select.explore}
-#' @param layout network layout (\link[sna]{gplot.layout})
-#' @param edge_colors color theme for positive and negative edges
-#' @param node_labels node labels
-#' @param node_labels_color node labels color
-#' @param node_groups node group indicator
-#' @param node_outer_size node border size
-#' @param node_inner_size node size
-#' @param alpha edge transparency
-#' @param txt_size node text size
-#' @param edge_multiplier constant to change edge width (egde * edge_multiplier)
-#' @param ... additional arguments (\link[GGally]{ggnet2})
+#' @description Visualize posterior hypothesis probabilities.
 #'
-#' @importFrom GGally ggnet2
-#' @importFrom ggplot2 ggtitle
-#' @importFrom network network.vertex.names<- set.edge.value set.edge.attribute %e% %v%<-
-#' @importFrom sna gplot.layout.circle
-#' @return object of class \code{ggplot}
+#' @param x object of class \code{summary.select.explore}
+#' @param size numeric. Size of the points.
+#' @param color string. Color of the points.
+#'
+#' @return
 #' @export
-#' @examples
-#' \donttest{
-#' Y <- BGGM::bfi[1:500, 1:20]
-#'
-#' # fit model
-#' fit_explore <- explore(Y)
-#'
-#' # select the graph (edge set E)
-#'
-#' E <- select(fit_explore)
-#'
-#'
-#' # plot
-#' plt <- plot(E,
-#'             node_labels = letters[1:20],
-#'             node_labels_color = "white",
-#'             node_groups = rep(c("1", "2", "3", "4"), each = 5),
-#'             edge_colors = "classic", txt_size = 8,
-#'             alpha = 0.5, palette = "Set2")
-#'}
-plot.select.explore <-
-  function(x,
-           layout = "circle",
-           edge_colors = "classic",
-           node_labels = NULL,
-           node_labels_color = "black",
-           node_groups = NULL,
-           node_outer_size = 12,
-           node_inner_size = 11,
-           alpha = 0.50, txt_size = 8,
-           edge_multiplier = 1,
-           ...) {
-    label <- NULL
-    color <- NULL
-    # number of nodes
+plot.summary.select.explore <- function(x, size = 2, color = "black"){
 
-    if(x$alternative != "exhaustive"){
-    names(x)[1] <- "partials_non_zero"
-    p <- ncol(x$partials_non_zero)
-    # network
-    if(x$alternative == "greater" | x$alternative == "less" ){
-      net <- network::network(x$Adj_20)
-    }else{
-    net <- network::network(x$Adj_10)
-}
 
-    # default labels
-    if (is.null(node_labels)) {
-      network::network.vertex.names(net) <- 1:p
-      # custom labels
-    } else {
-      # check label length
-      if (length(node_labels) != p) {
-        stop("labels must be of length p (number of nodes)")
-      }
+  dat_temp <- x$summary[order(x$summary$Pr.H1,
+                              decreasing = F), ]
 
-      network::network.vertex.names(net) <- node_labels
-    }
-    # set edge weights
-    network::set.edge.value(
-      x = net,
-      attrname =  "weights",
-      value = x$partials_non_zero
-    )
-    #
-    network::set.edge.value(
-      x = net,
-      attrname =  "abs_weights",
-      value = abs(x$partials_non_zero) * edge_multiplier
-    )
-    if (edge_colors == "classic") {
-      network::set.edge.attribute(
-        x = net,
-        attrname = "edge_color",
-        value = ifelse(net %e% "weights" < 0,
-                       "brown3", "palegreen3")
-      )
-    } else if (edge_colors == "color_blind") {
-      network::set.edge.attribute(
-        x = net,
-        attrname = "edge_color",
-        value = ifelse(net %e% "weights" < 0,
-                       "#009E73", "#D55E00")
-      )
-    } else if (edge_colors == "vivid") {
-      network::set.edge.attribute(
-        x = net,
-        attrname = "edge_color",
-        value = ifelse(net %e% "weights" < 0,
-                       "darkorange1", "darkorchid4")
-      )
+  dat_temp$Relation <-
+    factor(dat_temp$Relation,
+           levels = dat_temp$Relation,
+           labels = dat_temp$Relation)
 
-    }
 
-    if (is.null(node_groups)) {
-      plt <- ggnet2(
-        net = net, edge.alpha = alpha,
-        mode = layout,
-        node.size = node_outer_size,
-        node.color = "black",
-        edge.color = "edge_color",
-        edge.size = "abs_weights",
-        label = TRUE) +
-        geom_point(color = "white",
-                   size = node_inner_size,
-                   alpha = 1) +
-        geom_text(aes(label = label),
-                  color = node_labels_color,
-                  size = txt_size)
+  ggplot(dat_temp,
+         aes(x = Relation,
+             y = Pr.H1)) +
+    geom_point(size = size, color = color) +
 
-      plt <- list(plt = plt)
+    theme(axis.text.x = element_text(
+      angle = 90,
+      vjust = 0.5,
+      hjust = 1
+    ))
 
-    } else {
-      if (length(node_groups) != p) {
-        stop("labels must be of length p (number of nodes)")
-      }
-
-      net %v% "group" <- node_groups
-
-      plt <- ggnet2(
-        net = net,edge.alpha = alpha,
-        mode = layout, node.size = node_outer_size,
-        node.color = "group", node.alpha = 0.5,
-        edge.color = "edge_color",
-        edge.size = "abs_weights",
-        label = TRUE,
-        ...
-      ) +
-        # geom_point(aes(color = color),
-        #            size = node_outer_size,
-        #            alpha = 0.5) +
-        geom_point(aes(color = color),
-                   size = node_inner_size,
-                   alpha = 1) +
-        geom_text(aes(label = label),
-                  color = node_labels_color,
-                  size = txt_size)
-
-      plt <- list(plt = plt)
-    }
-
-    if (is.null(x$rope)) {
-      # network
-      net <- network::network(x$Adj_01, directed = FALSE)
-
-      # default labels
-      if (is.null(node_labels)) {
-        network::network.vertex.names(net) <- 1:p
-        # custom labels
-      } else {
-        # check label length
-        if (length(node_labels) != p) {
-          stop("labels must be of length p (number of nodes)")
-        }
-
-        network::network.vertex.names(net) <- node_labels
-      }
-
-
-      if (is.null(node_groups)) {
-        plt_null <- ggnet2(
-          net = net, edge.alpha = alpha,
-          mode = layout, node.size = node_outer_size,
-          node.color = "black",
-          label = TRUE
-        ) +
-          # geom_point(color = "black",
-          #            size = node_outer_size,
-          #            alpha = 1) +
-          geom_point(color = "white",
-                     size = node_inner_size,
-                     alpha = 1) +
-          geom_text(aes(label = label),
-                    color = node_labels_color,
-                    size = txt_size)
-
-        plt$plt_null <- plt_null
-
-      } else{
-        if (length(node_groups) != p) {
-          stop("labels must be of length p (number of nodes)")
-        }
-
-        net %v% "group" <- node_groups
-
-        plt_null <- ggnet2(
-          net = net,edge.alpha = alpha,
-          mode = layout, node.alpha = 0.5,
-          node.size = node_outer_size,
-          node.color = "group",
-          label = TRUE,
-          ...
-        ) +
-          geom_point(aes(color = color),
-                     size = node_inner_size,
-                     alpha = 1) +
-          geom_text(aes(label = label),
-                    color = node_labels_color,
-                    size = txt_size)
-
-        plt$plt_null <- plt_null
-      }
-    }
-  } else{
-
-
-      p <-  ncol(x$neg_mat)
-
-      if (is.null(node_groups)) {
-
-        # positive
-        w_pos <- x$pos_mat * x$pcor_mat
-        net <- network::network(x$pos_mat, directed = FALSE)
-
-      # default labels
-      if (is.null(node_labels)) {
-        network::network.vertex.names(net) <- 1:p
-        # custom labels
-      } else {
-        # check label length
-        if (length(node_labels) != p) {
-          stop("labels must be of length p (number of nodes)")
-        }
-
-        network::network.vertex.names(net) <- node_labels
-      }
-        network::set.edge.value(x = net,
-                                attrname =  "weights",
-                                value = w_pos)
-
-        network::set.edge.value(x = net,
-                                attrname =  "abs_weights",
-                                value = abs(w_pos) * edge_multiplier)
-
-      if (edge_colors == "classic") {
-        network::set.edge.attribute(
-          x = net,
-          attrname = "edge_color",
-          value = ifelse(net %e% "weights" < 0,
-                         "brown3", "palegreen3")
-        )
-      } else if (edge_colors == "color_blind") {
-        network::set.edge.attribute(
-          x = net,
-          attrname = "edge_color",
-          value = ifelse(net %e% "weights" < 0,
-                         "#009E73", "#D55E00")
-        )
-      } else if (edge_colors == "vivid") {
-        network::set.edge.attribute(
-          x = net,
-          attrname = "edge_color",
-          value = ifelse(net %e% "weights" < 0,
-                         "darkorange1", "darkorchid4")
-        )
-
-      }
-
-        plt_pos <- ggnet2(
-          net = net,edge.alpha = alpha,
-          mode = layout,
-          node.size = node_outer_size,
-          node.color = "black",
-          edge.color = "edge_color",
-          edge.size = "abs_weights",
-          label = TRUE
-        ) +
-          # geom_point(color = "black",
-          #            size = node_outer_size,
-          #            alpha = 1) +
-          geom_point(color = "white",
-                     size = node_inner_size,
-                     alpha = 1) +
-          geom_text(aes(label = label),
-                    color = node_labels_color,
-                    size = txt_size)
-
-        # negative
-        w_neg <- x$neg_mat * x$pcor_mat
-        net <- network::network(x$neg_mat, directed = FALSE)
-
-        # default labels
-        if (is.null(node_labels)) {
-          network::network.vertex.names(net) <- 1:p
-          # custom labels
-        } else {
-          # check label length
-          if (length(node_labels) != p) {
-            stop("labels must be of length p (number of nodes)")
-          }
-
-          network::network.vertex.names(net) <- node_labels
-        }
-
-
-        network::set.edge.value(
-          x = net,
-          attrname =  "weights",
-          value = w_neg
-        )
-        network::set.edge.value(
-          x = net,
-          attrname =  "abs_weights",
-          value = abs(w_neg) * edge_multiplier
-        )
-
-        if (edge_colors == "classic") {
-          network::set.edge.attribute(
-            x = net,
-            attrname = "edge_color",
-            value = ifelse(net %e% "weights" < 0,
-                           "brown3", "palegreen3")
-          )
-        } else if (edge_colors == "color_blind") {
-          network::set.edge.attribute(
-            x = net,
-            attrname = "edge_color",
-            value = ifelse(net %e% "weights" < 0,
-                           "#009E73", "#D55E00")
-          )
-        } else if (edge_colors == "vivid") {
-          network::set.edge.attribute(
-            x = net,
-            attrname = "edge_color",
-            value = ifelse(net %e% "weights" < 0,
-                           "darkorange1", "darkorchid4")
-          )
-
-        }
-
-
-
-        plt_neg <- ggnet2(
-          net = net, edge.alpha = alpha,
-          mode = layout, node.size = node_outer_size,
-          node.color = "black",
-          edge.color = "edge_color",
-          edge.size = "abs_weights",
-          label = TRUE
-        ) +
-          # geom_point(color = "black",
-          #            size = node_outer_size,
-          #            alpha = 1) +
-          geom_point(color = "white",
-                     size = node_inner_size,
-                     alpha = 1) +
-          geom_text(aes(label = label),
-                    color = node_labels_color,
-                    size = txt_size)
-
-
-
-        # null
-        net <- network::network(x$null_mat, directed = FALSE)
-
-        # default labels
-        if (is.null(node_labels)) {
-          network::network.vertex.names(net) <- 1:p
-          # custom labels
-        } else {
-          # check label length
-          if (length(node_labels) != p) {
-            stop("labels must be of length p (number of nodes)")
-          }
-
-          network::network.vertex.names(net) <- node_labels
-        }
-
-
-
-
-
-        plt_null <- ggnet2(
-          net = net, edge.alpha = alpha,
-          mode = layout, node.size = node_outer_size,
-          node.color = "white",
-          label = TRUE
-        ) +
-          # geom_point(color = "black",
-          #            size = node_outer_size,
-          #            alpha = 1) +
-          geom_point(color = "white",
-                     size = node_inner_size,
-                     alpha = 1) +
-          geom_text(aes(label = label),
-                    color = node_labels_color,
-                    size = txt_size)
-
-        plt <- list(plt_pos = plt_pos,
-                    plt_neg = plt_neg,
-                    plt_null = plt_null)
-
-        } else if(!is.null(node_groups))  {
-
-
-
-          if (length(node_groups) != p) {
-            stop("labels must be of length p (number of nodes)")
-          }
-
-
-
-          # positive
-          w_pos <- x$pos_mat * x$pcor_mat
-          net <- network::network(x$pos_mat, directed = FALSE)
-
-          net %v% "group" <- node_groups
-
-
-          # add positive with node groups
-          network::set.edge.value(
-            x = net,
-            attrname =  "weights",
-            value = w_pos
-          )
-          network::set.edge.value(
-            x = net,
-            attrname =  "abs_weights",
-            value = abs(w_pos) * edge_multiplier
-          )
-
-          if (edge_colors == "classic") {
-            network::set.edge.attribute(
-              x = net,
-              attrname = "edge_color",
-              value = ifelse(net %e% "weights" < 0,
-                             "brown3", "palegreen3")
-            )
-          } else if (edge_colors == "color_blind") {
-            network::set.edge.attribute(
-              x = net,
-              attrname = "edge_color",
-              value = ifelse(net %e% "weights" < 0,
-                             "#009E73", "#D55E00")
-            )
-          } else if (edge_colors == "vivid") {
-            network::set.edge.attribute(
-              x = net,
-              attrname = "edge_color",
-              value = ifelse(net %e% "weights" < 0,
-                             "darkorange1", "darkorchid4")
-            )
-
-          }
-
-
-
-          plt_pos <- ggnet2(
-            net = net, edge.alpha = alpha,
-            mode = layout, node.size = node_outer_size,
-            node.color = "group",
-            edge.color = "edge_color",
-            edge.size = "abs_weights",
-            label = TRUE,...
-          ) +
-            geom_point(aes(color = color),
-                       size = node_outer_size,
-                       alpha = 0.5) +
-            geom_point(aes(color = color),
-                       size = node_inner_size,
-                       alpha = 1) +
-            geom_text(aes(label = label),
-                      color = node_labels_color,
-                      size = txt_size)
-
-
-          # negative
-          w_neg <- x$neg_mat * x$pcor_mat
-          net <- network::network(x$neg_mat, directed = FALSE)
-
-          net %v% "group" <- node_groups
-
-
-          # add positive with node groups
-
-
-
-
-
-
-          network::set.edge.value(
-            x = net,
-            attrname =  "weights",
-            value = w_neg
-          )
-          network::set.edge.value(
-            x = net,
-            attrname =  "abs_weights",
-            value = abs(w_neg) * edge_multiplier
-          )
-
-          if (edge_colors == "classic") {
-            network::set.edge.attribute(
-              x = net,
-              attrname = "edge_color",
-              value = ifelse(net %e% "weights" < 0,
-                             "brown3", "palegreen3")
-            )
-          } else if (edge_colors == "color_blind") {
-            network::set.edge.attribute(
-              x = net,
-              attrname = "edge_color",
-              value = ifelse(net %e% "weights" < 0,
-                             "#009E73", "#D55E00")
-            )
-          } else if (edge_colors == "vivid") {
-            network::set.edge.attribute(
-              x = net,
-              attrname = "edge_color",
-              value = ifelse(net %e% "weights" < 0,
-                             "darkorange1", "darkorchid4")
-            )
-
-          }
-
-          plt_neg <- ggnet2(
-            net = net, edge.alpha = alpha,
-            mode = layout,
-            node.size = node_outer_size,
-            node.color = "group",
-            edge.color = "edge_color",
-            edge.size = "abs_weights",
-            label = TRUE,...
-          ) +
-            geom_point(aes(color = color),
-                       size = node_outer_size,
-                       alpha = 0.5) +
-            geom_point(aes(color = color),
-                       size = node_inner_size,
-                       alpha = 1) +
-            geom_text(aes(label = label),
-                      color = node_labels_color,
-                      size = txt_size)
-
-          # null
-          net <- network::network(x$null_mat, directed = FALSE)
-
-          net %v% "group" <- node_groups
-
-          if (edge_colors == "classic") {
-            network::set.edge.attribute(
-              x = net,
-              attrname = "edge_color",
-              value = ifelse(net %e% "weights" < 0,
-                             "brown3", "palegreen3")
-            )
-          } else if (edge_colors == "color_blind") {
-            network::set.edge.attribute(
-              x = net,
-              attrname = "edge_color",
-              value = ifelse(net %e% "weights" < 0,
-                             "#009E73", "#D55E00")
-            )
-          } else if (edge_colors == "vivid") {
-            network::set.edge.attribute(
-              x = net,
-              attrname = "edge_color",
-              value = ifelse(net %e% "weights" < 0,
-                             "darkorange1", "darkorchid4")
-            )
-
-          }
-
-          plt_null <- ggnet2(
-            net = net, edge.alpha = alpha,
-            mode = layout, node.size = node_outer_size,
-            node.color = "group",
-            label = TRUE,...
-          ) +
-            geom_point(aes(color = color),
-                       size = node_outer_size,
-                       alpha = 0.5) +
-            geom_point(aes(color = color),
-                       size = node_inner_size,
-                       alpha = 1) +
-            geom_text(aes(label = label),
-                      color = node_labels_color,
-                      size = txt_size)
-
-          plt <- list(plt_pos = plt_pos,
-                      plt_neg = plt_neg,
-                      plt_null = plt_null)
-        }
-
-}
-    return(plt)
 }

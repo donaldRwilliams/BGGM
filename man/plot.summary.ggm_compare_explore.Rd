@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggm_compare_bf.default.R
 \name{plot.summary.ggm_compare_explore}
 \alias{plot.summary.ggm_compare_explore}
-\title{GGM Compare: Plot \code{ggm_compare_explore] Object}}
+\title{GGM Compare: Plot \code{ggm_compare_explore] Objects}}
 \usage{
 \method{plot}{summary.ggm_compare_explore}(x, size = 2, color = "black")
 }

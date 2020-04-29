@@ -580,7 +580,7 @@ summary.ggm_compare_explore <- function(object,
 
 
 
-#' GGM Compare: Plot \code{ggm_compare_explore] Object}
+#' GGM Compare: Plot \code{ggm_compare_explore] Objects}
 #'
 #' @description Visualize posterior hypothesis probabilities.
 #'

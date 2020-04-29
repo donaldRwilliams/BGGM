@@ -74,11 +74,10 @@ ggm_compare_estimate <- function(...,
                                  mixed_type = NULL,
                                  analytic = FALSE,
                                  prior_sd = 0.25,
-                                 iter = 5000,
-                                 seed = 1){
+                                 iter = 5000){
 
   # set seed
-  set.seed(seed)
+  # set.seed(seed)
 
   # combine data
   info <- Y_combine(...)

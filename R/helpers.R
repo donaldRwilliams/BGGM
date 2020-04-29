@@ -229,42 +229,7 @@ sampling_helper_poly <- function(Y, delta, iter, type, mixed_type= NULL){
 }
 
 
-print_summary_select_explore <- function(x,...){
 
-  cat("BGGM: Bayesian Gaussian Graphical Models \n")
-  cat("--- \n")
-  cat("Type:", x$object$type, "\n")
-  cat("Alternative:", x$object$alternative, "\n")
-  cat("--- \n")
-  cat("Call:\n")
-  print(x$object$call)
-  cat("--- \n")
-  cat("Hypotheses: \n")
-
-  if(x$object$alternative == "two.sided"){
-
-    cat("H0: rho = 0\nH1: rho != 0", "\n")
-
-  } else if (x$object$alternative == "greater"){
-
-    cat("H0: rho = 0\nH1: rho > 0", "\n")
-
-  } else if (x$object$alternative == "less"){
-
-    cat("H0: rho = 0\nH1: rho < 0", "\n")
-
-  } else {
-
-    cat("H0: rho = 0\nH1: rho > 0\nH2: rho < 0", "\n")
-
-  }
-
-  cat("--- \n\n")
-
-  print(x$summary, right = FALSE, row.names = FALSE)
-
-
-}
 
 print_ggm_confirm <- function(x, ...){
   groups <- x$groups
@@ -443,130 +408,15 @@ print_select_ggm_compare_bf <- function(x,...){
 
 
 
-print_select_ggm_compare_estimate <- function(x,...){
-  object <- x
-  comparisons <- length(object$pcor_adj)
-  p <- ncol(object$pcor_adj[[1]])
-  cat("BGGM: Bayesian Gaussian Graphical Models \n")
-  cat("--- \n")
-  cat("Type:", object$object$type, "\n")
-  cat("Analytic:", object$object$analytic, "\n")
-  cat("Posterior Samples:", object$object$iter, "\n")
-  cat("Credible Interval:",  gsub("*0.","", formatC( round(object$cred, 4), format='f', digits=2)), "% \n")
-  cat("--- \n")
-  cat("Call: \n")
-  print(object$object$call)
-  cat("--- \n")
-  cat("Selected:\n\n")
-  for(i in 1:comparisons){
-
-    cat(names(object$object$diff)[i], "\n")
-    mat <- object$pcor_adj[[i]]
-    colnames(mat) <- 1:p
-    row.names(mat) <- 1:p
-    print(round(mat, 3))
-    cat("--- \n\n")
-  }
-}
 
 
 
-print_select_explore <- function(x,
-                                 ...){
 
-  p <- ncol(x$pcor_mat_zero)
-  cat("BGGM: Bayesian Gaussian Graphical Models \n")
-  cat("--- \n")
-  cat("Type:", x$type, "\n")
-  cat("Alternative:", x$alternative, "\n")
-  if(x$alternative == "two.sided"){
-  cat("Bayes Factor:", x$BF_cut, "\n")
 
-  }
-  cat("--- \n")
-  cat("Call:\n")
-  print(x$call)
-  cat("--- \n")
-  cat("Hypotheses: \n")
-
-  if(x$alternative == "two.sided"){
-
-    cat("H0: rho = 0\nH1: rho != 0", "\n")
-    cat("--- \n")
-    colnames(x$Adj_10) <- 1:p
-    row.names(x$Adj_10) <- 1:p
-    colnames( x$pcor_mat_zero) <- 1:p
-    row.names(x$pcor_mat_zero) <- 1:p
-    cat("Partial Correlations:\n\n")
-    print(round(x$pcor_mat_zero, 2))
-    cat("--- \n")
-    cat("Adjacency:\n\n")
-    print(x$Adj_10)
-    cat("--- \n")
-    } else if (x$alternative == "greater"){
-
-      cat("H0: rho = 0\nH1: rho > 0", "\n")
-      cat("--- \n")
-      colnames(x$Adj_20) <- 1:p
-      row.names(x$Adj_20) <- 1:p
-      colnames( x$pcor_mat_zero) <- 1:p
-      row.names(x$pcor_mat_zero) <- 1:p
-      cat("Partial Correlations:\n\n")
-      print(round(x$pcor_mat_zero, 2))
-      cat("--- \n")
-      cat("Adjacency:\n\n")
-      print(x$Adj_20)
-      cat("--- \n")
-
-  } else if (x$alternative == "less"){
-
-    cat("H0: rho = 0\nH1: rho < 0", "\n")
-    cat("--- \n")
-    colnames(x$Adj_20) <- 1:p
-    row.names(x$Adj_20) <- 1:p
-    colnames( x$pcor_mat_zero) <- 1:p
-    row.names(x$pcor_mat_zero) <- 1:p
-    cat("Partial Correlations:\n\n")
-    print(round(x$pcor_mat_zero, 2))
-    cat("--- \n")
-    cat("Adjacency:\n\n")
-    print(x$Adj_20)
-    cat("--- \n")
-  } else {
-
-    cat("H0: rho = 0\nH1: rho > 0\nH2: rho < 0", "\n")
-    cat("--- \n")
-    cat("Summary:\n\n")
-    dat <- x$post_prob
-    dat$prob_zero <- round(dat$prob_zero, 3)
-    dat$prob_greater <- round(dat$prob_greater, 3)
-    dat$prob_less <- round(dat$prob_less, 3)
-    colnames(dat) <- c("Relation", "Pr.H0", "Pr.H1", "Pr.H2")
-    print(dat, row.names = FALSE, right = FALSE)
-    cat("--- \n")
-    }
-}
 
 print_summary_explore <- function(x,...){
   summary(x$dat_results, summarize = TRUE)
 }
-
-print_explore <- function(x,...){
-  cat("BGGM: Bayesian Gaussian Graphical Models \n")
-  cat("--- \n")
-  cat("Type:", x$type, "\n")
-  cat("Posterior Samples:", x$iter, "\n")
-  cat("Observations (n):", nrow(x$dat), "\n")
-  cat("Variables (p):", x$p, "\n")
-  cat("Edges:", .5 * (x$p * (x$p-1)), "\n")
-  cat("Delta:", x$delta, "\n")
-  cat("--- \n")
-  cat("Call: \n")
-  print(x$call)
-  cat("--- \n")
-  cat("Date:", date(), "\n")
-}
-
 
 
 print_select_estimate <- function(x, summarize = FALSE, ...){
