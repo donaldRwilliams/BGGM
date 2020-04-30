@@ -117,12 +117,11 @@ ggm_compare_explore <- function(...,
                            mixed_type = NULL,
                            analytic = FALSE,
                            prior_sd = 0.20,
-                           iter = 5000,
-                           seed = 1){
+                           iter = 5000){
 
 
-  # set seed
-  set.seed(seed)
+  # # set seed
+  # set.seed(seed)
 
   # group info (e.g., n, p, etc)
   info <- BGGM:::Y_combine(...)
