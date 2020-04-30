@@ -11,7 +11,7 @@ ggm_compare_estimate(
   type = "continuous",
   mixed_type = NULL,
   analytic = FALSE,
-  prior_sd = 0.25,
+  prior_sd = 0.5,
   iter = 5000
 )
 }
