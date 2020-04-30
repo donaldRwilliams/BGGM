@@ -35,11 +35,9 @@ as ranks when \code{type = "mixed"} and \code{NULL} otherwise. See note for furt
 \item{analytic}{logical. Should the analytic solution be computed (default is \code{FALSE}) ?}
 
 \item{prior_sd}{The scale of the prior distribution (centered at zero), in reference to a beta distribtuion.
-The `default` is 0.25. See note for further details.}
+The `default` is 0.50. See note for further details.}
 
 \item{iter}{number of iterations (posterior samples; defaults to 5000).}
-
-\item{seed}{The seed for random number generation (default set to \code{1}).}
 }
 \value{
 A list of class \code{ggm_compare_estimate} containing:
@@ -52,7 +50,8 @@ A list of class \code{ggm_compare_estimate} containing:
  }
 }
 \description{
-Compare edges (partial correlations) that are estimated from groups to, say, detect a differences or equivalence.
+Compare partial correlations that are estimated from any number of groups. This method works for
+continuous, binary, ordinal, and mixed data.
 }
 \note{
 The work flow for most functions in \strong{BGGM} is to first fit the model
