@@ -556,7 +556,7 @@ plot.summary.ggm_compare_estimate <- function(x, color = "black",
   n_plt  <- length(x$dat_results)
 
   # plots
-  lapply(1:seq_len(n_plt), function(i){
+  lapply(1:n_plt, function(i){
 
     dat_temp <- x$dat_results[[i]][order(x$dat_results[[i]]$Post.mean,
                                          decreasing = F), ]
@@ -567,14 +567,9 @@ plot.summary.ggm_compare_estimate <- function(x, color = "black",
              labels = dat_temp$Relation)
 
 
-    ggplot(dat_temp,
+   plt <- ggplot(dat_temp,
            aes(x = Relation,
                y = Post.mean)) +
-
-      geom_errorbar(aes(ymax = dat_temp[, 4],
-                        ymin = dat_temp[, 5]),
-                    width = width,
-                    color = color) +
       geom_point(size = size) +
       xlab("Index") +
       theme(axis.text.x = element_text(
@@ -582,7 +577,17 @@ plot.summary.ggm_compare_estimate <- function(x, color = "black",
         vjust = 0.5,
         hjust = 1
       )) +
-      ggtitle(paste(names(x$object$diff)))
+      ggtitle(paste(names(x$object$diff)[i]))
+
+      if(isFALSE( x$object$analytic)){
+
+      plt <- plt +  geom_errorbar(aes(ymax = dat_temp[, 4],
+                          ymin = dat_temp[, 5]),
+                      width = width,
+                      color = color)
+      }
+
+      plt
   })
 }
 
