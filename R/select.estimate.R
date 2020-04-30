@@ -36,7 +36,7 @@
 #' \strong{Alternative Default:}
 #'
 #' This package was built for the social-behavioral sciences in particular. In these applications, there is
-#' strong theory that expects \emp{all} effects to be positive. This is known as a "positive manifold" and
+#' strong theory that expects \emph{all} effects to be positive. This is known as a "positive manifold" and
 #' this notion has a rich tradition in psychometrics. Hence, by default this expecation is included into graph selection
 #' (\code{alternative = "greater"}). This results in the estimted structure including only positive edges. Further
 #' details can be found at the blog "Dealing with Negative (Red) Edges in Psychological Networks: Frequentist Edition"

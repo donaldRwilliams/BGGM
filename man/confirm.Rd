@@ -12,8 +12,7 @@ confirm(
   data = NULL,
   type = "continuous",
   mixed_type = NULL,
-  iter = 25000,
-  seed = 1
+  iter = 25000
 )
 }
 \arguments{
@@ -38,8 +37,6 @@ as ranks when \code{type = "mixed"} and \code{NULL} otherwise. See note for furt
 
 \item{iter}{posterior and prior samples. 25,000 is the default, as it results in a more stable Bayes factor than
 using, say, 5,000.}
-
-\item{seed}{The seed for random number generation (default set to \code{1}).}
 }
 \value{
 list of class \code{confirm}:

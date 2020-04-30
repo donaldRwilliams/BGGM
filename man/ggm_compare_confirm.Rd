@@ -12,8 +12,7 @@ ggm_compare_confirm(
   type = "continuous",
   mixed_type = NULL,
   prior_sd = 0.2,
-  iter = 5000,
-  seed = 1
+  iter = 5000
 )
 }
 \arguments{
