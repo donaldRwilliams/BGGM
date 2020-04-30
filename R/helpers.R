@@ -28,7 +28,7 @@ rank_helper <- function(Y){
 
 
 
-group_hyp_helper <- function(hyp, x){
+group_hyp_helper <- function(hypothesis, x){
 
   hyp <- gsub(BGGM:::hyp_converter(BGGM:::convert_hyps(hypothesis = hypothesis, cbind(x)))$hyp_converted,
               pattern = "_", replacement = "")

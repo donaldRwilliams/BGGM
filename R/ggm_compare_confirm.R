@@ -37,11 +37,10 @@ ggm_compare_confirm <- function(...,
                                 type = "continuous",
                                 mixed_type = NULL,
                                 prior_sd = 0.20,
-                                iter = 5000,
-                                seed = 1){
+                                iter = 5000){
 
   # set seed
-  set.seed(seed)
+  # set.seed(seed)
 
   # prior prob
   priorprob <- 1
@@ -50,7 +49,7 @@ ggm_compare_confirm <- function(...,
   delta <- BGGM:::delta_solve(prior_sd)
 
   # group info (e.g., n, p, etc)
-  info <- BGGM:::Y_combine(Y1, Y2)
+  info <- BGGM:::Y_combine(...)
 
   # number of variables
   p <- info$dat_info$p[1]
@@ -83,7 +82,7 @@ ggm_compare_confirm <- function(...,
 
   prior_samp <- lapply(1:groups, function(x) {
 
-    Y <- info$dat[[x]]
+    Y <- as.matrix(info$dat[[x]])
 
     .Call(
       '_BGGM_Theta_continuous',
@@ -100,7 +99,7 @@ ggm_compare_confirm <- function(...,
   # colnames: post samples
   col_names <- BGGM:::numbers2words(1:p)
   mat_names <- lapply(1:groups, function(x) paste0("g", BGGM:::numbers2words(x),
-                sapply(col_names, function(x) paste(col_names, x, sep = ""))[upper.tri(I_p)]))
+               sapply(col_names, function(x) paste(col_names, x, sep = ""))[upper.tri(I_p)]))
 
   # posterior start group (one)
   post_group <- matrix(post_samp[[1]]$fisher_z[, , 51:(iter + 50)][upper.tri(I_p)],
@@ -116,12 +115,12 @@ ggm_compare_confirm <- function(...,
   for(j in 2:(groups)){
 
     post_group <-  cbind(post_group,
-                       matrix(post_samp[[1]]$fisher_z[, , 51:(iter+50)][upper.tri(I_p)],
+                       matrix(post_samp[[j]]$fisher_z[, , 51:(iter+50)][upper.tri(I_p)],
                               nrow = iter, ncol = pcors,
                               byrow = TRUE))
 
     prior_group <-  cbind(prior_group,
-                        matrix(prior_samp[[1]][ , ,][upper.tri(I_p)], iter, pcors, byrow = TRUE))
+                        matrix(prior_samp[[j]][ , ,][upper.tri(I_p)], iter, pcors, byrow = TRUE))
   }
 
   posterior_samples <- post_group
@@ -188,6 +187,8 @@ ggm_compare_confirm <- function(...,
     hypothesis = hypothesis,
     iter = iter,
     p = p,
+    posterior_samples = posterior_samples,
+    post_group = post_group,
     delta = delta
   )
 

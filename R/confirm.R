@@ -27,7 +27,6 @@
 #' @param iter posterior and prior samples. 25,000 is the default, as it results in a more stable Bayes factor than
 #' using, say, 5,000.
 #'
-#' @param seed The seed for random number generation (default set to \code{1}).
 #'
 #' @references
 #' \insertAllCited{}
@@ -139,18 +138,9 @@ confirm <- function(Y, hypothesis,
                     data = NULL,
                     type = "continuous",
                     mixed_type = NULL,
-                    iter = 25000, seed = 1){
+                    iter = 25000){
 
-  # set seed
-  set.seed(seed)
 
-  if(type != "continuous"){
-
-    stop("dev version: ordinal, binary, and mixed data will be implemented soon")
-
-    }
-
-  Y <- as.matrix(scale(na.omit(Y), scale = F))
 
   priorprob <- 1
 
@@ -160,25 +150,148 @@ confirm <- function(Y, hypothesis,
   # variables
   p <- ncol(Y)
 
+  # observations
+  n <- nrow(Y)
+
+  # remove NAs
+  Y <- na.omit(Y)
+
   # I_p
   I_p <- diag(p)
 
   # number of edges
   pcors <- p*(p-1)*0.5
 
-  # sample posterior
-  post_samp <- .Call(
-    '_BGGM_Theta_continuous',
-    PACKAGE = 'BGGM',
-    Y = Y,
-    iter = iter + 50,
-    delta = delta,
-    epsilon = 0.01,
-    prior_only = 0,
-    explore = 1
-  )
 
-  # sample prior
+  # continuous
+  if(type == "continuous"){
+
+    # scale Y
+    Y <- scale(Y, scale = T)
+
+    # no control
+    if(is.null(formula)){
+
+      # posterior sample
+      post_samp <- .Call(
+        '_BGGM_Theta_continuous',
+        PACKAGE = 'BGGM',
+        Y = Y,
+        iter = iter + 50,
+        delta = delta,
+        epsilon = 0.1,
+        prior_only = 0,
+        explore = 1
+      )
+
+      # control for variables
+    } else {
+
+      # model matrix
+      X <- model.matrix(formula, data)
+
+      # posterior sample
+      post_samp <- .Call(
+        "_BGGM_mv_continuous",
+        Y = Y,
+        X = X,
+        delta = delta,
+        epsilon = 0.1,
+        iter = iter + 50
+      )
+
+    } # end control
+
+    # binary
+  } else if (type == "binary"){
+
+
+    # intercept only
+    if(is.null(formula)){
+      X <- matrix(1, n, 1)
+      # model matrix
+    } else {
+
+      X <- model.matrix(formula, data)
+
+    }
+
+    # posterior sample
+    post_samp <-  .Call(
+      "_BGGM_mv_binary",
+      Y = Y,
+      X = X,
+      delta = delta,
+      epsilon = 0.1,
+      iter = iter + 50,
+      beta_prior = 0.0001,
+      cutpoints = c(-Inf, 0, Inf)
+    )
+
+    # ordinal
+  } else if(type == "ordinal"){
+
+    # intercept only
+    if(is.null(formula)){
+      X <- matrix(1, n, 1)
+
+    } else {
+
+      # model matrix
+      X <- model.matrix(formula, data)
+
+    }
+    # categories
+    K <- max(apply(Y, 2, function(x) { length(unique(x))   } ))
+
+    # call c ++
+    post_samp <- .Call(
+      "_BGGM_mv_ordinal_albert",
+      Y = Y,
+      X = X,
+      iter = iter + 50,
+      delta = delta,
+      epsilon = 0.1,
+      K = K
+    )
+
+  } else if(type == "mixed"){
+
+    # no control variables allowed
+    if(!is.null(formula)){
+      warning("formula ignored for mixed data at this time")
+      formula <- NULL
+    }
+
+    # default for ranks
+    if(is.null(mixed_type)) {
+      idx = colMeans(round(Y) == Y)
+      idx = ifelse(idx == 1, 1, 0)
+      # user defined
+    } else {
+      idx = mixed_type
+    }
+
+    # rank following hoff (2008)
+    rank_vars <- rank_helper(Y)
+
+    post_samp <- .Call(
+      "_BGGM_copula",
+      z0_start = rank_vars$z0_start,
+      levels = rank_vars$levels,
+      K = rank_vars$K,
+      Sigma_start = rank_vars$Sigma_start,
+      iter = iter + 50,
+      delta = delta,
+      epsilon = 0.1,
+      idx = idx
+    )
+
+  } else {
+    stop("'type' not supported: must be continuous, binary, ordinal, or mixed.")
+  }
+
+ # sample prior
   prior_samp <- .Call(
     '_BGGM_Theta_continuous',
     PACKAGE = 'BGGM',

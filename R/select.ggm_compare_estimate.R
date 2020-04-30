@@ -122,7 +122,7 @@ select.ggm_compare_estimate <- function(object,
 
   class(returned_object) <- c("BGGM",
                               "select.ggm_compare_estimate",
-                              "estimate")
+                              "estimate", "select")
   return(returned_object)
 
 }

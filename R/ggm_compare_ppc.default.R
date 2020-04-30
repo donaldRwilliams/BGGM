@@ -1,16 +1,20 @@
-#' GGM Compare: Posterior Predictive Distribution
+#' GGM Compare: Posterior Predictive Check
 #'
 #' @name ggm_compare_ppc
 #'
-#' @description Compare GGMs with the posterior predictive distribution. The method assume group equality, and the predictive check
-#' allows for testing whether that assumption should be modified--i.e., the GGMs are actually different. The current test statistic available is
-#' Kullback-Leibler divergence, which in this case, can be understood as a likelihood ratio for multivariate normal distributions. There are
-#' two options: (1) 'global' and (2) 'nodewise.' The former tests the entire GGM, whereas the latter allows for testing specific nodes (variables)
-#' in the model.
+#' @description Compare GGMs with a posterior predictive check. The method assumes group equality and the predictive check
+#' allows for testing whether that assumption should be modified (i.e., the GGMs are actually different). The current test
+#' statistic available is (symmeteric) Kullback-Leibler divergence that, in this case, can be understood as a likelihood
+#' ratio for multivariate normal distributions. There are two options: (1) \code{global} and (2) \code{nodewise}. The former tests the entire GGM and the
+#' latter test the each node in the model.
 #'
 #' @param ... data matrices (\emph{n} by  \emph{p}). Requires at least two.
+#'
+#'
 #' @param type \code{type = "global"} for testing the entire precision matrix. \code{type = "nodewise"} for testing each node (i.e., variable)
+#'
 #' @param iter number of replicated data sets. default is \code{iter = 1000}.
+#'
 #' @param cores number of cores for parallel computing. The default is 2, but this can be adjusted.
 #'
 #'

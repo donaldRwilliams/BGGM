@@ -341,10 +341,6 @@ plot.select <- function(x,
                                                  neg_col,
                                                  pos_col))
 
-
-
-
-
       if(is.null(groups)){
 
         e <- abs(as.numeric( x$pcor_mat * x$pos_mat))
@@ -413,6 +409,7 @@ plot.select <- function(x,
 
         e <- abs(as.numeric( x$pcor_mat * x$pos_mat))
 
+        suppressMessages(
         plt_pos <- ggnet2(
           net_pos,
           edge.alpha = e[e != 0] / max(e),
@@ -432,10 +429,13 @@ plot.select <- function(x,
           theme(legend.title = element_blank()) +
           scale_color_brewer(palette = palette) +
           geom_text(label = cn)
+        )
 
 
         e <- abs(as.numeric( x$pcor_mat * x$neg_mat))
 
+
+        suppressMessages(
         plt_neg <- ggnet2(net_neg,
                           node.size = 1,
                           edge.alpha = e[e != 0] / max(e),
@@ -453,9 +453,10 @@ plot.select <- function(x,
           theme(legend.title = element_blank()) +
           scale_color_brewer(palette = palette) +
           geom_text(label = cn)
+        )
 
 
-
+       suppressMessages(
         plt_null <- ggnet2(net_null,
                            node.size = 1,
                            mode = layout,
@@ -470,8 +471,10 @@ plot.select <- function(x,
           theme(legend.title = element_blank()) +
           scale_color_brewer(palette = palette) +
           geom_text(label = cn)
+)
 
-        plt_ambiguous <- ggnet2(net_ambigous,
+       suppressMessages(
+       plt_ambiguous <- ggnet2(net_ambigous,
                                 node.size = 1,
                                 mode = layout,
                                 node.color =  "group") +
@@ -482,7 +485,7 @@ plot.select <- function(x,
           theme(legend.title = element_blank()) +
           scale_color_brewer(palette = palette) +
           geom_text(label = cn)
-
+       )
 
         list(plt_pos = plt_pos,
              plt_neg = plt_neg,
@@ -491,6 +494,574 @@ plot.select <- function(x,
 
       } # end groups
     }
-  }
-  }
+  } else if(is(x, "select.ggm_compare_estimate")){
+
+
+    cn <- colnames(x$object$info$dat[[1]])
+
+    p <- ncol(x$pcor_adj[[1]])
+
+    comparisons <- length(x$pcor_adj)
+
+    if(is.null(cn) ) {
+      cn <- 1:p
+    }
+
+
+
+  lapply(1:comparisons, function(z){
+
+            net <- network::network(x$pcor_adj[[z]])
+
+            # edge weights
+            network::set.edge.value(x = net, attrname = "weights",
+                                    value = x$pcor_adj[[z]])
+
+            # edge weights absolute
+            network::set.edge.value(x = net, attrname = "abs_weights",
+                                    value = abs(x$pcor_adj[[z]]) * edge_magnify)
+
+
+            # edge colors
+            network::set.edge.attribute(x = net, attrname = "edge_color",
+                                        value = ifelse(net %e% "weights" < 0,
+                                                       neg_col,
+                                                       pos_col))
+
+            diag(x$pcor_adj[[z]]) <- 0
+            e <- abs(as.numeric(x$pcor_adj[[z]]))
+
+            if(is.null(groups)){
+
+              ggnet2(net, edge.alpha = e[e != 0] / max(e),
+                            edge.size = "abs_weights",
+                            edge.color = "edge_color",
+                            node.size = 1,
+                            mode = layout) +
+                geom_point(color = "black",
+                           size = node_size+1) +
+                geom_point(size = node_size, color = "white")  +
+                guides(color = FALSE) +
+                geom_text(label = cn) +
+                ggtitle(names(x$object$diff)[z])
+
+
+            } else {
+
+              net %v% "group" <- groups
+
+              suppressMessages(
+                 ggnet2(net, edge.alpha = e[e != 0] / max(e),
+                               edge.size = "abs_weights",
+                               edge.color = "edge_color",
+                               node.color = "group",
+                               node.size = 1,
+                               mode = layout) +
+                  geom_point(aes(color = groups),
+                             size = node_size + 2,
+                             alpha = 0.2) +
+                  geom_point(aes(color = groups),
+                             size = node_size,
+                             alpha = 1) +
+                  guides(colour = guide_legend(override.aes = list(size=node_size))) +
+                  theme(legend.title = element_blank()) +
+                  scale_color_brewer(palette = palette) +
+                  geom_text(label = cn) +
+                  ggtitle(names(x$object$diff[z]))
+              )
+            }
+        })
+  } else if(is(x, "select.ggm_compare_bf")){
+
+
+    if(x$post_prob == 0.50){
+
+
+      cn <- colnames(x$object$info$dat[[1]])
+
+
+
+      p <- ncol(x$pcor_adj[[1]])
+
+     if(is.null(cn) ){
+        cn <- 1:p
+      }
+
+
+
+      if(length(x$info$dat) == 2){
+
+
+        net_alt <- network::network(x$adj_10 * x$pcor_mat)
+        net_null <- network::network(x$adj_01)
+
+
+        # edge weights
+        network::set.edge.value(x = net_alt, attrname = "weights",
+                                value = x$adj_10 * x$pcor_mat)
+
+        # edge weights absolute
+        network::set.edge.value(x = net_alt, attrname = "abs_weights",
+                                value = abs(x$adj_10 * x$pcor_mat) * edge_magnify)
+
+        # edge colors
+        network::set.edge.attribute(x = net_alt, attrname = "edge_color",
+                                    value = ifelse(net_alt %e% "weights" < 0,
+                                                   neg_col,
+                                                   pos_col))
+
+
+        if(is.null(groups)){
+
+          e <- abs(as.numeric( x$pcor_mat * x$adj_10))
+
+          plt_alt <- ggnet2(
+            net_alt,
+            edge.alpha = e[e != 0] / max(e),
+            edge.size = "abs_weights",
+            edge.color = "edge_color",
+            node.size = 1,
+            mode = layout,...
+          ) +
+            geom_point(color = "black",
+                       size = node_size + 1) +
+            geom_point(size = node_size, color = "white")  +
+            guides(color = FALSE) +
+            geom_text(label = cn)
+
+          plt_null <- ggnet2(net_null,
+                             node.size = 1,
+                             mode = layout) +
+            geom_point(color = "black",
+                       size = node_size + 1) +
+            geom_point(size = node_size, color = "white")  +
+            guides(color = FALSE) +
+            geom_text(label = cn)
+
+
+
+          list(plt_alt = plt_alt,
+               plt_null = plt_null)
+
+        } else {
+
+          net_alt %v% "group" <- groups
+          net_null %v% "group" <- groups
+
+
+          e <- abs(as.numeric( x$pcor_mat * x$adj_10))
+
+          suppressMessages(
+          plt_alt <- ggnet2(
+            net_alt,
+            edge.alpha = e[e != 0] / max(e),
+            edge.size = "abs_weights",
+            edge.color = "edge_color",
+            node.color = "group",
+            node.size = 1,
+            mode = layout
+          ) +
+            geom_point(aes(color = groups),
+                     size = node_size + 2,
+                     alpha = 0.2) +
+            geom_point(aes(color = groups),
+                       size = node_size,
+                       alpha = 1) +
+            guides(colour = guide_legend(override.aes = list(size=node_size))) +
+            theme(legend.title = element_blank()) +
+            scale_color_brewer(palette = palette) +
+            geom_text(label = cn)
+          )
+
+        suppressMessages(
+          plt_null <- ggnet2(net_null,
+                             node.size = 1,
+                             mode = layout,
+                             node.color = "group") +
+            geom_point(color = "black",
+                       size = node_size + 1) +
+            geom_point(size = node_size, color = "white")  +
+            guides(color = FALSE) +
+            geom_text(label = cn) +
+            geom_point(aes(color = groups),
+                       size = node_size + 2,
+                       alpha = 0.2) +
+            geom_point(aes(color = groups),
+                       size = node_size,
+                       alpha = 1) +
+            guides(colour = guide_legend(override.aes = list(size=node_size))) +
+            theme(legend.title = element_blank()) +
+            scale_color_brewer(palette = palette) +
+            geom_text(label = cn)
+          )
+
+
+        list(plt_alt = plt_alt,
+             plt_null = plt_null)
+
+        } # end clusters
+
+        }  else {
+
+          net_alt <- network::network(x$adj_10)
+          net_null <- network::network(x$adj_01)
+
+          if(is.null(groups)){
+
+            plt_alt <- ggnet2(net_alt,
+                             node.size = 1,
+                             mode = layout) +
+            geom_point(color = "black",
+                       size = node_size + 1) +
+            geom_point(size = node_size, color = "white")  +
+            guides(color = FALSE) +
+            geom_text(label = cn)
+
+            plt_null <- ggnet2(net_null,
+                             node.size = 1,
+                             mode = layout) +
+            geom_point(color = "black",
+                       size = node_size + 1) +
+            geom_point(size = node_size, color = "white")  +
+            guides(color = FALSE) +
+            geom_text(label = cn)
+
+
+
+          list(plt_alt = plt_alt,
+               plt_null = plt_null)
+
+        } else {
+
+          net_alt %v% "group" <- groups
+          net_null %v% "group" <- groups
+
+
+
+          suppressMessages(
+            plt_alt <- ggnet2(net_alt,
+                               node.size = 1,
+                               mode = layout,
+                               node.color = "group") +
+              geom_point(color = "black",
+                         size = node_size + 1) +
+              geom_point(size = node_size, color = "white")  +
+              guides(color = FALSE) +
+              geom_text(label = cn) +
+              geom_point(aes(color = groups),
+                         size = node_size + 2,
+                         alpha = 0.2) +
+              geom_point(aes(color = groups),
+                         size = node_size,
+                         alpha = 1) +
+              guides(colour = guide_legend(override.aes = list(size=node_size))) +
+              theme(legend.title = element_blank()) +
+              scale_color_brewer(palette = palette) +
+              geom_text(label = cn)
+          )
+
+          suppressMessages(
+            plt_null <- ggnet2(net_null,
+                               node.size = 1,
+                               mode = layout,
+                               node.color = "group") +
+              geom_point(color = "black",
+                         size = node_size + 1) +
+              geom_point(size = node_size, color = "white")  +
+              guides(color = FALSE) +
+              geom_text(label = cn) +
+              geom_point(aes(color = groups),
+                         size = node_size + 2,
+                         alpha = 0.2) +
+              geom_point(aes(color = groups),
+                         size = node_size,
+                         alpha = 1) +
+              guides(colour = guide_legend(override.aes = list(size=node_size))) +
+              theme(legend.title = element_blank()) +
+              scale_color_brewer(palette = palette) +
+              geom_text(label = cn)
+          )
+
+
+          list(plt_alt = plt_alt,
+               plt_null = plt_null)
+
+      } # end of clusters
+
+    } # end two groups
+
+      # more than 0.50
+  } else {
+
+
+    cn <- colnames(x$object$info$dat[[1]])
+
+
+
+    p <- ncol(x$BF_10)
+
+    if(is.null(cn) ){
+      cn <- 1:p
+    }
+
+
+
+    if(length(x$info$dat) == 2){
+
+      Adj_alt <- x$adj_10
+      Adj_null <- x$adj_01
+
+      ambiguous <- matrix(1, p, p) - diag(p) -  Adj_alt - Adj_null
+
+      net_alt <- network::network(x$pcor_mat_10 * Adj_alt)
+      net_null <- network::network(Adj_null)
+      net_ambigous <- network(ambiguous)
+
+
+
+      # edge weights
+      network::set.edge.value(x = net_alt, attrname = "weights",
+                              value = x$pcor_mat_10 * Adj_alt)
+
+      # edge weights absolute
+      network::set.edge.value(x = net_alt, attrname = "abs_weights",
+                              value = abs(x$pcor_mat_10 * Adj_alt) * edge_magnify)
+
+      # edge colors
+      network::set.edge.attribute(x = net_alt, attrname = "edge_color",
+                                  value = ifelse(net_alt %e% "weights" < 0,
+                                                 neg_col,
+                                                 pos_col))
+
+      e <- abs(as.numeric(  x$pcor_mat_10 * x$adj_10))
+
+      if(is.null(groups)){
+
+        plt_alt <- ggnet2(
+          net_alt,
+          edge.alpha = e[e != 0] / max(e),
+          edge.size = "abs_weights",
+          edge.color = "edge_color",
+          node.size = 1,
+          mode = layout
+        ) +
+          geom_point(color = "black",
+                     size = node_size + 1) +
+          geom_point(size = node_size, color = "white")  +
+          guides(color = FALSE) +
+          geom_text(label = cn)
+
+
+        plt_null <- ggnet2(net_null,
+                           node.size = 1,
+                           mode = layout) +
+          geom_point(color = "black",
+                     size = node_size + 1) +
+          geom_point(size = node_size, color = "white")  +
+          guides(color = FALSE) +
+          geom_text(label = cn)
+
+
+
+        plt_ambiguous <- ggnet2(net_ambigous,
+                                node.size = 1,
+                                mode = layout) +
+          geom_point(color = "black",
+                     size = node_size + 1) +
+          geom_point(size = node_size, color = "white")  +
+          guides(color = FALSE) +
+          geom_text(label = cn)
+
+        list(plt_alt = plt_alt,
+             plt_null = plt_null,
+             plt_ambiguous = plt_ambiguous)
+
+      } else {
+
+        net_alt %v% "group" <- groups
+        net_null %v% "group" <- groups
+        net_ambigous %v% "group" <- groups
+
+        suppressMessages(
+          plt_alt <- ggnet2(net_alt, edge.alpha = e[e != 0] / max(e),
+                            edge.size = "abs_weights",
+                            edge.color = "edge_color",
+                            node.color = "group",
+                            node.size = 1,
+                            mode = layout) +
+            geom_point(aes(color = groups),
+                       size = node_size + 2,
+                       alpha = 0.2) +
+            geom_point(aes(color = groups),
+                       size = node_size,
+                       alpha = 1) +
+            guides(colour = guide_legend(override.aes = list(size=node_size))) +
+            theme(legend.title = element_blank()) +
+            scale_color_brewer(palette = palette) +
+            geom_text(label = cn)
+        )
+
+        suppressMessages(
+
+          plt_null <- ggnet2(net_null,
+                             node.size = 1,
+                             node.color = "group",
+                             mode = layout) +
+            geom_point(aes(color = groups),
+                       size = node_size + 2,
+                       alpha = 0.2) +
+            geom_point(aes(color = groups),
+                       size = node_size,
+                       alpha = 1) +
+            guides(colour = guide_legend(override.aes = list(size=node_size))) +
+            theme(legend.title = element_blank()) +
+            scale_color_brewer(palette = palette) +
+            geom_text(label = cn)
+        )
+
+
+        suppressMessages(
+          plt_ambiguous <-  ggnet2(net_ambigous,
+                                   node.size = 1,
+                                   node.color = "group",
+                                   mode = layout) +
+            geom_point(aes(color = groups),
+                       size = node_size + 2,
+                       alpha = 0.2) +
+            geom_point(aes(color = groups),
+                       size = node_size,
+                       alpha = 1) +
+            guides(colour = guide_legend(override.aes = list(size=node_size))) +
+            theme(legend.title = element_blank()) +
+            scale_color_brewer(palette = palette) +
+            geom_text(label = cn)
+        )
+
+
+        list(H1_plt = plt_alt,
+             H0_plt = plt_null,
+             ambiguous_plt = plt_ambiguous)
+
+        } # end cluster
+
+      # end: two groups
+  } else {
+
+      Adj_alt <- x$adj_10
+      Adj_null <- x$adj_01
+
+      ambiguous <- matrix(1, p, p) - diag(p) -  Adj_alt - Adj_null
+
+      net_alt <- network::network(Adj_alt)
+      net_null <- network::network(Adj_null)
+      net_ambigous <- network::network(ambiguous)
+
+      if(is.null(groups)){
+
+        plt_alt <- ggnet2(net_alt,
+                           node.size = 1,
+                           mode = layout) +
+          geom_point(color = "black",
+                     size = node_size + 1) +
+          geom_point(size = node_size, color = "white")  +
+          guides(color = FALSE) +
+          geom_text(label = cn)
+
+
+        plt_null <- ggnet2(net_null,
+                           node.size = 1,
+                           mode = layout) +
+          geom_point(color = "black",
+                     size = node_size + 1) +
+          geom_point(size = node_size, color = "white")  +
+          guides(color = FALSE) +
+          geom_text(label = cn)
+
+        plt_ambiguous <-  ggnet2(net_ambigous,
+                                 node.size = 1,
+                                 mode = layout) +
+          geom_point(color = "black",
+                     size = node_size + 1) +
+          geom_point(size = node_size, color = "white")  +
+          guides(color = FALSE) +
+          geom_text(label = cn)
+
+
+        list(plt_alt = plt_alt,
+             plt_null = plt_null,
+             plt_ambiguous = plt_ambiguous)
+
+      } else {
+
+        net_alt %v% "group" <- groups
+        net_null %v% "group" <- groups
+        net_ambigous %v% "group" <- groups
+
+        suppressMessages(
+          plt_alt <- ggnet2(net_alt,
+                            node.size = 1,
+                            node.color = "group",
+                            mode = layout) +
+            geom_point(aes(color = groups),
+                       size = node_size + 2,
+                       alpha = 0.2) +
+            geom_point(aes(color = groups),
+                       size = node_size,
+                       alpha = 1) +
+            guides(colour = guide_legend(override.aes = list(size=node_size))) +
+            theme(legend.title = element_blank()) +
+            scale_color_brewer(palette = palette) +
+            geom_text(label = cn)
+        )
+
+        suppressMessages(
+
+          plt_null <- ggnet2(net_null,
+                             node.size = 1,
+                             node.color = "group",
+                             mode = layout) +
+            geom_point(aes(color = groups),
+                       size = node_size + 2,
+                       alpha = 0.2) +
+            geom_point(aes(color = groups),
+                       size = node_size,
+                       alpha = 1) +
+            guides(colour = guide_legend(override.aes = list(size=node_size))) +
+            theme(legend.title = element_blank()) +
+            scale_color_brewer(palette = palette) +
+            geom_text(label = cn)
+        )
+
+        suppressMessages(
+
+          plt_ambiguous <-  ggnet2(net_ambigous,
+                                   node.size = 1,
+                                   node.color = "group",
+                                   mode = layout) +
+            geom_point(aes(color = groups),
+                       size = node_size + 2,
+                       alpha = 0.2) +
+            geom_point(aes(color = groups),
+                       size = node_size,
+                       alpha = 1) +
+            guides(colour = guide_legend(override.aes = list(size=node_size))) +
+            theme(legend.title = element_blank()) +
+            scale_color_brewer(palette = palette) +
+            geom_text(label = cn)
+
+          )
+
+        list(H1_plt = plt_alt,
+             H0_plt = plt_null,
+             ambiguous_plt = plt_ambiguous)
+
+        } # end cluster
+
+      } # end: more than 2 groups
+
+    } # end not 0.50.
+
+  } # end select.ggm_compare.explore
+
+}
 

@@ -458,6 +458,10 @@ summary.ggm_compare_estimate <- function(object,
       "Cred.ub"
     )
 
+    if(isTRUE( object$analytic)){
+
+      results_i <- results_i[,1:2]
+    }
 
     dat_results[[i]] <- results_i
   }
@@ -525,6 +529,7 @@ print_summary_ggm_estimate_compare <- function(x,...){
   print(x$object$call)
   cat("--- \n")
   cat("Estimates:\n")
+
   for (i in 1:nrow(x$object$info$pairwise)) {
     cat("\n", names(x$object$pcors_diffs[[i]]), "\n")
 

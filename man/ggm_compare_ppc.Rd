@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggm_compare_ppc.default.R
 \name{ggm_compare_ppc}
 \alias{ggm_compare_ppc}
-\title{GGM Compare: Posterior Predictive Distribution}
+\title{GGM Compare: Posterior Predictive Check}
 \usage{
 ggm_compare_ppc(..., type = "global", iter = 5000, cores = 1)
 }
@@ -37,11 +37,11 @@ list of class \code{ggm_compare_ppc}:
 }
 }
 \description{
-Compare GGMs with the posterior predictive distribution. The method assume group equality, and the predictive check
-allows for testing whether that assumption should be modified--i.e., the GGMs are actually different. The current test statistic available is
-Kullback-Leibler divergence, which in this case, can be understood as a likelihood ratio for multivariate normal distributions. There are
-two options: (1) 'global' and (2) 'nodewise.' The former tests the entire GGM, whereas the latter allows for testing specific nodes (variables)
-in the model.
+Compare GGMs with a posterior predictive check. The method assumes group equality and the predictive check
+allows for testing whether that assumption should be modified (i.e., the GGMs are actually different). The current test
+statistic available is (symmeteric) Kullback-Leibler divergence that, in this case, can be understood as a likelihood
+ratio for multivariate normal distributions. There are two options: (1) \code{global} and (2) \code{nodewise}. The former tests the entire GGM and the
+latter test the each node in the model.
 }
 \note{
 This method is Bayesian, as it relies on the posterior predictive distribution.

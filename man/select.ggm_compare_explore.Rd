@@ -4,7 +4,7 @@
 \alias{select.ggm_compare_explore}
 \title{Select Partial Correlattion Differences for \code{ggm_compare_bf} Objects}
 \usage{
-\method{select}{ggm_compare_explore}(object, post_prob = 0.5, ...)
+\method{select}{ggm_compare_explore}(object, post_prob = 0.5, BF = NULL, ...)
 }
 \arguments{
 \item{object}{object of class \code{ggm_compare_bf}.}
