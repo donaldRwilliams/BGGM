@@ -120,9 +120,6 @@ ggm_compare_explore <- function(...,
                            iter = 5000){
 
 
-  # # set seed
-  # set.seed(seed)
-
   # group info (e.g., n, p, etc)
   info <- BGGM:::Y_combine(...)
 
