@@ -414,13 +414,14 @@ summary.ggm_compare_estimate <- function(object,
 
 
   if(col_names | is.null(cn)){
+    mat_names <- sapply(1:p , function(x) paste(1:p, x, sep = "--"))[upper.tri(I_p)]
 
-    mat_names <-  sapply(cn , function(x) paste(cn, x, sep = "--"))[upper.tri(I_p)]
+
+
 
     } else {
 
-      mat_names <- sapply(1:p , function(x) paste(1:p, x, sep = "--"))[upper.tri(I_p)]
-
+      mat_names <-  sapply(cn , function(x) paste(cn, x, sep = "--"))[upper.tri(I_p)]
       }
 
   dat_results <- list()
