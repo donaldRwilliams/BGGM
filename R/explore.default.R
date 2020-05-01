@@ -25,8 +25,6 @@
 #'
 #' @param iter number of iterations (posterior samples; defaults to 5000).
 #'
-#' @param cores number of cores for parallel computing. The default is 2, but this can be changed.
-#'
 #' @param prior_sd hypothesized standard deviation for the edges or partial correlations
 #'
 #' @param ... currently ignored.
@@ -100,13 +98,7 @@ explore <- function(Y,
                     mixed_type = NULL,
                     analytic = FALSE,
                     prior_sd = 0.25,
-                    iter = 5000,
-                    cores = 2,
-                    seed = 1,...){
-
-
-  # # set seed
-  # set.seed(seed)
+                    iter = 5000,...){
 
   # delta parameter
   delta <- delta_solve(prior_sd)
@@ -122,6 +114,7 @@ explore <- function(Y,
 
   if(!analytic){
 
+  message("BGGM: Posterior Sampling")
   # continuous
   if(type == "continuous"){
 
@@ -183,7 +176,7 @@ explore <- function(Y,
       delta = delta,
       epsilon = 0.1,
       iter = iter + 50,
-      beta_prior = 0.0001,
+      beta_prior = 0.1,
       cutpoints = c(-Inf, 0, Inf)
     )
 
@@ -249,6 +242,7 @@ explore <- function(Y,
   } else {
     stop("'type' not supported: must be continuous, binary, ordinal, or mixed.")
   }
+  message("BGGM: Finished")
 
   # matrix dimensions for prior
   Y_dummy <- matrix(rnorm( 10 * 3 ),
@@ -259,11 +253,9 @@ explore <- function(Y,
                       Y = Y_dummy,
                       iter = iter,
                       delta = delta,
-                      epsilon = 0.001,
+                      epsilon = 0.1,
                       prior_only = 1,
                       explore = 1)
-
-
 
 
   pcor_mat <- round(apply(post_samp$pcors[,,51:(iter + 50)], 1:2, mean), 3)

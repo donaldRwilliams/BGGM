@@ -1,9 +1,11 @@
 // -*- mode: C++; c-indent-level: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
 // we only include RcppArmadillo.h which pulls Rcpp.h in for us
 #include "RcppArmadillo.h"
+#include <progress.hpp>
+#include <progress_bar.hpp>
 #include <truncnorm.h>
 
-// [[Rcpp::depends(RcppArmadillo, RcppDist)]]
+// [[Rcpp::depends(RcppArmadillo, RcppDist, RcppProgress)]]
 
 
 // matrix F continous sampler
@@ -21,10 +23,14 @@ Rcpp::List Theta_continuous(arma::mat Y,
                             int explore) {
 
 
+
   // note p changed to k to be consistent
   //with the multivariate regression samplers
 
   // number of rows
+
+  Progress  p(iter, TRUE);
+
   float n = Y.n_rows;
 
   int k = 1;
@@ -93,6 +99,12 @@ Rcpp::List Theta_continuous(arma::mat Y,
   arma::mat S_Y(Y.t() * Y);
 
   for(int  s = 0; s < iter; ++s){
+
+    p.increment();
+
+    if (s % 250 == 0){
+      Rcpp::checkUserInterrupt();
+    }
 
 
     if(prior_only == 1){
