@@ -22,8 +22,9 @@ Requires at least two.}
 \item{formula}{an object of class \code{\link[stats]{formula}}. This allows for including
 control variables in the model (i.e., \code{~ gender}).}
 
-\item{data}{an optional data frame, list or environment (or an object coercible by \code{\link[base]{as.data.frame}})
-to a data frame containing the variables in \code{formula}. This is required when controlling for variables.}
+\item{data}{optional data frames in a list that containing the variables in \code{formula}.
+This is required when controlling for variables. Requires at least two (one for each group).
+See \code{examples} for futher details.}
 
 \item{type}{character string. Which type of data for \strong{Y} ? The options include \code{continuous},
 \code{binary}, or \code{ordinal}. See the note for further details.}
@@ -51,35 +52,24 @@ A list of class \code{ggm_compare_estimate} containing:
 }
 \description{
 Compare partial correlations that are estimated from any number of groups. This method works for
-continuous, binary, ordinal, and mixed data.
+continuous, binary, ordinal, and mixed data.  The approach (i.e., a difference between posterior distributions) was
+described in  \insertCite{Williams2019;textual}{BGGM}.
 }
 \note{
-The work flow for most functions in \strong{BGGM} is to first fit the model
-and then select the graph  (in this case the differences) with  \code{\link{select}}.
+This function can be used to compare the partial correlations for any number of groups.
+This is accomplished with pairwise comparisons for each relation. In the case of three groups,
+for example, group 1 and group 2 are compared, then group 1 and group 3 are compared, and then
+group 2 and group 3 are compared. There is a full distibution for each difference that can be
+summarized  \code{\link{summary.ggm_compare_estimate}} and then visualized.
+\code{\link{plot.summary.ggm_compare_estimate}}
 }
 \examples{
-# data
-Y1 <- BGGM::bfi[1:500,1:5]
-Y2 <- BGGM::bfi[501:1000, 1:5]
+# comparing two groups (males vs. females) in a personality network
 
-# fit model
-fit <- ggm_compare_estimate(Y1, Y2)
 
-# posterior summary of differences
-summary(fit)
 
-# select (threshold) with credible intervals
-sel <- select(fit)
 
-# summary
-summary(sel)
-
-# selected differences
-sel$mat_pcor
-
-# adjacency matrix
-sel$mat_adj
 }
-\seealso{
-\code{\link{select.ggm_compare_estimate}}
+\references{
+\insertAllCited{}
 }

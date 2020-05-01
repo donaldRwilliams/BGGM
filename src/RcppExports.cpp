@@ -22,6 +22,22 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// sample_prior
+Rcpp::List sample_prior(arma::mat Y, int iter, float delta, float epsilon, int prior_only, int explore);
+RcppExport SEXP _BGGM_sample_prior(SEXP YSEXP, SEXP iterSEXP, SEXP deltaSEXP, SEXP epsilonSEXP, SEXP prior_onlySEXP, SEXP exploreSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< int >::type iter(iterSEXP);
+    Rcpp::traits::input_parameter< float >::type delta(deltaSEXP);
+    Rcpp::traits::input_parameter< float >::type epsilon(epsilonSEXP);
+    Rcpp::traits::input_parameter< int >::type prior_only(prior_onlySEXP);
+    Rcpp::traits::input_parameter< int >::type explore(exploreSEXP);
+    rcpp_result_gen = Rcpp::wrap(sample_prior(Y, iter, delta, epsilon, prior_only, explore));
+    return rcpp_result_gen;
+END_RCPP
+}
 // mv_continuous
 Rcpp::List mv_continuous(arma::mat Y, arma::mat X, float delta, float epsilon, int iter);
 RcppExport SEXP _BGGM_mv_continuous(SEXP YSEXP, SEXP XSEXP, SEXP deltaSEXP, SEXP epsilonSEXP, SEXP iterSEXP) {
@@ -182,6 +198,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_BGGM_Theta_continuous", (DL_FUNC) &_BGGM_Theta_continuous, 6},
+    {"_BGGM_sample_prior", (DL_FUNC) &_BGGM_sample_prior, 6},
     {"_BGGM_mv_continuous", (DL_FUNC) &_BGGM_mv_continuous, 5},
     {"_BGGM_trunc_mvn", (DL_FUNC) &_BGGM_trunc_mvn, 5},
     {"_BGGM_mv_binary", (DL_FUNC) &_BGGM_mv_binary, 7},

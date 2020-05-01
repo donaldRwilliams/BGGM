@@ -13,8 +13,6 @@ explore(
   analytic = FALSE,
   prior_sd = 0.25,
   iter = 5000,
-  cores = 2,
-  seed = 1,
   ...
 )
 }
@@ -37,8 +35,6 @@ as ranks when \code{type = "mixed"} and \code{NULL} otherwise. See note for furt
 \item{prior_sd}{hypothesized standard deviation for the edges or partial correlations}
 
 \item{iter}{number of iterations (posterior samples; defaults to 5000).}
-
-\item{cores}{number of cores for parallel computing. The default is 2, but this can be changed.}
 
 \item{...}{currently ignored.}
 }

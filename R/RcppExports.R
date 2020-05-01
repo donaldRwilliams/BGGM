@@ -5,6 +5,10 @@ Theta_continuous <- function(Y, iter, delta, epsilon, prior_only, explore) {
     .Call(`_BGGM_Theta_continuous`, Y, iter, delta, epsilon, prior_only, explore)
 }
 
+sample_prior <- function(Y, iter, delta, epsilon, prior_only, explore) {
+    .Call(`_BGGM_sample_prior`, Y, iter, delta, epsilon, prior_only, explore)
+}
+
 mv_continuous <- function(Y, X, delta, epsilon, iter) {
     .Call(`_BGGM_mv_continuous`, Y, X, delta, epsilon, iter)
 }

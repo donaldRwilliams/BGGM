@@ -17,4 +17,4 @@ StripTrailingWhitespace: Yes
 
 BuildType: Package
 PackageUseDevtools: Yes
-PackageInstallArgs: --no-multiarch --no-lock
+PackageInstallArgs: --no-multiarch  --preclean  --no-lock

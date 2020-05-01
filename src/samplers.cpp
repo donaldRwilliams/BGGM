@@ -27,10 +27,11 @@ Rcpp::List Theta_continuous(arma::mat Y,
   // note p changed to k to be consistent
   //with the multivariate regression samplers
 
-  // number of rows
+
 
   Progress  p(iter, TRUE);
 
+  // number of rows
   float n = Y.n_rows;
 
   int k = 1;
@@ -100,7 +101,153 @@ Rcpp::List Theta_continuous(arma::mat Y,
 
   for(int  s = 0; s < iter; ++s){
 
+
     p.increment();
+
+    if (s % 250 == 0){
+      Rcpp::checkUserInterrupt();
+    }
+
+
+    if(prior_only == 1){
+
+      Psi.slice(0) = wishrnd(I_k * epsilon, nu);
+
+      // sample Theta
+      Sigma.slice(0) =   wishrnd(inv(Psi.slice(0)),   k - 1 + delta);
+
+      // Sigma
+      Theta.slice(0) = inv(Sigma.slice(0));
+
+
+    } else {
+
+      Psi.slice(0) = wishrnd(inv(BMPinv + Theta.slice(0)), nuMP + deltaMP + k - 1);
+
+      // sample Theta
+      Theta.slice(0) =   wishrnd(inv(Psi.slice(0) + S_Y),  (deltaMP + k - 1) + (n - 1));
+
+      // Sigma
+      Sigma.slice(0) = inv(Theta.slice(0));
+
+    }
+
+    // correlation
+    cors =  diagmat(1 / sqrt(Sigma.slice(0).diag())) *
+      Sigma.slice(0) *
+      diagmat(1 / sqrt(Sigma.slice(0).diag()));
+
+    // partial correlations
+    pcors = diagmat(1 / sqrt(Theta.slice(0).diag())) *
+      Theta.slice(0) *
+      diagmat(1 / sqrt(Theta.slice(0).diag()));
+
+    // store posterior samples
+    pcors_mcmc.slice(s) =  -(pcors - I_k);
+    cors_mcmc.slice(s) =  cors;
+    Sigma_mcmc.slice(s) = Sigma.slice(0);
+    Theta_mcmc.slice(s) = Theta.slice(0);
+
+
+
+  }
+
+  arma::cube fisher_z = atanh(pcors_mcmc);
+
+  Rcpp::List ret;
+  ret["pcors"] = pcors_mcmc;
+  ret["cors"] =  cors_mcmc;
+  ret["Theta"] = Theta_mcmc;
+  ret["Sigma"] = Sigma_mcmc;
+  ret["fisher_z"] = fisher_z;
+  return ret;
+}
+
+
+// [[Rcpp::export]]
+Rcpp::List sample_prior(arma::mat Y,
+                            int iter,
+                            float delta,
+                            float epsilon,
+                            int prior_only,
+                            int explore) {
+
+
+
+  // note p changed to k to be consistent
+  //with the multivariate regression samplers
+
+  // number of rows
+
+ float n = Y.n_rows;
+
+  int k = 1;
+
+  // sample prior
+  if(prior_only == 1){
+
+    if(explore == 1){
+
+      k = 3;
+
+    } else {
+
+      k = Y.n_cols;
+
+    }
+
+  } else {
+
+    // number of columns
+    k = Y.n_cols;
+
+  }
+
+  // k by k identity mat
+  arma::mat  I_k(k, k, arma::fill::eye);
+
+  int nu = 1/ epsilon;
+  // // #nu in Mulder & Pericchi (2018) formula (30) line 1.
+  int nuMP = delta + k - 1 ;
+  //
+  // // #delta in Mulder & Pericchi (2018) formula (30) line 1.
+  int deltaMP = nu - k + 1 ;
+
+
+  // Psi update
+  arma::cube Psi(k, k, 1, arma::fill::zeros);
+
+  arma::mat B(epsilon * I_k);
+  arma::mat BMP(inv(B));
+  arma::mat BMPinv(inv(BMP));
+
+
+
+  // precison matrix
+  arma::cube Theta(k, k, 1, arma::fill::zeros);
+  arma::cube Theta_mcmc(k, k, iter, arma::fill::zeros);
+
+  // partial correlations
+  arma::mat pcors(k,k);
+  arma::cube pcors_mcmc(k, k, iter, arma::fill::zeros);
+
+  // correlations
+  arma::mat  cors(k,k);
+  arma::cube cors_mcmc(k, k, iter, arma::fill::zeros);
+
+  // covariance matrix
+  arma::cube Sigma_mcmc(k, k, iter, arma::fill::zeros);
+  arma::cube Sigma(k, k, 1, arma::fill::zeros);
+
+  // starting value
+  Sigma.slice(0).fill(arma::fill::eye);
+  Psi.slice(0).fill(arma::fill::eye);
+  Theta.slice(0).fill(arma::fill::eye);
+
+  arma::mat S_Y(Y.t() * Y);
+
+  for(int  s = 0; s < iter; ++s){
+
 
     if (s % 250 == 0){
       Rcpp::checkUserInterrupt();
@@ -169,6 +316,10 @@ Rcpp::List mv_continuous(arma::mat Y,
                           float epsilon,
                           int iter){
 
+
+  // progress
+  Progress  pr(iter, TRUE);
+
   // number of rows
   int n = Y.n_rows;
 
@@ -232,6 +383,14 @@ Rcpp::List mv_continuous(arma::mat Y,
   Theta.slice(0).fill(arma::fill::eye);
 
   for(int s = 0; s < iter; ++s){
+
+    pr.increment();
+
+    if (s % 250 == 0){
+      Rcpp::checkUserInterrupt();
+    }
+
+
 
     // draw coefficients
     beta = reshape(mvnrnd(reshape(Sinv_X * X.t() * Y, k*p , 1),
@@ -401,6 +560,11 @@ Rcpp::List mv_binary(arma::mat Y,
   // iter: number of samples
   // cutpoints: truncation points
   // delta: hyperparameter
+
+
+  // progress
+  Progress  pr(iter, TRUE);
+
   // dependent variables
   int k = Y.n_cols;
 
@@ -495,6 +659,17 @@ Rcpp::List mv_binary(arma::mat Y,
 
   // start sampling
   for(int s = 0; s < iter; ++s){
+
+
+    pr.increment();
+
+    if (s % 250 == 0){
+      Rcpp::checkUserInterrupt();
+    }
+
+
+
+
 
     // D matrix
     for(int i = 0; i < k; ++i){
@@ -908,6 +1083,8 @@ Rcpp::List mv_ordinal_albert(arma::mat Y,
                           int K){
 
 
+  Progress  pr(iter, TRUE);
+
   // number of rows
   float n = Y.n_rows;
 
@@ -1029,7 +1206,12 @@ Rcpp::List mv_ordinal_albert(arma::mat Y,
 
   for(int s = 1; s < iter; ++s ){
 
-    Rcpp::checkUserInterrupt();
+
+    pr.increment();
+
+    if (s % 250 == 0){
+      Rcpp::checkUserInterrupt();
+    }
 
     for(int i = 0; i < k; ++i){
 
@@ -1193,6 +1375,8 @@ Rcpp::List  copula(arma::mat z0_start,
   // levels: data matrix as sorted levels
   // K: levels in each columns
 
+  Progress  pr(iter, TRUE);
+
   // number of rows
   float n = z0_start.n_rows;
 
@@ -1252,6 +1436,13 @@ Rcpp::List  copula(arma::mat z0_start,
   arma::mat ss(1,1);
 
   for(int  s = 1; s < iter; ++s){
+
+    pr.increment();
+
+    if (s % 250 == 0){
+      Rcpp::checkUserInterrupt();
+    }
+
 
     for(int i = 0; i < k; ++i){
 

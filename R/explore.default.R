@@ -248,7 +248,8 @@ explore <- function(Y,
   Y_dummy <- matrix(rnorm( 10 * 3 ),
                     nrow = 10, ncol = 3)
 
-  prior_samp <- .Call('_BGGM_Theta_continuous',
+
+  prior_samp <- .Call('_BGGM_sample_prior',
                       PACKAGE = 'BGGM',
                       Y = Y_dummy,
                       iter = iter,
@@ -258,8 +259,10 @@ explore <- function(Y,
                       explore = 1)
 
 
+
   pcor_mat <- round(apply(post_samp$pcors[,,51:(iter + 50)], 1:2, mean), 3)
   pcor_sd <- round(apply(post_samp$pcors[,,51:(iter + 50)], 1:2, sd), 3)
+
 
   returned_object <- list(
     pcor_mat = pcor_mat,

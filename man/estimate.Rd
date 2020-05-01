@@ -13,7 +13,6 @@ estimate(
   analytic = FALSE,
   prior_sd = 0.25,
   iter = 5000,
-  seed = 1,
   ...
 )
 }
@@ -39,9 +38,9 @@ Treating continous data as ranks is computationally expensive and can be avoided
 
 \item{iter}{number of iterations (posterior samples; defaults to 5000).}
 
-\item{seed}{The seed for random number generation (default set to \code{1}).}
-
 \item{...}{currently ignored.}
+
+\item{seed}{The seed for random number generation (default set to \code{1}).}
 }
 \value{
 list of class \code{estimate}:

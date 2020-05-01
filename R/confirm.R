@@ -163,6 +163,7 @@ confirm <- function(Y, hypothesis,
   pcors <- p*(p-1)*0.5
 
 
+  message("BGGM: Posterior Sampling")
   # continuous
   if(type == "continuous"){
 
@@ -291,9 +292,11 @@ confirm <- function(Y, hypothesis,
     stop("'type' not supported: must be continuous, binary, ordinal, or mixed.")
   }
 
+  message("BGGM: Finished")
+
  # sample prior
   prior_samp <- .Call(
-    '_BGGM_Theta_continuous',
+    '_BGGM_sample_prior',
     PACKAGE = 'BGGM',
     Y = Y,
     iter = 10000,
@@ -311,7 +314,7 @@ confirm <- function(Y, hypothesis,
                               iter, pcors,
                               byrow = TRUE)
 
-  prior_samples <- matrix(prior_samp[,,][upper.tri(I_p)],iter, pcors, byrow = TRUE)
+  prior_samples <- matrix(prior_samp[,,][upper.tri(I_p)], 10000, pcors, byrow = TRUE)
 
 
   colnames(posterior_samples) <- mat_name

@@ -112,11 +112,7 @@ estimate  <- function(Y,
                       analytic = FALSE,
                       prior_sd = 0.25,
                       iter = 5000,
-                      seed = 1,
                       ...){
-
-  # set seed
-  set.seed(seed)
 
   # obervations
   n <- nrow(Y)
@@ -132,6 +128,8 @@ estimate  <- function(Y,
 
   # sample posterior
   if(!analytic){
+
+    message("BGGM: Posterior Sampling")
 
     # continuous
     if(type == "continuous"){
@@ -261,6 +259,8 @@ estimate  <- function(Y,
         stop("'type' not supported: must be continuous, binary, ordinal, or mixed.")
       }
 
+    message("BGGM: Finished")
+
     pcor_mat <- round(apply(post_samp$pcors[,,51:(iter + 50)], 1:2, mean), 3)
     pcor_sd <- round(apply(post_samp$pcors[,,51:(iter + 50)], 1:2, sd), 3)
 
@@ -347,23 +347,22 @@ summary.estimate <- function(object,
 
   if(col_names | is.null(cn)){
 
-    mat_names <-  sapply(cn , function(x) paste(cn, x, sep = "--"))[upper.tri(I_p)]
+    mat_names <- sapply(1:p , function(x) paste(1:p, x, sep = "--"))[upper.tri(I_p)]
+
 
   } else {
 
-    mat_names <- sapply(1:p , function(x) paste(1:p, x, sep = "--"))[upper.tri(I_p)]
+    mat_names <-  sapply(cn , function(x) paste(cn, x, sep = "--"))[upper.tri(I_p)]
 
   }
 
 
   if(isFALSE(object$analytic)){
-  post_mean <- round(apply( object$post_samp$pcors[,, 51:(object$iter + 50) ], 1:2, mean), 3)[upper.tri(I_p)]
 
-  post_sd  <- round(apply( object$post_samp$pcors[,, 51:(object$iter + 50) ], 1:2, sd), 3)[upper.tri(I_p)]
-
-  post_lb <- round(apply( object$post_samp$pcors[,, 51:(object$iter + 50) ], 1:2, quantile, lb), 3)[upper.tri(I_p)]
-
-  post_ub <- round(apply( object$post_samp$pcors[,, 51:(object$iter + 50) ], 1:2, quantile, ub), 3)[upper.tri(I_p)]
+    post_mean <- round(apply( object$post_samp$pcors[,, 51:(object$iter + 50) ], 1:2, mean), 3)[upper.tri(I_p)]
+    post_sd  <- round(apply( object$post_samp$pcors[,, 51:(object$iter + 50) ], 1:2, sd), 3)[upper.tri(I_p)]
+    post_lb <- round(apply( object$post_samp$pcors[,, 51:(object$iter + 50) ], 1:2, quantile, lb), 3)[upper.tri(I_p)]
+    post_ub <- round(apply( object$post_samp$pcors[,, 51:(object$iter + 50) ], 1:2, quantile, ub), 3)[upper.tri(I_p)]
 
 
 
