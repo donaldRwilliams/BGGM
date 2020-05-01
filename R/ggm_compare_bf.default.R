@@ -142,12 +142,18 @@ ggm_compare_explore <- function(...,
 
   if(!analytic){
 
-  if(type == "continuous"){
+
+
+
+    if(type == "continuous"){
 
       if(is.null(formula)){
 
-      # sample posterior
+        # sample posterior
   post_samp <- lapply(1:groups, function(x) {
+
+    # mixed
+    message("BGGM: Posterior Sampling ", "(Group ",x ,")")
 
     Y <- as.matrix(scale(info$dat[[x]], scale = FALSE))
 
@@ -171,6 +177,9 @@ ggm_compare_explore <- function(...,
 
     # posterior sample
     post_samp <- lapply(1:groups, function(x) {
+
+      # mixed
+      message("BGGM: Posterior Sampling ", "(Group ",x ,")")
 
       # data Y_gj
       Y <- as.matrix(scale(info$dat[[x]], scale = F))
@@ -205,6 +214,9 @@ ggm_compare_explore <- function(...,
     # posterior sample
     post_samp <- lapply(1:groups, function(x) {
 
+      # binary
+      message("BGGM: Posterior Sampling ", "(Group ",x ,")")
+
       # Y_gj
       Y <- as.matrix(info$dat[[x]])
 
@@ -236,6 +248,9 @@ ggm_compare_explore <- function(...,
 
     # posterior sample
     post_samp <- lapply(1:groups, function(x) {
+
+      # ordinal
+      message("BGGM: Posterior Sampling ", "(Group ",x ,")")
 
       # Y_gj
       Y <- as.matrix(info$dat[[x]])
@@ -284,6 +299,9 @@ ggm_compare_explore <- function(...,
       # rank following hoff (2008)
       rank_vars <- rank_helper(Y)
 
+      # mixed
+      message("BGGM: Posterior Sampling ", "(Group ",x ,")")
+
       .Call("_BGGM_copula",
             z0_start = rank_vars$z0_start,
             levels = rank_vars$levels,
@@ -300,7 +318,7 @@ ggm_compare_explore <- function(...,
       stop("'type' not supported: must be continuous, binary, ordinal, or mixed.")
 
       }
-
+    message("BGGM: Finished")
 
 
 
@@ -314,7 +332,7 @@ ggm_compare_explore <- function(...,
     # Y <- info$dat[[x]]
 
     .Call(
-      '_BGGM_Theta_continuous',
+      '_BGGM_sample_prior',
       PACKAGE = 'BGGM',
       Y = Y_dummy,
       iter = 10000,

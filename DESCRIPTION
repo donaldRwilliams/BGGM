@@ -13,7 +13,7 @@ Description: Fit Bayesian Gaussian graphical models. The methods are separated i
     Williams (2019) <doi:10.31234/osf.io/x8dpr>, 
     Williams and Mulder (2019) <doi:10.31234/osf.io/ypxd8>,
     Williams, Rast, Pericchi, and Mulder (2019) <doi:10.31234/osf.io/yt386>.
-Depends: R (>= 3.5.0), Rcpp (>= 0.9.4), RcppProgress (>= 0.1)
+Depends: R (>= 3.5.0)
 License: GPL-2
 Imports: 
     mvnfast (>= 0.2.5),
@@ -37,6 +37,7 @@ Imports:
     reshape,
     MASS,
     Rcpp (>= 1.0.4.6),
+    RcppProgress (>= 0.1),
     Rdpack,
     BFpack
 Suggests: 
