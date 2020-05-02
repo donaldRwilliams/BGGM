@@ -1,5 +1,7 @@
 #' GGM Compare: Exploratory Hypothesis Testing
 #'
+#' @name ggm_compare_explore
+#'
 #' @description Compare Gaussian graphical models with (exploratory) Bayesian hypothesis testing using the matrix-F prior
 #' distribution \insertCite{Mulder2018}{BGGM}. A test for each partial correlation in the model for any number of groups.
 #' This provides evidence for the null hypothesis of no difference and the alternative hypothesis

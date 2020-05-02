@@ -3,7 +3,8 @@
 #' @name ggm_compare_estimate
 #'
 #' @description Compare partial correlations that are estimated from any number of groups. This method works for
-#' continuous, binary, ordinal, and mixed data.  The approach (i.e., a difference between posterior distributions) was
+#' continuous, binary, ordinal, and mixed data (a combination of categorical and continuous variables).
+#' The approach (i.e., a difference between posterior distributions) was
 #' described in  \insertCite{Williams2019;textual}{BGGM}.
 #'
 #' @param ... matrices (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).
@@ -20,15 +21,17 @@
 #' The `default` is 0.50. See note for further details.
 #'
 #' @param type character string. Which type of data for \strong{Y} ? The options include \code{continuous},
-#' \code{binary}, or \code{ordinal}. See the note for further details.
+#' \code{binary}, \code{ordinal}, or \code{continuous}. See the note for further details.
 #'
-#' @param mixed_type numeric vector. An indicator of length p for which varibles should be treated as ranks.
-#' (1 for rank and 0 to assume normality). The default is currently (dev version) to treat all integer variables
+#' @param mixed_type numeric vector. An indicator of length \emph{p} for which varibles should be treated as ranks.
+#' (1 for rank and 0 to use the 'empirical' or observed distribution). The default is currently to treat all integer variables
 #' as ranks when \code{type = "mixed"} and \code{NULL} otherwise. See note for further details.
 #'
 #' @param iter number of iterations (posterior samples; defaults to 5000).
 #'
-#' @param analytic logical. Should the analytic solution be computed (default is \code{FALSE}) ?
+#' @param analytic logical. Should the analytic solution be computed (default is \code{FALSE})? This is only available
+#'                 for continous data. Note that if \code{type = "mixed"} and \code{analytic = TRUE}, the data will
+#'                 automatically be treated as continuous.
 #'
 #' @references
 #' \insertAllCited{}
@@ -47,8 +50,54 @@
 #' This is accomplished with pairwise comparisons for each relation. In the case of three groups,
 #' for example, group 1 and group 2 are compared, then group 1 and group 3 are compared, and then
 #' group 2 and group 3 are compared. There is a full distibution for each difference that can be
-#' summarized  \code{\link{summary.ggm_compare_estimate}} and then visualized.
-#' \code{\link{plot.summary.ggm_compare_estimate}}
+#' summarized (i.e., \code{\link{summary.ggm_compare_estimate}}) and then visualized
+#' (i.e., \code{\link{plot.summary.ggm_compare_estimate}}).
+#'
+#' \strong{Selecting the Graph of Differences:}
+#'
+#' Selecting the differences is implemented in \code{\link{select.ggm_compare_estimate}}. Currently the only available
+#' option is to detect differences with  credible interval exclusion of zero. This
+#' corresponds to a directional posterior probability \insertCite{Marsman2017a}{BGGM}. For example,
+#' the probability (conditional on the model) of a difference  is at least 97.5\eqn{%} when the 95\eqn{%}
+#' credible interval excludes zero.
+#'
+#'
+#' \strong{Interpretation of conditional (in)dependence models for latent data:}
+#'
+#' A  tetrachoric correlation (binary data) is a special case of a polychoric correlation (ordinal data).
+#' Both relations are between "theorized normally distributed continuous latent variables"
+#' (\href{https://en.wikipedia.org/wiki/Polychoric_correlation}{Wikipedia}). In both instances,
+#' the correpsonding partial correlation between observed variables is conditioned
+#' on the remaining variables in the \emph{latent} space. This implies that interpration
+#' is much the same as for continuous data, but with respect to latent variables.
+#' We refer interested reader to \insertCite{@page 2364, section 2.2, in  @webb2008bayesian;textual}{BGGM}.
+#'
+#'
+#' \strong{Mixed Data:}
+#'
+#' The mixed data approach was introduced  \insertCite{@in @hoff2007extending;textual}{BGGM}
+#' (our paper describing an extension to Bayesian hypothesis testing if forthcoming).
+#' This is a semi-paramateric copula model based on the ranked likelihood. This is computationally
+#' expensive when treating continuous data as ranks. The current default is to treat only integer data as ranks.
+#' This should of course be adjusted for continous data that is skewed. This can be accomplished with the
+#' argument \code{mixed_type}. A \code{1} in the numeric vector of length \emph{p}indicates to treat that
+#' respective node as a rank (corresponding to the column number) and zeros indicates to use the observed (or "emprical") data.
+#'
+#'
+#' It is also important to note that \code{type = "mixed"} is not restricted to mixed data (containing a combination of
+#' categorical and continuous): all the nodes can be ordinal or continuous (but again this will take some time).
+#'
+#' \strong{Prior Distribution:}
+#'
+#'
+#' \strong{Additional GGM Compare Methods}
+#'
+#' Bayesian hypothesis testing is implemented in \code{\link{ggm_compare_explore}} and
+#' \code{\link{ggm_compare_confirm}} \insertCite{Williams2019_bf}{BGGM}. The latter allows for confirmatory
+#' hypothesis testing.  An approach based on a posterior predictive check is implemented in \code{\link{ggm_compare_ppc}}
+#' \insertCite{williams2020comparing}{BGGM}. This provides  a 'global' test for comparing the entire GGM and a 'nodewise'
+#' test for comparing each variable in the network. Testing for nodewise differences in predictabilty is implemented in
+#' \code{\link{test.R2}} \insertCite{Williams2019;textual}{BGGM}.
 #'
 #' @examples
 #' # comparing two groups (males vs. females) in a personality network

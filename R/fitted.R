@@ -23,6 +23,7 @@ fitted.estimate <- function(object, iter = 500,
                             ...){
 
   if(object$iter < iter){
+
     stop("iter cannot be larger than the number of samples used for fitting")
   }
 

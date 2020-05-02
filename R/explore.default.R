@@ -115,84 +115,87 @@ explore <- function(Y,
   if(!analytic){
 
   message("BGGM: Posterior Sampling")
-  # continuous
-  if(type == "continuous"){
 
-    # scale Y
-    Y <- scale(Y, scale = T)
+    # continuous
+    if (type == "continuous") {
 
-    # no control
-    if(is.null(formula)){
+      # scale Y
+      Y <- scale(Y, scale = T)
+
+      # no control
+      if (is.null(formula)) {
+        # posterior sample
+        post_samp <- .Call(
+          '_BGGM_Theta_continuous',
+          PACKAGE = 'BGGM',
+          Y = Y,
+          iter = iter + 50,
+          delta = delta,
+          epsilon = 0.1,
+          prior_only = 0,
+          explore = 1
+        )
+
+        # control for variables
+      } else {
+
+        # model matrix
+        X <- model.matrix(formula, data)
+
+        # posterior sample
+        post_samp <- .Call(
+          "_BGGM_mv_continuous",
+          Y = Y,
+          X = X,
+          delta = delta,
+          epsilon = 0.1,
+          iter = iter + 50
+        )
+
+      } # end control
+
+      # binary
+    } else if (type == "binary") {
+
+      # intercept only
+      if (is.null(formula)) {
+
+        X <- matrix(1, n, 1)
+
+        } else {
+
+          # model matrix
+          X <- model.matrix(formula, data)
+      }
 
       # posterior sample
-      post_samp <- .Call(
-        '_BGGM_Theta_continuous',
-        PACKAGE = 'BGGM',
-        Y = Y,
-        iter = iter + 50,
-        delta = delta,
-        epsilon = 0.1,
-        prior_only = 0,
-        explore = 1
-      )
-
-      # control for variables
-    } else {
-
-      # model matrix
-      X <- model.matrix(formula, data)
-
-      # posterior sample
-      post_samp <- .Call(
-        "_BGGM_mv_continuous",
+      post_samp <-  .Call(
+        "_BGGM_mv_binary",
         Y = Y,
         X = X,
         delta = delta,
         epsilon = 0.1,
-        iter = iter + 50
+        iter = iter + 50,
+        beta_prior = 0.1,
+        cutpoints = c(-Inf, 0, Inf)
       )
 
-    } # end control
-
-    # binary
-  } else if (type == "binary"){
+      # ordinal
+    } else if (type == "ordinal") {
 
 
-    # intercept only
-    if(is.null(formula)){
-      X <- matrix(1, n, 1)
-      # model matrix
-    } else {
+      # intercept only
+      if (is.null(formula)) {
 
-      X <- model.matrix(formula, data)
+        X <- matrix(1, n, 1)
 
-    }
+      } else {
 
-    # posterior sample
-    post_samp <-  .Call(
-      "_BGGM_mv_binary",
-      Y = Y,
-      X = X,
-      delta = delta,
-      epsilon = 0.1,
-      iter = iter + 50,
-      beta_prior = 0.1,
-      cutpoints = c(-Inf, 0, Inf)
-    )
+        # model matrix
+        X <- model.matrix(formula, data)
 
-    # ordinal
-  } else if(type == "ordinal"){
+      }
 
-    # intercept only
-    if(is.null(formula)){
-      X <- matrix(1, n, 1)
-
-    } else {
-
-      # model matrix
-      X <- model.matrix(formula, data)
-
-    }
     # categories
     K <- max(apply(Y, 2, function(x) { length(unique(x))   } ))
 
@@ -217,10 +220,13 @@ explore <- function(Y,
 
     # default for ranks
     if(is.null(mixed_type)) {
+
       idx = colMeans(round(Y) == Y)
       idx = ifelse(idx == 1, 1, 0)
+
       # user defined
     } else {
+
       idx = mixed_type
     }
 
@@ -240,16 +246,19 @@ explore <- function(Y,
     )
 
   } else {
-    stop("'type' not supported: must be continuous, binary, ordinal, or mixed.")
-  }
-  message("BGGM: Finished")
 
-  # matrix dimensions for prior
-  Y_dummy <- matrix(rnorm( 10 * 3 ),
+    stop("'type' not supported: must be continuous, binary, ordinal, or mixed.")
+
+    }
+    # finished sampling
+    message("BGGM: Finished")
+
+    # matrix dimensions for prior
+    Y_dummy <- matrix(rnorm( 10 * 3 ),
                     nrow = 10, ncol = 3)
 
-
-  prior_samp <- .Call('_BGGM_sample_prior',
+    # sample prior
+    prior_samp <- .Call('_BGGM_sample_prior',
                       PACKAGE = 'BGGM',
                       Y = Y_dummy,
                       iter = iter,
@@ -258,10 +267,11 @@ explore <- function(Y,
                       prior_only = 1,
                       explore = 1)
 
+    # compute post.mean
+    pcor_mat <- round(apply(post_samp$pcors[,,51:(iter + 50)], 1:2, mean), 3)
 
-
-  pcor_mat <- round(apply(post_samp$pcors[,,51:(iter + 50)], 1:2, mean), 3)
-  pcor_sd <- round(apply(post_samp$pcors[,,51:(iter + 50)], 1:2, sd), 3)
+    # compute post.sd
+    pcor_sd <- round(apply(post_samp$pcors[,,51:(iter + 50)], 1:2, sd), 3)
 
 
   returned_object <- list(
@@ -278,13 +288,18 @@ explore <- function(Y,
     p = p,
     n = n
   )
+
   }else {
+
     stop("analytic solution not currently available")
+
     }
 
   returned_object
-  class(returned_object) <- c("BGGM", "default",
-  "explore")
+
+  class(returned_object) <- c("BGGM",
+                              "default",
+                              "explore")
   return(returned_object)
 }
 

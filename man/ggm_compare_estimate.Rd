@@ -27,13 +27,15 @@ This is required when controlling for variables. Requires at least two (one for 
 See \code{examples} for futher details.}
 
 \item{type}{character string. Which type of data for \strong{Y} ? The options include \code{continuous},
-\code{binary}, or \code{ordinal}. See the note for further details.}
+\code{binary}, \code{ordinal}, or \code{continuous}. See the note for further details.}
 
-\item{mixed_type}{numeric vector. An indicator of length p for which varibles should be treated as ranks.
-(1 for rank and 0 to assume normality). The default is currently (dev version) to treat all integer variables
+\item{mixed_type}{numeric vector. An indicator of length \emph{p} for which varibles should be treated as ranks.
+(1 for rank and 0 to use the 'empirical' or observed distribution). The default is currently to treat all integer variables
 as ranks when \code{type = "mixed"} and \code{NULL} otherwise. See note for further details.}
 
-\item{analytic}{logical. Should the analytic solution be computed (default is \code{FALSE}) ?}
+\item{analytic}{logical. Should the analytic solution be computed (default is \code{FALSE})? This is only available
+for continous data. Note that if \code{type = "mixed"} and \code{analytic = TRUE}, the data will
+automatically be treated as continuous.}
 
 \item{prior_sd}{The scale of the prior distribution (centered at zero), in reference to a beta distribtuion.
 The `default` is 0.50. See note for further details.}
@@ -52,16 +54,12 @@ A list of class \code{ggm_compare_estimate} containing:
 }
 \description{
 Compare partial correlations that are estimated from any number of groups. This method works for
-continuous, binary, ordinal, and mixed data.  The approach (i.e., a difference between posterior distributions) was
+continuous, binary, ordinal, and mixed data (a combination of categorical and continuous variables).
+The approach (i.e., a difference between posterior distributions) was
 described in  \insertCite{Williams2019;textual}{BGGM}.
 }
 \note{
-This function can be used to compare the partial correlations for any number of groups.
-This is accomplished with pairwise comparisons for each relation. In the case of three groups,
-for example, group 1 and group 2 are compared, then group 1 and group 3 are compared, and then
-group 2 and group 3 are compared. There is a full distibution for each difference that can be
-summarized  \code{\link{summary.ggm_compare_estimate}} and then visualized.
-\code{\link{plot.summary.ggm_compare_estimate}}
+
 }
 \examples{
 # comparing two groups (males vs. females) in a personality network
