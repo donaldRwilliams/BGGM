@@ -81,7 +81,8 @@ zero_order_cors <- function(Y,  type = "continuous",
                             iter = 5000,
                             mixed_type = NULL){
 
-  fit <- estimate(Y, type = type,
+  fit <- estimate(Y,
+                  type = type,
                   iter = iter,
                   mixed_type = mixed_type)
 

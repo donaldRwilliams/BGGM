@@ -351,17 +351,20 @@ estimate  <- function(Y,
     pcor_mat <- round(apply(post_samp$pcors[,,51:(iter + 50)], 1:2, mean), 3)
     pcor_sd <- round(apply(post_samp$pcors[,,51:(iter + 50)], 1:2, sd), 3)
 
-    results <- list(pcor_mat = pcor_mat,
-                            pcor_sd = pcor_sd,
-                            analytic = analytic,
-                            formula = formula,
-                            post_samp = post_samp,
-                            type = type,
-                            iter = iter,
-                            Y = Y,
-                            call = match.call(),
-                            p = p,
-                            n = n)
+    results <- list(
+      pcor_mat = pcor_mat,
+      pcor_sd = pcor_sd,
+      analytic = analytic,
+      formula = formula,
+      post_samp = post_samp,
+      type = type,
+      iter = iter,
+      Y = Y,
+      X = X,
+      call = match.call(),
+      p = p,
+      n = n
+    )
 
     #  analytic
     } else {
