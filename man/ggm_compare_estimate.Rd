@@ -7,7 +7,6 @@
 ggm_compare_estimate(
   ...,
   formula = NULL,
-  data = NULL,
   type = "continuous",
   mixed_type = NULL,
   analytic = FALSE,
@@ -20,11 +19,7 @@ ggm_compare_estimate(
 Requires at least two.}
 
 \item{formula}{an object of class \code{\link[stats]{formula}}. This allows for including
-control variables in the model (i.e., \code{~ gender}).}
-
-\item{data}{optional data frames in a list that containing the variables in \code{formula}.
-This is required when controlling for variables. Requires at least two (one for each group).
-See \code{examples} for futher details.}
+control variables in the model (i.e., \code{~ gender}). See the note for further details.}
 
 \item{type}{character string. Which type of data for \strong{Y} ? The options include \code{continuous},
 \code{binary}, \code{ordinal}, or \code{continuous}. See the note for further details.}
@@ -59,7 +54,64 @@ The approach (i.e., a difference between posterior distributions) was
 described in  \insertCite{Williams2019;textual}{BGGM}.
 }
 \note{
+This function can be used to compare the partial correlations for any number of groups.
+This is accomplished with pairwise comparisons for each relation. In the case of three groups,
+for example, group 1 and group 2 are compared, then group 1 and group 3 are compared, and then
+group 2 and group 3 are compared. There is a full distibution for each difference that can be
+summarized (i.e., \code{\link{summary.ggm_compare_estimate}}) and then visualized
+(i.e., \code{\link{plot.summary.ggm_compare_estimate}}).
 
+\strong{Selecting the Graph of Differences:}
+
+Selecting the differences is implemented in \code{\link{select.ggm_compare_estimate}}. Currently the only available
+option is to detect differences with  credible interval exclusion of zero. This
+corresponds to a directional posterior probability \insertCite{Marsman2017a}{BGGM}. For example,
+the probability (conditional on the model) of a difference  is at least 97.5 $\%$ when the 95 $\%$
+credible interval excludes zero.
+
+
+\strong{Interpretation of conditional (in)dependence models for latent data:}
+
+A  tetrachoric correlation (binary data) is a special case of a polychoric correlation (ordinal data).
+Both relations are between "theorized normally distributed continuous latent variables"
+(\href{https://en.wikipedia.org/wiki/Polychoric_correlation}{Wikipedia}). In both instances,
+the correpsonding partial correlation between observed variables is conditioned
+on the remaining variables in the \emph{latent} space. This implies that interpration
+is much the same as for continuous data, but with respect to latent variables.
+We refer interested reader to \insertCite{@page 2364, section 2.2, in  @webb2008bayesian;textual}{BGGM}.
+
+
+\strong{Mixed Data:}
+
+The mixed data approach was introduced  \insertCite{@in @hoff2007extending;textual}{BGGM}
+(our paper describing an extension to Bayesian hypothesis testing if forthcoming).
+This is a semi-paramateric copula model based on the ranked likelihood. This is computationally
+expensive when treating continuous data as ranks. The current default is to treat only integer data as ranks.
+This should of course be adjusted for continous data that is skewed. This can be accomplished with the
+argument \code{mixed_type}. A \code{1} in the numeric vector of length \emph{p}indicates to treat that
+respective node as a rank (corresponding to the column number) and a zero indicates to use the observed
+(or "emprical") data.
+
+
+It is also important to note that \code{type = "mixed"} is not restricted to mixed data (containing a combination of
+categorical and continuous): all the nodes can be ordinal or continuous (but again this will take some time).
+
+\strong{Prior Distribution:}
+
+ We use the novel matrix-F prior distribution that was recently introduces in X. In the context of GGMs, this prior
+ was first used in X. The key advantage is that the implied prior distrbution for each partial correlation is (1)
+ invariant to the network size (see section X in X) and (2) approximately beta distributed (Equation X in X). Accordingly,
+ the arguement \code{prior_sd} corresponds the standard deviation of a beta distrubtion (with a mean of zero). The function
+ \code{\link{plot_prior}} can be used to visualize the prior distibution.
+
+\strong{Additional GGM Compare Methods}
+
+Bayesian hypothesis testing is implemented in \code{\link{ggm_compare_explore}} and
+\code{\link{ggm_compare_confirm}} \insertCite{Williams2019_bf}{BGGM}. The latter allows for confirmatory
+hypothesis testing.  An approach based on a posterior predictive check is implemented in \code{\link{ggm_compare_ppc}}
+\insertCite{williams2020comparing}{BGGM}. This provides  a 'global' test for comparing the entire GGM and a 'nodewise'
+test for comparing each variable in the network. Testing for nodewise differences in predictabilty is implemented in
+\code{\link{test.R2}} \insertCite{Williams2019;textual}{BGGM}.
 }
 \examples{
 # comparing two groups (males vs. females) in a personality network

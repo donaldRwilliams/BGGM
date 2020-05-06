@@ -9,7 +9,6 @@ confirm(
   hypothesis,
   prior_sd = 0.25,
   formula = NULL,
-  data = NULL,
   type = "continuous",
   mixed_type = NULL,
   iter = 25000
@@ -24,9 +23,6 @@ confirm(
 
 \item{formula}{an object of class \code{\link[stats]{formula}}. This allows for including
 control variables in the model (e.g.,, \code{~ gender * education}).}
-
-\item{data}{an optional data frame, list or environment (or an object coercible by \code{\link[base]{as.data.frame}})
-to a data frame containing the variables in \code{formula}. This is required when controlling for variables.}
 
 \item{type}{character string. Which type of data for \strong{Y} ? The options include \code{continuous},
 \code{binary}, \code{ordinal}, or \code{mixed}. See the note for further details.}

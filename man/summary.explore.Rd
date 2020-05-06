@@ -2,18 +2,29 @@
 % Please edit documentation in R/explore.default.R
 \name{summary.explore}
 \alias{summary.explore}
-\title{Summary method for \code{explore} objects}
+\title{Summary method for \code{explore.default} objects}
 \usage{
-\method{summary}{explore}(object, ...)
+\method{summary}{explore}(object, col_names = TRUE)
 }
 \arguments{
-\item{object}{An object of class \code{explore}}
+\item{object}{an object of class \code{estimate}}
+
+\item{col_names}{logical. Should the summary include the column names (default is \code{TRUE})?
+Setting to \code{FALSE} includes the column numbers (e.g., \code{1--2}).}
 
 \item{...}{currently ignored}
 }
+\value{
+a list containing the summarized posterior distributions
+# data
+Y <- BGGM::bfi[, 1:5]
+# analytic approach (sample by setting analytic = FALSE)
+fit <- estimate(Y, analytic = TRUE)
+summary(fit)
+}
 \description{
-Summary method for \code{explore} objects
+Summary method for \code{explore.default} objects
 }
 \seealso{
-\code{\link{explore}}
+\code{\link{select.explore}}
 }

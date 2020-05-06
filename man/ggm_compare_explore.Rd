@@ -7,7 +7,6 @@
 ggm_compare_explore(
   ...,
   formula = NULL,
-  data = NULL,
   type = "continuous",
   mixed_type = NULL,
   analytic = FALSE,
@@ -20,9 +19,6 @@ ggm_compare_explore(
 
 \item{formula}{an object of class \code{\link[stats]{formula}}. This allows for including
 control variables in the model (i.e., \code{~ gender}).}
-
-\item{data}{an optional data frame, list or environment (or an object coercible by \code{\link[base]{as.data.frame}})
-to a data frame containing the variables in \code{formula}. This is required when controlling for variables.}
 
 \item{type}{character string. Which type of data for \strong{Y} ? The options include \code{continuous},
 \code{binary}, or \code{ordinal}. See the note for further details.}
@@ -37,6 +33,9 @@ as ranks when \code{type = "mixed"} and \code{NULL} otherwise. See note for furt
 The `default` is 0.25. See note for further details.}
 
 \item{iter}{number of iterations (posterior samples; defaults to 5000).}
+
+\item{data}{an optional data frame, list or environment (or an object coercible by \code{\link[base]{as.data.frame}})
+to a data frame containing the variables in \code{formula}. This is required when controlling for variables.}
 
 \item{seed}{The seed for random number generation (default set to \code{1}).}
 }

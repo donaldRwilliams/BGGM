@@ -195,6 +195,48 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// pcor_to_cor_internal
+Rcpp::List pcor_to_cor_internal(arma::cube x, int p);
+RcppExport SEXP _BGGM_pcor_to_cor_internal(SEXP xSEXP, SEXP pSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::cube >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type p(pSEXP);
+    rcpp_result_gen = Rcpp::wrap(pcor_to_cor_internal(x, p));
+    return rcpp_result_gen;
+END_RCPP
+}
+// predictability_helper
+Rcpp::List predictability_helper(arma::mat Y, arma::colvec y, arma::cube XX, arma::mat Xy, int n, int iter);
+RcppExport SEXP _BGGM_predictability_helper(SEXP YSEXP, SEXP ySEXP, SEXP XXSEXP, SEXP XySEXP, SEXP nSEXP, SEXP iterSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< arma::colvec >::type y(ySEXP);
+    Rcpp::traits::input_parameter< arma::cube >::type XX(XXSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Xy(XySEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< int >::type iter(iterSEXP);
+    rcpp_result_gen = Rcpp::wrap(predictability_helper(Y, y, XX, Xy, n, iter));
+    return rcpp_result_gen;
+END_RCPP
+}
+// beta_helper_fast
+Rcpp::List beta_helper_fast(arma::cube XX, arma::mat Xy, int p, int iter);
+RcppExport SEXP _BGGM_beta_helper_fast(SEXP XXSEXP, SEXP XySEXP, SEXP pSEXP, SEXP iterSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::cube >::type XX(XXSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Xy(XySEXP);
+    Rcpp::traits::input_parameter< int >::type p(pSEXP);
+    Rcpp::traits::input_parameter< int >::type iter(iterSEXP);
+    rcpp_result_gen = Rcpp::wrap(beta_helper_fast(XX, Xy, p, iter));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_BGGM_Theta_continuous", (DL_FUNC) &_BGGM_Theta_continuous, 6},
@@ -210,6 +252,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_BGGM_mv_ordinal_cowles", (DL_FUNC) &_BGGM_mv_ordinal_cowles, 6},
     {"_BGGM_mv_ordinal_albert", (DL_FUNC) &_BGGM_mv_ordinal_albert, 6},
     {"_BGGM_copula", (DL_FUNC) &_BGGM_copula, 8},
+    {"_BGGM_pcor_to_cor_internal", (DL_FUNC) &_BGGM_pcor_to_cor_internal, 2},
+    {"_BGGM_predictability_helper", (DL_FUNC) &_BGGM_predictability_helper, 6},
+    {"_BGGM_beta_helper_fast", (DL_FUNC) &_BGGM_beta_helper_fast, 4},
     {NULL, NULL, 0}
 };
 

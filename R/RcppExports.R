@@ -53,3 +53,15 @@ copula <- function(z0_start, levels, K, Sigma_start, iter, delta, epsilon, idx) 
     .Call(`_BGGM_copula`, z0_start, levels, K, Sigma_start, iter, delta, epsilon, idx)
 }
 
+pcor_to_cor_internal <- function(x, p) {
+    .Call(`_BGGM_pcor_to_cor_internal`, x, p)
+}
+
+predictability_helper <- function(Y, y, XX, Xy, n, iter) {
+    .Call(`_BGGM_predictability_helper`, Y, y, XX, Xy, n, iter)
+}
+
+beta_helper_fast <- function(XX, Xy, p, iter) {
+    .Call(`_BGGM_beta_helper_fast`, XX, Xy, p, iter)
+}
+

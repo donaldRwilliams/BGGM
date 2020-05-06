@@ -270,11 +270,23 @@ select.explore <- function(object,
             }
 
 
-          mat_names <-  matrix(0, x$p, x$p)
 
-          # matrix names
-          mat_names[] <-  unlist(lapply(1:x$p,
-                                        FUN = function(z) paste(1:x$p, z, sep = "--")))
+          # column names
+          cn <-  colnames(x$Y)
+
+          p  <- ncol(x$pcor_mat)
+
+          I_p <- diag(p)
+
+          if(is.null(cn)){
+
+            mat_names <- sapply(1:p , function(z) paste(1:p, z, sep = "--"))[upper.tri(I_p)]
+
+          } else {
+
+            mat_names <-  sapply(cn , function(z) paste(cn, z, sep = "--"))[upper.tri(I_p)]
+
+          }
 
           # posterior
           post_sd <- apply(post_samp$fisher_z[,,(51:x$iter)], 1:2, sd)
@@ -301,7 +313,7 @@ select.explore <- function(object,
 
           prob_mat <-  prob_null + prob_greater + prob_less
 
-          prob_dat = data.frame(edge = mat_names[upper.tri(mat_names)],
+          prob_dat = data.frame(edge = mat_names,
                                 prob_zero = prob_null[upper.tri(prob_null)],
                                 prob_greater = prob_greater[upper.tri(prob_greater)],
                                 prob_less = prob_less[upper.tri(prob_less)])

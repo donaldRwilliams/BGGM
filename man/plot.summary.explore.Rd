@@ -4,7 +4,7 @@
 \alias{plot.summary.explore}
 \title{Plot \code{summary.explore}}
 \usage{
-\method{plot}{summary.explore}(x, ...)
+\method{plot}{summary.explore}(x, color = "black", size = 2, width = 0, ...)
 }
 \arguments{
 \item{x}{an object of class \code{summary.explore}}

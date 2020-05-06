@@ -263,20 +263,36 @@ summary.metric <- function(object, cred = 0.95, ...){
 
   p <- length(object$scores)
 
+  # identity matrix
+  I_p <- diag(p)
+
+ # column names
+  cn <-  colnames(object$Y)
+  if(is.null(cn)){
+    mat_names <- 1:p
+  } else {
+    mat_names <- cn
+
+  }
+
+
   iter <- length(object$scores[[1]])
 
-  dat_summ <- data.frame(Node = 1:p,
-                         Post.mean  = sapply(object$scores, mean),
-                         Post.sd = sapply(object$scores, sd),
-                         Cred = t(sapply(object$scores,
+  dat_summ <- data.frame(Node = mat_names,
+                         Post.mean  = round(sapply(object$scores, mean), 3) ,
+                         Post.sd = round(sapply(object$scores, sd),3),
+                         Cred = round(t(sapply(object$scores,
                                          quantile,
-                                         c(lb, ub))))
+                                         c(lb, ub))), 3))
+
+  dat_summ[is.na(dat_summ)] <- 0
 
   returned_object <- list(summary = dat_summ,
                           metric = object$metric,
                           type = object$type,
                           iter = iter,
                           cred = cred)
+
   class(returned_object) <- c("BGGM", "metric",
                               "estimate",
                               "summary",
@@ -337,17 +353,20 @@ plot.metric <- function(x, type = "error_bar",
     temp <- summ$summary
 
     if(x$metric == "bayes_R2" | x$metric == "bayes_R2_diff"){
-      # add ordered levels
+
+      temp$Post.mean <- ifelse(is.nan(temp$Post.mean), 0, temp$Post.mean)
+
+      #add ordered levelse
       temp$Node <- factor(temp$Node,
-                          levels = (order(temp$Post.mean)),
-                          labels = (order(temp$Post.mean)))
+                          levels = temp$Node[(order(temp$Post.mean))],
+                          labels = temp$Node[(order(temp$Post.mean))])
 
     } else {
 
       # add ordered levels
       temp$Node <- factor(temp$Node,
-                          levels = rev(order(temp$Post.mean)),
-                          labels =rev(order(temp$Post.mean)))
+                          levels = (order(temp$Post.mean)),
+                          labels =(order(temp$Post.mean)))
 
     }
     # plot

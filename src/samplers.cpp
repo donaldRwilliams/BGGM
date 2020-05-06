@@ -85,15 +85,15 @@ Rcpp::List Theta_continuous(arma::mat Y,
   arma::cube pcors_mcmc(k, k, iter, arma::fill::zeros);
 
   // correlations
-  arma::mat  cors(k,k);
-  arma::cube cors_mcmc(k, k, iter, arma::fill::zeros);
+  // arma::mat  cors(k,k);
+  // arma::cube cors_mcmc(k, k, iter, arma::fill::zeros);
 
   // covariance matrix
-  arma::cube Sigma_mcmc(k, k, iter, arma::fill::zeros);
+  // arma::cube Sigma_mcmc(k, k, iter, arma::fill::zeros);
   arma::cube Sigma(k, k, 1, arma::fill::zeros);
 
   // starting value
-  Sigma.slice(0).fill(arma::fill::eye);
+  // Sigma.slice(0).fill(arma::fill::eye);
   Psi.slice(0).fill(arma::fill::eye);
   Theta.slice(0).fill(arma::fill::eye);
 
@@ -128,14 +128,14 @@ Rcpp::List Theta_continuous(arma::mat Y,
       Theta.slice(0) =   wishrnd(inv(Psi.slice(0) + S_Y),  (deltaMP + k - 1) + (n - 1));
 
       // Sigma
-      Sigma.slice(0) = inv(Theta.slice(0));
+      // Sigma.slice(0) = inv(Theta.slice(0));
 
     }
 
     // correlation
-    cors =  diagmat(1 / sqrt(Sigma.slice(0).diag())) *
-      Sigma.slice(0) *
-      diagmat(1 / sqrt(Sigma.slice(0).diag()));
+    // cors =  diagmat(1 / sqrt(Sigma.slice(0).diag())) *
+      // Sigma.slice(0) *
+      // diagmat(1 / sqrt(Sigma.slice(0).diag()));
 
     // partial correlations
     pcors = diagmat(1 / sqrt(Theta.slice(0).diag())) *
@@ -144,9 +144,9 @@ Rcpp::List Theta_continuous(arma::mat Y,
 
     // store posterior samples
     pcors_mcmc.slice(s) =  -(pcors - I_k);
-    cors_mcmc.slice(s) =  cors;
-    Sigma_mcmc.slice(s) = Sigma.slice(0);
-    Theta_mcmc.slice(s) = Theta.slice(0);
+    // cors_mcmc.slice(s) =  cors;
+    // Sigma_mcmc.slice(s) = Sigma.slice(0);
+    // Theta_mcmc.slice(s) = Theta.slice(0);
 
 
 
@@ -156,9 +156,9 @@ Rcpp::List Theta_continuous(arma::mat Y,
 
   Rcpp::List ret;
   ret["pcors"] = pcors_mcmc;
-  ret["cors"] =  cors_mcmc;
-  ret["Theta"] = Theta_mcmc;
-  ret["Sigma"] = Sigma_mcmc;
+  // ret["cors"] =  cors_mcmc;
+  // ret["Theta"] = Theta_mcmc;
+  // ret["Sigma"] = Sigma_mcmc;
   ret["fisher_z"] = fisher_z;
   return ret;
 }
@@ -1532,6 +1532,111 @@ Rcpp::List  copula(arma::mat z0_start,
   return ret;
 }
 
+
+// partials to correlations
+// [[Rcpp::export]]
+Rcpp::List pcor_to_cor_internal(arma::cube x, int p) {
+
+
+  // slices
+  int iter = x.n_slices;
+
+  // correlation matrix (R)
+  arma::cube R(p, p, iter);
+
+  // precision matrix
+  arma::mat Theta_s(p, p);
+
+  // sigma matrix
+  arma::mat Sigma_s(p, p);
+
+
+  for(int s = 0; s < iter; ++s){
+
+    Theta_s =   x.slice(s);
+
+    for(int j = 0; j < p; ++j) {
+
+      Theta_s.col(j).row(j) = 1;
+
+    }
+
+    arma::mat Sigma_s = inv(Theta_s);
+
+    R.slice(s) =  diagmat(1 / sqrt(Sigma_s.diag())) * Sigma_s * diagmat(1 / sqrt(Sigma_s.diag()));
+
+  }
+
+  arma::mat R_mean = mean(R, 2);
+  Rcpp::List ret;
+  ret["R"] = R;
+  ret["R_mean"] = R_mean;
+  return ret;
+}
+
+
+// partials to correlations
+// [[Rcpp::export]]
+Rcpp::List predictability_helper(arma::mat Y,
+                                 arma::colvec y,
+                                 arma::cube XX,
+                                 arma::mat Xy,
+                                 int n,
+                                 int iter) {
+
+
+  arma::mat r2(iter, 1, arma::fill::zeros);
+  arma::mat ppc(n,1);
+
+  for(int s = 0; s < iter; ++s){
+
+    // coefs
+    arma::mat coefs = Xy.col(s).t() * inv(XX.slice(s));
+
+    // predict mean
+    arma::mat mu = Y * coefs.t();
+
+    for(int j = 0; j < n; ++j){
+
+      // ppc person j
+      arma::vec ppc_j = Rcpp::rnorm(1, mu[j], stddev(mu - y));
+
+      // y rep
+      ppc.row(j) = arma::conv_to<double>::from(ppc_j);
+
+    }
+
+    // bayes R2
+    r2.row(s) = var(mu) / var(ppc);
+
+  }
+
+  Rcpp::List ret;
+  ret["r2"] = r2;
+  return ret;
+}
+
+// regression coefficients
+// [[Rcpp::export]]
+Rcpp::List beta_helper_fast(arma::cube XX,
+                       arma::mat Xy,
+                       int p,
+                       int iter) {
+
+
+  arma::mat coefs(iter, p, arma::fill::zeros);
+
+  for(int s = 0; s < iter; ++s){
+
+    arma::vec coef_s = inv(XX.slice(s)).t() * Xy.col(s);
+    coefs.row(s) =  coef_s.t();
+
+  }
+
+  Rcpp::List ret;
+  ret["coefs"] = coefs;
+  return ret;
+}
 
 
 

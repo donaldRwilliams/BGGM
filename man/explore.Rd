@@ -7,7 +7,6 @@
 explore(
   Y,
   formula = NULL,
-  data = NULL,
   type = "continuous",
   mixed_type = NULL,
   analytic = FALSE,
@@ -21,9 +20,6 @@ explore(
 
 \item{formula}{an object of class \code{\link[stats]{formula}}. This allows for including
 control variables in the model (i.e., \code{~ gender}).}
-
-\item{data}{an optional data frame, list or environment (or an object coercible by \code{\link[base]{as.data.frame}})
-to a data frame containing the variables in \code{formula}. This is required when controlling for variables.}
 
 \item{type}{character string. Which type of data for \strong{Y} ? The options include \code{continuous},
 \code{binary}, \code{ordinal}, or \code{mixed} (semi-parametric copula). See the note for further details.}

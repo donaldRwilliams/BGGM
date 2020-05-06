@@ -1,5 +1,7 @@
 #' Prior Distribution Plot
 #'
+#' @plot_prior
+#'
 #' @description Visualize the prior distribution used for the
 #' Bayesian hypothesis testing methods. This is governed by \code{prior_sd}.
 #' @param prior_sd hypothesized standard deviation for the edges or partial correlations.

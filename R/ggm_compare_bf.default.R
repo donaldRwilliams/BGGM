@@ -114,239 +114,56 @@
 #' }
 ggm_compare_explore <- function(...,
                            formula = NULL,
-                           data = NULL,
                            type = "continuous",
                            mixed_type = NULL,
                            analytic = FALSE,
                            prior_sd = 0.20,
                            iter = 5000){
 
+  # combine data
+  dat_list <- list(...)
 
-  # group info (e.g., n, p, etc)
-  info <- BGGM:::Y_combine(...)
-
-  # number of variables
-  p <- info$dat_info$p[1]
-
-  # number of observation
-  n = info$dat_info$n[1]
+  # combine data
+  info <- Y_combine(...)
 
   # groups
   groups <- length(info$dat)
 
+  # matrix-F hyperparameter
+  delta <- delta_solve(prior_sd)
+
   # check at least two groups
   if(groups < 2){
+
     stop("must have (at least) two groups")
+
     }
 
-  # matrix-F hyperparameter
-  delta <- BGGM:::delta_solve(prior_sd)
-
+  # sample
   if(!analytic){
 
-
-
-
-    if(type == "continuous"){
-
-      if(is.null(formula)){
-
-        # sample posterior
-  post_samp <- lapply(1:groups, function(x) {
+  samp <- lapply(1:groups, function(x) {
 
     # mixed
-    message("BGGM: Posterior Sampling ", "(Group ",x ,")")
-
-    Y <- as.matrix(scale(info$dat[[x]], scale = FALSE))
-
-    .Call(
-      '_BGGM_Theta_continuous',
-      PACKAGE = 'BGGM',
-      Y = Y,
-      iter = iter + 50,
-      delta = delta,
-      epsilon = 0.1,
-      prior_only = 0,
-      explore = 1
-    )
-  })
-
-  # control for variables
-  } else {
-
-    # model matrix
-    X <- model.matrix(formula, data)
-
-    # posterior sample
-    post_samp <- lapply(1:groups, function(x) {
-
-      # mixed
-      message("BGGM: Posterior Sampling ", "(Group ",x ,")")
-
-      # data Y_gj
-      Y <- as.matrix(scale(info$dat[[x]], scale = F))
-
-      .Call(
-        "_BGGM_mv_continuous",
-        Y = Y,
-        X = X,
-        delta = delta,
-        epsilon = 0.1,
-        iter = iter + 50
-      )
-    })
-  }
-
-  } else if (type == "binary") {
+    # message("BGGM: Posterior Sampling ", "(Group ",x ,")")
+    Y <- dat_list[[x]]
 
 
-    # intercept only
-    if(is.null(formula)){
-
-      X <- matrix(1, n, 1)
-
-      # model matrix
-    } else {
-
-      X <- model.matrix(formula, data)
-
-    }
-
-
-    # posterior sample
-    post_samp <- lapply(1:groups, function(x) {
-
-      # binary
-      message("BGGM: Posterior Sampling ", "(Group ",x ,")")
-
-      # Y_gj
-      Y <- as.matrix(info$dat[[x]])
-
-      .Call(
-        "_BGGM_mv_binary",
-        Y = Y,
-        X = X,
-        delta = delta,
-        epsilon = 0.1,
-        iter = iter + 50,
-        beta_prior = 0.0001,
-        cutpoints = c(-Inf, 0, Inf)
-      )
+    # call estimate
+    explore(Y, formula = formula,
+             type = type,
+             prior_sd = prior_sd,
+             iter = iter,
+             mixed_type = mixed_type,
+             ... = paste0("(Group ", x, ")"))
     })
 
-  } else if(type == "ordinal"){
+  post_samp <- lapply(1:groups, function(x) samp[[x]]$post_samp )
 
-    # intercept only
-    if(is.null(formula)){
+  prior_samp <-  lapply(1:groups, function(x) samp[[x]]$prior_samp)
 
-      X <- matrix(1, n, 1)
-
-    } else {
-
-      # model matrix
-      X <- model.matrix(formula, data)
-
-    }
-
-    # posterior sample
-    post_samp <- lapply(1:groups, function(x) {
-
-      # ordinal
-      message("BGGM: Posterior Sampling ", "(Group ",x ,")")
-
-      # Y_gj
-      Y <- as.matrix(info$dat[[x]])
-
-      # categories
-      K <- max(apply(Y, 2, function(x) { length(unique(x))   } ))
-
-      # call c ++
-      .Call("_BGGM_mv_ordinal_albert",
-            Y = Y,
-            X = X,
-            iter = iter + 50,
-            delta = delta,
-            epsilon = 0.1,
-            K = K)
-    })
-
-    } else if (type == "mixed") {
-
-    # no control variables allowed
-    if(!is.null(formula)){
-
-      warning("formula ignored for mixed data at this time")
-      formula <- NULL
-    }
-
-    # posterior samples
-    post_samp <- lapply(1:groups, function(x) {
-
-      # Y_gj
-      Y <- as.matrix(info$dat[[x]])
-
-      # default for ranks
-      if(is.null(mixed_type)) {
-
-        idx = colMeans(round(Y) == Y)
-        idx = ifelse(idx == 1, 1, 0)
-
-        # user defined
-      } else {
-
-        idx = mixed_type
-
-      }
-
-      # rank following hoff (2008)
-      rank_vars <- rank_helper(Y)
-
-      # mixed
-      message("BGGM: Posterior Sampling ", "(Group ",x ,")")
-
-      .Call("_BGGM_copula",
-            z0_start = rank_vars$z0_start,
-            levels = rank_vars$levels,
-            K = rank_vars$K,
-            Sigma_start = rank_vars$Sigma_start,
-            iter = iter + 50,
-            delta = delta,
-            epsilon = 0.1,
-            idx = idx)
-      })
-
-    } else {
-
-      stop("'type' not supported: must be continuous, binary, ordinal, or mixed.")
-
-      }
-    message("BGGM: Finished")
-
-
-
-  # matrix dimensions for prior
-  Y_dummy <- matrix(rnorm( groups * (groups+1) ),
-                    nrow = groups+1, ncol = groups)
-
-  # sample prior
-  prior_samp <- lapply(1:groups, function(x) {
-
-    # Y <- info$dat[[x]]
-
-    .Call(
-      '_BGGM_sample_prior',
-      PACKAGE = 'BGGM',
-      Y = Y_dummy,
-      iter = 10000,
-      delta = delta,
-      epsilon = 0.1,
-      prior_only = 1,
-      explore = 0
-    )$fisher_z
-  })
-
-
-
+  # p with predictors removed
+  p <- samp[[1]]$p
 
 
   # store pcor diff
@@ -377,12 +194,12 @@ ggm_compare_explore <- function(...,
 
     # start
     post_group <-  post_samp[[1]]$fisher_z[ rho_ij[1], rho_ij[2], (51:(iter + 50))]
-    prior_group <-  prior_samp[[1]][ 1, 2,]
+    prior_group <-  prior_samp[[1]]$fisher_z[ 1, 2,]
 
     # combined groups
     for(j in 2:(groups)){
       post_group <-  cbind(post_group,  post_samp[[j]]$fisher_z[ rho_ij[1], rho_ij[2], (51:(iter + 50))])
-      prior_group <-  cbind(prior_group,  prior_samp[[j]][1, 2,])
+      prior_group <-  cbind(prior_group,  prior_samp[[j]]$fisher_z[1, 2,])
     }
 
     # posterior covariance
@@ -430,7 +247,7 @@ ggm_compare_explore <- function(...,
                           delta = delta,
                           groups = groups,
                           pcor_diff = pcor_diff,
-                          post_samp = post_samp,
+                          samp = samp,
                           type = type,
                           p = p)
 
@@ -441,21 +258,19 @@ ggm_compare_explore <- function(...,
 
   }
 
+  class(returned_object) <- c("BGGM",
+                              "ggm_compare_explore",
+                              "explore")
+  returned_object
 
-
-    class(returned_object) <- c("BGGM",
-                                "ggm_compare_explore",
-                                "explore")
-    returned_object
-}
-
-
+  }
 
 print_summary_ggm_compare_bf <- function(x, ...){
   groups <- x$object$groups
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
   cat("Type:",  x$object$type, "\n")
+  cat("Formula:", paste(as.character(fit$formula), collapse = " "), "\n")
   # number of iterations
   cat("Posterior Samples:", x$object$iter, "\n")
   # number of observations
@@ -488,6 +303,7 @@ print_ggm_compare_bf <- function(x, ...){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
   cat("Type:",  x$type, "\n")
+  cat("Formula:", paste(as.character(fit$formula), collapse = " "), "\n")
   # number of iterations
   cat("Posterior Samples:", x$iter, "\n")
   # number of observations
@@ -546,10 +362,10 @@ summary.ggm_compare_explore <- function(object,
   prob_H1 <-   round(1 - prob_H0, 3)
 
   # column names
-  cn <-  colnames(object$info$dat[[1]])
+  cn <-  colnames(object$samp[[1]]$Y)
 
 
-  if(!isTRUE(col_names) | is.null(cn)){
+  if(is.null(cn)){
 
     mat_names <- sapply(1:p , function(x) paste(1:p, x, sep = "--"))[upper.tri(I_p)]
 
@@ -560,30 +376,27 @@ summary.ggm_compare_explore <- function(object,
 
   }
 
-
-
   if(object$groups == 2){
-  post_mean <- round(object$pcor_diff[upper.tri(I_p)], 3)
 
-  post_sd <- round(apply(object$post_samp[[1]]$pcors -
-                          object$post_samp[[2]]$pcors, 1:2, sd)[upper.tri(I_p)], 3)
+    post_mean <- round(object$pcor_diff[upper.tri(I_p)], 3)
 
+    post_sd <- round(apply(object$samp[[1]]$post_samp$pcors -
+                          object$samp[[2]]$post_samp$pcors, 1:2, sd)[upper.tri(I_p)], 3)
 
-  results <- data.frame(Relation = mat_names,
+    results <- data.frame(Relation = mat_names,
                                 Post.mean = post_mean,
                                 Post.sd = post_sd,
                                 Pr.H0 = prob_H0[upper.tri(I_p)],
                                 Pr.H1 = prob_H1[upper.tri(I_p)])
 
-
-  } else {
+    } else {
 
     results <- data.frame(Relation = mat_names,
                           Pr.H0 = prob_H0[upper.tri(I_p)],
                           Pr.H1 = prob_H1[upper.tri(I_p)])
 
+    }
 
-  }
   returned_object <- list(results = results,
                           object = object)
 
@@ -593,7 +406,6 @@ summary.ggm_compare_explore <- function(object,
                               "explore")
   returned_object
 }
-
 
 
 #' GGM Compare: Plot \code{ggm_compare_explore] Objects}

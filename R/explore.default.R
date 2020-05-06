@@ -13,9 +13,6 @@
 #' @param formula an object of class \code{\link[stats]{formula}}. This allows for including
 #' control variables in the model (i.e., \code{~ gender}).
 #'
-#' @param data an optional data frame, list or environment (or an object coercible by \code{\link[base]{as.data.frame}})
-#' to a data frame containing the variables in \code{formula}. This is required when controlling for variables.
-#'
 #' @param type character string. Which type of data for \strong{Y} ? The options include \code{continuous},
 #' \code{binary}, \code{ordinal}, or \code{mixed} (semi-parametric copula). See the note for further details.
 #'
@@ -93,7 +90,6 @@
 #' @export
 explore <- function(Y,
                     formula = NULL,
-                    data = NULL,
                     type = "continuous",
                     mixed_type = NULL,
                     analytic = FALSE,
@@ -103,27 +99,27 @@ explore <- function(Y,
   # delta parameter
   delta <- delta_solve(prior_sd)
 
-  # remove NAs
-  Y <- na.omit(Y)
-
-  # number of columns
-  p <- ncol(Y)
-
-  # number of rows
-  n <- nrow(Y)
-
   if(!analytic){
 
-  message("BGGM: Posterior Sampling")
+    message(paste0("BGGM: Posterior Sampling ", ...))
 
     # continuous
     if (type == "continuous") {
 
-      # scale Y
-      Y <- scale(Y, scale = T)
-
       # no control
       if (is.null(formula)) {
+
+        # na omit
+        Y <- as.matrix(na.omit(Y))
+
+        # scale Y
+        Y <- scale(Y, scale = F)
+
+        # nodes
+        p <- ncol(Y)
+
+        n <- nrow(Y)
+
         # posterior sample
         post_samp <- .Call(
           '_BGGM_Theta_continuous',
@@ -139,8 +135,20 @@ explore <- function(Y,
         # control for variables
       } else {
 
+        control_info <- remove_predictors_helper(list(as.data.frame(Y)),
+                                                 formula = formula)
+
+        # data
+        Y <- as.matrix(scale(control_info$Y_groups[[1]], scale = F))
+
+        # nodes
+        p <- ncol(Y)
+
+        # observations
+        n <- nrow(Y)
+
         # model matrix
-        X <- model.matrix(formula, data)
+        X <- as.matrix(control_info$model_matrices[[1]])
 
         # posterior sample
         post_samp <- .Call(
@@ -160,12 +168,34 @@ explore <- function(Y,
       # intercept only
       if (is.null(formula)) {
 
+        # data
+        Y <- as.matrix(na.omit(Y))
+
+        # obervations
+        n <- nrow(Y)
+
+        # nodes
+        p <- ncol(Y)
+
         X <- matrix(1, n, 1)
 
-        } else {
+      } else {
 
-          # model matrix
-          X <- model.matrix(formula, data)
+        control_info <- remove_predictors_helper(list(as.data.frame(Y)),
+                                                 formula = formula)
+
+        # data
+        Y <-  as.matrix(control_info$Y_groups[[1]])
+
+        # observations
+        n <- nrow(Y)
+
+        # nodes
+        p <- ncol(Y)
+
+        # model matrix
+        X <- as.matrix(control_info$model_matrices[[1]])
+
       }
 
       # posterior sample
@@ -183,21 +213,42 @@ explore <- function(Y,
       # ordinal
     } else if (type == "ordinal") {
 
-
       # intercept only
-      if (is.null(formula)) {
+      if(is.null(formula)){
 
+        # data
+        Y <- as.matrix(na.omit(Y))
+
+        # obervations
+        n <- nrow(Y)
+
+        # nodes
+        p <- ncol(Y)
+
+        # intercept only
         X <- matrix(1, n, 1)
 
       } else {
 
+        control_info <- remove_predictors_helper(list(as.data.frame(Y)),
+                                                 formula = formula)
+
+        # data
+        Y <-  as.matrix(control_info$Y_groups[[1]])
+
+        # observations
+        n <- nrow(Y)
+
+        # nodes
+        p <- ncol(Y)
+
         # model matrix
-        X <- model.matrix(formula, data)
+        X <- as.matrix(control_info$model_matrices[[1]])
 
       }
 
     # categories
-    K <- max(apply(Y, 2, function(x) { length(unique(x))   } ))
+    K <- max(apply(Y, 2, function(x) { length(unique(x)) } ))
 
     # call c ++
     post_samp <- .Call(
@@ -214,9 +265,27 @@ explore <- function(Y,
 
     # no control variables allowed
     if(!is.null(formula)){
+
       warning("formula ignored for mixed data at this time")
+
+      control_info <- remove_predictors_helper(list(as.data.frame(Y)),
+                                               formula = formula)
+      # data
+      Y <-  as.matrix(control_info$Y_groups[[1]])
+
       formula <- NULL
-    }
+
+    } else {
+
+      Y <- na.omit(Y)
+
+      }
+
+    # observations
+    n <- nrow(Y)
+
+    # nodes
+    p <- ncol(Y)
 
     # default for ranks
     if(is.null(mixed_type)) {
@@ -298,9 +367,98 @@ explore <- function(Y,
   returned_object
 
   class(returned_object) <- c("BGGM",
-                              "default",
-                              "explore")
+                              "explore",
+                              "default")
   return(returned_object)
+}
+
+
+
+
+#' @name summary.explore
+#'
+#' @title Summary method for \code{explore.default} objects
+#'
+#' @param object an object of class \code{estimate}
+#'
+#' @param col_names logical. Should the summary include the column names (default is \code{TRUE})?
+#'                  Setting to \code{FALSE} includes the column numbers (e.g., \code{1--2}).
+#'
+#' @param ... currently ignored
+#'
+#' @seealso \code{\link{select.explore}}
+#'
+#' @return a list containing the summarized posterior distributions
+#' # data
+#' Y <- BGGM::bfi[, 1:5]
+#' # analytic approach (sample by setting analytic = FALSE)
+#' fit <- estimate(Y, analytic = TRUE)
+#' summary(fit)
+#' @export
+summary.explore <- function(object,
+                             col_names = TRUE) {
+
+  # nodes
+  p <- object$p
+
+  # identity matrix
+  I_p <- diag(p)
+
+  # column names
+  cn <-  colnames(object$Y)
+
+
+  if(is.null(cn) | isFALSE(col_names)){
+
+    mat_names <- sapply(1:p , function(x) paste(1:p, x, sep = "--"))[upper.tri(I_p)]
+
+  } else {
+
+    mat_names <-  sapply(cn , function(x) paste(cn, x, sep = "--"))[upper.tri(I_p)]
+
+  }
+
+
+  if(isFALSE(object$analytic)){
+
+    post_mean <- round(object$pcor_mat, 3)[upper.tri(I_p)]
+    post_sd  <- round(object$pcor_sd, 3)[upper.tri(I_p)]
+
+    dat_results <-
+      data.frame(
+        relation = mat_names,
+        post_mean =  post_mean,
+        post_sd = post_sd
+      )
+
+    colnames(dat_results) <- c(
+      "Relation",
+      "Post.mean",
+      "Post.sd")
+
+  } else {
+
+    dat_results <-
+      data.frame(
+        relation = mat_names,
+        post_mean =  object$pcor_mat[upper.tri(I_p)]
+      )
+
+    colnames(dat_results) <- c(
+      "Relation",
+      "Post.mean")
+
+  }
+
+
+  returned_object <- list(dat_results = dat_results,
+                          object = object)
+
+
+  class(returned_object) <- c("BGGM", "explore",
+                              "summary_explore",
+                              "summary.explore")
+  returned_object
 }
 
 
@@ -327,30 +485,6 @@ print_explore <- function(x,...){
 }
 
 
-
-#' @name summary.explore
-#' @title  Summary method for \code{explore} objects
-#' @param object An object of class \code{explore}
-#' @seealso \code{\link{explore}}
-#' @param ... currently ignored
-#' @export
-summary.explore <- function(object,...){
-
-  dat_results <- select(object,
-                      BF_cut = 0,
-                      alternative =
-                      "exhaustive")
-
-returned_object <- list(dat_results = dat_results,
-                        object = object)
-
-class(returned_object) <- c("BGGM",
-                           "explore",
-                           "summary.explore")
-return(returned_object)
-}
-
-
 #' Plot \code{summary.explore}
 #'
 #' @param x an object of class \code{summary.explore}
@@ -358,37 +492,47 @@ return(returned_object)
 #'
 #' @return an object of class \code{ggplot}
 #' @export
+plot.summary.explore <- function(x, color = "black",
+                                  size = 2,
+                                  width = 0, ...){
 
-plot.summary.explore <- function(x,...){
+  dat_temp <- x$dat_results[order(x$dat_results$Post.mean,
+                                  decreasing = F), ]
 
-  not_h0 <-  1 - (x$dat_results$post_prob$prob_zero)
-  h0 <- (x$dat_results$post_prob$prob_zero)
-
-  test_dat <- data.frame(Edge = x$dat_results$post_prob$edge, probability = c(not_h0 - 0.5))
-
-  dat_temp <- test_dat[order(test_dat$probability, decreasing = T),]
-  dat_temp$Edge <-
-    factor(dat_temp$Edge,
-           levels = rev(dat_temp$Edge),
-           labels = rev(dat_temp$Edge))
+  dat_temp$Relation <-
+    factor(dat_temp$Relation,
+           levels = dat_temp$Relation,
+           labels = dat_temp$Relation)
 
 
-  ggplot(dat_temp, aes(x = Edge, y = probability)) +
-    geom_linerange(aes(x = Edge, ymin = 0, ymax = probability),
-                   position = position_dodge(width = 1)) +
+  if(isFALSE(x$object$analytic)){
+    ggplot(dat_temp,
+           aes(x = Relation,
+               y = Post.mean)) +
 
-    scale_y_continuous(limits = c(-0.5, 0.5),
-                       labels = c(1, 0.5, 0, 0.5, 1)) +
-    geom_point(aes(x = Edge, y = probability),
-               position = position_dodge(width = 1)) +
+      geom_errorbar(aes(ymax = Post.mean + dat_temp[, 3],
+                        ymin = Post.mean -  dat_temp[, 3]),
+                    width = width,
+                    color = color) +
+      geom_point(size = size) +
+      xlab("Index") +
+      theme(axis.text.x = element_text(
+        angle = 90,
+        vjust = 0.5,
+        hjust = 1
+      ))
+  } else {
 
-    ylab(
-      expression(
-        italic(H)[0] * symbol(' \254 ') * "Posterior Probability " * symbol('\256 ') *
-          "'not " * italic(H)[0] * "'"
-      )
-    ) +
-    geom_point(color = "blue", size = 1) +
-    geom_hline(yintercept = 0, linetype = "dotted") +
-    coord_flip()
+    ggplot(dat_temp,
+           aes(x = Relation,
+               y = Post.mean)) +
+      geom_point(size = size) +
+      xlab("Index") +
+      theme(axis.text.x = element_text(
+        angle = 90,
+        vjust = 0.5,
+        hjust = 1
+      ))
+  }
+
 }

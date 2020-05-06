@@ -11,11 +11,8 @@
 #' Requires at least two.
 #'
 #' @param formula an object of class \code{\link[stats]{formula}}. This allows for including
-#' control variables in the model (i.e., \code{~ gender}).
+#' control variables in the model (i.e., \code{~ gender}). See the note for further details.
 #'
-#' @param data optional data frames in a list that containing the variables in \code{formula}.
-#'             This is required when controlling for variables. Requires at least two (one for each group).
-#'             See \code{examples} for futher details.
 #'
 #' @param prior_sd The scale of the prior distribution (centered at zero), in reference to a beta distribtuion.
 #' The `default` is 0.50. See note for further details.
@@ -58,7 +55,7 @@
 #' Selecting the differences is implemented in \code{\link{select.ggm_compare_estimate}}. Currently the only available
 #' option is to detect differences with  credible interval exclusion of zero. This
 #' corresponds to a directional posterior probability \insertCite{Marsman2017a}{BGGM}. For example,
-#' the probability (conditional on the model) of a difference  is at least 97.5\eqn{%} when the 95\eqn{%}
+#' the probability (conditional on the model) of a difference  is at least 97.5 $\%$ when the 95 $\%$
 #' credible interval excludes zero.
 #'
 #'
@@ -81,7 +78,8 @@
 #' expensive when treating continuous data as ranks. The current default is to treat only integer data as ranks.
 #' This should of course be adjusted for continous data that is skewed. This can be accomplished with the
 #' argument \code{mixed_type}. A \code{1} in the numeric vector of length \emph{p}indicates to treat that
-#' respective node as a rank (corresponding to the column number) and zeros indicates to use the observed (or "emprical") data.
+#' respective node as a rank (corresponding to the column number) and a zero indicates to use the observed
+#' (or "emprical") data.
 #'
 #'
 #' It is also important to note that \code{type = "mixed"} is not restricted to mixed data (containing a combination of
@@ -89,6 +87,11 @@
 #'
 #' \strong{Prior Distribution:}
 #'
+#'  We use the novel matrix-F prior distribution that was recently introduces in X. In the context of GGMs, this prior
+#'  was first used in X. The key advantage is that the implied prior distrbution for each partial correlation is (1)
+#'  invariant to the network size (see section X in X) and (2) approximately beta distributed (Equation X in X). Accordingly,
+#'  the arguement \code{prior_sd} corresponds the standard deviation of a beta distrubtion (with a mean of zero). The function
+#'  \code{\link{plot_prior}} can be used to visualize the prior distibution.
 #'
 #' \strong{Additional GGM Compare Methods}
 #'
@@ -108,20 +111,22 @@
 #' @export
 ggm_compare_estimate <- function(...,
                                  formula = NULL,
-                                 data = NULL,
                                  type = "continuous",
                                  mixed_type = NULL,
                                  analytic = FALSE,
                                  prior_sd = 0.50,
                                  iter = 5000){
   # combine data
+  dat_list <- list(...)
+
+  # combine data
   info <- Y_combine(...)
 
-  # number of variables
-  p <- info$dat_info$p[1]
-
-  # number of observation
-  n = info$dat_info$n[1]
+  # # number of variables
+  # p <- info$dat_info$p[1]
+  #
+  # # number of observation
+  # n = info$dat_info$n[1]
 
   # number of groups
   groups <- length(info$dat)
@@ -139,232 +144,50 @@ ggm_compare_estimate <- function(...,
   # sample
   if(!analytic){
 
-    if(type == "continuous"){
+    post_samp <- lapply(1:groups, function(x) {
 
-      # no control variables
-      if(is.null(formula)){
+      Y <- dat_list[[x]]
 
-        # posterior sample
-        post_samp <- lapply(1:groups, function(x) {
+      # call estimate
+      estimate(Y, formula = formula,
+               type = type,
+               prior_sd = prior_sd,
+               iter = iter,
+               mixed_type = mixed_type,
+               ... = paste0("(Group ", x, ")"))
 
-          # data Y_gj
-          Y <- as.matrix(scale(info$dat[[x]], scale = F))
+    })
 
-          # continuous
-          message("BGGM: Posterior Sampling ", "(Group ",x ,")")
+    # number of variables
+    p <- post_samp[[1]]$p
 
-          .Call(
-            '_BGGM_Theta_continuous',
-            PACKAGE = 'BGGM',
-            Y = Y,
-            iter = iter + 50,
-            delta = delta,
-            epsilon = 0.1,
-            prior_only = 0,
-            explore = 1
-          )$pcors
-        })
-
-        # control for variables
-        } else {
-
-          # posterior sample
-          post_samp <- lapply(1:groups, function(x) {
-
-            # data Y_gj
-            Y <- as.matrix(scale(info$dat[[x]], scale = F))
-
-            # model matrix
-            X <- model.matrix(formula, data[[x]])
-
-            # continuous
-            message("BGGM: Posterior Sampling ", "(Group ",x ,")")
-
-            .Call(
-              "_BGGM_mv_continuous",
-              Y = Y,
-              X = X,
-              delta = delta,
-              epsilon = 0.1,
-              iter = iter + 50
-            )$pcors
-          })
-        }
-
-      # binary data
-      } else if(type == "binary") {
-
-        # intercept only
-        if(is.null(formula)){
-
-          X <- matrix(1, n, 1)
-
-          # model matrix
-          } else {
-
-            X <- model.matrix(formula, data)
-
-            }
-
-        # posterior sample
-        post_samp <- lapply(1:groups, function(x) {
-
-          # Y_gj
-          Y <- as.matrix(info$dat[[x]])
-
-
-          # intercept only
-          if(is.null(formula)){
-
-            X <- matrix(1, n, 1)
-
-            # model matrix
-          } else {
-
-            X <- model.matrix(formula, data[[x]])
-
-          }
-
-          # binary
-          message("BGGM: Posterior Sampling ", "(Group ",x ,")")
-
-          .Call(
-            "_BGGM_mv_binary",
-            Y = Y,
-            X = X,
-            delta = delta,
-            epsilon = 0.1,
-            iter = iter + 50,
-            beta_prior = 0.0001,
-            cutpoints = c(-Inf, 0, Inf)
-          )$pcors
-          })
-
-      } else if(type == "ordinal"){
-
-        # intercept only
-        if(is.null(formula)){
-
-          X <- matrix(1, n, 1)
-
-        } else {
-
-          # model matrix
-          X <- model.matrix(formula, data)
-
-        }
-
-        # posterior sample
-        post_samp <- lapply(1:groups, function(x) {
-
-          # Y_gj
-          Y <- as.matrix(info$dat[[x]])
-
-          # intercept only
-          if(is.null(formula)){
-
-            X <- matrix(1, n, 1)
-
-            # model matrix
-          } else {
-
-            X <- model.matrix(formula, data[[x]])
-
-          }
-
-
-          # ordinal
-          message("BGGM: Posterior Sampling ", "(Group ",x ,")")
-
-          # categories
-          K <- max(apply(Y, 2, function(x) { length(unique(x))   } ))
-
-          # call c ++
-          .Call("_BGGM_mv_ordinal_albert",
-              Y = Y + 1,
-              X = X,
-              iter = iter + 50,
-              delta = delta,
-              epsilon = 0.1,
-              K = K)$pcors
-          })
-
-        # mixed data
-        } else if(type == "mixed"){
-
-          # no control variables allowed
-          if(!is.null(formula)){
-
-            warning("formula ignored for mixed data at this time")
-
-            formula <- NULL
-          }
-
-          # posterior samples
-          post_samp <- lapply(1:groups, function(x) {
-
-
-            # mixed
-            message("BGGM: Posterior Sampling ", "(Group ",x ,")")
-
-            # Y_gj
-            Y <- as.matrix(info$dat[[x]])
-
-            # default for ranks
-            if(is.null(mixed_type)) {
-
-              idx = colMeans(round(Y) == Y)
-              idx = ifelse(idx == 1, 1, 0)
-
-              # user defined
-              } else {
-
-                idx = mixed_type
-
-                }
-
-            # rank following hoff (2008)
-            rank_vars <- rank_helper(Y)
-
-            .Call("_BGGM_copula",
-                z0_start = rank_vars$z0_start,
-                levels = rank_vars$levels,
-                K = rank_vars$K,
-                Sigma_start = rank_vars$Sigma_start,
-                iter = iter + 50,
-                delta = delta,
-                epsilon = 0.1,
-                idx = idx)$pcors
-            })
-
-          } else {
-
-            stop("'type' not supported: must be continuous, binary, ordinal, or mixed.")
-
-            }
-
-    message("BGGM: Finished")
-
+    # compute difference
     diff <- lapply(1:comparisons, function(x) {
 
       contrast <- info$pairwise[x, ]
-
-      post_samp[[contrast[[1]]]][, , 51:(iter + 50)] - post_samp[[contrast[[2]]]][, , 51:(iter + 50)]
+      post_samp[[contrast[[1]]]]$post_samp$pcors[, , 51:(iter + 50)] - post_samp[[contrast[[2]]]]$post_samp$pcors[, , 51:(iter + 50)]
 
       })
 
-
-      names(diff)  <- sapply(1:comparisons, function(x)
+    # name posterior (differences) array
+    names(diff)  <- sapply(1:comparisons, function(x)
         paste("Y_g",
               info$pairwise[x, ],
               sep = "",
               collapse = " - "))
 
+    # pcor_mats
+    pcor_mats <- lapply(1:length(diff), function(x) {
+       round(apply(diff[[x]], 1:2, mean), 3)
 
+       })
 
+      # name pcor_mats
+      names(pcor_mats) <- names(diff)
 
       # returned object
       returned_object <- list(
+        pcor_mats = pcor_mats,
         diff = diff,
         p = p,
         info = info,
@@ -372,15 +195,15 @@ ggm_compare_estimate <- function(...,
         analytic = analytic,
         type = type,
         formula = formula,
-        call = match.call()
+        call = match.call(),
+        post_samp= post_samp
       )
 
-
-
-  # analytic
+      # analytic
     } else {
 
       if(type != "continuous"){
+
         warning("analytic solution only available for 'type = continuous'")
         type <- "continuous"
       }
@@ -397,7 +220,6 @@ ggm_compare_estimate <- function(...,
           abs((g1$inv_map - g2$inv_map) /   sqrt(g1$inv_var + g2$inv_var))
 
       })
-
 
       diff <- lapply(1:comparisons, function(x) {
         contrast <- info$pairwise[x, ]
@@ -433,10 +255,9 @@ ggm_compare_estimate <- function(...,
         analytic = analytic,
         call = match.call()
       )
-
     }
 
-    class(returned_object) <- c("BGGM",
+  class(returned_object) <- c("BGGM",
                               "ggm_compare_estimate",
                               "estimate")
   returned_object
@@ -492,10 +313,10 @@ summary.ggm_compare_estimate <- function(object,
   comparisons <- length(names(object$diff))
 
   # column names
-  cn <-  colnames(object$info$dat[[1]])
+  cn <-  colnames(object$post_samp[[1]]$Y)
 
 
-  if(col_names | is.null(cn)){
+  if(is.null(cn) | isFALSE(col_names)){
 
     mat_names <- sapply(1:p , function(x) paste(1:p, x, sep = "--"))[upper.tri(I_p)]
 
@@ -510,7 +331,7 @@ summary.ggm_compare_estimate <- function(object,
   # summary for comparison i
   for(i in seq_len(comparisons)){
 
-    post_mean <- round(apply( object$diff[[i]], 1:2, mean), 3)[upper.tri(I_p)]
+    post_mean <- round(apply(object$diff[[i]], 1:2, mean), 3)[upper.tri(I_p)]
 
     post_sd  <- round(apply( object$diff[[i]], 1:2, sd), 3)[upper.tri(I_p)]
 

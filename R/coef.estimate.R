@@ -1,32 +1,14 @@
-#' Precision Matrix to Multiple Regression
-#' @name coef.estimate
-#' @description There is a direct correspondence between the covariance matrix and multiple regression. In the case of GGMs, it is possible
-#' to estimate the edge set with multiple regression (i.e., neighborhood selection). In *BGGM*, the precision matrix is first sampled from, and then
-#' each draws is converted to the corresponding coefficients and error variances. This results in a posterior distribution. This function can be used
-#' to perform Bayesian multiple regression.
+#' Compute Regression Parameters
 #'
-#' @param object object of class \code{estimate} (analytic = F)
-#' @param node which node to summarize (i.e., the outcome)
-#' @param cred credible interval used in the summary output
-#' @param iter number of samples used in the conversion.
+#' @name coef.estimate
+
+#' @param object object of class \code{estimate} or \code{explore}
+#'
+#' @param iter number of iterations (posterior samples; defaults to the number in the object).
+#'
 #' @param ... e.g., \code{digits}
 #'
 #' @return list of class \code{coef.estimate}:
-#'
-#' list \code{inv_2_beta}:
-#' \itemize{
-#'  \item \code{betas} posterior samples for the regression coefficients
-#'  \item \code{sigma} posterior samples for sigma (residual sd)
-#'  \item \code{call} \code{match.call()}
-#' }
-#'
-#' data frame \code{summary_inv_2_beta}:
-#' \itemize{
-#' \item summary of regression coefficients
-#' }
-#'
-#'
-#' \code{call} \code{match.call()}
 #'
 #' @examples
 #' # p = 10
@@ -38,24 +20,181 @@
 #' # precision to regression
 #' coefficients(fit, node = 1, cred = 0.95)
 #' @export
-coef.estimate <- function(object, node = 1, cred = 0.95, iter = 500, ...){
+coef.estimate <- function(object, iter = NULL,...) {
 
-  # check for samples
-  if(isTRUE(object$analytic)) stop("posterior samples are required (analytic = F)")
+  # check for object class
+  if(is(object, "estimate") | is(object, "explore")){
 
-  # inverse to beta
-  inv_2_beta <- beta_summary(object, node = node,
-                             ci_width = cred, samples = iter)
+    # check for default
+    if(!is(object, "default")){
 
-  # summary regression coefficients
-  summary_inv_2_beta <- inv_2_beta[[1]][[1]][,1:5]
+      stop(paste0("\nclass not supported. must be an object\n",
+                  "from either the 'explore' or 'estimate' functions"))
+    }
 
-  returned_object <- list(inv_2_beta = inv_2_beta,
-                          summary_inv_2_beta = summary_inv_2_beta,
-                          call = match.call(), data = object$dat,
-                          iter = iter, node = node, cred = cred)
-  class(returned_object) <- c("BGGM", "estimate",  "coef")
+    # nodes
+    p <- object$p
+
+    # all posterior samples
+    if(is.null(iter)){
+
+      iter <- object$iter
+
+    }
+
+    # pcor to cor
+    cors <- pcor_to_cor(object, iter = iter)$R
+
+    # betas
+
+    pb <- utils::txtProgressBar(min = 0, max = p, style = 3)
+
+    betas <- lapply(1:p, function(x) {
+
+    beta_p <- .Call("_BGGM_beta_helper_fast",
+                    XX = cors[-x, -x,],
+                    Xy = cors[x, -x,],
+                    p = p - 1,
+                    iter = iter
+                    )$coefs
+
+    utils::setTxtProgressBar(pb, x)
+
+    beta_p
+
+    })
+
+  } else {
+
+    stop("class not currently supported")
+
+  }
+
+  # remove samples so
+  # object does not become huge
+  object$post_samp <- 0
+
+  returned_object <- list(betas = betas, object = object)
+  class(returned_object) <- c("BGGM", "coef")
   returned_object
 }
+
+
+
+print_coef <- function(x,...){
+  # nodes
+  p <- length(x$betas)
+
+  # column names
+  cn <- colnames(x$object$Y)
+
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type:", x$object$type, "\n")
+  cat("Formula:", paste(as.character(x$object$formula), collapse = " "), "\n")
+  cat("--- \n")
+  cat("Call: \n")
+  print(x$object$call)
+  cat("--- \n")
+  cat("Coefficients: \n \n")
+
+  if(is.null(cn)) {
+
+    cn <- 1:p
+
+  }
+
+  for (i in seq_len(p)) {
+    # print outcome
+    cat(paste0(cn[i], ": \n"))
+
+    # coefs for node i
+    coef_i <- data.frame(t(round(colMeans(x$betas[[i]]), 3)))
+
+    # predictor names
+    colnames(coef_i) <- cn[-i]
+
+    # print coefs
+    print(coef_i, row.names = FALSE)
+    cat("\n")
+  }
+}
+
+
+
+#' Summarize \code{coef} Objects
+#'
+#' @param object an object of class \code{coef}
+#' @param cred credible interval width used for the decision rule
+#'
+#' @return a list of length \emph{p} including the
+#'         summaries for each multiple regression.
+#' @export
+#'
+#' @examples
+summary.coef <- function(object, cred = 0.95){
+
+  lb <- (1 - cred) / 2
+  ub <- 1 - lb
+  p <- object$object$p
+
+  post_mean <- t(sapply(1:p, function(x)  apply(object$betas[[x]], MARGIN = 2, mean )))
+  post_sd   <- t(sapply(1:p, function(x)  apply(object$betas[[x]], MARGIN = 2, sd)))
+  post_lb   <- t(sapply(1:p, function(x)  apply(object$betas[[x]], MARGIN = 2, quantile, lb)))
+  post_ub   <- t(sapply(1:p, function(x)  apply(object$betas[[x]], MARGIN = 2, quantile, ub)))
+
+  res_i <- list()
+  for(i in 1:p){
+    res_i[[i]] <- round(data.frame(post_mean = post_mean[i,],
+                                   post_sd = post_sd[i,],
+                                   post_lb = post_lb[i,],
+                                   post_ub  = post_ub[i,]), 3)
+
+  }
+
+
+  returned_object <- list(summaries = res_i,
+                          object = object)
+
+  class(returned_object) <- c("BGGM", "coef", "summary.coef")
+  returned_object
+}
+
+
+
+print_summary_coef <- function(x,...){
+
+  # node names
+  cn <- colnames(x$object$object$Y)
+
+  # nodes
+  p <- ncol(x$object$object$Y)
+
+  # check for column names
+  if(is.null(cn)) {
+
+    cn <- 1:p
+
+  }
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type:", x$object$object$type, "\n")
+  cat("Formula:", paste(as.character(x$object$object$formula), collapse = " "), "\n")
+  cat("--- \n")
+  cat("Call: \n")
+  print(x$object$object$call)
+  cat("--- \n")
+  cat("Coefficients: \n \n")
+
+  for(i in seq_len(p)){
+    cat(paste0( cn[i], ": \n"))
+    summ_i <- x$summaries[[i]]
+    colnames(summ_i) <- c("Post.mean", "Post.sd", "Cred.lb", "Cred.ub")
+    print( cbind.data.frame(Node = cn[-i], summ_i), row.names = FALSE)
+    cat("\n")
+  }
+
+}
+
 
 

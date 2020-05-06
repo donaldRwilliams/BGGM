@@ -10,10 +10,7 @@
 #' @param Y  matrix (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).
 #'
 #' @param formula an object of class \code{\link[stats]{formula}}. This allows for including
-#' control variables in the model (i.e., \code{~ gender}).
-#'
-#' @param data an optional data frame, list or environment (or an object coercible by \code{\link[base]{as.data.frame}})
-#' to a data frame containing the variables in \code{formula}. This is required when controlling for variables.
+#' control variables in the model (i.e., \code{~ gender}). See the note for further details.
 #'
 #' @param type character string. Which type of data for \strong{Y} ? The options include \code{continuous},
 #' \code{binary}, \code{ordinal}, or \code{mixed}. See the note for further details.
@@ -27,9 +24,6 @@
 #' @param iter number of iterations (posterior samples; defaults to 5000).
 #'
 #' @param analytic logical. Should the analytic solution be computed (default is \code{FALSE})?
-#'
-#' @param seed The seed for random number generation (default set to \code{1}).
-#'
 #'
 #' @param ... currently ignored.
 #'
@@ -66,35 +60,49 @@
 #' }
 #'
 #'
-#'
 #' @note The default is to draws samples from the posterior distribution (\code{analytic = FALSE}). The samples are
 #' required for computing edge differences (see \code{\link{ggm_compare_estimate}}), Bayesian R2 introduced in
-#'  \insertCite{gelman_r2_2019;textual}{BGGM} (see \code{\link{bayes_R2}}), etc. If the goal is to *only* determine the non-zero effects, this can be accomplished by setting \code{analytic = TRUE}. Note also sampling is
-#' very fast--i.e., less than 1 second with p = 25, n = 2500 and 5,000 samples.
+#' \insertCite{gelman_r2_2019;textual}{BGGM} (see \code{\link{bayes_R2}}), etc. If the goal is to *only* determine
+#' the non-zero effects, this can be accomplished by setting \code{analytic = TRUE}. Note also sampling is very fast--i.e.,
+#' less than 1 second with p = 25, n = 2500 and 5,000 samples.
 #'
-#' These methods are inherently Bayesian. This also means there is a close correspondence to "frequentist" methods or, say,
-#' maximum likelihood. In fact, the prior distribution is set to mimic the unbiased estimate of the sample based
-#' covariance matrix. This allows for efficiently drawing samples from the posterior distribution. The advantage compared
-#' to frequentist methods is that a measure of uncertainty is readily available. This allows for
-#' seamlessly computing partial correlation (see \code{\link{ggm_compare_estimate}}) and Bayesian R2  (see \code{\link{test.R2}}) differences.
-#' Further, the posterior probability of a null region (see \code{\link{select.estimate}}) can be computed and this provides
-#' an estimate of the conditional independence structure (null effects).
-#'
-#'
-#' \strong{Interpretation of conditional (in)dependence models for latent data:}
-#'
-#' A  tetrachoric correlation (binary data) is a special case of a polychoric correlation (ordinal data).
-#' Both relations are between "theorized normally distributed continuous latent variables"
-#' (\href{https://en.wikipedia.org/wiki/Polychoric_correlation}{Wikipedia}). In both instances,
-#' the correpsonding partial correlation between observed variables is conditioned
-#' on the remaining variables in the \emph{latent} space. This implies that interpration
-#' is much the same as for continuous data, but with respect to latent variables.
-#' We refer interested reader to \insertCite{@page 2364, section 2.2, in  @webb2008bayesian;textual}{BGGM}.
+#' These methods are inherently Bayesian. This also means there is a close correspondence to "frequentist" methods. The prior
+#' distribution for \code{analytic = TRUE} is set to mimic the unbiased estimate of the sample based
+#' covariance matrix. When \code{analytic = FALSE}, samples are efficiently drawn from the posterior distribution.
+#' The advantage compared to frequentist methods is that a measure of uncertainty is readily available. This allows for
+#' seamlessly comparing partial correlation (see \code{\link{ggm_compare_estimate}}) and computing Bayesian R2
+#' (see \code{\link{test.R2}}). Further, the posterior probability of a null region (see \code{\link{select.estimate}})
+#' provides an estimate of the conditional independence structure (null effects).
 #'
 #'
-#' see \code{methods("estimate")}
+#'\strong{Controlling for Variables}:
+#'
+#' When controlling for variables, it is assumed that \code{Y} includes \emph{only}
+#' the nodes in the GGM and the control variables. Internally, \code{only} the predictors
+#' that are included in \code{formula} are removed from \code{Y}. An example is provided below.
+#'
+#' \strong{Dealing with Errors}:
+#'
+#' An error is most likely to arise when \code{type = "ordinal"}. The are two common errors (although still rare).
+#' The first is due to ampling the thresholds, especially when the data is
+#' heavily skewed. This can result in an ill-defined matrix. If this occurs, we recommend to first try
+#' decreasing \code{prior_sd} (i.e., a more informative prior). If that does not work, then  change the
+#' data type to \code{type = mixed}. This should work without a problem.
+#'
+#' The second error is from the categories. For example, if the error staes that the index is out of bounds, this
+#' means there are zeros in the data. The first category must be \code{1}. This can easily be addressed by adding 1 to the
+#' data matrix.
+#'
+#'
+#' \strong{Interpretation of conditional (in)dependence models for latent data}:
+#'
+#' See \code{\link{BGGM}} for details about the interpretation of GGMs based on latent data
+#' (i.e, all data types besides \code{"continuous"})
+#'
+#'
+#'
 #' @examples
-#' # p = 20
+#' # p = 5
 #' Y <- BGGM::bfi[, 1:5]
 #'
 #' # analytic approach (sample by setting analytic = FALSE)
@@ -106,7 +114,6 @@
 #' @export
 estimate  <- function(Y,
                       formula = NULL,
-                      data = NULL,
                       type = "continuous",
                       mixed_type = NULL,
                       analytic = FALSE,
@@ -114,31 +121,30 @@ estimate  <- function(Y,
                       iter = 5000,
                       ...){
 
-  # obervations
-  n <- nrow(Y)
-
-  # nodes
-  p <- ncol(Y)
-
-  # na omit
-  Y <- as.matrix(na.omit(Y))
-
   # delta rho ~ beta(delta/2, delta/2)
   delta <- delta_solve(prior_sd)
 
   # sample posterior
   if(!analytic){
 
-    message("BGGM: Posterior Sampling")
+    message(paste0("BGGM: Posterior Sampling ", ...))
 
     # continuous
     if(type == "continuous"){
 
-      # scale Y
-      Y <- scale(Y, scale = T)
-
       # no control
       if(is.null(formula)){
+
+        # na omit
+        Y <- as.matrix(na.omit(Y))
+
+        # scale Y
+        Y <- scale(Y, scale = F)
+
+        # nodes
+        p <- ncol(Y)
+
+        n <- nrow(Y)
 
         # posterior sample
         post_samp <- .Call(
@@ -155,8 +161,20 @@ estimate  <- function(Y,
         # control for variables
         } else {
 
-        # model matrix
-        X <- model.matrix(formula, data)
+          control_info <- remove_predictors_helper(list(as.data.frame(Y)),
+                                                   formula = formula)
+
+          # data
+          Y <- as.matrix(scale(control_info$Y_groups[[1]], scale = F))
+
+          # nodes
+          p <- ncol(Y)
+
+          # observations
+          n <- nrow(Y)
+
+          # model matrix
+          X <- as.matrix(control_info$model_matrices[[1]])
 
         # posterior sample
         post_samp <- .Call(
@@ -167,22 +185,44 @@ estimate  <- function(Y,
           epsilon = 0.1,
           iter = iter + 50
         )
-
-    } # end control
+      # end control
+      }
 
       # binary
-    } else if (type == "binary"){
-
+    } else if (type == "binary") {
 
       # intercept only
-      if(is.null(formula)){
-        X <- matrix(1, n, 1)
-        # model matrix
-      } else {
+      if (is.null(formula)) {
 
-        X <- model.matrix(formula, data)
+          # data
+          Y <- as.matrix(na.omit(Y))
 
-      }
+          # obervations
+          n <- nrow(Y)
+
+          # nodes
+          p <- ncol(Y)
+
+          X <- matrix(1, n, 1)
+
+        } else {
+
+          control_info <- remove_predictors_helper(list(as.data.frame(Y)),
+                                                   formula = formula)
+
+          # data
+          Y <-  as.matrix(control_info$Y_groups[[1]])
+
+          # observations
+          n <- nrow(Y)
+
+          # nodes
+          p <- ncol(Y)
+
+          # model matrix
+          X <- as.matrix(control_info$model_matrices[[1]])
+
+          }
 
       # posterior sample
       post_samp <-  .Call(
@@ -201,14 +241,38 @@ estimate  <- function(Y,
 
       # intercept only
       if(is.null(formula)){
+
+        # data
+        Y <- as.matrix(na.omit(Y))
+
+        # obervations
+        n <- nrow(Y)
+
+        # nodes
+        p <- ncol(Y)
+
+        # intercept only
         X <- matrix(1, n, 1)
 
         } else {
 
-        # model matrix
-        X <- model.matrix(formula, data)
+          control_info <- remove_predictors_helper(list(as.data.frame(Y)),
+                                                   formula = formula)
 
-      }
+          # data
+          Y <-  as.matrix(control_info$Y_groups[[1]])
+
+          # observations
+          n <- nrow(Y)
+
+          # nodes
+          p <- ncol(Y)
+
+          # model matrix
+          X <- as.matrix(control_info$model_matrices[[1]])
+
+          }
+
         # categories
         K <- max(apply(Y, 2, function(x) { length(unique(x))   } ))
 
@@ -227,21 +291,44 @@ estimate  <- function(Y,
 
           # no control variables allowed
           if(!is.null(formula)){
+
             warning("formula ignored for mixed data at this time")
+
+            control_info <- remove_predictors_helper(list(as.data.frame(Y)),
+                                                     formula = formula)
+
+            # data
+            Y <-  as.matrix(control_info$Y_groups[[1]])
+
             formula <- NULL
+
+          } else {
+
+             Y <- na.omit(Y)
+
             }
 
           # default for ranks
           if(is.null(mixed_type)) {
+
             idx = colMeans(round(Y) == Y)
             idx = ifelse(idx == 1, 1, 0)
+
             # user defined
             } else {
+
               idx = mixed_type
+
               }
 
-      # rank following hoff (2008)
-      rank_vars <- rank_helper(Y)
+          # observations
+          n <- nrow(Y)
+
+          # nodes
+          p <- ncol(Y)
+
+          # rank following hoff (2008)
+          rank_vars <- rank_helper(Y)
 
       post_samp <- .Call(
         "_BGGM_copula",
@@ -254,8 +341,8 @@ estimate  <- function(Y,
         epsilon = 0.1,
         idx = idx
       )
-
       } else {
+
         stop("'type' not supported: must be continuous, binary, ordinal, or mixed.")
       }
 
@@ -280,12 +367,26 @@ estimate  <- function(Y,
     } else {
 
       if(type != "continuous"){
+
         warning("analytic solution only available for 'type = continuous'")
         type <- "continuous"
-        }
+
+      }
+      if(!is.null(formula)){
+
+        stop("formula note permitted with the analytic solution")
+
+      }
+
+    Y <- na.omit(Y)
+
+    # observations
+    n <- nrow(Y)
 
     formula <- NULL
+
     analytic_fit <- analytic_solve(Y)
+
     results <- list(pcor_mat = analytic_fit$pcor_mat,
                     analytic_fit = analytic_fit,
                     analytic = analytic,
@@ -345,10 +446,9 @@ summary.estimate <- function(object,
   cn <-  colnames(object$Y)
 
 
-  if(col_names | is.null(cn)){
+  if(is.null(cn) | isFALSE(col_names)){
 
     mat_names <- sapply(1:p , function(x) paste(1:p, x, sep = "--"))[upper.tri(I_p)]
-
 
   } else {
 
@@ -464,7 +564,7 @@ print_estimate <- function(x, ...){
 #'
 #' @return an object of class \code{ggplot}
 #' @export
-plot.summary_estimate <- function(x, color = "black",
+plot.summary.estimate <- function(x, color = "black",
                                   size = 2,
                                   width = 0, ...){
 

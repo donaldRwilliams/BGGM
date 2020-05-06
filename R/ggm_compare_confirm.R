@@ -2,15 +2,12 @@
 #'
 #' @name ggm_compare_confirm
 #'
-#' @param ... at least two matrices (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).
+#' @param ... at least two matrices (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (nodes).
 #'
 #' @param hypothesis character string. hypothesis (or hypotheses) to be tested. See notes for futher details.
 #'
 #' @param formula an object of class \code{\link[stats]{formula}}. This allows for including
 #' control variables in the model (i.e., \code{~ gender}).
-#'
-#' @param data an optional data frame, list or environment (or an object coercible by \code{\link[base]{as.data.frame}})
-#' to a data frame containing the variables in \code{formula}. This is required when controlling for variables.
 #'
 #' @param prior_sd The scale of the prior distribution (centered at zero), in reference to a beta distribtuion.
 #' The `default` is 0.25. See note for further details.
@@ -33,71 +30,375 @@
 ggm_compare_confirm <- function(...,
                                 hypothesis,
                                 formula = NULL,
-                                data = NULL,
                                 type = "continuous",
                                 mixed_type = NULL,
                                 prior_sd = 0.20,
                                 iter = 5000){
-
-  # set seed
-  # set.seed(seed)
-
   # prior prob
   priorprob <- 1
 
   # delta parameter
-  delta <- BGGM:::delta_solve(prior_sd)
+  delta <- delta_solve(prior_sd)
 
-  # group info (e.g., n, p, etc)
-  info <- BGGM:::Y_combine(...)
+  # combine data
+  dat_list <- list(...)
 
-  # number of variables
-  p <- info$dat_info$p[1]
+  # combine data
+  info <- Y_combine(...)
 
   # groups
   groups <- length(info$dat)
 
-  # number of edges
+  if(type == "continuous"){
+
+    if(is.null(formula)){
+
+      post_samp <- lapply(1:groups, function(x) {
+
+        message("BGGM: Posterior Sampling ", "(Group ",x ,")")
+
+        # data
+        Y <- as.matrix(scale(dat_list[[x]], scale = F))
+
+        Y <- na.omit(Y)
+
+        .Call(
+          '_BGGM_Theta_continuous',
+          PACKAGE = 'BGGM',
+          Y = Y,
+          iter = iter + 50,
+          delta = delta,
+          epsilon = 0.1,
+          prior_only = 0,
+          explore = 1
+        )
+      })
+
+      # formula
+    } else {
+
+      post_samp <- lapply(1:groups, function(x) {
+
+        message("BGGM: Posterior Sampling ", "(Group ",x ,")")
+
+        control_info <- remove_predictors_helper(list(as.data.frame(dat_list[[x]])),
+                                                 formula = formula)
+
+        # data
+        Y <- as.matrix(scale(control_info$Y_groups[[1]], scale = F))
+
+        # nodes
+        p <- ncol(Y)
+
+        # observations
+        n <- nrow(Y)
+
+        # model matrix
+        X <- as.matrix(control_info$model_matrices[[1]])
+
+        # posterior sample
+        .Call(
+          "_BGGM_mv_continuous",
+          Y = Y,
+          X = X,
+          delta = delta,
+          epsilon = 0.1,
+          iter = iter + 50
+        )
+      })
+    }
+
+    } else if(type == "binary"){
+
+    # intercept only
+    if (is.null(formula)) {
+
+
+      post_samp <- lapply(1:groups, function(x) {
+        message("BGGM: Posterior Sampling ", "(Group ",x ,")")
+
+        # data
+        Y <- as.matrix(na.omit(dat_list[[x]]))
+
+        # obervations
+        n <- nrow(Y)
+
+        # nodes
+        p <- ncol(Y)
+
+        X <- matrix(1, n, 1)
+
+        # posterior sample
+      .Call(
+        "_BGGM_mv_binary",
+        Y = Y,
+        X = X,
+        delta = delta,
+        epsilon = 0.1,
+        iter = iter + 50,
+        beta_prior = 0.0001,
+        cutpoints = c(-Inf, 0, Inf)
+      )
+      })
+
+    } else {
+
+      post_samp <- lapply(1:groups, function(x) {
+
+        message("BGGM: Posterior Sampling ", "(Group ",x ,")")
+        control_info <- remove_predictors_helper(list(as.data.frame(dat_list[[x]])),
+                                                 formula = formula)
+
+        # data
+        Y <-  as.matrix(control_info$Y_groups[[1]])
+
+        # observations
+        n <- nrow(Y)
+
+        # nodes
+        p <- ncol(Y)
+
+        # model matrix
+        X <- as.matrix(control_info$model_matrices[[1]])
+
+        # posterior sample
+        .Call(
+          "_BGGM_mv_binary",
+          Y = Y,
+          X = X,
+          delta = delta,
+          epsilon = 0.1,
+          iter = iter + 50,
+          beta_prior = 0.0001,
+          cutpoints = c(-Inf, 0, Inf)
+        )
+      })
+    }
+
+  } else if(type == "ordinal"){
+
+    if(is.null(formula)){
+
+      post_samp <- lapply(1:groups, function(x) {
+
+        message("BGGM: Posterior Sampling ", "(Group ",x ,")")
+        # data
+        Y <- as.matrix(na.omit(dat_list[[x]]))
+
+        # obervations
+        n <- nrow(Y)
+
+        # nodes
+        p <- ncol(Y)
+
+        X <- matrix(1, n, 1)
+
+        # categories
+        K <- max(apply(Y, 2, function(x) { length(unique(x)) } ))
+
+        # posterior sample
+        # call c ++
+         .Call(
+          "_BGGM_mv_ordinal_albert",
+          Y = Y,
+          X = X,
+          iter = iter + 50,
+          delta = delta,
+          epsilon = 0.1,
+          K = K)
+      })
+
+      } else {
+
+        post_samp <- lapply(1:groups, function(x) {
+
+          message("BGGM: Posterior Sampling ", "(Group ", x ,")")
+
+          control_info <- remove_predictors_helper(list(as.data.frame(dat_list[[x]])),
+                                                   formula = formula)
+
+          # data
+          Y <-  as.matrix(control_info$Y_groups[[1]])
+
+          # observations
+          n <- nrow(Y)
+
+          # nodes
+          p <- ncol(Y)
+
+          # model matrix
+          X <- as.matrix(control_info$model_matrices[[1]])
+
+          # categories
+          K <- max(apply(Y, 2, function(x) { length(unique(x)) } ))
+
+          # posterior sample
+          # call c ++
+          .Call(
+            "_BGGM_mv_ordinal_albert",
+            Y = Y,
+            X = X,
+            iter = iter + 50,
+            delta = delta,
+            epsilon = 0.1,
+            K = K)
+        })
+  }
+
+} else if(type == "mixed") {
+
+    if(!is.null(formula)){
+
+      warning("formula ignored for mixed data at this time")
+
+      post_samp <- lapply(1:groups, function(x) {
+
+        message("BGGM: Posterior Sampling ", "(Group ",x ,")")
+
+        control_info <- remove_predictors_helper(list(as.data.frame(dat_list[[x]])),
+                                                 formula = formula)
+
+        # data
+        Y <-  as.matrix(control_info$Y_groups[[1]])
+
+        Y <- na.omit(Y)
+
+        # observations
+        n <- nrow(Y)
+
+        # nodes
+        p <- ncol(Y)
+
+        # default for ranks
+        if(is.null(mixed_type)) {
+
+          idx = colMeans(round(Y) == Y)
+          idx = ifelse(idx == 1, 1, 0)
+
+          # user defined
+        } else {
+
+          idx = mixed_type
+        }
+
+        # rank following hoff (2008)
+        rank_vars <- rank_helper(Y)
+
+        post_samp <- .Call(
+          "_BGGM_copula",
+          z0_start = rank_vars$z0_start,
+          levels = rank_vars$levels,
+          K = rank_vars$K,
+          Sigma_start = rank_vars$Sigma_start,
+          iter = iter + 50,
+          delta = delta,
+          epsilon = 0.1,
+          idx = idx
+        )
+        })
+
+    } else {
+
+
+      post_samp <- lapply(1:groups, function(x) {
+
+        message("BGGM: Posterior Sampling ", "(Group ",x ,")")
+
+        Y <- na.omit(dat_list[[x]])
+
+        # observations
+        n <- nrow(Y)
+
+        # nodes
+        p <- ncol(Y)
+
+        # default for ranks
+        if(is.null(mixed_type)) {
+
+          idx = colMeans(round(Y) == Y)
+          idx = ifelse(idx == 1, 1, 0)
+
+          # user defined
+        } else {
+
+          idx = mixed_type
+        }
+
+        # rank following hoff (2008)
+        rank_vars <- rank_helper(Y)
+
+        post_samp <- .Call(
+          "_BGGM_copula",
+          z0_start = rank_vars$z0_start,
+          levels = rank_vars$levels,
+          K = rank_vars$K,
+          Sigma_start = rank_vars$Sigma_start,
+          iter = iter + 50,
+          delta = delta,
+          epsilon = 0.1,
+          idx = idx
+        )
+      })
+      }
+
+  } else {
+    stop("'type' not supported: must be continuous, binary, ordinal, or mixed.")
+}
+
+  message("BGGM: Finished")
+
+  # sample prior
+  if(is.null(formula)){
+
+    Yprior <- as.matrix(dat_list[[1]])
+
+    prior_samp <- lapply(1:groups, function(x) {
+      .Call(
+        '_BGGM_sample_prior',
+        PACKAGE = 'BGGM',
+        Y = Yprior,
+        iter = 10000,
+        delta = delta,
+        epsilon = 0.1,
+        prior_only = 1,
+        explore = 0
+      )$fisher_z
+    })
+
+  } else {
+
+    control_info <- remove_predictors_helper(list(as.data.frame(dat_list[[1]])),
+                                             formula = formula)
+
+    Yprior <- as.matrix(scale(control_info$Y_groups[[1]], scale = F))
+
+    prior_samp <- lapply(1:groups, function(x) {
+
+      .Call(
+        '_BGGM_sample_prior',
+        PACKAGE = 'BGGM',
+        Y = Yprior,
+        iter = 10000,
+        delta = delta,
+        epsilon = 0.1,
+        prior_only = 1,
+        explore = 0
+      )$fisher_z
+    })
+  }
+
+  # nodes
+  p <- ncol(Yprior)
+
+  # number of pcors
   pcors <- 0.5 * (p * (p - 1))
 
   # identity matrix
   I_p <- diag(p)
 
-  # sample posterior
-  post_samp <- lapply(1:groups, function(x) {
-
-    Y <- as.matrix(scale(info$dat[[x]], scale = FALSE))
-
-    .Call(
-      '_BGGM_Theta_continuous',
-      PACKAGE = 'BGGM',
-      Y = Y,
-      iter = iter + 50,
-      delta = delta,
-      epsilon = 0.1,
-      prior_only = 0,
-      explore = 1
-    )
-  })
-
-  prior_samp <- lapply(1:groups, function(x) {
-
-    Y <- as.matrix(info$dat[[x]])
-
-    .Call(
-      '_BGGM_Theta_continuous',
-      PACKAGE = 'BGGM',
-      Y = Y,
-      iter = 10000,
-      delta = delta,
-      epsilon = 0.1,
-      prior_only = 1,
-      explore = 0
-    )$fisher_z
-  })
-
   # colnames: post samples
   col_names <- BGGM:::numbers2words(1:p)
+
   mat_names <- lapply(1:groups, function(x) paste0("g", BGGM:::numbers2words(x),
                sapply(col_names, function(x) paste(col_names, x, sep = ""))[upper.tri(I_p)]))
 
@@ -161,7 +462,7 @@ ggm_compare_confirm <- function(...,
   }
 
   # posterior hyp probs
-  out_hyp_prob <- BF_tu * priorprob / sum(BF_tu * priorprob)
+  out_hyp_prob <- (BF_tu * priorprob) / sum(BF_tu * priorprob)
 
   # BF matrix
   BF_matrix <- matrix(rep(BF_tu, length(BF_tu)),
@@ -174,6 +475,7 @@ ggm_compare_confirm <- function(...,
   BF_matrix <- t(BF_matrix) / (BF_matrix)
 
   row.names(BF_matrix) <- row.names(BFpost$BFtable_confirmatory)
+
   colnames(BF_matrix) <- row.names(BFpost$BFtable_confirmatory)
 
   returned_object <- list(
@@ -189,10 +491,83 @@ ggm_compare_confirm <- function(...,
     p = p,
     posterior_samples = posterior_samples,
     post_group = post_group,
-    delta = delta
+    delta = delta,
+    formula = formula,
+    dat_list = dat_list,
+    post_samp = post_samp
+
   )
 
-class(returned_object) <- c("BGGM", "confirm", "ggm_compare_confirm")
+class(returned_object) <- c("BGGM",
+                            "confirm",
+                            "ggm_compare_confirm")
 returned_object
 
 }
+
+
+
+print_ggm_confirm <- function(x, ...){
+  groups <- x$groups
+  info <- x$info_dat
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+
+  cat("Type:",  x$type ,  "\n")
+
+  cat("--- \n")
+
+  cat("Posterior Samples:", x$iter, "\n")
+
+  for(i in 1:groups){
+    cat("  Group", paste( i, ":", sep = "") , info$dat_info$n[[i]], "\n")
+  }
+  # number of variables
+  cat("Variables (p):", x$p, "\n")
+  # number of edges
+  cat("Relations:", .5 * (x$p * (x$p-1)), "\n")
+  cat("Delta:", x$delta, "\n")
+  cat("--- \n")
+
+  cat("Call:\n")
+
+  print(x$call)
+
+  cat("--- \n")
+
+  cat("Hypotheses: \n\n")
+
+  hyps <- strsplit(x$hypothesis, ";")
+
+  n_hyps <- length(hyps[[1]])
+
+  x$info$hypotheses[1:n_hyps] <- hyps[[1]]
+
+  n_hyps <- length(x$info$hypotheses)
+
+  for (h in seq_len(n_hyps)) {
+    cat(paste0("H", h,  ": ", gsub(" ", "", x$info$hypotheses[h])  ))
+    cat("\n")
+  }
+
+  cat("--- \n")
+
+  cat("Posterior prob: \n\n")
+
+  for(h in seq_len(n_hyps)){
+
+    cat(paste0("p(H",h,"|data) = ", round(x$out_hyp_prob[h], 3 )  ))
+    cat("\n")
+  }
+
+  cat("--- \n")
+
+  cat('Bayes factor matrix: \n')
+
+  print(round(x$BF_matrix, 3))
+
+  cat("--- \n")
+
+  cat("note: equal hypothesis prior probabilities")
+}
+
+

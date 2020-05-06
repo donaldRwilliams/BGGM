@@ -151,12 +151,13 @@ plot.select <- function(x,
 
       }
 
-
       ambiguous <- matrix(1, p, p) - diag(p) -  Adj_alt - Adj_null
 
       net_alt <- network::network(x$pcor_mat_zero)
+
       net_null <- network::network(Adj_null)
-      net_ambigous <- network(ambiguous)
+
+      net_ambigous <- network::network(ambiguous)
 
       if(is.null(cn) ) {
         cn <- 1:p
@@ -304,7 +305,7 @@ plot.select <- function(x,
       net_pos <- network::network(x$pos_mat * x$pcor_mat)
       net_neg <- network::network(x$neg_mat * x$pcor_mat)
       net_null <- network::network(x$null_mat)
-      net_ambigous <- network(ambiguous)
+      net_ambigous <- network::network(ambiguous)
 
       if(is.null(cn) ) {
         cn <- 1:p

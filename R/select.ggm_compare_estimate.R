@@ -83,9 +83,7 @@ select.ggm_compare_estimate <- function(object,
                             object = object,
                             rope = rope,
                             cred = cred)
-
     } else {
-
 
       # analytic
       critical <- abs(qnorm((1 - cred) / 2))
@@ -93,7 +91,6 @@ select.ggm_compare_estimate <- function(object,
       adj <- lapply(1:contrasts, function(x)  {
 
         ifelse(object$z_stat[[x]] > critical, 1, 0)
-
 
         })
 
@@ -112,7 +109,6 @@ select.ggm_compare_estimate <- function(object,
                               cred = cred)
 
       } # end analytic
-
 
     } else { # for rope. future direction
 

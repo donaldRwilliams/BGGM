@@ -14,9 +14,6 @@
 #' @param formula an object of class \code{\link[stats]{formula}}. This allows for including
 #' control variables in the model (e.g.,, \code{~ gender * education}).
 #'
-#' @param data an optional data frame, list or environment (or an object coercible by \code{\link[base]{as.data.frame}})
-#' to a data frame containing the variables in \code{formula}. This is required when controlling for variables.
-#'
 #' @param type character string. Which type of data for \strong{Y} ? The options include \code{continuous},
 #' \code{binary}, \code{ordinal}, or \code{mixed}. See the note for further details.
 #'
@@ -135,43 +132,43 @@
 confirm <- function(Y, hypothesis,
                     prior_sd = 0.25,
                     formula = NULL,
-                    data = NULL,
                     type = "continuous",
                     mixed_type = NULL,
                     iter = 25000){
 
-
-
   priorprob <- 1
 
   # hyperparameter
-  delta <- BGGM:::delta_solve(prior_sd)
+  delta <- delta_solve(prior_sd)
 
-  # variables
   p <- ncol(Y)
 
-  # observations
-  n <- nrow(Y)
-
-  # remove NAs
-  Y <- na.omit(Y)
-
-  # I_p
   I_p <- diag(p)
 
   # number of edges
   pcors <- p*(p-1)*0.5
 
-
   message("BGGM: Posterior Sampling")
+
   # continuous
   if(type == "continuous"){
 
-    # scale Y
-    Y <- scale(Y, scale = T)
+
+
 
     # no control
     if(is.null(formula)){
+
+      # na omit
+      Y <- as.matrix(na.omit(Y))
+
+      # scale Y
+      Y <- scale(Y, scale = F)
+
+      # nodes
+      p <- ncol(Y)
+
+      n <- nrow(Y)
 
       # posterior sample
       post_samp <- .Call(
@@ -188,8 +185,20 @@ confirm <- function(Y, hypothesis,
       # control for variables
     } else {
 
+      control_info <- remove_predictors_helper(list(as.data.frame(Y)),
+                                               formula = formula)
+
+      # data
+      Y <- as.matrix(scale(control_info$Y_groups[[1]], scale = F))
+
+      # nodes
+      p <- ncol(Y)
+
+      # observations
+      n <- nrow(Y)
+
       # model matrix
-      X <- model.matrix(formula, data)
+      X <- as.matrix(control_info$model_matrices[[1]])
 
       # posterior sample
       post_samp <- .Call(
@@ -204,20 +213,43 @@ confirm <- function(Y, hypothesis,
     } # end control
 
     # binary
-  } else if (type == "binary"){
+    } else if (type == "binary"){
 
 
-    # intercept only
-    if(is.null(formula)){
-      X <- matrix(1, n, 1)
-      # model matrix
-    } else {
+      # intercept only
+      if (is.null(formula)) {
 
-      X <- model.matrix(formula, data)
+        # data
+        Y <- as.matrix(na.omit(Y))
 
-    }
+        # obervations
+        n <- nrow(Y)
 
-    # posterior sample
+        # nodes
+        p <- ncol(Y)
+
+        X <- matrix(1, n, 1)
+
+      } else {
+
+        control_info <- remove_predictors_helper(list(as.data.frame(Y)),
+                                                 formula = formula)
+
+        # data
+        Y <-  as.matrix(control_info$Y_groups[[1]])
+
+        # observations
+        n <- nrow(Y)
+
+        # nodes
+        p <- ncol(Y)
+
+        # model matrix
+        X <- as.matrix(control_info$model_matrices[[1]])
+
+      }
+
+  # posterior sample
     post_samp <-  .Call(
       "_BGGM_mv_binary",
       Y = Y,
@@ -234,14 +266,38 @@ confirm <- function(Y, hypothesis,
 
     # intercept only
     if(is.null(formula)){
+
+      # data
+      Y <- as.matrix(na.omit(Y))
+
+      # obervations
+      n <- nrow(Y)
+
+      # nodes
+      p <- ncol(Y)
+
+      # intercept only
       X <- matrix(1, n, 1)
 
     } else {
 
-      # model matrix
-      X <- model.matrix(formula, data)
+      control_info <- remove_predictors_helper(list(as.data.frame(Y)),
+                                               formula = formula)
 
-    }
+      # data
+      Y <-  as.matrix(control_info$Y_groups[[1]])
+
+      # observations
+      n <- nrow(Y)
+
+      # nodes
+      p <- ncol(Y)
+
+      # model matrix
+      X <- as.matrix(control_info$model_matrices[[1]])
+
+      }
+
     # categories
     K <- max(apply(Y, 2, function(x) { length(unique(x))   } ))
 
@@ -259,17 +315,38 @@ confirm <- function(Y, hypothesis,
   } else if(type == "mixed"){
 
     # no control variables allowed
-    if(!is.null(formula)){
+    if (!is.null(formula)) {
+
       warning("formula ignored for mixed data at this time")
+
+      control_info <- remove_predictors_helper(list(as.data.frame(Y)),
+                                               formula = formula)
+
+      # data
+      Y <-  as.matrix(control_info$Y_groups[[1]])
+
       formula <- NULL
+
+    } else {
+
+      Y <- na.omit(Y)
     }
+
+    # observations
+    n <- nrow(Y)
+
+    # nodes
+    p <- ncol(Y)
 
     # default for ranks
     if(is.null(mixed_type)) {
+
       idx = colMeans(round(Y) == Y)
       idx = ifelse(idx == 1, 1, 0)
+
       # user defined
     } else {
+
       idx = mixed_type
     }
 
@@ -289,6 +366,7 @@ confirm <- function(Y, hypothesis,
     )
 
   } else {
+
     stop("'type' not supported: must be continuous, binary, ordinal, or mixed.")
   }
 

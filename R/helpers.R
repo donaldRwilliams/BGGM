@@ -8,6 +8,54 @@
 #' @import ggplot2
 
 
+remove_predictors_helper <- function(Y_groups, formula){
+
+  # number of groups
+  groups <- length(Y_groups)
+
+
+  Y_groups <- lapply(seq_len(groups), function(x)  na.omit(Y_groups[[x]]) )
+
+
+  model_matrices <- lapply(seq_len(groups) , function(x) {
+    model.matrix(formula, Y_groups[[x]])
+  })
+
+  # model matrix terms
+  mm_terms <- attr(terms(formula), "term.labels")
+
+  if(length(mm_terms) == 0){
+
+    Y_groups <- Y_groups
+
+  } else {
+
+    Y_groups <- lapply(seq_len(groups), function(x){
+
+      # check for factors
+      factor_pred <- which(paste0("as.factor(", colnames(Y_groups[[x]]), ")") %in% mm_terms)
+
+      # check for scaled
+      scale_pred <- which(paste0("scale(", colnames(Y_groups[[x]]), ")") %in% mm_terms)
+
+      # check for non factors
+      cont_pred <- which(colnames(Y_groups[[x]]) %in% mm_terms)
+
+      # remove predictors
+      Y_groups[[x]][,-c(factor_pred, cont_pred, scale_pred)]
+
+    })
+  }
+
+
+
+
+  list(Y_groups = Y_groups, model_matrices = model_matrices)
+
+}
+
+
+
 rank_helper <- function(Y){
 
   # adapted from hoff (2008). See documentation.
@@ -243,7 +291,7 @@ print_ggm_confirm <- function(x, ...){
   cat("Posterior Samples:", x$iter, "\n")
 
   for(i in 1:groups){
-    cat("  Group", paste( i, ":", sep = "") ,info$dat_info$n[[i]], "\n")
+    cat("  Group", paste( i, ":", sep = "") , info$dat_info$n[[i]], "\n")
   }
   # number of variables
   cat("Variables (p):", x$p, "\n")
@@ -625,7 +673,7 @@ print_summary_metric <- function(x, digits = 2,...){
   cat("Estimates:\n\n")
   dat <- x$summary
   colnames(dat) <- c(colnames(dat)[1:3], "Cred.lb", "Cred.ub")
-  print(as.data.frame( sapply(dat , round, digits)),
+  print(as.data.frame(dat),
         row.names = FALSE)
 }
 
@@ -714,64 +762,6 @@ summary_ggm_compare_ppc <- function(object, ...){
 print_ggm_compare_ppc <- function(x,...){
 
   print_summary_ggm_compare_ppc((summary_ggm_compare_ppc(x)))
-}
-
-
-
-
-
-
-
-print_coef <- function(x,...){
-
-  res_sigma <- x$inv_2_beta$sigma
-
-  lb <- (1 - x$cred) / 2
-
-  ub <- 1 - lb
-
-  cred_int <- stats::quantile(res_sigma, prob = c(lb, ub))
-
-  res_sigma_summ <- data.frame(Estimate = mean(res_sigma),
-                               Est.Error = sd(res_sigma),
-                               t(cred_int))
-
-  # R2
-  ypred <- t(apply(as.matrix(x$inv_2_beta$betas)[1:x$iter,], 1,
-                   function(z)  z %*% t(as.matrix(x$data[,- x$node]))))
-
-  r2 <- R2_helper(ypred, x$data[,x$node], ci_width = x$cred)
-  cred_in <- stats::quantile(r2$R2, prob = c(lb, ub))
-
-  res_r2_summ <- data.frame(Estimate = mean(r2$R2), Est.Error = sd(r2$R2), t(cred_in))
-
-  colnames(res_sigma_summ) <- c("Estimate", "Est.Error", "CrI.lb", "CrI.ub")
-
-  colnames(res_r2_summ) <- c("Estimate", "Est.Error", "CrI.lb", "CrI.ub")
-
-  colnames(x$summary_inv_2_beta) <- c("Node", "Estimate",
-                                      "Est.Error", "Cred.lb",
-                                      "Cred.ub")
-  cat("BGGM: Bayesian Gaussian Graphical Models \n")
-  cat("--- \n")
-  cat("Type: Inverse to Regression \n")
-  cat("Credible Interval:",  gsub("*0.","", formatC( round(x$cred, 4), format='f', digits=2)), "% \n")
-  cat("Node:", x$node, "\n")
-  cat("--- \n")
-  cat("Call: \n")
-  print(x$call)
-  cat("--- \n")
-  cat("Coefficients: \n \n")
-  summary_inv_2_beta <- data.frame(x$summary_inv_2_beta,
-                                   check.names = F)
-  print(summary_inv_2_beta, row.names = FALSE, ...)
-  cat("--- \n")
-  cat("Sigma:\n\n")
-  print(round(res_sigma_summ, 3), row.names = FALSE, ...)
-  cat("--- \n")
-  cat("Bayesian R2:\n\n")
-  print(round(res_r2_summ, 3), row.names = FALSE, ...)
-  cat("--- \n")
 }
 
 
@@ -1006,101 +996,6 @@ beta_helper <- function(x, which_one){
 
 }
 
-inverse_2_beta <- function(fit, samples = 500){
-  fit <- fit[1:6]
-
-  # check number of samples
-  if(samples > fit$iter){
-    stop("Samples used to compute R2 cannot be greater than the number used for fitting the model")
-
-  }
-
-  # get posterior estimate for precision matrix
-  inv <-  fit$posterior_samples[,  grep("cov_inv", colnames(fit$posterior_samples))]
-
-  # seperate estimates by row
-  node_wise_elements <- lapply(split(colnames(inv), 1:fit$p), function(x) inv[,x])
-
-  # convert off-diagonals to betas
-  betas <- lapply(1:fit$p, function(x) node_wise_elements[[x]][-x] *  as.matrix((1/ node_wise_elements[[x]][x]) ) * -1)
-
-  # convert diagonals to residual variance
-  sigmas <- lapply(1:fit$p, function(x) as.matrix((1/ node_wise_elements[[x]][x])))
-
-
-  # betas: select number of posterior samples
-  betas <- lapply(betas, function(x)  x[1:samples,])
-
-  # sigma: select number of posterior samples (sd scale)
-  sigmas <- lapply(sigmas, function(x) sqrt(x[1:samples,]))
-
-
-  # returned object
-  returned_object <- list(betas = betas,
-                          sigmas = sigmas,
-                          p = fit$p,
-                          data = fit$dat)
-
-  # assign class
-  class(returned_object) <- "inverse_2_beta"
-
-  returned_object
-}
-
-summary_beta_helper <- function(x, node, ci_width){
-  # index for row_names
-  row_names <- 1:x$p
-
-  # lower and upper ci
-  low <- (1 - ci_width) / 2
-  up <- 1 - low
-
-  # beta posterior mean
-  beta <- apply(x$betas[[node]], 2, mean)
-
-  # beta poster sd
-  post_sd <- apply(x$betas[[node]], 2, stats::sd)
-
-  # lower and upper of posterior
-  beta_ci <- t(apply(x$betas[[node]], 2, quantile, probs = c(low, up)))
-
-  # sd of the outcome
-  sd_y <- stats::sd(x$data[,node])
-
-  # sd of the predictors
-  sd_x <- apply(x$data[,-node], 2, stats::sd)
-
-  # standardized (std) beta
-  beta_std_temp <- x$betas[[node]] * (sd_x / sd_y)
-
-  # beta std posterior mean
-  beta_std <- apply(beta_std_temp, 2, mean)
-
-  # beta std posterior sd
-  beta_std_post_sd <- apply(beta_std_temp, 2, stats::sd)
-
-  # lower and upper of posterior
-  beta_std_ci <- t(apply(beta_std_temp, 2,  quantile, probs = c(low, up)))
-
-  returned_object <- round(cbind(Node =  row_names[-node],
-                                 beta,
-                                 post_sd,
-                                 beta_ci,
-                                 beta_std,
-                                 post_sd = beta_std_post_sd,
-                                 beta_std_ci),3)
-
-  # remove row names
-  row.names(returned_object ) <- NULL
-
-  # make list for naming purposes
-  returned_object <- list(as.data.frame(returned_object))
-
-  # list elemenet name as the response
-  names(returned_object) <- paste("predicting node", node)
-  returned_object$call <- match.call()
-  returned_object
-}
 
 
 R2_helper <- function(ypred, y, ci_width) {

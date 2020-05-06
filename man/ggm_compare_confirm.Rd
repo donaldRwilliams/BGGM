@@ -8,7 +8,6 @@ ggm_compare_confirm(
   ...,
   hypothesis,
   formula = NULL,
-  data = NULL,
   type = "continuous",
   mixed_type = NULL,
   prior_sd = 0.2,
@@ -16,15 +15,12 @@ ggm_compare_confirm(
 )
 }
 \arguments{
-\item{...}{at least two matrices (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).}
+\item{...}{at least two matrices (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (nodes).}
 
 \item{hypothesis}{character string. hypothesis (or hypotheses) to be tested. See notes for futher details.}
 
 \item{formula}{an object of class \code{\link[stats]{formula}}. This allows for including
 control variables in the model (i.e., \code{~ gender}).}
-
-\item{data}{an optional data frame, list or environment (or an object coercible by \code{\link[base]{as.data.frame}})
-to a data frame containing the variables in \code{formula}. This is required when controlling for variables.}
 
 \item{type}{character string. Which type of data for \strong{Y} ? The options include \code{continuous},
 \code{binary}, or \code{ordinal}. See the note for further details.}
