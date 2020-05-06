@@ -383,6 +383,8 @@ estimate  <- function(Y,
     # observations
     n <- nrow(Y)
 
+    p <- ncol(Y)
+
     formula <- NULL
 
     analytic_fit <- analytic_solve(Y)

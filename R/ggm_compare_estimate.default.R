@@ -244,6 +244,7 @@ ggm_compare_estimate <- function(...,
                 sep = "",
                 collapse = " - "))
 
+      p <- ncol(diff[[1]])
 
       returned_object <- list(
         z_stat = z_stat,
@@ -328,8 +329,13 @@ summary.ggm_compare_estimate <- function(object,
 
   dat_results <- list()
 
+
+
+
   # summary for comparison i
   for(i in seq_len(comparisons)){
+
+   if(isFALSE(object$analytic )){
 
     post_mean <- round(apply(object$diff[[i]], 1:2, mean), 3)[upper.tri(I_p)]
 
@@ -357,12 +363,26 @@ summary.ggm_compare_estimate <- function(object,
       "Cred.ub"
     )
 
-    if(isTRUE( object$analytic)){
+   } else {
 
-      results_i <- results_i[,1:2]
-    }
+     post_mean <- round(object$diff[[i]][upper.tri(I_p)], 3)
+
+     results_i <-
+       data.frame(
+         relation = mat_names,
+         post_mean =  post_mean
+       )
+
+
+     colnames(results_i) <- c(
+       "Relation",
+       "Post.mean"
+     )
+
+   }
 
     dat_results[[i]] <- results_i
+
   }
 
   returned_object <- list(dat_results = dat_results,
