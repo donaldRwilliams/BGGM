@@ -115,8 +115,11 @@ explore <- function(Y,
         # scale Y
         Y <- scale(Y, scale = F)
 
+        X <- NULL
+
         # nodes
         p <- ncol(Y)
+
 
         n <- nrow(Y)
 
@@ -140,6 +143,8 @@ explore <- function(Y,
 
         # data
         Y <- as.matrix(scale(control_info$Y_groups[[1]], scale = F))
+
+        X <- NULL
 
         # nodes
         p <- ncol(Y)
@@ -187,6 +192,8 @@ explore <- function(Y,
         # data
         Y <-  as.matrix(control_info$Y_groups[[1]])
 
+        X <- NULL
+
         # observations
         n <- nrow(Y)
 
@@ -218,6 +225,8 @@ explore <- function(Y,
 
         # data
         Y <- as.matrix(na.omit(Y))
+
+        X <- NULL
 
         # obervations
         n <- nrow(Y)
@@ -279,6 +288,7 @@ explore <- function(Y,
 
       Y <- na.omit(Y)
 
+      X = NULL
       }
 
     # observations
@@ -355,7 +365,8 @@ explore <- function(Y,
     Y = Y,
     call = match.call(),
     p = p,
-    n = n
+    n = n,
+    X = X
   )
 
   }else {

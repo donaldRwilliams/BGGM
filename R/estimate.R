@@ -7,6 +7,7 @@
 #' Bayesian hypothesis testing is implemented in \code{\link{explore}} and \code{\link{confirm}} \insertCite{Williams2019_bf}{BGGM}.
 #'
 #' @name estimate
+#'
 #' @param Y  matrix (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).
 #'
 #' @param formula an object of class \code{\link[stats]{formula}}. This allows for including
@@ -141,9 +142,13 @@ estimate  <- function(Y,
         # scale Y
         Y <- scale(Y, scale = F)
 
+        # design matrix
+        X <- NULL
+
         # nodes
         p <- ncol(Y)
 
+        # number of variables
         n <- nrow(Y)
 
         # posterior sample
@@ -306,12 +311,15 @@ estimate  <- function(Y,
 
              Y <- na.omit(Y)
 
+             X <- NULL
+
             }
 
           # default for ranks
           if(is.null(mixed_type)) {
 
             idx = colMeans(round(Y) == Y)
+
             idx = ifelse(idx == 1, 1, 0)
 
             # user defined

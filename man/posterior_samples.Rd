@@ -2,23 +2,20 @@
 % Please edit documentation in R/posterior_samples.R
 \name{posterior_samples}
 \alias{posterior_samples}
-\title{Extract posterior samples}
+\title{Extract Posterior Samples}
 \usage{
-posterior_samples(x, ...)
+posterior_samples(object, ...)
 }
 \arguments{
-\item{x}{A R object of class \code{estimate} or \code{explore}}
+\item{object}{an object of class \code{estimate} or \code{explore}.}
 
 \item{...}{currently ignored.}
 }
 \value{
-A matrix of posterior samples (corresponding to the upper-triangular elements)
+A matrix of posterior samples for the partial correlation. Note that if controlling for
+        variables (e.g., formula \code{~ age}), the matrix also includes the coefficients from each
+        multivariate regression.
 }
 \description{
-Extract posterior samples
-}
-\examples{
-Y <- BGGM::ptsd
-fit <- estimate(Y)
-posterior_samples(fit)
+Extract posterior samples for all parameters.
 }
