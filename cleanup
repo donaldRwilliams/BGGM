@@ -1,0 +1,5 @@
+#!/bin/sh
+
+rm -f config.* src/Makevars src/config.h inst/include/mfbvarConfigGenerated.h \
+      src/*.o src/*.so src/*.dll
+rm -rf autom4te.cache/
