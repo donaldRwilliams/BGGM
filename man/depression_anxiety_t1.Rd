@@ -3,7 +3,7 @@
 \docType{data}
 \name{depression_anxiety_t1}
 \alias{depression_anxiety_t1}
-\title{Depression and Anxiety (Time 1)}
+\title{Data: Depression and Anxiety (Time 1)}
 \format{
 A data frame containing 403 observations (n = 7466) and 16 variables (p = 16) measured on the 4-point
 likert scale.

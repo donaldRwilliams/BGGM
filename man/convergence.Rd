@@ -2,30 +2,84 @@
 % Please edit documentation in R/convergence.R
 \name{convergence}
 \alias{convergence}
-\title{MCMC Convergence Plots}
+\title{MCMC Convergence}
 \usage{
-convergence(x, type = "acf", param = "1--2")
+convergence(object, param = NULL, type = "trace", print_names = FALSE)
 }
 \arguments{
-\item{x}{object of class \code{estimate} or \code{explore}}
+\item{object}{an object of class \code{estimate} or \code{explore}}
 
-\item{type}{\code{acf} or \code{trace} plot}
+\item{param}{character string. Names of parameters for which to monitor MCMC convergence.}
 
-\item{param}{edge name(s) (e.g., "1--2" or c("1--2", "1--3"))}
+\item{type}{character string. Which type of convergence plot ? The current
+options are \code{trace} (default) and \code{acf}.}
+
+\item{print_name}{logical. Should the parameter names be printed (defaults to \code{FALSE})? This
+can be used to first determine the parameter names to specify in \code{type}.}
 }
 \value{
-\code{ggplots}
+a list of \code{ggplot} objects.
 }
 \description{
-Monitor converge of the MCMC sampler
+Monitor convergence of the MCMC algorithms.
+}
+\note{
+An overview of MCMC diagnostics can be found \href{http://sbfnk.github.io/mfiidd/mcmc_diagnostics.html}{here}.
 }
 \examples{
-# plot
-Y <- bfi[,1:5]
+\donttest{
+# data
+library(BGGM)
+Y <- ptsd
 
-# fit model
+#########################
+###### continuous #######
+#########################
 fit <- estimate(Y)
 
-# convergence plots
-convergence(fit, type = "trace")
+# print names first
+convergence(fit, print_names = TRUE)
+
+# trace plots
+convergence(fit, type = "trace",
+            param = c("B1--B2", "B1--B3"))
+
+# acf plots
+convergence(fit, type = "acf",
+            param = c("B1--B2", "B1--B3"))
+
+#########################
+######## mixed ##########
+#########################
+# copula
+
+fit <- estimate(Y, type = "mixed")
+
+# print names first
+convergence(fit, print_names = TRUE)
+
+# trace plots
+convergence(fit, type = "trace",
+            param = c("B1--B2", "B1--B3"))
+
+# acf plots
+convergence(fit, type = "acf",
+            param = c("B1--B2", "B1--B3"))
+
+#########################
+######## ordinal ########
+#########################
+fit <- estimate(Y + 1, type = "ordinal")
+
+# print names first
+convergence(fit, print_names = TRUE)
+
+# trace plots
+convergence(fit, type = "trace",
+            param = c("B1--B2", "B1--B3"))
+
+# acf plots
+convergence(fit, type = "acf",
+            param = c("B1--B2", "B1--B3"))
+}
 }

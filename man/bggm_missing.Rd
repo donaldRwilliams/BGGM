@@ -10,7 +10,7 @@ bggm_missing(x, method = "estimate", ...)
 \item{x}{an object of class \code{mid} \code{\link[mice]{mice}}.}
 
 \item{method}{character string. Which method should be used (default set to \code{estimate})? The current
-options are \code{estimate} and \code{explore}.}
+options are \code{"estimate"} and \code{"explore"}.}
 
 \item{...}{additional arguments passed to either
 \code{\link{estimate}} or \code{\link{explore}}.}
@@ -19,11 +19,24 @@ options are \code{estimate} and \code{explore}.}
 an object of class \code{estimate} or \code{explore}
 }
 \description{
-Estimation and Exploratory hypothesis testing with missing data.
+Estimation and exploratory hypothesis testing with missing data.
 }
 \note{
-Currently \strong{BGGM} works with the package \code{\link[mice]{mice}} for handling
-      the missing data.
+Currently, \strong{BGGM} is compatible with the package \code{\link[mice]{mice}} for handling
+      the missing data. This is accomplished by fitting a model for each imputed dataset
+      (i.e., more than one to account for uncertainty in the imputation step) and then pooling
+      the estimates.
+
+      In a future version, an additional option will be added that allows for
+      imputing the missing values during model fitting. This option will be incorporated directly into
+      the \code{\link{estimate}} or \code{\link{explore}} functions, such that \code{bggm_missing} will
+      always support missing data with \code{\link[mice]{mice}}.
+
+\strong{Support}:
+
+ There is limited support for missing data. As of version \code{2.0.0}, it is possible to
+ determine the graphical structure with either  \code{\link{estimate}} or \code{\link{explore}}, in addition
+ to plotting the graph with \code{\link{plot.select}}. All data types \emph{are} currently supported.
 }
 \examples{
 \donttest{

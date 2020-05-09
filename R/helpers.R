@@ -56,6 +56,47 @@ remove_predictors_helper <- function(Y_groups, formula){
 
 
 
+binary_latent_helper <- function(x){
+  # obervations
+  n <- nrow(x)
+
+  # variables
+  p <- ncol(x)
+
+  # thresholds
+  thresholds <- c(-Inf, 0, Inf)
+
+  # latent data
+  latent_data <- sapply(1:p, function(z) qnorm(runif(n, min = pnorm(thresholds[x[,z]], mean = 0, sd = 1),
+                                                     max = pnorm(thresholds[x[,z]+1], mean = 0, sd = 1)),
+                                               mean = 0, sd = 1))
+  # latent data (sd = 1)
+  latent_data <- scale(latent_data)
+  latent_data
+}
+
+
+ordinal_latent_helper <- function(x, thresholds){
+
+  # observations
+  n <- nrow(x)
+
+  # variables
+  p <- ncol(x)
+
+  thresholds <- t(sapply(1:p, function(x) colMeans(thresholds[,,x])))
+
+  latent_data <- sapply(1:p, function(z)  qnorm(runif(n, min=pnorm(thresholds[z, x[,z]], mean = 0, sd = 1),
+                                                      max=pnorm(thresholds[z, x[,z]+1], mean = 0, sd = 1)),
+                                                mean = 0, sd = 1))
+
+  latent_data <- scale(latent_data)
+
+  latent_data
+
+}
+
+
 rank_helper <- function(Y){
 
   # adapted from hoff (2008). See documentation.
@@ -655,27 +696,6 @@ print_post_pred <- function(x,...){
 
 
 
-
-print_summary_metric <- function(x, digits = 2,...){
-  cat("BGGM: Bayesian Gaussian Graphical Models \n")
-  cat("--- \n")
-  if(x$metric == "bayes_R2"){
-    cat("Metric:", "Bayes R2\n")
-  } else if(x$metric == "bayes_R2_diff"){
-    cat("Metric:", "Bayes R2 Difference \n")
-  } else {
-    cat("Metric:", x$metric, "\n")
-
-  }
-  cat("Type:", x$type, "\n")
-  cat("Credible Interval:", x$cred, "\n")
-  cat("--- \n")
-  cat("Estimates:\n\n")
-  dat <- x$summary
-  colnames(dat) <- c(colnames(dat)[1:3], "Cred.lb", "Cred.ub")
-  print(as.data.frame(dat),
-        row.names = FALSE)
-}
 
 
 

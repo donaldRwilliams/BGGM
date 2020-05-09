@@ -58,9 +58,16 @@ posterior_samples <- function(object, ...){
 
   if(!is.null(object$formula)){
 
-    # predictors
-    beta_terms <- colnames(fit$X)
+    # intercept only
+    if(ncol(object$X) == 1){
 
+      beta_terms <- "(Intercept)"
+
+    } else {
+    # predictors
+    beta_terms <- colnames(object$X)
+
+    }
     # number of terms
     n_beta_terms <- length(beta_terms)
 

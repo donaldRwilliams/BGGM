@@ -184,6 +184,8 @@ explore <- function(Y,
 
         X <- matrix(1, n, 1)
 
+        formula <- ~ 1
+
       } else {
 
         control_info <- remove_predictors_helper(list(as.data.frame(Y)),
@@ -236,6 +238,8 @@ explore <- function(Y,
 
         # intercept only
         X <- matrix(1, n, 1)
+
+        formula <- ~ 1
 
       } else {
 

@@ -1,75 +1,143 @@
-#' MCMC Convergence Plots
+#' MCMC Convergence
 #'
-#' Monitor converge of the MCMC sampler
+#' Monitor convergence of the MCMC algorithms.
 #'
-#' @param x object of class \code{estimate} or \code{explore}
-#' @param type \code{acf} or \code{trace} plot
-#' @param param edge name(s) (e.g., "1--2" or c("1--2", "1--3"))
+#' @param object an object of class \code{estimate} or \code{explore}
 #'
-#' @return \code{ggplots}
+#' @param param character string. Names of parameters for which to monitor MCMC convergence.
+#'
+#' @param type character string. Which type of convergence plot ? The current
+#'             options are \code{trace} (default) and \code{acf}.
+#'
+#' @param print_name logical. Should the parameter names be printed (defaults to \code{FALSE})? This
+#'                   can be used to first determine the parameter names to specify in \code{type}.
+#'
+#' @return a list of \code{ggplot} objects.
+#'
+#' @note An overview of MCMC diagnostics can be found \href{http://sbfnk.github.io/mfiidd/mcmc_diagnostics.html}{here}.
+#'
 #' @importFrom stats acf
-#' @export
 #'
 #' @examples
-#' # plot
-#' Y <- bfi[,1:5]
+#' \donttest{
+#' # data
+#' library(BGGM)
+#' Y <- ptsd
 #'
-#' # fit model
+#' #########################
+#' ###### continuous #######
+#' #########################
 #' fit <- estimate(Y)
 #'
-#' # convergence plots
-#' convergence(fit, type = "trace")
-convergence <- function(x, type = "acf", param = "1--2"){
+#' # print names first
+#' convergence(fit, print_names = TRUE)
+#'
+#' # trace plots
+#' convergence(fit, type = "trace",
+#'             param = c("B1--B2", "B1--B3"))
+#'
+#' # acf plots
+#' convergence(fit, type = "acf",
+#'             param = c("B1--B2", "B1--B3"))
+#'
+#' #########################
+#' ######## mixed ##########
+#' #########################
+#' # copula
+#'
+#' fit <- estimate(Y, type = "mixed")
+#'
+#' # print names first
+#' convergence(fit, print_names = TRUE)
+#'
+#' # trace plots
+#' convergence(fit, type = "trace",
+#'             param = c("B1--B2", "B1--B3"))
+#'
+#' # acf plots
+#' convergence(fit, type = "acf",
+#'             param = c("B1--B2", "B1--B3"))
+#'
+#' #########################
+#' ######## ordinal ########
+#' #########################
+#' fit <- estimate(Y + 1, type = "ordinal")
+#'
+#' # print names first
+#' convergence(fit, print_names = TRUE)
+#'
+#' # trace plots
+#' convergence(fit, type = "trace",
+#'             param = c("B1--B2", "B1--B3"))
+#'
+#' # acf plots
+#' convergence(fit, type = "acf",
+#'             param = c("B1--B2", "B1--B3"))
+#' }
+#' @export
+convergence <- function(object,
+                        param = NULL,
+                        type = "trace",
+                        print_names = FALSE){
 
+  # posterior samples
+  samps <- posterior_samples(object)
 
-  if(class(x) == 'estimate'){
+  # print names ?
+  if(!isFALSE(print_names)){
 
-    samps <- x$posterior_samples
-    p <-  x$p
+    print(colnames(samps))
 
-    mat <- matrix(0, p, p)
-    mat[] <- unlist(lapply(1:p, function(x) paste(1:p, x, sep = "--")))
-    samps <- samps[, grep("pcor", colnames(samps))]
-    colnames(samps) <-  unlist(as.list(mat))
+  } else {
 
+    # trace plot
+    if(type == "trace"){
 
-    if(type == "acf"){
+      # number of params
       params <- length(param)
-      plts <- lapply(1:params, function(x) {
 
-        dat <- with(acf(samps[,param[x]], plot = FALSE),
-                    data.frame(lag, acf));
-
-        ggplot(data = dat, mapping = aes(x = lag, y = acf)) +
-          geom_hline(aes(yintercept = 0)) +
-          geom_segment(mapping = aes(xend = lag, yend = 0)) +
-          ggtitle(param[x])
-      } )
-
-    } else if (type == "trace"){
-
-      params <- length(param)
-      plts <- lapply(1:params, function(x) {
+      plts <- lapply(1:params, function(x){
 
         dat <- as.data.frame( samps[,param[x]])
+
         dat$iteration <- 1:nrow(dat)
-        ggplot(data = dat, mapping = aes(x = iteration, y = dat[,1])) +
+
+        ggplot(data = dat,
+               mapping = aes(x = iteration,
+                             y = dat[,1])) +
           geom_line(alpha = 0.75) +
-          geom_hline(yintercept = mean(dat[,1]), color = "red")+
+          geom_hline(yintercept = mean(dat[,1]),
+                     color = "red")+
           ggtitle(param[x]) +
           ylab("Estimate")
-      } )
+      })
 
+    } else if(type == "acf"){
+
+      params <- length(param)
+
+      plts <- lapply(1:params, function(x) {
+
+        dat <- with(acf(samps[,param[x]],
+                        plot = FALSE),
+                    data.frame(lag, acf));
+
+        ggplot(data = dat,
+               mapping = aes(x = lag,
+                             y = acf)) +
+          geom_hline(aes(yintercept = 0)) +
+          geom_segment(mapping = aes(xend = lag,
+                                     yend = 0)) +
+          ggtitle(param[x])
+
+      })
 
     } else {
 
-      stop("type not supported")
+      stop("type not supported. must be 'trace' or 'acf'")
+
     }
 
-  } else {
-    stop("class not currently supported")
+    plts
   }
-
-  plts
 }
-

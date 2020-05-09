@@ -2,21 +2,20 @@
 % Please edit documentation in R/predict.estimate.R
 \name{predict.estimate}
 \alias{predict.estimate}
-\title{Prediction from an \code{estimate} Object}
+\title{Model Predictions for \coode{estimate} Objects}
 \usage{
-\method{predict}{estimate}(object, iter = 500, cred = 0.95, newdata = NULL, summary = TRUE, ...)
+\method{predict}{estimate}(object, newdata = NULL, summary = TRUE, cred = 0.95, iter = NULL, ...)
 }
 \arguments{
 \item{object}{object of class \code{estimate}}
 
-\item{iter}{iters used to compute the residuals}
+\item{newdata}{an optional data frame for obtaining predictions (e.g., on test data)}
+
+\item{summary}{summarize the posterior samples (defaults to \code{TRUE}).}
 
 \item{cred}{credible interval used for summarizing}
 
-\item{newdata}{an optional data frame for obtaining predictions (e.g., on test data)}
-
-\item{summary}{summarize the posterior samples (Default is \code{TRUE}).
-Setting it to \code{FALSE} can be used to then compute performance metrics.}
+\item{iter}{number of posterior samples (defaults to all in the object).}
 
 \item{...}{currently ignored}
 }
@@ -27,7 +26,7 @@ Setting it to \code{FALSE} can be used to then compute performance metrics.}
         list containing predictions for each variable
 }
 \description{
-Prediction from an \code{estimate} Object
+Model Predictions for \coode{estimate} Objects
 }
 \examples{
 \donttest{

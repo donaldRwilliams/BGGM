@@ -118,15 +118,12 @@ plot.select <- function(x,
     # end: select.estimate
   } else if (is(x, "select.explore")){
 
-
-
-
     if(x$alternative == "two.sided" |
        x$alternative == "greater" |
        x$alternative == "less"){
 
 
-      cn <- colnames( x$object$Y)
+      cn <- colnames(x$object$Y)
 
       p <- ncol(x$pcor_mat_zero)
 
@@ -295,12 +292,13 @@ plot.select <- function(x,
 
     } else if(x$alternative == "exhaustive"){
 
-      cn <- colnames( x$object$Y)
+      cn <- colnames(x$object$Y)
+
       p <- ncol(x$pcor_mat)
+
       diag(x$pcor_mat) <- 0
+
       ambiguous <- ifelse((x$neg_mat + x$pos_mat + x$null_mat) == 0, 1, 0)
-
-
 
       net_pos <- network::network(x$pos_mat * x$pcor_mat)
       net_neg <- network::network(x$neg_mat * x$pcor_mat)

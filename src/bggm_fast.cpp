@@ -1,5 +1,6 @@
 // -*- mode: C++; c-indent-level: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
 // we only include RcppArmadillo.h which pulls Rcpp.h in for us
+
 #include "RcppArmadillo.h"
 #include <progress.hpp>
 #include <progress_bar.hpp>
@@ -20,7 +21,7 @@ Rcpp::List Theta_continuous(arma::mat Y,
                             float delta,
                             float epsilon,
                             int prior_only,
-                            int explore) {
+                            int explore, arma::mat start) {
 
 
 
@@ -66,15 +67,12 @@ Rcpp::List Theta_continuous(arma::mat Y,
   // // #delta in Mulder & Pericchi (2018) formula (30) line 1.
   int deltaMP = nu - k + 1 ;
 
-
   // Psi update
   arma::cube Psi(k, k, 1, arma::fill::zeros);
 
   arma::mat B(epsilon * I_k);
   arma::mat BMP(inv(B));
   arma::mat BMPinv(inv(BMP));
-
-
 
   // precison matrix
   arma::cube Theta(k, k, 1, arma::fill::zeros);
@@ -84,18 +82,11 @@ Rcpp::List Theta_continuous(arma::mat Y,
   arma::mat pcors(k,k);
   arma::cube pcors_mcmc(k, k, iter, arma::fill::zeros);
 
-  // correlations
-  // arma::mat  cors(k,k);
-  // arma::cube cors_mcmc(k, k, iter, arma::fill::zeros);
-
-  // covariance matrix
-  // arma::cube Sigma_mcmc(k, k, iter, arma::fill::zeros);
   arma::cube Sigma(k, k, 1, arma::fill::zeros);
 
   // starting value
-  // Sigma.slice(0).fill(arma::fill::eye);
   Psi.slice(0).fill(arma::fill::eye);
-  Theta.slice(0).fill(arma::fill::eye);
+  Theta.slice(0) = start;
 
   arma::mat S_Y(Y.t() * Y);
 
@@ -127,15 +118,7 @@ Rcpp::List Theta_continuous(arma::mat Y,
       // sample Theta
       Theta.slice(0) =   wishrnd(inv(Psi.slice(0) + S_Y),  (deltaMP + k - 1) + (n - 1));
 
-      // Sigma
-      // Sigma.slice(0) = inv(Theta.slice(0));
-
     }
-
-    // correlation
-    // cors =  diagmat(1 / sqrt(Sigma.slice(0).diag())) *
-      // Sigma.slice(0) *
-      // diagmat(1 / sqrt(Sigma.slice(0).diag()));
 
     // partial correlations
     pcors = diagmat(1 / sqrt(Theta.slice(0).diag())) *
@@ -144,21 +127,15 @@ Rcpp::List Theta_continuous(arma::mat Y,
 
     // store posterior samples
     pcors_mcmc.slice(s) =  -(pcors - I_k);
-    // cors_mcmc.slice(s) =  cors;
-    // Sigma_mcmc.slice(s) = Sigma.slice(0);
-    // Theta_mcmc.slice(s) = Theta.slice(0);
 
-
-
-  }
+    }
 
   arma::cube fisher_z = atanh(pcors_mcmc);
+  arma::mat  pcor_mat = mean(pcors_mcmc, 2);
 
   Rcpp::List ret;
   ret["pcors"] = pcors_mcmc;
-  // ret["cors"] =  cors_mcmc;
-  // ret["Theta"] = Theta_mcmc;
-  // ret["Sigma"] = Sigma_mcmc;
+  ret["pcor_mat"] =  pcor_mat;
   ret["fisher_z"] = fisher_z;
   return ret;
 }
@@ -1639,4 +1616,303 @@ Rcpp::List beta_helper_fast(arma::cube XX,
 }
 
 
+// [[Rcpp::export]]
+Rcpp::List pred_helper_latent(arma::mat Y,
+                       arma::cube XX,
+                       arma::mat Xy,
+                       arma::vec quantiles,
+                       int n,
+                       int iter) {
 
+
+  arma::mat yhat(iter, n, arma::fill::zeros);
+
+  for(int s = 0; s < iter; ++s){
+
+    arma::vec yhat_s = Y * inv(XX.slice(s)).t() * Xy.col(s) ;
+
+    yhat.row(s) =  yhat_s.t();
+
+  }
+
+  // yhat
+  arma::mat yhat_mean = mean(yhat);
+
+  // quantiles
+  arma::mat yhat_quantiles = quantile(yhat, quantiles);
+
+  arma::mat yhat_sd = stddev(yhat);
+
+  // returned
+  Rcpp::List ret;
+
+  ret["yhat"] = yhat;
+  ret["yhat_mean"] = yhat_mean;
+  ret["yhat_sd"] = yhat_sd;
+  ret["yhat_quantiles"] = yhat_quantiles;
+  return ret;
+}
+
+
+// [[Rcpp::export]]
+float KL_univariate(float var_1, float var_2){
+
+  float kl = log(sqrt(var_2)/sqrt(var_1)) + (var_1/(2 * var_2)) -  0.5;
+  return kl;
+
+}
+
+// [[Rcpp::export]]
+Rcpp::List ppc_helper_nodewise_fast(arma::cube Theta,
+                                    int n1,
+                                    int n2,
+                                    int p){
+
+  int iter = Theta.n_slices;
+
+  arma::vec mu(p, arma::fill::zeros);
+
+  arma::mat kl(iter, p,  arma::fill::zeros);
+
+  for(int s = 0; s < iter; ++s){
+
+    arma::mat Sigma = inv(Theta.slice(s));
+
+    arma::mat R =  diagmat(1 / sqrt(Sigma.diag())) * Sigma * diagmat(1 / sqrt(Sigma.diag()));
+
+
+    arma::mat Yrep_1  = mvnrnd(mu, R, n1).t();
+    arma::mat Yrep_2  = mvnrnd(mu, R, n2).t();
+
+    arma::mat Yrep_cor_1 = cor(Yrep_1);
+    arma::mat Yrep_cor_2 = cor(Yrep_2);
+
+    for(int j = 0; j < p; ++j){
+
+      arma::mat pred_1 =  remove_col(Yrep_1, j) * trans(Sigma_i_not_i(Yrep_cor_1, j) *
+        inv(remove_row(remove_col(Yrep_cor_1, j), j)));
+
+      arma::mat pred_2 =  remove_col(Yrep_2, j) * trans(Sigma_i_not_i(Yrep_cor_2, j) *
+        inv(remove_row(remove_col(Yrep_cor_2, j), j)));
+
+      arma::mat var_1 = var(pred_1);
+      arma::mat var_2 = var(pred_2);
+
+      kl(s, j) = (KL_univariate(arma::conv_to<float>::from(var_1), arma::conv_to<float>::from(var_2)) +
+        KL_univariate(arma::conv_to<float>::from(var_2), arma::conv_to<float>::from(var_1)))  * 0.5;
+
+    }
+  }
+
+  Rcpp::List ret;
+  ret["kl"] = kl;
+  return ret;
+
+}
+
+
+// [[Rcpp::export]]
+double KL_divergnece_mvn(arma::mat Theta_1, arma::mat Theta_2) {
+
+  // number of variables
+  int p = Theta_1.n_cols;
+
+  arma::mat Sigma_1 = inv(Theta_1);
+
+  // identity matrix
+  arma::mat  I_p(p, p, arma::fill::eye);
+
+  double kl = 0.50 * (trace(Sigma_1 * Theta_2) -  log(det(Sigma_1 * Theta_2)) - p);
+
+
+  return kl;
+
+
+}
+
+// [[Rcpp::export]]
+float sum_squares(arma::mat Rinv_1, arma::mat Rinv_2){
+
+  arma::rowvec ss = sum(square(Rinv_1 - Rinv_2), 0);
+  return sum(ss);
+
+  }
+
+// [[Rcpp::export]]
+arma::vec my_dnorm( arma::vec x, arma::vec means, arma::vec sds){
+
+  int n = x.size() ;
+  arma::vec res(n) ;
+
+  for( int i=0; i<n; i++) res[i] = R::dnorm(x[i], means[i], sds[i],  FALSE) ;
+
+  return res;
+}
+
+// [[Rcpp::export]]
+float hamming_distance(arma::mat Rinv_1,
+                       arma::mat Rinv_2,
+                       float df1,
+                       float df2,
+                       float dens,
+                       int pcors,
+                       float BF_cut){
+
+  // approximate post sd
+  arma::mat se_1  = sqrt((1 - square(Rinv_1)) / (df1));
+  arma::mat se_2  = sqrt((1 - square(Rinv_2)) / (df2));
+
+  // upper-triangular
+  arma::uvec ids = trimatu_ind(size(se_1), 1);
+
+  // partial correlations
+  arma::vec r_1 = Rinv_1(ids);
+  arma::vec r_2 = Rinv_2(ids);
+
+  // sds
+  arma::vec se_up_1 = se_1(ids);
+  arma::vec se_up_2 = se_2(ids);
+
+  // matrix of zeros
+  arma::vec zerovec(pcors, arma::fill::zeros);
+
+  // mat for 0's and 1's
+  arma::vec sig_1(pcors, arma::fill::zeros);
+  arma::vec sig_2(pcors, arma::fill::zeros);
+
+  // density at zero
+  arma::vec dens_1 = my_dnorm(zerovec, r_1, se_up_1);
+  arma::vec dens_2 = my_dnorm(zerovec, r_2, se_up_2);
+
+  //
+  for(int i = 0; i < pcors; ++i){
+
+    // check BF_cut (group 1)
+    if((1 / (dens_1(i) / dens))  > BF_cut){
+
+      sig_1(i) = 1;
+
+    } else {
+
+      sig_1(i) = 0;
+
+    }
+
+    // check BF_cut (group 2)
+    if((1 / (dens_2(i) / dens))  > BF_cut){
+
+      sig_2(i) = 1;
+
+    } else {
+
+      sig_2(i) = 0;
+
+    }
+  }
+
+  return sum(square(sig_1 - sig_2));
+
+
+}
+
+// [[Rcpp::export]]
+float correlation(arma::mat Rinv_1,
+                  arma::mat Rinv_2){
+
+  arma::uvec ids = trimatu_ind(size(Rinv_1), 1);
+  arma::vec r_1 = Rinv_1(ids);
+  arma::vec r_2 = Rinv_2(ids);
+
+  arma::mat cor_nets = cor(r_1, r_2);
+
+  float cors = arma::conv_to<float>::from(cor_nets);
+
+  return cors;
+
+}
+
+
+// [[Rcpp::export]]
+Rcpp::List ppc_helper_fast(arma::cube Theta,
+                           int n1,
+                           int n2,
+                           int p,
+                           float BF_cut,
+                           float dens,
+                           bool ppc_ss,
+                           bool ppc_cors,
+                           bool ppc_hd){
+
+  int iter = Theta.n_slices;
+
+  arma::vec mu(p, arma::fill::zeros);
+
+  arma::vec kl(iter, arma::fill::zeros);
+
+  arma::vec ss(iter, arma::fill::zeros);
+
+  arma::vec hd(iter, arma::fill::zeros);
+
+  arma::vec cors(iter, arma::fill::zeros);
+
+  arma::mat Yrep_Rinv_1(p, p);
+
+  int df1 = n1 - (p-2) - 2;
+
+  int df2 = n2 - (p-2) - 2;
+
+  int pcors = (p * (p - 1)) * 0.5;
+
+  for(int s = 0; s < iter; ++s){
+
+    arma::mat Sigma = inv(Theta.slice(s));
+
+    arma::mat R =  diagmat(1 / sqrt(Sigma.diag())) * Sigma * diagmat(1 / sqrt(Sigma.diag()));
+
+    arma::mat Yrep_1  = mvnrnd(mu, R, n1).t();
+    arma::mat Yrep_2  = mvnrnd(mu, R, n2).t();
+
+    arma::mat Yrep_Theta_1 = inv(cov(Yrep_1));
+    arma::mat Yrep_Theta_2 = inv(cov(Yrep_2));
+
+    arma::mat Yrep_Rinv_1 = diagmat(1 / sqrt(Yrep_Theta_1.diag())) *
+      Yrep_Theta_1 *
+      diagmat(1 / sqrt(Yrep_Theta_1.diag()));
+
+    arma::mat Yrep_Rinv_2 = diagmat(1 / sqrt(Yrep_Theta_2.diag())) *
+      Yrep_Theta_2 *
+      diagmat(1 / sqrt(Yrep_Theta_2.diag()));
+
+    kl(s) = 0.5 * (KL_divergnece_mvn(Yrep_Rinv_1, Yrep_Rinv_2) +
+      KL_divergnece_mvn(Yrep_Rinv_2, Yrep_Rinv_1));
+
+    if(ppc_ss){
+
+      ss(s) = sum_squares(Yrep_Rinv_1, Yrep_Rinv_2) * 0.50;
+
+    }
+
+    if(ppc_hd){
+
+      hd(s) = hamming_distance(Yrep_Rinv_1,
+         Yrep_Rinv_2,
+         df1, df2, dens,
+         pcors, BF_cut);
+    }
+
+    if(ppc_cors){
+
+      cors(s) = correlation(Yrep_Rinv_1, Yrep_Rinv_2);
+
+    }
+
+  }
+
+  Rcpp::List ret;
+  ret["kl"] = kl;
+  ret["ss"] = ss;
+  ret["hd"] = hd;
+  ret["cors"] = cors;
+  return ret;
+
+}

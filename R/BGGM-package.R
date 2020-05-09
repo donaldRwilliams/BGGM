@@ -1,5 +1,6 @@
 #' BGGM:  Bayesian Gaussian Graphical Models
 #'
+#'
 #' @description The \code{R} package \strong{BGGM} provides tools for making Bayesian inference in
 #' Gaussian graphical models (GGM). The methods are organized around two general approaches for
 #' Bayesian inference: (1) estimation \insertCite{Williams2019}{BGGM} and (2) hypothesis testing

@@ -520,7 +520,7 @@ NULL
 
 #' Sachs Network
 #'
-#' Protein Expression In Human Immune System Cells
+#' Protein expression in human immune system cells
 #'
 #' @name sachs
 #'
@@ -613,7 +613,7 @@ NULL
 
 
 
-#' Depression and Anxiety (Time 1)
+#' Data: Depression and Anxiety (Time 1)
 #'
 #' A data frame containing 403 observations (n = 403) and 16 variables (p = 16) measured on the 4-point
 #' likert scale (depression: 9; anxiety: 7).
@@ -686,7 +686,7 @@ NULL
 
 
 
-#' Depression and Anxiety (Time 2)
+#' Data: Depression and Anxiety (Time 2)
 #'
 #' A data frame containing 403 observations (n = 403) and 16 variables (p = 16) measured on the 4-point
 #' likert scale  (depression: 9; anxiety: 7).
@@ -753,4 +753,75 @@ NULL
 #'
 #' Jones, P. J., Williams, D. R., & McNally, R. J. (2019). Sampling variability is not nonreplication:
 #' a Bayesian reanalysis of Forbes, Wright, Markon, & Krueger.
+NULL
+
+
+
+
+#' Data: Women and Mathematics
+#'
+#' A data frame containing 1190 observations (n = 1190) and 6 variables (p = 6) measured on the binary scale.
+#'
+#'\itemize{
+#'   \item \code{1}  Lecture attendance (attend/did not attend)
+#'   \item \code{2}  Gender (male/female)
+#'   \item \code{3}  School type (urban/suburban)
+#'   \item \code{4}  “I will be needing Mathematics in my future work” (agree/disagree)
+#'   \item \code{5}  Subject preference (math/science vs. liberal arts)
+#'   \item \code{6} Future plans (college/job)
+#'}
+#'
+#' @references
+#' \insertAllCited{}
+#'
+#' @docType data
+#'
+#' @keywords datasets
+#' @name women_math
+#'
+#' @usage data("women_math")
+#'
+#' @format A data frame containing 1190 observations (n = 1190) and 6 variables (p = 6) measured on the binary scale
+#'         \insertCite{fowlkes1988evaluating}{BGGM}. These data have been analyzed in \insertCite{tarantola2004mcmc;textual}{BGGM}
+#'         and in \insertCite{madigan1994model}{BGGM}. The variable descriptions were copied from  (section 5.2 )
+#'         \insertCite{@section 5.2, @talhouk2012efficient}{BGGM}
+#'
+#' @examples
+#' data("women_math")
+NULL
+
+
+
+#' @title Data: 1994 General Social Survey
+#'
+#' @description  A data frame containing 1002 rows and 7 variables measured on various scales,
+#' including binary and ordered cateogrical (with varying numbers of categories).
+#' There are also missing values in each variable
+#'
+#'\itemize{
+#'   \item \code{Inc}  Income of the respondent in 1000s of dollars, binned into 21 ordered categories.
+#'   \item \code{DEG}   Highest degree ever obtained (none, HS, Associates, Bachelors, or Graduate)
+#'   \item \code{CHILD}  Number of children ever had.
+#'   \item \code{PINC}  Financial status of respondent's parents when respondent was 16 (on a 5-point scale).
+#'   \item \code{PDEG}  Maximum of mother's and father's highest degree
+#'   \item \code{PCHILD}  Number of siblings of the respondent plus one
+#'   \item \code{AGE} Age of the respondent in years.
+#'}
+#'
+#' @references
+#' \insertAllCited{}
+#'
+#' @docType data
+#'
+#' @keywords datasets
+#' @name gss
+#'
+#' @usage data("gss")
+#'
+#' @format A data frame containing 1190 observations (n = 1190) and 6 variables (p = 6) measured on the binary scale
+#'         \insertCite{fowlkes1988evaluating}{BGGM}. The variable descriptions were copied from
+#'         \insertCite{@section 4, @hoff2007extending;textual}{BGGM}
+#'
+#' @examples
+#' data("gss")
 NULL

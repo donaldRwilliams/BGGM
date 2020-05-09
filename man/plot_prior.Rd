@@ -2,22 +2,24 @@
 % Please edit documentation in R/plot_prior.R
 \name{plot_prior}
 \alias{plot_prior}
-\title{Prior Distribution Plot}
+\title{Plot: Prior Distribution}
 \usage{
-plot_prior(prior_sd = 0.2, samples = 10000)
+plot_prior(prior_sd = 0.2, iter = 5000)
 }
 \arguments{
-\item{prior_sd}{hypothesized standard deviation for the edges or partial correlations.}
+\item{delta}{numeric. Hyperparameter that governs the scale of
+             the prior distribution. Larger values are more informative
+             (i.e., narrower).
 
-\item{samples}{number of samples drawn from the prior distribution}
+ @param iter number of iterations (posterior samples; defaults to 5000).}
 }
 \value{
-\code{ggplot object}
+a \code{ggplot} object.
 }
 \description{
+Visualize the implied prior distribution for the partial correlations. This is
+             particularly useful for the Bayesian hypothesis testing methods.
+
 Visualize the prior distribution used for the
 Bayesian hypothesis testing methods. This is governed by \code{prior_sd}.
-}
-\examples{
-plot_prior(prior_sd = c(0.1, 0.2, 0.3), samples = 1000)
 }

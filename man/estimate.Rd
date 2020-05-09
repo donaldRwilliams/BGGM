@@ -73,19 +73,10 @@ The graph is then selected with \code{\link{select.estimate}}, with either direc
 Bayesian hypothesis testing is implemented in \code{\link{explore}} and \code{\link{confirm}} \insertCite{Williams2019_bf}{BGGM}.
 }
 \note{
-The default is to draws samples from the posterior distribution (\code{analytic = FALSE}). The samples are
+The default is to draw samples from the posterior distribution (\code{analytic = FALSE}). The samples are
 required for computing edge differences (see \code{\link{ggm_compare_estimate}}), Bayesian R2 introduced in
 \insertCite{gelman_r2_2019;textual}{BGGM} (see \code{\link{bayes_R2}}), etc. If the goal is to *only* determine
-the non-zero effects, this can be accomplished by setting \code{analytic = TRUE}. Note also sampling is very fast--i.e.,
-less than 1 second with p = 25, n = 2500 and 5,000 samples.
-
-These methods are inherently Bayesian. This also means there is a close correspondence to "frequentist" methods. The prior
-distribution for \code{analytic = TRUE} is set to mimic the unbiased estimate of the sample based
-covariance matrix. When \code{analytic = FALSE}, samples are efficiently drawn from the posterior distribution.
-The advantage compared to frequentist methods is that a measure of uncertainty is readily available. This allows for
-seamlessly comparing partial correlation (see \code{\link{ggm_compare_estimate}}) and computing Bayesian R2
-(see \code{\link{test.R2}}). Further, the posterior probability of a null region (see \code{\link{select.estimate}})
-provides an estimate of the conditional independence structure (null effects).
+the non-zero effects, this can be accomplished by setting \code{analytic = TRUE}.
 
 
 \strong{Controlling for Variables}:
@@ -97,19 +88,19 @@ that are included in \code{formula} are removed from \code{Y}. An example is pro
 \strong{Dealing with Errors}:
 
 An error is most likely to arise when \code{type = "ordinal"}. The are two common errors (although still rare).
-The first is due to ampling the thresholds, especially when the data is
+The first is due to sampling the thresholds, especially when the data is
 heavily skewed. This can result in an ill-defined matrix. If this occurs, we recommend to first try
 decreasing \code{prior_sd} (i.e., a more informative prior). If that does not work, then  change the
-data type to \code{type = mixed}. This should work without a problem.
+data type to \code{type = mixed} which estimates a copula GGM. This should work without a problem.
 
-The second error is from the categories. For example, if the error staes that the index is out of bounds, this
+The second common error is from the categories. For example, if the error staes that the index is out of bounds, this
 means there are zeros in the data. The first category must be \code{1}. This can easily be addressed by adding 1 to the
 data matrix.
 
 
 \strong{Interpretation of conditional (in)dependence models for latent data}:
 
-See \code{\link{BGGM}} for details about the interpretation of GGMs based on latent data
+See \code{\link{BGGM-package}} for details about interpreting GGMs based on latent data
 (i.e, all data types besides \code{"continuous"})
 }
 \examples{

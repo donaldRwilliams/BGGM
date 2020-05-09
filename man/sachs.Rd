@@ -16,7 +16,7 @@ A data frame containing 7466 cells (n = 7466) and flow cytometry
 data("sachs")
 }
 \description{
-Protein Expression In Human Immune System Cells
+Protein expression in human immune system cells
 }
 \examples{
 data("sachs")

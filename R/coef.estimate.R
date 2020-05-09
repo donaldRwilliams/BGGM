@@ -1,14 +1,14 @@
-#' Compute Regression Parameters
+#' Compute Regression Parameters for \code{estimate} Objects
 #'
 #' @name coef.estimate
 
-#' @param object object of class \code{estimate} or \code{explore}
+#' @param object object of class \code{estimate}
 #'
-#' @param iter number of iterations (posterior samples; defaults to the number in the object).
+#' @param iter number of posterior samples (defaults to the number in the object).
 #'
-#' @param ... e.g., \code{digits}
+#' @param ... not currently used.
 #'
-#' @return list of class \code{coef.estimate}:
+#' @return
 #'
 #' @examples
 #' # p = 10
@@ -61,6 +61,89 @@ coef.estimate <- function(object, iter = NULL,...) {
     utils::setTxtProgressBar(pb, x)
 
     beta_p
+
+    })
+
+  } else {
+
+    stop("class not currently supported")
+
+  }
+
+  # remove samples so
+  # object does not become huge
+  object$post_samp <- 0
+
+  returned_object <- list(betas = betas, object = object)
+  class(returned_object) <- c("BGGM", "coef")
+  returned_object
+}
+
+
+
+#' Compute Regression Parameters for \code{explore} Objects
+#'
+#' @name coef.explore
+#'
+#' @param object object of class \code{explore}
+#'
+#' @param iter number of posterior samples (defaults to the number in the object).
+#'
+#' @param ... not currently used.
+#'
+#' @return
+#'
+#' @examples
+#' # p = 10
+#' Y <- BGGM::bfi[,1:10]
+#'
+#' # sample posterior
+#' fit <- estimate(Y, iter = 5000)
+#'
+#' # precision to regression
+#' coefficients(fit, node = 1, cred = 0.95)
+#' @export
+coef.explore <- function(object, iter = NULL,...) {
+
+  # check for object class
+  if(is(object, "estimate") | is(object, "explore")){
+
+    # check for default
+    if(!is(object, "default")){
+
+      stop(paste0("\nclass not supported. must be an object\n",
+                  "from either the 'explore' or 'estimate' functions"))
+    }
+
+    # nodes
+    p <- object$p
+
+    # all posterior samples
+    if(is.null(iter)){
+
+      iter <- object$iter
+
+    }
+
+    # pcor to cor
+    cors <- pcor_to_cor(object, iter = iter)$R
+
+    # betas
+
+    pb <- utils::txtProgressBar(min = 0, max = p, style = 3)
+
+    betas <- lapply(1:p, function(x) {
+
+      beta_p <- .Call("_BGGM_beta_helper_fast",
+                      XX = cors[-x, -x,],
+                      Xy = cors[x, -x,],
+                      p = p - 1,
+                      iter = iter
+      )$coefs
+
+      utils::setTxtProgressBar(pb, x)
+
+      beta_p
 
     })
 
