@@ -7,7 +7,7 @@
 plot_prior(prior_sd = 0.2, iter = 5000)
 }
 \arguments{
-\item{delta}{numeric. Hyperparameter that governs the scale of
+\item{delta}{Numeric. Hyperparameter that governs the scale of
              the prior distribution. Larger values are more informative
              (i.e., narrower).
 

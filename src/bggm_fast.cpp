@@ -27,9 +27,6 @@ Rcpp::List Theta_continuous(arma::mat Y,
 
   // note p changed to k to be consistent
   //with the multivariate regression samplers
-
-
-
   Progress  p(iter, TRUE);
 
   // number of rows
@@ -92,13 +89,11 @@ Rcpp::List Theta_continuous(arma::mat Y,
 
   for(int  s = 0; s < iter; ++s){
 
-
     p.increment();
 
     if (s % 250 == 0){
       Rcpp::checkUserInterrupt();
     }
-
 
     if(prior_only == 1){
 
@@ -149,14 +144,11 @@ Rcpp::List sample_prior(arma::mat Y,
                             int prior_only,
                             int explore) {
 
-
-
   // note p changed to k to be consistent
   //with the multivariate regression samplers
 
   // number of rows
-
- float n = Y.n_rows;
+  float n = Y.n_rows;
 
   int k = 1;
 
@@ -190,15 +182,12 @@ Rcpp::List sample_prior(arma::mat Y,
   // // #delta in Mulder & Pericchi (2018) formula (30) line 1.
   int deltaMP = nu - k + 1 ;
 
-
   // Psi update
   arma::cube Psi(k, k, 1, arma::fill::zeros);
 
   arma::mat B(epsilon * I_k);
   arma::mat BMP(inv(B));
   arma::mat BMPinv(inv(BMP));
-
-
 
   // precison matrix
   arma::cube Theta(k, k, 1, arma::fill::zeros);
@@ -224,7 +213,6 @@ Rcpp::List sample_prior(arma::mat Y,
   arma::mat S_Y(Y.t() * Y);
 
   for(int  s = 0; s < iter; ++s){
-
 
     if (s % 250 == 0){
       Rcpp::checkUserInterrupt();
@@ -270,9 +258,7 @@ Rcpp::List sample_prior(arma::mat Y,
     Sigma_mcmc.slice(s) = Sigma.slice(0);
     Theta_mcmc.slice(s) = Theta.slice(0);
 
-
-
-  }
+    }
 
   arma::cube fisher_z = atanh(pcors_mcmc);
 
@@ -366,8 +352,6 @@ Rcpp::List mv_continuous(arma::mat Y,
     if (s % 250 == 0){
       Rcpp::checkUserInterrupt();
     }
-
-
 
     // draw coefficients
     beta = reshape(mvnrnd(reshape(Sinv_X * X.t() * Y, k*p , 1),
@@ -487,7 +471,6 @@ Rcpp::List trunc_mvn(arma::mat mu,
     c.row(i).col(i) = 0;
   }
 
-
   // term
   arma::mat  term(T, 1, arma::fill::zeros);
 
@@ -537,7 +520,6 @@ Rcpp::List mv_binary(arma::mat Y,
   // iter: number of samples
   // cutpoints: truncation points
   // delta: hyperparameter
-
 
   // progress
   Progress  pr(iter, TRUE);
@@ -621,8 +603,6 @@ Rcpp::List mv_binary(arma::mat Y,
   // draw coefs conditional on w
   arma::mat gamma(p, k, arma::fill::zeros);
 
-
-
   arma::cube Dinv(k, k, 1, arma::fill::zeros);
   arma::mat D(k, k,  arma::fill::eye);
 
@@ -637,16 +617,11 @@ Rcpp::List mv_binary(arma::mat Y,
   // start sampling
   for(int s = 0; s < iter; ++s){
 
-
     pr.increment();
 
     if (s % 250 == 0){
       Rcpp::checkUserInterrupt();
     }
-
-
-
-
 
     // D matrix
     for(int i = 0; i < k; ++i){
@@ -942,9 +917,7 @@ Rcpp::List mv_ordinal_cowles(arma::mat Y,
     }
 
     for(int j = 0; j < n; ++j){
-
       for(int i = 0; i < k; ++i){
-
 
         R_numer(j, i) =  (R::pnorm5(c_thresh_mat(i , Y.col(i)[j], 0) - mm(j), 0, 1, TRUE, FALSE) -
           R::pnorm5(c_thresh_mat(i , Y.col(i)[j]-1 , 0) - mm(j), 0, 1, TRUE, FALSE));
@@ -954,12 +927,9 @@ Rcpp::List mv_ordinal_cowles(arma::mat Y,
       }
     }
 
-
-
     // remove nan
     R_numer.replace(arma::datum::nan, 0);
     R_denom.replace(arma::datum::nan, 0);
-
 
     // block update for each variable
     for(int j = 0; j < k; j ++){
@@ -970,8 +940,6 @@ Rcpp::List mv_ordinal_cowles(arma::mat Y,
         thresh_mat.slice(0).row(j) = c_thresh_mat.slice(0).row(j);
       }
     }
-
-
 
     for(int i = 0; i < k; ++i){
       D.row(i).col(i) = sqrt(1 / R::rgamma((deltaMP + k - 1) / 2,
@@ -1158,9 +1126,8 @@ Rcpp::List mv_ordinal_albert(arma::mat Y,
   Psi.slice(0).fill(arma::fill::eye);
   Sigma.slice(0).fill(arma::fill::eye);
 
- // draw coefs conditional on w
+  // draw coefs conditional on w
   arma::mat gamma(p, k, arma::fill::zeros);
-
 
   arma::cube thresh(iter, K+1, k, arma::fill::zeros);
 
@@ -1183,7 +1150,6 @@ Rcpp::List mv_ordinal_albert(arma::mat Y,
 
   for(int s = 1; s < iter; ++s ){
 
-
     pr.increment();
 
     if (s % 250 == 0){
@@ -1201,10 +1167,6 @@ Rcpp::List mv_ordinal_albert(arma::mat Y,
         Sigma_i_not_i(R.slice(0), i) *
         inv(remove_row(remove_col(R.slice(0), i), i)) *
         Sigma_i_not_i(R.slice(0), i).t();
-
-
-
-      // Rcpp::checkUserInterrupt();
 
       if(s == 1){
         // generate latent data
@@ -1316,8 +1278,6 @@ Rcpp::List mv_ordinal_albert(arma::mat Y,
 
   }
 
-  ////////////////////////////////////////////
-
   arma::cube fisher_z = atanh(pcors_mcmc);
 
   Rcpp::List ret;
@@ -1420,7 +1380,6 @@ Rcpp::List  copula(arma::mat z0_start,
       Rcpp::checkUserInterrupt();
     }
 
-
     for(int i = 0; i < k; ++i){
 
       mm = Sigma_i_not_i(Sigma.slice(0), i) *
@@ -1514,7 +1473,6 @@ Rcpp::List  copula(arma::mat z0_start,
 // [[Rcpp::export]]
 Rcpp::List pcor_to_cor_internal(arma::cube x, int p) {
 
-
   // slices
   int iter = x.n_slices;
 
@@ -1526,7 +1484,6 @@ Rcpp::List pcor_to_cor_internal(arma::cube x, int p) {
 
   // sigma matrix
   arma::mat Sigma_s(p, p);
-
 
   for(int s = 0; s < iter; ++s){
 
@@ -1645,7 +1602,6 @@ Rcpp::List pred_helper_latent(arma::mat Y,
 
   // returned
   Rcpp::List ret;
-
   ret["yhat"] = yhat;
   ret["yhat_mean"] = yhat_mean;
   ret["yhat_sd"] = yhat_sd;
@@ -1670,16 +1626,23 @@ Rcpp::List ppc_helper_nodewise_fast(arma::cube Theta,
 
   int iter = Theta.n_slices;
 
+  Progress  pr(iter, TRUE);
+
   arma::vec mu(p, arma::fill::zeros);
 
   arma::mat kl(iter, p,  arma::fill::zeros);
 
   for(int s = 0; s < iter; ++s){
 
+    pr.increment();
+
+    if (s % 250 == 0){
+      Rcpp::checkUserInterrupt();
+    }
+
     arma::mat Sigma = inv(Theta.slice(s));
 
     arma::mat R =  diagmat(1 / sqrt(Sigma.diag())) * Sigma * diagmat(1 / sqrt(Sigma.diag()));
-
 
     arma::mat Yrep_1  = mvnrnd(mu, R, n1).t();
     arma::mat Yrep_2  = mvnrnd(mu, R, n2).t();
@@ -1724,7 +1687,6 @@ double KL_divergnece_mvn(arma::mat Theta_1, arma::mat Theta_2) {
 
   double kl = 0.50 * (trace(Sigma_1 * Theta_2) -  log(det(Sigma_1 * Theta_2)) - p);
 
-
   return kl;
 
 
@@ -1734,17 +1696,19 @@ double KL_divergnece_mvn(arma::mat Theta_1, arma::mat Theta_2) {
 float sum_squares(arma::mat Rinv_1, arma::mat Rinv_2){
 
   arma::rowvec ss = sum(square(Rinv_1 - Rinv_2), 0);
+
   return sum(ss);
 
-  }
+}
 
 // [[Rcpp::export]]
 arma::vec my_dnorm( arma::vec x, arma::vec means, arma::vec sds){
 
-  int n = x.size() ;
-  arma::vec res(n) ;
+  int n = x.size();
 
-  for( int i=0; i<n; i++) res[i] = R::dnorm(x[i], means[i], sds[i],  FALSE) ;
+  arma::vec res(n);
+
+  for( int i=0; i < n; i++) res[i] = R::dnorm(x[i], means[i], sds[i],  FALSE) ;
 
   return res;
 }
@@ -1820,7 +1784,9 @@ float correlation(arma::mat Rinv_1,
                   arma::mat Rinv_2){
 
   arma::uvec ids = trimatu_ind(size(Rinv_1), 1);
+
   arma::vec r_1 = Rinv_1(ids);
+
   arma::vec r_2 = Rinv_2(ids);
 
   arma::mat cor_nets = cor(r_1, r_2);
@@ -1845,14 +1811,22 @@ Rcpp::List ppc_helper_fast(arma::cube Theta,
 
   int iter = Theta.n_slices;
 
+  // progress bar
+  Progress  pr(iter, TRUE);
+
+  // mean vector
   arma::vec mu(p, arma::fill::zeros);
 
+  // KL storage
   arma::vec kl(iter, arma::fill::zeros);
 
+  // sum of squares storage
   arma::vec ss(iter, arma::fill::zeros);
 
+  // hamming distance storage
   arma::vec hd(iter, arma::fill::zeros);
 
+  // correlation storage
   arma::vec cors(iter, arma::fill::zeros);
 
   arma::mat Yrep_Rinv_1(p, p);
@@ -1864,6 +1838,12 @@ Rcpp::List ppc_helper_fast(arma::cube Theta,
   int pcors = (p * (p - 1)) * 0.5;
 
   for(int s = 0; s < iter; ++s){
+
+    pr.increment();
+
+    if (s % 250 == 0){
+      Rcpp::checkUserInterrupt();
+    }
 
     arma::mat Sigma = inv(Theta.slice(s));
 
@@ -1916,3 +1896,4 @@ Rcpp::List ppc_helper_fast(arma::cube Theta,
   return ret;
 
 }
+

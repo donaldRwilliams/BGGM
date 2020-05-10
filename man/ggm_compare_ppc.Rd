@@ -4,71 +4,256 @@
 \alias{ggm_compare_ppc}
 \title{GGM Compare: Posterior Predictive Check}
 \usage{
-ggm_compare_ppc(..., type = "global", iter = 5000, cores = 1)
+ggm_compare_ppc(
+  ...,
+  test = "global",
+  iter = 5000,
+  FUN = NULL,
+  custom_obs = NULL,
+  loss = TRUE
+)
 }
 \arguments{
-\item{...}{data matrices (\emph{n} by  \emph{p}). Requires at least two.}
+\item{...}{At least two matrices (or data frames) of dimensions \emph{n} (observations) by  \emph{p} (variables).}
 
-\item{type}{\code{type = "global"} for testing the entire precision matrix. \code{type = "nodewise"} for testing each node (i.e., variable)}
+\item{test}{Which test should be performed (defaults to \code{"global"}) ? The options include
+\code{global} and \code{nodewise}.}
 
-\item{iter}{number of replicated data sets. default is \code{iter = 1000}.}
+\item{iter}{Number of replicated datasets used to construct the predictivie distribution
+(defaults to 5000).}
 
-\item{cores}{number of cores for parallel computing. The default is 2, but this can be adjusted.}
+\item{FUN}{An optional function for comparing GGMs that returns a number. See \strong{Details}.}
+
+\item{custom_obs}{Number corresponding to the observed score for comparing the GGMs. This is
+required if a function is provided in \code{FUN}. See \strong{Details}.}
+
+\item{loss}{Logical. If a function is provided, is the measure a "loss function"
+(i.e., a large score is bad thing). This determines how the \emph{p}-value
+is computed. See \strong{Details}.}
 }
 \value{
-list of class \code{ggm_compare_ppc}:
+The returned object of class \code{ggm_compare_ppc} contains a lot of information that
+        is used for printing and plotting the results. For users of \strong{BGGM}, the following
+        are the useful objects:
+
+\code{test = "global"}
 
 \itemize{
-\item \code{pvalue} posterior predictive p-values
-\item \code{obs_jsd} observed symmetric KL divergence (Jensen-Shannon divergence)
-\item \code{predictive_risk} list of predictive distributions
-\item  \code{info} list of information about the data matrices
 
-\itemize{
-\item \code{dat} list containing the data matrices
-\item \code{dat_info} sample size for each data matrix
-\item \code{pairwise} matrix of pairwise combinations
+\item \code{ppp_jsd} posterior predictive \emph{p}-values (JSD).
+
+\item \code{ppp_sse} posterior predictive \emph{p}-values (SSE).
+
+\item \code{predictive_jsd} list containing the posterior predictive distributions (JSD).
+
+\item \code{predictive_sse} list containing the posterior predictive distributions (SSE).
+
+\item \code{obs_jsd} list containing the observed error (JSD).
+
+\item \code{obs_sse} list containing the observed error (SSE).
+
 }
 
-\item \code{names} contrast names (e.g.., Yg1  vs Yg2)
-\item \code{iter}  number of posterior samples
-\item \code{type} "global"
-\item \code{call} match.call()
+
+\code{test = "nodewise"}
+
+\itemize{
+
+\item \code{ppp_jsd} posterior predictive \emph{p}-values (JSD).
+
+\item \code{predictive_jsd} list containing the posterior predictive distributions (JSD).
+
+\item \code{obs_jsd} list containing the observed error (JSD).
+
+}
+
+
+\code{FUN = f()}
+
+\itemize{
+
+\item \code{ppp_custom} posterior predictive \emph{p}-values (custom).
+
+\item \code{predictive_custom} posterior predictive distributions (custom).
+
+\item \code{obs_custom} observed error (custom).
+
 }
 }
 \description{
-Compare GGMs with a posterior predictive check. The method assumes group equality and the predictive check
-allows for testing whether that assumption should be modified (i.e., the GGMs are actually different). The current test
-statistic available is (symmeteric) Kullback-Leibler divergence that, in this case, can be understood as a likelihood
-ratio for multivariate normal distributions. There are two options: (1) \code{global} and (2) \code{nodewise}. The former tests the entire GGM and the
-latter test the each node in the model.
+Compare GGMs with a posterior predicitve check \insertCite{gelman1996posterior}{BGGM}.
+This method was introduced in \insertCite{williams2020comparing;textual}{BGGM}. Currently,
+there is a \code{global} (the entire GGM) and a \code{nodewise} test. The default
+is to compare GGMs with respect to the posterior predictive distribution of Kullback
+Leibler divergence and the sum of squared errors. It is also possible to compare the
+GGMs with a user defined test-statistic.
+}
+\details{
+The \code{FUN} argument allows for a user defined test-statisic (the measure used to compare the GGMs).
+The function must include only two agruments, each of which corresponds to a dataset. For example,
+\code{f <- function(Yg1, Yg2)}, where each Y is dataset of dimensions \emph{n} by \emph{p}. The
+groups are then compare within the function, returning a single number. An example is provided below.
+
+Further, when using a custom function care must be taken when specifying the argument \code{loss}.
+We recommended to visualize the results with \code{plot} to ensure the \emph{p}-value was computed
+in the right direction.
 }
 \note{
-This method is Bayesian, as it relies on the posterior predictive distribution.
-That said, there are clear parallels to frequentist testing-e.g., assuming group
-equality and critical regions. Most importantly, this method CANNOT provide evidence
-for the null hypothesis. Thus it can only reject the underlying assumption of group equality.
-For gaining (relative) evidence for the null hypothesis see..
+\strong{Interpretation}:
 
-see methods(class = "ggm_compare_ppc")
+The primary test-statistic is symmetric KL-divergence that is termed Jensen-Shannon divergence (JSD).
+This is in essence a likelihood ratio that provides the "distance" between two multivariate normal
+distributions. The basic idea is to (1) compute the posterior predictive distribution, assuming group equality
+(the null model). This provides the error that we would expect to see under the null model; (2) compute
+JSD for the observed groups; and (3) compare the observed JSD to the posterior predictive distribution,
+from which a posterior predictive \emph{p}-value is computed.
+
+For the \code{global} check, the sum of squared error is also provided.
+This is computed from the partial correlation matrices and it is analagous
+to the strength test in \insertCite{van2017comparing;textual}{BGGM}. The \code{nodewise}
+test compares the posterior predictive distribution for each node. This is based on the correspondence
+between the inverse covariance matrix and multiple regresssion \insertCite{kwan2014regression,Stephens1998}{BGGM}.
+
+If the null model is \code{not} rejected, note that this does \code{not} provide evidence for equality!
+Further, if the null model is rejected, this means that the assumption of group equality is not tenable--the
+groups are different.
+
+\strong{A Note on Model Selection}:
+
+ These methods do \bold{not} select edges. On the one hand, this may seem to be a limitation due to the structure
+ not being determined. On the other hand, this actually advantagous because it preserves the known distribution
+ of the partial correlations, covariances, etc. This is not possible when selecting a model, as the sampling
+ distribution is heavily distorted. In this way, the statisical properties of these parameters are not compromised.
+ I refer interested users to this \href{http://bactra.org/notebooks/post-model-selection-inference.html}{weblink},
+ that includes a treasure chest of resources related to post-selection inference (and the inherent issues of
+ model selection).
+
+ Note, however, that differences in the adjancency matrices (e.g., Hamming distance)
+ can be examined directly by specifying a custom function (\code{FUN}). See "example 2"
+ in the custom function section below. Importantly, those measures not included in
+ \bold{BGGM} should be investigated with simulation.
+
+\strong{Alternative Methods}:
+
+There are several methods in \strong{BGGM} for comparing groups. See
+\code{\link{ggm_compare_estimate}} (posterior differences for the
+partial correlations), \code{\link{ggm_compare_explore}} (exploratory hypothesis testing),
+and \code{\link{ggm_compare_confirm}} (confirmatory hypothesis testing).
 }
 \examples{
 \donttest{
-# Assume null is true
-Y1 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
-Y2 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
-Y3 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
+library(BGGM)
 
-# global predictive check (iter = 50 for demonstrative purposes)
-ggm_ppc <- ggm_compare_ppc(Y1, Y2, Y3,
-                           type = "global", iter = 50)
-summary(ggm_ppc)
+# data
+Y <- bfi
 
-plot(ggm_ppc)
+#############################
+######### global ############
+#############################
 
-# nodewise
-ggm_ppc  <- ggm_compare_ppc(Y1, Y2, Y3, type = "nodewise", iter = 50)
 
-plot(ggm_ppc, log = TRUE)
+# males
+Ym <- subset(Y, gender == 1,
+             select = - c(gender, education))
+
+# females
+
+Yf <- subset(Y, gender == 2,
+             select = - c(gender, education))
+
+
+global_test <- ggm_compare_ppc(Ym, Yf, iter = 5000)
+
+global_test
+
+
+#############################
+###### custom function ######
+#############################
+
+# example 1
+
+# maximum difference van Borkulo et al. (2017)
+
+f <- function(Yg1, Yg2){
+
+# remove NA
+x <- na.omit(Yg1)
+y <- na.omit(Yg2)
+
+# nodes
+p <- ncol(Yg1)
+
+# identity matrix
+I_p <- diag(p)
+
+# partial correlations
+
+pcor_1 <- -(cov2cor(solve(cor(x))) - I_p)
+pcor_2 <- -(cov2cor(solve(cor(y))) - I_p)
+
+# max difference
+max(abs((pcor_1[upper.tri(I_p)] - pcor_2[upper.tri(I_p)])))
+
 }
+
+# observed difference
+obs <- f(Ym, Yf)
+
+global_max <- ggm_compare_ppc(Ym, Yf,
+                                 iter = 1000,
+                                 FUN = f,
+                                 custom_obs = obs)
+
+global_max
+
+
+# example 2
+# Hamming distance (squared error for adjacency)
+
+f <- function(Yg1, Yg2){
+
+# remove NA
+x <- na.omit(Yg1)
+y <- na.omit(Yg2)
+
+# nodes
+p <- ncol(x)
+
+# identity matrix
+I_p <- diag(p)
+
+fit1 <-  estimate(x, analytic = T)
+fit2 <-  estimate(y, analytic = T)
+
+sel1 <- select(fit1)
+sel2 <- select(fit2)
+
+sum((sel1$adj[upper.tri(I_p)] - sel2$adj[upper.tri(I_p)])^2)
+
+}
+
+# observed difference
+obs <- f(Ym, Yf)
+
+global_hd <- ggm_compare_ppc(Ym, Yf,
+                            iter = 500,
+                            FUN = f,
+                            custom_obs  = obs)
+
+global_hd
+
+#############################
+########  nodewise ##########
+#############################
+
+nodewise <- ggm_compare_ppc(Ym, Yf, iter = 1000,
+                           test = "nodewise")
+
+nodewise
+
+}
+}
+\references{
+\insertAllCited{}
 }

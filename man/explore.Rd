@@ -16,88 +16,293 @@ explore(
 )
 }
 \arguments{
-\item{Y}{matrix (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).}
+\item{Y}{Matrix (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).}
 
-\item{formula}{an object of class \code{\link[stats]{formula}}. This allows for including
+\item{formula}{An object of class \code{\link[stats]{formula}}. This allows for including
 control variables in the model (i.e., \code{~ gender}).}
 
-\item{type}{character string. Which type of data for \strong{Y} ? The options include \code{continuous},
+\item{type}{Character string. Which type of data for \strong{Y} ? The options include \code{continuous},
 \code{binary}, \code{ordinal}, or \code{mixed} (semi-parametric copula). See the note for further details.}
 
-\item{mixed_type}{numeric vector. An indicator of length p for which varibles should be treated as ranks.
-(1 for rank and 0 to assume normality). The default is currently (dev version) to treat all integer variables
-as ranks when \code{type = "mixed"} and \code{NULL} otherwise. See note for further details.}
+\item{mixed_type}{Numeric vector. An indicator of length p for which varibles should be treated as ranks.
+(1 for rank and 0 to assume normality). The default is currently (dev version) to treat all integer
+variables as ranks when \code{type = "mixed"} and \code{NULL} otherwise. See note for further details.}
 
-\item{prior_sd}{hypothesized standard deviation for the edges or partial correlations}
+\item{analytic}{Logical. Should the analytic solution be computed (default is \code{FALSE})?
+(currently not implemented)}
 
-\item{iter}{number of iterations (posterior samples; defaults to 5000).}
+\item{prior_sd}{Scale of the prior distribution, approximately the standard deviation of a beta distribution.
+(defaults to 0.25).}
+
+\item{iter}{Number of iterations (posterior samples; defaults to 5000).}
 
 \item{...}{currently ignored.}
 }
 \value{
-list of class \code{explore}:
+The returned object of class \code{explore} contains a lot of information that
+        is used for printing and plotting the results. For users of \strong{BGGM}, the following
+        are the useful objects:
+
 \itemize{
-\item \code{parcors_mat} partial correlation matrix
-\item \code{parcors_sd} partial correlation standard deviations
-\item \code{samples} list of prior and posterior samples
-\itemize{
- \item \code{fisher_z_post} Fisher z transformed posterior distributions (partial correlations)
- \item  \code{pcor_post} partial correlation posterior distributions (not transformed)
- \item \code{inv_cov_post} inverse covariance matrix posterior distribution
- \item \code{pcor_prior} partial correlation prior distribution
- \item \code{fisher_z_prior}  Fisher z transformed prior distributions (partial correlations)
- }
-\item \code{delta} hyperparameter of matrix-F prior distribution (corresponds to \code{prior_sd})
-\item \code{iter} number of posterior and prior samples
-\item \code{dat} data matrix
-\item \code{call} match.call()
-\item \code{p} number of variables
-\item \code{cores} number of cores
-\item \code{edge} number of estimated edges
+
+\item \code{pcor_mat} partial correltion matrix (posterior mean).
+
+\item \code{post_samp} an object containing the posterior samples.
+
 }
 }
 \description{
 Learn the conditional (in)dependence structure with the Bayes factor using the matrix-F prior distribution
-\insertCite{Mulder2018}{BGGM}. It is
-possible to test for only positive or negative edges, as well as two sided hypothesis testing (which is the customary approach). Further
-there is also an exhaustive option that provides the posterior probability of the null, greater than zero, and less than zero.
+\insertCite{Mulder2018}{BGGM}. It is possible to test for only positive or negative edges, as well as two sided hypothesis
+testing (which is the customary approach). Further there is also an exhaustive option that provides the posterior
+probability of the null, greater than zero, and less than zero.
 These methods were introduced in \insertCite{Williams2019_bf;textual}{BGGM}.
+The graph is selected with \code{\link{select.estimate}} and
+then plotted with \code{\link{plot.select}}.
+}
+\details{
+\strong{Controlling for Variables}:
+
+When controlling for variables, it is assumed that \code{Y} includes \emph{only}
+the nodes in the GGM and the control variables. Internally, \code{only} the predictors
+that are included in \code{formula} are removed from \code{Y}. This is not behavior of, say,
+\code{\link{lm}}, but was adopted to ensure  users do not have to write out each variable that
+should be included in the GGM. An example is provided below.
+
+\strong{Mixed Type}:
+
+ The term "mixed" is somewhat of a misnomer, because the method can be used for data including \emph{only}
+ continuous or \emph{only} discrete variables. This is based on the ranked likelihood which requires sampling
+ the ranks for each variable (i.e., the data is not merely transformed to ranks). This is computationally
+ expensive when there are many levels. For example, with continuous data, there are as many ranks
+ as data points!
+
+ The option \code{mixed_type} allows the user to determine  which variable should be treated as ranks
+ and the "emprical" distribution is used otherwise. This is accomplished by specifying an indicator
+ vector of length \emph{p}. A one indicates to use the ranks, whereas a zero indicates to "ignore"
+ that variable. By default all integer variables are handled as ranks.
+
+
+
+
+
+\strong{Dealing with Errors}:
+
+An error is most likely to arise when \code{type = "ordinal"}. The are two common errors (although still rare):
+
+\itemize{
+
+\item The first is due to sampling the thresholds, especially when the data is heavily skewed.
+      This can result in an ill-defined matrix. If this occurs, we recommend to first try
+      decreasing \code{prior_sd} (i.e., a more informative prior). If that does not work, then
+      change the data type to \code{type = mixed} which then estimates a copula GGM
+      (this method can be used for data containing \strong{only} ordinal variable). This should
+      work without a problem.
+
+\item  The second is due to how the ordinal data are categorized. For example, if the error states
+       that the index is out of bounds, this indicates that the first category is a zero. This is not allowed, as
+       the first category must be one. This is addressed by adding one (e.g., \code{Y + 1}) to the data matrix.
+
+}
 }
 \note{
-After sampling from the posterior distribution, use \code{select} to determine the edge set and \code{plot} for visualizing the
-edge set. see \code{methods(class = "explore")}
+\strong{Posterior Uncertainty}:
 
-\strong{Interpretation of conditional (in)dependence models for latent data:}
+#' A key feature of \bold{BGGM} is that there is a posterior distribution for each partial correlation.
+This readily allows for visiualizing uncertainty in the estimates. This feature works
+with all data types and is accomplished by plotting the summary of the \code{explore} object
+(i.e., \code{plot(summary(fit))}). Note that in contrast to \code{estimate} (credible intervals),
+the posterior standard deviation is plotted with \code{explore} objects.
 
-A  tetrachoric correlation (binary data) is a special case of a polychoric correlation (ordinal data). Both relations are
-between "theorized normally distributed continuous latent variables"
-(\href{https://en.wikipedia.org/wiki/Polychoric_correlation}{Wikipedia})
-In both instances, the correpsonding partial correlation between observed variables is conditioned
-on the remaining variables in the \emph{latent} space. This implies that interpration is much the same as
-for continuous data, but with respect to latent variables. We refer interested reader to
-\insertCite{@page 2364, section 2.2, in  @webb2008bayesian;textual}{BGGM}.
+
+\strong{"Default" Prior}:
+
+ In Bayesian statistics, a default Bayes factor needs to have several properties. I refer
+ interested users to \insertCite{@section 2.2 in dablander2020default;textual}{BGGM}. In
+ \insertCite{Williams2019_bf;textual}{BGGM}, some of these propteries were investigated, such
+ model selection consistency. That said, we would not consider this a "default" Bayes factor and
+ thus we encourage users to perform sensitivity analyses by varying the scale of the prior
+ distribution.
+
+ Furthermore, it is important to note there is no "correct" prior and, also, there is no need
+ to entertain the possibility of a "true" model. Rather, the Bayes factor can be interpreted as
+ which hypothesis best (relative to each other) predicts the observed data
+ \insertCite{@Section 3.2 in @Kass1995}{BGGM}.
+
+\strong{Interpretation of Conditional (In)dependence Models for Latent Data}:
+
+See \code{\link{BGGM-package}} for details about interpreting GGMs based on latent data
+(i.e, all data types besides \code{"continuous"})
 }
 \examples{
-# p = 10
-Y <- BGGM::bfi[,1:10]
+\donttest{
 
-# sample posterior
-fit <- explore(Y, iter = 500)
+#########################################
+### example 1: continuous and ordinal ###
+#########################################
+# data
+Y <- ptsd
 
-# select E
-E <- select(fit, BF_cut = 3)
+# continuous
 
-# summarize
-summary(E)
+# fit model
+fit <- explore(Y, type = "continuous")
 
-# non-zero edges
-E$partials_non_zero
+# summarize the partial correlations
+summary(fit)
 
-# adjacency matrix
-E$Adj_10
+# plot the summary
+plot(summary(fit))
 
-# null adjacency matrix
-E$Adj_01
+# select the graph
+select(fit)
+
+# plot the selected graph
+plot(select(fit))
+
+
+# ordinal
+
+# fit model (note + 1, due to zeros)
+fit <- explore(Y + 1, type = "ordinal")
+
+# summarize the partial correlations
+summary(fit)
+
+# plot the summary
+plot(summary(fit))
+
+# select the graph
+select(fit)
+
+# plot the selected graph
+plot(select(fit))
+
+#########################
+### example 2: binary ###
+#########################
+# data
+Y <- women_math
+
+# fit model
+fit <- explore(Y, type = "binary")
+
+# summarize the partial correlations
+summary(fit)
+
+# plot the summary
+plot(summary(fit))
+
+# select the graph
+select(fit)
+
+# plot the selected graph
+plot(select(fit))
+
+########################################
+### example 3: control  with formula ###
+########################################
+# (the following works with all data types)
+
+# controlling for gender
+Y <- bfi
+
+# Y contains two control variables
+# (gender and education)
+
+# the following is incorrect, as education is
+# automatically included in Y !
+
+incorrect <- explore(Y, type = ~ gender)
+
+# to control for only gender
+# (remove education)
+
+# fit model
+Y <- subset(Y, select = - education)
+
+# summarize the partial correlations
+summary(fit)
+
+# plot the summary
+plot(summary(fit))
+
+# select the graph
+select(fit)
+
+# plot the selected graph
+plot(select(fit))
+
+# control for an intercation (for some reason ?)
+# (gender by education)
+
+# data
+Y <- bfi
+
+# fit model
+fit <- explore(Y, formula = ~ gender * education)
+
+# summarize the partial correlations
+summary(fit)
+
+# plot the summary
+plot(summary(fit))
+
+# select the graph
+select(fit)
+
+# plot the selected graph
+plot(select(fit))
+
+
+########################################
+### example 4: control  with "mixed" ###
+########################################
+# control with mixed data approach
+# (all variables included in Y)
+
+# data
+Y <- bfi
+
+# fit model
+fit <- explore(Y, type = "mixed")
+
+# summarize the partial correlations
+summary(fit)
+
+# plot the summary
+plot(summary(fit))
+
+# select the graph
+select(fit)
+
+# plot the selected graph
+plot(select(fit))
+
+
+##################################
+## example 5: analytic solution ##
+##################################
+# (only continuous)
+
+# data
+Y <- ptsd
+
+# fit model
+fit <- explore(Y, analytic = TRUE)
+
+# summarize the partial correlations
+summary(fit)
+
+# plot summary
+plot(summary(fit))
+
+# select graph
+select(fit)
+
+# plot the selected graph
+plot(select(fit))
+}
 }
 \references{
 \insertAllCited{}

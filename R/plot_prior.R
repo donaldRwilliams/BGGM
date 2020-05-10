@@ -8,7 +8,7 @@
 #' @description Visualize the prior distribution used for the
 #' Bayesian hypothesis testing methods. This is governed by \code{prior_sd}.
 #'
-#' @param delta numeric. Hyperparameter that governs the scale of
+#' @param delta Numeric. Hyperparameter that governs the scale of
 #'              the prior distribution. Larger values are more informative
 #'              (i.e., narrower).
 #'
@@ -27,7 +27,7 @@ plot_prior <- function(prior_sd = 0.2,
   Y_dummy <- matrix(rnorm(10 * 3),
                     nrow = 10, ncol = 3)
 
-  delta <- BGGM:::delta_solve(prior_sd)
+  delta <- delta_solve(prior_sd)
 
   # sample prior
   prior_samp <- .Call('_BGGM_sample_prior',

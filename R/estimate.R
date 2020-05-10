@@ -2,91 +2,111 @@
 #'
 #' @description Estimate the conditional (in)dependence with either an analytic solution or efficiently
 #' sampling from the posterior distribution. These methods were introduced in \insertCite{Williams2019;textual}{BGGM}.
-#' The graph is then selected with \code{\link{select.estimate}}, with either directional posterior probabilities
-#' \insertCite{Marsman2017a}{BGGM}, credible intervals, or a region of practical equivalence \insertCite{Kruschke2017}{BGGM}.
-#' Bayesian hypothesis testing is implemented in \code{\link{explore}} and \code{\link{confirm}} \insertCite{Williams2019_bf}{BGGM}.
+#' The graph is selected with \code{\link{select.estimate}} and then plotted with \code{\link{plot.select}}.
 #'
 #' @name estimate
 #'
-#' @param Y  matrix (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).
+#' @param Y  Matrix (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).
 #'
-#' @param formula an object of class \code{\link[stats]{formula}}. This allows for including
+#' @param formula An object of class \code{\link[stats]{formula}}. This allows for including
 #' control variables in the model (i.e., \code{~ gender}). See the note for further details.
 #'
-#' @param type character string. Which type of data for \strong{Y} ? The options include \code{continuous},
-#' \code{binary}, \code{ordinal}, or \code{mixed}. See the note for further details.
+#' @param type Character string. Which type of data for \strong{Y} ? The options include \code{continuous},
+#' \code{binary}, \code{ordinal}, or \code{mixed}. Note that mixed can be used for data with only
+#' ordinal variables. See the note for further details.
 #'
-#' @param mixed_type numeric vector. An indicator of length p for which varibles should be treated as ranks.
+#' @param mixed_type Numeric vector. An indicator of length \emph{p} for which varibles should be treated as ranks.
 #' (1 for rank and 0 to assume normality). The default is currently to treat all integer variables as ranks
 #' when \code{type = "mixed"} and \code{NULL} otherwise. See note for further details.
 #'
-#' Treating continous data as ranks is computationally expensive and can be avoided by assuming normality.
+#' @param iter Number of iterations (posterior samples; defaults to 5000).
 #'
-#' @param iter number of iterations (posterior samples; defaults to 5000).
+#' @param prior_sd Scale of the prior distribution, approximately the standard deviation of a beta distribution
+#' (defaults to 0.50).
 #'
-#' @param analytic logical. Should the analytic solution be computed (default is \code{FALSE})?
+#' @param analytic Logical. Should the analytic solution be computed (default is \code{FALSE})?
 #'
-#' @param ... currently ignored.
+#' @param ... Currently ignored.
 #'
 #' @references
 #' \insertAllCited{}
 #'
 #'
-#' @return  list of class \code{estimate}:
+#' @return The returned object of class \code{estimate} contains a lot of information that
+#'         is used for printing and plotting the results. For users of \strong{BGGM}, the following
+#'         are the useful objects:
 #'
-#' \code{analytic = TRUE}:
 #' \itemize{
-#' \item \code{fit} list of analytic solution estimates
-#' \itemize{
-#' \item \code{inv_mu} inverse covariance matrix (mean)
-#' \item \code{inv_var} inverse covariance matrix (variance)
-#' \item \code{partial} partial correlation matrix
-#' }
-#' \item \code{analytic} TRUE
-#' \item \code{call} match.call()
-#' \item \code{dat} data matrix
-#' \item \code{p} number of variables
-#' }
 #'
-#' \code{analytic = FALSE}:
-#' \itemize{
-#' \item \code{parcors_mat} partial correlation matrix
-#' \item \code{inv_mat} inverse covariance matrix
-#' \item \code{posterior samples} posterior samples for partial correlations and inverse covariance matrix
-#' \item \code{p} number of variables
-#' \item \code{dat} data matrix
-#' \item \code{iter} number of posterior samples
-#' \item \code{call} match.call()
-#' \item \code{analytic} FALSE
+#' \item \code{pcor_mat} partial correltion matrix (posterior mean).
+#'
+#' \item \code{post_samp} an object containing the posterior samples.
+#'
 #' }
 #'
 #'
-#' @note The default is to draw samples from the posterior distribution (\code{analytic = FALSE}). The samples are
+#' @details
+#'
+#' The default is to draw samples from the posterior distribution (\code{analytic = FALSE}). The samples are
 #' required for computing edge differences (see \code{\link{ggm_compare_estimate}}), Bayesian R2 introduced in
 #' \insertCite{gelman_r2_2019;textual}{BGGM} (see \code{\link{bayes_R2}}), etc. If the goal is to *only* determine
-#' the non-zero effects, this can be accomplished by setting \code{analytic = TRUE}.
+#' the non-zero effects, this can be accomplished by setting \code{analytic = TRUE}. This is particularly useful
+#' when a fast solution is needed (see the examples in \code{\link{ggm_compare_ppc}})
 #'
-#'
-#'\strong{Controlling for Variables}:
+#' \strong{Controlling for Variables}:
 #'
 #' When controlling for variables, it is assumed that \code{Y} includes \emph{only}
 #' the nodes in the GGM and the control variables. Internally, \code{only} the predictors
-#' that are included in \code{formula} are removed from \code{Y}. An example is provided below.
+#' that are included in \code{formula} are removed from \code{Y}. This is not behavior of, say,
+#' \code{\link{lm}}, but was adopted to ensure  users do not have to write out each variable that
+#' should be included in the GGM. An example is provided below.
+#'
+#' \strong{Mixed Type}:
+#'
+#'  The term "mixed" is somewhat of a misnomer, because the method can be used for data including \emph{only}
+#'  continuous or \emph{only} discrete variables. This is based on the ranked likelihood which requires sampling
+#'  the ranks for each variable (i.e., the data is not merely transformed to ranks). This is computationally
+#'  expensive when there are many levels. For example, with continuous data, there are as many ranks
+#'  as data points!
+#'
+#'  The option \code{mixed_type} allows the user to determine  which variable should be treated as ranks
+#'  and the "emprical" distribution is used otherwise. This is accomplished by specifying an indicator
+#'  vector of length \emph{p}. A one indicates to use the ranks, whereas a zero indicates to "ignore"
+#'  that variable. By default all integer variables are handled as ranks.
+#'
+#'
 #'
 #' \strong{Dealing with Errors}:
 #'
-#' An error is most likely to arise when \code{type = "ordinal"}. The are two common errors (although still rare).
-#' The first is due to sampling the thresholds, especially when the data is
-#' heavily skewed. This can result in an ill-defined matrix. If this occurs, we recommend to first try
-#' decreasing \code{prior_sd} (i.e., a more informative prior). If that does not work, then  change the
-#' data type to \code{type = mixed} which estimates a copula GGM. This should work without a problem.
+#' An error is most likely to arise when \code{type = "ordinal"}. The are two common errors (although still rare):
 #'
-#' The second common error is from the categories. For example, if the error staes that the index is out of bounds, this
-#' means there are zeros in the data. The first category must be \code{1}. This can easily be addressed by adding 1 to the
-#' data matrix.
+#' \itemize{
+#'
+#' \item The first is due to sampling the thresholds, especially when the data is heavily skewed.
+#'       This can result in an ill-defined matrix. If this occurs, we recommend to first try
+#'       decreasing \code{prior_sd} (i.e., a more informative prior). If that does not work, then
+#'       change the data type to \code{type = mixed} which then estimates a copula GGM
+#'       (this method can be used for data containing \strong{only} ordinal variable). This should
+#'       work without a problem.
+#'
+#' \item  The second is due to how the ordinal data are categorized. For example, if the error states
+#'        that the index is out of bounds, this indicates that the first category is a zero. This is not allowed, as
+#'        the first category must be one. This is addressed by adding one (e.g., \code{Y + 1}) to the data matrix.
+#'
+#' }
+#'
+#' @note
+#'
+#' \strong{Posterior Uncertainty}:
+#'
+#' A key feature of \bold{BGGM} is that there is a posterior distribution for each partial correlation.
+#' This readily allows for visiualizing uncertainty in the estimates. This feature works
+#' with all data types and is accomplished by plotting the summary of the \code{estimate} object
+#' (i.e., \code{plot(summary(fit))}). Several examples are provided below.
 #'
 #'
-#' \strong{Interpretation of conditional (in)dependence models for latent data}:
+#'
+#' \strong{Interpretation of Conditional (In)dependence Models for Latent Data}:
 #'
 #' See \code{\link{BGGM-package}} for details about interpreting GGMs based on latent data
 #' (i.e, all data types besides \code{"continuous"})
@@ -94,15 +114,174 @@
 #'
 #'
 #' @examples
-#' # p = 5
-#' Y <- BGGM::bfi[, 1:5]
+#' \donttest{
 #'
-#' # analytic approach (sample by setting analytic = FALSE)
-#' fit_analytic <- estimate(Y, analytic = TRUE)
+#' #########################################
+#' ### example 1: continuous and ordinal ###
+#' #########################################
+#' # data
+#' Y <- ptsd
 #'
-#' # select the graph (edge set E)
-#' E <- select(fit_analytic, ci_width = 0.95)
+#' # continuous
 #'
+#' # fit model
+#' fit <- estimate(Y, type = "continuous")
+#'
+#' # summarize the partial correlations
+#' summary(fit)
+#'
+#' # plot the summary
+#' plot(summary(fit))
+#'
+#' # select the graph
+#' select(fit)
+#'
+#' # plot the selected graph
+#' plot(select(fit))
+#'
+#'
+#' # ordinal
+#'
+#' # fit model (note + 1, due to zeros)
+#' fit <- estimate(Y + 1, type = "ordinal")
+#'
+#' # summarize the partial correlations
+#' summary(fit)
+#'
+#' # plot the summary
+#' plot(summary(fit))
+#'
+#' # select the graph
+#' select(fit)
+#'
+#' # plot the selected graph
+#' plot(select(fit))
+#'
+#' #########################
+#' ### example 2: binary ###
+#' #########################
+#' # data
+#' Y <- women_math
+#'
+#' # fit model
+#' fit <- estimate(Y, type = "binary")
+#'
+#' # summarize the partial correlations
+#' summary(fit)
+#'
+#' # plot the summary
+#' plot(summary(fit))
+#'
+#' # select the graph
+#' select(fit)
+#'
+#' # plot the selected graph
+#' plot(select(fit))
+#'
+#' ########################################
+#' ### example 3: control  with formula ###
+#' ########################################
+#' # (the following works with all data types)
+#'
+#' # controlling for gender
+#' Y <- bfi
+#'
+#' # Y contains two control variables
+#' # (gender and education)
+#'
+#' # the following is incorrect, as education is
+#' # automatically included in Y !
+#'
+#' incorrect <- estimate(Y, type = ~ gender)
+#'
+#' # to control for only gender
+#' # (remove education)
+#'
+#' # fit model
+#' Y <- subset(Y, select = - education)
+#'
+#' # summarize the partial correlations
+#' summary(fit)
+#'
+#' # plot the summary
+#' plot(summary(fit))
+#'
+#' # select the graph
+#' select(fit)
+#'
+#' # plot the selected graph
+#' plot(select(fit))
+#'
+#' # control for an intercation (for some reason ?)
+#' # (gender by education)
+#'
+#' # data
+#' Y <- bfi
+#'
+#' # fit model
+#' fit <- estimate(Y, formula = ~ gender * education)
+#'
+#' # summarize the partial correlations
+#' summary(fit)
+#'
+#' # plot the summary
+#' plot(summary(fit))
+#'
+#' # select the graph
+#' select(fit)
+#'
+#' # plot the selected graph
+#' plot(select(fit))
+#'
+#'
+#' ########################################
+#' ### example 4: control  with "mixed" ###
+#' ########################################
+#' # control with mixed data approach
+#' # (all variables included in Y)
+#'
+#' # data
+#' Y <- bfi
+#'
+#' # fit model
+#' fit <- estimate(Y, type = "mixed")
+#'
+#' # summarize the partial correlations
+#' summary(fit)
+#'
+#' # plot the summary
+#' plot(summary(fit))
+#'
+#' # select the graph
+#' select(fit)
+#'
+#' # plot the selected graph
+#' plot(select(fit))
+#'
+#'
+#' ##################################
+#' ## example 5: analytic solution ##
+#' ##################################
+#' # (only continuous)
+#'
+#' # data
+#' Y <- ptsd
+#'
+#' # fit model
+#' fit <- estimate(Y, analytic = TRUE)
+#'
+#' # summarize the partial correlations
+#' summary(fit)
+#'
+#' # plot summary
+#' plot(summary(fit))
+#'
+#' # select graph
+#' select(fit)
+#'
+#' # plot the selected graph
+#' plot(select(fit))
+#' }
 #' @export
 estimate  <- function(Y,
                       formula = NULL,
@@ -356,10 +535,7 @@ estimate  <- function(Y,
 
 
     pcor_mat <- round(apply(post_samp$pcors[,,51:(iter + 50)], 1:2, mean), 3)
-      pcor_sd <- round(apply(post_samp$pcors[,,51:(iter + 50)], 1:2, sd), 3)
-
-
-
+    pcor_sd <- round(apply(post_samp$pcors[,,51:(iter + 50)], 1:2, sd), 3)
 
     results <- list(
       pcor_mat = pcor_mat,
