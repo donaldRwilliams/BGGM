@@ -204,8 +204,10 @@ incorrect <- estimate(Y, type = ~ gender)
 # to control for only gender
 # (remove education)
 
-# fit model
 Y <- subset(Y, select = - education)
+
+ # fit model
+fit <- estimate(Y, type = ~ gender)
 
 # summarize the partial correlations
 summary(fit)

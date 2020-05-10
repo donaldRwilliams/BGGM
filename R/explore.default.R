@@ -30,7 +30,7 @@
 #'
 #' @param iter Number of iterations (posterior samples; defaults to 5000).
 #'
-#' @param ... currently ignored.
+#' @param ... Currently ignored (leave empty).
 #'
 #' @references
 #' \insertAllCited{}
@@ -301,6 +301,20 @@ explore <- function(Y,
                     prior_sd = 0.25,
                     iter = 5000,...){
 
+
+
+  dot_dot_dot <- list(...)
+
+  # check for groups
+  if(length(dot_dot_dot) == 0){
+
+    eps <- 0.01
+
+  } else {
+
+    eps <- 0.1
+  }
+
   # delta parameter
   delta <- delta_solve(prior_sd)
 
@@ -320,14 +334,16 @@ explore <- function(Y,
         # scale Y
         Y <- scale(Y, scale = F)
 
+        # NULL design matrix
         X <- NULL
 
         # nodes
         p <- ncol(Y)
 
-
+        # observations
         n <- nrow(Y)
 
+        # starting values
         start <- solve(cov(Y))
 
         # posterior sample
@@ -337,7 +353,7 @@ explore <- function(Y,
           Y = Y,
           iter = iter + 50,
           delta = delta,
-          epsilon = 0.01,
+          epsilon = eps,
           prior_only = 0,
           explore = 1,
           start = start
@@ -369,7 +385,7 @@ explore <- function(Y,
           Y = Y,
           X = X,
           delta = delta,
-          epsilon = 0.1,
+          epsilon = eps,
           iter = iter + 50
         )
 
@@ -478,7 +494,7 @@ explore <- function(Y,
       X = X,
       iter = iter + 50,
       delta = delta,
-      epsilon = 0.1,
+      epsilon = 0.01,
       K = K
     )
 
@@ -532,7 +548,7 @@ explore <- function(Y,
       Sigma_start = rank_vars$Sigma_start,
       iter = iter + 50,
       delta = delta,
-      epsilon = 0.1,
+      epsilon = 0.01,
       idx = idx
     )
 
@@ -554,7 +570,7 @@ explore <- function(Y,
                       Y = Y_dummy,
                       iter = iter,
                       delta = delta,
-                      epsilon = 0.01,
+                      epsilon = eps,
                       prior_only = 1,
                       explore = 1)
 
@@ -578,7 +594,8 @@ explore <- function(Y,
     call = match.call(),
     p = p,
     n = n,
-    X = X
+    X = X,
+    eps = eps
   )
 
   }else {

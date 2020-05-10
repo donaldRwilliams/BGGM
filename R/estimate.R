@@ -26,6 +26,8 @@
 #'
 #' @param analytic Logical. Should the analytic solution be computed (default is \code{FALSE})?
 #'
+#' @param seed An integer for the random seed.
+#'
 #' @param ... Currently ignored.
 #'
 #' @references
@@ -197,8 +199,10 @@
 #' # to control for only gender
 #' # (remove education)
 #'
-#' # fit model
 #' Y <- subset(Y, select = - education)
+#'
+#'  # fit model
+#' fit <- estimate(Y, type = ~ gender)
 #'
 #' # summarize the partial correlations
 #' summary(fit)
@@ -290,7 +294,12 @@ estimate  <- function(Y,
                       analytic = FALSE,
                       prior_sd = 0.25,
                       iter = 5000,
+                      seed = 1,
                       ...){
+
+  old <- .Random.seed
+
+  set.seed(seed)
 
   # delta rho ~ beta(delta/2, delta/2)
   delta <- delta_solve(prior_sd)
@@ -591,6 +600,7 @@ estimate  <- function(Y,
 
     } # end analytic
 
+  .Random.seed <<- old
   returned_object <- results
   class(returned_object) <- c("BGGM", "estimate", "default")
   return(returned_object)

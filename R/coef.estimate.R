@@ -1,24 +1,142 @@
 #' Compute Regression Parameters for \code{estimate} Objects
 #'
+#'  There is a direct correspondence between the inverse covariance matrix and
+#'  multiple regression \insertCite{kwan2014regression,Stephens1998}{BGGM}. This readily allows
+#'  for converting the GGM paramters to regression coefficients. All data types are supported.
+#'
+#'
 #' @name coef.estimate
-
-#' @param object object of class \code{estimate}
 #'
-#' @param iter number of posterior samples (defaults to the number in the object).
+#' @param object An Object of class \code{estimate}
 #'
-#' @param ... not currently used.
+#' @param iter Number of iterations (posterior samples; defaults to the number in the object).
 #'
-#' @return
+#' @param ... Not currently used.
+#'
+#' @references
+#' \insertAllCited{}
+#'
+#' @return An object of class \code{coef}, containting two lists.
+#'
+#'
+#' \itemize{
+#'
+#' \item \code{betas} A list of length \emph{p}, each containing a \emph{p} - 1 by \code{iter} matrix of
+#' posterior samples
+#'
+#' \item \code{object} An object of class \code{estimate} (the fitted model).
+#' }
 #'
 #' @examples
-#' # p = 10
-#' Y <- BGGM::bfi[,1:10]
+#' \donttest{
+#' #########################################
+#' ### example 1: continuous and ordinal ###
+#' #########################################
+#' # data
+#' Y <- ptsd
 #'
-#' # sample posterior
-#' fit <- estimate(Y, iter = 5000)
+#' # continuous
 #'
-#' # precision to regression
-#' coefficients(fit, node = 1, cred = 0.95)
+#' # fit model
+#' fit <- estimate(Y, type = "continuous")
+#'
+#' # regression
+#' reg <- coef(fit)
+#'
+#' # summary(reg)
+#'
+#'
+#' # ordinal
+#'
+#' # fit model (note + 1, due to zeros)
+#' fit <- estimate(Y + 1, type = "ordinal")
+#'
+#' # summarize the partial correlations
+#' reg <- coef(fit)
+#'
+#' # summary
+#' summary(reg)
+#'
+#' #########################
+#' ### example 2: binary ###
+#' #########################
+#' # data
+#' Y <- women_math
+#'
+#' # fit model
+#' fit <- estimate(Y, type = "binary")
+#'
+#' # summarize the partial correlations
+#' reg <- coef(fit)
+#'
+#' # summary
+#' summary(reg)
+#'
+#' ########################################
+#' ### example 3: control  with formula ###
+#' ########################################
+#' # (the following works with all data types)
+#'
+#' # controlling for gender
+#' Y <- bfi
+#'
+#' # Y contains two control variables
+#' # (gender and education)
+#'
+#' # the following is incorrect, as education is
+#' # automatically included in Y !
+#'
+#' incorrect <- estimate(Y, type = ~ gender)
+#'
+#' # to control for only gender
+#' # (remove education)
+#'
+#' Y <- subset(Y, select = - education)
+#'
+#'  # fit model
+#' fit <- estimate(Y, type = ~ gender)
+#'
+#' # regression
+#' reg <- coef(fit)
+#'
+#' # summary
+#' summary(reg)
+#'
+#'
+#' # control for an intercation (for some reason ?)
+#' # (gender by education)
+#'
+#' # data
+#' Y <- bfi
+#'
+#' # fit model
+#' fit <- estimate(Y, formula = ~ gender * education)
+#'
+#' # regression
+#' reg <- coef(fit)
+#'
+#' # summary
+#' summary(reg)
+#'
+#' ########################################
+#' ### example 4: control  with "mixed" ###
+#' ########################################
+#' # control with mixed data approach
+#' # (all variables included in Y)
+#'
+#' # data
+#' Y <- bfi
+#'
+#' # fit model
+#' fit <- estimate(Y, type = "mixed")
+#'
+#' # regression
+#' reg <- coef(fit)
+#'
+#' # summary
+#' summary(reg)
+#'
+#' }
 #' @export
 coef.estimate <- function(object, iter = NULL,...) {
 
@@ -83,25 +201,141 @@ coef.estimate <- function(object, iter = NULL,...) {
 
 #' Compute Regression Parameters for \code{explore} Objects
 #'
+#'  There is a direct correspondence between the inverse covariance matrix and
+#'  multiple regression \insertCite{kwan2014regression,Stephens1998}{BGGM}. This readily allows
+#'  for converting the GGM paramters to regression coefficients. All data types are supported.
+#'
 #' @name coef.explore
 #'
-#' @param object object of class \code{explore}
+#' @param object An Object of class \code{estimate}
 #'
-#' @param iter number of posterior samples (defaults to the number in the object).
+#' @param iter Number of iterations (posterior samples; defaults to the number in the object).
 #'
-#' @param ... not currently used.
+#' @param ... Not currently used.
 #'
-#' @return
+#' @references
+#' \insertAllCited{}
+#'
+#' @return An object of class \code{coef}, containting two lists.
+#'
+#' \itemize{
+#'
+#' \item \code{betas} A list of length \emph{p}, each containing a \emph{p} - 1 by \code{iter} matrix of
+#' posterior samples
+#'
+#' \item \code{object} An object of class \code{explore} (the fitted model).
+#' }
 #'
 #' @examples
-#' # p = 10
-#' Y <- BGGM::bfi[,1:10]
+#' \donttest{
+#' #########################################
+#' ### example 1: continuous and ordinal ###
+#' #########################################
+#' # data
+#' Y <- ptsd
 #'
-#' # sample posterior
-#' fit <- estimate(Y, iter = 5000)
+#' # continuous
 #'
-#' # precision to regression
-#' coefficients(fit, node = 1, cred = 0.95)
+#' # fit model
+#' fit <- explore(Y, type = "continuous")
+#'
+#' # regression
+#' reg <- coef(fit)
+#'
+#' # summary(reg)
+#'
+#'
+#' # ordinal
+#'
+#' # fit model (note + 1, due to zeros)
+#' fit <- explore(Y + 1, type = "ordinal")
+#'
+#' # summarize the partial correlations
+#' reg <- coef(fit)
+#'
+#' # summary
+#' summary(reg)
+#'
+#' #########################
+#' ### example 2: binary ###
+#' #########################
+#' # data
+#' Y <- women_math
+#'
+#' # fit model
+#' fit <- explore(Y, type = "binary")
+#'
+#' # summarize the partial correlations
+#' reg <- coef(fit)
+#'
+#' # summary
+#' summary(reg)
+#'
+#' ########################################
+#' ### example 3: control  with formula ###
+#' ########################################
+#' # (the following works with all data types)
+#'
+#' # controlling for gender
+#' Y <- bfi
+#'
+#' # Y contains two control variables
+#' # (gender and education)
+#'
+#' # the following is incorrect, as education is
+#' # automatically included in Y !
+#'
+#' incorrect <- explore(Y, type = ~ gender)
+#'
+#' # to control for only gender
+#' # (remove education)
+#'
+#' Y <- subset(Y, select = - education)
+#'
+#'  # fit model
+#' fit <- explore(Y, type = ~ gender)
+#'
+#' # regression
+#' reg <- coef(fit)
+#'
+#' # summary
+#' summary(reg)
+#'
+#'
+#' # control for an intercation (for some reason ?)
+#' # (gender by education)
+#'
+#' # data
+#' Y <- bfi
+#'
+#' # fit model
+#' fit <- explore(Y, formula = ~ gender * education)
+#'
+#' # regression
+#' reg <- coef(fit)
+#'
+#' # summary
+#' summary(reg)
+#'
+#' ########################################
+#' ### example 4: control  with "mixed" ###
+#' ########################################
+#' # control with mixed data approach
+#' # (all variables included in Y)
+#'
+#' # data
+#' Y <- bfi
+#'
+#' # fit model
+#' fit <- explore(Y, type = "mixed")
+#'
+#' # regression
+#' reg <- coef(fit)
+#'
+#' # summary
+#' summary(reg)
+#'
+#' }
 #' @export
 coef.explore <- function(object, iter = NULL,...) {
 
