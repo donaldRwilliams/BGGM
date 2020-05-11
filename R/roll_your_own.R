@@ -6,15 +6,15 @@
 #'
 #' @param object An object of class \code{estimate}.
 #'
-#' @param FUN A custom function for computing the statistic.
+#' @param FUN A custom function for computing the statistic. The first argument must be
+#'            a partial correlation matrix.
+#'
+#' @param iter  Number of iterations (posterior samples; defaults to the number in the object).
 #'
 #' @param select Logical. Should the graph be selected ? The default is currently \code{FALSE}.
 #'
 #' @param cred Numeric. Credible interval between 0 and 1  (default is 0.95) that is used for selecting the graph.
 #'
-#' @param extract A character string specifying what, if anything, should be extracted from the function. For example,
-#'                to extract the object "r", set \code{extract = "r"} and internally \code{$r} will be added
-#'                to the end of the function.
 #'
 #' @param ... Arguments passed to the function.
 #'
@@ -48,12 +48,16 @@
 #'
 #' membership <- c(rep("a", 5), rep("c", 5))
 #'
+#'f <- function(x,...){
+#' assortment.discrete(x, ...)$r
+#'}
+#'
 #'
 #' net_stat <- roll_your_own(object = fit,
-#'                           FUN = assortment.discrete,
-#'                           types = membership, weighted = TRUE,
-#'                           SE = FALSE, M = 1,
-#'                           extract = "r")
+#'                           FUN = f,
+#'                           types = membership,
+#'                           weighted = TRUE,
+#'                           SE = FALSE, M = 1)
 #'
 #' hist(net_stat)
 #' }
@@ -61,9 +65,9 @@
 #'
 roll_your_own <- function(object,
                           FUN,
+                          iter = NULL,
                           select = FALSE,
-                          cred = 0.95,
-                          extract = NULL, ...){
+                          cred = 0.95, ...){
 
   if(! all( c("estimate", "default") %in% class(fit)) ){
     stop("class must be 'estimate'")
@@ -81,7 +85,11 @@ roll_your_own <- function(object,
 
   }
 
-  iter <- object$iter
+  if(is.null(iter)){
+
+    iter <- object$iter
+
+  }
 
   pcors <- object$post_samp$pcors[, , 51:(iter + 50)]
 
@@ -90,10 +98,6 @@ roll_your_own <- function(object,
     pcors_s <- pcors[, , x] * adj
 
     est <- FUN(pcors_s, ...)
-
-    if (!is.null(extract)) {
-      est <- eval(parse(text = paste0("est$", extract)))
-    }
 
     est
   })

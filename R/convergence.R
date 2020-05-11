@@ -2,17 +2,17 @@
 #'
 #' Monitor convergence of the MCMC algorithms.
 #'
-#' @param object an object of class \code{estimate} or \code{explore}
+#' @param object An object of class \code{estimate} or \code{explore}
 #'
-#' @param param character string. Names of parameters for which to monitor MCMC convergence.
+#' @param param Character string. Names of parameters for which to monitor MCMC convergence.
 #'
-#' @param type character string. Which type of convergence plot ? The current
+#' @param type Character string. Which type of convergence plot ? The current
 #'             options are \code{trace} (default) and \code{acf}.
 #'
-#' @param print_name logical. Should the parameter names be printed (defaults to \code{FALSE})? This
+#' @param print_name Logical. Should the parameter names be printed (defaults to \code{FALSE})? This
 #'                   can be used to first determine the parameter names to specify in \code{type}.
 #'
-#' @return a list of \code{ggplot} objects.
+#' @return A list of \code{ggplot} objects.
 #'
 #' @note An overview of MCMC diagnostics can be found \href{http://sbfnk.github.io/mfiidd/mcmc_diagnostics.html}{here}.
 #'

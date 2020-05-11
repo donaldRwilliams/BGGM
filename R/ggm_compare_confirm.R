@@ -1,18 +1,24 @@
 #' GGM Compare: Confirmatory Hypothesis Testing
 #'
+#' #' @description Confirmatory hypothesis testing for comparing GGMs. Hypotheses are expressed as equality
+#' and/or ineqaulity contraints on the partial correlations of interest. Here the focus is \emph{not}
+#' on determining the graph (see \code{\link{explore}}) but testing specific hypotheses related to
+#' the conditional (in)dependence structure. These methods were introduced in
+#' \insertCite{Williams2019_bf;textual}{BGGM} and in \insertCite{williams2020comparing;textual}{BGGM}
+#'
 #' @name ggm_compare_confirm
 #'
-#' @param ... at least two matrices (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (nodes).
+#' @param ... At least two matrices (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (nodes).
 #'
-#' @param hypothesis character string. hypothesis (or hypotheses) to be tested. See notes for futher details.
+#' @param hypothesis Character string. The hypothesis (or hypotheses) to be tested. See notes for futher details.
 #'
 #' @param formula an object of class \code{\link[stats]{formula}}. This allows for including
 #' control variables in the model (i.e., \code{~ gender}).
 #'
-#' @param prior_sd The scale of the prior distribution (centered at zero), in reference to a beta distribtuion.
-#' The `default` is 0.25. See note for further details.
+#' @param prior_sd Numeric. The scale of the prior distribution (centered at zero),
+#'                 in reference to a beta distribtuion (defaults to 0.25).
 #'
-#' @param type character string. Which type of data for \strong{Y} ? The options include \code{continuous},
+#' @param type Character string. Which type of data for \strong{Y} ? The options include \code{continuous},
 #' \code{binary}, or \code{ordinal}. See the note for further details.
 #'
 #' @param mixed_type numeric vector. An indicator of length p for which varibles should be treated as ranks.
@@ -23,10 +29,113 @@
 #'
 #' @param seed The seed for random number generation (default set to \code{1}).
 #'
-#' @return
-#' @export
+#' @return The returned object of class \code{confirm} contains a lot of information that
+#'         is used for printing and plotting the results. For users of \strong{BGGM}, the following
+#'         are the useful objects:
+#'
+#' \itemize{
+#'
+#' \item \code{out_hyp_prob} Posterior hypothesis probabilities.
+#'
+#' \item \code{info} An object of class \code{BF} from the R package \strong{BFpack}.
+#'
+#' }
+#'
+#' @details
+#' The hypotheses can be written either with the respective column names or numbers.
+#' For example, \code{g1_1--2} denotes the relation between the variables in column 1 and 2 for group 1.
+#' The \code{g1_1} is required and the only difference from \code{\link{confirm}} (one group).
+#' Note that these must correspond to the upper triangular elements of the correlation
+#' matrix. This is accomplished by ensuring that the first number is smaller than the second number.
+#' This also applies when using column names (i.e,, in reference to the column number).
+#'
+#' \strong{One Hypothesis}:
+#'
+#' \itemize{
+#'
+#' \item  To test whether a relation in larger in one group, while both are expected
+#'        to be positive,  this can be written as
+#'
+#'  \code{hyp <-  c(g1_1--2 > g2_1--2 > 0)},
+#'
+#'  This is then compared to the complement.
+#'}
+#'
+#' \strong{More Than One Hypothesis}:
+#'
+#' \itemize{
+#'
+#' \item The above hypothesis can also be compared to, say, a null model by using ";"
+#'       to seperate the hypotheses, for example,
+#'
+#' \code{hyp <-  c(g1_1--2 > g2_1--2 > 0; g1_1--2 = g2_1--2 = 0)}.
+#'
+#' Any number of hypotheses can be compared this way.
+#'}
+#'
+#' \strong{Controlling for Variables}:
+#'
+#' When controlling for variables, it is assumed that \code{Y} includes \emph{only}
+#' the nodes in the GGM and the control variables. Internally, \code{only} the predictors
+#' that are included in \code{formula} are removed from \code{Y}. This is not behavior of, say,
+#' \code{\link{lm}}, but was adopted to ensure  users do not have to write out each variable that
+#' should be included in the GGM. An example is provided below.
+#'
+#' \strong{Mixed Type}:
+#'
+#'  The term "mixed" is somewhat of a misnomer, because the method can be used for data including \emph{only}
+#'  continuous or \emph{only} discrete variables \insertCite{hoff2007extending}{BGGM}. This is based on the
+#'  ranked likelihood which requires sampling the ranks for each variable (i.e., the data is not merely
+#'  transformed to ranks). This is computationally expensive when there are many levels. For example,
+#'  with continuous data, there are as many ranks as data points!
+#'
+#'  The option \code{mixed_type} allows the user to determine  which variable should be treated as ranks
+#'  and the "emprical" distribution is used otherwise. This is accomplished by specifying an indicator
+#'  vector of length \emph{p}. A one indicates to use the ranks, whereas a zero indicates to "ignore"
+#'  that variable. By default all integer variables are handled as ranks.
+#'
+#' \strong{Dealing with Errors}:
+#'
+#' An error is most likely to arise when \code{type = "ordinal"}. The are two common errors (although still rare):
+#'
+#' \itemize{
+#'
+#' \item The first is due to sampling the thresholds, especially when the data is heavily skewed.
+#'       This can result in an ill-defined matrix. If this occurs, we recommend to first try
+#'       decreasing \code{prior_sd} (i.e., a more informative prior). If that does not work, then
+#'       change the data type to \code{type = mixed} which then estimates a copula GGM
+#'       (this method can be used for data containing \strong{only} ordinal variable). This should
+#'       work without a problem.
+#'
+#' \item  The second is due to how the ordinal data are categorized. For example, if the error states
+#'        that the index is out of bounds, this indicates that the first category is a zero. This is not allowed, as
+#'        the first category must be one. This is addressed by adding one (e.g., \code{Y + 1}) to the data matrix.
+#'
+#' }
+#'
+#' @note
+#'
+#' \strong{"Default" Prior}:
+#'
+#'  In Bayesian statistics, a default Bayes factor needs to have several properties. I refer
+#'  interested users to \insertCite{@section 2.2 in @dablander2020default;textual}{BGGM}. In
+#'  \insertCite{Williams2019_bf;textual}{BGGM}, some of these propteries were investigated (e.g.,
+#'  model selection consistency). That said, we would not consider this a "default" or "automatic"
+#'  Bayes factor and thus we encourage users to perform sensitivity analyses by varying the scale of the prior
+#'  distribution.
+#'
+#'  Furthermore, it is important to note there is no "correct" prior and, also, there is no need
+#'  to entertain the possibility of a "true" model. Rather, the Bayes factor can be interpreted as
+#'  which hypothesis best (relative to each other) predicts the observed data
+#'  \insertCite{@Section 3.2 in @Kass1995}{BGGM}.
+#'
+#' \strong{Interpretation of Conditional (In)dependence Models for Latent Data}:
+#'
+#'  See \code{\link{BGGM-package}} for details about interpreting GGMs based on latent data
+#' (i.e, all data types besides \code{"continuous"})
 #'
 #' @examples
+#' @export
 ggm_compare_confirm <- function(...,
                                 hypothesis,
                                 formula = NULL,
