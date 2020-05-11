@@ -16,7 +16,7 @@
 #'                to extract the object "r", set \code{extract = "r"} and internally \code{$r} will be added
 #'                to the end of the function.
 #'
-#' @param ... Currently ignored
+#' @param ... Arguments passed to the function.
 #'
 #' @return An object defined by \code{FUN}.
 #'

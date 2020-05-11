@@ -19,7 +19,7 @@ roll_your_own(object, FUN, select = FALSE, cred = 0.95, extract = NULL, ...)
 to extract the object "r", set \code{extract = "r"} and internally \code{$r} will be added
 to the end of the function.}
 
-\item{...}{Currently ignored}
+\item{...}{Arguments passed to the function.}
 }
 \value{
 An object defined by \code{FUN}.
