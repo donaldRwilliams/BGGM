@@ -93,11 +93,15 @@ roll_your_own <- function(object,
 
   pcors <- object$post_samp$pcors[, , 51:(iter + 50)]
 
+  pb <- utils::txtProgressBar(min = 0, max = iter, style = 3)
+
   results <- sapply(1:iter, function(x) {
 
     pcors_s <- pcors[, , x] * adj
 
     est <- FUN(pcors_s, ...)
+
+    utils::setTxtProgressBar(pb, x)
 
     est
   })
