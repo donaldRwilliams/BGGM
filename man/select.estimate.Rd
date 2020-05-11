@@ -4,7 +4,7 @@
 \alias{select.estimate}
 \title{GGM Selection: Estimation}
 \usage{
-\method{select}{estimate}(object, cred = 0.95, alternative = "greater")
+\method{select}{estimate}(object, cred = 0.95, alternative = "two.sided")
 }
 \arguments{
 \item{object}{object of class \code{estimate.default}}
@@ -12,7 +12,7 @@
 \item{cred}{credible interval width used for the decision rule}
 
 \item{alternative}{a character string specifying the alternative hypothesis,
-must be one of "two.sided", "greater" (default) or "less".
+must be one of "two.sided" (default), "greater"  or "less".
 See note for futher details.}
 
 \item{...}{not currently used}
@@ -39,8 +39,8 @@ credible interval excludes zero.
 
 This package was built for the social-behavioral sciences in particular. In these applications, there is
 strong theory that expects \emph{all} effects to be positive. This is known as a "positive manifold" and
-this notion has a rich tradition in psychometrics. Hence, by default this expecation is included into graph selection
-(\code{alternative = "greater"}). This results in the estimted structure including only positive edges. Further
+this notion has a rich tradition in psychometrics. Hence, this can be incorportated into the graph with
+\code{alternative = "greater"}. This results in the estimted structure including only positive edges. Further
 details can be found at the blog "Dealing with Negative (Red) Edges in Psychological Networks: Frequentist Edition"
 (\href{https://donaldrwilliams.github.io/2020/03/29/dealing-with-negative-red-edges-in-psychological-networks-frequentist-edition/}{link})
 }

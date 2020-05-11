@@ -15,7 +15,6 @@
 #'
 #' @param cred Numeric. Credible interval between 0 and 1  (default is 0.95) that is used for selecting the graph.
 #'
-#'
 #' @param ... Arguments passed to the function.
 #'
 #' @return An object defined by \code{FUN}.
@@ -60,9 +59,35 @@
 #'                           SE = FALSE, M = 1)
 #'
 #' hist(net_stat)
+#'
+#'
+#' ############################################
+#' ###### example 2: expected influence #######
+#' ############################################
+#' library(networkTools)
+#'
+#' # data
+#' Y <- depression
+#'
+#' # fit model
+#' fit <- estimate(Y = Y, iter = 5000)
+#'
+#' # define function
+#' f <- function(x,...){
+#'   expectedInf(x,...)$step1
 #' }
 #'
+#' # compute
+#' net_stat <- roll_your_own(object = fit,
+#'                           FUN = f,
+#'                           iter = 1000)
 #'
+#' colmeans
+#' colMeans(t(net_stat))
+#'
+#' # full distribution (node 1)
+#' hist(net_stat[1,])
+#' }
 roll_your_own <- function(object,
                           FUN,
                           iter = NULL,

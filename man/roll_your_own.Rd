@@ -4,20 +4,19 @@
 \alias{roll_your_own}
 \title{Compute Custom Network Statistics}
 \usage{
-roll_your_own(object, FUN, select = FALSE, cred = 0.95, extract = NULL, ...)
+roll_your_own(object, FUN, iter = NULL, select = FALSE, cred = 0.95, ...)
 }
 \arguments{
 \item{object}{An object of class \code{estimate}.}
 
-\item{FUN}{A custom function for computing the statistic.}
+\item{FUN}{A custom function for computing the statistic. The first argument must be
+a partial correlation matrix.}
+
+\item{iter}{Number of iterations (posterior samples; defaults to the number in the object).}
 
 \item{select}{Logical. Should the graph be selected ? The default is currently \code{FALSE}.}
 
 \item{cred}{Numeric. Credible interval between 0 and 1  (default is 0.95) that is used for selecting the graph.}
-
-\item{extract}{A character specifying what, if anything, should be extracted from the function. For example,
-to extract the object "r", set \code{extract = "r"} and internally \code{$r} will be added
-to the end of the function.}
 
 \item{...}{Arguments passed to the function.}
 }
@@ -54,15 +53,45 @@ e.g., first 5 are "a", last 5 are "c"
 
 membership <- c(rep("a", 5), rep("c", 5))
 
-
-net_stat <- roll_your_own(object = fit,
-                          FUN = assortment.discrete,
-                          types = membership, weighted = TRUE,
-                          SE = FALSE, M = 1,
-                          extract = "r")
-
-hist(net_stat)
+f <- function(x,...){
+assortment.discrete(x, ...)$r
 }
 
 
+net_stat <- roll_your_own(object = fit,
+                          FUN = f,
+                          types = membership,
+                          weighted = TRUE,
+                          SE = FALSE, M = 1)
+
+hist(net_stat)
+
+
+############################################
+###### example 2: expected influence #######
+############################################
+library(networkTools)
+
+# data
+Y <- depression
+
+# fit model
+fit <- estimate(Y = Y, iter = 5000)
+
+# define function
+f <- function(x,...){
+  expectedInf(x,...)$step1
+}
+
+# compute
+net_stat <- roll_your_own(object = fit,
+                          FUN = f,
+                          iter = 1000)
+
+colmeans
+colMeans(t(net_stat))
+
+# full distribution (node 1)
+hist(net_stat[1,])
+}
 }

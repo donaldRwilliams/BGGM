@@ -17,20 +17,20 @@ confirm(
 )
 }
 \arguments{
-\item{Y}{matrix (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).}
+\item{Y}{Matrix (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).}
 
-\item{hypothesis}{character string. hypothesis (or hypotheses) to be tested. See details.}
+\item{hypothesis}{Character string. The hypothesis (or hypotheses) to be tested. See details.}
 
-\item{prior_sd}{Scale of the prior distribution, approximately the standard deviation
-of a beta distribution (defaults to 0.50).}
+\item{prior_sd}{Numeric. Scale of the prior distribution, approximately the standard deviation
+of a beta distribution (defaults to 0.25).}
 
-\item{formula}{an object of class \code{\link[stats]{formula}}. This allows for including
+\item{formula}{An object of class \code{\link[stats]{formula}}. This allows for including
 control variables in the model (e.g.,, \code{~ gender * education}).}
 
-\item{type}{character string. Which type of data for \strong{Y} ? The options include \code{continuous},
+\item{type}{Character string. Which type of data for \strong{Y} ? The options include \code{continuous},
 \code{binary}, \code{ordinal}, or \code{mixed}. See the note for further details.}
 
-\item{mixed_type}{numeric vector of length \emph{p}. An indicator for which varibles should be treated as ranks.
+\item{mixed_type}{Numeric vector of length \emph{p}. An indicator for which varibles should be treated as ranks.
 (1 for rank and 0 to assume normality). The default is currently (dev version) to treat all integer variables
 as ranks when \code{type = "mixed"} and \code{NULL} otherwise. See note for further details.}
 
@@ -105,10 +105,10 @@ should be included in the GGM. An example is provided below.
 \strong{Mixed Type}:
 
  The term "mixed" is somewhat of a misnomer, because the method can be used for data including \emph{only}
- continuous or \emph{only} discrete variables. This is based on the ranked likelihood which requires sampling
- the ranks for each variable (i.e., the data is not merely transformed to ranks). This is computationally
- expensive when there are many levels. For example, with continuous data, there are as many ranks
- as data points!
+ continuous or \emph{only} discrete variables \insertCite{hoff2007extending}{BGGM}. This is based on the
+ ranked likelihood which requires sampling the ranks for each variable (i.e., the data is not merely
+ transformed to ranks). This is computationally expensive when there are many levels. For example,
+ with continuous data, there are as many ranks as data points!
 
  The option \code{mixed_type} allows the user to determine  which variable should be treated as ranks
  and the "emprical" distribution is used otherwise. This is accomplished by specifying an indicator
@@ -139,9 +139,9 @@ An error is most likely to arise when \code{type = "ordinal"}. The are two commo
 
  In Bayesian statistics, a default Bayes factor needs to have several properties. I refer
  interested users to \insertCite{@section 2.2 in @dablander2020default;textual}{BGGM}. In
- \insertCite{Williams2019_bf;textual}{BGGM}, some of these propteries were investigated, such
- model selection consistency. That said, we would not consider this a "default" Bayes factor and
- thus we encourage users to perform sensitivity analyses by varying the scale of the prior
+ \insertCite{Williams2019_bf;textual}{BGGM}, some of these propteries were investigated (e.g.,
+ model selection consistency). That said, we would not consider this a "default" or "automatic"
+ Bayes factor and thus we encourage users to perform sensitivity analyses by varying the scale of the prior
  distribution.
 
  Furthermore, it is important to note there is no "correct" prior and, also, there is no need

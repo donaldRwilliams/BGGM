@@ -7,18 +7,18 @@
 convergence(object, param = NULL, type = "trace", print_names = FALSE)
 }
 \arguments{
-\item{object}{an object of class \code{estimate} or \code{explore}}
+\item{object}{An object of class \code{estimate} or \code{explore}}
 
-\item{param}{character string. Names of parameters for which to monitor MCMC convergence.}
+\item{param}{Character string. Names of parameters for which to monitor MCMC convergence.}
 
-\item{type}{character string. Which type of convergence plot ? The current
+\item{type}{Character string. Which type of convergence plot ? The current
 options are \code{trace} (default) and \code{acf}.}
 
-\item{print_name}{logical. Should the parameter names be printed (defaults to \code{FALSE})? This
+\item{print_name}{Logical. Should the parameter names be printed (defaults to \code{FALSE})? This
 can be used to first determine the parameter names to specify in \code{type}.}
 }
 \value{
-a list of \code{ggplot} objects.
+A list of \code{ggplot} objects.
 }
 \description{
 Monitor convergence of the MCMC algorithms.
