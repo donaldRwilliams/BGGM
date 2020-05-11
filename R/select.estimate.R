@@ -11,7 +11,7 @@
 #' @param cred credible interval width used for the decision rule
 #'
 #' @param alternative a character string specifying the alternative hypothesis,
-#'                    must be one of "two.sided", "greater" (default) or "less".
+#'                    must be one of "two.sided" (default), "greater"  or "less".
 #'                    See note for futher details.
 
 #' @param ... not currently used
@@ -37,8 +37,8 @@
 #'
 #' This package was built for the social-behavioral sciences in particular. In these applications, there is
 #' strong theory that expects \emph{all} effects to be positive. This is known as a "positive manifold" and
-#' this notion has a rich tradition in psychometrics. Hence, by default this expecation is included into graph selection
-#' (\code{alternative = "greater"}). This results in the estimted structure including only positive edges. Further
+#' this notion has a rich tradition in psychometrics. Hence, this can be incorportated into the graph with
+#' \code{alternative = "greater"}. This results in the estimted structure including only positive edges. Further
 #' details can be found at the blog "Dealing with Negative (Red) Edges in Psychological Networks: Frequentist Edition"
 #' (\href{https://donaldrwilliams.github.io/2020/03/29/dealing-with-negative-red-edges-in-psychological-networks-frequentist-edition/}{link})
 #'
@@ -62,7 +62,7 @@
 #' @export
 select.estimate <- function(object,
                             cred = 0.95,
-                            alternative = "greater"){
+                            alternative = "two.sided"){
 
   if(isFALSE(object$analytic)){
 
@@ -74,7 +74,7 @@ select.estimate <- function(object,
       ub <- 1 - lb
 
       adj <- ifelse(apply(pcors, 1:2, quantile, lb) < 0 &
-                  apply(pcors, 1:2, quantile, ub) > 0, 0, 1)
+                    apply(pcors, 1:2, quantile, ub) > 0, 0, 1)
 
       } else if(alternative == "greater") {
 

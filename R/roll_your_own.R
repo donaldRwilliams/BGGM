@@ -12,7 +12,7 @@
 #'
 #' @param cred Numeric. Credible interval between 0 and 1  (default is 0.95) that is used for selecting the graph.
 #'
-#' @param extract A character specifying what, if anything, should be extracted from the function. For example,
+#' @param extract A character string specifying what, if anything, should be extracted from the function. For example,
 #'                to extract the object "r", set \code{extract = "r"} and internally \code{$r} will be added
 #'                to the end of the function.
 #'
