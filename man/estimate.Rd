@@ -12,6 +12,8 @@ estimate(
   analytic = FALSE,
   prior_sd = 0.25,
   iter = 5000,
+  progress = TRUE,
+  seed = 1,
   ...
 )
 }
@@ -36,6 +38,10 @@ when \code{type = "mixed"} and \code{NULL} otherwise. See note for further detai
 
 \item{iter}{Number of iterations (posterior samples; defaults to 5000).}
 
+\item{progress}{Logical. Should a progress bar be included (defaults to \code{TRUE}) ?}
+
+\item{seed}{An integer for the random seed.}
+
 \item{...}{Currently ignored.}
 }
 \value{
@@ -45,9 +51,9 @@ The returned object of class \code{estimate} contains a lot of information that
 
 \itemize{
 
-\item \code{pcor_mat} partial correltion matrix (posterior mean).
+\item \code{pcor_mat} Partial correltion matrix (posterior mean).
 
-\item \code{post_samp} an object containing the posterior samples.
+\item \code{post_samp} An object containing the posterior samples.
 
 }
 }

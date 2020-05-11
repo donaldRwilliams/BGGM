@@ -30,6 +30,10 @@
 #'                 for continous data. Note that if \code{type = "mixed"} and \code{analytic = TRUE}, the data will
 #'                 automatically be treated as continuous.
 #'
+#' @param progress Logical. Should a progress bar be included (defaults to \code{TRUE}) ?
+#'
+#' @param seed An integer for the random seed.
+#'
 #' @references
 #' \insertAllCited{}
 #'
@@ -115,18 +119,14 @@ ggm_compare_estimate <- function(...,
                                  mixed_type = NULL,
                                  analytic = FALSE,
                                  prior_sd = 0.50,
-                                 iter = 5000){
+                                 iter = 5000,
+                                 progress = TRUE,
+                                 seed = 1){
   # combine data
   dat_list <- list(...)
 
   # combine data
   info <- Y_combine(...)
-
-  # # number of variables
-  # p <- info$dat_info$p[1]
-  #
-  # # number of observation
-  # n = info$dat_info$n[1]
 
   # number of groups
   groups <- length(info$dat)
@@ -154,6 +154,7 @@ ggm_compare_estimate <- function(...,
                prior_sd = prior_sd,
                iter = iter,
                mixed_type = mixed_type,
+               progress = progress,
                ... = paste0("(Group ", x, ")"))
 
     })

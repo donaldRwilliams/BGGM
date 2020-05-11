@@ -7,19 +7,19 @@
 plot_prior(prior_sd = 0.2, iter = 5000)
 }
 \arguments{
-\item{delta}{Numeric. Hyperparameter that governs the scale of
-             the prior distribution. Larger values are more informative
-             (i.e., narrower).
+\item{prior_sd}{Scale of the prior distribution, approximately the standard deviation
+                of a beta distribution (defaults to 0.25).
 
- @param iter number of iterations (posterior samples; defaults to 5000).}
+ @param iter Number of iterations (prior samples; defaults to 5000).}
 }
 \value{
-a \code{ggplot} object.
+A \code{ggplot} object.
 }
 \description{
 Visualize the implied prior distribution for the partial correlations. This is
              particularly useful for the Bayesian hypothesis testing methods.
+}
+\examples{
+plot_prior(prior_sd = 0.25, iter = 5000)
 
-Visualize the prior distribution used for the
-Bayesian hypothesis testing methods. This is governed by \code{prior_sd}.
 }

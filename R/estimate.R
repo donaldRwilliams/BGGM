@@ -26,6 +26,8 @@
 #'
 #' @param analytic Logical. Should the analytic solution be computed (default is \code{FALSE})?
 #'
+#' @param progress Logical. Should a progress bar be included (defaults to \code{TRUE}) ?
+#'
 #' @param seed An integer for the random seed.
 #'
 #' @param ... Currently ignored.
@@ -40,9 +42,9 @@
 #'
 #' \itemize{
 #'
-#' \item \code{pcor_mat} partial correltion matrix (posterior mean).
+#' \item \code{pcor_mat} Partial correltion matrix (posterior mean).
 #'
-#' \item \code{post_samp} an object containing the posterior samples.
+#' \item \code{post_samp} An object containing the posterior samples.
 #'
 #' }
 #'
@@ -294,6 +296,7 @@ estimate  <- function(Y,
                       analytic = FALSE,
                       prior_sd = 0.25,
                       iter = 5000,
+                      progress = TRUE,
                       seed = 1,
                       ...){
 
@@ -307,8 +310,11 @@ estimate  <- function(Y,
   # sample posterior
   if(!analytic){
 
-    message(paste0("BGGM: Posterior Sampling ", ...))
+    if(isTRUE(progress)){
 
+      message(paste0("BGGM: Posterior Sampling ", ...))
+
+      }
     # continuous
     if(type == "continuous"){
 
@@ -342,7 +348,8 @@ estimate  <- function(Y,
           epsilon = 0.1,
           prior_only = 0,
           explore = 1,
-          start = start
+          start = start,
+          progress =  progress
           )
 
         # control for variables
@@ -363,6 +370,8 @@ estimate  <- function(Y,
           # model matrix
           X <- as.matrix(control_info$model_matrices[[1]])
 
+          start <- solve(cov(Y))
+
         # posterior sample
         post_samp <- .Call(
           "_BGGM_mv_continuous",
@@ -370,7 +379,9 @@ estimate  <- function(Y,
           X = X,
           delta = delta,
           epsilon = 0.1,
-          iter = iter + 50
+          iter = iter + 50,
+          start = start,
+          progress = progress
         )
       # end control
       }
@@ -394,6 +405,8 @@ estimate  <- function(Y,
 
           formula <- ~ 1
 
+          start <- solve(cov(Y))
+
         } else {
 
           control_info <- remove_predictors_helper(list(as.data.frame(Y)),
@@ -411,6 +424,7 @@ estimate  <- function(Y,
           # model matrix
           X <- as.matrix(control_info$model_matrices[[1]])
 
+          start <- solve(cov(Y))
           }
 
       # posterior sample
@@ -422,7 +436,9 @@ estimate  <- function(Y,
         epsilon = 0.1,
         iter = iter + 50,
         beta_prior = 0.0001,
-        cutpoints = c(-Inf, 0, Inf)
+        cutpoints = c(-Inf, 0, Inf),
+        start = start,
+        progress = progress
       )
 
       # ordinal
@@ -445,6 +461,8 @@ estimate  <- function(Y,
 
         formula <- ~ 1
 
+        start <- solve(cov(Y))
+
         } else {
 
           control_info <- remove_predictors_helper(list(as.data.frame(Y)),
@@ -462,6 +480,8 @@ estimate  <- function(Y,
           # model matrix
           X <- as.matrix(control_info$model_matrices[[1]])
 
+          start <- solve(cov(Y))
+
           }
 
         # categories
@@ -475,7 +495,9 @@ estimate  <- function(Y,
           iter = iter + 50,
           delta = delta,
           epsilon = 0.1,
-          K = K
+          K = K,
+          start = start,
+          progress = progress
         )
 
         } else if(type == "mixed"){
@@ -492,6 +514,8 @@ estimate  <- function(Y,
             Y <-  as.matrix(control_info$Y_groups[[1]])
 
             formula <- NULL
+
+            X <- NULL
 
           } else {
 
@@ -533,22 +557,24 @@ estimate  <- function(Y,
         iter = iter + 50,
         delta = delta,
         epsilon = 0.1,
-        idx = idx
+        idx = idx,
+        progress = progress
       )
       } else {
 
         stop("'type' not supported: must be continuous, binary, ordinal, or mixed.")
       }
 
-    message("BGGM: Finished")
+    if(isTRUE(progress)){
 
+      message("BGGM: Finished")
 
-    pcor_mat <- round(apply(post_samp$pcors[,,51:(iter + 50)], 1:2, mean), 3)
-    pcor_sd <- round(apply(post_samp$pcors[,,51:(iter + 50)], 1:2, sd), 3)
+      }
+
+    pcor_mat <- post_samp$pcor_mat
 
     results <- list(
       pcor_mat = pcor_mat,
-      pcor_sd = pcor_sd,
       analytic = analytic,
       formula = formula,
       post_samp = post_samp,
@@ -601,8 +627,12 @@ estimate  <- function(Y,
     } # end analytic
 
   .Random.seed <<- old
+
   returned_object <- results
-  class(returned_object) <- c("BGGM", "estimate", "default")
+
+  class(returned_object) <- c("BGGM",
+                              "estimate",
+                              "default")
   return(returned_object)
 
   }
@@ -660,15 +690,16 @@ summary.estimate <- function(object,
 
   if(isFALSE(object$analytic)){
 
-    post_mean <- round(apply( object$post_samp$pcors[,, 51:(object$iter + 50) ], 1:2, mean), 3)[upper.tri(I_p)]
-    post_sd  <- round(apply( object$post_samp$pcors[,, 51:(object$iter + 50) ], 1:2, sd), 3)[upper.tri(I_p)]
+    post_mean <- round(object$pcor_mat[upper.tri(I_p)], 3)
+
+    post_sd  <- round(apply(object$post_samp$pcors[,, 51:(object$iter + 50) ], 1:2, sd), 3)[upper.tri(I_p)]
+
     post_lb <- round(apply( object$post_samp$pcors[,, 51:(object$iter + 50) ], 1:2, quantile, lb), 3)[upper.tri(I_p)]
+
     post_ub <- round(apply( object$post_samp$pcors[,, 51:(object$iter + 50) ], 1:2, quantile, ub), 3)[upper.tri(I_p)]
 
-
-
-  dat_results <-
-    data.frame(
+    dat_results <-
+      data.frame(
       relation = mat_names,
       post_mean =  post_mean,
       post_sd = post_sd,

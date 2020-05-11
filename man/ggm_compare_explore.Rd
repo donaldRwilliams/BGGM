@@ -11,7 +11,9 @@ ggm_compare_explore(
   mixed_type = NULL,
   analytic = FALSE,
   prior_sd = 0.2,
-  iter = 5000
+  iter = 5000,
+  progress = TRUE,
+  seed = 1
 )
 }
 \arguments{
@@ -34,10 +36,12 @@ The `default` is 0.25. See note for further details.}
 
 \item{iter}{number of iterations (posterior samples; defaults to 5000).}
 
+\item{progress}{Logical. Should a progress bar be included (defaults to \code{TRUE}) ?}
+
+\item{seed}{An integer for the random seed.}
+
 \item{data}{an optional data frame, list or environment (or an object coercible by \code{\link[base]{as.data.frame}})
 to a data frame containing the variables in \code{formula}. This is required when controlling for variables.}
-
-\item{seed}{The seed for random number generation (default set to \code{1}).}
 }
 \value{
 list of class \code{ggm_compare_bf}

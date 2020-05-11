@@ -7,12 +7,12 @@
 bggm_missing(x, method = "estimate", ...)
 }
 \arguments{
-\item{x}{an object of class \code{mid} \code{\link[mice]{mice}}.}
+\item{x}{An object of class \code{mid} \code{\link[mice]{mice}}.}
 
-\item{method}{character string. Which method should be used (default set to \code{estimate})? The current
+\item{method}{Character string. Which method should be used (default set to \code{estimate})? The current
 options are \code{"estimate"} and \code{"explore"}.}
 
-\item{...}{additional arguments passed to either
+\item{...}{Additional arguments passed to either
 \code{\link{estimate}} or \code{\link{explore}}.}
 }
 \value{

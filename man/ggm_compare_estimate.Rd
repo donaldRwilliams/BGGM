@@ -11,7 +11,9 @@ ggm_compare_estimate(
   mixed_type = NULL,
   analytic = FALSE,
   prior_sd = 0.5,
-  iter = 5000
+  iter = 5000,
+  progress = TRUE,
+  seed = 1
 )
 }
 \arguments{
@@ -36,6 +38,10 @@ automatically be treated as continuous.}
 The `default` is 0.50. See note for further details.}
 
 \item{iter}{number of iterations (posterior samples; defaults to 5000).}
+
+\item{progress}{Logical. Should a progress bar be included (defaults to \code{TRUE}) ?}
+
+\item{seed}{An integer for the random seed.}
 }
 \value{
 A list of class \code{ggm_compare_estimate} containing:

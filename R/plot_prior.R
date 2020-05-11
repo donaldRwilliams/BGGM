@@ -5,20 +5,18 @@
 #'
 #' @name plot_prior
 #'
-#' @description Visualize the prior distribution used for the
-#' Bayesian hypothesis testing methods. This is governed by \code{prior_sd}.
 #'
-#' @param delta Numeric. Hyperparameter that governs the scale of
-#'              the prior distribution. Larger values are more informative
-#'              (i.e., narrower).
+#' @param prior_sd Scale of the prior distribution, approximately the standard deviation
+#'                 of a beta distribution (defaults to 0.25).
 #'
-#'  @param iter number of iterations (posterior samples; defaults to 5000).
+#'  @param iter Number of iterations (prior samples; defaults to 5000).
 #'
-#' @return a \code{ggplot} object.
-#' @export
+#' @return A \code{ggplot} object.
 #'
 #' @examples
-
+#' plot_prior(prior_sd = 0.25, iter = 5000)
+#'
+#' @export
 plot_prior <- function(prior_sd = 0.2,
                        iter = 5000){
 

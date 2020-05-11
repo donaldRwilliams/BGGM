@@ -2,12 +2,12 @@
 #'
 #' Estimation and exploratory hypothesis testing with missing data.
 #'
-#' @param x an object of class \code{mid} \code{\link[mice]{mice}}.
+#' @param x An object of class \code{mid} \code{\link[mice]{mice}}.
 #'
-#' @param method character string. Which method should be used (default set to \code{estimate})? The current
+#' @param method Character string. Which method should be used (default set to \code{estimate})? The current
 #'               options are \code{"estimate"} and \code{"explore"}.
 #'
-#' @param ... additional arguments passed to either
+#' @param ... Additional arguments passed to either
 #'            \code{\link{estimate}} or \code{\link{explore}}.
 #'
 #' @return an object of class \code{estimate} or \code{explore}

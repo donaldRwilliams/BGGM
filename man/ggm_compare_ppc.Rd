@@ -67,7 +67,6 @@ The returned object of class \code{ggm_compare_ppc} contains a lot of informatio
 
 }
 
-
 \code{FUN = f()}
 
 \itemize{
@@ -118,21 +117,6 @@ If the null model is \code{not} rejected, note that this does \code{not} provide
 Further, if the null model is rejected, this means that the assumption of group equality is not tenable--the
 groups are different.
 
-\strong{A Note on Model Selection}:
-
- These methods do \bold{not} select edges. On the one hand, this may seem to be a limitation due to the structure
- not being determined. On the other hand, this actually advantagous because it preserves the known distribution
- of the partial correlations, covariances, etc. This is not possible when selecting a model, as the sampling
- distribution is heavily distorted. In this way, the statisical properties of these parameters are not compromised.
- I refer interested users to this \href{http://bactra.org/notebooks/post-model-selection-inference.html}{weblink},
- that includes a treasure chest of resources related to post-selection inference (and the inherent issues of
- model selection).
-
- Note, however, that differences in the adjancency matrices (e.g., Hamming distance)
- can be examined directly by specifying a custom function (\code{FUN}). See "example 2"
- in the custom function section below. Importantly, those measures not included in
- \bold{BGGM} should be investigated with simulation.
-
 \strong{Alternative Methods}:
 
 There are several methods in \strong{BGGM} for comparing groups. See
@@ -166,6 +150,8 @@ global_test <- ggm_compare_ppc(Ym, Yf, iter = 5000)
 
 global_test
 
+# plot
+plot(global_test)
 
 #############################
 ###### custom function ######
@@ -207,6 +193,8 @@ global_max <- ggm_compare_ppc(Ym, Yf,
 
 global_max
 
+# plot
+plot(global_max)
 
 # example 2
 # Hamming distance (squared error for adjacency)
@@ -243,6 +231,9 @@ global_hd <- ggm_compare_ppc(Ym, Yf,
 
 global_hd
 
+# plot
+plot(global_hd)
+
 #############################
 ########  nodewise ##########
 #############################
@@ -252,6 +243,8 @@ nodewise <- ggm_compare_ppc(Ym, Yf, iter = 1000,
 
 nodewise
 
+# plot
+plot(nodewise)
 }
 }
 \references{

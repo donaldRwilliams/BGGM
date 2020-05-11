@@ -1,15 +1,17 @@
 #' Confirmatory Hypothesis Testing
 #'
-#' @description Confirmatory hypothesis testing in GGMs, for, say, comparing formalized models encoding
-#' scienctific expectations. Hypotheses are expressed as equality and/or ineqaulity contraints on the
-#' partial correlations of interest. Here the focus is \emph{not} on determining the graph (see \code{\link{explore}}) but testing specific hypotheses related to
-#' the conditional (in)dependence structure. These methods were introduced in \insertCite{Williams2019_bf;textual}{BGGM}.
+#' @description Confirmatory hypothesis testing in GGMs. Hypotheses are expressed as equality
+#' and/or ineqaulity contraints on the partial correlations of interest. Here the focus is \emph{not}
+#' on determining the graph (see \code{\link{explore}}) but testing specific hypotheses related to
+#' the conditional (in)dependence structure. These methods were introduced in
+#' \insertCite{Williams2019_bf;textual}{BGGM}.
 #'
 #' @param Y  matrix (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).
 #'
-#' @param hypothesis character string. hypothesis (or hypotheses) to be tested. See notes for futher details.
+#' @param hypothesis character string. hypothesis (or hypotheses) to be tested. See details.
 #'
-#' @param prior_sd hypothesized standard deviation of the prior distribution.
+#' @param prior_sd Scale of the prior distribution, approximately the standard deviation
+#'                 of a beta distribution (defaults to 0.50).
 #'
 #' @param formula an object of class \code{\link[stats]{formula}}. This allows for including
 #' control variables in the model (e.g.,, \code{~ gender * education}).
@@ -21,120 +23,224 @@
 #' (1 for rank and 0 to assume normality). The default is currently (dev version) to treat all integer variables
 #' as ranks when \code{type = "mixed"} and \code{NULL} otherwise. See note for further details.
 #'
-#' @param iter posterior and prior samples. 25,000 is the default, as it results in a more stable Bayes factor than
-#' using, say, 5,000.
+#' @param iter  Number of iterations (posterior samples; defaults to 25,000).
 #'
+#' @param progress Logical. Should a progress bar be included (defaults to \code{TRUE}) ?
+#'
+#' @param seed An integer for the random seed.
+#'
+#' @param ... Currently ignored.
 #'
 #' @references
 #' \insertAllCited{}
 #'
-#' @return list of class \code{confirm}:
+#' @return The returned object of class \code{confirm} contains a lot of information that
+#'         is used for printing and plotting the results. For users of \strong{BGGM}, the following
+#'         are the useful objects:
 #'
 #' \itemize{
-#' \item \code{BF_matrix} matrix of Bayes factors for each hypothesis. Also includes the compliment
-#' \item \code{post_prob} posterior hypothesis probabilities
-#' \item \code{hypotheses} \code{hypothesis}
-#' \item \code{call} match.call()
-#' \item \code{p} number of variables
-#' \item \code{n} number of observations
-#' \item \code{iter} number of posterior samples
-#' \item \code{delta} hyperparameter of matrix-F prior distribution (corresponds to prior_sd)
-#' \item \code{parcors_mat} partial correlation matrix
-#' \item \code{returned_mats} contrast matrices
+#'
+#' \item \code{out_hyp_prob} Posterior hypothesis probabilities.
+#'
+#' \item \code{info} An object of class \code{BF} from the R package \strong{BFpack}.
+#'
 #' }
 #'
 #' @importFrom MASS ginv
 #' @importFrom BFpack BF
 #' @importFrom stats cov rbeta
-
 #'
-#' @note
-#' \strong{Interpretation of conditional (in)dependence models for latent data:}
+#' @details
+#' The hypotheses can be written either with the respective column names or numbers.
+#' For example, \code{1--2} denotes the relation between the variables in column 1 and 2.
+#' Note that these must correspond to the upper triangular elements of the correlation
+#' matrix. This is accomplished by ensuring that the first number is smaller than the second number.
+#' This also applies when using column names (i.e,, in reference to the column number).
 #'
-#' A  tetrachoric correlation (binary data) is a special case of a polychoric correlation (ordinal data). Both relations are
-#' between "theorized normally distributed continuous latent variables"
-#' (\href{https://en.wikipedia.org/wiki/Polychoric_correlation}{Wikipedia})
-#' In both instances, the correpsonding partial correlation between observed variables is conditioned
-#' on the remaining variables in the \emph{latent} space. This implies that interpration is much the same as
-#' for continuous data, but with respect to latent variables. We refer interested reader to
-#' \insertCite{@page 2364, section 2.2, in  @webb2008bayesian;textual}{BGGM}.
+#' \strong{One Hypothesis}:
 #'
-#'
-#' \strong{Hypothesis Examples:}
-#'
-#' The hypotheses can be written either with the respective column names or numbers. For example, \code{1--2} denotes the
-#' relation between variables in column 1 and 2. Note that these must correspond to the upper triangular elements of the correlation
-#' matrix. This is accomplished by ensuring that the first number is smaller than the second number. This also applies when using
-#' column names (e.g., in reference to the column number).
-#'
-#'One hypothesis:
 #' \itemize{
 #'
-#' \item  To test whether some relations are larger than others, while others are expected to be equal, this can be writting as
+#' \item  To test whether some relations are larger than others, while others
+#'        are expected to be equal, this can be writting as
 #'
 #'  \code{hyp <-  c(1--2 > 1--3  = 1--4 > 0)},
 #'
-#'  where there is an addition additional contraint that all effects are expected to be positive. This is then compared to the complement.
+#'  where there is an addition additional contraint that all effects are expected to be positive.
+#'  This is then compared to the complement.
 #'}
 #'
-#'More than one hypothesis:
-#'\itemize{
+#' \strong{More Than One Hypothesis}:
 #'
-#'\item The above hypothesis can also be compared to, say, a null model by using ";" to seperate the hypotheses, for example,
+#' \itemize{
+#'
+#' \item The above hypothesis can also be compared to, say, a null model by using ";"
+#'       to seperate the hypotheses, for example,
 #'
 #' \code{hyp <-  c(1--2 > 1--3  = 1--4 > 0; 1--2 = 1--3  = 1--4 = 0)}.
 #'
-#' Any number of hypotheses can be tested.
+#' Any number of hypotheses can be compared this way.
 #'}
 #'
+#' \strong{Controlling for Variables}:
 #'
+#' When controlling for variables, it is assumed that \code{Y} includes \emph{only}
+#' the nodes in the GGM and the control variables. Internally, \code{only} the predictors
+#' that are included in \code{formula} are removed from \code{Y}. This is not behavior of, say,
+#' \code{\link{lm}}, but was adopted to ensure  users do not have to write out each variable that
+#' should be included in the GGM. An example is provided below.
 #'
-#' see \code{methods(class = "confirm")}
+#' \strong{Mixed Type}:
+#'
+#'  The term "mixed" is somewhat of a misnomer, because the method can be used for data including \emph{only}
+#'  continuous or \emph{only} discrete variables. This is based on the ranked likelihood which requires sampling
+#'  the ranks for each variable (i.e., the data is not merely transformed to ranks). This is computationally
+#'  expensive when there are many levels. For example, with continuous data, there are as many ranks
+#'  as data points!
+#'
+#'  The option \code{mixed_type} allows the user to determine  which variable should be treated as ranks
+#'  and the "emprical" distribution is used otherwise. This is accomplished by specifying an indicator
+#'  vector of length \emph{p}. A one indicates to use the ranks, whereas a zero indicates to "ignore"
+#'  that variable. By default all integer variables are handled as ranks.
+#'
+#' \strong{Dealing with Errors}:
+#'
+#' An error is most likely to arise when \code{type = "ordinal"}. The are two common errors (although still rare):
+#'
+#' \itemize{
+#'
+#' \item The first is due to sampling the thresholds, especially when the data is heavily skewed.
+#'       This can result in an ill-defined matrix. If this occurs, we recommend to first try
+#'       decreasing \code{prior_sd} (i.e., a more informative prior). If that does not work, then
+#'       change the data type to \code{type = mixed} which then estimates a copula GGM
+#'       (this method can be used for data containing \strong{only} ordinal variable). This should
+#'       work without a problem.
+#'
+#' \item  The second is due to how the ordinal data are categorized. For example, if the error states
+#'        that the index is out of bounds, this indicates that the first category is a zero. This is not allowed, as
+#'        the first category must be one. This is addressed by adding one (e.g., \code{Y + 1}) to the data matrix.
+#'
+#' }
+#'
+#' @note
+#'
+#' \strong{"Default" Prior}:
+#'
+#'  In Bayesian statistics, a default Bayes factor needs to have several properties. I refer
+#'  interested users to \insertCite{@section 2.2 in @dablander2020default;textual}{BGGM}. In
+#'  \insertCite{Williams2019_bf;textual}{BGGM}, some of these propteries were investigated, such
+#'  model selection consistency. That said, we would not consider this a "default" Bayes factor and
+#'  thus we encourage users to perform sensitivity analyses by varying the scale of the prior
+#'  distribution.
+#'
+#'  Furthermore, it is important to note there is no "correct" prior and, also, there is no need
+#'  to entertain the possibility of a "true" model. Rather, the Bayes factor can be interpreted as
+#'  which hypothesis best (relative to each other) predicts the observed data
+#'  \insertCite{@Section 3.2 in @Kass1995}{BGGM}.
+#'
+#' \strong{Interpretation of Conditional (In)dependence Models for Latent Data}:
+#'
+#'  See \code{\link{BGGM-package}} for details about interpreting GGMs based on latent data
+#' (i.e, all data types besides \code{"continuous"})
+#'
 #'
 #' @examples
 #' \donttest{
+#' library(BGGM)
 #'
-#' # p = 10
+#' ##########################
+#' ### example 1: numbers ###
+#' ##########################
+#'
+#' # data
 #' Y <- BGGM::bfi[,1:10]
 #'
 #' # hypothesis
 #' hypothesis <- c("1--2 > 1--3 > 1--4 > 1--5")
 #'
+#' # test inequality contraints
+#' test_order <-  confirm(Y = Y, hypothesis  = hypothesis)
+#'
+#' # print
+#' test_order
+#'
+#'
+#'########################
+#'### example 2: names ###
+#'########################
+#'
+#' # hypothesis
+#' hypothesis <- c("A1--A2 > A1--A3 > A1--A4 > A1--A5")
+#'
+#' # test inequality contraints
+#' test_order <-  confirm(Y = Y,
+#'                       type = "continuous",
+#'                       hypothesis  = hypothesis)
+#'
+#' # print
+#' test_order
+#'
+#' ########################
+#' ### example 3: mixed ###
+#' ########################
+#' # rank likelihood
+#'
+#' # hypothesis
+#' hypothesis <- c("A1--A2 > A1--A3 > A1--A4 > A1--A5")
+#'
+#' # test inequality contraints
+#' test_order <-  confirm(Y = Y,
+#'                        type = "mixed",
+#'                        hypothesis  = hypothesis)
+#'
+#' # print
+#' test_order
+#'
+#'###################################
+#'### example 4: two  hypotheses ####
+#'###################################
+#'
+#' hypothesis <- c("A1--A2 > A1--A3 = A1--A4 = 0;
+#'               A1--A2 = A1--A3 = A1--A4 = 0")
+#'
 #' # test inequality contraint
-#' test_order <-  confirm(Y = Y, hypothesis  = hypothesis,
-#'                       prior_sd = 0.5, iter = 50000,
-#'                       cores = 2)
-#' # summary
-#' summary(test_order)
+#' test_order <-  confirm(Y = Y,
+#'                        type = "continuous",
+#'                        hypothesis  = hypothesis)
+#' # print
+#' test_order
 #'
+#' ###############################
+#' ##### example 5: cheating #####
+#' ###############################
 #'
-#'# test hypothesized directions
+#' # All examples thus far the hypotheses
+#' # were not confirmed. Here a true hypothesis
+#' # is tested, which shows the method works nicely
+#' # (peeked at partials beforehand)
 #'
-#'# hypothesis
-#'hypothesis <- c("(1--2, 1--3, 1--4)  <  0 < (1--6)")
+#' # test cheat
+#' test_cheat <-  confirm(Y = Y,
+#'                        type = "continuous",
+#'                        hypothesis  = hypothesis)
 #'
-#'# test directions
-#' test_directions <-  confirm(Y = Y, hypothesis  = hypothesis,
-#'                       prior_sd = 0.5, iter = 50000,
-#'                       cores = 2)
-#'# summary
-#' test_directions
-#'
-#'#############################
-#'######## Binary #############
-#'#############################
-#'
-#'
-#'
-#'
-#'}
+#' # print (probabilty of nearly 1 !)
+#' test_cheat
+#' }
 #'@export
 confirm <- function(Y, hypothesis,
                     prior_sd = 0.25,
                     formula = NULL,
                     type = "continuous",
                     mixed_type = NULL,
-                    iter = 25000){
+                    iter = 25000,
+                    progress = TRUE,
+                    seed = 1){
+
+
+  old <- .Random.seed
+
+  set.seed(seed)
 
   priorprob <- 1
 
@@ -148,13 +254,13 @@ confirm <- function(Y, hypothesis,
   # number of edges
   pcors <- p*(p-1)*0.5
 
-  message("BGGM: Posterior Sampling")
+
+  if(isTRUE(progress)){
+    message("BGGM: Posterior Sampling")
+  }
 
   # continuous
   if(type == "continuous"){
-
-
-
 
     # no control
     if(is.null(formula)){
@@ -170,6 +276,8 @@ confirm <- function(Y, hypothesis,
 
       n <- nrow(Y)
 
+      start <- solve(cov(Y))
+
       # posterior sample
       post_samp <- .Call(
         '_BGGM_Theta_continuous',
@@ -179,7 +287,9 @@ confirm <- function(Y, hypothesis,
         delta = delta,
         epsilon = 0.1,
         prior_only = 0,
-        explore = 1
+        explore = 1,
+        start = start,
+        progress = progress
       )
 
       # control for variables
@@ -200,6 +310,8 @@ confirm <- function(Y, hypothesis,
       # model matrix
       X <- as.matrix(control_info$model_matrices[[1]])
 
+      start <- solve(cov(Y))
+
       # posterior sample
       post_samp <- .Call(
         "_BGGM_mv_continuous",
@@ -207,7 +319,9 @@ confirm <- function(Y, hypothesis,
         X = X,
         delta = delta,
         epsilon = 0.1,
-        iter = iter + 50
+        iter = iter + 50,
+        start = start,
+        progress = progress
       )
 
     } # end control
@@ -230,6 +344,8 @@ confirm <- function(Y, hypothesis,
 
         X <- matrix(1, n, 1)
 
+        start <- solve(cov(Y))
+
       } else {
 
         control_info <- remove_predictors_helper(list(as.data.frame(Y)),
@@ -247,6 +363,8 @@ confirm <- function(Y, hypothesis,
         # model matrix
         X <- as.matrix(control_info$model_matrices[[1]])
 
+        start <- solve(cov(Y))
+
       }
 
   # posterior sample
@@ -255,10 +373,12 @@ confirm <- function(Y, hypothesis,
       Y = Y,
       X = X,
       delta = delta,
-      epsilon = 0.1,
+      epsilon = 0.01,
       iter = iter + 50,
       beta_prior = 0.0001,
-      cutpoints = c(-Inf, 0, Inf)
+      cutpoints = c(-Inf, 0, Inf),
+      start = start,
+      progress = progress
     )
 
     # ordinal
@@ -279,6 +399,9 @@ confirm <- function(Y, hypothesis,
       # intercept only
       X <- matrix(1, n, 1)
 
+      # start
+      start <- solve(cov(Y))
+
     } else {
 
       control_info <- remove_predictors_helper(list(as.data.frame(Y)),
@@ -296,6 +419,9 @@ confirm <- function(Y, hypothesis,
       # model matrix
       X <- as.matrix(control_info$model_matrices[[1]])
 
+      # start
+      start <- solve(cov(Y))
+
       }
 
     # categories
@@ -308,8 +434,10 @@ confirm <- function(Y, hypothesis,
       X = X,
       iter = iter + 50,
       delta = delta,
-      epsilon = 0.1,
-      K = K
+      epsilon = 0.01,
+      K = K,
+      start = start,
+      progress = progress
     )
 
   } else if(type == "mixed"){
@@ -327,9 +455,15 @@ confirm <- function(Y, hypothesis,
 
       formula <- NULL
 
+      # start
+      start <- solve(cov(Y))
+
     } else {
 
-      Y <- na.omit(Y)
+      Y <- as.matrix(na.omit(Y))
+
+      # start
+      start <- solve(cov(Y))
     }
 
     # observations
@@ -361,8 +495,9 @@ confirm <- function(Y, hypothesis,
       Sigma_start = rank_vars$Sigma_start,
       iter = iter + 50,
       delta = delta,
-      epsilon = 0.1,
-      idx = idx
+      epsilon = 0.01,
+      idx = idx,
+      progress = progress
     )
 
   } else {
@@ -370,20 +505,21 @@ confirm <- function(Y, hypothesis,
     stop("'type' not supported: must be continuous, binary, ordinal, or mixed.")
   }
 
-  message("BGGM: Finished")
-
- # sample prior
+  # sample prior
   prior_samp <- .Call(
     '_BGGM_sample_prior',
     PACKAGE = 'BGGM',
     Y = Y,
-    iter = 10000,
+    iter = 25000,
     delta = delta,
     epsilon = 0.01,
     prior_only = 1,
     explore = 0
   )$fisher_z
 
+  if(isTRUE(progress)){
+  message("BGGM: Testing Hypotheses")
+}
   col_names <- BGGM:::numbers2words(1:p)
 
   mat_name <- sapply(col_names, function(x) paste(col_names,x, sep = ""))[upper.tri(I_p)]
@@ -392,8 +528,10 @@ confirm <- function(Y, hypothesis,
                               iter, pcors,
                               byrow = TRUE)
 
-  prior_samples <- matrix(prior_samp[,,][upper.tri(I_p)], 10000, pcors, byrow = TRUE)
-
+  prior_samples <- matrix(prior_samp[,,][upper.tri(I_p)],
+                          25000,
+                          pcors,
+                          byrow = TRUE)
 
   colnames(posterior_samples) <- mat_name
 
@@ -411,7 +549,6 @@ confirm <- function(Y, hypothesis,
                 Sigma = prior_cov,
                 hypothesis = BGGM:::convert_hyps(hypothesis, Y = Y),
                 n = 1)
-
 
   BFpost <- BF(post_mu,
                Sigma = post_cov,
@@ -447,6 +584,12 @@ confirm <- function(Y, hypothesis,
 
   row.names(BF_matrix) <- row.names( BFpost$BFtable_confirmatory)
   colnames(BF_matrix) <- row.names( BFpost$BFtable_confirmatory)
+
+  if(isTRUE(progress)){
+    message("BGGM: Finished")
+  }
+
+  .Random.seed <<- old
 
   returned_object <- list(BF_matrix = BF_matrix,
                           out_hyp_prob = out_hyp_prob,

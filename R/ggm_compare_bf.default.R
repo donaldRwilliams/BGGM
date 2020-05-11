@@ -31,7 +31,9 @@
 #'
 #' @param iter number of iterations (posterior samples; defaults to 5000).
 #'
-#' @param seed The seed for random number generation (default set to \code{1}).
+#' @param progress Logical. Should a progress bar be included (defaults to \code{TRUE}) ?
+#'
+#' @param seed An integer for the random seed.
 #'
 #' @references
 #' \insertAllCited{}
@@ -118,7 +120,9 @@ ggm_compare_explore <- function(...,
                            mixed_type = NULL,
                            analytic = FALSE,
                            prior_sd = 0.20,
-                           iter = 5000){
+                           iter = 5000,
+                           progress = TRUE,
+                           seed = 1){
 
   # combine data
   dat_list <- list(...)
@@ -129,7 +133,6 @@ ggm_compare_explore <- function(...,
   # groups
   groups <- length(info$dat)
 
-  # matrix-F hyperparameter
   delta <- delta_solve(prior_sd)
 
   # check at least two groups
@@ -152,10 +155,14 @@ ggm_compare_explore <- function(...,
     # call estimate
     explore(Y, formula = formula,
              type = type,
-             prior_sd = prior_sd,
+             prior_sd =  prior_sd,
              iter = iter,
              mixed_type = mixed_type,
+             progress = progress,
+             seed = x,
              ... = paste0("(Group ", x, ")"))
+
+
     })
 
   post_samp <- lapply(1:groups, function(x) samp[[x]]$post_samp )
@@ -217,6 +224,7 @@ ggm_compare_explore <- function(...,
 
     # transformed prior
     mu_prior <- mats$R_e %*% rep(0, groups)
+
     s_prior <- mats$R_e %*% cov_prior %*% t(mats$R_e)
 
     # bayes factor
@@ -236,8 +244,8 @@ ggm_compare_explore <- function(...,
         }
   }
 
-  BF_01 <- BGGM:::symmteric_mat(BF_01_mat)
-  pcor_diff <- BGGM:::symmteric_mat(pcor_diff)
+  BF_01 <-  symmteric_mat(BF_01_mat)
+  pcor_diff <- symmteric_mat(pcor_diff)
 
   returned_object <- list(BF_01 = BF_01,
                           info = info,

@@ -30,6 +30,10 @@
 #'
 #' @param iter Number of iterations (posterior samples; defaults to 5000).
 #'
+#' @param progress Logical. Should a progress bar be included (defaults to \code{TRUE}) ?
+#'
+#' @param seed An integer for the random seed.
+#'
 #' @param ... Currently ignored (leave empty).
 #'
 #' @references
@@ -107,7 +111,7 @@
 #' \strong{"Default" Prior}:
 #'
 #'  In Bayesian statistics, a default Bayes factor needs to have several properties. I refer
-#'  interested users to \insertCite{@section 2.2 in dablander2020default;textual}{BGGM}. In
+#'  interested users to \insertCite{@section 2.2 in @dablander2020default;textual}{BGGM}. In
 #'  \insertCite{Williams2019_bf;textual}{BGGM}, some of these propteries were investigated, such
 #'  model selection consistency. That said, we would not consider this a "default" Bayes factor and
 #'  thus we encourage users to perform sensitivity analyses by varying the scale of the prior
@@ -299,9 +303,14 @@ explore <- function(Y,
                     mixed_type = NULL,
                     analytic = FALSE,
                     prior_sd = 0.25,
-                    iter = 5000,...){
+                    iter = 5000,
+                    progress = TRUE,
+                    seed = 1, ...){
 
 
+  old <- .Random.seed
+
+  set.seed(seed)
 
   dot_dot_dot <- list(...)
 
@@ -320,7 +329,11 @@ explore <- function(Y,
 
   if(!analytic){
 
-    message(paste0("BGGM: Posterior Sampling ", ...))
+    if(isTRUE(progress)){
+
+      message(paste0("BGGM: Posterior Sampling ", ...))
+
+    }
 
     # continuous
     if (type == "continuous") {
@@ -356,7 +369,8 @@ explore <- function(Y,
           epsilon = eps,
           prior_only = 0,
           explore = 1,
-          start = start
+          start = start,
+          progress = progress
         )
 
         # control for variables
@@ -379,6 +393,8 @@ explore <- function(Y,
         # model matrix
         X <- as.matrix(control_info$model_matrices[[1]])
 
+        start <- solve(cov(Y))
+
         # posterior sample
         post_samp <- .Call(
           "_BGGM_mv_continuous",
@@ -386,7 +402,9 @@ explore <- function(Y,
           X = X,
           delta = delta,
           epsilon = eps,
-          iter = iter + 50
+          iter = iter + 50,
+          start = start,
+          progress = progress
         )
 
       } # end control
@@ -410,6 +428,8 @@ explore <- function(Y,
 
         formula <- ~ 1
 
+        start <- solve(cov(Y))
+
       } else {
 
         control_info <- remove_predictors_helper(list(as.data.frame(Y)),
@@ -429,6 +449,8 @@ explore <- function(Y,
         # model matrix
         X <- as.matrix(control_info$model_matrices[[1]])
 
+        start <- solve(cov(Y))
+
       }
 
       # posterior sample
@@ -437,10 +459,12 @@ explore <- function(Y,
         Y = Y,
         X = X,
         delta = delta,
-        epsilon = 0.1,
+        epsilon = 0.01,
         iter = iter + 50,
         beta_prior = 0.1,
-        cutpoints = c(-Inf, 0, Inf)
+        cutpoints = c(-Inf, 0, Inf),
+        start = start,
+        progress = progress
       )
 
       # ordinal
@@ -465,6 +489,9 @@ explore <- function(Y,
 
         formula <- ~ 1
 
+        # start
+        start <- solve(cov(Y))
+
       } else {
 
         control_info <- remove_predictors_helper(list(as.data.frame(Y)),
@@ -482,6 +509,9 @@ explore <- function(Y,
         # model matrix
         X <- as.matrix(control_info$model_matrices[[1]])
 
+        # start
+        start <- solve(cov(Y))
+
       }
 
     # categories
@@ -495,7 +525,9 @@ explore <- function(Y,
       iter = iter + 50,
       delta = delta,
       epsilon = 0.01,
-      K = K
+      K = K,
+      start = start,
+      progress = progress
     )
 
   } else if(type == "mixed"){
@@ -512,11 +544,14 @@ explore <- function(Y,
 
       formula <- NULL
 
+      X <- NULL
+
     } else {
 
       Y <- na.omit(Y)
 
       X = NULL
+
       }
 
     # observations
@@ -549,7 +584,8 @@ explore <- function(Y,
       iter = iter + 50,
       delta = delta,
       epsilon = 0.01,
-      idx = idx
+      idx = idx,
+      progress = progress
     )
 
   } else {
@@ -557,10 +593,8 @@ explore <- function(Y,
     stop("'type' not supported: must be continuous, binary, ordinal, or mixed.")
 
     }
-    # finished sampling
-    message("BGGM: Finished")
 
-    # matrix dimensions for prior
+   # matrix dimensions for prior
     Y_dummy <- matrix(rnorm( 10 * 3 ),
                     nrow = 10, ncol = 3)
 
@@ -574,16 +608,22 @@ explore <- function(Y,
                       prior_only = 1,
                       explore = 1)
 
-    # compute post.mean
-    pcor_mat <- round(apply(post_samp$pcors[,,51:(iter + 50)], 1:2, mean), 3)
+    if(isTRUE(progress)){
 
-    # compute post.sd
-    pcor_sd <- round(apply(post_samp$pcors[,,51:(iter + 50)], 1:2, sd), 3)
+      message("BGGM: Finished")
+
+    }
+
+    # # compute post.mean
+    pcor_mat <- post_samp$pcor_mat
+      # round(apply(post_samp$pcors[,,51:(iter + 50)], 1:2, mean), 3)
+    #
+    # # compute post.sd
+    # pcor_sd <- round(apply(post_samp$pcors[,,51:(iter + 50)], 1:2, sd), 3)
 
 
   returned_object <- list(
     pcor_mat = pcor_mat,
-    pcor_sd = pcor_sd,
     analytic = analytic,
     formula = formula,
     post_samp = post_samp,
@@ -603,6 +643,8 @@ explore <- function(Y,
     stop("analytic solution not currently available")
 
     }
+
+  .Random.seed <<- old
 
   returned_object
 
@@ -662,7 +704,7 @@ summary.explore <- function(object,
   if(isFALSE(object$analytic)){
 
     post_mean <- round(object$pcor_mat, 3)[upper.tri(I_p)]
-    post_sd  <- round(object$pcor_sd, 3)[upper.tri(I_p)]
+    post_sd  <- round(apply(object$post_samp$pcors[,, 51:(object$iter + 50) ], 1:2, sd), 3)[upper.tri(I_p)]
 
     dat_results <-
       data.frame(

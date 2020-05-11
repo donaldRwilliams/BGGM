@@ -1,18 +1,41 @@
 #' Generate Ordinal and Binary data
 #'
-#' @param n number of observations
-#' @param p number of variables
-#' @param levels number of categories
-#' @param cor_mat true correlation matrix
-#' @param empirical logical. If true, mu and Sigma specify the empirical not
-#'                  population mean and covariance matrix.
+#' Generate Multivariate Ordinal and Binary data.
 #'
-#' @return
-#' @export
+#' @param n Number of observations (\emph{n}).
+#'
+#' @param p Number of variables  (\emph{p}).
+#'
+#' @param levels Number of categories (defaults to 2; binary data).
+#'
+#' @param cor_mat A \emph{p} by \emph{p} matrix including the true correlation structure.
+#'
+#' @param empirical Logical. If true, \code{cor_mat} specifies  the empirical not
+#'                  population covariance matrix.
+#'
+#' @return A \emph{n} by \emph{p} data matrix.
+#'
+#' @references
+#' \insertAllCited{}
+#'
+#' @note
+#'
+#' In order to allow users to enjoy the functionality of \bold{BGGM}, we had to make minor changes to the function \code{rmvord_naiv}
+#' from the \code{R} package \bold{orddata} \insertCite{orddata}{BGGM}. All rights to, and credit for, the function \code{rmvord_naiv}
+#' belong to the authors of that package.
+#'
+#' This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+#' This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#' A copy of the GNU General Public License is available at \href{https://www.R-project.org/Licenses}{https://www.R-project.org/Licenses}.
+#'
 #'
 #' @examples
+#' ################################
+#' ######### example 1 ############
+#' ################################
+#' library(BGGM)
 #'
-#' main <- BGGM::ptsd_cor1[1:5,1:5]
+#' main <-  ptsd_cor1[1:5,1:5]
 #' p <- ncol(main)
 #'
 #' pcors <- -(cov2cor(solve(main)) -diag(p))
@@ -25,18 +48,35 @@
 #'
 #' # example data
 #' Y <- BGGM::gen_ordinal(n = 500, p = 5,
-#'                    levels = 2,
-#'                     cor_mat = cors,
-#'                     empirical = FALSE)
+#'                        levels = 2,
+#'                        cor_mat = cors,
+#'                        empirical = FALSE)
+#'
+#'
+#'
+#' ################################
+#' ######### example 2 ############
+#' ################################
+#' # empirical = TRUE
+#'
+#' Y <-  gen_ordinal(n = 500,
+#'                   p = 16,
+#'                   levels = 5,
+#'                   cor_mat = ptsd_cor1,
+#'                   empirical = TRUE)
+#'
+#' @export
+gen_ordinal <- function(n,  p, levels = 2,  cor_mat, empirical = FALSE){
 
-gen_ordinal <- function(n, p, levels,  cor_mat, empirical = FALSE){
   ls <- list()
+
   for(i in 1:p){
     temp <- table(sample(c(1:levels),
                          size = n,
                          replace = T))
     ls[[i]] <- as.numeric(temp / sum(temp))
   }
+
   junk <- capture.output(data <- rmvord_naiv(n = n, probs =  ls,
                                              Cor = cor_mat,
                                              empirical = empirical))

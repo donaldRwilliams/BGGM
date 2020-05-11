@@ -4,29 +4,42 @@
 \alias{gen_ordinal}
 \title{Generate Ordinal and Binary data}
 \usage{
-gen_ordinal(n, p, levels, cor_mat, empirical = FALSE)
+gen_ordinal(n, p, levels = 2, cor_mat, empirical = FALSE)
 }
 \arguments{
-\item{n}{number of observations}
+\item{n}{Number of observations (\emph{n}).}
 
-\item{p}{number of variables}
+\item{p}{Number of variables  (\emph{p}).}
 
-\item{levels}{number of categories}
+\item{levels}{Number of categories (defaults to 2; binary data).}
 
-\item{cor_mat}{true correlation matrix}
+\item{cor_mat}{A \emph{p} by \emph{p} matrix including the true correlation structure.}
 
-\item{empirical}{logical. If true, mu and Sigma specify the empirical not
-population mean and covariance matrix.}
+\item{empirical}{Logical. If true, \code{cor_mat} specifies  the empirical not
+population covariance matrix.}
 }
 \value{
-
+A \emph{n} by \emph{p} data matrix.
 }
 \description{
-Generate Ordinal and Binary data
+Generate Multivariate Ordinal and Binary data.
+}
+\note{
+In order to allow users to enjoy the functionality of \bold{BGGM}, we had to make minor changes to the function \code{rmvord_naiv}
+from the \code{R} package \bold{orddata} \insertCite{orddata}{BGGM}. All rights to, and credit for, the function \code{rmvord_naiv}
+belong to the authors of that package.
+
+This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+A copy of the GNU General Public License is available at \href{https://www.R-project.org/Licenses}{https://www.R-project.org/Licenses}.
 }
 \examples{
+################################
+######### example 1 ############
+################################
+library(BGGM)
 
-main <- BGGM::ptsd_cor1[1:5,1:5]
+main <-  ptsd_cor1[1:5,1:5]
 p <- ncol(main)
 
 pcors <- -(cov2cor(solve(main)) -diag(p))
@@ -39,7 +52,24 @@ cors <- cov2cor( solve(inv))
 
 # example data
 Y <- BGGM::gen_ordinal(n = 500, p = 5,
-                   levels = 2,
-                    cor_mat = cors,
-                    empirical = FALSE)
+                       levels = 2,
+                       cor_mat = cors,
+                       empirical = FALSE)
+
+
+
+################################
+######### example 2 ############
+################################
+# empirical = TRUE
+
+Y <-  gen_ordinal(n = 500,
+                  p = 16,
+                  levels = 5,
+                  cor_mat = ptsd_cor1,
+                  empirical = TRUE)
+
+}
+\references{
+\insertAllCited{}
 }

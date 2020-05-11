@@ -64,21 +64,6 @@
 #' Further, if the null model is rejected, this means that the assumption of group equality is not tenable--the
 #' groups are different.
 #'
-#' \strong{A Note on Model Selection}:
-#'
-#'  These methods do \bold{not} select edges. On the one hand, this may seem to be a limitation due to the structure
-#'  not being determined. On the other hand, this actually advantagous because it preserves the known distribution
-#'  of the partial correlations, covariances, etc. This is not possible when selecting a model, as the sampling
-#'  distribution is heavily distorted. In this way, the statisical properties of these parameters are not compromised.
-#'  I refer interested users to this \href{http://bactra.org/notebooks/post-model-selection-inference.html}{weblink},
-#'  that includes a treasure chest of resources related to post-selection inference (and the inherent issues of
-#'  model selection).
-#'
-#'  Note, however, that differences in the adjancency matrices (e.g., Hamming distance)
-#'  can be examined directly by specifying a custom function (\code{FUN}). See "example 2"
-#'  in the custom function section below. Importantly, those measures not included in
-#'  \bold{BGGM} should be investigated with simulation.
-#'
 #' \strong{Alternative Methods}:
 #'
 #' There are several methods in \strong{BGGM} for comparing groups. See
@@ -122,7 +107,6 @@
 #'
 #' }
 #'
-#'
 #' \code{FUN = f()}
 #'
 #' \itemize{
@@ -161,6 +145,8 @@
 #'
 #' global_test
 #'
+#' # plot
+#' plot(global_test)
 #'
 #' #############################
 #' ###### custom function ######
@@ -202,6 +188,8 @@
 #'
 #' global_max
 #'
+#' # plot
+#' plot(global_max)
 #'
 #' # example 2
 #' # Hamming distance (squared error for adjacency)
@@ -238,6 +226,9 @@
 #'
 #' global_hd
 #'
+#' # plot
+#' plot(global_hd)
+#'
 #' #############################
 #' ########  nodewise ##########
 #' #############################
@@ -247,6 +238,8 @@
 #'
 #' nodewise
 #'
+#' # plot
+#' plot(nodewise)
 #' }
 #' @export
 ggm_compare_ppc <- function(...,
@@ -366,16 +359,16 @@ ggm_compare_ppc <- function(...,
 
       returned_object <- list(
         ppp_jsd = ppp_jsd,
-        ppp_ss = ppp_ss,
+        ppp_sse = ppp_ss,
         obs_jsd = obs_jsd,
-        obs_ss  = obs_ss,
+        obs_sse  = obs_ss,
         info = info,
         names = nms,
         iter = iter,
         test = test,
         call = match.call(),
         predictive_jsd = predictive_jsd,
-        predictive_ss = predictive_ss,
+        predictive_sse = predictive_ss,
         custom = custom
       )
 
@@ -590,8 +583,8 @@ print_ggm_compare_ppc <- function(x, ...){
       cat("Sum of Squared Error: \n \n")
       results <- data.frame(
         contrast = do.call(rbind, x$names),
-        SSE.obs =  round(do.call(rbind, x$obs_ss), 3),
-        p.value = round(x$ppp_ss, 3)
+        SSE.obs =  round(do.call(rbind, x$obs_sse), 3),
+        p.value = round(x$ppp_sse, 3)
       )
       print(results, row.names = F)
       cat("--- \n")
@@ -614,6 +607,7 @@ print_ggm_compare_ppc <- function(x, ...){
 
     cat("Symmetric KL divergence (JSD): \n \n")
     results <- list()
+
     for (i in 1:length(x$obs_jsd)) {
       results[[i]] <-
         data.frame(
@@ -639,194 +633,286 @@ print_ggm_compare_ppc <- function(x, ...){
 
 #' Plot \code{ggm_compare_ppc} Objects
 #'
-#' @description Plot \href{https://CRAN.R-project.org/package=ggridges/vignettes/introduction.html}{ggridges} for
-#' the GGM comparison with posterior predictive KL-divergence. The plots contain the predictive distribution, assuming group equality, as well as
-#' the observed KL-divergence. Further, the predictive distributions are conveniently colored to infer whether the null of group equality
-#' should be rejected. This is accomplished by having the critical region, corresponding to a desired 'significance' level, shaded in red.
-#' Thus, if the observed value is in the red region, this suggests the null hypothesis of group equality should be rejected.
+#' @description Plot the predictive check with
+#' \href{https://CRAN.R-project.org/package=ggridges/vignettes/introduction.html}{ggridges}.
 #'
-#' @param x object of class \code{ggm_compare_ppc}
-#' @param critical 'significance' level
-#' @param col_noncritical fill color of the non critical region
-#' @param col_critical  fill color of the critical region (e.g., \code{critical = 0.05})
-#' @param point_size point size for the observed KL-divergence
-#' @param log log transformation. useful for small values and skewed predictive distributions
-#' @param ... currently ignored
-#' @references
-#' Williams, D. R., Rast, P., Pericchi, L. R., & Mulder, J. (2019). Comparing Gaussian Graphical
-#' Models with the Posterior Predictive Distribution and Bayesian Model Selection. \href{https://psyarxiv.com/yt386}{pre print}
+#' @param x An object of class \code{ggm_compare_ppc}
 #'
-#' @return one object of class \code{ggplot} when \code{type = "global"}. One object for each pairwise contrast when \code{type = "nodewise"}
+#' @param critical 'Significance' level (defaults to 0.05).
 #'
-#' @note This method is Bayesian, as it relies on the posterior predictive distribution. That said, there are clear parallels to frequentist testing-e.g.,
-#' assuming group equality and critical regions. Most importantly, this method CANNOT provide evidence for the null hypothesis. Thus it can only reject
-#' the underlying assumption of group equality..
+#' @param col_noncritical  Fill color for the non critical region as a
+#'                         character (defaults to "#84e184A0").
 #'
-
+#' @param col_critical  Fill color for the critical region as a character.
+#'
+#' @param point_size Numeric point size for the observed score.
+#'
+#' @param ... Currently ignored
+#'
+#' @return An object (or list of objects) of class \code{ggplot}
 #'
 #' @importFrom ggridges stat_density_ridges
 #'
 #' @examples
-#' # assume group equality
-#' Y1 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
-#' Y2 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
-#' Y3 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
+#' \donttest{
+#' library(BGGM)
 #'
-#'# global
-#' ggm_ppc  <- ggm_compare_ppc(Y1, Y2, Y3, type = "global", iter = 50)
+#' # data
+#' Y <- bfi
 #'
-#' # plot
-#' plot(ggm_ppc)
+#' #############################
+#' ######### global ############
+#' #############################
 #'
-#'\donttest{
-#'# nodewise
-#'ggm_ppc  <- ggm_compare_ppc(Y1, Y2, Y3, type = "nodewise", iter = 50)
+#' # males
+#' Ym <- subset(Y, gender == 1,
+#'              select = - c(gender, education))
 #'
-#' plot(ggm_ppc, log = TRUE)
+#' # females
+#'
+#' Yf <- subset(Y, gender == 2,
+#'              select = - c(gender, education))
+#'
+#'
+#' global_test <- ggm_compare_ppc(Ym, Yf)
+#'
+#' global_test
+#'
+#' plot(global_test)
+#'
+#' #############################
+#' ######### nodewise ##########
+#' #############################
+#'
+#' nodewise_test <- ggm_compare_ppc(Ym, Yf,
+#'                                  test = "nodewise")
+#'
+#' nodewise_test
+#'
+#' plot(nodewise_test)
 #' }
 #' @export
 plot.ggm_compare_ppc <- function(x,
                                  critical = 0.05,
                                  col_noncritical = "#84e184A0",
                                  col_critical = "red",
-                                 point_size = 2,
-                                 log = FALSE,...){
+                                 point_size = 2){
 
-  # change object name
-  fit <- x
+  # check for ggridges
+  if(!requireNamespace("ggridges", quietly = TRUE)) {
+    stop("Please install the '", "ggridges", "' package.")
+  }
 
+  if(x$test == "global"){
 
+    if(isFALSE( x$custom)) {
 
-  if(fit$type == "global"){
+      # number of contrasts
+      k <- length(fit$ppp_jsd)
 
-    # number of contrasts
-    k <- length(fit$pvalue)
+      jsd <- unlist(x$predictive_jsd)
 
-    ppc <- unlist(fit$predictive_risk)
+      sse <- unlist(x$predictive_sse)
 
-    dat_ppc <- data.frame(ppc = ppc,
-                          contrast = rep( gsub(x = fit$names,pattern =  "_", replacement = ""),
-                                          each = fit$iter) )
+      dat_jsd <- data.frame(ppc = jsd,
+                            contrast = rep(gsub(
+                              x = x$names,
+                              pattern =  "_",
+                              replacement = ""
+                            ),
+                            each = x$iter))
 
-    dat_obs <- data.frame(contrast =  gsub(x = fit$names,pattern =  "_",
-                                           replacement = ""),
-                          ppc = unlist(fit$obs_jsd))
+      dat_obs_jsd <- data.frame(
+        contrast =  gsub(
+          x = fit$names,
+          pattern =  "_",
+          replacement = ""
+        ),
+        ppc = unlist(fit$obs_jsd)
+      )
 
-    if(isFALSE(log)){
+      dat_sse <- data.frame(ppc = sse,
+                            contrast = rep(gsub(
+                              x = x$names,
+                              pattern =  "_",
+                              replacement = ""
+                            ),
+                            each = x$iter))
 
-      plt <- ggplot(dat_ppc, aes(x = ppc,
-                                 y = contrast,
-                                 fill = factor(..quantile..))) +
+      dat_obs_sse <- data.frame(
+        contrast =  gsub(
+          x = x$names,
+          pattern =  "_",
+          replacement = ""
+        ),
+        ppc = unlist(x$obs_sse)
+      )
 
-        stat_density_ridges(geom = "density_ridges_gradient",
-                            calc_ecdf = TRUE, alpha = 0.5,
-                            quantiles = c(0.025, 1 - (critical))) +
-        scale_fill_manual( values = c(col_noncritical, col_noncritical, col_critical)) +
+      plot_jsd <- ggplot(dat_jsd, aes(
+        x = ppc,
+        y = contrast,
+        fill = factor(..quantile..)
+      )) +
+        stat_density_ridges(
+          geom = "density_ridges_gradient",
+          calc_ecdf = TRUE,
+          alpha = 0.5,
+          quantiles = c(0.025, 1 - (critical))
+        ) +
+        scale_fill_manual(values = c(col_noncritical,
+                                     col_noncritical,
+                                     col_critical)) +
         theme(legend.position = "none") +
         xlab("Predictive Check") +
         ylab("Contrast") +
-        geom_point(inherit.aes = F,
-                   data = dat_obs,
-                   aes(x = ppc,
-                       y = contrast),
-                   size = point_size) +
-        scale_y_discrete(limits = rev(levels(dat_obs$contrast)))
+        geom_point(
+          inherit.aes = F,
+          data = dat_obs_jsd,
+          aes(x = ppc,
+              y = contrast),
+          size = point_size
+        ) +
+        scale_y_discrete(limits = rev(levels(dat_obs_jsd$contrast))) +
+        ggtitle("Symmetric KL-Divergence")
 
-    }
+      plot_sse <- ggplot(dat_sse, aes(
+        x = ppc,
+        y = contrast,
+        fill = factor(..quantile..)
+      )) +
+        stat_density_ridges(
+          geom = "density_ridges_gradient",
+          calc_ecdf = TRUE,
+          alpha = 0.5,
+          quantiles = c(0.025, 1 - (critical))
+        ) +
+        scale_fill_manual(values = c(col_noncritical,
+                                     col_noncritical,
+                                     col_critical)) +
+        theme(legend.position = "none") +
+        xlab("Predictive Check") +
+        ylab("Contrast") +
+        geom_point(
+          inherit.aes = F,
+          data = dat_obs_sse,
+          aes(x = ppc,
+              y = contrast),
+          size = point_size
+        ) +
+        scale_y_discrete(limits = rev(levels(dat_obs_sse$contrast))) +
+        ggtitle("Sum of Squared Error")
 
-    if(isTRUE(log)){
+      list(plot_sse = plot_sse, plot_jsd = plot_jsd)
 
-      plt <- ggplot(dat_ppc, aes(x = log(ppc),
-                                 y = contrast,
-                                 fill = factor(..quantile..))) +
+    } else {
+
+      k <- length(x$ppp_custom)
+
+      custom <- unlist(x$predictive_custom)
+
+      dat_custom <- data.frame(ppc = custom,
+                               contrast = rep(gsub(
+                                 x = x$names,
+                                 pattern =  "_",
+                                 replacement = ""
+                               ),
+                               each = x$iter))
+
+      dat_obs_custom <- data.frame(
+        contrast = gsub(
+          x = x$names,
+          pattern =  "_",
+          replacement = ""
+        ),
+        ppc = unlist(x$custom_obs)
+      )
+
+      plot_custom <- ggplot(dat_custom, aes(
+        x = ppc,
+        y = contrast,
+        fill = factor(..quantile..)
+      )) +
+        stat_density_ridges(
+          geom = "density_ridges_gradient",
+          calc_ecdf = TRUE,
+          alpha = 0.5,
+          quantiles = c(0.025, 1 - (critical))
+        ) +
+        scale_fill_manual(values = c(col_noncritical,
+                                     col_noncritical,
+                                     col_critical)) +
+        theme(legend.position = "none") +
+        xlab("Predictive Check") +
+        ylab("Contrast") +
+        geom_point(
+          inherit.aes = F,
+          data = dat_obs_custom,
+          aes(x = ppc,
+              y = contrast),
+          size = point_size
+        ) +
+        scale_y_discrete(limits = rev(levels(dat_obs_custom$contrast))) +
+        ggtitle("Custom")
+
+      list(plot_custom = plot_custom)
+
+    }  # end of global
+
+  } else {
+
+    plt <- list()
+
+    k <- length(x$names)
+
+    for(i in 1:k){
+
+      dat_obs <- data.frame(ppc = unlist(x$obs_jsd[[i]]),
+                            node = 1:x$info$dat_info$p[1])
+
+
+      test <- reshape::melt(x$predictive_jsd[[i]])
+
+      test$node <- factor(test$X2,
+                          levels = rev(1:x$info$dat_info$p[1]),
+                          labels = rev(1:x$info$dat_info$p[1]))
+
+      dat_obs$node <- factor(dat_obs$node,
+                             levels = rev(1:x$info$dat_info$p[1]),
+                             labels = rev(1:x$info$dat_info$p[1]))
+
+      suppressWarnings(
+        test$value <- log(test$value)
+      )
+      check_inf <- which(is.infinite(test$value))
+
+      test$value[check_inf] <- NA
+
+      test <- na.omit(test)
+
+      plt[[i]] <- ggplot(test, aes(x = value,
+                                   y = node,
+                                   fill = factor(..quantile..))) +
         stat_density_ridges(geom = "density_ridges_gradient",
+                            rel_min_height = 0.01,
                             calc_ecdf = TRUE,
-                            quantiles = c(0.025, 1 - (critical ))) +
-        scale_fill_manual( values = c(col_noncritical, col_noncritical, col_critical)) +
+                            quantiles = c(0.025, 1 - (critical))) +
+        scale_fill_manual( values = c(col_noncritical,
+                                      col_noncritical,
+                                      col_critical)) +
+        geom_point(data = dat_obs,
+                   inherit.aes = F,
+                   aes(x = log(ppc),
+                       y = node),
+                   size = point_size) +
         theme(legend.position = "none") +
         xlab("Predictive Check") +
-        ylab("Contrast") +
-        geom_point(inherit.aes = F,
-                   data = dat_obs,
-                   aes(x = log(ppc),
-                       y = contrast),
-                   size = point_size) +
-        scale_y_discrete(limits = rev(levels(dat_obs$contrast)))
-
+        ylab("Node") +
+        ggtitle(gsub(x = x$names[[i]],
+                     pattern =  "_",
+                     replacement = ""),
+                subtitle = "Symmteric KL-Divergence (log scale)")
     }
 
+    plt
   }
-  if(fit$type == "nodewise" ){
-
-
-    if(isTRUE(log)){
-      plt <- list()
-      k <- length(fit$names)
-
-      for(i in 1:k){
-        dat_obs <- data.frame(ppc = unlist(fit$obs_jsd[[i]]),
-                              node = 1:fit$info$dat_info$p[1])
-
-
-        test <- reshape::melt( do.call(rbind, fit$predictive_risk[[i]]))
-
-        test$node <- factor(test$X2, levels = rev(1:fit$info$dat_info$p[1]), labels = rev(1:fit$info$dat_info$p[1]))
-        dat_obs$node <- factor(dat_obs$node, levels = rev(1:fit$info$dat_info$p[1]), labels = rev(1:fit$info$dat_info$p[1]))
-
-        plt[[i]] <- ggplot(test, aes(x = log(value),
-                                     y = node,
-                                     fill = factor(..quantile..))) +
-          stat_density_ridges(geom = "density_ridges_gradient",rel_min_height = 0.01,
-                              calc_ecdf = TRUE,
-                              quantiles = c(0.025, 1 - (critical))) +
-          scale_fill_manual( values = c(col_noncritical, col_noncritical, col_critical)) +
-
-          geom_point(data = dat_obs, inherit.aes = F,  aes(x = log(ppc), y = node), size = point_size) +
-          theme(legend.position = "none") +
-          xlab("Predictive Check") +
-          ylab("Node") +
-          ggtitle( gsub(x =fit$names[[i]],pattern =  "_",
-                        replacement = ""))
-      }
-    }
-    if(isFALSE(log)){
-
-      plt <- list()
-      k <- length(fit$names)
-
-      for(i in 1:k){
-        dat_obs <- data.frame(ppc = unlist(fit$obs_jsd[[i]]),
-                              node = 1:fit$info$dat_info$p[1])
-
-
-        test <- reshape::melt( do.call(rbind, fit$predictive_risk[[i]]))
-
-        test$node <- factor(test$X2,
-                            levels = rev(1:fit$info$dat_info$p[1]),
-                            labels = rev(1:fit$info$dat_info$p[1]))
-
-        dat_obs$node <- factor(dat_obs$node, levels = rev(1:fit$info$dat_info$p[1]),
-                               labels = rev(1:fit$info$dat_info$p[1]))
-
-        plt[[i]] <- ggplot(test, aes(x = value,
-                                     y = node,
-                                     fill = factor(..quantile..))) +
-          stat_density_ridges(geom = "density_ridges_gradient",
-                              calc_ecdf = TRUE,
-                              quantiles = c(0.025, 1 - (critical))) +
-          scale_fill_manual( values = c(col_noncritical, col_noncritical, col_critical)) +
-          geom_point(data = dat_obs, inherit.aes = F,  aes(x = ppc, y = node)) +
-          # scale_y_discrete(limits = rev(levels(as.factor(dat_obs$node)))) +
-          theme(legend.position = "none") +
-          xlab("Predictive Check") +
-          ylab("Node") +
-          ggtitle( gsub(x =fit$names[[i]],pattern =  "_",
-                        replacement = ""))
-      }
-
-
-    }
-  }
-  plt
 }
-

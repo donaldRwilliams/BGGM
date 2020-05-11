@@ -12,6 +12,8 @@ explore(
   analytic = FALSE,
   prior_sd = 0.25,
   iter = 5000,
+  progress = TRUE,
+  seed = 1,
   ...
 )
 }
@@ -36,7 +38,11 @@ variables as ranks when \code{type = "mixed"} and \code{NULL} otherwise. See not
 
 \item{iter}{Number of iterations (posterior samples; defaults to 5000).}
 
-\item{...}{currently ignored.}
+\item{progress}{Logical. Should a progress bar be included (defaults to \code{TRUE}) ?}
+
+\item{seed}{An integer for the random seed.}
+
+\item{...}{Currently ignored (leave empty).}
 }
 \value{
 The returned object of class \code{explore} contains a lot of information that
@@ -118,7 +124,7 @@ the posterior standard deviation is plotted with \code{explore} objects.
 \strong{"Default" Prior}:
 
  In Bayesian statistics, a default Bayes factor needs to have several properties. I refer
- interested users to \insertCite{@section 2.2 in dablander2020default;textual}{BGGM}. In
+ interested users to \insertCite{@section 2.2 in @dablander2020default;textual}{BGGM}. In
  \insertCite{Williams2019_bf;textual}{BGGM}, some of these propteries were investigated, such
  model selection consistency. That said, we would not consider this a "default" Bayes factor and
  thus we encourage users to perform sensitivity analyses by varying the scale of the prior

@@ -107,7 +107,7 @@ rank_helper <- function(Y){
   n_complete <- apply(!is.na(ranks), 2, sum)
   U <- t(t(ranks)/(n_complete + 1))
   Z <- qnorm(U)
-  S <- diag(p)
+  S <- cov(Z)
   list(K = K,
        levels = levels,
        Sigma_start = S,
