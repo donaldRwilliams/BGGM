@@ -2,28 +2,28 @@
 #'
 #' @name ggm_compare_explore
 #'
-#' @description Compare Gaussian graphical models with (exploratory) Bayesian hypothesis testing using the matrix-F prior
-#' distribution \insertCite{Mulder2018}{BGGM}. A test for each partial correlation in the model for any number of groups.
-#' This provides evidence for the null hypothesis of no difference and the alternative hypothesis
-#' of difference. With more than two groups, the test is for \emph{all} groups simultaneously (i.e., the relation is the same or different in all groups).
-#' This method was introduced in \insertCite{williams2020comparing;textual}{BGGM}. For confirmatory hypothesis testing see
-#' \code{confirm_groups}.
+#' @description Compare Gaussian graphical models with (exploratory) hypothesis testing using the matrix-F prior
+#' distribution \insertCite{Mulder2018}{BGGM}. A test for each partial correlation in the model for any number
+#' of groups. This provides evidence for the null hypothesis of no difference and the alternative hypothesis
+#' of difference. With more than two groups, the test is for \emph{all} groups simultaneously (i.e., the relation
+#' is the same or different in all groups). This method was introduced in \insertCite{williams2020comparing;textual}{BGGM}.
+#' For confirmatory hypothesis testing see \code{confirm_groups}.
 #'
-#' @param ... at least two matrices (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).
+#' @param ... At least two matrices (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).
 #'
-#' @param formula an object of class \code{\link[stats]{formula}}. This allows for including
+#' @param formula An object of class \code{\link[stats]{formula}}. This allows for including
 #' control variables in the model (i.e., \code{~ gender}).
 #'
-#' @param data an optional data frame, list or environment (or an object coercible by \code{\link[base]{as.data.frame}})
+#' @param data An optional data frame, list or environment (or an object coercible by \code{\link[base]{as.data.frame}})
 #' to a data frame containing the variables in \code{formula}. This is required when controlling for variables.
 #'
-#' @param prior_sd The scale of the prior distribution (centered at zero), in reference to a beta distribtuion.
+#' @param prior_sd Numeric. The scale of the prior distribution (centered at zero), in reference to a beta distribtuion.
 #' The `default` is 0.25. See note for further details.
 #'
-#' @param type character string. Which type of data for \strong{Y} ? The options include \code{continuous},
+#' @param type Character string. Which type of data for \code{Y} ? The options include \code{continuous},
 #' \code{binary}, or \code{ordinal}. See the note for further details.
 #'
-#' @param mixed_type numeric vector. An indicator of length p for which varibles should be treated as ranks.
+#' @param mixed_type Numeric vector. An indicator of length p for which varibles should be treated as ranks.
 #' (1 for rank and 0 to assume normality). The default is currently (dev version) to treat all integer variables
 #' as ranks when \code{type = "mixed"} and \code{NULL} otherwise. See note for further details.
 #'
@@ -39,80 +39,159 @@
 #' \insertAllCited{}
 #'
 #'
-#' @return list of class \code{ggm_compare_bf}
-#' \itemize{
-#' \item \code{BF_01}  Bayes factors in favor of the null hypothesis.
-#' \item \code{pcor_diff} partial correlation difference (for two groups only)
-#' \item \code{p} number of variables
-#' \item  \code{info} list of information about the data matrices
+#' @return The returned object of class \code{ggm_compare_explore} contains a lot of information that
+#'         is used for printing and plotting the results. For users of \strong{BGGM}, the following
+#'         are the useful objects:
 #'
 #' \itemize{
-#' \item \code{dat} list containing the data matrices
-#' \item \code{dat_info} sample size for each data matrix
-#' \item \code{pairwise} matrix of pairwise combinations
+#'
+#' \item \code{BF_01} A \emph{p} by \emph{p} matrix including
+#'                     the Bayes factor for the null hypothesis.
+#'
+#' \item \code{pcor_diff} A \emph{p} by \emph{p} matrix including
+#'                        the difference in partial correlations (only for two groups).
+#'
+#' \item \code{samp} A list containing the fitted models (of class \code{explore}) for each group.
+#'
 #' }
-#' \item \code{iter} number of posterior and prior samples
-#' \item \code{call} match.call()
-#' \item \code{delta} hyperparameter of matrix-F prior distribution (corresponds to \code{prior_sd})
+#' @details
 #'
-#' \item \code{groups} number of groups
-#' \item \code{post_samp} matrix of posterior samples
+#' \strong{Controlling for Variables}:
+#'
+#' When controlling for variables, it is assumed that \code{Y} includes \emph{only}
+#' the nodes in the GGM and the control variables. Internally, \code{only} the predictors
+#' that are included in \code{formula} are removed from \code{Y}. This is not behavior of, say,
+#' \code{\link{lm}}, but was adopted to ensure  users do not have to write out each variable that
+#' should be included in the GGM. An example is provided below.
+#'
+#' \strong{Mixed Type}:
+#'
+#'  The term "mixed" is somewhat of a misnomer, because the method can be used for data including \emph{only}
+#'  continuous or \emph{only} discrete variables. This is based on the ranked likelihood which requires sampling
+#'  the ranks for each variable (i.e., the data is not merely transformed to ranks). This is computationally
+#'  expensive when there are many levels. For example, with continuous data, there are as many ranks
+#'  as data points!
+#'
+#'  The option \code{mixed_type} allows the user to determine  which variable should be treated as ranks
+#'  and the "emprical" distribution is used otherwise. This is accomplished by specifying an indicator
+#'  vector of length \emph{p}. A one indicates to use the ranks, whereas a zero indicates to "ignore"
+#'  that variable. By default all integer variables are handled as ranks.
+#'
+#' \strong{Dealing with Errors}:
+#'
+#' An error is most likely to arise when \code{type = "ordinal"}. The are two common errors (although still rare):
+#'
+#' \itemize{
+#'
+#' \item The first is due to sampling the thresholds, especially when the data is heavily skewed.
+#'       This can result in an ill-defined matrix. If this occurs, we recommend to first try
+#'       decreasing \code{prior_sd} (i.e., a more informative prior). If that does not work, then
+#'       change the data type to \code{type = mixed} which then estimates a copula GGM
+#'       (this method can be used for data containing \strong{only} ordinal variable). This should
+#'       work without a problem.
+#'
+#' \item  The second is due to how the ordinal data are categorized. For example, if the error states
+#'        that the index is out of bounds, this indicates that the first category is a zero. This is not allowed, as
+#'        the first category must be one. This is addressed by adding one (e.g., \code{Y + 1}) to the data matrix.
+#'
 #' }
 #'
 #' @note
 #'
-#' \strong{More than Two Groups:}
+#' \strong{"Default" Prior}:
 #'
-#'  It is possible to compare any number of group. This does \emph{not} provide pairwise differences. Rather, the test
-#'  is for all group, say, that each partial correlation is the same in each. This is analagous to an ANOVA--an
-#'  `omnibus` test that does not indicate which groups are different. A follow up test would be required for this purpose.
+#'  In Bayesian statistics, a default Bayes factor needs to have several properties. I refer
+#'  interested users to \insertCite{@section 2.2 in @dablander2020default;textual}{BGGM}. In
+#'  \insertCite{Williams2019_bf;textual}{BGGM}, some of these propteries were investigated, such
+#'  model selection consistency. That said, we would not consider this a "default" Bayes factor and
+#'  thus we encourage users to perform sensitivity analyses by varying the scale of the prior
+#'  distribution.
 #'
-#' \strong{A Note on Defaults:}
+#'  Furthermore, it is important to note there is no "correct" prior and, also, there is no need
+#'  to entertain the possibility of a "true" model. Rather, the Bayes factor can be interpreted as
+#'  which hypothesis best (relative to each other) predicts the observed data
+#'  \insertCite{@Section 3.2 in @Kass1995}{BGGM}.
 #'
-#' The `default` for \code{prior_sd} is 0.25. This can and should be changed to reflect the hypothesized difference.
-#' If differences are expected to be small \code{prior_sd} should be set to a smaller value (e.g., 0.15).
-#' This might raise concerns of the `correct` prior.` Note, however, that the interpretation remains unchanged: which hypothesis better
-#' predicts the observed data. \insertCite{@p. 777, in  @Kass1995}{BGGM}
+#' \strong{Interpretation of Conditional (In)dependence Models for Latent Data}:
 #'
-#' If the desired inference is \emph{not} (relative) evidence between models, the method in \code{\link{ggm_compare_estimate}}
-#' (for each partial correlation ) or  \code{\link{ggm_compare_ppc}} (a global test) can be used.
-#'
-#'
-#' \strong{Interpretation of conditional (in)dependence models for latent data:}
-#'
-#' A  tetrachoric correlation (binary data) is a special case of a polychoric correlation (ordinal data). Both relations are
-#' between "theorized normally distributed continuous latent variables"
-#' (\href{https://en.wikipedia.org/wiki/Polychoric_correlation}{Wikipedia})
-#' In both instances, the correpsonding partial correlation between observed variables is conditioned
-#' on the remaining variables in the \emph{latent} space. This implies that interpration is much the same as
-#' for continuous data, but with respect to latent variables. We refer interested reader to
-#' \insertCite{@page 2364, section 2.2, in  @webb2008bayesian;textual}{BGGM}.
-#'
-#'
-#' \strong{Mixed Data:}
-#'
+#' See \code{\link{BGGM-package}} for details about interpreting GGMs based on latent data
+#' (i.e, all data types besides \code{"continuous"})
 #'
 #' @export
 #'
 #'
 #' @examples
 #' \donttest{
-#'# assume null is true
-#' Y1 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
-#' Y2 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
-#' Y3 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
+#' library(BGGM)
+#'
+#' # data
+#' Y <- bfi
+#'
+#' # males and females
+#' Ymale <- subset(Y, gender == 1,
+#'                    select = -c(gender,
+#'                                education))[,1:10]
+#'
+#' Yfemale <- subset(Y, gender == 2,
+#'                      select = -c(gender,
+#'                                  education))[,1:10]
+#'
+#' #############################
+#' ### example 1: continuous ###
+#' #############################
 #'
 #' # fit model
-#' bf_ggm <- ggm_compare_bf(Y1, Y2, Y3,
-#'                          prior_sd = .2,
-#'                          iter = 500, cores = 2)
+#' fit <- ggm_compare_explore(Ymale, Yfemale,
+#'                            type = "continuous")
+#'
+#' # summary
+#' summary(fit)
+#'
+#' # plot summary
+#' plot(summary(fit))
 #'
 #' # select graph
-#' sel <- select(bf_ggm, BF_cut = 3)
+#' select(fit)
 #'
-#' # plot
-#' plot(sel)
+#' # plot graph
+#' plot(select(fit))
 #'
+#' ##########################
+#' ### example 2: ordinal ###
+#' ##########################
+#'
+#' # fit model
+#' fit <- ggm_compare_explore(Ymale,  Yfemale,
+#'                            type = "ordinal")
+#'
+#' # summary
+#' summary(fit)
+#'
+#' # plot summary
+#' plot(summary(fit))
+#'
+#' # select graph
+#' select(fit)
+#'
+#' # plot graph
+#' plot(select(fit))
+#'
+#' #########################
+#' ### example 3: mixed  ###
+#' #########################
+#'
+#' # fit model
+#' fit <- ggm_compare_explore(Ymale, Yfemale,
+#'                            type = "mixed")
+#'
+#' # summary
+#' summary(fit)
+#'
+#' # plot summary
+#' plot(summary(fit))
+#'
+#' # select graph
+#' select(fit)
 #' }
 ggm_compare_explore <- function(...,
                            formula = NULL,

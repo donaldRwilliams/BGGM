@@ -11,7 +11,9 @@ ggm_compare_confirm(
   type = "continuous",
   mixed_type = NULL,
   prior_sd = 0.2,
-  iter = 5000
+  iter = 25000,
+  progress = TRUE,
+  seed = 1
 )
 }
 \arguments{
@@ -32,9 +34,11 @@ as ranks when \code{type = "mixed"} and \code{NULL} otherwise. See note for furt
 \item{prior_sd}{Numeric. The scale of the prior distribution (centered at zero),
 in reference to a beta distribtuion (defaults to 0.25).}
 
-\item{iter}{number of iterations (posterior samples; defaults to 5000).}
+\item{iter}{Number of iterations (posterior samples; defaults to 25,000).}
 
-\item{seed}{The seed for random number generation (default set to \code{1}).}
+\item{progress}{Logical. Should a progress bar be included (defaults to \code{TRUE}) ?}
+
+\item{seed}{An integer for the random seed.}
 }
 \value{
 The returned object of class \code{confirm} contains a lot of information that

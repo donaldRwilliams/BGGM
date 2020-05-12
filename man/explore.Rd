@@ -88,10 +88,6 @@ should be included in the GGM. An example is provided below.
  vector of length \emph{p}. A one indicates to use the ranks, whereas a zero indicates to "ignore"
  that variable. By default all integer variables are handled as ranks.
 
-
-
-
-
 \strong{Dealing with Errors}:
 
 An error is most likely to arise when \code{type = "ordinal"}. The are two common errors (although still rare):

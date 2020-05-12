@@ -25,9 +25,11 @@
 #' (1 for rank and 0 to assume normality). The default is currently (dev version) to treat all integer variables
 #' as ranks when \code{type = "mixed"} and \code{NULL} otherwise. See note for further details.
 #'
-#' @param iter number of iterations (posterior samples; defaults to 5000).
+#' @param iter  Number of iterations (posterior samples; defaults to 25,000).
 #'
-#' @param seed The seed for random number generation (default set to \code{1}).
+#' @param progress Logical. Should a progress bar be included (defaults to \code{TRUE}) ?
+#'
+#' @param seed An integer for the random seed.
 #'
 #' @return The returned object of class \code{confirm} contains a lot of information that
 #'         is used for printing and plotting the results. For users of \strong{BGGM}, the following
@@ -142,7 +144,16 @@ ggm_compare_confirm <- function(...,
                                 type = "continuous",
                                 mixed_type = NULL,
                                 prior_sd = 0.20,
-                                iter = 5000){
+                                iter = 25000,
+                                progress = TRUE,
+                                seed = 1){
+
+
+
+  old <- .Random.seed
+
+  set.seed(seed)
+
   # prior prob
   priorprob <- 1
 
@@ -483,6 +494,8 @@ ggm_compare_confirm <- function(...,
 
     prior_samp <- lapply(1:groups, function(x) {
 
+      set.seed(x)
+
       .Call(
         '_BGGM_sample_prior',
         PACKAGE = 'BGGM',
@@ -606,6 +619,8 @@ ggm_compare_confirm <- function(...,
     post_samp = post_samp
 
   )
+
+  .Random.seed <<- old
 
 class(returned_object) <- c("BGGM",
                             "confirm",
