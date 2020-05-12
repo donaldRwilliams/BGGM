@@ -606,6 +606,7 @@ print_ggm_compare_ppc <- function(x, ...){
   } else {
 
     cat("Symmetric KL divergence (JSD): \n \n")
+
     results <- list()
 
     for (i in 1:length(x$obs_jsd)) {
@@ -728,7 +729,7 @@ plot.ggm_compare_ppc <- function(x,
           pattern =  "_",
           replacement = ""
         ),
-        ppc = unlist(fit$obs_jsd)
+        ppc = unlist(x$obs_jsd)
       )
 
       dat_sse <- data.frame(ppc = sse,

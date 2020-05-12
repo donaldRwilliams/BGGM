@@ -156,4 +156,10 @@ print.BGGM <- function(x, ...) {
 
       }
   }
+
+if(is(x, "roll_your_own")){
+
+  print_roll_your_own(x, ...)
+ }
+
 }
