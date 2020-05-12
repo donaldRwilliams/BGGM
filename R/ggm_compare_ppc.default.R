@@ -709,7 +709,7 @@ plot.ggm_compare_ppc <- function(x,
     if(isFALSE( x$custom)) {
 
       # number of contrasts
-      k <- length(fit$ppp_jsd)
+      k <- length(x$ppp_jsd)
 
       jsd <- unlist(x$predictive_jsd)
 
@@ -725,7 +725,7 @@ plot.ggm_compare_ppc <- function(x,
 
       dat_obs_jsd <- data.frame(
         contrast =  gsub(
-          x = fit$names,
+          x = x$names,
           pattern =  "_",
           replacement = ""
         ),

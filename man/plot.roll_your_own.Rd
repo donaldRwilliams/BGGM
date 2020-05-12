@@ -26,23 +26,21 @@ Plot \code{roll_your_own} Objects
 ####################################
 ###### example 1: assortment #######
 ####################################
+# assortment
 library(assortnet)
 
 Y <- BGGM::bfi[,1:10]
 membership <- c(rep("a", 5), rep("c", 5))
 
 # fit model
-fit <- estimate(Y = Y,
-                analytic = FALSE,
-                iter = 1000)
+fit <- estimate(Y = Y, iter = 1000)
 
-# list of columns belowinging in each group
-e.g., first 5 are "a", last 5 are "c"
-
+# membership
 membership <- c(rep("a", 5), rep("c", 5))
 
+# define function
 f <- function(x,...){
-assortment.discrete(x, ...)$r
+assortment::assortment.discrete(x, ...)$r
 }
 
 
@@ -62,6 +60,7 @@ plot(net_stat)
 ############################################
 ###### example 2: expected influence #######
 ############################################
+# expected influence from this package
 library(networkTools)
 
 # data
@@ -72,7 +71,7 @@ fit <- estimate(Y = Y, iter = 5000)
 
 # define function
 f <- function(x,...){
-  expectedInf(x,...)$step1
+  networktools::expectedInf(x,...)$step1
 }
 
 # compute
@@ -85,6 +84,38 @@ net_stat
 
 #plot
 plot(net_stat)
+
+
+#######################################
+### example 3: mixed data & bridge ####
+#######################################
+# bridge from this package
+library(networkTools)
+
+# data
+Y <- ptsd
+
+fit <- estimate(Y,
+                type = "mixed",
+                iter = 1000)
+
+# clusters
+communities <- substring(colnames(Y), 1, 1)
+
+f <- function(x, ...){
+ networktools::bridge(x, ...)$`Bridge Strength`
 }
 
+net_stat <- roll_your_own(fit,
+                          FUN = f,
+                          select = TRUE,
+                          communities = communities)
+
+# print
+net_stat
+
+#plot
+plot(net_stat)
+
+}
 }

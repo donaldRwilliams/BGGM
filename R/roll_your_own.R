@@ -21,9 +21,15 @@
 #'
 #' @details
 #'
-#' The user has complete control of this function. Hence, care must be taken as to what \code{FUN} returns
-#' and in what format.
+#' The user has complete control of this function. Hence, care must be taken as to what \code{FUN}
+#' returns and in what format. The function should return a single number (one for the entire GGM)
+#' or a vector (one for each node). This ensures that the print and \code{\link{plot.roll_your_own}}
+#' will work.
 #'
+#'
+#' When \code{select = TRUE}, the graph is selected and then the network statistics are computed based on
+#' the weigthed adjacency matrix. This is accomplished internally by multiplying each of the sampled
+#' partial correlation matrices by the adjacency matrix.
 #'
 #' @examples
 #' \donttest{
@@ -31,6 +37,7 @@
 #' ####################################
 #' ###### example 1: assortment #######
 #' ####################################
+#' # assortment from this package
 #' library(assortnet)
 #'
 #' Y <- BGGM::bfi[,1:10]
@@ -47,7 +54,7 @@
 #' membership <- c(rep("a", 5), rep("c", 5))
 #'
 #'f <- function(x,...){
-#' assortment.discrete(x, ...)$r
+#' assortnet::assortment.discrete(x, ...)$r
 #'}
 #'
 #'
@@ -57,12 +64,16 @@
 #'                           weighted = TRUE,
 #'                           SE = FALSE, M = 1)
 #'
-#' hist(net_stat)
+#' # print
+#' net_stat
 #'
+#' # plot
+#' plot(net_stat)
 #'
 #' ############################################
 #' ###### example 2: expected influence #######
 #' ############################################
+#' # expected influence from this package
 #' library(networkTools)
 #'
 #' # data
@@ -73,19 +84,51 @@
 #'
 #' # define function
 #' f <- function(x,...){
-#'   expectedInf(x,...)$step1
+#'   networktools::expectedInf(x,...)$step1
 #' }
 #'
 #' # compute
 #' net_stat <- roll_your_own(object = fit,
 #'                           FUN = f,
 #'                           iter = 1000)
+#' # print
+#' net_stat
 #'
-#' colmeans
-#' colMeans(t(net_stat))
+#' # plot
+#' plot(net_stat)
 #'
-#' # full distribution (node 1)
-#' hist(net_stat[1,])
+#'
+#' #######################################
+#' ### example 3: mixed data & bridge ####
+#' #######################################
+#' # bridge from this package
+#' library(networkTools)
+#'
+#' # data
+#' Y <- ptsd
+#'
+#' fit <- estimate(Y,
+#'                 type = "mixed",
+#'                 iter = 1000)
+#'
+#' # clusters
+#' communities <- substring(colnames(Y), 1, 1)
+#'
+#' # function is slow
+#' f <- function(x, ...){
+#'  networktools::bridge(x, ...)$`Bridge Strength`
+#' }
+#'
+#' net_stat <- roll_your_own(fit,
+#'                           FUN = f,
+#'                           select = TRUE,
+#'                           communities = communities)
+#'
+#' # print
+#' net_stat
+#'
+#' #plot
+#' plot(net_stat)
 #' }
 #' @export
 roll_your_own <- function(object,
@@ -147,16 +190,22 @@ print_roll_your_own <- function(x, cred = 0.95, ...) {
   cat("Posterior Samples:", x$iter, "\n")
   cat("--- \n")
   cat("Estimates: \n\n")
+
   lb <- (1-cred) / 2
   ub <- 1 - lb
+
   dims <- dim(x$results)
+
   if(is.null(dims)){
+
     mu <- mean(x$results)
+
     scale <- sd(x$results)
+
     res <- data.frame(Post.mean = round(mean(x$results), 3),
                       Post.sd =    round(sd(x$results), 3),
                       Cred.lb = round(quantile(x$results, probs = lb), 3),
-                      Cred.ub = round(quantile(x$results, probs = lb), 3) )
+                      Cred.ub = round(quantile(x$results, probs = ub), 3) )
   } else {
 
     mu <-  apply( x$results, 1, mean)
@@ -165,7 +214,8 @@ print_roll_your_own <- function(x, cred = 0.95, ...) {
     ci_lb <- apply( x$results, 1, quantile, lb)
     ci_ub <- apply( x$results, 1, quantile, ub)
 
-    res<- data.frame(Node = 1:p, Post.mean = round(mu, 3),
+    res<- data.frame(Node = 1:p,
+                     Post.mean = round(mu, 3),
                      Post.sd = round(scale, 3),
                      Cred.lb = round(ci_lb, 3),
                      Cred.ub = round(ci_ub, 3))
@@ -177,6 +227,8 @@ print_roll_your_own <- function(x, cred = 0.95, ...) {
 
 
 #' Plot \code{roll_your_own} Objects
+#'
+#' @name plot.roll_your_own
 #'
 #' @param x An object of class \code{roll_your_own}
 #'
@@ -195,23 +247,21 @@ print_roll_your_own <- function(x, cred = 0.95, ...) {
 #' ####################################
 #' ###### example 1: assortment #######
 #' ####################################
+#' # assortment
 #' library(assortnet)
 #'
 #' Y <- BGGM::bfi[,1:10]
 #' membership <- c(rep("a", 5), rep("c", 5))
 #'
 #' # fit model
-#' fit <- estimate(Y = Y,
-#'                 analytic = FALSE,
-#'                 iter = 1000)
+#' fit <- estimate(Y = Y, iter = 1000)
 #'
-#' # list of columns belowinging in each group
-#' e.g., first 5 are "a", last 5 are "c"
-#'
+#' # membership
 #' membership <- c(rep("a", 5), rep("c", 5))
 #'
-#'f <- function(x,...){
-#' assortment.discrete(x, ...)$r
+#' # define function
+#' f <- function(x,...){
+#' assortment::assortment.discrete(x, ...)$r
 #'}
 #'
 #'
@@ -231,6 +281,7 @@ print_roll_your_own <- function(x, cred = 0.95, ...) {
 #' ############################################
 #' ###### example 2: expected influence #######
 #' ############################################
+#' # expected influence from this package
 #' library(networkTools)
 #'
 #' # data
@@ -241,7 +292,7 @@ print_roll_your_own <- function(x, cred = 0.95, ...) {
 #'
 #' # define function
 #' f <- function(x,...){
-#'   expectedInf(x,...)$step1
+#'   networktools::expectedInf(x,...)$step1
 #' }
 #'
 #' # compute
@@ -254,8 +305,40 @@ print_roll_your_own <- function(x, cred = 0.95, ...) {
 #'
 #' #plot
 #' plot(net_stat)
+#'
+#'
+#' #######################################
+#' ### example 3: mixed data & bridge ####
+#' #######################################
+#' # bridge from this package
+#' library(networkTools)
+#'
+#' # data
+#' Y <- ptsd
+#'
+#' fit <- estimate(Y,
+#'                 type = "mixed",
+#'                 iter = 1000)
+#'
+#' # clusters
+#' communities <- substring(colnames(Y), 1, 1)
+#'
+#' f <- function(x, ...){
+#'  networktools::bridge(x, ...)$`Bridge Strength`
 #' }
 #'
+#' net_stat <- roll_your_own(fit,
+#'                           FUN = f,
+#'                           select = TRUE,
+#'                           communities = communities)
+#'
+#' # print
+#' net_stat
+#'
+#' #plot
+#' plot(net_stat)
+#'
+#' }
 #' @export
 plot.roll_your_own <- function(x, fill = "#CC79A7", alpha = 0.5, ...){
 
@@ -274,16 +357,34 @@ plot.roll_your_own <- function(x, fill = "#CC79A7", alpha = 0.5, ...){
 
     dat <- reshape::melt(t(x$results))
 
-    mus <- tapply(dat$value, dat$X2, mean)
+    mus <- rowMeans(x$results)
 
     dat$order <- factor(dat$X2, levels =  unique(dat$X2)[order(mus)],
                         labels = unique(dat$X2)[order(mus)] )
 
+    zeros <- which(with(dat, tapply(value, X2, sum)) == 0)
+
+    if(length(zeros) > 0){
+
+    zeros_dat <- data.frame(X1 = 1, X2= names(zeros), value = 0, order = names(zeros))
+
+    dat_new <- subset(dat, X2 != names(zeros)[1])
+
+    for(i in 2:length(zeros)){
+
+      dat_new <- subset(dat_new, X2 != names(zeros)[i])
+
+    }
+
+    dat <- rbind.data.frame(dat_new, zeros_dat)
+
+    }
     plt <- ggplot(dat, aes(x = value,
-                           group = order,
+                           group = as.factor(order),
                            y = as.factor(order))) +
       geom_density_ridges(fill = fill,
-                          alpha = alpha) +
+                          alpha = alpha,
+                          rel_min_height = 0.001) +
       ylab("")
 
 

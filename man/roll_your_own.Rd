@@ -29,8 +29,10 @@ weighted adjacency matrices (partial correlations). The statistics are computed 
 each of the sampled matrices, resulting in a distribution.
 }
 \details{
-The user has complete control of this function. Hence, care must be taken as to what \code{FUN} returns
-and in what format.
+The user has complete control of this function. Hence, care must be taken as to what \code{FUN}
+returns and in what format. The function should return a single number (one for the entire GGM)
+of a vector (one for each node). This ensures that the print and \code{\link{plot.roll_your_own}}
+will work.
 }
 \examples{
 \donttest{
@@ -38,6 +40,7 @@ and in what format.
 ####################################
 ###### example 1: assortment #######
 ####################################
+# assortment from this package
 library(assortnet)
 
 Y <- BGGM::bfi[,1:10]
@@ -54,7 +57,7 @@ e.g., first 5 are "a", last 5 are "c"
 membership <- c(rep("a", 5), rep("c", 5))
 
 f <- function(x,...){
-assortment.discrete(x, ...)$r
+assortnet::assortment.discrete(x, ...)$r
 }
 
 
@@ -64,12 +67,16 @@ net_stat <- roll_your_own(object = fit,
                           weighted = TRUE,
                           SE = FALSE, M = 1)
 
-hist(net_stat)
+# print
+net_stat
 
+# plot
+plot(net_stat)
 
 ############################################
 ###### example 2: expected influence #######
 ############################################
+# expected influence from this package
 library(networkTools)
 
 # data
@@ -80,18 +87,49 @@ fit <- estimate(Y = Y, iter = 5000)
 
 # define function
 f <- function(x,...){
-  expectedInf(x,...)$step1
+  networktools::expectedInf(x,...)$step1
 }
 
 # compute
 net_stat <- roll_your_own(object = fit,
                           FUN = f,
                           iter = 1000)
+# print
+net_stat
 
-colmeans
-colMeans(t(net_stat))
+# plot
+plot(net_stat)
 
-# full distribution (node 1)
-hist(net_stat[1,])
+
+#######################################
+### example 3: mixed data & bridge ####
+#######################################
+# bridge from this package
+library(networkTools)
+
+# data
+Y <- ptsd
+
+fit <- estimate(Y,
+                type = "mixed",
+                iter = 1000)
+
+# clusters
+communities <- substring(colnames(Y), 1, 1)
+
+f <- function(x, ...){
+ networktools::bridge(x, ...)$`Bridge Strength`
+}
+
+net_stat <- roll_your_own(fit,
+                          FUN = f,
+                          select = TRUE,
+                          communities = communities)
+
+# print
+net_stat
+
+#plot
+plot(net_stat)
 }
 }
