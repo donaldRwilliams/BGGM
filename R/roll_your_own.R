@@ -73,7 +73,7 @@
 #' ###### example 2: expected influence #######
 #' ############################################
 #' # expected influence from this package
-#' library(networkTools)
+#' library(networktools)
 #'
 #' # data
 #' Y <- depression
@@ -101,7 +101,7 @@
 #' ### example 3: mixed data & bridge ####
 #' #######################################
 #' # bridge from this package
-#' library(networkTools)
+#' library(networktools)
 #'
 #' # data
 #' Y <- ptsd
@@ -282,7 +282,7 @@ print_roll_your_own <- function(x, cred = 0.95, ...) {
 #' ###### example 2: expected influence #######
 #' ############################################
 #' # expected influence from this package
-#' library(networkTools)
+#' library(networktools)
 #'
 #' # data
 #' Y <- depression
@@ -311,7 +311,7 @@ print_roll_your_own <- function(x, cred = 0.95, ...) {
 #' ### example 3: mixed data & bridge ####
 #' #######################################
 #' # bridge from this package
-#' library(networkTools)
+#' library(networktools)
 #'
 #' # data
 #' Y <- ptsd
