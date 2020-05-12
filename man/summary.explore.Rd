@@ -4,7 +4,7 @@
 \alias{summary.explore}
 \title{Summary method for \code{explore.default} objects}
 \usage{
-\method{summary}{explore}(object, col_names = TRUE)
+\method{summary}{explore}(object, col_names = TRUE, ...)
 }
 \arguments{
 \item{object}{an object of class \code{estimate}}
@@ -12,7 +12,7 @@
 \item{col_names}{logical. Should the summary include the column names (default is \code{TRUE})?
 Setting to \code{FALSE} includes the column numbers (e.g., \code{1--2}).}
 
-\item{...}{currently ignored}
+\item{...}{Currently ignored}
 }
 \value{
 a list containing the summarized posterior distributions

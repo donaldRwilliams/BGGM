@@ -16,5 +16,5 @@ Correlation (s) (backtransformed)
 Back tranform Fisher's Z to correlations
 }
 \examples{
-fisher_r2z(0.5)
+fisher_z_to_r(0.5)
 }

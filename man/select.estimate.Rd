@@ -4,7 +4,7 @@
 \alias{select.estimate}
 \title{GGM Selection: Estimation}
 \usage{
-\method{select}{estimate}(object, cred = 0.95, alternative = "two.sided")
+\method{select}{estimate}(object, cred = 0.95, alternative = "two.sided", ...)
 }
 \arguments{
 \item{object}{object of class \code{estimate.default}}
@@ -15,7 +15,7 @@
 must be one of "two.sided" (default), "greater"  or "less".
 See note for futher details.}
 
-\item{...}{not currently used}
+\item{...}{Not currently used}
 }
 \value{
 An object of class \code{select.estimate}:

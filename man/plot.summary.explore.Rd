@@ -9,6 +9,10 @@
 \arguments{
 \item{x}{an object of class \code{summary.explore}}
 
+\item{color}{Character string.}
+
+\item{size}{Numeric.}
+
 \item{...}{currently ignored}
 }
 \value{

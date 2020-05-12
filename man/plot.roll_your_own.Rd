@@ -61,7 +61,7 @@ plot(net_stat)
 ###### example 2: expected influence #######
 ############################################
 # expected influence from this package
-library(networkTools)
+library(networktools)
 
 # data
 Y <- depression
@@ -90,7 +90,7 @@ plot(net_stat)
 ### example 3: mixed data & bridge ####
 #######################################
 # bridge from this package
-library(networkTools)
+library(networktools)
 
 # data
 Y <- ptsd

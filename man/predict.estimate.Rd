@@ -2,7 +2,7 @@
 % Please edit documentation in R/predict.estimate.R
 \name{predict.estimate}
 \alias{predict.estimate}
-\title{Model Predictions for \coode{estimate} Objects}
+\title{Model Predictions for \code{estimate} Objects}
 \usage{
 \method{predict}{estimate}(object, newdata = NULL, summary = TRUE, cred = 0.95, iter = NULL, ...)
 }
@@ -26,7 +26,7 @@
         list containing predictions for each variable
 }
 \description{
-Model Predictions for \coode{estimate} Objects
+Model Predictions for \code{estimate} Objects
 }
 \examples{
 \donttest{

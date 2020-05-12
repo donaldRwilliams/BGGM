@@ -2,9 +2,9 @@
 #' na.omit pnorm quantile rWishart
 #' sd qnorm residuals fitted density
 #' @importFrom utils combn
-#' @importFrom foreach %dopar% foreach
 #' @importFrom graphics plot
 #' @importFrom Rdpack reprompt
+#' @importFrom MASS ginv
 #' @import ggplot2
 
 
@@ -67,8 +67,12 @@ binary_latent_helper <- function(x){
   thresholds <- c(-Inf, 0, Inf)
 
   # latent data
-  latent_data <- sapply(1:p, function(z) qnorm(runif(n, min = pnorm(thresholds[x[,z]], mean = 0, sd = 1),
-                                                     max = pnorm(thresholds[x[,z]+1], mean = 0, sd = 1)),
+  latent_data <- sapply(1:p, function(z) qnorm(runif(n, min = pnorm(thresholds[x[,z]],
+                                                                    mean = 0,
+                                                                    sd = 1),
+                                                     max = pnorm(thresholds[x[,z]+1],
+                                                                 mean = 0,
+                                                                 sd = 1)),
                                                mean = 0, sd = 1))
   # latent data (sd = 1)
   latent_data <- scale(latent_data)
@@ -86,8 +90,12 @@ ordinal_latent_helper <- function(x, thresholds){
 
   thresholds <- t(sapply(1:p, function(x) colMeans(thresholds[,,x])))
 
-  latent_data <- sapply(1:p, function(z)  qnorm(runif(n, min=pnorm(thresholds[z, x[,z]], mean = 0, sd = 1),
-                                                      max=pnorm(thresholds[z, x[,z]+1], mean = 0, sd = 1)),
+  latent_data <- sapply(1:p, function(z)  qnorm(runif(n, min = pnorm(thresholds[z, x[,z]],
+                                                                     mean = 0,
+                                                                     sd = 1),
+                                                         max = pnorm(thresholds[z, x[,z]+1],
+                                                                     mean = 0,
+                                                                     sd = 1)),
                                                 mean = 0, sd = 1))
 
   latent_data <- scale(latent_data)
@@ -119,7 +127,7 @@ rank_helper <- function(Y){
 
 group_hyp_helper <- function(hypothesis, x){
 
-  hyp <- gsub(BGGM:::hyp_converter(BGGM:::convert_hyps(hypothesis = hypothesis, cbind(x)))$hyp_converted,
+  hyp <- gsub(hyp_converter(convert_hyps(hypothesis = hypothesis, cbind(x)))$hyp_converted,
               pattern = "_", replacement = "")
   hyp
 }
@@ -130,7 +138,7 @@ convert_hyps <- function(hypothesis, Y){
 
   p <- ncol(Y)
 
-  col_names <- BGGM:::numbers2words(1:p)
+  col_names <- numbers2words(1:p)
 
   mat_name_num <- sapply(1:p, function(x) paste0(1:p, "--", x, sep = ""))
 
@@ -316,140 +324,6 @@ sampling_helper_poly <- function(Y, delta, iter, type, mixed_type= NULL){
 
 
 }
-
-
-
-
-print_ggm_confirm <- function(x, ...){
-  groups <- x$groups
-  info <- x$info_dat
-  cat("BGGM: Bayesian Gaussian Graphical Models \n")
-
-  cat("Type:",  x$type ,  "\n")
-
-  cat("--- \n")
-
-  cat("Posterior Samples:", x$iter, "\n")
-
-  for(i in 1:groups){
-    cat("  Group", paste( i, ":", sep = "") , info$dat_info$n[[i]], "\n")
-  }
-  # number of variables
-  cat("Variables (p):", x$p, "\n")
-  # number of edges
-  cat("Relations:", .5 * (x$p * (x$p-1)), "\n")
-  cat("Delta:", x$delta, "\n")
-  cat("--- \n")
-
-  cat("Call:\n")
-
-  print(x$call)
-
-  cat("--- \n")
-
-  cat("Hypotheses: \n\n")
-
-  hyps <- strsplit(x$hypothesis, ";")
-
-  n_hyps <- length(hyps[[1]])
-
-  x$info$hypotheses[1:n_hyps] <- hyps[[1]]
-
-  n_hyps <- length(x$info$hypotheses)
-
-  for (h in seq_len(n_hyps)) {
-    cat(paste0("H", h,  ": ", gsub(" ", "", x$info$hypotheses[h])  ))
-    cat("\n")
-  }
-
-  cat("--- \n")
-
-  cat("Posterior prob: \n\n")
-
-  for(h in seq_len(n_hyps)){
-
-    cat(paste0("p(H",h,"|data) = ", round(x$out_hyp_prob[h], 3 )  ))
-    cat("\n")
-  }
-
-  cat("--- \n")
-
-  cat('Bayes factor matrix: \n')
-
-  print(round(x$BF_matrix, 3))
-
-  cat("--- \n")
-
-  cat("note: equal hypothesis prior probabilities")
-}
-
-
-
-print_confirm <- function(x, ...){
-
-  cat("BGGM: Bayesian Gaussian Graphical Models \n")
-
-  cat("Type:",  x$type ,  "\n")
-
-  cat("--- \n")
-
-  cat("Posterior Samples:", x$iter, "\n")
-
-  cat("Observations (n):", nrow(x$dat), "\n")
-
-  cat("Variables (p):", x$p, "\n")
-
-  cat("Delta:", x$delta, "\n")
-
-  cat("--- \n")
-
-  cat("Call:\n")
-
-  print(x$call)
-
-  cat("--- \n")
-
-  cat("Hypotheses: \n\n")
-
-  hyps <- strsplit(x$hypothesis, ";")
-
-  n_hyps <- length(hyps[[1]])
-
-  x$info$hypotheses[1:n_hyps] <- hyps[[1]]
-
-  n_hyps <- length(x$info$hypotheses)
-
-  for (h in seq_len(n_hyps)) {
-    cat(paste0("H", h,  ": ", gsub(" ", "", x$info$hypotheses[h])  ))
-    cat("\n")
-  }
-
-  cat("--- \n")
-
-  cat("Posterior prob: \n\n")
-
-  for(h in seq_len(n_hyps)){
-
-    cat(paste0("p(H",h,"|data) = ", round(x$out_hyp_prob[h], 3 )  ))
-    cat("\n")
-  }
-
-  cat("--- \n")
-
-  cat('Bayes factor matrix: \n')
-
-  print(round(x$BF_matrix, 3))
-
-  cat("--- \n")
-
-  cat("note: equal hypothesis prior probabilities")
-}
-
-
-
-
-
-
 
 
 print_select_ggm_compare_bf <- function(x,...){
@@ -1032,12 +906,6 @@ contrast_helper <- function(x){
 }
 
 
-axis_ticks_helper <- function(x){
-
-  paste(stringr::str_sub(x, start = 1, end = 3),
-        stringr::str_sub(x, start = 4, end = 5),
-        stringr::str_sub(x, start = 6, end = 8))
-}
 
 
 
@@ -1129,7 +997,7 @@ exhaustive_helper <- function(BF_null, BF_positive, BF_negative){
   c(BF_null, BF_positive, BF_negative) /  sum(BF_null, BF_positive, BF_negative)
 }
 
-symmteric_mat <- function(x){
+symmetric_mat <- function(x){
   x[lower.tri(x)] <- t(x)[lower.tri(x)]
   x
 }
@@ -1250,6 +1118,7 @@ post_helper <- function(S, n, nu, p, delta, Psi, b_inv, sigma_inv){
   deltaMP <- nu - p + 1
 
   BMP <- solve(B)
+
   BMPinv <- solve(BMP)
   # Psi
   Psi <- rWishart(1, nuMP + deltaMP + p - 1, solve(sigma_inv + BMPinv,  tol  = 1e-20))[,,1]
@@ -1269,31 +1138,7 @@ post_helper <- function(S, n, nu, p, delta, Psi, b_inv, sigma_inv){
        pcors_post_low = pcors_post_low, sigma_inv = sigma_inv, Psi = Psi)
 }
 
-sampling <- function(X, nu, delta, n_samples = 20000, cores = 4){
-  # register parallel
-  cl <- parallel::makeCluster(cores)
-  doParallel::registerDoParallel(cl)
 
-  # samples for each "chain"
-  samps <- rep(round(n_samples / cores), cores)
-  chains <- cores
-
-  # global variable
-  i <- 1
-
-  # sample from priors and posteriors
-  samples <- foreach::foreach(i = 1:chains,
-                              .export = c("fisher_z", "sampling_helper",
-                                          "numbers2words", "prior_helper", "post_helper")) %dopar% {
-                                                sampling_helper(X = X, nu = nu,
-                                                                delta = delta,
-                                                                n_samples = samps[i])
-                                            }
-  # stop cluster
-  parallel::stopCluster(cl)
-
-  return(samples)
-}
 
 fisher_z <- function(rho){
   .5 * log(( 1 + rho )/ ( 1 - rho ))
@@ -1307,6 +1152,7 @@ pcor_name_helper <- function(x){
   keep_vars <-  unlist(strsplit(gsub("[^[:alnum:] ]", "", x), " +"))
   keep_vars
 }
+
 
 framer <- function(x){
   pos_comparisons <- unlist(gregexpr("[<>=]", x))
@@ -1330,18 +1176,23 @@ framer <- function(x){
 
 
 
-create_matrices <- function(framed, varnames){
+create_matrices <- function(framed, varnames) {
+
   k <- length(varnames)
-  if(any(grepl(",", framed$left)) || any(grepl(",", framed$right))){
-    if(nrow(framed) > 1){
-      for(r in 1:(nrow(framed)-1)){
-        if(all.equal(framed$right[r], framed$left[r+1])){
-          if(substring(framed$right[r], 1, 1) == "(") {
+
+  if (any(grepl(",", framed$left)) ||
+      any(grepl(",", framed$right))) {
+    if (nrow(framed) > 1) {
+      for (r in 1:(nrow(framed) - 1)) {
+        if (all.equal(framed$right[r], framed$left[r + 1])) {
+          if (substring(framed$right[r], 1, 1) == "(") {
             framed$right[r] <- sub("),.+", ")", framed$right[r])
-            framed$left[r+1] <- sub(".+),", "", framed$left[r +1])
+            framed$left[r + 1] <- sub(".+),", "", framed$left[r + 1])
+
           } else{
             framed$right[r] <- sub(",.+", "", framed$right[r])
-            framed$left[r+1] <- sub("[^,]+,", "", framed$left[r+1])
+            framed$left[r + 1] <-
+              sub("[^,]+,", "", framed$left[r + 1])
           }
         }
       }
@@ -1349,163 +1200,188 @@ create_matrices <- function(framed, varnames){
 
     commas_left <- framed$left[grep(",", framed$left)]
     commas_right <- framed$right[grep(",", framed$right)]
-    if(isTRUE(any(!grepl("\\(.+)", commas_left))) || isTRUE(any(!grepl("\\(.+)", commas_right))) ||
-       isTRUE(any(grepl(").+", commas_left))) || isTRUE(any(grepl(").+", commas_right))) ||
-       isTRUE(any(grepl(".+\\(", commas_left))) || isTRUE(any(grepl(".+\\(", commas_right)))) {
+    if (isTRUE(any(!grepl("\\(.+)", commas_left))) ||
+        isTRUE(any(!grepl("\\(.+)", commas_right))) ||
+        isTRUE(any(grepl(").+", commas_left))) ||
+        isTRUE(any(grepl(").+", commas_right))) ||
+        isTRUE(any(grepl(".+\\(", commas_left))) ||
+        isTRUE(any(grepl(".+\\(", commas_right)))) {
       stop("Incorrect hypothesis syntax or extra character, check specification")
     }
 
     framed$left <- gsub("[()]", "", framed$left)
     framed$right <- gsub("[()]", "", framed$right)
-    commas <- unique(c(grep(",", framed$left), grep(",", framed$right)))
+    commas <-
+      unique(c(grep(",", framed$left), grep(",", framed$right)))
 
-    if(length(commas) > 0){
+    if (length(commas) > 0) {
       multiples <- vector("list", length = length(commas))
 
-      for(r in seq_along(commas)){
-        several <- framed[commas,][r, ]
+      for (r in seq_along(commas)) {
+        several <- framed[commas, ][r,]
 
-        if(several$comp == "="){
-
+        if (several$comp == "=") {
           several <- c(several$left, several$right)
           separate <- unlist(strsplit(several, split = ","))
-          if(any(grepl("^$", several))) stop("Misplaced comma in hypothesis")
+          if (any(grepl("^$", several)))
+            stop("Misplaced comma in hypothesis")
           converted_equality <- paste(separate, collapse = "=")
           multiples[[r]] <- framer(converted_equality)
 
         } else{
           leftvars <- unlist(strsplit(several$left, split = ","))
           rightvars <- unlist(strsplit(several$right, split = ","))
-          if(any(grepl("^$", leftvars)) || any(grepl("^$", rightvars))) stop("Misplaced comma in hypothesis")
+          if (any(grepl("^$", leftvars)) ||
+              any(grepl("^$", rightvars)))
+            stop("Misplaced comma in hypothesis")
 
-          left <- rep(leftvars, length.out = length(rightvars)*length(leftvars))
+          left <-
+            rep(leftvars, length.out = length(rightvars) * length(leftvars))
           right <- rep(rightvars, each = length(leftvars))
           comp <- rep(several$comp, length(left))
 
-          multiples[[r]] <- data.frame(left = left, comp = comp, right = right, stringsAsFactors = FALSE)
+          multiples[[r]] <-
+            data.frame(
+              left = left,
+              comp = comp,
+              right = right,
+              stringsAsFactors = FALSE
+            )
         }
       }
 
-      framed <- framed[-commas,]
+      framed <- framed[-commas, ]
       multiples <- do.call(rbind, multiples)
       framed <- rbind(multiples, framed)
     }
   }
 
-  equality <- framed[framed$comp == "=",]
-  inequality <- framed[!framed$comp == "=",]
+  equality <- framed[framed$comp == "=", ]
+  inequality <- framed[!framed$comp == "=", ]
 
   #****Equality part string-to-matrix
-  if(nrow(equality) == 0) {
+  if (nrow(equality) == 0) {
     R_e <- r_e <- NULL
   } else{
-    outcomes <- suppressWarnings(apply(equality[, -2], 2, as.numeric))
+    outcomes <- suppressWarnings(apply(equality[,-2], 2, as.numeric))
     outcomes <- matrix(outcomes, ncol = 2, byrow = FALSE)
-    if(any(rowSums(is.na(outcomes)) == 0)) stop("Value compared with value rather than variable, e.g., '2 = 2', check hypotheses")
+    if (any(rowSums(is.na(outcomes)) == 0))
+      stop("Value compared with value rather than variable, e.g., '2 = 2', check hypotheses")
     rows <- which(rowSums(is.na(outcomes)) < 2)
-    specified <- t(outcomes[rows,])
+    specified <- t(outcomes[rows, ])
     specified <- specified[!is.na(specified)]
     r_e <- ifelse(rowSums(is.na(outcomes)) == 2, 0, specified)
     r_e <- matrix(r_e)
 
-    var_locations <- apply(equality[, -2], 2, function(x) ifelse(x %in% varnames, match(x, varnames), 0))
+    var_locations <-
+      apply(equality[,-2], 2, function(x)
+        ifelse(x %in% varnames, match(x, varnames), 0))
     var_locations <- matrix(var_locations, ncol = 2)
 
-    R_e <- matrix(rep(0, nrow(equality)*length(varnames)), ncol = length(varnames))
+    R_e <-
+      matrix(rep(0, nrow(equality) * length(varnames)), ncol = length(varnames))
 
-    for(i in seq_along(r_e)){
-      if(!all(var_locations[i, ] > 0)){
-        R_e[i, var_locations[i,]] <- 1
+    for (i in seq_along(r_e)) {
+      if (!all(var_locations[i,] > 0)) {
+        R_e[i, var_locations[i, ]] <- 1
       } else{
-        R_e[i, var_locations[i,]] <- c(1, -1)
+        R_e[i, var_locations[i, ]] <- c(1,-1)
       }
     }
   }
 
 
   #****Inequality part string-to-matrix
-  if(nrow(inequality) == 0) {
+  if (nrow(inequality) == 0) {
     R_i <- r_i <- NULL
   } else{
-    outcomes <- suppressWarnings(apply(inequality[, -2], 2, as.numeric))
+    outcomes <- suppressWarnings(apply(inequality[,-2], 2, as.numeric))
     outcomes <- matrix(outcomes, ncol = 2, byrow = FALSE)
-    if(any(rowSums(is.na(outcomes)) == 0)) stop("Value compared with value rather than variable, e.g., '2 > 2', check hypotheses")
+    if (any(rowSums(is.na(outcomes)) == 0))
+      stop("Value compared with value rather than variable, e.g., '2 > 2', check hypotheses")
     cols <- which(rowSums(is.na(outcomes)) < 2)
-    specified <- t(outcomes[cols,])
+    specified <- t(outcomes[cols, ])
     specified <- specified[!is.na(specified)]
     r_i <- ifelse(rowSums(is.na(outcomes)) == 2, 0, specified)
     r_i <- matrix(r_i)
 
     leq <- which(inequality$comp == "<")
-    var_locations <- apply(inequality[, -2], 2, function(x) ifelse(x %in% varnames, match(x, varnames), 0))
+    var_locations <-
+      apply(inequality[,-2], 2, function(x)
+        ifelse(x %in% varnames, match(x, varnames), 0))
     var_locations <- matrix(var_locations, ncol = 2)
 
-    R_i <- matrix(rep(0, nrow(inequality)*length(varnames)), ncol = length(varnames))
+    R_i <-
+      matrix(rep(0, nrow(inequality) * length(varnames)), ncol = length(varnames))
 
-    for(i in seq_along(r_i)){
-      if(!all(var_locations[i, ] > 0)){
-
-        if(var_locations[i, 1] == 0){
-          if(i %in% leq){
+    for (i in seq_along(r_i)) {
+      if (!all(var_locations[i,] > 0)) {
+        if (var_locations[i, 1] == 0) {
+          if (i %in% leq) {
             value <-  1
           } else{
-            r_i[i] <- r_i[i]*-1
+            r_i[i] <- r_i[i] * -1
             value <- -1
           }
         } else{
-          if(i %in% leq){
-            r_i[i] <- r_i[i]*-1
+          if (i %in% leq) {
+            r_i[i] <- r_i[i] * -1
             value <-  -1
           } else{
             value <- 1
           }
         }
 
-        R_i[i, var_locations[i,]] <- value
+        R_i[i, var_locations[i, ]] <- value
 
       } else{
-        value <- if(i %in% leq) c(-1, 1) else c(1, -1)
-        R_i[i, var_locations[i,]] <- value
+        value <- if (i %in% leq)
+          c(-1, 1)
+        else
+          c(1,-1)
+        R_i[i, var_locations[i, ]] <- value
       }
     }
   }
 
   #3)check comparisons----------------
-  if(is.null(R_i)){
+  if (is.null(R_i)) {
     comparisons <- "only equality"
-  } else if(is.null(R_e)){
+  } else if (is.null(R_e)) {
     comparisons <- "only inequality"
   } else{
     comparisons <- "both comparisons"
   }
 
   #set prior mean
-  R_ei <- rbind(R_e,R_i)
-  r_ei <- rbind(r_e,r_i)
-  Rr_ei <- cbind(R_ei,r_ei)
-  beta_zero <- MASS::ginv(R_ei)%*%r_ei
+  R_ei <- rbind(R_e, R_i)
+  r_ei <- rbind(r_e, r_i)
+  Rr_ei <- cbind(R_ei, r_ei)
+  beta_zero <- MASS::ginv(R_ei) %*% r_ei
 
-  if(nrow(Rr_ei) > 1){
-    rref_ei <- pracma::rref(Rr_ei)
-    nonzero <- rref_ei[,k+1]!=0
-    if(max(nonzero)>0){
-      row1 <- max(which(nonzero==T))
-      if(sum(abs(rref_ei[row1,1:k]))==0){
+  if (nrow(Rr_ei) > 1) {
+    # rref_ei <- pracma::rref(Rr_ei)
+    nonzero <- rref_ei[, k + 1] != 0
+    if (max(nonzero) > 0) {
+      row1 <- max(which(nonzero == T))
+      if (sum(abs(rref_ei[row1, 1:k])) == 0) {
         stop("Default prior mean cannot be constructed from constraints.")
       }
     }
   }
 
 
-  list(R_i = R_i,
-       r_i = r_i,
-       R_e = R_e,
-       r_e = r_e,
-       R_ei = R_ei,
-       Rr_ei = Rr_ei,
-       r_ei = r_ei,
-       beta_zero = beta_zero,
-       comparisons = comparisons)
+  list(
+    R_i = R_i,
+    r_i = r_i,
+    R_e = R_e,
+    r_e = r_e,
+    R_ei = R_ei,
+    Rr_ei = Rr_ei,
+    r_ei = r_ei,
+    beta_zero = beta_zero,
+    comparisons = comparisons
+  )
 
 }
 
@@ -1628,27 +1504,8 @@ samps_pcor_helper <- function(x, p){
   pcors
 }
 
-hyp_converter <- function(x){
-
-  hyp_converted <- x
-
-  extract_numbers <- unlist(stringr::str_extract_all(hyp_converted, "\\d+"))
-
-  extract_numbers <- extract_numbers[unlist(extract_numbers) != 0 ]
-  words <- NA
-  for(i in 1:length(extract_numbers)){
-
-    temp <- noquote(extract_numbers[i])
-    words[i] <- numbers2words(as.numeric(temp))
-    hyp_converted <- sub(temp, numbers2words(as.numeric(temp)), hyp_converted)
 
 
-  }
-
-  hyp_converted <- stringr::str_remove_all(hyp_converted, "--")
-
-  list(hyp_converted = hyp_converted, words = words)
-}
 
 
 performance <- function(Estimate, True){
@@ -1816,7 +1673,7 @@ gen_pcors <- function (p = 20, edge_prob = 0.3, lb = 0.05, ub = 0.3) {
       pool <- c(0, pool)
     }
     mat[upper.tri(mat)] <- sample(pool, size = effects)
-    pcs <- BGGM:::symmteric_mat(mat)
+    pcs <- symmetric_mat(mat)
     pcs <- -pcs
     diag(pcs) <- -diag(pcs)
     d <- det(pcs)

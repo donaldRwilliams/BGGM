@@ -1,100 +1,17 @@
-#' Select Graphical Structure with the Bayes Factor
+#' @title select explore
+#'
 #' @name select.explore
-#' @description This allows for not only estimating the conditional dependence structure, that is non-zero edges, but also the conditional \strong{in}dependence
-#' structure (evidence for no relation).
 #'
 #' @param object object of class \code{explore.default}
+#'
 #' @param BF_cut evidentiary threshold
+#'
 #' @param alternative type of hypothesis (see notes)
+#'
 #' @param ... currently not used
-#'
-#' @note The \code{alternative} can be either \code{greater}, \code{less}, \code{two.sided}, or \code{exhaustive}. The argument \code{hyp_prob} is used only
-#' when \code{alternative = hypothesis}. \code{greater} and \code{less} test directional hypotheses, and thus, the graphical structure will
-#' only included edges in that direction (i.e., positive or negative). \code{two.sided} is the customary approach, and test for the presence or
-#' absence of an edge. \code{exhaustive} tests negative vs. positive  vs. zero. Here \code{hyp_prob} is the posterior probability threshold for the respective
-#' hypotheses.
-#'
 #'
 #' @return list of class \code{select.explore}:
 #'
-#' \code{alternative = "two.sided"}:
-#' \itemize{
-#'  \item \code{partials_non_zero} selected partial correlation matrix
-#'  \item \code{pcor_mat} partial correlation matrix (non set to zero)
-#'  \item \code{pcor_sd} partial correlation standard deviations
-#'  \item \code{Adj_10} adjacency matrix for the selected edges (in favor of the \code{alternative})
-#'  \item \code{Adj_01} adjacency matrix for the null hypothesis  (conditional independence)
-#'  \item \code{BF_10} Bayes factors for \code{alternative}
-#'  \item \code{BF_01} Bayes factors for the null hypothesis
-#'  \item \code{BF_cut} evidentiary threshold
-#'  \item \code{alternative} \code{"two.sided"}
-#'  \item \code{code} \code{match.call()}
-#' }
-#'
-#' \code{alternative = "greater"}:
-#' \itemize{
-#'  \item \code{partials_positive} selected partial correlation matrix
-#'  \item \code{pcor_mat} partial correlation matrix (none set to zero)
-#'  \item \code{pcor_sd} partial correlation standard deviations
-#'  \item \code{Adj_20} adjacency matrix for the selected edges (in favor of the \code{alternative})
-#'  \item \code{Adj_01} adjacency matrix for the null hypothesis  (conditional independence)
-#'  \item \code{BF_20} Bayes factors for \code{alternative}
-#'  \item \code{BF_01} Bayes factors for the null hypothesis
-#'  \item \code{BF_cut} evidentiary threshold
-#'  \item \code{alternative} \code{"greater"}
-#'  \item \code{code} \code{match.call()}
-#' }
-#'
-#' \code{alternative = "less"}:
-#' \itemize{
-#'  \item \code{partials_negative} selected partial correlation matrix
-#'  \item \code{pcor_mat} partial correlation matrix (none set to zero)
-#'  \item \code{pcor_sd} partial correlation standard deviations
-#'  \item \code{Adj_20} adjacency matrix for the selected edges (in favor of the \code{alternative})
-#'  \item \code{Adj_01} adjacency matrix for the null hypothesis  (conditional independence)
-#'  \item \code{BF_20} Bayes factors for \code{alternative}
-#'  \item \code{BF_01} Bayes factors for the null hypothesis
-#'  \item \code{BF_cut} evidentiary threshold
-#'  \item \code{alternative} \code{"less"}
-#'  \item \code{code} \code{match.call()}
-#' }
-#'
-#' \code{alternative = "exhaustive"}
-#' \itemize{
-#' \item \code{post_prob} data.frame with posterior probabilities for each edge
-#' \item \code{neg_mat} adjacency matrix for negative edges
-#' \item \code{post_mat} adjacency matrix for positive edges
-#' \item \code{null_mat} adjacency matrix for zero  (conditional independence)
-#' \item \code{"alternative"} "exhaustive"
-#' \item \code{pcor_mat} partial correlation matrix (non set to zero)
-#' \item \code{pcor_sd} partial correlation standard deviations
-#' \item \code{code} \code{match.call()}
-#' \item \code{prob} \code{hyp_prob}
-#' }
-#'
-#' @examples
-#' \donttest{
-#' # p = 10
-#' Y <- BGGM::bfi[,1:10]
-#'
-#' # sample posterior
-#' fit <- explore(Y, iter = 5000)
-#'
-#' # select E
-#' E <- select(fit, BF_cut = 3)
-#'
-#' # summarize
-#' summary(E)
-#'
-#' # non-zero edges
-#' E$partials_non_zero
-#'
-#' # adjacency matrix
-#' E$Adj_10
-#'
-#' # null adjacency matrix
-#' E$Adj_01
-#' }
 #' @export
 select.explore <- function(object,
                            BF_cut = 3,
@@ -442,14 +359,22 @@ print_select_explore <- function(x,
 
 
 
-#' Summary Method for \code{select.explore} Objects
+#' @title   Summary Method for \code{select.explore} Objects
+#'
+#' @name summary.select.explore
 #'
 #' @param object object of class \code{select.explore}.
+#'
+#' @param col_names Logical.
+#'
+#' @param ... Currently ignored.
 #'
 #' @return a data frame including the posterior mean, standard deviation,
 #' and posterior hypothesis probabilities for each relation.
 #' @export
-summary.select.explore <- function(object, col_names = TRUE){
+summary.select.explore <- function(object,
+                                   col_names = TRUE,
+                                   ...){
 
   x <- object
 
@@ -587,17 +512,26 @@ print_summary_select_explore <- function(x,...){
 }
 
 
-#' GGM: Plot \code{summary.select.explore] Objects}
+#' @title Plot new
 #'
-#' @description Visualize posterior hypothesis probabilities.
+#' @name plot.summary.select.explore
 #'
-#' @param x object of class \code{summary.select.explore}
-#' @param size numeric. Size of the points.
-#' @param color string. Color of the points.
+#' @description Visualize the posterior hypothesis probabilities.
 #'
-#' @return
+#' @param x An object of class \code{summary.select.explore}
+#'
+#' @param size Numeric. The size for the points (defaults to 2).
+#'
+#' @param color Character string. The Color for the points
+#'
+#' @param ... Currently ignored
+#'
+#' @return A \code{ggplot} object
 #' @export
-plot.summary.select.explore <- function(x, size = 2, color = "black"){
+plot.summary.select.explore <- function(x,
+                                        size = 2,
+                                        color = "black",
+                                        ...){
 
 
   dat_temp <- x$summary[order(x$summary$Pr.H1,

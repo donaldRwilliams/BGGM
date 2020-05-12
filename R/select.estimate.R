@@ -14,7 +14,7 @@
 #'                    must be one of "two.sided" (default), "greater"  or "less".
 #'                    See note for futher details.
 
-#' @param ... not currently used
+#' @param ... Not currently used
 #'
 #' @references
 #' \insertAllCited{}
@@ -62,7 +62,7 @@
 #' @export
 select.estimate <- function(object,
                             cred = 0.95,
-                            alternative = "two.sided"){
+                            alternative = "two.sided", ...){
 
   if(isFALSE(object$analytic)){
 

@@ -697,7 +697,7 @@ plot.ggm_compare_ppc <- function(x,
                                  critical = 0.05,
                                  col_noncritical = "#84e184A0",
                                  col_critical = "red",
-                                 point_size = 2){
+                                 point_size = 2, ...){
 
   # check for ggridges
   if(!requireNamespace("ggridges", quietly = TRUE)) {

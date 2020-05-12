@@ -4,7 +4,7 @@
 \alias{plot.summary.ggm_compare_explore}
 \title{GGM Compare: Plot \code{ggm_compare_explore] Objects}}
 \usage{
-\method{plot}{summary.ggm_compare_explore}(x, size = 2, color = "black")
+\method{plot}{summary.ggm_compare_explore}(x, size = 2, color = "black", ...)
 }
 \arguments{
 \item{x}{object of class \code{ggm_compare_explore}}
@@ -12,6 +12,8 @@
 \item{size}{numeric. Size of the points.}
 
 \item{color}{string. Color of the points.}
+
+\item{...}{Currently ignored}
 }
 \value{
 

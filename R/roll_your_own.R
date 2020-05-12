@@ -47,13 +47,12 @@
 #'                 analytic = FALSE,
 #'                 iter = 1000)
 #'
-#' # list of columns belowinging in each group
-#' e.g., first 5 are "a", last 5 are "c"
+#' # list of columns belonging in each group
 #'
 #' membership <- c(rep("a", 5), rep("c", 5))
 #'
 #'f <- function(x,...){
-#'     assortnet::assortment.discrete(x, ...)$r
+#'     assortment.discrete(x, ...)$r
 #'}
 #'
 #'
@@ -83,7 +82,7 @@
 #'
 #' # define function
 #' f <- function(x,...){
-#'      networktools::expectedInf(x,...)$step1
+#'      expectedInf(x,...)$step1
 #' }
 #'
 #' # compute
@@ -115,7 +114,7 @@
 #'
 #' # function is slow
 #' f <- function(x, ...){
-#'  networktools::bridge(x, ...)$`Bridge Strength`
+#'  bridge(x, ...)$`Bridge Strength`
 #' }
 #'
 #' net_stat <- roll_your_own(fit,
@@ -261,7 +260,7 @@ print_roll_your_own <- function(x, cred = 0.95, ...) {
 #'
 #' # define function
 #' f <- function(x,...){
-#' assortment::assortment.discrete(x, ...)$r
+#'  assortment.discrete(x, ...)$r
 #'}
 #'
 #'
@@ -292,7 +291,7 @@ print_roll_your_own <- function(x, cred = 0.95, ...) {
 #'
 #' # define function
 #' f <- function(x,...){
-#'   networktools::expectedInf(x,...)$step1
+#'   expectedInf(x,...)$step1
 #' }
 #'
 #' # compute
@@ -324,7 +323,7 @@ print_roll_your_own <- function(x, cred = 0.95, ...) {
 #' communities <- substring(colnames(Y), 1, 1)
 #'
 #' f <- function(x, ...){
-#'  networktools::bridge(x, ...)$`Bridge Strength`
+#'       bridge(x, ...)$`Bridge Strength`
 #' }
 #'
 #' net_stat <- roll_your_own(fit,

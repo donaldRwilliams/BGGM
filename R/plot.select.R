@@ -46,7 +46,7 @@ plot.select <- function(x,
   # select estimate
   if(is(x, "select.estimate")){
 
-    cn <- colnames( x$object$Y)
+    cn <- colnames(x$object$Y)
 
     p <- ncol(x$pcor_adj)
 
@@ -73,7 +73,7 @@ plot.select <- function(x,
                                                neg_col,
                                                pos_col))
 
-    e <- abs(as.numeric( x$pcor_adj))
+    e <- abs(as.numeric(x$pcor_adj))
 
     if(is.null(groups)){
 
@@ -119,7 +119,9 @@ plot.select <- function(x,
   } else if (is(x, "select.explore")){
 
     if(x$alternative == "two.sided" |
+
        x$alternative == "greater" |
+
        x$alternative == "less"){
 
 

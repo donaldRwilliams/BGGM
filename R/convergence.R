@@ -9,7 +9,7 @@
 #' @param type Character string. Which type of convergence plot ? The current
 #'             options are \code{trace} (default) and \code{acf}.
 #'
-#' @param print_name Logical. Should the parameter names be printed (defaults to \code{FALSE})? This
+#' @param print_names Logical. Should the parameter names be printed (defaults to \code{FALSE})? This
 #'                   can be used to first determine the parameter names to specify in \code{type}.
 #'
 #' @return A list of \code{ggplot} objects.

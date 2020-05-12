@@ -14,7 +14,7 @@ convergence(object, param = NULL, type = "trace", print_names = FALSE)
 \item{type}{Character string. Which type of convergence plot ? The current
 options are \code{trace} (default) and \code{acf}.}
 
-\item{print_name}{Logical. Should the parameter names be printed (defaults to \code{FALSE})? This
+\item{print_names}{Logical. Should the parameter names be printed (defaults to \code{FALSE})? This
 can be used to first determine the parameter names to specify in \code{type}.}
 }
 \value{

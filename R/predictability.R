@@ -341,19 +341,28 @@ print_summary_metric <- function(x, digits = 2,...){
 
 
 #' Plot \code{metric} Objects
+#'
 #' @param x object of class \code{metric}
+#'
 #' @param type \code{"error_bar"} or \code{"ridgeline"}
+#'
 #' @param cred credible interval
+#'
 #' @param width width of error bar end (\code{type = "error_bar"})
+#'
 #' @param size point size (\code{type = "error_bar"})
+#'
 #' @param color point (\code{type = "error_bar"}) or
 #' tail region (\code{type = "ridgeline"} ) color
+#'
 #' @param alpha transparency of tail region (\code{type = "ridgeline"})
+#'
 #' @param scale overlap of densities (\code{type = "ridgeline"})
+#'
 #' @param ... currently ignored
 #'
 #' @return \code{ggplot}
-#' @importFrom reshape2 melt
+#' @importFrom reshape melt
 #' @importFrom ggridges stat_density_ridges
 #' @export
 #'
@@ -376,10 +385,12 @@ print_summary_metric <- function(x, digits = 2,...){
 #' plot(error)
 #' }
 plot.predictability <- function(x, type = "error_bar",
-                        cred = 0.95, alpha = 0.5,
-                        scale = 1, width = 0,
-                        size = 1, color = "blue",
-                        rope = 0.1,
+                        cred = 0.95,
+                        alpha = 0.5,
+                        scale = 1,
+                        width = 0,
+                        size = 1,
+                        color = "blue",
                         ...){
 
   if(type == "error_bar"){
@@ -440,7 +451,7 @@ plot.predictability <- function(x, type = "error_bar",
 
     summ <- summary(x)
 
-    dat <- reshape2::melt(x$scores)
+    dat <- reshape::melt(x$scores)
 
     dat$L1 <- as.factor(dat$L1)
 

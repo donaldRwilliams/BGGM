@@ -78,7 +78,7 @@ gen_ordinal <- function(n,  p, levels = 2,  cor_mat, empirical = FALSE){
   }
 
   junk <- capture.output(data <- rmvord_naiv(n = n, probs =  ls,
-                                             Cor = cor_mat,
+                                             Cors = cor_mat,
                                              empirical = empirical))
   data
 }

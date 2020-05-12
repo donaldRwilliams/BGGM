@@ -10,7 +10,7 @@ ggm_compare_confirm(
   formula = NULL,
   type = "continuous",
   mixed_type = NULL,
-  prior_sd = 0.2,
+  prior_sd = 0.25,
   iter = 25000,
   progress = TRUE,
   seed = 1
@@ -24,8 +24,9 @@ ggm_compare_confirm(
 \item{formula}{an object of class \code{\link[stats]{formula}}. This allows for including
 control variables in the model (i.e., \code{~ gender}).}
 
-\item{type}{Character string. Which type of data for \strong{Y} ? The options include \code{continuous},
-\code{binary}, or \code{ordinal}. See the note for further details.}
+\item{type}{Character string. Which type of data for \code{Y} ? The options include \code{continuous},
+\code{binary}, \code{ordinal}, or \code{mixed}. Note that mixed can be used for data with only
+ordinal variables. See the note for further details.}
 
 \item{mixed_type}{numeric vector. An indicator of length p for which varibles should be treated as ranks.
 (1 for rank and 0 to assume normality). The default is currently (dev version) to treat all integer variables
@@ -49,7 +50,8 @@ The returned object of class \code{confirm} contains a lot of information that
 
 \item \code{out_hyp_prob} Posterior hypothesis probabilities.
 
-\item \code{info} An object of class \code{BF} from the R package \strong{BFpack}.
+\item \code{info} An object of class \code{BF} from the R package \strong{BFpack}
+                  \insertCite{mulder2019bfpack}{BGGM}
 
 }
 }
@@ -63,34 +65,71 @@ the conditional (in)dependence structure. These methods were introduced in
 \details{
 The hypotheses can be written either with the respective column names or numbers.
 For example, \code{g1_1--2} denotes the relation between the variables in column 1 and 2 for group 1.
-The \code{g1_1} is required and the only difference from \code{\link{confirm}} (one group).
+The \code{g1_} is required and the only difference from \code{\link{confirm}} (one group).
 Note that these must correspond to the upper triangular elements of the correlation
 matrix. This is accomplished by ensuring that the first number is smaller than the second number.
 This also applies when using column names (i.e,, in reference to the column number).
 
+
 \strong{One Hypothesis}:
+
+To test whether a relation in larger in one group, while both are expected
+to be positive,  this can be written as
 
 \itemize{
 
-\item  To test whether a relation in larger in one group, while both are expected
-       to be positive,  this can be written as
-
- \code{hyp <-  c(g1_1--2 > g2_1--2 > 0)},
-
- This is then compared to the complement.
+\item  \code{hyp <-  c(g1_1--2 > g2_1--2 > 0)}
 }
+
+This is then compared to the complement.
 
 \strong{More Than One Hypothesis}:
 
-\itemize{
-
-\item The above hypothesis can also be compared to, say, a null model by using ";"
+The above hypothesis can also be compared to, say, a null model by using ";"
       to seperate the hypotheses, for example,
 
-\code{hyp <-  c(g1_1--2 > g2_1--2 > 0; g1_1--2 = g2_1--2 = 0)}.
+\itemize{
+
+\item  \code{hyp <-  c(g1_1--2 > g2_1--2 > 0; g1_1--2 = g2_1--2 = 0)}.
+
+}
 
 Any number of hypotheses can be compared this way.
+
+\strong{Using "&"}
+
+ It is also possible to include \code{&}. This allows for testing one constraint \bold{and}
+ another contraint as one hypothesis.
+
+\itemize{
+
+\item \code{hyp <- c("g1_A1--A2 > g2_A1--A2 & g1_A1--A3 = g2_A1--A3")}
+
 }
+
+Of course, it is then possible to include additional hypotheses by separating them with ";".
+
+\strong{Testing Sums}
+
+It might also be interesting to test the sum of partial correlations. For example, that the
+sum of specific relations in one group is larger than the sum in another group.
+
+\itemize{
+
+\item \code{hyp <- c("g1_A1--A2 + g1_A1--A3 > g2_A1--A2 + g2_A1--A3;
+                      g1_A1--A2 + g1_A1--A3 = g2_A1--A2 + g2_A1--A3")}
+
+}
+
+
+\strong{Potential Delays}:
+
+There is a chance for a potentially long delay from the time the progress bar finishes
+to when the function is done running. This occurs when the hypotheses require further
+sampling to be tested, for example, when grouping relations
+\code{c("(g1_A1--A2, g2_A2--A3) > (g2_A1--A2, g2_A2--A3)"}.
+This is not an error.
+
 
 \strong{Controlling for Variables}:
 
@@ -139,8 +178,8 @@ An error is most likely to arise when \code{type = "ordinal"}. The are two commo
  interested users to \insertCite{@section 2.2 in @dablander2020default;textual}{BGGM}. In
  \insertCite{Williams2019_bf;textual}{BGGM}, some of these propteries were investigated (e.g.,
  model selection consistency). That said, we would not consider this a "default" or "automatic"
- Bayes factor and thus we encourage users to perform sensitivity analyses by varying the scale of the prior
- distribution.
+ Bayes factor and thus we encourage users to perform sensitivity analyses by varying the scale of
+ the prior distribution (\code{prior_sd}).
 
  Furthermore, it is important to note there is no "correct" prior and, also, there is no need
  to entertain the possibility of a "true" model. Rather, the Bayes factor can be interpreted as
@@ -151,4 +190,134 @@ An error is most likely to arise when \code{type = "ordinal"}. The are two commo
 
  See \code{\link{BGGM-package}} for details about interpreting GGMs based on latent data
 (i.e, all data types besides \code{"continuous"})
+}
+\examples{
+\donttest{
+library(BGGM)
+
+# data
+Y <- bfi
+
+###############################
+#### example 1: continuous ####
+###############################
+
+# males
+Ymale   <- subset(Y, gender == 1,
+                  select = -c(education,
+                              gender))[,1:5]
+
+
+# females
+Yfemale <- subset(Y, gender == 2,
+                     select = -c(education,
+                                 gender))[,1:5]
+
+ # exhaustive
+ hypothesis <- c("g1_A1--A2 >  g2_A1--A2;
+                  g1_A1--A2 <  g2_A1--A2;
+                  g1_A1--A2 =  g2_A1--A2")
+
+# test hyp
+test <- ggm_compare_confirm(Ymale,  Yfemale,
+                            hypothesis = hypothesis)
+
+# print (evidence not strong)
+test
+
+#########################################
+#### example 2: sensitivity to prior ####
+#########################################
+# continued from example 1
+
+# decrease prior SD
+test <- ggm_compare_confirm(Ymale,
+                            Yfemale,
+                            prior_sd = 0.1,
+                            hypothesis = hypothesis)
+
+# print
+test
+
+# indecrease prior SD
+test <- ggm_compare_confirm(Ymale,
+                            Yfemale,
+                            prior_sd = 0.5,
+                            hypothesis = hypothesis)
+
+# print
+test
+
+################################
+#### example 3: mixed data #####
+################################
+
+hypothesis <- c("g1_A1--A2 >  g2_A1--A2;
+                 g1_A1--A2 <  g2_A1--A2;
+                 g1_A1--A2 =  g2_A1--A2")
+
+# test (1000 for example)
+test <- ggm_compare_confirm(Ymale,
+                            Yfemale,
+                            type = "mixed",
+                            iter = 1000,
+                            hypothesis = hypothesis)
+
+# print
+test
+
+##############################
+##### example 4: control #####
+##############################
+# control for education
+
+# data
+Y <- bfi
+
+# males
+Ymale   <- subset(Y, gender == 1,
+                  select = -c(gender))[,c(1:5, 26)]
+
+# females
+Yfemale <- subset(Y, gender == 2,
+                  select = -c(gender))[,c(1:5, 26)]
+
+# test
+test <- ggm_compare_confirm(Ymale,
+                             Yfemale,
+                             formula = ~ education,
+                             hypothesis = hypothesis)
+# print
+test
+
+
+#####################################
+##### example 5: many relations #####
+#####################################
+
+# data
+Y <- bfi
+
+hypothesis <- c("g1_A1--A2 > g2_A1--A2 & g1_A1--A3 = g2_A1--A3;
+                 g1_A1--A2 = g2_A1--A2 & g1_A1--A3 = g2_A1--A3;
+                 g1_A1--A2 = g2_A1--A2 = g1_A1--A3 = g2_A1--A3")
+
+Ymale   <- subset(Y, gender == 1,
+                  select = -c(education,
+                              gender))[,1:5]
+
+
+# females
+Yfemale <- subset(Y, gender == 2,
+                     select = -c(education,
+                                 gender))[,1:5]
+
+test <- ggm_compare_confirm(Ymale,
+                            Yfemale,
+                             hypothesis = hypothesis)
+
+# print
+test
+}
+
 }

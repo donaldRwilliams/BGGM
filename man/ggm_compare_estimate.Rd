@@ -120,7 +120,6 @@ test for comparing each variable in the network. Testing for nodewise difference
 \code{\link{test.R2}} \insertCite{Williams2019;textual}{BGGM}.
 }
 \examples{
-# comparing two groups (males vs. females) in a personality network
 
 
 

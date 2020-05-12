@@ -2,20 +2,22 @@
 % Please edit documentation in R/select.explore.R
 \name{plot.summary.select.explore}
 \alias{plot.summary.select.explore}
-\title{GGM: Plot \code{summary.select.explore] Objects}}
+\title{Plot new}
 \usage{
-\method{plot}{summary.select.explore}(x, size = 2, color = "black")
+\method{plot}{summary.select.explore}(x, size = 2, color = "black", ...)
 }
 \arguments{
-\item{x}{object of class \code{summary.select.explore}}
+\item{x}{An object of class \code{summary.select.explore}}
 
-\item{size}{numeric. Size of the points.}
+\item{size}{Numeric. The size for the points (defaults to 2).}
 
-\item{color}{string. Color of the points.}
+\item{color}{Character string. The Color for the points}
+
+\item{...}{Currently ignored}
 }
 \value{
-
+A \code{ggplot} object
 }
 \description{
-Visualize posterior hypothesis probabilities.
+Visualize the posterior hypothesis probabilities.
 }

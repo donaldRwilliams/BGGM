@@ -594,6 +594,12 @@ explore <- function(Y,
     Y_dummy <- matrix(rnorm( 10 * 3 ),
                     nrow = 10, ncol = 3)
 
+    if(isTRUE(progress)){
+
+      message(paste0("BGGM: Prior Sampling ", ...))
+
+    }
+
     # sample prior
     prior_samp <- .Call('_BGGM_sample_prior',
                       PACKAGE = 'BGGM',
@@ -602,7 +608,8 @@ explore <- function(Y,
                       delta = delta,
                       epsilon = eps,
                       prior_only = 1,
-                      explore = 1)
+                      explore = 1,
+                      progress = progress)
 
     if(isTRUE(progress)){
 
@@ -662,7 +669,7 @@ explore <- function(Y,
 #' @param col_names logical. Should the summary include the column names (default is \code{TRUE})?
 #'                  Setting to \code{FALSE} includes the column numbers (e.g., \code{1--2}).
 #'
-#' @param ... currently ignored
+#' @param ... Currently ignored
 #'
 #' @seealso \code{\link{select.explore}}
 #'
@@ -674,7 +681,7 @@ explore <- function(Y,
 #' summary(fit)
 #' @export
 summary.explore <- function(object,
-                             col_names = TRUE) {
+                             col_names = TRUE, ...) {
 
   # nodes
   p <- object$p
@@ -766,6 +773,8 @@ print_explore <- function(x,...){
 #' Plot \code{summary.explore}
 #'
 #' @param x an object of class \code{summary.explore}
+#' @param color Character string.
+#' @param size Numeric.
 #' @param ... currently ignored
 #'
 #' @return an object of class \code{ggplot}

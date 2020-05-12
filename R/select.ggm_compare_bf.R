@@ -4,6 +4,8 @@
 #'
 #' @param post_prob numeric. Posterior `inclusion` probability.  The default is set to 0.50.
 #'
+#' @param BF_cut Numeric.
+#'
 #' @param ... not currently used.
 #'
 #' @return list of class \code{select.ggm_compare_bf}
@@ -38,11 +40,11 @@
 #' }
 select.ggm_compare_explore <- function(object,
                                        post_prob = 0.50,
-                                       BF = NULL,...){
+                                       BF_cut = NULL,...){
 
   x <- object
 
-  if(is.null(BF)){
+  if(is.null(BF_cut)){
 
     BF_cut = (post_prob) / (1 - post_prob)
 

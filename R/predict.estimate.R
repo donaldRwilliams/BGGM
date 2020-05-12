@@ -1,4 +1,4 @@
-#' Model Predictions for \coode{estimate} Objects
+#' Model Predictions for \code{estimate} Objects
 #'
 #' @name predict.estimate
 #'

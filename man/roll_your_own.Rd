@@ -55,13 +55,12 @@ fit <- estimate(Y = Y,
                 analytic = FALSE,
                 iter = 1000)
 
-# list of columns belowinging in each group
-e.g., first 5 are "a", last 5 are "c"
+# list of columns belonging in each group
 
 membership <- c(rep("a", 5), rep("c", 5))
 
 f <- function(x,...){
-    assortnet::assortment.discrete(x, ...)$r
+    assortment.discrete(x, ...)$r
 }
 
 
@@ -81,7 +80,7 @@ plot(net_stat)
 ###### example 2: expected influence #######
 ############################################
 # expected influence from this package
-library(networkTools)
+library(networktools)
 
 # data
 Y <- depression
@@ -91,7 +90,7 @@ fit <- estimate(Y = Y, iter = 5000)
 
 # define function
 f <- function(x,...){
-     networktools::expectedInf(x,...)$step1
+     expectedInf(x,...)$step1
 }
 
 # compute
@@ -109,7 +108,7 @@ plot(net_stat)
 ### example 3: mixed data & bridge ####
 #######################################
 # bridge from this package
-library(networkTools)
+library(networktools)
 
 # data
 Y <- ptsd
@@ -123,7 +122,7 @@ communities <- substring(colnames(Y), 1, 1)
 
 # function is slow
 f <- function(x, ...){
- networktools::bridge(x, ...)$`Bridge Strength`
+ bridge(x, ...)$`Bridge Strength`
 }
 
 net_stat <- roll_your_own(fit,

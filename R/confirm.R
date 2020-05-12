@@ -505,6 +505,13 @@ confirm <- function(Y, hypothesis,
     stop("'type' not supported: must be continuous, binary, ordinal, or mixed.")
   }
 
+
+  if(isTRUE(progress)){
+
+    message(paste0("BGGM: Prior Sampling ", ...))
+
+  }
+
   # sample prior
   prior_samp <- .Call(
     '_BGGM_sample_prior',
@@ -514,13 +521,16 @@ confirm <- function(Y, hypothesis,
     delta = delta,
     epsilon = 0.01,
     prior_only = 1,
-    explore = 0
+    explore = 0,
+    progress = progress
   )$fisher_z
 
   if(isTRUE(progress)){
-  message("BGGM: Testing Hypotheses")
-}
-  col_names <- BGGM:::numbers2words(1:p)
+
+    message("BGGM: Testing Hypotheses")
+    }
+
+  col_names <- numbers2words(1:p)
 
   mat_name <- sapply(col_names, function(x) paste(col_names,x, sep = ""))[upper.tri(I_p)]
 
@@ -547,12 +557,12 @@ confirm <- function(Y, hypothesis,
 
   BFprior <- BF(prior_mu,
                 Sigma = prior_cov,
-                hypothesis = BGGM:::convert_hyps(hypothesis, Y = Y),
+                hypothesis = convert_hyps(hypothesis, Y = Y),
                 n = 1)
 
   BFpost <- BF(post_mu,
                Sigma = post_cov,
-               hypothesis = BGGM:::convert_hyps(hypothesis, Y = Y),
+               hypothesis = convert_hyps(hypothesis, Y = Y),
                n = 1)
 
 
@@ -604,3 +614,65 @@ confirm <- function(Y, hypothesis,
   class(returned_object) <- c("BGGM", "confirm")
   returned_object
 }
+
+
+print_confirm <- function(x, ...){
+
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+
+  cat("Type:",  x$type ,  "\n")
+
+  cat("--- \n")
+
+  cat("Posterior Samples:", x$iter, "\n")
+
+  cat("Observations (n):", nrow(x$dat), "\n")
+
+  cat("Variables (p):", x$p, "\n")
+
+  cat("Delta:", x$delta, "\n")
+
+  cat("--- \n")
+
+  cat("Call:\n")
+
+  print(x$call)
+
+  cat("--- \n")
+
+  cat("Hypotheses: \n\n")
+
+  hyps <- strsplit(x$hypothesis, ";")
+
+  n_hyps <- length(hyps[[1]])
+
+  x$info$hypotheses[1:n_hyps] <- hyps[[1]]
+
+  n_hyps <- length(x$info$hypotheses)
+
+  for (h in seq_len(n_hyps)) {
+    cat(paste0("H", h,  ": ", gsub(" ", "", x$info$hypotheses[h])  ))
+    cat("\n")
+  }
+
+  cat("--- \n")
+
+  cat("Posterior prob: \n\n")
+
+  for (h in seq_len(n_hyps)) {
+    cat(paste0("H", h,  ": ", gsub(" ", "",  gsub('[\n]', '', x$info$hypotheses[h])), "\n"))
+
+  }
+
+  cat("--- \n")
+
+  cat('Bayes factor matrix: \n')
+
+  print(round(x$BF_matrix, 3))
+
+  cat("--- \n")
+
+  cat("note: equal hypothesis prior probabilities")
+}
+
+

@@ -790,6 +790,7 @@ print_estimate <- function(x, ...){
 #' Plot \code{summary.estimate} Objects
 #'
 #' @param x an object of class \code{summary.estimate}
+#' @param size Numeric. The size for the points.
 #' @param color color of error bar
 #' @param width width of error bar cap
 #' @param ... currently ignored

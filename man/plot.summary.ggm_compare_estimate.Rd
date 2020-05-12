@@ -11,6 +11,8 @@
 
 \item{color}{color of error bar}
 
+\item{size}{Numeric.}
+
 \item{width}{width of error bar cap}
 
 \item{...}{currently ignored}

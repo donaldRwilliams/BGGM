@@ -16,5 +16,5 @@ Fisher Z transformed correlation(s)
 Tranform correlations to Fisher's Z
 }
 \examples{
-fisher_r2z(0.5)
+fisher_r_to_z(0.5)
 }

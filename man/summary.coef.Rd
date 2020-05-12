@@ -4,12 +4,14 @@
 \alias{summary.coef}
 \title{Summarize \code{coef} Objects}
 \usage{
-\method{summary}{coef}(object, cred = 0.95)
+\method{summary}{coef}(object, cred = 0.95, ...)
 }
 \arguments{
 \item{object}{an object of class \code{coef}}
 
 \item{cred}{credible interval width used for the decision rule}
+
+\item{...}{Currently ignored}
 }
 \value{
 a list of length \emph{p} including the

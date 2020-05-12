@@ -443,13 +443,15 @@ print_coef <- function(x,...){
 #'
 #' @param object an object of class \code{coef}
 #' @param cred credible interval width used for the decision rule
+#' @param ... Currently ignored
 #'
 #' @return a list of length \emph{p} including the
 #'         summaries for each multiple regression.
 #' @export
 #'
-#' @examples
-summary.coef <- function(object, cred = 0.95){
+summary.coef <- function(object,
+                         cred = 0.95,
+                         ...){
 
   lb <- (1 - cred) / 2
   ub <- 1 - lb

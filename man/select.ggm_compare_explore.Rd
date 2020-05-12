@@ -4,12 +4,14 @@
 \alias{select.ggm_compare_explore}
 \title{Select Graph: \code{ggm_compare_explore} Objects}
 \usage{
-\method{select}{ggm_compare_explore}(object, post_prob = 0.5, BF = NULL, ...)
+\method{select}{ggm_compare_explore}(object, post_prob = 0.5, BF_cut = NULL, ...)
 }
 \arguments{
 \item{object}{object of class \code{ggm_compare_bf}.}
 
 \item{post_prob}{numeric. Posterior `inclusion` probability.  The default is set to 0.50.}
+
+\item{BF_cut}{Numeric.}
 
 \item{...}{not currently used.}
 }

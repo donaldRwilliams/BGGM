@@ -2,4 +2,15 @@
 .Rhistory
 .RData
 .Ruserdata
+
 ^/\.gitattributes$
+
+.travis.yml
+
+.joss_paper/
+
+.data-raw/
+
+
+
+.paper.md

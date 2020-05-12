@@ -127,4 +127,8 @@
 #'
 #' @name BGGM-package
 #'
+#' @import Rcpp
+#' @importFrom Rcpp sourceCpp
+#' @useDynLib BGGM, .registration = TRUE
+#'
 NULL

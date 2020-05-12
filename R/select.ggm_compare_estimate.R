@@ -20,27 +20,6 @@
 #' \item \code{cred} credible interval
 #' \item \code{prob} posterior probability
 #' }
-#' @examples
-#' # data
-#' Y1 <- BGGM::bfi[1:500,1:5]
-#' Y2 <- BGGM::bfi[501:1000, 1:5]
-#'
-#' # fit model
-#' fit <- ggm_compare_estimate(Y1, Y2)
-#'
-#' # posterior summary of differences
-#' summary(fit)
-#'
-#' # select (threshold) with credible intervals
-#' sel <- select(fit)
-#'
-#' # summary
-#' summary(sel)
-#'
-#'# selected differences
-#' sel$mat_pcor
-#'
-#' # adjacency matrix
 #' sel$mat_adj
 #' @export
 select.ggm_compare_estimate <- function(object,

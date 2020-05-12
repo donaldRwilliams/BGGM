@@ -145,10 +145,13 @@ Rcpp::List sample_prior(arma::mat Y,
                             float delta,
                             float epsilon,
                             int prior_only,
-                            int explore) {
+                            int explore,
+                            bool progress) {
 
   // note p changed to k to be consistent
   //with the multivariate regression samplers
+
+  Progress  p(iter, progress);
 
   // number of rows
   float n = Y.n_rows;

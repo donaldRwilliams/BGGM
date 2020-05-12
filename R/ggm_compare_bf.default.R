@@ -14,9 +14,6 @@
 #' @param formula An object of class \code{\link[stats]{formula}}. This allows for including
 #' control variables in the model (i.e., \code{~ gender}).
 #'
-#' @param data An optional data frame, list or environment (or an object coercible by \code{\link[base]{as.data.frame}})
-#' to a data frame containing the variables in \code{formula}. This is required when controlling for variables.
-#'
 #' @param prior_sd Numeric. The scale of the prior distribution (centered at zero), in reference to a beta distribtuion.
 #' The `default` is 0.25. See note for further details.
 #'
@@ -323,8 +320,9 @@ ggm_compare_explore <- function(...,
         }
   }
 
-  BF_01 <-  symmteric_mat(BF_01_mat)
-  pcor_diff <- symmteric_mat(pcor_diff)
+  BF_01 <-  symmetric_mat(BF_01_mat)
+
+  pcor_diff <- symmetric_mat(pcor_diff)
 
   returned_object <- list(BF_01 = BF_01,
                           info = info,
@@ -431,7 +429,6 @@ print_ggm_compare_bf <- function(x, ...){
 #' @return
 #' @export
 #'
-#' @examples
 summary.ggm_compare_explore <- function(object,
                                         col_names = TRUE,
                                         ...){
@@ -502,11 +499,14 @@ summary.ggm_compare_explore <- function(object,
 #' @param x object of class \code{ggm_compare_explore}
 #' @param size numeric. Size of the points.
 #' @param color string. Color of the points.
+#' @param ... Currently ignored
 #'
 #' @return
 #' @export
 #'
-plot.summary.ggm_compare_explore <- function(x, size = 2, color = "black"){
+plot.summary.ggm_compare_explore <- function(x,
+                                             size = 2,
+                                             color = "black", ...){
 
 
   dat_temp <- x$results[order(x$results$Pr.H1,

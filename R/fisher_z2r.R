@@ -6,7 +6,7 @@
 #' @export
 #'
 #' @examples
-#' fisher_r2z(0.5)
+#' fisher_z_to_r(0.5)
 fisher_z_to_r <- function(z){
   r <- z2r(z)
   return(r)

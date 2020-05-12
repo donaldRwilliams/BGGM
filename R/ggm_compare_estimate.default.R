@@ -106,10 +106,6 @@
 #' test for comparing each variable in the network. Testing for nodewise differences in predictabilty is implemented in
 #' \code{\link{test.R2}} \insertCite{Williams2019;textual}{BGGM}.
 #'
-#' @examples
-#' # comparing two groups (males vs. females) in a personality network
-#'
-#'
 #'
 #'
 #' @export
@@ -467,6 +463,7 @@ print_summary_ggm_estimate_compare <- function(x,...){
 #'
 #' @param x an object of class \code{estimate} or \code{ggm_compare_estimate}
 #' @param color color of error bar
+#' @param size Numeric.
 #' @param width width of error bar cap
 #' @param ... currently ignored
 #'

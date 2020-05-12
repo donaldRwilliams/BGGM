@@ -13,7 +13,6 @@
   width = 0,
   size = 1,
   color = "blue",
-  rope = 0.1,
   ...
 )
 }

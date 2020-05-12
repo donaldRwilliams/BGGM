@@ -4,10 +4,14 @@
 \alias{summary.select.explore}
 \title{Summary Method for \code{select.explore} Objects}
 \usage{
-\method{summary}{select.explore}(object, col_names = TRUE)
+\method{summary}{select.explore}(object, col_names = TRUE, ...)
 }
 \arguments{
 \item{object}{object of class \code{select.explore}.}
+
+\item{col_names}{Logical.}
+
+\item{...}{Currently ignored.}
 }
 \value{
 a data frame including the posterior mean, standard deviation,
