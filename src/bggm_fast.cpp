@@ -178,7 +178,7 @@ Rcpp::List sample_prior(arma::mat Y,
   // k by k identity mat
   arma::mat  I_k(k, k, arma::fill::eye);
 
-  int nu = 1/ epsilon;
+  int nu = 1 / epsilon;
   // // #nu in Mulder & Pericchi (2018) formula (30) line 1.
   int nuMP = delta + k - 1 ;
   //
@@ -245,10 +245,10 @@ Rcpp::List sample_prior(arma::mat Y,
 
     }
 
-    // correlation
-    cors =  diagmat(1 / sqrt(Sigma.slice(0).diag())) *
-      Sigma.slice(0) *
-      diagmat(1 / sqrt(Sigma.slice(0).diag()));
+    // // correlation
+    // cors =  diagmat(1 / sqrt(Sigma.slice(0).diag())) *
+    //   Sigma.slice(0) *
+    //   diagmat(1 / sqrt(Sigma.slice(0).diag()));
 
     // partial correlations
     pcors = diagmat(1 / sqrt(Theta.slice(0).diag())) *
@@ -257,9 +257,9 @@ Rcpp::List sample_prior(arma::mat Y,
 
     // store posterior samples
     pcors_mcmc.slice(s) =  -(pcors - I_k);
-    cors_mcmc.slice(s) =  cors;
-    Sigma_mcmc.slice(s) = Sigma.slice(0);
-    Theta_mcmc.slice(s) = Theta.slice(0);
+    // cors_mcmc.slice(s) =  cors;
+    // Sigma_mcmc.slice(s) = Sigma.slice(0);
+    // Theta_mcmc.slice(s) = Theta.slice(0);
 
     }
 
@@ -267,9 +267,9 @@ Rcpp::List sample_prior(arma::mat Y,
 
   Rcpp::List ret;
   ret["pcors"] = pcors_mcmc;
-  ret["cors"] =  cors_mcmc;
-  ret["Theta"] = Theta_mcmc;
-  ret["Sigma"] = Sigma_mcmc;
+  // ret["cors"] =  cors_mcmc;
+  // ret["Theta"] = Theta_mcmc;
+  // ret["Sigma"] = Sigma_mcmc;
   ret["fisher_z"] = fisher_z;
   return ret;
 }
@@ -1733,7 +1733,7 @@ float hamming_distance(arma::mat Rinv_1,
   arma::mat se_2  = sqrt((1 - square(Rinv_2)) / (df2));
 
   // upper-triangular
-  arma::uvec ids = trimatu_ind(size(se_1), 1);
+  arma::uvec ids = arma::trimatu_ind(size(se_1), 1);
 
   // partial correlations
   arma::vec r_1 = Rinv_1(ids);
@@ -1789,7 +1789,7 @@ float hamming_distance(arma::mat Rinv_1,
 float correlation(arma::mat Rinv_1,
                   arma::mat Rinv_2){
 
-  arma::uvec ids = trimatu_ind(size(Rinv_1), 1);
+  arma::uvec ids = arma::trimatu_ind(size(Rinv_1), 1);
 
   arma::vec r_1 = Rinv_1(ids);
 

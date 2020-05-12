@@ -2,7 +2,7 @@
 % Please edit documentation in R/select.ggm_compare_bf.R
 \name{select.ggm_compare_explore}
 \alias{select.ggm_compare_explore}
-\title{Select Partial Correlattion Differences for \code{ggm_compare_bf} Objects}
+\title{Select Graph: \code{ggm_compare_explore} Objects}
 \usage{
 \method{select}{ggm_compare_explore}(object, post_prob = 0.5, BF = NULL, ...)
 }
@@ -27,7 +27,7 @@ list of class \code{select.ggm_compare_bf}
 }
 }
 \description{
-Select Partial Correlattion Differences for \code{ggm_compare_bf} Objects
+Select Graph: \code{ggm_compare_explore} Objects
 }
 \examples{
 \donttest{

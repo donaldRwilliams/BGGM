@@ -33,7 +33,6 @@
 #'
 #' @examples
 #' \donttest{
-#'
 #' ####################################
 #' ###### example 1: assortment #######
 #' ####################################
@@ -54,7 +53,7 @@
 #' membership <- c(rep("a", 5), rep("c", 5))
 #'
 #'f <- function(x,...){
-#' assortnet::assortment.discrete(x, ...)$r
+#'     assortnet::assortment.discrete(x, ...)$r
 #'}
 #'
 #'
@@ -84,7 +83,7 @@
 #'
 #' # define function
 #' f <- function(x,...){
-#'   networktools::expectedInf(x,...)$step1
+#'      networktools::expectedInf(x,...)$step1
 #' }
 #'
 #' # compute
@@ -135,7 +134,8 @@ roll_your_own <- function(object,
                           FUN,
                           iter = NULL,
                           select = FALSE,
-                          cred = 0.95, ...){
+                          cred = 0.95,
+                          ...){
 
   if(! all( c("estimate", "default") %in% class(fit)) ){
     stop("class must be 'estimate'")

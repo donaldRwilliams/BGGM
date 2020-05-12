@@ -1,6 +1,6 @@
 #' GGM Compare: Confirmatory Hypothesis Testing
 #'
-#' #' @description Confirmatory hypothesis testing for comparing GGMs. Hypotheses are expressed as equality
+#' @description Confirmatory hypothesis testing for comparing GGMs. Hypotheses are expressed as equality
 #' and/or ineqaulity contraints on the partial correlations of interest. Here the focus is \emph{not}
 #' on determining the graph (see \code{\link{explore}}) but testing specific hypotheses related to
 #' the conditional (in)dependence structure. These methods were introduced in
@@ -175,12 +175,18 @@ ggm_compare_confirm <- function(...,
 
       post_samp <- lapply(1:groups, function(x) {
 
-        message("BGGM: Posterior Sampling ", "(Group ",x ,")")
+        if(isTRUE(progress)){
+
+          message("BGGM: Posterior Sampling ", "(Group ",x ,")")
+
+        }
 
         # data
         Y <- as.matrix(scale(dat_list[[x]], scale = F))
 
         Y <- na.omit(Y)
+
+        start <- solve(cov(Y))
 
         .Call(
           '_BGGM_Theta_continuous',
@@ -188,9 +194,11 @@ ggm_compare_confirm <- function(...,
           Y = Y,
           iter = iter + 50,
           delta = delta,
-          epsilon = 0.1,
+          epsilon = 0.01,
           prior_only = 0,
-          explore = 1
+          explore = 1,
+          start = start,
+          progress = progress
         )
       })
 
@@ -199,7 +207,11 @@ ggm_compare_confirm <- function(...,
 
       post_samp <- lapply(1:groups, function(x) {
 
-        message("BGGM: Posterior Sampling ", "(Group ",x ,")")
+        if(isTRUE(progress)){
+
+          message("BGGM: Posterior Sampling ", "(Group ",x ,")")
+
+        }
 
         control_info <- remove_predictors_helper(list(as.data.frame(dat_list[[x]])),
                                                  formula = formula)
@@ -216,14 +228,18 @@ ggm_compare_confirm <- function(...,
         # model matrix
         X <- as.matrix(control_info$model_matrices[[1]])
 
+        start <- solve(cov(Y))
+
         # posterior sample
         .Call(
           "_BGGM_mv_continuous",
           Y = Y,
           X = X,
           delta = delta,
-          epsilon = 0.1,
-          iter = iter + 50
+          epsilon = 0.01,
+          iter = iter + 50,
+          start = start,
+          progress = progress
         )
       })
     }
@@ -235,7 +251,12 @@ ggm_compare_confirm <- function(...,
 
 
       post_samp <- lapply(1:groups, function(x) {
-        message("BGGM: Posterior Sampling ", "(Group ",x ,")")
+
+        if(isTRUE(progress)){
+
+          message("BGGM: Posterior Sampling ", "(Group ",x ,")")
+
+        }
 
         # data
         Y <- as.matrix(na.omit(dat_list[[x]]))
@@ -248,16 +269,20 @@ ggm_compare_confirm <- function(...,
 
         X <- matrix(1, n, 1)
 
+        start <- solve(cov(Y))
+
         # posterior sample
       .Call(
         "_BGGM_mv_binary",
         Y = Y,
         X = X,
         delta = delta,
-        epsilon = 0.1,
+        epsilon = 0.01,
         iter = iter + 50,
         beta_prior = 0.0001,
-        cutpoints = c(-Inf, 0, Inf)
+        cutpoints = c(-Inf, 0, Inf),
+        start = start,
+        progress = progress
       )
       })
 
@@ -265,7 +290,11 @@ ggm_compare_confirm <- function(...,
 
       post_samp <- lapply(1:groups, function(x) {
 
-        message("BGGM: Posterior Sampling ", "(Group ",x ,")")
+        if(isTRUE(progress)){
+
+          message("BGGM: Posterior Sampling ", "(Group ",x ,")")
+
+        }
         control_info <- remove_predictors_helper(list(as.data.frame(dat_list[[x]])),
                                                  formula = formula)
 
@@ -281,16 +310,20 @@ ggm_compare_confirm <- function(...,
         # model matrix
         X <- as.matrix(control_info$model_matrices[[1]])
 
+        start <- solve(cov(Y))
+
         # posterior sample
         .Call(
           "_BGGM_mv_binary",
           Y = Y,
           X = X,
           delta = delta,
-          epsilon = 0.1,
+          epsilon = 0.01,
           iter = iter + 50,
           beta_prior = 0.0001,
-          cutpoints = c(-Inf, 0, Inf)
+          cutpoints = c(-Inf, 0, Inf),
+          start = start,
+          progress = progress
         )
       })
     }
@@ -301,7 +334,12 @@ ggm_compare_confirm <- function(...,
 
       post_samp <- lapply(1:groups, function(x) {
 
-        message("BGGM: Posterior Sampling ", "(Group ",x ,")")
+        if(isTRUE(progress)){
+
+          message("BGGM: Posterior Sampling ", "(Group ",x ,")")
+
+        }
+
         # data
         Y <- as.matrix(na.omit(dat_list[[x]]))
 
@@ -316,6 +354,8 @@ ggm_compare_confirm <- function(...,
         # categories
         K <- max(apply(Y, 2, function(x) { length(unique(x)) } ))
 
+        start <- solve(cov(Y))
+
         # posterior sample
         # call c ++
          .Call(
@@ -324,15 +364,22 @@ ggm_compare_confirm <- function(...,
           X = X,
           iter = iter + 50,
           delta = delta,
-          epsilon = 0.1,
-          K = K)
+          epsilon = 0.01,
+          K = K,
+          start = start,
+          progress = progress
+          )
       })
 
       } else {
 
         post_samp <- lapply(1:groups, function(x) {
 
-          message("BGGM: Posterior Sampling ", "(Group ", x ,")")
+          if(isTRUE(progress)){
+
+            message("BGGM: Posterior Sampling ", "(Group ",x ,")")
+
+          }
 
           control_info <- remove_predictors_helper(list(as.data.frame(dat_list[[x]])),
                                                    formula = formula)
@@ -352,6 +399,8 @@ ggm_compare_confirm <- function(...,
           # categories
           K <- max(apply(Y, 2, function(x) { length(unique(x)) } ))
 
+          start <- solve(cov(Y))
+
           # posterior sample
           # call c ++
           .Call(
@@ -360,8 +409,11 @@ ggm_compare_confirm <- function(...,
             X = X,
             iter = iter + 50,
             delta = delta,
-            epsilon = 0.1,
-            K = K)
+            epsilon = 0.01,
+            K = K,
+            start = start,
+            progress = progress
+            )
         })
   }
 
@@ -373,7 +425,11 @@ ggm_compare_confirm <- function(...,
 
       post_samp <- lapply(1:groups, function(x) {
 
-        message("BGGM: Posterior Sampling ", "(Group ",x ,")")
+        if(isTRUE(progress)){
+
+          message("BGGM: Posterior Sampling ", "(Group ",x ,")")
+
+        }
 
         control_info <- remove_predictors_helper(list(as.data.frame(dat_list[[x]])),
                                                  formula = formula)
@@ -412,8 +468,9 @@ ggm_compare_confirm <- function(...,
           Sigma_start = rank_vars$Sigma_start,
           iter = iter + 50,
           delta = delta,
-          epsilon = 0.1,
-          idx = idx
+          epsilon = 0.01,
+          idx = idx,
+          progress = progress
         )
         })
 
@@ -422,7 +479,11 @@ ggm_compare_confirm <- function(...,
 
       post_samp <- lapply(1:groups, function(x) {
 
-        message("BGGM: Posterior Sampling ", "(Group ",x ,")")
+        if(isTRUE(progress)){
+
+          message("BGGM: Posterior Sampling ", "(Group ",x ,")")
+
+        }
 
         Y <- na.omit(dat_list[[x]])
 
@@ -455,19 +516,20 @@ ggm_compare_confirm <- function(...,
           Sigma_start = rank_vars$Sigma_start,
           iter = iter + 50,
           delta = delta,
-          epsilon = 0.1,
-          idx = idx
+          epsilon = 0.01,
+          idx = idx,
+          progress = progress
         )
       })
       }
 
   } else {
+
     stop("'type' not supported: must be continuous, binary, ordinal, or mixed.")
-}
 
-  message("BGGM: Finished")
+    }
 
-  # sample prior
+ # sample prior
   if(is.null(formula)){
 
     Yprior <- as.matrix(dat_list[[1]])
@@ -477,9 +539,9 @@ ggm_compare_confirm <- function(...,
         '_BGGM_sample_prior',
         PACKAGE = 'BGGM',
         Y = Yprior,
-        iter = 10000,
+        iter = 25000,
         delta = delta,
-        epsilon = 0.1,
+        epsilon = 0.01,
         prior_only = 1,
         explore = 0
       )$fisher_z
@@ -500,9 +562,9 @@ ggm_compare_confirm <- function(...,
         '_BGGM_sample_prior',
         PACKAGE = 'BGGM',
         Y = Yprior,
-        iter = 10000,
+        iter = 25000,
         delta = delta,
-        epsilon = 0.1,
+        epsilon = 0.01,
         prior_only = 1,
         explore = 0
       )$fisher_z
@@ -600,6 +662,12 @@ ggm_compare_confirm <- function(...,
 
   colnames(BF_matrix) <- row.names(BFpost$BFtable_confirmatory)
 
+  if(isTRUE(progress)){
+
+    message("BGGM: Finished")
+
+  }
+
   returned_object <- list(
     BF_matrix = BF_matrix,
     out_hyp_prob = out_hyp_prob,
@@ -622,12 +690,12 @@ ggm_compare_confirm <- function(...,
 
   .Random.seed <<- old
 
-class(returned_object) <- c("BGGM",
+  class(returned_object) <- c("BGGM",
                             "confirm",
                             "ggm_compare_confirm")
-returned_object
+  returned_object
 
-}
+  }
 
 
 

@@ -54,7 +54,7 @@ The returned object of class \code{confirm} contains a lot of information that
 }
 }
 \description{
-#' @description Confirmatory hypothesis testing for comparing GGMs. Hypotheses are expressed as equality
+Confirmatory hypothesis testing for comparing GGMs. Hypotheses are expressed as equality
 and/or ineqaulity contraints on the partial correlations of interest. Here the focus is \emph{not}
 on determining the graph (see \code{\link{explore}}) but testing specific hypotheses related to
 the conditional (in)dependence structure. These methods were introduced in

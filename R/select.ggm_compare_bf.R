@@ -1,4 +1,4 @@
-#' Select Partial Correlattion Differences for \code{ggm_compare_bf} Objects
+#' Select Graph: \code{ggm_compare_explore} Objects
 #'
 #' @param object object of class \code{ggm_compare_bf}.
 #'
@@ -36,7 +36,6 @@
 #' # summary
 #' summary(ggm_bf_sel)
 #' }
-
 select.ggm_compare_explore <- function(object,
                                        post_prob = 0.50,
                                        BF = NULL,...){

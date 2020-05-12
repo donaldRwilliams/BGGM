@@ -31,12 +31,16 @@ each of the sampled matrices, resulting in a distribution.
 \details{
 The user has complete control of this function. Hence, care must be taken as to what \code{FUN}
 returns and in what format. The function should return a single number (one for the entire GGM)
-of a vector (one for each node). This ensures that the print and \code{\link{plot.roll_your_own}}
+or a vector (one for each node). This ensures that the print and \code{\link{plot.roll_your_own}}
 will work.
+
+
+When \code{select = TRUE}, the graph is selected and then the network statistics are computed based on
+the weigthed adjacency matrix. This is accomplished internally by multiplying each of the sampled
+partial correlation matrices by the adjacency matrix.
 }
 \examples{
 \donttest{
-
 ####################################
 ###### example 1: assortment #######
 ####################################
@@ -57,7 +61,7 @@ e.g., first 5 are "a", last 5 are "c"
 membership <- c(rep("a", 5), rep("c", 5))
 
 f <- function(x,...){
-assortnet::assortment.discrete(x, ...)$r
+    assortnet::assortment.discrete(x, ...)$r
 }
 
 
@@ -87,7 +91,7 @@ fit <- estimate(Y = Y, iter = 5000)
 
 # define function
 f <- function(x,...){
-  networktools::expectedInf(x,...)$step1
+     networktools::expectedInf(x,...)$step1
 }
 
 # compute
@@ -117,6 +121,7 @@ fit <- estimate(Y,
 # clusters
 communities <- substring(colnames(Y), 1, 1)
 
+# function is slow
 f <- function(x, ...){
  networktools::bridge(x, ...)$`Bridge Strength`
 }
