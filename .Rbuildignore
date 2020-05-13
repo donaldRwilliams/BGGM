@@ -12,3 +12,7 @@
 ^joss_paper$
 
 ^data-raw$
+
+^README\.Rmd$
+^README\.md$
+^LICENSE$
