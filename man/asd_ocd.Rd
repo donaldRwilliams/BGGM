@@ -30,9 +30,8 @@ The sample size was 213.
   \item \code{VR}  Verbal rituals
 }
 
-
   \strong{OCD}
-  \itemize{
+\itemize{
   \item \code{CD} Concern with things touched due to dirt/bacteria
   \item \code{TB} Thoughts of doing something bad around others
   \item \code{CT} Continual thoughts that do not go away
@@ -64,6 +63,6 @@ Ruzzano, L., Borsboom, D., & Geurts, H. M. (2015).
 Repetitive behaviors in autism and obsessive-compulsive
 disorder: New perspectives from a network analysis.
 Journal of Autism and Developmental Disorders, 45(1),
-192-202.
+192-202. doi:10.1007/s10803-014-2204-9
 }
 \keyword{datasets}
