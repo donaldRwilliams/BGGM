@@ -1,8 +1,11 @@
 #' @name print.BGGM
-#' @title  Print method for \code{BGGM} objects
+#' @title  Print Method for \code{BGGM} Objects
 #'
-#' @param x An object of class \code{BGGM}
+#' @param x An object of class \code{BGGM}.
+#'
 #' @param ... currently ignored
+#'
+#' @importFrom methods is
 #' @export
 
 print.BGGM <- function(x, ...) {

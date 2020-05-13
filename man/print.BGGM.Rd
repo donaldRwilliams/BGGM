@@ -2,15 +2,15 @@
 % Please edit documentation in R/print_BGGM.R
 \name{print.BGGM}
 \alias{print.BGGM}
-\title{Print method for \code{BGGM} objects}
+\title{Print Method for \code{BGGM} Objects}
 \usage{
 \method{print}{BGGM}(x, ...)
 }
 \arguments{
-\item{x}{An object of class \code{BGGM}}
+\item{x}{An object of class \code{BGGM}.}
 
 \item{...}{currently ignored}
 }
 \description{
-Print method for \code{BGGM} objects
+Print Method for \code{BGGM} Objects
 }

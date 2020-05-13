@@ -5,11 +5,14 @@
 \alias{bfi}
 \title{25 Personality items representing 5 factors}
 \format{
-A data frame with 25 variables and 2800 observations (but with missing data)
+A data frame with 25 variables and 2800 observations (including missing values)
+}
+\usage{
+data("bfi")
 }
 \description{
-This data set and the documentation was taken from the \strong{psych} package. Further details can be found in the documentation
-of the \strong{psych} package.
+This dataset and the corresponding documentation was taken from the \strong{psych} package. We refer users to that
+package for further details \insertCite{psych}{BGGM}.
 }
 \details{
 \itemize{
@@ -43,7 +46,6 @@ of the \strong{psych} package.
 }
 }
 \references{
-Revelle, W. (2018) psych: Procedures for Personality and Psychological Research, Northwestern University,
-Evanston, Illinois, USA, https://CRAN.R-project.org/package=psych Version = 1.8.12.
+\insertAllCited{}
 }
 \keyword{datasets}

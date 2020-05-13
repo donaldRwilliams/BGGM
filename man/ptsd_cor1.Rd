@@ -3,13 +3,13 @@
 \docType{data}
 \name{ptsd_cor1}
 \alias{ptsd_cor1}
-\title{post-traumatic stress disorder correlation matrix (# 1)}
+\title{Data: Post-Traumatic Stress Disorder (Sample # 1)}
 \format{
-A (correlation) matrix with 16 variables
+A correlation matrix with 16 variables
 }
 \description{
-A dataset containing items that measure Post-traumatic stress disorder symptoms. There are 16 variables in total.
-The correlation matrix was estimated from 526 individuals.
+A correlation matrix that includes 16 variables. The correlation matrix was estimated from 526
+individuals \insertCite{fried2018replicability}{BGGM}.
 }
 \details{
 \itemize{
@@ -32,13 +32,16 @@ The correlation matrix was estimated from 526 individuals.
 }
 }
 \examples{
+
 data(ptsd_cor1)
-Y <- MASS::mvrnorm(n = 965, mu = rep(0, 16),
-                   Sigma = ptsd_cor1,  empirical = TRUE)
+
+Y <- MASS::mvrnorm(n = 526,
+                   mu = rep(0, 16),
+                   Sigma = ptsd_cor1,
+                   empirical = TRUE)
+
 }
 \references{
-Fried, E. I., Eidhof, M. B., Palic, S., Costantini, G., Huisman-van Dijk, H. M., Bockting, C. L., ... & Karstoft, K. I. (2018).
-Replicability and generalizability of posttraumatic stress disorder (PTSD) networks: a cross-cultural multisite study of PTSD
-symptoms in four trauma patient samples. Clinical Psychological Science, 6(3), 335-351.
+\insertAllCited{}
 }
 \keyword{datasets}

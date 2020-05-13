@@ -3,13 +3,16 @@
 \docType{data}
 \name{ptsd}
 \alias{ptsd}
-\title{post-traumatic stress disorder dataset}
+\title{Data: Post-Traumatic Stress Disorder}
+\format{
+A dataframe with 221 rows and 20 variables
+}
 \usage{
 data("ptsd")
 }
 \description{
-A dataset containing items that measure Post-traumatic stress disorder symptoms. There are 20 variables (p) and
-221 observations (n)
+A dataset containing items that measure Post-traumatic stress disorder symptoms \insertCite{armour2017network}{BGGM}.
+There are 20 variables (\emph{p}) and  221 observations (\emph{n}).
 }
 \details{
 \itemize{
@@ -35,7 +38,6 @@ A dataset containing items that measure Post-traumatic stress disorder symptoms.
 }
 }
 \references{
-Epskamp, S., & Fried, E. I. (2018). A tutorial on regularized partial correlation networks. Psychological methods.
- @format A data frame with 221 rows and 20 variables
+\insertAllCited{}
 }
 \keyword{datasets}
