@@ -3,12 +3,6 @@
 #'
 #' @param x An object of class \code{BGGM}
 #' @param ... currently ignored
-#' @examples
-#' # data
-#' Y <- BGGM::bfi[, 1:5]
-#' # analytic approach (sample by setting analytic = FALSE)
-#' fit <- estimate(Y, analytic = TRUE)
-#' fit
 #' @export
 
 print.BGGM <- function(x, ...) {

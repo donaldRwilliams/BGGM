@@ -14,10 +14,3 @@
 \description{
 Print method for \code{BGGM} objects
 }
-\examples{
-# data
-Y <- BGGM::bfi[, 1:5]
-# analytic approach (sample by setting analytic = FALSE)
-fit <- estimate(Y, analytic = TRUE)
-fit
-}

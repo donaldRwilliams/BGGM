@@ -15,4 +15,6 @@
 
 ^README\.Rmd$
 ^README\.md$
+^paper\.md$
+
 ^LICENSE$

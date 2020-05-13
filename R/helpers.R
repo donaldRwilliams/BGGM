@@ -642,33 +642,6 @@ post_prob <- function(data){
 }
 
 
-R2_ppc <- function(fit, betas, adj, which_one, sims){
-
-  # data
-  dat <- fit$dat
-
-  # sample size
-  n <- nrow(dat)
-
-  # selected betas
-  beta <- sweep(as.matrix(betas$betas[[which_one]]) , MARGIN=2,
-                adj[which_one,-which_one], `*`)
-
-  # sigmas
-  sigma <- betas$sigmas[[which_one]]
-
-  # posterior predictive
-  ppc <- t(sapply(1:sims, function(s) rnorm(n = n,
-                                            mean = dat[,-which_one] %*% beta[s,],
-                                            sd = sigma[s])))
-  # fitted values
-  pred <- t(sapply(1:sims, function(s) dat[,-which_one] %*% beta[s,]))
-  # r <- rowSums(pred^2)/ rowSums(ppc^2)
-
-  # Bayes R2
-  apply(pred, 1, var) / apply(ppc, 1, var)
-
-}
 
 convert_colnames <- function(hyp, Y){
   names_temp <- unlist(strsplit( strsplit(hyp, " ")[[1]], "--"))
@@ -1652,7 +1625,9 @@ globalVariables(c('Y1','Y2',
                   'density', 'Node',
                   'Post.mean',
                   'L1', 'lag', 'acf',
-                  'iteration'))
+                  'iteration'.
+                  '.imp',
+                  'estimate'))
 
 
 
