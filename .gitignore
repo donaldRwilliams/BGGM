@@ -4,17 +4,10 @@
 .Ruserdata
 
 ^/\.gitattributes$
-
 .travis.yml
-
 .joss_paper/
-
 .data-raw/
-
-
 .paper.md
-
-
 src/*.o
 src/*.so
 src/*.dll

@@ -25,7 +25,6 @@ Imports:
     mvtnorm (>= 1.0.11),
     network (>= 1.15),
     reshape,
-    pracma,
     Rcpp (>= 1.0.4.6),
     RcppProgress (>= 0.1),
     Rdpack,

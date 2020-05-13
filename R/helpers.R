@@ -6,6 +6,7 @@
 #' @importFrom Rdpack reprompt
 #' @importFrom MASS ginv
 #' @import ggplot2
+#' @importFrom stats model.matrix
 
 
 remove_predictors_helper <- function(Y_groups, formula){
@@ -18,7 +19,7 @@ remove_predictors_helper <- function(Y_groups, formula){
 
 
   model_matrices <- lapply(seq_len(groups) , function(x) {
-    model.matrix(formula, Y_groups[[x]])
+    stats::model.matrix(formula, Y_groups[[x]])
   })
 
   # model matrix terms
@@ -729,30 +730,8 @@ analytic_solve <- function(X){
        pcor_mat = pcor_mat)
 }
 
-# summarize coefficients
-beta_summary <- function(x, node, ci_width, samples){
 
-  # convert inverse to beta
-  x <- inverse_2_beta(x, samples = samples)
 
-  # stop if not the correct class
-  if(class(x) != "inverse_2_beta"){
-    stop("class must be inverse_2_beta")
-  }
-
-  # check ci_width is allowed
-  if(ci_width >= 1 | ci_width <= 0){
-    stop("ci_width must be between 0 and 1")
-  }
-  returned_object <- lapply(node, function(y) summary_beta_helper(node =  y,
-                                                                  x = x,
-                                                                  ci_width))
-  class(returned_object) <- "beta_summary"
-  returned_object$betas <- x$betas[[node]]
-  returned_object$sigma <- x$sigma[[node]]
-  returned_object$call <- match.call()
-  returned_object
-}
 
 rope_helper <- function(x, rope){
   mean(- rope < x & x < rope )
