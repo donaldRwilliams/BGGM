@@ -65,7 +65,7 @@ The graph is selected with \code{\link{select.estimate}} and then plotted with \
 \details{
 The default is to draw samples from the posterior distribution (\code{analytic = FALSE}). The samples are
 required for computing edge differences (see \code{\link{ggm_compare_estimate}}), Bayesian R2 introduced in
-\insertCite{gelman_r2_2019;textual}{BGGM} (see \code{\link{bayes_R2}}), etc. If the goal is to *only* determine
+\insertCite{gelman_r2_2019;textual}{BGGM} (see \code{\link{predictabilty}}), etc. If the goal is to *only* determine
 the non-zero effects, this can be accomplished by setting \code{analytic = TRUE}. This is particularly useful
 when a fast solution is needed (see the examples in \code{\link{ggm_compare_ppc}})
 

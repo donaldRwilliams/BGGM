@@ -103,8 +103,7 @@
 #' \code{\link{ggm_compare_confirm}} \insertCite{Williams2019_bf}{BGGM}. The latter allows for confirmatory
 #' hypothesis testing.  An approach based on a posterior predictive check is implemented in \code{\link{ggm_compare_ppc}}
 #' \insertCite{williams2020comparing}{BGGM}. This provides  a 'global' test for comparing the entire GGM and a 'nodewise'
-#' test for comparing each variable in the network. Testing for nodewise differences in predictabilty is implemented in
-#' \code{\link{test.R2}} \insertCite{Williams2019;textual}{BGGM}.
+#' test for comparing each variable in the network \insertCite{Williams2019;textual}{BGGM}.
 #'
 #'
 #'

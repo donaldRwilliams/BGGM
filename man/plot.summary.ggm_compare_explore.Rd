@@ -16,7 +16,7 @@
 \item{...}{Currently ignored}
 }
 \value{
-
+A \code{ggplot} object
 }
 \description{
 Visualize posterior hypothesis probabilities.

@@ -426,7 +426,7 @@ print_ggm_compare_bf <- function(x, ...){
 #'
 #' @param ... currently ignored
 #'
-#' @return
+#' @return An object of class \code{summary.ggm_compare_explore}
 #' @export
 #'
 summary.ggm_compare_explore <- function(object,
@@ -498,10 +498,13 @@ summary.ggm_compare_explore <- function(object,
 #'
 #' @param x object of class \code{ggm_compare_explore}
 #' @param size numeric. Size of the points.
+#'
 #' @param color string. Color of the points.
+#'
 #' @param ... Currently ignored
 #'
-#' @return
+#' @return A \code{ggplot} object
+#'
 #' @export
 #'
 plot.summary.ggm_compare_explore <- function(x,

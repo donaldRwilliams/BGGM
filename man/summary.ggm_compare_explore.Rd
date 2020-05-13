@@ -15,7 +15,7 @@ Setting to \code{FALSE} includes the column numbers (e.g., \code{1--2}).}
 \item{...}{currently ignored}
 }
 \value{
-
+An object of class \code{summary.ggm_compare_explore}
 }
 \description{
 Summarize the posterior hypothesis probabilities
