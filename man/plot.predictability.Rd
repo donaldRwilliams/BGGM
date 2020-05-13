@@ -42,22 +42,3 @@ tail region (\code{type = "ridgeline"} ) color}
 \description{
 Plot \code{metric} Objects
 }
-\examples{
-\donttest{
-# data
-Y <- subset(tas, gender == "M")[,-ncol(tas)]
-
-# fit model
-fit <- estimate(Y)
-
-# posterior predictions
-pred <- posterior_predict(fit, iter = 500,
-                          summary = FALSE)
-
-# prediction error
-error <- mse(pred)
-
-# plot
-plot(error)
-}
-}

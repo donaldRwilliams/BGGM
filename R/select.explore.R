@@ -287,7 +287,7 @@ print_select_explore <- function(x,
   cat("--- \n")
   cat("Type:", x$type, "\n")
   cat("Analytic:", x$analytic, "\n")
-  cat("Formula:", paste(as.character(fit$formula), collapse = " "), "\n")
+  cat("Formula:", paste(as.character(x$formula), collapse = " "), "\n")
   cat("Alternative:", x$alternative, "\n")
   if(x$alternative == "two.sided"){
     cat("Bayes Factor:", x$BF_cut, "\n")

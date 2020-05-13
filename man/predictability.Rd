@@ -44,50 +44,6 @@ Currently the default to include all nodes in the model when computing R2. This 
 then sets those edges not detected to zero. This is accomplished by subsetting the correlation matrix according to each neighborhood
 of relations.
 }
-\examples{
-\donttest{
-#####################
-#### continuous #####
-#####################
-# data
-Y <- BGGM::ptsd
-
-# estimate the model
-fit <- estimate(Y, iter = 1000)
-
-# predictability
-r2 <- predictability(fit,
-                     select = TRUE,
-                     iter = 1000)
-
-# print summary
-r2
-
-# plot
-plot(r2)
-
-
-#####################
-####### mixed #######
-#####################
-
-# estimate the model
-fit <- estimate(Y,
-                type = "mixed",
-                iter = 1000)
-
-# predictability
-r2 <- predictability(fit,
-                     select = TRUE,
-                     iter = 1000)
-
-# print summary
-r2
-
-# plot
-plot(r2)
-}
-}
 \references{
 \insertAllCited{}
 }

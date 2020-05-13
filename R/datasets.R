@@ -518,11 +518,11 @@ NULL
 NULL
 
 
-#' Sachs Network
+#' @title Sachs Network
 #'
 #' Protein expression in human immune system cells
 #'
-#' @name sachs
+#' @name Sachs
 #'
 #'
 #'
@@ -530,10 +530,10 @@ NULL
 #'
 #' @keywords datasets
 #'
-#' @usage data("sachs")
+#' @usage data("Sachs")
 #'
 #' @examples
-#' data("sachs")
+#' data("Sachs")
 #'
 #' @format A data frame containing 7466 cells (n = 7466) and flow cytometry
 #'  measurements of 11 (p = 11) phosphorylated proteins and phospholipids
@@ -594,7 +594,7 @@ NULL
 #' # generate continuous
 #' Y <- MASS::mvrnorm(n = 213,
 #'                    mu = rep(0, 17),
-#'                    Sigma = autism_ocd,
+#'                    Sigma = asd_ocd,
 #'                    empirical = TRUE)
 #'
 #'
@@ -789,7 +789,6 @@ NULL
 #' @examples
 #' data("women_math")
 NULL
-
 
 
 #' @title Data: 1994 General Social Survey

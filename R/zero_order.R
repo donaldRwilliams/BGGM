@@ -30,53 +30,7 @@
 #' \item \code{R_mean} Posterior mean of the correlations (of dimensions \emph{p} by \emph{p})
 #' }
 #'
-#' @examples
-#'
-#' \donttest{
-#'
-#' #########################
-#' ###### continuous #######
-#' #########################
-#'
-#' # data (two variables)
-#' Y <- BGGM::ptsd[,1:2]
-#'
-#' # estimate the model
-#' fit <- estimate(Y, iter = 1000)
-#'
-#' # compute correlations
-#' cors <- pcor_to_cor(fit)
-#'
-#'
-#' #########################
-#' ###### ordinal  #########
-#' #########################
-#'
-#' # first level must be 1 !
-#' Y <- Y + 1
-#'
-#' # estimate the model
-#' fit <- estimate(Y, type =  "ordinal",
-#'                 iter = 1000)
-#'
-#' # compute correlations
-#' cors <- pcor_to_cor(fit)
-#'
-#'
-#' #########################
-#' #######   mixed    ######
-#' #########################
-#'
-#' # rank based correlations
-#'
-#' # estimate the model
-#' fit <- estimate(Y, type =  "mixed",
-#'                 iter = 1000)
-#'
-#' # compute correlations
-#' cors <- pcor_to_cor(fit)
-#' }
-#'
+
 #' @export
 zero_order_cors <- function(Y,  type = "continuous",
                             iter = 5000,

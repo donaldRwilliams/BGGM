@@ -24,51 +24,7 @@
 #' The 'default' prior distributions are specified for partial correlations in particular. This
 #' means that the implied prior distribution will not be the same for the correlations.
 #'
-#' @examples
-#' \donttest{
-#' # data
-#' Y <- BGGM::ptsd
-#'
-#' #########################
-#' ###### continuous #######
-#' #########################
-#'
-#' # estimate the model
-#' fit <- estimate(Y, iter = 1000)
-#'
-#' # compute correlations
-#' cors <- pcor_to_cor(fit)
-#'
-#'
-#' #########################
-#' ###### ordinal  #########
-#' #########################
-#'
-#' # first level must be 1 !
-#' Y <- Y + 1
-#'
-#' # estimate the model
-#' fit <- estimate(Y, type =  "ordinal",
-#'                 iter = 1000)
-#'
-#' # compute correlations
-#' cors <- pcor_to_cor(fit)
-#'
-#'
-#' #########################
-#' #######   mixed    ######
-#' #########################
-#'
-#' # rank based correlations
-#'
-#' # estimate the model
-#' fit <- estimate(Y, type =  "mixed",
-#'                 iter = 1000)
-#'
-#' # compute correlations
-#' cors <- pcor_to_cor(fit)
-#'}
-#'
+
 #' @export
 pcor_to_cor <- function(object, iter = NULL){
 

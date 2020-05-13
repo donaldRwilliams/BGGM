@@ -123,175 +123,6 @@
 #' See \code{\link{BGGM-package}} for details about interpreting GGMs based on latent data
 #' (i.e, all data types besides \code{"continuous"})
 #'
-#' @examples
-#' \donttest{
-#'
-#' #########################################
-#' ### example 1: continuous and ordinal ###
-#' #########################################
-#' # data
-#' Y <- ptsd
-#'
-#' # continuous
-#'
-#' # fit model
-#' fit <- explore(Y, type = "continuous")
-#'
-#' # summarize the partial correlations
-#' summary(fit)
-#'
-#' # plot the summary
-#' plot(summary(fit))
-#'
-#' # select the graph
-#' select(fit)
-#'
-#' # plot the selected graph
-#' plot(select(fit))
-#'
-#'
-#' # ordinal
-#'
-#' # fit model (note + 1, due to zeros)
-#' fit <- explore(Y + 1, type = "ordinal")
-#'
-#' # summarize the partial correlations
-#' summary(fit)
-#'
-#' # plot the summary
-#' plot(summary(fit))
-#'
-#' # select the graph
-#' select(fit)
-#'
-#' # plot the selected graph
-#' plot(select(fit))
-#'
-#' #########################
-#' ### example 2: binary ###
-#' #########################
-#' # data
-#' Y <- women_math
-#'
-#' # fit model
-#' fit <- explore(Y, type = "binary")
-#'
-#' # summarize the partial correlations
-#' summary(fit)
-#'
-#' # plot the summary
-#' plot(summary(fit))
-#'
-#' # select the graph
-#' select(fit)
-#'
-#' # plot the selected graph
-#' plot(select(fit))
-#'
-#' ########################################
-#' ### example 3: control  with formula ###
-#' ########################################
-#' # (the following works with all data types)
-#'
-#' # controlling for gender
-#' Y <- bfi
-#'
-#' # Y contains two control variables
-#' # (gender and education)
-#'
-#' # the following is incorrect, as education is
-#' # automatically included in Y !
-#'
-#' incorrect <- explore(Y, type = ~ gender)
-#'
-#' # to control for only gender
-#' # (remove education)
-#'
-#' # fit model
-#' Y <- subset(Y, select = - education)
-#'
-#' # summarize the partial correlations
-#' summary(fit)
-#'
-#' # plot the summary
-#' plot(summary(fit))
-#'
-#' # select the graph
-#' select(fit)
-#'
-#' # plot the selected graph
-#' plot(select(fit))
-#'
-#' # control for an intercation (for some reason ?)
-#' # (gender by education)
-#'
-#' # data
-#' Y <- bfi
-#'
-#' # fit model
-#' fit <- explore(Y, formula = ~ gender * education)
-#'
-#' # summarize the partial correlations
-#' summary(fit)
-#'
-#' # plot the summary
-#' plot(summary(fit))
-#'
-#' # select the graph
-#' select(fit)
-#'
-#' # plot the selected graph
-#' plot(select(fit))
-#'
-#'
-#' ########################################
-#' ### example 4: control  with "mixed" ###
-#' ########################################
-#' # control with mixed data approach
-#' # (all variables included in Y)
-#'
-#' # data
-#' Y <- bfi
-#'
-#' # fit model
-#' fit <- explore(Y, type = "mixed")
-#'
-#' # summarize the partial correlations
-#' summary(fit)
-#'
-#' # plot the summary
-#' plot(summary(fit))
-#'
-#' # select the graph
-#' select(fit)
-#'
-#' # plot the selected graph
-#' plot(select(fit))
-#'
-#'
-#' ##################################
-#' ## example 5: analytic solution ##
-#' ##################################
-#' # (only continuous)
-#'
-#' # data
-#' Y <- ptsd
-#'
-#' # fit model
-#' fit <- explore(Y, analytic = TRUE)
-#'
-#' # summarize the partial correlations
-#' summary(fit)
-#'
-#' # plot summary
-#' plot(summary(fit))
-#'
-#' # select graph
-#' select(fit)
-#'
-#' # plot the selected graph
-#' plot(select(fit))
-#' }
 #' @export
 explore <- function(Y,
                     formula = NULL,
@@ -674,11 +505,6 @@ explore <- function(Y,
 #' @seealso \code{\link{select.explore}}
 #'
 #' @return a list containing the summarized posterior distributions
-#' # data
-#' Y <- BGGM::bfi[, 1:5]
-#' # analytic approach (sample by setting analytic = FALSE)
-#' fit <- estimate(Y, analytic = TRUE)
-#' summary(fit)
 #' @export
 summary.explore <- function(object,
                              col_names = TRUE, ...) {
@@ -753,7 +579,7 @@ print_explore <- function(x,...){
   cat("--- \n")
   cat("Type:",  x$type, "\n")
   cat("Analytic:", x$analytic, "\n")
-  cat("Formula:", paste(as.character(fit$formula), collapse = " "), "\n")
+  cat("Formula:", paste(as.character(x$formula), collapse = " "), "\n")
   # number of iterations
   cat("Posterior Samples:", x$iter, "\n")
   # number of observations
@@ -775,6 +601,7 @@ print_explore <- function(x,...){
 #' @param x an object of class \code{summary.explore}
 #' @param color Character string.
 #' @param size Numeric.
+#' @param width Numeric
 #' @param ... currently ignored
 #'
 #' @return an object of class \code{ggplot}

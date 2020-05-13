@@ -37,7 +37,6 @@ A copy of the GNU General Public License is available at \href{https://www.R-pro
 ################################
 ######### example 1 ############
 ################################
-library(BGGM)
 
 main <-  ptsd_cor1[1:5,1:5]
 p <- ncol(main)

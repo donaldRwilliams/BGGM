@@ -30,7 +30,8 @@ Imports:
     Rdpack,
     sna (>= 2.5),
     stats,
-    utils
+    utils,
+    stringr
 Suggests: 
   abind,
   assortnet,

@@ -7,26 +7,27 @@
 #' The approach (i.e., a difference between posterior distributions) was
 #' described in  \insertCite{Williams2019;textual}{BGGM}.
 #'
-#' @param ... matrices (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).
+#' @param ... Matrices (or data frames) of dimensions \emph{n} (observations) by  \emph{p} (variables).
 #' Requires at least two.
 #'
-#' @param formula an object of class \code{\link[stats]{formula}}. This allows for including
+#' @param formula An object of class \code{\link[stats]{formula}}. This allows for including
 #' control variables in the model (i.e., \code{~ gender}). See the note for further details.
 #'
 #'
-#' @param prior_sd The scale of the prior distribution (centered at zero), in reference to a beta distribtuion.
-#' The `default` is 0.50. See note for further details.
+#' @param prior_sd The scale of the prior distribution (centered at zero), in reference to a beta distribtuion
+#'                 (defaults to 0.50).
+#'                 See note for further details.
 #'
-#' @param type character string. Which type of data for \strong{Y} ? The options include \code{continuous},
+#' @param type Character string. Which type of data for \strong{Y} ? The options include \code{continuous},
 #' \code{binary}, \code{ordinal}, or \code{continuous}. See the note for further details.
 #'
-#' @param mixed_type numeric vector. An indicator of length \emph{p} for which varibles should be treated as ranks.
+#' @param mixed_type Numeric vector. An indicator of length \emph{p} for which varibles should be treated as ranks.
 #' (1 for rank and 0 to use the 'empirical' or observed distribution). The default is currently to treat all integer variables
 #' as ranks when \code{type = "mixed"} and \code{NULL} otherwise. See note for further details.
 #'
-#' @param iter number of iterations (posterior samples; defaults to 5000).
+#' @param iter Number of iterations (posterior samples; defaults to 5000).
 #'
-#' @param analytic logical. Should the analytic solution be computed (default is \code{FALSE})? This is only available
+#' @param analytic Logical. Should the analytic solution be computed (default is \code{FALSE})? This is only available
 #'                 for continous data. Note that if \code{type = "mixed"} and \code{analytic = TRUE}, the data will
 #'                 automatically be treated as continuous.
 #'
@@ -47,31 +48,58 @@
 #'  \item \code{call} \code{match.call}
 #'  }
 #'
-#' @note This function can be used to compare the partial correlations for any number of groups.
+#' @details
+#' This function can be used to compare the partial correlations for any number of groups.
 #' This is accomplished with pairwise comparisons for each relation. In the case of three groups,
 #' for example, group 1 and group 2 are compared, then group 1 and group 3 are compared, and then
 #' group 2 and group 3 are compared. There is a full distibution for each difference that can be
 #' summarized (i.e., \code{\link{summary.ggm_compare_estimate}}) and then visualized
-#' (i.e., \code{\link{plot.summary.ggm_compare_estimate}}).
-#'
-#' \strong{Selecting the Graph of Differences:}
-#'
-#' Selecting the differences is implemented in \code{\link{select.ggm_compare_estimate}}. Currently the only available
-#' option is to detect differences with  credible interval exclusion of zero. This
-#' corresponds to a directional posterior probability \insertCite{Marsman2017a}{BGGM}. For example,
-#' the probability (conditional on the model) of a difference  is at least 97.5 $\%$ when the 95 $\%$
-#' credible interval excludes zero.
+#' (i.e., \code{\link{plot.summary.ggm_compare_estimate}}). The graph of difference is selected with
+#' \code{\link{select.ggm_compare_estimate}}).
 #'
 #'
-#' \strong{Interpretation of conditional (in)dependence models for latent data:}
+#' \strong{Controlling for Variables}:
 #'
-#' A  tetrachoric correlation (binary data) is a special case of a polychoric correlation (ordinal data).
-#' Both relations are between "theorized normally distributed continuous latent variables"
-#' (\href{https://en.wikipedia.org/wiki/Polychoric_correlation}{Wikipedia}). In both instances,
-#' the correpsonding partial correlation between observed variables is conditioned
-#' on the remaining variables in the \emph{latent} space. This implies that interpration
-#' is much the same as for continuous data, but with respect to latent variables.
-#' We refer interested reader to \insertCite{@page 2364, section 2.2, in  @webb2008bayesian;textual}{BGGM}.
+#' When controlling for variables, it is assumed that \code{Y} includes \emph{only}
+#' the nodes in the GGM and the control variables. Internally, \code{only} the predictors
+#' that are included in \code{formula} are removed from \code{Y}. This is not behavior of, say,
+#' \code{\link{lm}}, but was adopted to ensure  users do not have to write out each variable that
+#' should be included in the GGM. An example is provided below.
+#'
+#' \strong{Mixed Type}:
+#'
+#'  The term "mixed" is somewhat of a misnomer, because the method can be used for data including \emph{only}
+#'  continuous or \emph{only} discrete variables. This is based on the ranked likelihood which requires sampling
+#'  the ranks for each variable (i.e., the data is not merely transformed to ranks). This is computationally
+#'  expensive when there are many levels. For example, with continuous data, there are as many ranks
+#'  as data points!
+#'
+#'  The option \code{mixed_type} allows the user to determine  which variable should be treated as ranks
+#'  and the "emprical" distribution is used otherwise. This is accomplished by specifying an indicator
+#'  vector of length \emph{p}. A one indicates to use the ranks, whereas a zero indicates to "ignore"
+#'  that variable. By default all integer variables are handled as ranks.
+#'
+#' \strong{Dealing with Errors}:
+#'
+#' An error is most likely to arise when \code{type = "ordinal"}. The are two common errors (although still rare):
+#'
+#' \itemize{
+#'
+#' \item The first is due to sampling the thresholds, especially when the data is heavily skewed.
+#'       This can result in an ill-defined matrix. If this occurs, we recommend to first try
+#'       decreasing \code{prior_sd} (i.e., a more informative prior). If that does not work, then
+#'       change the data type to \code{type = mixed} which then estimates a copula GGM
+#'       (this method can be used for data containing \strong{only} ordinal variable). This should
+#'       work without a problem.
+#'
+#' \item  The second is due to how the ordinal data are categorized. For example, if the error states
+#'        that the index is out of bounds, this indicates that the first category is a zero. This is not allowed, as
+#'        the first category must be one. This is addressed by adding one (e.g., \code{Y + 1}) to the data matrix.
+#'
+#' }
+#'
+#'
+#' @note
 #'
 #'
 #' \strong{Mixed Data:}
@@ -89,13 +117,13 @@
 #' It is also important to note that \code{type = "mixed"} is not restricted to mixed data (containing a combination of
 #' categorical and continuous): all the nodes can be ordinal or continuous (but again this will take some time).
 #'
-#' \strong{Prior Distribution:}
 #'
-#'  We use the novel matrix-F prior distribution that was recently introduces in X. In the context of GGMs, this prior
-#'  was first used in X. The key advantage is that the implied prior distrbution for each partial correlation is (1)
-#'  invariant to the network size (see section X in X) and (2) approximately beta distributed (Equation X in X). Accordingly,
-#'  the arguement \code{prior_sd} corresponds the standard deviation of a beta distrubtion (with a mean of zero). The function
-#'  \code{\link{plot_prior}} can be used to visualize the prior distibution.
+#' \strong{Interpretation of Conditional (In)dependence Models for Latent Data}:
+#'
+#' See \code{\link{BGGM-package}} for details about interpreting GGMs based on latent data
+#' (i.e, all data types besides \code{"continuous"})
+#'
+#'
 #'
 #' \strong{Additional GGM Compare Methods}
 #'
@@ -104,8 +132,6 @@
 #' hypothesis testing.  An approach based on a posterior predictive check is implemented in \code{\link{ggm_compare_ppc}}
 #' \insertCite{williams2020comparing}{BGGM}. This provides  a 'global' test for comparing the entire GGM and a 'nodewise'
 #' test for comparing each variable in the network \insertCite{Williams2019;textual}{BGGM}.
-#'
-#'
 #'
 #' @export
 ggm_compare_estimate <- function(...,
@@ -141,6 +167,7 @@ ggm_compare_estimate <- function(...,
 
     post_samp <- lapply(1:groups, function(x) {
 
+
       Y <- dat_list[[x]]
 
       # call estimate
@@ -149,6 +176,7 @@ ggm_compare_estimate <- function(...,
                prior_sd = prior_sd,
                iter = iter,
                mixed_type = mixed_type,
+               seed = x,
                progress = progress,
                ... = paste0("(Group ", x, ")"))
 

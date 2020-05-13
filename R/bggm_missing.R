@@ -29,65 +29,6 @@
 #'  determine the graphical structure with either  \code{\link{estimate}} or \code{\link{explore}}, in addition
 #'  to plotting the graph with \code{\link{plot.select}}. All data types \emph{are} currently supported.
 #'
-#'
-#' @examples
-#' \donttest{
-#' library(mice)
-#'
-#' # data
-#' Y <- BGGM::ptsd
-#'
-#' # matrix for indices
-#' mat <- matrix(0, nrow = 221, ncol = 20)
-#'
-#' # indices
-#' indices <- which(mat == 0, arr.ind = T)
-#'
-#' # 50 NAs
-#' Y[indices[sample(1:nrow(indices), 50),]] <- NA
-#'
-#' # impute
-#' x <- mice(Y, m = 5, print = FALSE)
-#'
-#' #########################
-#' ###### continuous #######
-#' #########################
-#'
-#' # estimate the model
-#' fit_est <- bggm_missing(x, type = "continuous")
-#'
-#' select(fit_est)
-#'
-#' # explore
-#' fit_exp <-  bggm_missing(x,
-#'                          type = "continuous",
-#'                          method = "explore")
-#'
-#'
-#' select(fit_exp)
-#'
-#' #########################
-#' #######   copula    #####
-#' #########################
-#' # rank based parital correlations
-#'
-#' # estimate the model
-#' fit_est <-  bggm_missing(Y,
-#'                          type =  "mixed",
-#'                          iter = 1000)
-#'
-#' select(fit_est)
-#'
-#'
-#' # explore
-#' fit_exp <-  bggm_missing(Y,
-#'                          type =  "mixed",
-#'                          method = explore,
-#'                          ter = 1000)
-#'
-#' select(fit_exp)
-#'
-#'}
 bggm_missing <- function(x, method = "estimate", ...){
 
   # check for mice

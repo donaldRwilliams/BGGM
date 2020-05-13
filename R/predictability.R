@@ -43,55 +43,13 @@
 #' @references
 #' \insertAllCited{}
 #'
-#' @examples
-#' \donttest{
-#' #####################
-#' #### continuous #####
-#' #####################
-#' # data
-#' Y <- BGGM::ptsd
-#'
-#' # estimate the model
-#' fit <- estimate(Y, iter = 1000)
-#'
-#' # predictability
-#' r2 <- predictability(fit,
-#'                      select = TRUE,
-#'                      iter = 1000)
-#'
-#' # print summary
-#' r2
-#'
-#' # plot
-#' plot(r2)
-#'
-#'
-#' #####################
-#' ####### mixed #######
-#' #####################
-#'
-#' # estimate the model
-#' fit <- estimate(Y,
-#'                 type = "mixed",
-#'                 iter = 1000)
-#'
-#' # predictability
-#' r2 <- predictability(fit,
-#'                      select = TRUE,
-#'                      iter = 1000)
-#'
-#' # print summary
-#' r2
-#'
-#' # plot
-#' plot(r2)
-#' }
 #' @export
 predictability <- function(object,
                            select = FALSE,
                            cred = 0.95,
                            BF_cut = 3,
-                           iter = NULL){
+                           iter = NULL,
+                           ...){
 
 
   if(object$type == "continuous"){
@@ -366,24 +324,6 @@ print_summary_metric <- function(x, digits = 2,...){
 #' @importFrom ggridges stat_density_ridges
 #' @export
 #'
-#' @examples
-#' \donttest{
-#' # data
-#' Y <- subset(tas, gender == "M")[,-ncol(tas)]
-#'
-#' # fit model
-#' fit <- estimate(Y)
-#'
-#' # posterior predictions
-#' pred <- posterior_predict(fit, iter = 500,
-#'                           summary = FALSE)
-#'
-#' # prediction error
-#' error <- mse(pred)
-#'
-#' # plot
-#' plot(error)
-#' }
 plot.predictability <- function(x, type = "error_bar",
                         cred = 0.95,
                         alpha = 0.5,

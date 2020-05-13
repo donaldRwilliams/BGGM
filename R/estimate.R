@@ -53,7 +53,7 @@
 #'
 #' The default is to draw samples from the posterior distribution (\code{analytic = FALSE}). The samples are
 #' required for computing edge differences (see \code{\link{ggm_compare_estimate}}), Bayesian R2 introduced in
-#' \insertCite{gelman_r2_2019;textual}{BGGM} (see \code{\link{predictabilty}}), etc. If the goal is to *only* determine
+#' \insertCite{gelman_r2_2019;textual}{BGGM} (see \code{\link{predictability}}), etc. If the goal is to *only* determine
 #' the non-zero effects, this can be accomplished by setting \code{analytic = TRUE}. This is particularly useful
 #' when a fast solution is needed (see the examples in \code{\link{ggm_compare_ppc}})
 #'
@@ -117,177 +117,6 @@
 #'
 #'
 #'
-#' @examples
-#' \donttest{
-#'
-#' #########################################
-#' ### example 1: continuous and ordinal ###
-#' #########################################
-#' # data
-#' Y <- ptsd
-#'
-#' # continuous
-#'
-#' # fit model
-#' fit <- estimate(Y, type = "continuous")
-#'
-#' # summarize the partial correlations
-#' summary(fit)
-#'
-#' # plot the summary
-#' plot(summary(fit))
-#'
-#' # select the graph
-#' select(fit)
-#'
-#' # plot the selected graph
-#' plot(select(fit))
-#'
-#'
-#' # ordinal
-#'
-#' # fit model (note + 1, due to zeros)
-#' fit <- estimate(Y + 1, type = "ordinal")
-#'
-#' # summarize the partial correlations
-#' summary(fit)
-#'
-#' # plot the summary
-#' plot(summary(fit))
-#'
-#' # select the graph
-#' select(fit)
-#'
-#' # plot the selected graph
-#' plot(select(fit))
-#'
-#' #########################
-#' ### example 2: binary ###
-#' #########################
-#' # data
-#' Y <- women_math
-#'
-#' # fit model
-#' fit <- estimate(Y, type = "binary")
-#'
-#' # summarize the partial correlations
-#' summary(fit)
-#'
-#' # plot the summary
-#' plot(summary(fit))
-#'
-#' # select the graph
-#' select(fit)
-#'
-#' # plot the selected graph
-#' plot(select(fit))
-#'
-#' ########################################
-#' ### example 3: control  with formula ###
-#' ########################################
-#' # (the following works with all data types)
-#'
-#' # controlling for gender
-#' Y <- bfi
-#'
-#' # Y contains two control variables
-#' # (gender and education)
-#'
-#' # the following is incorrect, as education is
-#' # automatically included in Y !
-#'
-#' incorrect <- estimate(Y, type = ~ gender)
-#'
-#' # to control for only gender
-#' # (remove education)
-#'
-#' Y <- subset(Y, select = - education)
-#'
-#'  # fit model
-#' fit <- estimate(Y, type = ~ gender)
-#'
-#' # summarize the partial correlations
-#' summary(fit)
-#'
-#' # plot the summary
-#' plot(summary(fit))
-#'
-#' # select the graph
-#' select(fit)
-#'
-#' # plot the selected graph
-#' plot(select(fit))
-#'
-#' # control for an intercation (for some reason ?)
-#' # (gender by education)
-#'
-#' # data
-#' Y <- bfi
-#'
-#' # fit model
-#' fit <- estimate(Y, formula = ~ gender * education)
-#'
-#' # summarize the partial correlations
-#' summary(fit)
-#'
-#' # plot the summary
-#' plot(summary(fit))
-#'
-#' # select the graph
-#' select(fit)
-#'
-#' # plot the selected graph
-#' plot(select(fit))
-#'
-#'
-#' ########################################
-#' ### example 4: control  with "mixed" ###
-#' ########################################
-#' # control with mixed data approach
-#' # (all variables included in Y)
-#'
-#' # data
-#' Y <- bfi
-#'
-#' # fit model
-#' fit <- estimate(Y, type = "mixed")
-#'
-#' # summarize the partial correlations
-#' summary(fit)
-#'
-#' # plot the summary
-#' plot(summary(fit))
-#'
-#' # select the graph
-#' select(fit)
-#'
-#' # plot the selected graph
-#' plot(select(fit))
-#'
-#'
-#' ##################################
-#' ## example 5: analytic solution ##
-#' ##################################
-#' # (only continuous)
-#'
-#' # data
-#' Y <- ptsd
-#'
-#' # fit model
-#' fit <- estimate(Y, analytic = TRUE)
-#'
-#' # summarize the partial correlations
-#' summary(fit)
-#'
-#' # plot summary
-#' plot(summary(fit))
-#'
-#' # select graph
-#' select(fit)
-#'
-#' # plot the selected graph
-#' plot(select(fit))
-#' }
 #' @export
 estimate  <- function(Y,
                       formula = NULL,
@@ -745,7 +574,7 @@ print_summary_estimate <- function(x, ...) {
     cat("--- \n")
     cat("Type:",  x$object$type, "\n")
     cat("Analytic:", x$object$analytic, "\n")
-    cat("Formula:", paste(as.character(fit$formula), collapse = " "), "\n")
+    cat("Formula:", paste(as.character(x$formula), collapse = " "), "\n")
     # number of iterations
     cat("Posterior Samples:", x$object$iter, "\n")
     # number of observations
@@ -769,7 +598,7 @@ print_estimate <- function(x, ...){
   cat("--- \n")
   cat("Type:",  x$type, "\n")
   cat("Analytic:", x$analytic, "\n")
-  cat("Formula:", paste(as.character(fit$formula), collapse = " "), "\n")
+  cat("Formula:", paste(as.character(x$formula), collapse = " "), "\n")
   # number of iterations
   cat("Posterior Samples:", x$iter, "\n")
   # number of observations

@@ -16,11 +16,6 @@ Setting to \code{FALSE} includes the column numbers (e.g., \code{1--2}).}
 }
 \value{
 a list containing the summarized posterior distributions
-# data
-Y <- BGGM::bfi[, 1:5]
-# analytic approach (sample by setting analytic = FALSE)
-fit <- estimate(Y, analytic = TRUE)
-summary(fit)
 }
 \description{
 Summary method for \code{explore.default} objects

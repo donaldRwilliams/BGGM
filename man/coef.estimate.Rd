@@ -32,6 +32,8 @@ There is a direct correspondence between the inverse covariance matrix and
 }
 \examples{
 \donttest{
+# note: iter = 250 for demonstrative purposes
+
 #########################################
 ### example 1: continuous and ordinal ###
 #########################################
@@ -89,7 +91,7 @@ Y <- bfi
 # the following is incorrect, as education is
 # automatically included in Y !
 
-incorrect <- estimate(Y, type = ~ gender)
+incorrect <- estimate(Y, formula = ~ gender)
 
 # to control for only gender
 # (remove education)
@@ -97,7 +99,8 @@ incorrect <- estimate(Y, type = ~ gender)
 Y <- subset(Y, select = - education)
 
  # fit model
-fit <- estimate(Y, type = ~ gender)
+fit <- estimate(Y, formula = ~ gender,
+                iter = 250)
 
 # regression
 reg <- coef(fit)
@@ -113,7 +116,8 @@ summary(reg)
 Y <- bfi
 
 # fit model
-fit <- estimate(Y, formula = ~ gender * education)
+fit <- estimate(Y, formula = ~ gender * education,
+                iter = 250)
 
 # regression
 reg <- coef(fit)
@@ -131,7 +135,8 @@ summary(reg)
 Y <- bfi
 
 # fit model
-fit <- estimate(Y, type = "mixed")
+fit <- estimate(Y, type = "mixed",
+                iter = 250)
 
 # regression
 reg <- coef(fit)

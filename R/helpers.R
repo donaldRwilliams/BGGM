@@ -9,6 +9,24 @@
 #' @importFrom stats model.matrix
 
 
+
+hyp_converter <- function (x) {
+  hyp_converted <- x
+  extract_numbers <- unlist(stringr::str_extract_all(hyp_converted,
+                                                     "\\d+"))
+  extract_numbers <- extract_numbers[unlist(extract_numbers) !=
+                                       0]
+  words <- NA
+  for (i in 1:length(extract_numbers)) {
+    temp <- noquote(extract_numbers[i])
+    words[i] <- numbers2words(as.numeric(temp))
+    hyp_converted <- sub(temp, numbers2words(as.numeric(temp)),
+                         hyp_converted)
+  }
+  hyp_converted <- stringr::str_remove_all(hyp_converted, "--")
+  list(hyp_converted = hyp_converted, words = words)
+}
+
 remove_predictors_helper <- function(Y_groups, formula){
 
   # number of groups

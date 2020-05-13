@@ -2,7 +2,7 @@
 #'
 #' @name ggm_compare_explore
 #'
-#' @description Compare Gaussian graphical models with (exploratory) hypothesis testing using the matrix-F prior
+#' @description Compare Gaussian graphical models with exploratory hypothesis testing using the matrix-F prior
 #' distribution \insertCite{Mulder2018}{BGGM}. A test for each partial correlation in the model for any number
 #' of groups. This provides evidence for the null hypothesis of no difference and the alternative hypothesis
 #' of difference. With more than two groups, the test is for \emph{all} groups simultaneously (i.e., the relation
@@ -117,79 +117,6 @@
 #' @export
 #'
 #'
-#' @examples
-#' \donttest{
-#' library(BGGM)
-#'
-#' # data
-#' Y <- bfi
-#'
-#' # males and females
-#' Ymale <- subset(Y, gender == 1,
-#'                    select = -c(gender,
-#'                                education))[,1:10]
-#'
-#' Yfemale <- subset(Y, gender == 2,
-#'                      select = -c(gender,
-#'                                  education))[,1:10]
-#'
-#' #############################
-#' ### example 1: continuous ###
-#' #############################
-#'
-#' # fit model
-#' fit <- ggm_compare_explore(Ymale, Yfemale,
-#'                            type = "continuous")
-#'
-#' # summary
-#' summary(fit)
-#'
-#' # plot summary
-#' plot(summary(fit))
-#'
-#' # select graph
-#' select(fit)
-#'
-#' # plot graph
-#' plot(select(fit))
-#'
-#' ##########################
-#' ### example 2: ordinal ###
-#' ##########################
-#'
-#' # fit model
-#' fit <- ggm_compare_explore(Ymale,  Yfemale,
-#'                            type = "ordinal")
-#'
-#' # summary
-#' summary(fit)
-#'
-#' # plot summary
-#' plot(summary(fit))
-#'
-#' # select graph
-#' select(fit)
-#'
-#' # plot graph
-#' plot(select(fit))
-#'
-#' #########################
-#' ### example 3: mixed  ###
-#' #########################
-#'
-#' # fit model
-#' fit <- ggm_compare_explore(Ymale, Yfemale,
-#'                            type = "mixed")
-#'
-#' # summary
-#' summary(fit)
-#'
-#' # plot summary
-#' plot(summary(fit))
-#'
-#' # select graph
-#' select(fit)
-#' }
 ggm_compare_explore <- function(...,
                            formula = NULL,
                            type = "continuous",
@@ -355,7 +282,7 @@ print_summary_ggm_compare_bf <- function(x, ...){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
   cat("Type:",  x$object$type, "\n")
-  cat("Formula:", paste(as.character(fit$formula), collapse = " "), "\n")
+  cat("Formula:", paste(as.character(x$formula), collapse = " "), "\n")
   # number of iterations
   cat("Posterior Samples:", x$object$iter, "\n")
   # number of observations
@@ -388,7 +315,7 @@ print_ggm_compare_bf <- function(x, ...){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
   cat("Type:",  x$type, "\n")
-  cat("Formula:", paste(as.character(fit$formula), collapse = " "), "\n")
+  cat("Formula:", paste(as.character(x$formula), collapse = " "), "\n")
   # number of iterations
   cat("Posterior Samples:", x$iter, "\n")
   # number of observations

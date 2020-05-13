@@ -18,17 +18,6 @@
 #'         4 (posterior summary),
 #'         p (number of nodes). \code{summary = FALSE}:
 #'         list containing predictions for each variable
-#' @examples
-#' \donttest{
-#' # data
-#' Y <- subset(tas, gender == "M")[,-ncol(tas)]
-#'
-#' # fit model
-#' fit <- estimate(Y)
-#'
-#' # predict
-#' predict(fit, iter = 25)
-#' }
 #' @export
 predict.estimate <- function(object,
                            newdata = NULL,
@@ -181,17 +170,6 @@ predict.estimate <- function(object,
 #'         4 (posterior summary),
 #'         p (number of nodes). \code{summary = FALSE}:
 #'         list containing predictions for each variable
-#' @examples
-#' \donttest{
-#' # data
-#' Y <- subset(tas, gender == "M")[,-ncol(tas)]
-#'
-#' # fit model
-#' fit <- estimate(Y)
-#'
-#' # predict
-#' predict(fit, iter = 25)
-#' }
 #' @export
 predict.explore <- function(object,
                              newdata = NULL,

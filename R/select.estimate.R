@@ -42,23 +42,6 @@
 #' details can be found at the blog "Dealing with Negative (Red) Edges in Psychological Networks: Frequentist Edition"
 #' (\href{https://donaldrwilliams.github.io/2020/03/29/dealing-with-negative-red-edges-in-psychological-networks-frequentist-edition/}{link})
 #'
-#' @examples
-#'
-#' # Analytic = TRUE
-#'# p = 5
-#' Y <- BGGM::bfi[,1:5]
-#'
-#' # analytic solution
-#' fit_analytic <- estimate(Y, analytic = TRUE)
-#'
-#' # select E
-#' E <- select(fit_analytic, ci_width = 0.95)
-#'
-#' # non-zero partial correlations
-#' E$partials_non_zero
-#'
-#' # adjacency matrix
-#' E$adjacency_non_zero
 #' @export
 select.estimate <- function(object,
                             cred = 0.95,
@@ -66,7 +49,7 @@ select.estimate <- function(object,
 
   if(isFALSE(object$analytic)){
 
-    pcors <- object$post_samp$pcors[,,51:(fit$iter +50)]
+    pcors <- object$post_samp$pcors[,,51:(object$iter +50)]
 
     if(alternative == "two.sided"){
 
@@ -168,7 +151,7 @@ print_select_estimate <- function(x, ...){
   cat("--- \n")
   cat("Type:", object$object$type, "\n")
   cat("Analytic:", object$object$analytic, "\n")
-  cat("Formula:", paste(as.character(fit$formula), collapse = " "), "\n")
+  cat("Formula:", paste(as.character(x$formula), collapse = " "), "\n")
   cat("Posterior Samples:", object$object$iter, "\n")
   cat("Credible Interval:",  gsub("*0.","", formatC( round(object$cred, 4), format='f', digits=2)), "% \n")
   cat("--- \n")

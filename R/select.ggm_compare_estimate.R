@@ -20,7 +20,6 @@
 #' \item \code{cred} credible interval
 #' \item \code{prob} posterior probability
 #' }
-#' sel$mat_adj
 #' @export
 select.ggm_compare_estimate <- function(object,
                                         cred = 0.95,

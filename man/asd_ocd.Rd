@@ -50,7 +50,7 @@ data("asd_ocd")
 # generate continuous
 Y <- MASS::mvrnorm(n = 213,
                    mu = rep(0, 17),
-                   Sigma = autism_ocd,
+                   Sigma = asd_ocd,
                    empirical = TRUE)
 
 

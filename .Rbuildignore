@@ -5,12 +5,10 @@
 
 
 ^\.travis\.yml$
-^_config\.yml$
+
 
 ^Meta$
 
-.joss_paper/
+^joss_paper$
 
-.data-raw/
-
-.paper.md
+^data-raw$

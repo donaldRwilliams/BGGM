@@ -29,6 +29,8 @@
 #'
 #' @examples
 #' \donttest{
+#' # note: iter = 250 for demonstrative purposes
+#'
 #' #########################################
 #' ### example 1: continuous and ordinal ###
 #' #########################################
@@ -86,7 +88,7 @@
 #' # the following is incorrect, as education is
 #' # automatically included in Y !
 #'
-#' incorrect <- estimate(Y, type = ~ gender)
+#' incorrect <- estimate(Y, formula = ~ gender)
 #'
 #' # to control for only gender
 #' # (remove education)
@@ -94,7 +96,8 @@
 #' Y <- subset(Y, select = - education)
 #'
 #'  # fit model
-#' fit <- estimate(Y, type = ~ gender)
+#' fit <- estimate(Y, formula = ~ gender,
+#'                 iter = 250)
 #'
 #' # regression
 #' reg <- coef(fit)
@@ -110,7 +113,8 @@
 #' Y <- bfi
 #'
 #' # fit model
-#' fit <- estimate(Y, formula = ~ gender * education)
+#' fit <- estimate(Y, formula = ~ gender * education,
+#'                 iter = 250)
 #'
 #' # regression
 #' reg <- coef(fit)
@@ -128,7 +132,8 @@
 #' Y <- bfi
 #'
 #' # fit model
-#' fit <- estimate(Y, type = "mixed")
+#' fit <- estimate(Y, type = "mixed",
+#'                 iter = 250)
 #'
 #' # regression
 #' reg <- coef(fit)
@@ -226,116 +231,7 @@ coef.estimate <- function(object, iter = NULL,...) {
 #' \item \code{object} An object of class \code{explore} (the fitted model).
 #' }
 #'
-#' @examples
-#' \donttest{
-#' #########################################
-#' ### example 1: continuous and ordinal ###
-#' #########################################
-#' # data
-#' Y <- ptsd
-#'
-#' # continuous
-#'
-#' # fit model
-#' fit <- explore(Y, type = "continuous")
-#'
-#' # regression
-#' reg <- coef(fit)
-#'
-#' # summary(reg)
-#'
-#'
-#' # ordinal
-#'
-#' # fit model (note + 1, due to zeros)
-#' fit <- explore(Y + 1, type = "ordinal")
-#'
-#' # summarize the partial correlations
-#' reg <- coef(fit)
-#'
-#' # summary
-#' summary(reg)
-#'
-#' #########################
-#' ### example 2: binary ###
-#' #########################
-#' # data
-#' Y <- women_math
-#'
-#' # fit model
-#' fit <- explore(Y, type = "binary")
-#'
-#' # summarize the partial correlations
-#' reg <- coef(fit)
-#'
-#' # summary
-#' summary(reg)
-#'
-#' ########################################
-#' ### example 3: control  with formula ###
-#' ########################################
-#' # (the following works with all data types)
-#'
-#' # controlling for gender
-#' Y <- bfi
-#'
-#' # Y contains two control variables
-#' # (gender and education)
-#'
-#' # the following is incorrect, as education is
-#' # automatically included in Y !
-#'
-#' incorrect <- explore(Y, type = ~ gender)
-#'
-#' # to control for only gender
-#' # (remove education)
-#'
-#' Y <- subset(Y, select = - education)
-#'
-#'  # fit model
-#' fit <- explore(Y, type = ~ gender)
-#'
-#' # regression
-#' reg <- coef(fit)
-#'
-#' # summary
-#' summary(reg)
-#'
-#'
-#' # control for an intercation (for some reason ?)
-#' # (gender by education)
-#'
-#' # data
-#' Y <- bfi
-#'
-#' # fit model
-#' fit <- explore(Y, formula = ~ gender * education)
-#'
-#' # regression
-#' reg <- coef(fit)
-#'
-#' # summary
-#' summary(reg)
-#'
-#' ########################################
-#' ### example 4: control  with "mixed" ###
-#' ########################################
-#' # control with mixed data approach
-#' # (all variables included in Y)
-#'
-#' # data
-#' Y <- bfi
-#'
-#' # fit model
-#' fit <- explore(Y, type = "mixed")
-#'
-#' # regression
-#' reg <- coef(fit)
-#'
-#' # summary
-#' summary(reg)
-#'
-#' }
+
 #' @export
 coef.explore <- function(object, iter = NULL,...) {
 

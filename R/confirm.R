@@ -144,89 +144,6 @@
 #' (i.e, all data types besides \code{"continuous"})
 #'
 #'
-#' @examples
-#' \donttest{
-#' library(BGGM)
-#'
-#' ##########################
-#' ### example 1: numbers ###
-#' ##########################
-#'
-#' # data
-#' Y <- BGGM::bfi[,1:10]
-#'
-#' # hypothesis
-#' hypothesis <- c("1--2 > 1--3 > 1--4 > 1--5")
-#'
-#' # test inequality contraints
-#' test_order <-  confirm(Y = Y, hypothesis  = hypothesis)
-#'
-#' # print
-#' test_order
-#'
-#'
-#'########################
-#'### example 2: names ###
-#'########################
-#'
-#' # hypothesis
-#' hypothesis <- c("A1--A2 > A1--A3 > A1--A4 > A1--A5")
-#'
-#' # test inequality contraints
-#' test_order <-  confirm(Y = Y,
-#'                       type = "continuous",
-#'                       hypothesis  = hypothesis)
-#'
-#' # print
-#' test_order
-#'
-#' ########################
-#' ### example 3: mixed ###
-#' ########################
-#' # rank likelihood
-#'
-#' # hypothesis
-#' hypothesis <- c("A1--A2 > A1--A3 > A1--A4 > A1--A5")
-#'
-#' # test inequality contraints
-#' test_order <-  confirm(Y = Y,
-#'                        type = "mixed",
-#'                        hypothesis  = hypothesis)
-#'
-#' # print
-#' test_order
-#'
-#'###################################
-#'### example 4: two  hypotheses ####
-#'###################################
-#'
-#' hypothesis <- c("A1--A2 > A1--A3 = A1--A4 = 0;
-#'               A1--A2 = A1--A3 = A1--A4 = 0")
-#'
-#' # test inequality contraint
-#' test_order <-  confirm(Y = Y,
-#'                        type = "continuous",
-#'                        hypothesis  = hypothesis)
-#' # print
-#' test_order
-#'
-#' ###############################
-#' ##### example 5: cheating #####
-#' ###############################
-#'
-#' # All examples thus far the hypotheses
-#' # were not confirmed. Here a true hypothesis
-#' # is tested, which shows the method works nicely
-#' # (peeked at partials beforehand)
-#'
-#' # test cheat
-#' test_cheat <-  confirm(Y = Y,
-#'                        type = "continuous",
-#'                        hypothesis  = hypothesis)
-#'
-#' # print (probabilty of nearly 1 !)
-#' test_cheat
-#' }
 #'@export
 confirm <- function(Y, hypothesis,
                     prior_sd = 0.25,
@@ -235,7 +152,7 @@ confirm <- function(Y, hypothesis,
                     mixed_type = NULL,
                     iter = 25000,
                     progress = TRUE,
-                    seed = 1){
+                    seed = 1, ...){
 
 
   old <- .Random.seed
@@ -651,17 +568,16 @@ print_confirm <- function(x, ...){
   n_hyps <- length(x$info$hypotheses)
 
   for (h in seq_len(n_hyps)) {
-    cat(paste0("H", h,  ": ", gsub(" ", "", x$info$hypotheses[h])  ))
-    cat("\n")
-  }
+    cat(paste0("H", h,  ": ", gsub(" ", "",  gsub('[\n]', '', x$info$hypotheses[h])), "\n"))
 
+  }
   cat("--- \n")
 
   cat("Posterior prob: \n\n")
 
-  for (h in seq_len(n_hyps)) {
-    cat(paste0("H", h,  ": ", gsub(" ", "",  gsub('[\n]', '', x$info$hypotheses[h])), "\n"))
-
+  for(h in seq_len(n_hyps)){
+    cat(paste0("p(H",h,"|data) = ", round(x$out_hyp_prob[h], 3 )  ))
+    cat("\n")
   }
 
   cat("--- \n")

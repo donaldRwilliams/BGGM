@@ -58,7 +58,7 @@ The returned object of class \code{ggm_compare_explore} contains a lot of inform
 }
 }
 \description{
-Compare Gaussian graphical models with (exploratory) hypothesis testing using the matrix-F prior
+Compare Gaussian graphical models with exploratory hypothesis testing using the matrix-F prior
 distribution \insertCite{Mulder2018}{BGGM}. A test for each partial correlation in the model for any number
 of groups. This provides evidence for the null hypothesis of no difference and the alternative hypothesis
 of difference. With more than two groups, the test is for \emph{all} groups simultaneously (i.e., the relation
@@ -125,80 +125,6 @@ An error is most likely to arise when \code{type = "ordinal"}. The are two commo
 
 See \code{\link{BGGM-package}} for details about interpreting GGMs based on latent data
 (i.e, all data types besides \code{"continuous"})
-}
-\examples{
-\donttest{
-library(BGGM)
-
-# data
-Y <- bfi
-
-# males and females
-Ymale <- subset(Y, gender == 1,
-                   select = -c(gender,
-                               education))[,1:10]
-
-Yfemale <- subset(Y, gender == 2,
-                     select = -c(gender,
-                                 education))[,1:10]
-
-#############################
-### example 1: continuous ###
-#############################
-
-# fit model
-fit <- ggm_compare_explore(Ymale, Yfemale,
-                           type = "continuous")
-
-# summary
-summary(fit)
-
-# plot summary
-plot(summary(fit))
-
-# select graph
-select(fit)
-
-# plot graph
-plot(select(fit))
-
-##########################
-### example 2: ordinal ###
-##########################
-
-# fit model
-fit <- ggm_compare_explore(Ymale,  Yfemale,
-                           type = "ordinal")
-
-# summary
-summary(fit)
-
-# plot summary
-plot(summary(fit))
-
-# select graph
-select(fit)
-
-# plot graph
-plot(select(fit))
-
-#########################
-### example 3: mixed  ###
-#########################
-
-# fit model
-fit <- ggm_compare_explore(Ymale, Yfemale,
-                           type = "mixed")
-
-# summary
-summary(fit)
-
-# plot summary
-plot(summary(fit))
-
-# select graph
-select(fit)
-}
 }
 \references{
 \insertAllCited{}

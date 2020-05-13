@@ -21,23 +21,7 @@
 #' }
 #'
 #' @export
-#'
-#' @examples
-#' \donttest{
-#' Y1 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
-#' Y2 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
-#' Y3 <- MASS::mvrnorm(500, rep(0, 16), Sigma = diag(16))
-#'
-#' ggm_bf <- ggm_compare_bf(Y1, Y2, Y3,
-#'                         prior_sd = .20,
-#'                         iter = 500,
-#'                         cores = 2)
-#'# select with BF_cut = 3
-#' ggm_bf_sel <- select(ggm_bf, BF_cut = 3)
-#'
-#' # summary
-#' summary(ggm_bf_sel)
-#' }
+
 select.ggm_compare_explore <- function(object,
                                        post_prob = 0.50,
                                        BF_cut = NULL,...){

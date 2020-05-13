@@ -44,24 +44,6 @@ this notion has a rich tradition in psychometrics. Hence, this can be incorporta
 details can be found at the blog "Dealing with Negative (Red) Edges in Psychological Networks: Frequentist Edition"
 (\href{https://donaldrwilliams.github.io/2020/03/29/dealing-with-negative-red-edges-in-psychological-networks-frequentist-edition/}{link})
 }
-\examples{
-
-# Analytic = TRUE
-# p = 5
-Y <- BGGM::bfi[,1:5]
-
-# analytic solution
-fit_analytic <- estimate(Y, analytic = TRUE)
-
-# select E
-E <- select(fit_analytic, ci_width = 0.95)
-
-# non-zero partial correlations
-E$partials_non_zero
-
-# adjacency matrix
-E$adjacency_non_zero
-}
 \references{
 \insertAllCited{}
 }

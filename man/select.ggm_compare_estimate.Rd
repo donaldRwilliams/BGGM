@@ -27,7 +27,6 @@ A list of class \code{select.ggm_compare_estimate}:
 \item \code{cred} credible interval
 \item \code{prob} posterior probability
 }
-sel$mat_adj
 }
 \description{
 Select Partial Correlattion Differences for \code{ggm_compare_estimate} Objects
