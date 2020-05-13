@@ -608,7 +608,7 @@ NULL
 #' Repetitive behaviors in autism and obsessive-compulsive
 #' disorder: New perspectives from a network analysis.
 #' Journal of Autism and Developmental Disorders, 45(1),
-#' 192–202. doi:10.1007/s10803-014-2204-9
+#' 192-202. doi:10.1007/s10803-014-2204-9
 NULL
 
 

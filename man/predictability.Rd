@@ -4,7 +4,14 @@
 \alias{predictability}
 \title{Predictability: Bayesian Variance Explained (R2)}
 \usage{
-predictability(object, select = FALSE, cred = 0.95, BF_cut = 3, iter = NULL)
+predictability(
+  object,
+  select = FALSE,
+  cred = 0.95,
+  BF_cut = 3,
+  iter = NULL,
+  ...
+)
 }
 \arguments{
 \item{object}{object of class \code{estimate} or \code{explore}}
