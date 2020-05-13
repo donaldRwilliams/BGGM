@@ -29,7 +29,7 @@ Imports:
     stats,
     utils,
     stringr, 
-    method
+    methods
 Suggests: 
  knitr
 Encoding: UTF-8
