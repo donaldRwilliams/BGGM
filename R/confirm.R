@@ -508,7 +508,7 @@ confirm <- function(Y, hypothesis,
 
   if(isTRUE(progress)){
 
-    message(paste0("BGGM: Prior Sampling ", ...))
+    message(paste0("BGGM: Prior Sampling "))
 
   }
 
