@@ -30,7 +30,8 @@ The sample size was 213.
   \item \code{VR}  Verbal rituals
 }
 
-  \strong{OCD}
+\strong{OCD}
+
 \itemize{
   \item \code{CD} Concern with things touched due to dirt/bacteria
   \item \code{TB} Thoughts of doing something bad around others
