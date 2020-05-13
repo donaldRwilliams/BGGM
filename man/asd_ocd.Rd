@@ -29,11 +29,8 @@ The sample size was 213.
   \item \code{VR}  Verbal rituals
 }
 
-  \itemize{
-
   \strong{OCD}
-
-
+\itemize{
   \item \code{CD} Concern with things touched due to dirt/bacteria
   \item \code{TB} Thoughts of doing something bad around others
   \item \code{CT} Continual thoughts that do not go away
