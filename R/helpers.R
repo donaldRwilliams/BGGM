@@ -1625,7 +1625,7 @@ globalVariables(c('Y1','Y2',
                   'density', 'Node',
                   'Post.mean',
                   'L1', 'lag', 'acf',
-                  'iteration'.
+                  'iteration',
                   '.imp',
                   'estimate'))
 
