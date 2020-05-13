@@ -13,7 +13,8 @@ confirm(
   mixed_type = NULL,
   iter = 25000,
   progress = TRUE,
-  seed = 1
+  seed = 1,
+  ...
 )
 }
 \arguments{

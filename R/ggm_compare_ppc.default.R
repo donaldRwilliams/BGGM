@@ -532,44 +532,6 @@ print_ggm_compare_ppc <- function(x, ...){
 #'
 #' @importFrom ggridges stat_density_ridges
 #'
-#' @examples
-#' \donttest{
-#' library(BGGM)
-#'
-#' # data
-#' Y <- bfi
-#'
-#' #############################
-#' ######### global ############
-#' #############################
-#'
-#' # males
-#' Ym <- subset(Y, gender == 1,
-#'              select = - c(gender, education))
-#'
-#' # females
-#'
-#' Yf <- subset(Y, gender == 2,
-#'              select = - c(gender, education))
-#'
-#'
-#' global_test <- ggm_compare_ppc(Ym, Yf)
-#'
-#' global_test
-#'
-#' plot(global_test)
-#'
-#' #############################
-#' ######### nodewise ##########
-#' #############################
-#'
-#' nodewise_test <- ggm_compare_ppc(Ym, Yf,
-#'                                  test = "nodewise")
-#'
-#' nodewise_test
-#'
-#' plot(nodewise_test)
-#' }
 #' @export
 plot.ggm_compare_ppc <- function(x,
                                  critical = 0.05,

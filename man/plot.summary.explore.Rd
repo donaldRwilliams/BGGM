@@ -13,6 +13,8 @@
 
 \item{size}{Numeric.}
 
+\item{width}{Numeric}
+
 \item{...}{currently ignored}
 }
 \value{
