@@ -3,6 +3,8 @@
 #'
 #' @param x An object of class \code{BGGM}
 #' @param ... currently ignored
+#'
+#' @importFrom methods is
 #' @export
 
 print.BGGM <- function(x, ...) {

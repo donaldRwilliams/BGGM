@@ -33,13 +33,7 @@ Imports:
     utils,
     stringr
 Suggests: 
-  abind,
-  assortnet,
-  knitr, 
-  mice,
-  mvnfast,
-  networktools,
-  rmarkdown
+ knitr
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.0

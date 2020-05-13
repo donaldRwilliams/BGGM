@@ -1,6 +1,6 @@
 #' @importFrom stats coef cov2cor var dnorm lm
-#' na.omit pnorm quantile rWishart
-#' sd qnorm residuals fitted density
+#' na.omit pnorm quantile rWishart runif dnorm rnorm
+#' sd qnorm residuals fitted density weighted.mean
 #' @importFrom utils combn
 #' @importFrom graphics plot
 #' @importFrom Rdpack reprompt
@@ -1625,9 +1625,10 @@ globalVariables(c('Y1','Y2',
                   'density', 'Node',
                   'Post.mean',
                   'L1', 'lag', 'acf',
-                  'iteration'.
+                  'iteration',
                   '.imp',
-                  'estimate'))
+                  'estimate',
+                  'rref_ei'))
 
 
 

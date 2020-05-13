@@ -1,7 +1,7 @@
-#' post-traumatic stress disorder dataset
+#' Data: Post-Traumatic Stress Disorder
 #'
-#' A dataset containing items that measure Post-traumatic stress disorder symptoms. There are 20 variables (p) and
-#' 221 observations (n)
+#' A dataset containing items that measure Post-traumatic stress disorder symptoms \insertCite{armour2017network}{BGGM}.
+#' There are 20 variables (\emph{p}) and  221 observations (\emph{n}).
 #'
 #' \itemize{
 #'   \item Intrusive Thoughts
@@ -26,20 +26,26 @@
 #' }
 #'
 #' @docType data
+#'
 #' @keywords datasets
+#'
 #' @name ptsd
+#'
 #' @usage data("ptsd")
+#'
 #' @references
-#' Epskamp, S., & Fried, E. I. (2018). A tutorial on regularized partial correlation networks. Psychological methods.
-#'  @format A data frame with 221 rows and 20 variables
+#'
+#' \insertAllCited{}
+#'
+#' @format A dataframe with 221 rows and 20 variables
 NULL
 
 
 
-#' post-traumatic stress disorder correlation matrix (# 1)
+#' Data: Post-Traumatic Stress Disorder (Sample # 1)
 #'
-#' A dataset containing items that measure Post-traumatic stress disorder symptoms. There are 16 variables in total.
-#' The correlation matrix was estimated from 526 individuals.
+#' A correlation matrix that includes 16 variables. The correlation matrix was estimated from 526
+#' individuals \insertCite{fried2018replicability}{BGGM}.
 #'
 #' \itemize{
 #'   \item Intrusive Thoughts
@@ -61,23 +67,31 @@ NULL
 #' }
 #'
 #' @docType data
+#'
 #' @keywords datasets
+#'
 #' @name ptsd_cor1
+#'
 #' @examples
+#'
 #' data(ptsd_cor1)
-#' Y <- MASS::mvrnorm(n = 965, mu = rep(0, 16),
-#'                    Sigma = ptsd_cor1,  empirical = TRUE)
+#'
+#' Y <- MASS::mvrnorm(n = 526,
+#'                    mu = rep(0, 16),
+#'                    Sigma = ptsd_cor1,
+#'                    empirical = TRUE)
+#'
 #' @references
-#' Fried, E. I., Eidhof, M. B., Palic, S., Costantini, G., Huisman-van Dijk, H. M., Bockting, C. L., ... & Karstoft, K. I. (2018).
-#' Replicability and generalizability of posttraumatic stress disorder (PTSD) networks: a cross-cultural multisite study of PTSD
-#' symptoms in four trauma patient samples. Clinical Psychological Science, 6(3), 335-351.
-#' @format A (correlation) matrix with 16 variables
+#'
+#' \insertAllCited{}
+#'
+#' @format A correlation matrix with 16 variables
 NULL
 
-#' post-traumatic stress disorder correlation matrix (# 2)
+#' Data: Post-Traumatic Stress Disorder (Sample # 2)
 #'
-#' A dataset containing items that measure Post-traumatic stress disorder symptoms. There are 16 variables in total.
-#' The correlation matrix was estimated from 365 individuals.
+#' A correlation matrix that includes 16 variables. The correlation matrix
+#' was estimated from 365 individuals \insertCite{fried2018replicability}{BGGM}.
 #'
 #' \itemize{
 #'   \item Intrusive Thoughts
@@ -99,25 +113,31 @@ NULL
 #' }
 #'
 #' @docType data
+#'
 #' @keywords datasets
+#'
 #' @name ptsd_cor2
+#'
 #' @examples
 #' data(ptsd_cor2)
-#' Y <- MASS::mvrnorm(n = 365, mu = rep(0, 16),
-#'                    Sigma = ptsd_cor2,  empirical = TRUE)
+#' Y <- MASS::mvrnorm(n = 365,
+#'                    mu = rep(0, 16),
+#'                    Sigma = ptsd_cor2,
+#'                    empirical = TRUE)
 #' @references
-#' Fried, E. I., Eidhof, M. B., Palic, S., Costantini, G., Huisman-van Dijk, H. M., Bockting, C. L., ... & Karstoft, K. I. (2018).
-#' Replicability and generalizability of posttraumatic stress disorder (PTSD) networks: a cross-cultural multisite study of PTSD
-#' symptoms in four trauma patient samples. Clinical Psychological Science, 6(3), 335-351.
-#' @format A (correlation) matrix with 16 variables
+#'
+#' \insertAllCited{}
+#'
+#' @format A correlation matrix with 16 variables
 NULL
 
-#' post-traumatic stress disorder correlation matrix (# 3)
+#'  Data: Post-Traumatic Stress Disorder  (Sample # 3)
 #'
-#' A dataset containing items that measure Post-traumatic stress disorder symptoms. There are 16 variables in total.
-#' The correlation matrix was estimated from 926 individuals.
+#' A correlation matrix that includes 16 variables. The correlation matrix
+#' was estimated from 926 individuals \insertCite{fried2018replicability}{BGGM}.
 #'
 #' \itemize{
+#'
 #'   \item Intrusive Thoughts
 #'   \item Nightmares
 #'   \item Flashbacks
@@ -137,23 +157,30 @@ NULL
 #' }
 #'
 #' @docType data
+#'
 #' @keywords datasets
+#'
 #' @name ptsd_cor3
+#'
 #' @examples
 #' data(ptsd_cor3)
-#' Y <- MASS::mvrnorm(n = 926, mu = rep(0, 16),
-#'                    Sigma = ptsd_cor3,  empirical = TRUE)
+#' Y <- MASS::mvrnorm(n = 926,
+#'                    mu = rep(0, 16),
+#'                    Sigma = ptsd_cor3,
+#'                    empirical = TRUE)
+#'
 #' @references
-#' Fried, E. I., Eidhof, M. B., Palic, S., Costantini, G., Huisman-van Dijk, H. M., Bockting, C. L., ... & Karstoft, K. I. (2018).
-#' Replicability and generalizability of posttraumatic stress disorder (PTSD) networks: a cross-cultural multisite study of PTSD
-#' symptoms in four trauma patient samples. Clinical Psychological Science, 6(3), 335-351.
-#' @format A (correlation) matrix with 16 variables
+#'
+#' \insertAllCited{}
+#'
+#' @format A correlation matrix with 16 variables
+#'
 NULL
 
-#' post-traumatic stress disorder correlation matrix (# 4)
+#' Data: Post-Traumatic Stress Disorder  (Sample # 4)
 #'
-#' A dataset containing items that measure Post-traumatic stress disorder symptoms. There are 16 variables in total.
-#' The correlation matrix was estimated from 965 individuals.
+#' A correlation matrix that includes 16 variables. The correlation matrix
+#' was estimated from 965 individuals \insertCite{fried2018replicability}{BGGM}.
 #'
 #' \itemize{
 #'   \item Intrusive Thoughts
@@ -175,23 +202,30 @@ NULL
 #' }
 #'
 #' @docType data
+#'
 #' @keywords datasets
+#'
 #' @name ptsd_cor4
+#'
 #' @examples
 #' data(ptsd_cor4)
-#' Y <- MASS::mvrnorm(n = 965, mu = rep(0, 16),
-#'                    Sigma = ptsd_cor4,  empirical = TRUE)
+#' Y <- MASS::mvrnorm(n = 965,
+#'                    mu = rep(0, 16),
+#'                    Sigma = ptsd_cor4,
+#'                    empirical = TRUE)
+#'
 #' @references
-#' Fried, E. I., Eidhof, M. B., Palic, S., Costantini, G., Huisman-van Dijk, H. M., Bockting, C. L., ... & Karstoft, K. I. (2018).
-#' Replicability and generalizability of posttraumatic stress disorder (PTSD) networks: a cross-cultural multisite study of PTSD
-#' symptoms in four trauma patient samples. Clinical Psychological Science, 6(3), 335-351.
-#' @format A (correlation) matrix with 16 variables
+#'
+#' \insertAllCited{}
+#'
+#' @format A correlation matrix with 16 variables
 NULL
+
 
 #' 25 Personality items representing 5 factors
 #'
-#' This data set and the documentation was taken from the \strong{psych} package. Further details can be found in the documentation
-#' of the \strong{psych} package.
+#' This dataset and the corresponding documentation was taken from the \strong{psych} package. We refer users to that
+#' package for further details \insertCite{psych}{BGGM}.
 #'
 #' \itemize{
 #'   \item \code{A1} Am indifferent to the feelings of others. (q_146)
@@ -224,12 +258,18 @@ NULL
 #' }
 #'
 #' @docType data
+#'
 #' @keywords datasets
+#'
 #' @name bfi
+#'
+#' @usage data("bfi")
+#'
 #' @references
-#' Revelle, W. (2018) psych: Procedures for Personality and Psychological Research, Northwestern University,
-#' Evanston, Illinois, USA, https://CRAN.R-project.org/package=psych Version = 1.8.12.
-#' @format A data frame with 25 variables and 2800 observations (but with missing data)
+#'
+#' \insertAllCited{}
+#'
+#' @format A data frame with 25 variables and 2800 observations (including missing values)
 NULL
 
 
