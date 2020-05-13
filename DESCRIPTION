@@ -28,7 +28,7 @@ Imports:
     sna (>= 2.5),
     GGally (>= 1.4.0),
     ggplot2 (>= 3.2.1),
-    ggridges (>= 0.5.1)
+    ggridges (>= 0.5.1),
     stats,
     utils,
     stringr, 
