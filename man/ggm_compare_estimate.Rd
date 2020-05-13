@@ -119,12 +119,6 @@ hypothesis testing.  An approach based on a posterior predictive check is implem
 test for comparing each variable in the network. Testing for nodewise differences in predictabilty is implemented in
 \code{\link{test.R2}} \insertCite{Williams2019;textual}{BGGM}.
 }
-\examples{
-
-
-
-
-}
 \references{
 \insertAllCited{}
 }
