@@ -373,7 +373,9 @@ summary.coef <- function(object,
   returned_object <- list(summaries = res_i,
                           object = object)
 
-  class(returned_object) <- c("BGGM", "coef", "summary.coef")
+  class(returned_object) <- c("BGGM",
+                              "coef",
+                              "summary.coef")
   returned_object
 }
 

@@ -107,7 +107,7 @@ An error is most likely to arise when \code{type = "ordinal"}. The are two commo
 \note{
 \strong{Posterior Uncertainty}:
 
-#' A key feature of \bold{BGGM} is that there is a posterior distribution for each partial correlation.
+A key feature of \bold{BGGM} is that there is a posterior distribution for each partial correlation.
 This readily allows for visiualizing uncertainty in the estimates. This feature works
 with all data types and is accomplished by plotting the summary of the \code{explore} object
 (i.e., \code{plot(summary(fit))}). Note that in contrast to \code{estimate} (credible intervals),

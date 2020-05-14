@@ -7,19 +7,23 @@
 \method{plot}{summary.ggm_compare_estimate}(x, color = "black", size = 2, width = 0, ...)
 }
 \arguments{
-\item{x}{an object of class \code{estimate} or \code{ggm_compare_estimate}}
+\item{x}{An object of class \code{ggm_compare_estimate}.}
 
-\item{color}{color of error bar}
+\item{color}{Character string. The color of the points
+(defaults to \code{"black"}).}
 
-\item{size}{Numeric.}
+\item{size}{Numeric. The size of the points (defaults to 2).}
 
-\item{width}{width of error bar cap}
+\item{width}{Numeric. The width of error bar ends (defaults to \code{0}).}
 
-\item{...}{currently ignored}
+\item{...}{Currently ignored.}
 }
 \value{
-an object of class \code{ggplot}
+An object of class \code{ggplot}
 }
 \description{
-Plot \code{summary.ggm_compare_estimate} Objects
+Visualize the posterior distribution differences..
+}
+\seealso{
+\code{\link{ggm_compare_estimate}}
 }

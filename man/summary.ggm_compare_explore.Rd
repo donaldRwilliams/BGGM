@@ -7,16 +7,19 @@
 \method{summary}{ggm_compare_explore}(object, col_names = TRUE, ...)
 }
 \arguments{
-\item{object}{object of class \code{ggm_compare_explore}}
+\item{object}{An object of class \code{ggm_compare_explore}.}
 
-\item{col_names}{logical. Should the summary include the column names (default is \code{TRUE})?
+\item{col_names}{Logical. Should the summary include the column names (default is \code{TRUE})?
 Setting to \code{FALSE} includes the column numbers (e.g., \code{1--2}).}
 
-\item{...}{currently ignored}
+\item{...}{Currently ignored.}
 }
 \value{
 An object of class \code{summary.ggm_compare_explore}
 }
 \description{
 Summarize the posterior hypothesis probabilities
+}
+\seealso{
+\code{\link{ggm_compare_explore}}
 }

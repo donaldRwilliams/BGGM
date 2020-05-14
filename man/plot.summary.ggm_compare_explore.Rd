@@ -2,22 +2,26 @@
 % Please edit documentation in R/ggm_compare_bf.default.R
 \name{plot.summary.ggm_compare_explore}
 \alias{plot.summary.ggm_compare_explore}
-\title{GGM Compare: Plot \code{ggm_compare_explore] Objects}}
+\title{Plot \code{summary.ggm_compare_explore} Objects}
 \usage{
 \method{plot}{summary.ggm_compare_explore}(x, size = 2, color = "black", ...)
 }
 \arguments{
-\item{x}{object of class \code{ggm_compare_explore}}
+\item{x}{An object of class \code{summary.ggm_compare_explore}}
 
-\item{size}{numeric. Size of the points.}
+\item{size}{Numeric. The size of the points (defaults to 2).}
 
-\item{color}{string. Color of the points.}
+\item{color}{Character string. The color of the points
+(defaults to \code{"black"}).}
 
-\item{...}{Currently ignored}
+\item{...}{Currently ignored.}
 }
 \value{
 A \code{ggplot} object
 }
 \description{
-Visualize posterior hypothesis probabilities.
+Visualize the posterior hypothesis probabilities.
+}
+\seealso{
+\code{\link{ggm_compare_explore}}
 }

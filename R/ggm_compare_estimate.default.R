@@ -133,6 +133,100 @@
 #' \insertCite{williams2020comparing}{BGGM}. This provides  a 'global' test for comparing the entire GGM and a 'nodewise'
 #' test for comparing each variable in the network \insertCite{Williams2019;textual}{BGGM}.
 #'
+#' @examples
+#' \donttest{
+#' # note: iter = 250 for demonstrative purposes
+#'
+#' # data
+#' Y <- bfi
+#'
+#' # males and females
+#' Ymale <- subset(Y, gender == 1,
+#'                    select = -c(gender,
+#'                                education))[,1:10]
+#'
+#' Yfemale <- subset(Y, gender == 2,
+#'                      select = -c(gender,
+#'                                  education))[,1:10]
+#'
+#' #############################
+#' ### example 1: continuous ###
+#' #############################
+#'
+#' # fit model
+#' fit <- ggm_compare_estimate(Ymale, Yfemale,
+#'                            iter = 250,
+#'                            type = "continuous")
+#'
+#' # summary
+#' summary(fit)
+#'
+#' # plot summary
+#' plot(summary(fit))
+#'
+#' # select graph
+#' select(fit)
+#'
+#' # plot graph
+#' plot(select(fit))
+#'
+#' ##########################
+#' ### example 2: ordinal ###
+#' ##########################
+#'
+#' # fit model
+#' fit <- ggm_compare_estimate(Ymale,  Yfemale,
+#'                            type = "ordinal",
+#'                            iter = 250,
+#'                            prior_sd = 0.25)
+#'
+#' # summary
+#' summary(fit)
+#'
+#' # plot summary
+#' plot(summary(fit))
+#'
+#' # select graph
+#' select(fit)
+#'
+#'
+#' #########################
+#' ### example 3: mixed  ###
+#' #########################
+#'
+#' # fit model
+#' fit <- ggm_compare_explore(Ymale, Yfemale,
+#'                            type = "mixed",
+#'                            iter = 250)
+#'
+#' # summary
+#' summary(fit)
+#'
+#' # plot summary
+#' plot(summary(fit))
+#'
+#' ###########################
+#' ### example 4: analytic ###
+#' ###########################
+#'
+#' # fit model
+#' fit <- ggm_compare_estimate(Ymale, Yfemale,
+#'                             analytic = TRUE)
+#'
+#' # summary
+#' summary(fit)
+#'
+#' # plot summary
+#' plot(summary(fit))
+#'
+#' # select
+#' select(fit)
+#'
+#' # plot select
+#' plot(select(fit))
+#'
+#' }
+#'
 #' @export
 ggm_compare_estimate <- function(...,
                                  formula = NULL,
@@ -290,29 +384,26 @@ ggm_compare_estimate <- function(...,
 }
 
 
-#' @name summary.ggm_compare_estimate
-#'
 #' @title Summary method for \code{ggm_compare_estimate} objects
 #'
-#' @param object an object of class \code{ggm_compare_estimate}
+#' @description Summarize the posterior distribution of each partial correlation
+#' difference with the posterior mean and standard deviation.
 #'
-#' @param col_names logical. Should the summary include the column names (default is \code{TRUE})?
+#' @name summary.ggm_compare_estimate
+#'
+#' @param object An object of class \code{ggm_compare_estimate}.
+#'
+#' @param col_names Logical. Should the summary include the column names (default is \code{TRUE})?
 #'                  Setting to \code{FALSE} includes the column numbers (e.g., \code{1--2}).
 #'
-#' @param cred credible interval width
-#' @param ... currently ignored
+#' @param cred Numeric. The credible interval width for summarizing the posterior
+#'             distributions (defaults to 0.95; must be between 0 and 1).
+#'
+#' @param ... Currently ignored.
+#'
 #' @seealso \code{\link{ggm_compare_estimate}}
-#' @return A list containing the summarized posterior distributions
-#' @examples
-#' # data
-#' Y1 <- BGGM::bfi[1:500,1:5]
-#' Y2 <- BGGM::bfi[501:1000, 1:5]
 #'
-#' # fit model
-#' fit <- ggm_compare_estimate(Y1, Y2)
-#'
-#' # posterior summary of differences
-#' summary(fit)
+#' @return A list containing the summarized posterior distributions.
 #'
 #' @export
 summary.ggm_compare_estimate <- function(object,
@@ -488,13 +579,23 @@ print_summary_ggm_estimate_compare <- function(x,...){
 
 #' Plot \code{summary.ggm_compare_estimate} Objects
 #'
-#' @param x an object of class \code{estimate} or \code{ggm_compare_estimate}
-#' @param color color of error bar
-#' @param size Numeric.
-#' @param width width of error bar cap
-#' @param ... currently ignored
+#' @description Visualize the posterior distribution differences..
 #'
-#' @return an object of class \code{ggplot}
+#' @param x An object of class \code{ggm_compare_estimate}.
+#'
+#' @param size Numeric. The size of the points (defaults to 2).
+#'
+#' @param color Character string. The color of the points
+#' (defaults to \code{"black"}).
+#'
+#' @param width Numeric. The width of error bar ends (defaults to \code{0}).
+#'
+#' @param ... Currently ignored.
+#'
+#' @return An object of class \code{ggplot}
+#'
+#' @seealso \code{\link{ggm_compare_estimate}}
+#'
 #' @export
 plot.summary.ggm_compare_estimate <- function(x, color = "black",
                                   size = 2,

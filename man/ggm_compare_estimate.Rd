@@ -142,6 +142,101 @@ hypothesis testing.  An approach based on a posterior predictive check is implem
 \insertCite{williams2020comparing}{BGGM}. This provides  a 'global' test for comparing the entire GGM and a 'nodewise'
 test for comparing each variable in the network \insertCite{Williams2019;textual}{BGGM}.
 }
+\examples{
+\donttest{
+# note: iter = 250 for demonstrative purposes
+
+# data
+Y <- bfi
+
+# males and females
+Ymale <- subset(Y, gender == 1,
+                   select = -c(gender,
+                               education))[,1:10]
+
+Yfemale <- subset(Y, gender == 2,
+                     select = -c(gender,
+                                 education))[,1:10]
+
+#############################
+### example 1: continuous ###
+#############################
+
+# fit model
+fit <- ggm_compare_estimate(Ymale, Yfemale,
+                           iter = 250,
+                           type = "continuous")
+
+# summary
+summary(fit)
+
+# plot summary
+plot(summary(fit))
+
+# select graph
+select(fit)
+
+# plot graph
+plot(select(fit))
+
+##########################
+### example 2: ordinal ###
+##########################
+
+# fit model
+fit <- ggm_compare_estimate(Ymale,  Yfemale,
+                           type = "ordinal",
+                           iter = 250,
+                           prior_sd = 0.25)
+
+# summary
+summary(fit)
+
+# plot summary
+plot(summary(fit))
+
+# select graph
+select(fit)
+
+
+#########################
+### example 3: mixed  ###
+#########################
+
+# fit model
+fit <- ggm_compare_explore(Ymale, Yfemale,
+                           type = "mixed",
+                           iter = 250)
+
+# summary
+summary(fit)
+
+# plot summary
+plot(summary(fit))
+
+###########################
+### example 4: analytic ###
+###########################
+
+# fit model
+fit <- ggm_compare_estimate(Ymale, Yfemale,
+                            analytic = TRUE)
+
+# summary
+summary(fit)
+
+# plot summary
+plot(summary(fit))
+
+# select
+select(fit)
+
+# plot select
+plot(select(fit))
+
+}
+
+}
 \references{
 \insertAllCited{}
 }

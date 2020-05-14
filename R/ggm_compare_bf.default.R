@@ -114,9 +114,81 @@
 #' See \code{\link{BGGM-package}} for details about interpreting GGMs based on latent data
 #' (i.e, all data types besides \code{"continuous"})
 #'
+#'
+#' @examples
+#'
+#' \donttest{
+#' # note: iter = 250 for demonstrative purposes
+#'
+#' # data
+#' Y <- bfi
+#'
+#' # males and females
+#' Ymale <- subset(Y, gender == 1,
+#'                    select = -c(gender,
+#'                                education))[,1:10]
+#'
+#' Yfemale <- subset(Y, gender == 2,
+#'                      select = -c(gender,
+#'                                  education))[,1:10]
+#'
+#' #############################
+#' ### example 1: continuous ###
+#' #############################
+#'
+#' # fit model
+#' fit <- ggm_compare_explore(Ymale, Yfemale,
+#'                            iter = 250,
+#'                            type = "continuous")
+#'
+#' # summary
+#' summary(fit)
+#'
+#' # plot summary
+#' plot(summary(fit))
+#'
+#' # select graph
+#' select(fit)
+#'
+#' # plot graph
+#' plot(select(fit))
+#'
+#' ##########################
+#' ### example 2: ordinal ###
+#' ##########################
+#'
+#' # fit model
+#' fit <- ggm_compare_explore(Ymale,  Yfemale,
+#'                            type = "ordinal",
+#'                            iter = 250)
+#'
+#' # summary
+#' summary(fit)
+#'
+#' # plot summary
+#' plot(summary(fit))
+#'
+#' # select graph
+#' select(fit)
+#'
+#'
+#' #########################
+#' ### example 3: mixed  ###
+#' #########################
+#'
+#' # fit model
+#' fit <- ggm_compare_explore(Ymale, Yfemale,
+#'                            type = "mixed",
+#'                            iter = 250)
+#'
+#' # summary
+#' summary(fit)
+#'
+#' # plot summary
+#' plot(summary(fit))
+#' }
+#'
 #' @export
-#'
-#'
 ggm_compare_explore <- function(...,
                            formula = NULL,
                            type = "continuous",
@@ -309,8 +381,6 @@ print_summary_ggm_compare_bf <- function(x, ...){
   cat("--- \n")
 }
 
-
-
 print_ggm_compare_bf <- function(x, ...){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
@@ -340,22 +410,24 @@ print_ggm_compare_bf <- function(x, ...){
   cat("Date:", date(), "\n")
 }
 
-
-
-
-#' Summary Method for \code{ggm_compare_explore} Objects
+#' @title Summary Method for \code{ggm_compare_explore} Objects
 #'
 #' @description Summarize the posterior hypothesis probabilities
 #'
-#' @param object object of class \code{ggm_compare_explore}
-#' @param col_names logical. Should the summary include the column names (default is \code{TRUE})?
+#' @name summary.ggm_compare_explore
+#'
+#' @param object An object of class \code{ggm_compare_explore}.
+#'
+#' @param col_names Logical. Should the summary include the column names (default is \code{TRUE})?
 #'                  Setting to \code{FALSE} includes the column numbers (e.g., \code{1--2}).
 #'
-#' @param ... currently ignored
+#' @param ... Currently ignored.
 #'
 #' @return An object of class \code{summary.ggm_compare_explore}
-#' @export
 #'
+#' @seealso \code{\link{ggm_compare_explore}}
+#'
+#' @export
 summary.ggm_compare_explore <- function(object,
                                         col_names = TRUE,
                                         ...){
@@ -419,21 +491,26 @@ summary.ggm_compare_explore <- function(object,
 }
 
 
-#' GGM Compare: Plot \code{ggm_compare_explore] Objects}
+#' @title Plot \code{summary.ggm_compare_explore} Objects
 #'
-#' @description Visualize posterior hypothesis probabilities.
+#' @description Visualize the posterior hypothesis probabilities.
 #'
-#' @param x object of class \code{ggm_compare_explore}
-#' @param size numeric. Size of the points.
+#' @name plot.summary.ggm_compare_explore
 #'
-#' @param color string. Color of the points.
+#' @param x An object of class \code{summary.ggm_compare_explore}
 #'
-#' @param ... Currently ignored
+#' @param size Numeric. The size of the points (defaults to 2).
+#'
+#' @param color Character string. The color of the points
+#' (defaults to \code{"black"}).
+#'
+#' @param ... Currently ignored.
 #'
 #' @return A \code{ggplot} object
 #'
-#' @export
+#' @seealso \code{\link{ggm_compare_explore}}
 #'
+#' @export
 plot.summary.ggm_compare_explore <- function(x,
                                              size = 2,
                                              color = "black", ...){

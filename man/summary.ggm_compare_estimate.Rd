@@ -7,32 +7,22 @@
 \method{summary}{ggm_compare_estimate}(object, col_names = TRUE, cred = 0.95, ...)
 }
 \arguments{
-\item{object}{an object of class \code{ggm_compare_estimate}}
+\item{object}{An object of class \code{ggm_compare_estimate}.}
 
-\item{col_names}{logical. Should the summary include the column names (default is \code{TRUE})?
+\item{col_names}{Logical. Should the summary include the column names (default is \code{TRUE})?
 Setting to \code{FALSE} includes the column numbers (e.g., \code{1--2}).}
 
-\item{cred}{credible interval width}
+\item{cred}{Numeric. The credible interval width for summarizing the posterior
+distributions (defaults to 0.95; must be between 0 and 1).}
 
-\item{...}{currently ignored}
+\item{...}{Currently ignored.}
 }
 \value{
-A list containing the summarized posterior distributions
+A list containing the summarized posterior distributions.
 }
 \description{
-Summary method for \code{ggm_compare_estimate} objects
-}
-\examples{
-# data
-Y1 <- BGGM::bfi[1:500,1:5]
-Y2 <- BGGM::bfi[501:1000, 1:5]
-
-# fit model
-fit <- ggm_compare_estimate(Y1, Y2)
-
-# posterior summary of differences
-summary(fit)
-
+Summarize the posterior distribution of each partial correlation
+difference with the posterior mean and standard deviation.
 }
 \seealso{
 \code{\link{ggm_compare_estimate}}

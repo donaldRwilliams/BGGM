@@ -19,7 +19,7 @@
 \item{...}{Currently ignored}
 }
 \value{
-A \code{ggplot} object
+A \code{ggplot} object.
 }
 \description{
 Visualize the posterior distributions for each partial correlation.

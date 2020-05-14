@@ -814,9 +814,10 @@ print_estimate <- function(x, ...){
 #'
 #' @seealso \code{\link{estimate}}
 #'
-#' @return A \code{ggplot} object
+#' @return A \code{ggplot} object.
 #' @export
-plot.summary.estimate <- function(x, color = "black",
+plot.summary.estimate <- function(x,
+                                  color = "black",
                                   size = 2,
                                   width = 0, ...){
 
