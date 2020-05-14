@@ -3,7 +3,7 @@
 \docType{data}
 \name{iri}
 \alias{iri}
-\title{Interpersonal Reactivity Index (IRI)}
+\title{Data: Interpersonal Reactivity Index (IRI)}
 \format{
 A data frame with 28 variables and 1973 observations (5 point Likert scale)
 }

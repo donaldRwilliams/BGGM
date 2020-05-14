@@ -222,7 +222,7 @@ NULL
 NULL
 
 
-#' 25 Personality items representing 5 factors
+#' Data: 25 Personality items representing 5 factors
 #'
 #' This dataset and the corresponding documentation was taken from the \strong{psych} package. We refer users to that
 #' package for further details \insertCite{psych}{BGGM}.
@@ -274,7 +274,7 @@ NULL
 
 
 
-#' Contingencies of Self-Worth Scale (CSWS)
+#' Data: Contingencies of Self-Worth Scale (CSWS)
 #'
 #' A dataset containing items from the Contingencies of Self-Worth Scale (CSWS) scale. There are 35 variables  and
 #' 680 observations
@@ -353,7 +353,7 @@ NULL
 
 
 
-#' Toronto Alexithymia Scale (TAS)
+#' Data: Toronto Alexithymia Scale (TAS)
 #'
 #' A dataset containing items from the Toronto Alexithymia Scale (TAS). There are 20 variables  and
 #' 1925 observations
@@ -410,7 +410,7 @@ NULL
 
 
 
-#' Interpersonal Reactivity Index (IRI)
+#' Data: Interpersonal Reactivity Index (IRI)
 #'
 #' A dataset containing items from the Interpersonal Reactivity Index (IRI; an empathy measure). There are 28 variables  and
 #' 1973 observations
@@ -482,7 +482,7 @@ NULL
 
 
 
-#' Resilience Scale of Adults (RSA)
+#' Data: Resilience Scale of Adults (RSA)
 #'
 #' A dataset containing items from the Resilience Scale of Adults (RSA). There are 33 items  and
 #' 675 observations
@@ -558,7 +558,7 @@ NULL
 NULL
 
 
-#' @title Sachs Network
+#' @title Data: Sachs Network
 #'
 #' Protein expression in human immune system cells
 #'
@@ -585,7 +585,7 @@ NULL
 
 
 
-#' Autism and Obssesive Compulsive Disorder
+#' Data: Autism and Obssesive Compulsive Disorder
 #'
 #' A correlation matrix with 17 variables in total (autsim: 9; OCD: 8).
 #' The sample size was 213.

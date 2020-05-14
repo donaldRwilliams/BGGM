@@ -113,6 +113,186 @@
 #' See \code{\link{BGGM-package}} for details about interpreting GGMs based on latent data
 #' (i.e, all data types besides \code{"continuous"})
 #'
+#' @examples
+#' \donttest{
+#' # note: iter = 250 for demonstrative purposes
+#'
+#' #########################################
+#' ### example 1: continuous and ordinal ###
+#' #########################################
+#' # data
+#' Y <- ptsd
+#'
+#' # continuous
+#'
+#' # fit model
+#' fit <- estimate(Y, type = "continuous",
+#'                 iter = 250)
+#'
+#' # summarize the partial correlations
+#' summary(fit)
+#'
+#' # plot the summary
+#' plot(summary(fit))
+#'
+#' # select the graph
+#' select(fit)
+#'
+#' # plot the selected graph
+#' plot(select(fit))
+#'
+#'
+#' # ordinal
+#'
+#' # fit model (note + 1, due to zeros)
+#' fit <- estimate(Y + 1, type = "ordinal",
+#'                 iter = 250)
+#'
+#' # summarize the partial correlations
+#' summary(fit)
+#'
+#' # plot the summary
+#' plot(summary(fit))
+#'
+#' # select the graph
+#' select(fit)
+#'
+#' # plot the selected graph
+#' plot(select(fit))
+#'
+#' #########################
+#' ### example 2: binary ###
+#' #########################
+#' # data
+#' Y <- women_math
+#'
+#' # fit model
+#' fit <- estimate(Y, type = "binary",
+#'                 iter = 250)
+#'
+#' # summarize the partial correlations
+#' summary(fit)
+#'
+#' # plot the summary
+#' plot(summary(fit))
+#'
+#' # select the graph
+#' select(fit)
+#'
+#' # plot the selected graph
+#' plot(select(fit))
+#'
+#' ########################################
+#' ### example 3: control  with formula ###
+#' ########################################
+#' # (the following works with all data types)
+#'
+#' # controlling for gender
+#' Y <- bfi
+#'
+#' # Y contains two control variables
+#' # (gender and education)
+#'
+#' # the following is incorrect, as education is
+#' # automatically included in Y !
+#'
+#' incorrect <- estimate(Y, formula = ~ gender,
+#'                       iter = 250)
+#'
+#' # to control for only gender
+#' # (remove education)
+#'
+#' Y <- subset(Y, select = - education)
+#'
+#' # fit model
+#' fit <- estimate(Y, formula = ~ gender,
+#'                 iter = 250)
+#'
+#' # summarize the partial correlations
+#' summary(fit)
+#'
+#' # plot the summary
+#' plot(summary(fit))
+#'
+#' # select the graph
+#' select(fit)
+#'
+#' # plot the selected graph
+#' plot(select(fit))
+#'
+#' # control for an intercation (for some reason ?)
+#' # (gender by education)
+#'
+#' # data
+#' Y <- bfi
+#'
+#' # fit model
+#' fit <- estimate(Y, formula = ~ gender * education,
+#'                 iter = 250)
+#'
+#' # summarize the partial correlations
+#' summary(fit)
+#'
+#' # plot the summary
+#' plot(summary(fit))
+#'
+#' # select the graph
+#' select(fit)
+#'
+#' # plot the selected graph
+#' plot(select(fit))
+#'
+#' ########################################
+#' ### example 4: control  with "mixed" ###
+#' ########################################
+#' # control with mixed data approach
+#' # (all variables included in Y)
+#'
+#' # data
+#' Y <- bfi
+#'
+#' # fit model
+#' fit <- estimate(Y, type = "mixed",
+#'                 iter = 250)
+#'
+#' # summarize the partial correlations
+#' summary(fit)
+#'
+#' # plot the summary
+#' plot(summary(fit))
+#'
+#' # select the graph
+#' select(fit)
+#'
+#' # plot the selected graph
+#' plot(select(fit))
+#'
+#'
+#' ##################################
+#' ## example 5: analytic solution ##
+#' ##################################
+#' # (only continuous)
+#'
+#' # data
+#' Y <- ptsd
+#'
+#' # fit model
+#' fit <- estimate(Y, analytic = TRUE)
+#'
+#' # summarize the partial correlations
+#' summary(fit)
+#'
+#' # plot summary
+#' plot(summary(fit))
+#'
+#' # select graph
+#' select(fit)
+#'
+#' # plot the selected graph
+#' plot(select(fit))
+#'
+#'}
+#'
 #' @export
 estimate  <- function(Y,
                       formula = NULL,

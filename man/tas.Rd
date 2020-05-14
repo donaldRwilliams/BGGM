@@ -3,7 +3,7 @@
 \docType{data}
 \name{tas}
 \alias{tas}
-\title{Toronto Alexithymia Scale (TAS)}
+\title{Data: Toronto Alexithymia Scale (TAS)}
 \format{
 A data frame with 20 variables and 1925 observations (5 point Likert scale)
 }

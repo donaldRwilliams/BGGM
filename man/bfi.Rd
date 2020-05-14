@@ -3,7 +3,7 @@
 \docType{data}
 \name{bfi}
 \alias{bfi}
-\title{25 Personality items representing 5 factors}
+\title{Data: 25 Personality items representing 5 factors}
 \format{
 A data frame with 25 variables and 2800 observations (including missing values)
 }

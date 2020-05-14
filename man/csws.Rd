@@ -3,7 +3,7 @@
 \docType{data}
 \name{csws}
 \alias{csws}
-\title{Contingencies of Self-Worth Scale (CSWS)}
+\title{Data: Contingencies of Self-Worth Scale (CSWS)}
 \format{
 A data frame with 35 variables and 680 observations (7 point Likert scale)
 }

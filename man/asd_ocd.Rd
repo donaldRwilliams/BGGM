@@ -3,7 +3,7 @@
 \docType{data}
 \name{asd_ocd}
 \alias{asd_ocd}
-\title{Autism and Obssesive Compulsive Disorder}
+\title{Data: Autism and Obssesive Compulsive Disorder}
 \format{
 A correlation matrix including 17 variables. These data were measured on a 4 level likert scale.
 }

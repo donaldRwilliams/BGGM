@@ -3,7 +3,7 @@
 \docType{data}
 \name{Sachs}
 \alias{Sachs}
-\title{Sachs Network
+\title{Data: Sachs Network
 
 Protein expression in human immune system cells}
 \format{
@@ -18,7 +18,7 @@ A data frame containing 7466 cells (n = 7466) and flow cytometry
 data("Sachs")
 }
 \description{
-Sachs Network
+Data: Sachs Network
 
 Protein expression in human immune system cells
 }
