@@ -28,7 +28,66 @@
 #'  There is limited support for missing data. As of version \code{2.0.0}, it is possible to
 #'  determine the graphical structure with either  \code{\link{estimate}} or \code{\link{explore}}, in addition
 #'  to plotting the graph with \code{\link{plot.select}}. All data types \emph{are} currently supported.
+
+#' @examples
+#' \donttest{
+#' # note: iter = 250 for demonstrative purposes
 #'
+#' library(mice)
+#'
+#' # data
+#' Y <- ptsd
+#'
+#' # matrix for indices
+#' mat <- matrix(0, nrow = 221, ncol = 20)
+#'
+#' # indices
+#' indices <- which(mat == 0, arr.ind = TRUE)
+#'
+#' # 50 NAs
+#' Y[indices[sample(1:nrow(indices), 50),]] <- NA
+#'
+#' # impute
+#' x <- mice(Y, m = 5, print = FALSE)
+#'
+#' #########################
+#' ###### continuous #######
+#' #########################
+#'
+#' # estimate the model
+#' fit_est <- bggm_missing(x, type = "continuous",
+#'                         iter = 250)
+#'
+#' # select edge set
+#' E <- select(fit_est)
+#'
+#' # explore
+#' fit_exp <-  bggm_missing(x, type = "continuous",
+#'                          method = "explore",
+#'                          iter = 250)
+#'
+#' # select edge set
+#' E <- select(fit_exp)
+#'
+#' # plot E
+#' plt_E <- plot(E)
+#'
+#' #########################
+#' #######   copula    #####
+#' #########################
+#' # rank based parital correlations
+#'
+#' # estimate the model
+#' fit_est <-  bggm_missing(x, type =  "mixed",
+#'                          iter = 250)
+#'
+#' # select edge set
+#' E <- select(fit_est)
+#'
+#' # plot E
+#' plt_E <- plot(E)
+#'
+#'}
 bggm_missing <- function(x, method = "estimate", ...){
 
   # check for mice
