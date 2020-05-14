@@ -7,16 +7,16 @@
 map(Y)
 }
 \arguments{
-\item{Y}{data matrix (\emph{n} by  \emph{p})}
+\item{Y}{Matrix (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).}
 }
 \value{
-object of class \code{map}
+An object of class \code{map}, including the precision matrix,
+        partial correlation matrix, and regression parameters.
 }
 \description{
 Maximum A Posteriori Precision Matrix
 }
 \examples{
-# p = 20
 Y <- BGGM::bfi[, 1:5]
 
 # map
