@@ -24,6 +24,7 @@ Imports:
     grDevices,
     MASS,
     Matrix,
+    methods,
     mice,
     mvtnorm (>= 1.0.11),
     mvnfast,
