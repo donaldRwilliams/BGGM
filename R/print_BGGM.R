@@ -1,8 +1,7 @@
 #' @name print.BGGM
-#' @title  Print Method for \code{BGGM} Objects
+#' @title  Print method for \code{BGGM} objects
 #'
-#' @param x An object of class \code{BGGM}.
-#'
+#' @param x An object of class \code{BGGM}
 #' @param ... currently ignored
 #'
 #' @importFrom methods is

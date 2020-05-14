@@ -1,6 +1,6 @@
 #' @importFrom stats coef cov2cor var dnorm lm
 #' na.omit pnorm quantile rWishart runif dnorm rnorm
-#' sd qnorm residuals fitted density weighted.mean cov terms
+#' sd qnorm residuals fitted density weighted.mean
 #' @importFrom utils combn
 #' @importFrom graphics plot
 #' @importFrom Rdpack reprompt
@@ -1157,8 +1157,7 @@ create_matrices <- function(framed, varnames) {
         if (all.equal(framed$right[r], framed$left[r + 1])) {
           if (substring(framed$right[r], 1, 1) == "(") {
             framed$right[r] <- sub("),.+", ")", framed$right[r])
-            framed$left[r + 1] <-
-              sub(".+),", "", framed$left[r + 1])
+            framed$left[r + 1] <- sub(".+),", "", framed$left[r + 1])
 
           } else{
             framed$right[r] <- sub(",.+", "", framed$right[r])
@@ -1189,7 +1188,7 @@ create_matrices <- function(framed, varnames) {
       multiples <- vector("list", length = length(commas))
 
       for (r in seq_along(commas)) {
-        several <- framed[commas,][r, ]
+        several <- framed[commas, ][r,]
 
         if (several$comp == "=") {
           several <- c(several$left, several$right)
@@ -1221,31 +1220,31 @@ create_matrices <- function(framed, varnames) {
         }
       }
 
-      framed <- framed[-commas,]
+      framed <- framed[-commas, ]
       multiples <- do.call(rbind, multiples)
       framed <- rbind(multiples, framed)
     }
   }
 
-  equality <- framed[framed$comp == "=",]
-  inequality <- framed[!framed$comp == "=",]
+  equality <- framed[framed$comp == "=", ]
+  inequality <- framed[!framed$comp == "=", ]
 
   #****Equality part string-to-matrix
   if (nrow(equality) == 0) {
     R_e <- r_e <- NULL
   } else{
-    outcomes <- suppressWarnings(apply(equality[, -2], 2, as.numeric))
+    outcomes <- suppressWarnings(apply(equality[,-2], 2, as.numeric))
     outcomes <- matrix(outcomes, ncol = 2, byrow = FALSE)
     if (any(rowSums(is.na(outcomes)) == 0))
       stop("Value compared with value rather than variable, e.g., '2 = 2', check hypotheses")
     rows <- which(rowSums(is.na(outcomes)) < 2)
-    specified <- t(outcomes[rows,])
+    specified <- t(outcomes[rows, ])
     specified <- specified[!is.na(specified)]
     r_e <- ifelse(rowSums(is.na(outcomes)) == 2, 0, specified)
     r_e <- matrix(r_e)
 
     var_locations <-
-      apply(equality[, -2], 2, function(x)
+      apply(equality[,-2], 2, function(x)
         ifelse(x %in% varnames, match(x, varnames), 0))
     var_locations <- matrix(var_locations, ncol = 2)
 
@@ -1253,10 +1252,10 @@ create_matrices <- function(framed, varnames) {
       matrix(rep(0, nrow(equality) * length(varnames)), ncol = length(varnames))
 
     for (i in seq_along(r_e)) {
-      if (!all(var_locations[i, ] > 0)) {
-        R_e[i, var_locations[i,]] <- 1
+      if (!all(var_locations[i,] > 0)) {
+        R_e[i, var_locations[i, ]] <- 1
       } else{
-        R_e[i, var_locations[i,]] <- c(1, -1)
+        R_e[i, var_locations[i, ]] <- c(1,-1)
       }
     }
   }
@@ -1265,24 +1264,20 @@ create_matrices <- function(framed, varnames) {
   #****Inequality part string-to-matrix
   if (nrow(inequality) == 0) {
     R_i <- r_i <- NULL
-
   } else{
-    outcomes <- suppressWarnings(apply(inequality[, -2], 2, as.numeric))
-
+    outcomes <- suppressWarnings(apply(inequality[,-2], 2, as.numeric))
     outcomes <- matrix(outcomes, ncol = 2, byrow = FALSE)
-
     if (any(rowSums(is.na(outcomes)) == 0))
       stop("Value compared with value rather than variable, e.g., '2 > 2', check hypotheses")
-
     cols <- which(rowSums(is.na(outcomes)) < 2)
-    specified <- t(outcomes[cols,])
+    specified <- t(outcomes[cols, ])
     specified <- specified[!is.na(specified)]
     r_i <- ifelse(rowSums(is.na(outcomes)) == 2, 0, specified)
     r_i <- matrix(r_i)
 
     leq <- which(inequality$comp == "<")
     var_locations <-
-      apply(inequality[, -2], 2, function(x)
+      apply(inequality[,-2], 2, function(x)
         ifelse(x %in% varnames, match(x, varnames), 0))
     var_locations <- matrix(var_locations, ncol = 2)
 
@@ -1290,7 +1285,7 @@ create_matrices <- function(framed, varnames) {
       matrix(rep(0, nrow(inequality) * length(varnames)), ncol = length(varnames))
 
     for (i in seq_along(r_i)) {
-      if (!all(var_locations[i, ] > 0)) {
+      if (!all(var_locations[i,] > 0)) {
         if (var_locations[i, 1] == 0) {
           if (i %in% leq) {
             value <-  1
@@ -1307,14 +1302,14 @@ create_matrices <- function(framed, varnames) {
           }
         }
 
-        R_i[i, var_locations[i,]] <- value
+        R_i[i, var_locations[i, ]] <- value
 
       } else{
         value <- if (i %in% leq)
           c(-1, 1)
         else
-          c(1, -1)
-        R_i[i, var_locations[i,]] <- value
+          c(1,-1)
+        R_i[i, var_locations[i, ]] <- value
       }
     }
   }
@@ -1413,7 +1408,6 @@ word2num <- function(word){
 
 
 numbers2words <- function(x){
-
   ## Function by John Fox found here:
   ## http://tolstoy.newcastle.edu.au/R/help/05/04/2715.html
   ## Tweaks by AJH to add commas and "and"
