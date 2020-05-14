@@ -119,6 +119,130 @@
 #'
 #' }
 #'
+#'  @examples
+#' \donttest{
+#' # note: iter = 250 for demonstrative purposes
+#'
+#' # data
+#' Y <- bfi
+#'
+#' #############################
+#' ######### global ############
+#' #############################
+#'
+#'
+#' # males
+#' Ym <- subset(Y, gender == 1,
+#'              select = - c(gender, education))
+#'
+#' # females
+#'
+#' Yf <- subset(Y, gender == 2,
+#'              select = - c(gender, education))
+#'
+#'
+#' global_test <- ggm_compare_ppc(Ym, Yf,
+#'                                iter = 250)
+#'
+#' global_test
+#'
+#' # plot
+#' plot(global_test)
+#'
+#' #############################
+#' ###### custom function ######
+#' #############################
+#'
+#' # example 1
+#'
+#' # maximum difference van Borkulo et al. (2017)
+#'
+#' f <- function(Yg1, Yg2){
+#'
+#' # remove NA
+#' x <- na.omit(Yg1)
+#' y <- na.omit(Yg2)
+#'
+#' # nodes
+#' p <- ncol(Yg1)
+#'
+#' # identity matrix
+#' I_p <- diag(p)
+#'
+#' # partial correlations
+#'
+#' pcor_1 <- -(cov2cor(solve(cor(x))) - I_p)
+#' pcor_2 <- -(cov2cor(solve(cor(y))) - I_p)
+#'
+#' # max difference
+#' max(abs((pcor_1[upper.tri(I_p)] - pcor_2[upper.tri(I_p)])))
+#'
+#' }
+#'
+#' # observed difference
+#' obs <- f(Ym, Yf)
+#'
+#' global_max <- ggm_compare_ppc(Ym, Yf,
+#'                               iter = 250,
+#'                               FUN = f,
+#'                               custom_obs = obs)
+#'
+#' global_max
+#'
+#' # plot
+#' plot(global_max)
+#'
+#' # example 2
+#' # Hamming distance (squared error for adjacency)
+#'
+#' f <- function(Yg1, Yg2){
+#'
+#' # remove NA
+#' x <- na.omit(Yg1)
+#' y <- na.omit(Yg2)
+#'
+#' # nodes
+#' p <- ncol(x)
+#'
+#' # identity matrix
+#' I_p <- diag(p)
+#'
+#' fit1 <-  estimate(x, analytic = T)
+#' fit2 <-  estimate(y, analytic = T)
+#'
+#' sel1 <- select(fit1)
+#' sel2 <- select(fit2)
+#'
+#' sum((sel1$adj[upper.tri(I_p)] - sel2$adj[upper.tri(I_p)])^2)
+#'
+#'}
+#'
+#' # observed difference
+#' obs <- f(Ym, Yf)
+#'
+#' global_hd <- ggm_compare_ppc(Ym, Yf,
+#'                             iter = 250,
+#'                             FUN = f,
+#'                             custom_obs  = obs)
+#'
+#' global_hd
+#'
+#' # plot
+#' plot(global_hd)
+#'
+#' #############################
+#' ########  nodewise ##########
+#' #############################
+#'
+#' nodewise <- ggm_compare_ppc(Ym, Yf, iter = 250,
+#'                            test = "nodewise")
+#'
+#' nodewise
+#'
+#' # plot
+#' plot(nodewise)
+#' }
+#'
 #' @export
 ggm_compare_ppc <- function(...,
                             test = "global",
@@ -512,25 +636,34 @@ print_ggm_compare_ppc <- function(x, ...){
 
 #' Plot \code{ggm_compare_ppc} Objects
 #'
-#' @description Plot the predictive check with
-#' \href{https://CRAN.R-project.org/package=ggridges/vignettes/introduction.html}{ggridges}.
+#' @description Plot the predictive check with\code{\link[ggrides]{ggridges}}
 #'
 #' @param x An object of class \code{ggm_compare_ppc}
 #'
-#' @param critical 'Significance' level (defaults to 0.05).
+#' @param critical Numeric. The 'significance' level
+#'                 (defaults to \code{0.05}).
 #'
-#' @param col_noncritical  Fill color for the non critical region as a
-#'                         character (defaults to "#84e184A0").
+#' @param col_noncritical Character string. Fill color for the non-critical region
+#'                        (defaults to \code{"#84e184A0"}).
 #'
-#' @param col_critical  Fill color for the critical region as a character.
+#' @param col_critical  Character string. Fill color for the critical region
+#'                     (defaults to \code{"red"}).
 #'
-#' @param point_size Numeric point size for the observed score.
+#' @param point_size Numeric. The point size for the observed score
+#'                   (defaults to \code{2}).
 #'
-#' @param ... Currently ignored
+#' @param ... Currently ignored.
 #'
-#' @return An object (or list of objects) of class \code{ggplot}
+#' @return An object (or list of objects) of class \code{ggplot}.
 #'
 #' @importFrom ggridges stat_density_ridges
+#'
+#' @note
+#' See
+#' \href{https://CRAN.R-project.org/package=ggridges/vignettes/introduction.html}{ggridges} for
+#' many examples.
+#'
+#' @seealso \code{\link{ggm_compare_ppc}}
 #'
 #' @export
 plot.ggm_compare_ppc <- function(x,
@@ -538,11 +671,6 @@ plot.ggm_compare_ppc <- function(x,
                                  col_noncritical = "#84e184A0",
                                  col_critical = "red",
                                  point_size = 2, ...){
-
-  # check for ggridges
-  if(!requireNamespace("ggridges", quietly = TRUE)) {
-    stop("Please install the '", "ggridges", "' package.")
-  }
 
   if(x$test == "global"){
 

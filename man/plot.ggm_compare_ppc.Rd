@@ -16,21 +16,31 @@
 \arguments{
 \item{x}{An object of class \code{ggm_compare_ppc}}
 
-\item{critical}{'Significance' level (defaults to 0.05).}
+\item{critical}{Numeric. The 'significance' level
+(defaults to \code{0.05}).}
 
-\item{col_noncritical}{Fill color for the non critical region as a
-character (defaults to "#84e184A0").}
+\item{col_noncritical}{Character string. Fill color for the non-critical region
+(defaults to \code{"#84e184A0"}).}
 
-\item{col_critical}{Fill color for the critical region as a character.}
+\item{col_critical}{Character string. Fill color for the critical region
+(defaults to \code{"red"}).}
 
-\item{point_size}{Numeric point size for the observed score.}
+\item{point_size}{Numeric. The point size for the observed score
+(defaults to \code{2}).}
 
-\item{...}{Currently ignored}
+\item{...}{Currently ignored.}
 }
 \value{
-An object (or list of objects) of class \code{ggplot}
+An object (or list of objects) of class \code{ggplot}.
 }
 \description{
-Plot the predictive check with
-\href{https://CRAN.R-project.org/package=ggridges/vignettes/introduction.html}{ggridges}.
+Plot the predictive check with\code{\link[ggrides]{ggridges}}
+}
+\note{
+See
+\href{https://CRAN.R-project.org/package=ggridges/vignettes/introduction.html}{ggridges} for
+many examples.
+}
+\seealso{
+\code{\link{ggm_compare_ppc}}
 }

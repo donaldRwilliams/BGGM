@@ -18,7 +18,9 @@ A \code{ggplot} object.
 Plot \code{confirm} objects
 }
 \examples{
+
 \donttest{
+
 #####################################
 ##### example 1: many relations #####
 #####################################

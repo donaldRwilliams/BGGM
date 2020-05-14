@@ -963,7 +963,9 @@ print_ggm_confirm <- function(x, ...){
 #'
 #'
 #' @examples
+#'
 #' \donttest{
+#'
 #' #####################################
 #' ##### example 1: many relations #####
 #' #####################################
