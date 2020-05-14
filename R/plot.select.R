@@ -32,12 +32,15 @@
 #' @importFrom sna gplot.layout.circle
 #'
 #' @return An object (or list of objects) of class \code{ggplot}
+#' that can then be further customized.
+#'
 #'
 #' @examples
 #' \donttest{
 #' #########################
 #' ### example 1: one ggm ##
 #' #########################
+#'
 #' # data
 #' Y <- bfi[,1:25]
 #'
@@ -54,11 +57,6 @@
 #' plt_E <- plot(E, edge_magnify = 5,
 #'               palette = "Set1",
 #'               groups = comm)
-#'
-#' # ggplot object
-#' plt_E$plt +
-#'   ggtitle("Personality")
-#'
 #'
 #'
 #' #############################
@@ -89,9 +87,6 @@
 #'               palette = "Set1",
 #'               groups = comm)
 #'
-#' # ggplot object
-#' plt_E[[1]] +
-#' ggtitle("Personality")
 #'
 #'}
 #'

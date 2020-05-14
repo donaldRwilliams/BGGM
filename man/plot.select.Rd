@@ -42,6 +42,7 @@ This indicates groups of nodes that should be the same color
 }
 \value{
 An object (or list of objects) of class \code{ggplot}
+that can then be further customized.
 }
 \description{
 Visualize the conditional (in)dependence structure.
@@ -51,6 +52,7 @@ Visualize the conditional (in)dependence structure.
 #########################
 ### example 1: one ggm ##
 #########################
+
 # data
 Y <- bfi[,1:25]
 
@@ -67,11 +69,6 @@ E <- select(fit)
 plt_E <- plot(E, edge_magnify = 5,
               palette = "Set1",
               groups = comm)
-
-# ggplot object
-plt_E$plt +
-  ggtitle("Personality")
-
 
 
 #############################
@@ -102,9 +99,6 @@ plt_E <- plot(E, edge_magnify = 5,
               palette = "Set1",
               groups = comm)
 
-# ggplot object
-plt_E[[1]] +
-ggtitle("Personality")
 
 }
 
