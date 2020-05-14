@@ -6,7 +6,7 @@
 #' @importFrom Rdpack reprompt
 #' @importFrom MASS ginv
 #' @import ggplot2
-#' @importFrom stats model.matrix
+#' @importFrom stats model.matrix terms cor
 
 
 

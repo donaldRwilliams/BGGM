@@ -18,6 +18,7 @@
 #' @references
 #' \insertAllCited{}
 #'
+#' @importFrom utils capture.output
 #' @note
 #'
 #' In order to allow users to enjoy the functionality of \bold{BGGM}, we had to make minor changes to the function \code{rmvord_naiv}
