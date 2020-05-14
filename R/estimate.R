@@ -113,10 +113,6 @@
 #' See \code{\link{BGGM-package}} for details about interpreting GGMs based on latent data
 #' (i.e, all data types besides \code{"continuous"})
 #'
-#' @examples
-#' \donttest{
-
-#' }
 #' @export
 estimate  <- function(Y,
                       formula = NULL,

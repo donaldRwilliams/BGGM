@@ -1,4 +1,4 @@
-#' Confirmatory Hypothesis Testing
+#' GGM: Confirmatory Hypothesis Testing
 #'
 #' @description Confirmatory hypothesis testing in GGMs. Hypotheses are expressed as equality
 #' and/or ineqaulity contraints on the partial correlations of interest. Here the focus is \emph{not}
@@ -59,28 +59,66 @@
 #'
 #' \strong{One Hypothesis}:
 #'
-#' \itemize{
-#'
-#' \item  To test whether some relations are larger than others, while others
+#' To test whether some relations are larger than others, while others
 #'        are expected to be equal, this can be writting as
 #'
-#'  \code{hyp <-  c(1--2 > 1--3  = 1--4 > 0)},
-#'
-#'  where there is an addition additional contraint that all effects are expected to be positive.
-#'  This is then compared to the complement.
+#'\itemize{
+#' \item \code{hyp <-  c(1--2 > 1--3  = 1--4 > 0)},
 #'}
+#'
+#' where there is an addition additional contraint that all effects are expected to be positive.
+#' This is then compared to the complement.
 #'
 #' \strong{More Than One Hypothesis}:
 #'
+#' The above hypothesis can also be compared to, say, a null model by using ";"
+#' to seperate the hypotheses, for example,
+#'
 #' \itemize{
 #'
-#' \item The above hypothesis can also be compared to, say, a null model by using ";"
-#'       to seperate the hypotheses, for example,
+#' \item
 #'
 #' \code{hyp <-  c(1--2 > 1--3  = 1--4 > 0; 1--2 = 1--3  = 1--4 = 0)}.
 #'
+#'
+#' }
+#'
 #' Any number of hypotheses can be compared this way.
-#'}
+#'
+#' \strong{Using "&"}
+#'
+#'  It is also possible to include \code{&}. This allows for testing one constraint \bold{and}
+#'  another contraint as one hypothesis.
+#'
+#' \itemize{
+#'
+#' \item \code{hyp <- c("A1--A2 > A1--A2 & A1--A3 = A1--A3")}
+#'
+#' }
+#'
+#' Of course, it is then possible to include additional hypotheses by separating them with ";".
+#' Note also that the column names were used in this example (e.g., \code{A1--A2} is the relation
+#' between those nodes).
+#'
+#' \strong{Testing Sums}
+#'
+#' It might also be interesting to test the sum of partial correlations. For example, that the
+#' sum of specific relations is larger than the sum of other relations. This can be written as
+#'
+#' \itemize{
+#'
+#' \item \code{hyp <- c("A1--A2 + A1--A3 > A1--A4 + A1--A5;
+#'                       A1--A2 + A1--A3 = A1--A4 + A1--A5")}
+#'
+#' }
+#'
+#' \strong{Potential Delays}:
+#'
+#' There is a chance for a potentially long delay from the time the progress bar finishes
+#' to when the function is done running. This occurs when the hypotheses require further
+#' sampling to be tested, for example, when grouping relations
+#' \code{c("(A1--A2, A1--A3) > (A1--A4, A1--A5)"}. This is not an error.
+#'
 #'
 #' \strong{Controlling for Variables}:
 #'
@@ -144,6 +182,87 @@
 #' (i.e, all data types besides \code{"continuous"})
 #'
 #'
+#' @examples
+#' \donttest{
+#' # note: iter = 250 for demonstrative purposes
+#'
+#'
+#' ##########################
+#' ### example 1: numbers ###
+#' ##########################
+#'
+#' # data
+#' Y <- BGGM::bfi[,1:10]
+#'
+#' # hypothesis
+#' hypothesis <- c("1--2 > 1--3 > 1--4 > 1--5")
+#'
+#' # test inequality contraints
+#' test_order <-  confirm(Y = Y, hypothesis  = hypothesis,
+#'                        iter = 250)
+#'
+#'
+#'########################
+#'### example 2: names ###
+#'########################
+#'
+#' # hypothesis
+#' hypothesis <- c("A1--A2 > A1--A3 > A1--A4 > A1--A5")
+#'
+#' # test inequality contraints
+#' test_order <-  confirm(Y = Y,
+#'                       type = "continuous",
+#'                       hypothesis  = hypothesis,
+#'                       iter = 250)
+#'
+#' ########################
+#' ### example 3: mixed ###
+#' ########################
+#' # rank likelihood
+#'
+#' # hypothesis
+#' hypothesis <- c("A1--A2 > A1--A3 > A1--A4 > A1--A5")
+#'
+#' # test inequality contraints
+#' test_order <-  confirm(Y = Y,
+#'                        type = "mixed",
+#'                        hypothesis  = hypothesis,
+#'                        iter = 250)
+#'
+#'
+#'###################################
+#'### example 4: two  hypotheses ####
+#'###################################
+#'
+#' hypothesis <- c("A1--A2 > A1--A3 = A1--A4 = 0;
+#'                  A1--A2 = A1--A3 = A1--A4 = 0")
+#'
+#' # test inequality contraint
+#' test_two <-  confirm(Y = Y,
+#'                      type = "continuous",
+#'                      hypothesis  = hypothesis,
+#'                      iter = 250)
+#'
+#' ###############################
+#' ##### example 5: cheating #####
+#' ###############################
+#'
+#' # All examples thus far the hypotheses
+#' # were not confirmed. Here a true hypothesis
+#' # is tested, which shows the method works nicely
+#' # (peeked at partials beforehand)
+#'
+#' hypothesis <- c("A1--A2 < A1--A3 < A1--A4 = A1--A5")
+#'
+#' # test cheat
+#' test_cheat <-  confirm(Y = Y,
+#'                        type = "continuous",
+#'                        hypothesis  = hypothesis,
+#'                        iter = 250)
+#'
+#' # print (probabilty of nearly 1 !)
+#' test_cheat
+#' }
 #'@export
 confirm <- function(Y, hypothesis,
                     prior_sd = 0.25,
