@@ -1,35 +1,101 @@
 #' Network Plot for \code{select} Objects
 #'
-#' @param x object of class \code{select}.
+#' Visualize the conditional (in)dependence structure.
 #'
-#' @param layout a character string specifying the graph layout (default is \code{circle}). See \link[sna]{gplot.layout}.
+#' @param x An object of class \code{select}.
 #'
-#' @param pos_col a character string specifying the color for the positive edges.
+#' @param layout Character string. Which graph layout (defaults is \code{circle}) ?.
+#'                See \link[sna]{gplot.layout}.
 #'
-#' @param neg_col a character string specifying the color for the negative edges.
+#' @param pos_col Character string. Color for the positive edges (defaults to \code{green}).
 #'
-#' @param node_size numeric. Node size.
-#' @param edge_magnify numeric. A value that is multiplied by the edge weights. This can increase (> 1) or
+#' @param neg_col Character string.  Color for the negative edges (defaults to \code{green}).
+#'
+#' @param node_size Numeric. The size of the nodes (defaults to \code{10}).
+#'
+#' @param edge_magnify Numeric. A value that is multiplied by the edge weights. This can increase (> 1) or
 #'                     derease (< 1) the line widths.
 #'
-#' @param groups a character string of length \emph{p} (the number of nodes in the model). This indicates
-#'               groups of nodes that should be the same color (e.g., clusters).
+#' @param groups A character string of length \emph{p} (the number of nodes in the model).
+#'               This indicates groups of nodes that should be the same color
+#'               (e.g., "clusters" or "communities").
 #'
-#' @param palette a character string sepcifying the palette for the \code{groups} color (default is \code{Set3}). See
-#'                \href{http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/}{palette options here}.
+#' @param palette A character string sepcifying the palette for the \code{groups}.
+#'                (default is \code{Set3}). See \href{http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/}{palette options here}.
 #'
-#' @param ... additional options passed to \link[GGally]{ggnet2}
+#' @param ... Additional options passed to \link[GGally]{ggnet2}
 #'
 #' @importFrom GGally ggnet2
 #'
-#' @importFrom network network.vertex.names<- set.edge.value set.edge.attribute %e% %v%<-
+#' @importFrom network network.vertex.names<- set.edge.value set.edge.attribute %e% %v%<- network
 #'
 #' @importFrom sna gplot.layout.circle
 #'
-#' @return object of class \code{ggplot}
+#' @return An object (or list of objects) of class \code{ggplot}
+#'
+#' @examples
+#' \donttest{
+#' #########################
+#' ### example 1: one ggm ##
+#' #########################
+#' # data
+#' Y <- bfi[,1:25]
+#'
+#' # estimate
+#' fit <- estimate(Y, iter = 250)
+#'
+#' # "communities"
+#' comm <- substring(colnames(Y), 1, 1)
+#'
+#' # edge set
+#' E <- select(fit)
+#'
+#' # plot edge set
+#' plt_E <- plot(E, edge_magnify = 5,
+#'               palette = "Set1",
+#'               groups = comm)
+#'
+#' # ggplot object
+#' plt_E$plt +
+#'   ggtitle("Personality")
+#'
+#'
+#'
+#' #############################
+#' ### example 2: ggm compare ##
+#' #############################
+#' # compare males vs. females
+#'
+#' # data
+#' Y <- bfi[,1:26]
+#'
+#' Ym <- subset(Y, gender == 1,
+#'              select = -gender)
+#'
+#' Yf <- subset(Y, gender == 2,
+#'               select = -gender)
+#'
+#' # estimate
+#' fit <- ggm_compare_estimate(Ym, Yf, iter = 250)
+#'
+#' # "communities"
+#' comm <- substring(colnames(Ym), 1, 1)
+#'
+#' # edge set
+#' E <- select(fit)
+#'
+#' # plot edge set
+#' plt_E <- plot(E, edge_magnify = 5,
+#'               palette = "Set1",
+#'               groups = comm)
+#'
+#' # ggplot object
+#' plt_E[[1]] +
+#' ggtitle("Personality")
+#'
+#'}
 #'
 #' @export
-
 
 plot.select <- function(x,
                         layout = "circle",
@@ -40,8 +106,6 @@ plot.select <- function(x,
                         groups = NULL,
                         palette = "Set3",
                         ...){
-
-
 
   # select estimate
   if(is(x, "select.estimate")){
