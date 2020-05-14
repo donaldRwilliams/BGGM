@@ -642,25 +642,28 @@ estimate  <- function(Y,
 
   }
 
-#' @name summary.estimate
 #' @title Summary method for \code{estimate.default} objects
 #'
-#' @param object an object of class \code{estimate}
+#' @name summary.estimate
 #'
-#' @param col_names logical. Should the summary include the column names (default is \code{TRUE})?
+#' @description Summarize the posterior distribution of each partial correlation
+#' with the posterior mean and standard deviation.
+#'
+#'
+#' @param object An object of class \code{estimate}
+#'
+#' @param col_names Logical. Should the summary include the column names (default is \code{TRUE})?
 #'                  Setting to \code{FALSE} includes the column numbers (e.g., \code{1--2}).
 #'
-#' @param cred credible interval width
-#' @param ... currently ignored
-
-
-#' @seealso \code{\link{select.estimate}}
-#' @return a list containing the summarized posterior distributions
-#' # data
-#' Y <- BGGM::bfi[, 1:5]
-#' # analytic approach (sample by setting analytic = FALSE)
-#' fit <- estimate(Y, analytic = TRUE)
-#' summary(fit)
+#' @param cred Numeric. The credible interval width for summarizing the posterior
+#' distributions (defaults to 0.95; must be between 0 and 1).
+#'
+#' @param ... Currently ignored.
+#'
+#' @seealso \code{\link{estimate}}
+#'
+#' @return A dataframe containing the summarized posterior distributions.
+#'
 #' @export
 summary.estimate <- function(object,
                              col_names = TRUE,
@@ -792,15 +795,26 @@ print_estimate <- function(x, ...){
 
 
 
-#' Plot \code{summary.estimate} Objects
+#' @title Plot \code{summary.estimate} Objects
 #'
-#' @param x an object of class \code{summary.estimate}
-#' @param size Numeric. The size for the points.
-#' @param color color of error bar
-#' @param width width of error bar cap
-#' @param ... currently ignored
+#' @description Visualize the posterior distributions for each partial correlation.
 #'
-#' @return an object of class \code{ggplot}
+#' @name plot.summary.estimate
+#'
+#' @param x An object of class \code{summary.estimate}
+#'
+#' @param size Numeric. The size for the points (defaults to \code{2}).
+#'
+#' @param color Character string. The color for the error bars.
+#' (defaults to \code{"black"}).
+#'
+#' @param width Numeric. The width of error bar ends (defaults to \code{0}).
+#'
+#' @param ... Currently ignored
+#'
+#' @seealso \code{\link{estimate}}
+#'
+#' @return A \code{ggplot} object
 #' @export
 plot.summary.estimate <- function(x, color = "black",
                                   size = 2,

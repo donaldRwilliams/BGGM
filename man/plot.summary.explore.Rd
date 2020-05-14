@@ -2,24 +2,28 @@
 % Please edit documentation in R/explore.default.R
 \name{plot.summary.explore}
 \alias{plot.summary.explore}
-\title{Plot \code{summary.explore}}
+\title{Plot \code{summary.explore} Objects}
 \usage{
 \method{plot}{summary.explore}(x, color = "black", size = 2, width = 0, ...)
 }
 \arguments{
-\item{x}{an object of class \code{summary.explore}}
+\item{x}{An object of class \code{summary.explore}}
 
-\item{color}{Character string.}
+\item{color}{Character string. The color for the error bars.
+(defaults to \code{"black"}).}
 
-\item{size}{Numeric.}
+\item{size}{Numeric. The size for the points (defaults to \code{2}).}
 
-\item{width}{Numeric}
+\item{width}{Numeric. The width of error bar ends (defaults to \code{0} ).}
 
-\item{...}{currently ignored}
+\item{...}{Currently ignored}
 }
 \value{
-an object of class \code{ggplot}
+A \code{ggplot} object
 }
 \description{
-Plot \code{summary.explore}
+Visualize the posterior distributions for each partial correlation.
+}
+\seealso{
+\code{\link{explore}}
 }

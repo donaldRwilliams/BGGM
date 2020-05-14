@@ -7,19 +7,23 @@
 \method{plot}{summary.estimate}(x, color = "black", size = 2, width = 0, ...)
 }
 \arguments{
-\item{x}{an object of class \code{summary.estimate}}
+\item{x}{An object of class \code{summary.estimate}}
 
-\item{color}{color of error bar}
+\item{color}{Character string. The color for the error bars.
+(defaults to \code{"black"}).}
 
-\item{size}{Numeric. The size for the points.}
+\item{size}{Numeric. The size for the points (defaults to \code{2}).}
 
-\item{width}{width of error bar cap}
+\item{width}{Numeric. The width of error bar ends (defaults to \code{0}).}
 
-\item{...}{currently ignored}
+\item{...}{Currently ignored}
 }
 \value{
-an object of class \code{ggplot}
+A \code{ggplot} object
 }
 \description{
-Plot \code{summary.estimate} Objects
+Visualize the posterior distributions for each partial correlation.
+}
+\seealso{
+\code{\link{estimate}}
 }

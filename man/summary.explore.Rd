@@ -2,23 +2,24 @@
 % Please edit documentation in R/explore.default.R
 \name{summary.explore}
 \alias{summary.explore}
-\title{Summary method for \code{explore.default} objects}
+\title{Summary Method for \code{explore.default} Objects}
 \usage{
 \method{summary}{explore}(object, col_names = TRUE, ...)
 }
 \arguments{
-\item{object}{an object of class \code{estimate}}
+\item{object}{An object of class \code{estimate}}
 
-\item{col_names}{logical. Should the summary include the column names (default is \code{TRUE})?
+\item{col_names}{Logical. Should the summary include the column names (default is \code{TRUE})?
 Setting to \code{FALSE} includes the column numbers (e.g., \code{1--2}).}
 
 \item{...}{Currently ignored}
 }
 \value{
-a list containing the summarized posterior distributions
+A dataframe containing the summarized posterior distributions.
 }
 \description{
-Summary method for \code{explore.default} objects
+Summarize the posterior distribution for each partial correlation
+with the posterior mean and standard deviation.
 }
 \seealso{
 \code{\link{select.explore}}

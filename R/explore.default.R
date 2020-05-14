@@ -120,6 +120,162 @@
 #' See \code{\link{BGGM-package}} for details about interpreting GGMs based on latent data
 #' (i.e, all data types besides \code{"continuous"})
 #'
+#'
+#' @examples
+#' \donttest{
+#' # note: iter = 250 for demonstrative purposes
+#'
+#' #########################################
+#' ### example 1: continuous and ordinal ###
+#' #########################################
+#' # data
+#' Y <- ptsd
+#'
+#' # continuous
+#'
+#' # fit model
+#' fit <- explore(Y, type = "continuous",
+#'                 iter = 250)
+#'
+#' # summarize the partial correlations
+#' summary(fit)
+#'
+#' # plot the summary
+#' plot(summary(fit))
+#'
+#' # select the graph
+#' select(fit)
+#'
+#' # plot the selected graph
+#' plot(select(fit))
+#'
+#'
+#' # ordinal
+#'
+#' # fit model (note + 1, due to zeros)
+#' fit <- explore(Y + 1, type = "ordinal",
+#'                 iter = 250)
+#'
+#' # summarize the partial correlations
+#' summary(fit)
+#'
+#' # plot the summary
+#' plot(summary(fit))
+#'
+#' # select the graph
+#' select(fit)
+#'
+#' # plot the selected graph
+#' plot(select(fit))
+#'
+#' #########################
+#' ### example 2: binary ###
+#' #########################
+#' # data
+#' Y <- women_math
+#'
+#' # fit model
+#' fit <- explore(Y, type = "binary",
+#'                 iter = 250)
+#'
+#' # summarize the partial correlations
+#' summary(fit)
+#'
+#' # plot the summary
+#' plot(summary(fit))
+#'
+#' # select the graph
+#' select(fit)
+#'
+#' # plot the selected graph
+#' plot(select(fit))
+#'
+#' ########################################
+#' ### example 3: control  with formula ###
+#' ########################################
+#' # (the following works with all data types)
+#'
+#' # controlling for gender
+#' Y <- bfi
+#'
+#' # Y contains two control variables
+#' # (gender and education)
+#'
+#' # the following is incorrect, as education is
+#' # automatically included in Y !
+#'
+#' #incorrect <- estimate(Y, formula = ~ gender,
+#'  #                     iter = 250)
+#'
+#' # to control for only gender
+#' # (remove education)
+#'
+#' Y <- subset(Y, select = - education)
+#'
+#' # fit model
+#' fit <- explore(Y, formula = ~ gender,
+#'                 iter = 250)
+#'
+#' # summarize the partial correlations
+#' summary(fit)
+#'
+#' # plot the summary
+#' plot(summary(fit))
+#'
+#' # select the graph
+#' select(fit)
+#'
+#' # plot the selected graph
+#' plot(select(fit))
+#'
+#' # control for an intercation (for some reason ?)
+#' # (gender by education)
+#'
+#' # data
+#' Y <- bfi
+#'
+#' # fit model
+#' fit <- explore(Y, formula = ~ gender * education,
+#'                 iter = 250)
+#'
+#' # summarize the partial correlations
+#' summary(fit)
+#'
+#' # plot the summary
+#' plot(summary(fit))
+#'
+#' # select the graph
+#' select(fit)
+#'
+#' # plot the selected graph
+#' plot(select(fit))
+#'
+#' ########################################
+#' ### example 4: control  with "mixed" ###
+#' ########################################
+#' # control with mixed data approach
+#' # (all variables included in Y)
+#'
+#' # data
+#' Y <- bfi
+#'
+#' # fit model
+#' fit <- explore(Y, type = "mixed",
+#'                 iter = 250)
+#'
+#' # summarize the partial correlations
+#' summary(fit)
+#'
+#' # plot the summary
+#' plot(summary(fit))
+#'
+#' # select the graph
+#' select(fit)
+#'
+#' # plot the selected graph
+#' plot(select(fit))
+#'
+#'}
 #' @export
 explore <- function(Y,
                     formula = NULL,
@@ -487,21 +643,24 @@ explore <- function(Y,
 
 
 
-
+#' @title Summary Method for \code{explore.default} Objects
+#'
+#' @description Summarize the posterior distribution for each partial correlation
+#' with the posterior mean and standard deviation.
+#'
 #' @name summary.explore
 #'
-#' @title Summary method for \code{explore.default} objects
+#' @param object An object of class \code{estimate}
 #'
-#' @param object an object of class \code{estimate}
-#'
-#' @param col_names logical. Should the summary include the column names (default is \code{TRUE})?
+#' @param col_names Logical. Should the summary include the column names (default is \code{TRUE})?
 #'                  Setting to \code{FALSE} includes the column numbers (e.g., \code{1--2}).
 #'
 #' @param ... Currently ignored
 #'
 #' @seealso \code{\link{select.explore}}
 #'
-#' @return a list containing the summarized posterior distributions
+#' @return A dataframe containing the summarized posterior distributions.
+#'
 #' @export
 summary.explore <- function(object,
                              col_names = TRUE, ...) {
@@ -593,19 +752,34 @@ print_explore <- function(x,...){
 }
 
 
-#' Plot \code{summary.explore}
+#' @title Plot \code{summary.explore} Objects
 #'
-#' @param x an object of class \code{summary.explore}
-#' @param color Character string.
-#' @param size Numeric.
-#' @param width Numeric
-#' @param ... currently ignored
+#' @description Visualize the posterior distributions for each partial correlation.
 #'
-#' @return an object of class \code{ggplot}
+#' @name plot.summary.explore
+#'
+#'
+#' @param x An object of class \code{summary.explore}
+#'
+#' @param size Numeric. The size for the points (defaults to \code{2}).
+#'
+#' @param color Character string. The color for the error bars.
+#' (defaults to \code{"black"}).
+#'
+#' @param width Numeric. The width of error bar ends (defaults to \code{0} ).
+#'
+#' @param ... Currently ignored
+#'
+#' @return A \code{ggplot} object
+#'
+#' @seealso \code{\link{explore}}
+#'
 #' @export
-plot.summary.explore <- function(x, color = "black",
+plot.summary.explore <- function(x,
+                                 color = "black",
                                   size = 2,
-                                  width = 0, ...){
+                                  width = 0,
+                                 ...){
 
   dat_temp <- x$dat_results[order(x$dat_results$Post.mean,
                                   decreasing = F), ]
