@@ -10,7 +10,7 @@
 #'         variables (e.g., formula \code{~ age}), the matrix also includes the coefficients from each
 #'         multivariate regression.
 #'
-#'
+#' @examples
 #' \donttest{
 #' # note: iter = 250 for demonstrative purposes
 #'

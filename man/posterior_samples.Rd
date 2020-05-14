@@ -15,8 +15,11 @@ posterior_samples(object, ...)
 A matrix of posterior samples for the partial correlation. Note that if controlling for
         variables (e.g., formula \code{~ age}), the matrix also includes the coefficients from each
         multivariate regression.
-
-
+}
+\description{
+Extract posterior samples for all parameters.
+}
+\examples{
 \donttest{
 # note: iter = 250 for demonstrative purposes
 
@@ -50,7 +53,5 @@ fit <- estimate(Y, formula = ~ gender,
 posterior_samples(fit)
 
 }
-}
-\description{
-Extract posterior samples for all parameters.
+
 }
