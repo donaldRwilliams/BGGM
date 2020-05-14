@@ -18,7 +18,6 @@ The sample size was 213.
 \strong{Autism}:
 
 \itemize{
-
   \item \code{CI}  Circumscribed interests
   \item \code{UP}  Unusual preoccupations
   \item \code{RO}  Repetitive use of objects or interests in parts of objects
@@ -41,7 +40,6 @@ The sample size was 213.
   \item \code{CCh} Continual checking CntCheck
   \item \code{CC} Continual counting/repeating
   \item \code{RD} Repeatedly do things until it feels good or just right
-
 }
 }
 \examples{

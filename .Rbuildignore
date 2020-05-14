@@ -12,7 +12,6 @@
 ^joss_paper$
 
 ^data-raw$
-
 ^README\.Rmd$
 ^README\.md$
 ^paper\.md$
