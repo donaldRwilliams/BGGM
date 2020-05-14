@@ -34,7 +34,7 @@
 An object (or list of objects) of class \code{ggplot}.
 }
 \description{
-Plot the predictive check with\code{\link[ggrides]{ggridges}}
+Plot the predictive check with\code{\link[ggridges]{ggridges}}
 }
 \note{
 See

@@ -213,8 +213,8 @@ p <- ncol(x)
 # identity matrix
 I_p <- diag(p)
 
-fit1 <-  estimate(x, analytic = T)
-fit2 <-  estimate(y, analytic = T)
+fit1 <-  estimate(x, analytic = TRUE)
+fit2 <-  estimate(y, analytic = TRUE)
 
 sel1 <- select(fit1)
 sel2 <- select(fit2)
