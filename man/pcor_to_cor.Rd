@@ -2,14 +2,14 @@
 % Please edit documentation in R/pcor_2_cor.BGGM.R
 \name{pcor_to_cor}
 \alias{pcor_to_cor}
-\title{Partial Correlations to Correlations}
+\title{Compute Correlations from the Partial Correlations}
 \usage{
 pcor_to_cor(object, iter = NULL)
 }
 \arguments{
-\item{object}{an object of class \code{estimate} or \code{explore}}
+\item{object}{An object of class \code{estimate} or \code{explore}}
 
-\item{iter}{numeric. How many iterations (i.e., posterior samples) should be used?
+\item{iter}{numeric. How many iterations (i.e., posterior samples) should be used ?
 The default uses all of the samples, but note that this can take a long
 time with large matrices.}
 }
@@ -23,9 +23,60 @@ time with large matrices.}
 }
 }
 \description{
-Convert the partial correlation matrices into correlation matrices.
+Convert the partial correlation matrices into correlation matrices. To our knowledge,
+this is the only Bayesian
+implementation in \code{R} that can estiamte Pearson's,  tetrachoric (binary), polychoric
+(ordinal with more than two cateogries), and rank based correlation coefficients.
 }
 \note{
 The 'default' prior distributions are specified for partial correlations in particular. This
 means that the implied prior distribution will not be the same for the correlations.
+}
+\examples{
+\donttest{
+# note: iter = 250 for demonstrative purposes
+
+# data
+Y <- BGGM::ptsd
+
+#########################
+###### continuous #######
+#########################
+
+# estimate the model
+fit <- estimate(Y, iter = 250)
+
+# compute correlations
+cors <- pcor_to_cor(fit)
+
+
+#########################
+###### ordinal  #########
+#########################
+
+# first level must be 1 !
+Y <- Y + 1
+
+# estimate the model
+fit <- estimate(Y, type =  "ordinal",
+                iter = 250)
+
+# compute correlations
+cors <- pcor_to_cor(fit)
+
+
+#########################
+#######   mixed    ######
+#########################
+
+# rank based correlations
+
+# estimate the model
+fit <- estimate(Y, type =  "mixed",
+                iter = 250)
+
+# compute correlations
+cors <- pcor_to_cor(fit)
+}
+
 }
