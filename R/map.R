@@ -1,11 +1,14 @@
 #' Maximum A Posteriori Precision Matrix
 #'
-#' @param Y data matrix (\emph{n} by  \emph{p})
-#' @return object of class \code{map}
+#'
+#' @param Y Matrix (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).
+#'
+#' @return An object of class \code{map}, including the precision matrix,
+#'         partial correlation matrix, and regression parameters.
+#'
 #' @export
 #'
 #' @examples
-#' # p = 20
 #' Y <- BGGM::bfi[, 1:5]
 #'
 #' # map
@@ -13,29 +16,27 @@
 #' map
 map <- function(Y){
 
-  x <- na.omit(Y)
+  Y <- na.omit(Y)
 
-  x <- scale(x, scale = FALSE)
+  p <- ncol(Y)
 
-  p <- ncol(x)
+  fit <- analytic_solve(Y)
 
-  n <- nrow(x)
+  map <- fit$inv_map
 
-  S <- t(x) %*% x
-
-  map <- (n - p - 1) * solve(S)
-
-  pcor <- -1 * (cov2cor(map) - diag(p))
+  pcor <- fit$pcor_mat
 
   betas <- lapply(1:p, function(z) -1 * (map[z,-z] / map[z,z]) )
   betas <- do.call(rbind, betas)
 
-  returned_object <- list(precision = map,
-                          pcor = pcor,
+  returned_object <- list(precision = round(map, 3),
+                          pcor = round(pcor, 3),
                           betas = betas,
-                          dat = x)
+                          dat = Y)
 
-  class(returned_object) <- c("BGGM", "estimate", "map")
+  class(returned_object) <- c("BGGM",
+                              "estimate",
+                              "map")
 
   return(returned_object)
 }
