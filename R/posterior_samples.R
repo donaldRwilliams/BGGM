@@ -10,6 +10,41 @@
 #'         variables (e.g., formula \code{~ age}), the matrix also includes the coefficients from each
 #'         multivariate regression.
 #'
+#'
+#' \donttest{
+#' # note: iter = 250 for demonstrative purposes
+#'
+#' #################################
+#' ####### example 1: estimate  ####
+#' #################################
+#' Y <- ptsd[,1:5]
+#'
+#' fit <- estimate(Y, type = "continuous",
+#'                 iter = 250)
+#'
+#' posterior_samples(fit)
+#'
+#' ########################################
+#' ### example 2: control  with formula ###
+#' ########################################
+#' # (the following works with all data types)
+#'
+#' # controlling for gender
+#' Y <- bfi
+#'
+#' # to control for only gender
+#' # (remove education)
+#' Y <- subset(Y, select = - education)
+#'
+#' # fit model
+#' fit <- estimate(Y, formula = ~ gender,
+#'                 iter = 250)
+#'
+#' # note regression coefficients
+#' posterior_samples(fit)
+#'
+#' }
+#'
 #' @export
 posterior_samples <- function(object, ...){
 
