@@ -45,7 +45,8 @@
 #' @export
 select.estimate <- function(object,
                             cred = 0.95,
-                            alternative = "two.sided", ...){
+                            alternative = "two.sided",
+                            ...){
 
   if(isFALSE(object$analytic)){
 
@@ -89,7 +90,7 @@ select.estimate <- function(object,
 
         z_stat <- (-object$analytic_fit$inv_map) /  sqrt(object$analytic_fit$inv_var)
 
-        adj <- ifelse( z_stat > qnorm(ub, lower.tail = FALSE), 1, 0)
+        adj <- ifelse(z_stat > qnorm(ub, lower.tail = FALSE), 1, 0)
 
 
 
@@ -104,11 +105,7 @@ select.estimate <- function(object,
 
       }
 
-
-
-
-
-}
+      }
 
   pcor_adj <- adj * object$pcor_mat
 

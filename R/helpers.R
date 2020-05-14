@@ -11,12 +11,15 @@
 
 
 hyp_converter <- function (x) {
+
   hyp_converted <- x
+
   extract_numbers <- unlist(stringr::str_extract_all(hyp_converted,
                                                      "\\d+"))
-  extract_numbers <- extract_numbers[unlist(extract_numbers) !=
-                                       0]
+
+  extract_numbers <- extract_numbers[unlist(extract_numbers) != 0]
   words <- NA
+
   for (i in 1:length(extract_numbers)) {
     temp <- noquote(extract_numbers[i])
     words[i] <- numbers2words(as.numeric(temp))
@@ -1628,8 +1631,25 @@ globalVariables(c('Y1','Y2',
                   'iteration',
                   '.imp',
                   'estimate',
-                  'rref_ei'))
-
+                  'rref_ei', 'explore',
+                  'print_coef',
+                  'print_confirm',
+                  'print_estimate',
+                  'print_explore',
+                  'print_ggm_compare',
+                  'print_ggm_compare_bf',
+                  'print_ggm_compare_ppc',
+                  'print_ggm_confirm',
+                  'print_roll_your_own',
+                  'print_select_explore',
+                  'print_select_ggm_compare_estimate',
+                  'print_summary_coef',
+                  'print_summary_estimate',
+                  'print_summary_ggm_compare_bf',
+                  'print_summary_ggm_estimate_compare',
+                  'print_summary_metric',
+                  'print_summary_select_explore',
+                  '..'))
 
 
 gen_pcors <- function (p = 20, edge_prob = 0.3, lb = 0.05, ub = 0.3) {
