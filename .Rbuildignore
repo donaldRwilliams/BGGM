@@ -14,6 +14,7 @@
 ^data-raw$
 ^README\.Rmd$
 ^README\.md$
+^README\.html$
 ^paper\.md$
 
 ^LICENSE$
