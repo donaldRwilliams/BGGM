@@ -13,7 +13,16 @@
 #'
 #' \enumerate{
 #'
-#' \item Bayesian hypothesis testing with the novel matrix-F prior distribution \insertCite{Mulder2018}{BGGM}
+#' \item Bayesian estimation with the novel matrix-F prior distribution \insertCite{Mulder2018}{BGGM}.
+#'
+#'  \itemize{
+#'
+#'  \item Estimation \code{\link{estimate}}.
+#'
+#'  }
+#'
+#'
+#' \item Bayesian hypothesis testing with the novel matrix-F prior distribution \insertCite{Mulder2018}{BGGM}.
 #'
 #'  \itemize{
 #'
