@@ -957,9 +957,9 @@ print_ggm_confirm <- function(x, ...){
 #'
 #' @param x An object of class \code{confirm}
 #'
-#' @param ... Currently ignored
+#' @param ... Currently ignored.
 #'
-#' @return A \code{ggplot} object
+#' @return A \code{ggplot} object.
 #'
 #'
 #' @examples

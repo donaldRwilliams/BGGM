@@ -9,10 +9,10 @@
 \arguments{
 \item{x}{An object of class \code{confirm}}
 
-\item{...}{Currently ignored}
+\item{...}{Currently ignored.}
 }
 \value{
-A \code{ggplot} object
+A \code{ggplot} object.
 }
 \description{
 Plot \code{confirm} objects
