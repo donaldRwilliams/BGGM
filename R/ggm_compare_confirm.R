@@ -175,6 +175,140 @@
 #'  See \code{\link{BGGM-package}} for details about interpreting GGMs based on latent data
 #' (i.e, all data types besides \code{"continuous"})
 #'
+#'
+#' @examples
+#' \donttest{
+#' # note: iter = 250 for demonstrative purposes
+#'
+#' # data
+#' Y <- bfi
+#'
+#' ###############################
+#' #### example 1: continuous ####
+#' ###############################
+#'
+#' # males
+#' Ymale   <- subset(Y, gender == 1,
+#'                   select = -c(education,
+#'                               gender))[,1:5]
+#'
+#'
+#' # females
+#' Yfemale <- subset(Y, gender == 2,
+#'                      select = -c(education,
+#'                                  gender))[,1:5]
+#'
+#'  # exhaustive
+#'  hypothesis <- c("g1_A1--A2 >  g2_A1--A2;
+#'                   g1_A1--A2 <  g2_A1--A2;
+#'                   g1_A1--A2 =  g2_A1--A2")
+#'
+#' # test hyp
+#' test <- ggm_compare_confirm(Ymale,  Yfemale,
+#'                             hypothesis = hypothesis,
+#'                             iter = 250)
+#'
+#' # print (evidence not strong)
+#' test
+#'
+#' #########################################
+#' #### example 2: sensitivity to prior ####
+#' #########################################
+#' # continued from example 1
+#'
+#' # decrease prior SD
+#' test <- ggm_compare_confirm(Ymale,
+#'                             Yfemale,
+#'                             prior_sd = 0.1,
+#'                             hypothesis = hypothesis,
+#'                             iter = 250)
+#'
+#' # print
+#' test
+#'
+#' # indecrease prior SD
+#' test <- ggm_compare_confirm(Ymale,
+#'                             Yfemale,
+#'                             prior_sd = 0.5,
+#'                             hypothesis = hypothesis,
+#'                             iter = 250)
+#'
+#' # print
+#' test
+#'
+#' ################################
+#' #### example 3: mixed data #####
+#' ################################
+#'
+#' hypothesis <- c("g1_A1--A2 >  g2_A1--A2;
+#'                  g1_A1--A2 <  g2_A1--A2;
+#'                  g1_A1--A2 =  g2_A1--A2")
+#'
+#' # test (1000 for example)
+#' test <- ggm_compare_confirm(Ymale,
+#'                             Yfemale,
+#'                             type = "mixed",
+#'                             hypothesis = hypothesis,
+#'                             iter = 250)
+#'
+#' # print
+#' test
+#'
+#' ##############################
+#' ##### example 4: control #####
+#' ##############################
+#' # control for education
+#'
+#' # data
+#' Y <- bfi
+#'
+#' # males
+#' Ymale   <- subset(Y, gender == 1,
+#'                   select = -c(gender))[,c(1:5, 26)]
+#'
+#' # females
+#' Yfemale <- subset(Y, gender == 2,
+#'                   select = -c(gender))[,c(1:5, 26)]
+#'
+#' # test
+#' test <- ggm_compare_confirm(Ymale,
+#'                              Yfemale,
+#'                              formula = ~ education,
+#'                              hypothesis = hypothesis,
+#'                              iter = 250)
+#' # print
+#' test
+#'
+#'
+#' #####################################
+#' ##### example 5: many relations #####
+#' #####################################
+#'
+#' # data
+#' Y <- bfi
+#'
+#' hypothesis <- c("g1_A1--A2 > g2_A1--A2 & g1_A1--A3 = g2_A1--A3;
+#'                  g1_A1--A2 = g2_A1--A2 & g1_A1--A3 = g2_A1--A3;
+#'                  g1_A1--A2 = g2_A1--A2 = g1_A1--A3 = g2_A1--A3")
+#'
+#' Ymale   <- subset(Y, gender == 1,
+#'                   select = -c(education,
+#'                               gender))[,1:5]
+#'
+#'
+#' # females
+#' Yfemale <- subset(Y, gender == 2,
+#'                      select = -c(education,
+#'                                  gender))[,1:5]
+#'
+#' test <- ggm_compare_confirm(Ymale,
+#'                             Yfemale,
+#'                              hypothesis = hypothesis,
+#'                              iter = 250)
+#'
+#' # print
+#' test
+#' }
 #' @export
 ggm_compare_confirm <- function(...,
                                 hypothesis,
@@ -819,9 +953,10 @@ print_ggm_confirm <- function(x, ...){
 }
 
 
-#' Plot: \code{confirm} objects
+#' Plot \code{confirm} objects
 #'
 #' @param x An object of class \code{confirm}
+#'
 #' @param ... Currently ignored
 #'
 #' @return A \code{ggplot} object

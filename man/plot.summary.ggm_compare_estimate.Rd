@@ -22,7 +22,7 @@
 An object of class \code{ggplot}
 }
 \description{
-Visualize the posterior distribution differences..
+Visualize the posterior distribution differences.
 }
 \seealso{
 \code{\link{ggm_compare_estimate}}

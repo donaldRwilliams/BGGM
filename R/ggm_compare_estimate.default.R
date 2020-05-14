@@ -573,13 +573,9 @@ print_summary_ggm_estimate_compare <- function(x,...){
   cat("--- \n")
 }
 
-
-
-
-
 #' Plot \code{summary.ggm_compare_estimate} Objects
 #'
-#' @description Visualize the posterior distribution differences..
+#' @description Visualize the posterior distribution differences.
 #'
 #' @param x An object of class \code{ggm_compare_estimate}.
 #'

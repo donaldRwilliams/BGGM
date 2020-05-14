@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggm_compare_confirm.R
 \name{plot.confirm}
 \alias{plot.confirm}
-\title{Plot: \code{confirm} objects}
+\title{Plot \code{confirm} objects}
 \usage{
 \method{plot}{confirm}(x, ...)
 }
@@ -15,7 +15,7 @@
 A \code{ggplot} object
 }
 \description{
-Plot: \code{confirm} objects
+Plot \code{confirm} objects
 }
 \examples{
 \donttest{
