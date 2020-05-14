@@ -119,7 +119,9 @@
 #'
 #' }
 #'
-#'  @examples
+#'
+#' @examples
+#'
 #' \donttest{
 #' # note: iter = 250 for demonstrative purposes
 #'

@@ -78,8 +78,54 @@ The returned object of class \code{ggm_compare_ppc} contains a lot of informatio
 \item \code{obs_custom} observed error (custom).
 
 }
+}
+\description{
+Compare GGMs with a posterior predicitve check \insertCite{gelman1996posterior}{BGGM}.
+This method was introduced in \insertCite{williams2020comparing;textual}{BGGM}. Currently,
+there is a \code{global} (the entire GGM) and a \code{nodewise} test. The default
+is to compare GGMs with respect to the posterior predictive distribution of Kullback
+Leibler divergence and the sum of squared errors. It is also possible to compare the
+GGMs with a user defined test-statistic.
+}
+\details{
+The \code{FUN} argument allows for a user defined test-statisic (the measure used to compare the GGMs).
+The function must include only two agruments, each of which corresponds to a dataset. For example,
+\code{f <- function(Yg1, Yg2)}, where each Y is dataset of dimensions \emph{n} by \emph{p}. The
+groups are then compare within the function, returning a single number. An example is provided below.
 
- @examples
+Further, when using a custom function care must be taken when specifying the argument \code{loss}.
+We recommended to visualize the results with \code{plot} to ensure the \emph{p}-value was computed
+in the right direction.
+}
+\note{
+\strong{Interpretation}:
+
+The primary test-statistic is symmetric KL-divergence that is termed Jensen-Shannon divergence (JSD).
+This is in essence a likelihood ratio that provides the "distance" between two multivariate normal
+distributions. The basic idea is to (1) compute the posterior predictive distribution, assuming group equality
+(the null model). This provides the error that we would expect to see under the null model; (2) compute
+JSD for the observed groups; and (3) compare the observed JSD to the posterior predictive distribution,
+from which a posterior predictive \emph{p}-value is computed.
+
+For the \code{global} check, the sum of squared error is also provided.
+This is computed from the partial correlation matrices and it is analagous
+to the strength test in \insertCite{van2017comparing;textual}{BGGM}. The \code{nodewise}
+test compares the posterior predictive distribution for each node. This is based on the correspondence
+between the inverse covariance matrix and multiple regresssion \insertCite{kwan2014regression,Stephens1998}{BGGM}.
+
+If the null model is \code{not} rejected, note that this does \code{not} provide evidence for equality!
+Further, if the null model is rejected, this means that the assumption of group equality is not tenable--the
+groups are different.
+
+\strong{Alternative Methods}:
+
+There are several methods in \strong{BGGM} for comparing groups. See
+\code{\link{ggm_compare_estimate}} (posterior differences for the
+partial correlations), \code{\link{ggm_compare_explore}} (exploratory hypothesis testing),
+and \code{\link{ggm_compare_confirm}} (confirmatory hypothesis testing).
+}
+\examples{
+
 \donttest{
 # note: iter = 250 for demonstrative purposes
 
@@ -202,51 +248,7 @@ nodewise
 # plot
 plot(nodewise)
 }
-}
-\description{
-Compare GGMs with a posterior predicitve check \insertCite{gelman1996posterior}{BGGM}.
-This method was introduced in \insertCite{williams2020comparing;textual}{BGGM}. Currently,
-there is a \code{global} (the entire GGM) and a \code{nodewise} test. The default
-is to compare GGMs with respect to the posterior predictive distribution of Kullback
-Leibler divergence and the sum of squared errors. It is also possible to compare the
-GGMs with a user defined test-statistic.
-}
-\details{
-The \code{FUN} argument allows for a user defined test-statisic (the measure used to compare the GGMs).
-The function must include only two agruments, each of which corresponds to a dataset. For example,
-\code{f <- function(Yg1, Yg2)}, where each Y is dataset of dimensions \emph{n} by \emph{p}. The
-groups are then compare within the function, returning a single number. An example is provided below.
 
-Further, when using a custom function care must be taken when specifying the argument \code{loss}.
-We recommended to visualize the results with \code{plot} to ensure the \emph{p}-value was computed
-in the right direction.
-}
-\note{
-\strong{Interpretation}:
-
-The primary test-statistic is symmetric KL-divergence that is termed Jensen-Shannon divergence (JSD).
-This is in essence a likelihood ratio that provides the "distance" between two multivariate normal
-distributions. The basic idea is to (1) compute the posterior predictive distribution, assuming group equality
-(the null model). This provides the error that we would expect to see under the null model; (2) compute
-JSD for the observed groups; and (3) compare the observed JSD to the posterior predictive distribution,
-from which a posterior predictive \emph{p}-value is computed.
-
-For the \code{global} check, the sum of squared error is also provided.
-This is computed from the partial correlation matrices and it is analagous
-to the strength test in \insertCite{van2017comparing;textual}{BGGM}. The \code{nodewise}
-test compares the posterior predictive distribution for each node. This is based on the correspondence
-between the inverse covariance matrix and multiple regresssion \insertCite{kwan2014regression,Stephens1998}{BGGM}.
-
-If the null model is \code{not} rejected, note that this does \code{not} provide evidence for equality!
-Further, if the null model is rejected, this means that the assumption of group equality is not tenable--the
-groups are different.
-
-\strong{Alternative Methods}:
-
-There are several methods in \strong{BGGM} for comparing groups. See
-\code{\link{ggm_compare_estimate}} (posterior differences for the
-partial correlations), \code{\link{ggm_compare_explore}} (exploratory hypothesis testing),
-and \code{\link{ggm_compare_confirm}} (confirmatory hypothesis testing).
 }
 \references{
 \insertAllCited{}
