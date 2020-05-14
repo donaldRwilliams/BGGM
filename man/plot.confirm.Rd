@@ -15,7 +15,8 @@
 A \code{ggplot} object.
 }
 \description{
-Plot \code{confirm} objects
+Plot the posterior hypothesis probabilities as a pie chart, with
+each slice corresponding the probability of a given hypothesis.
 }
 \examples{
 

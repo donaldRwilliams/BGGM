@@ -636,9 +636,9 @@ print_ggm_compare_ppc <- function(x, ...){
 }
 
 
-#' Plot \code{ggm_compare_ppc} Objects
+#' @title Plot \code{ggm_compare_ppc} Objects
 #'
-#' @description Plot the predictive check with\code{\link[ggridges]{ggridges}}
+#' @description Plot the predictive check with \code{\link[ggridges]{ggridges}}
 #'
 #' @param x An object of class \code{ggm_compare_ppc}
 #'

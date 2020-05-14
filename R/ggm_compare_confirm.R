@@ -953,7 +953,10 @@ print_ggm_confirm <- function(x, ...){
 }
 
 
-#' Plot \code{confirm} objects
+#' @title Plot \code{confirm} objects
+#'
+#' @description Plot the posterior hypothesis probabilities as a pie chart, with
+#' each slice corresponding the probability of a given hypothesis.
 #'
 #' @param x An object of class \code{confirm}
 #'

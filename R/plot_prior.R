@@ -5,7 +5,6 @@
 #'
 #' @name plot_prior
 #'
-#'
 #' @param prior_sd Scale of the prior distribution, approximately the standard deviation
 #'                 of a beta distribution (defaults to 0.25).
 #'
@@ -14,7 +13,9 @@
 #' @return A \code{ggplot} object.
 #'
 #' @examples
-#' plot_prior(prior_sd = 0.25, iter = 5000)
+#' # note: iter = 250 for demonstrative purposes
+#'
+#' plot_prior(prior_sd = 0.25, iter = 250)
 #'
 #' @export
 plot_prior <- function(prior_sd = 0.2, iter = 5000){
