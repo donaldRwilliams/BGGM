@@ -11,7 +11,7 @@
 #' @param formula An object of class \code{\link[stats]{formula}}. This allows for including
 #' control variables in the model (i.e., \code{~ gender}). See the note for further details.
 #'
-#' @param type Character string. Which type of data for \strong{Y} ? The options include \code{continuous},
+#' @param type Character string. Which type of data for \code{Y} ? The options include \code{continuous},
 #' \code{binary}, \code{ordinal}, or \code{mixed}. Note that mixed can be used for data with only
 #' ordinal variables. See the note for further details.
 #'
@@ -115,66 +115,7 @@
 #'
 #' @examples
 #' \donttest{
-#' library(BGGM)
-#' library(mice)
-#' # data
-#' Y <- ptsd
-#'
-#' # matrix for indices
-#' mat <- matrix(0, nrow = 221, ncol = 20)
-#'
-#' # indices
-#' indices <- which(mat == 0, arr.ind = TRUE)
-#'
-#' # 50 NAs
-#' Y[indices[sample(1:nrow(indices), 50),]] <- NA
-#'
-#' # impute
-#' x <- mice(Y, m = 5, print = FALSE)
-#'
-#' #########################
-#' ###### continuous #######
-#' #########################
-#'
-#' # estimate the model
-#' fit_est <- bggm_missing(x, type = "continuous",
-#'                         iter = 250)
-#'
-#' # summary
-#' summ <- summary(fit_est)
-#'
-#' # plot summary
-#' plt_summ <- plot(summ)
-#'
-#' # select edge set
-#' E <- select(fit_est, alternative = "greater")
-#'
-#' # plot edge set
-#' plt_E <- plot(E)
-#'
-#' #########################
-#' #######   copula    #####
-#' #########################
-#' # rank based parital correlations
-#'
-#' # estimate the model
-#' fit_rank <-  bggm_missing(x, type =  "mixed",
-#'                           iter = 250)
-#'
-#' # summary
-#' summ <- summary(fit_rank)
-#'
-#' # plot summary
-#' plt_summ <- plot(summ)
-#'
-#' # select edge set
-#' E <- select(fit_rank)
-#'
-#' # plot edge set
-#' plt_E <- plot(E)
-#'
-#' # plot edge set
-#' plt_E
+
 #' }
 #' @export
 estimate  <- function(Y,

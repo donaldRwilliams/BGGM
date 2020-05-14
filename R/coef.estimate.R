@@ -11,7 +11,7 @@
 #'
 #' @param iter Number of iterations (posterior samples; defaults to the number in the object).
 #'
-#' @param ... Not currently used.
+#' @param ... Currently ignored.
 #'
 #' @references
 #' \insertAllCited{}
@@ -27,6 +27,55 @@
 #' \item \code{object} An object of class \code{estimate} (the fitted model).
 #' }
 #'
+#' @examples
+#' \donttest{
+#' # note: iter = 250 for demonstrative purposes
+#'
+#' data
+#' Y <- ptsd
+#' #########################################
+#' ### example 1: continuous and ordinal ###
+#' #########################################
+#'
+#' # fit model
+#' fit <- estimate(Y, type = "continuous",
+#'                iter = 250)
+#'
+#' # regression
+#' reg <- coef(fit)
+#'
+#' # summary
+#' summ <- summary(reg)
+#'
+#' # ordinal
+#'
+#' # fit model (note + 1, due to zeros)
+#' fit <- estimate(Y + 1, type = "ordinal",
+#'                 iter = 250)
+#'
+#' # summarize the partial correlations
+#' reg <- coef(fit)
+#'
+#' # summary
+#' summ <- summary(reg)
+#'
+#' #########################
+#' ### example 2: binary ###
+#' #########################
+#' # data
+#' Y <- women_math
+#'
+#' # fit model
+#' fit <- estimate(Y, type = "binary",
+#'                 iter = 250)
+#'
+#' # summarize the partial correlations
+#' reg <- coef(fit)
+#'
+#' # summary
+#' summ <- summary(reg)
+#'
+#'}
 #' @export
 coef.estimate <- function(object, iter = NULL,...) {
 
@@ -97,11 +146,11 @@ coef.estimate <- function(object, iter = NULL,...) {
 #'
 #' @name coef.explore
 #'
-#' @param object An Object of class \code{estimate}
+#' @param object An Object of class \code{explore}.
 #'
 #' @param iter Number of iterations (posterior samples; defaults to the number in the object).
 #'
-#' @param ... Not currently used.
+#' @param ... Currently ignored.
 #'
 #' @references
 #' \insertAllCited{}
@@ -116,9 +165,60 @@ coef.estimate <- function(object, iter = NULL,...) {
 #' \item \code{object} An object of class \code{explore} (the fitted model).
 #' }
 #'
-
+#' @examples
+#' \donttest{
+#' # note: iter = 250 for demonstrative purposes
+#'
+#' data
+#' Y <- ptsd
+#' #########################################
+#' ### example 1: continuous and ordinal ###
+#' #########################################
+#'
+#' # fit model
+#' fit <- explore(Y, type = "continuous",
+#'                iter = 250)
+#'
+#' # regression
+#' reg <- coef(fit)
+#'
+#' # summary
+#' summ <- summary(reg)
+#'
+#' summ
+#'
+#' # ordinal
+#'
+#' # fit model (note + 1, due to zeros)
+#' fit <- explore(Y + 1, type = "ordinal",
+#'                iter = 250)
+#'
+#' # summarize the partial correlations
+#' reg <- coef(fit)
+#'
+#' # summary
+#' summ <- summary(reg)
+#'
+#' #########################
+#' ### example 2: binary ###
+#' #########################
+#' # data
+#' Y <- women_math
+#'
+#' # fit model
+#' fit <- explore(Y, type = "binary",
+#'                iter = 250)
+#'
+#' # summarize the partial correlations
+#' reg <- coef(fit)
+#'
+#' # summary
+#' summ <- summary(reg)
+#'
+#'}
 #' @export
-coef.explore <- function(object, iter = NULL,...) {
+coef.explore <- function(object,
+                         iter = NULL,...) {
 
   # check for object class
   if(is(object, "estimate") | is(object, "explore")){
@@ -172,7 +272,9 @@ coef.explore <- function(object, iter = NULL,...) {
   # object does not become huge
   object$post_samp <- 0
 
-  returned_object <- list(betas = betas, object = object)
+  returned_object <- list(betas = betas,
+                          object = object)
+
   class(returned_object) <- c("BGGM", "coef")
   returned_object
 }
@@ -182,7 +284,6 @@ coef.explore <- function(object, iter = NULL,...) {
 print_coef <- function(x,...){
   # nodes
   p <- length(x$betas)
-
   # column names
   cn <- colnames(x$object$Y)
 
@@ -196,8 +297,7 @@ print_coef <- function(x,...){
   cat("--- \n")
   cat("Coefficients: \n \n")
 
-  if(is.null(cn)) {
-
+  if(is.null(cn)){
     cn <- 1:p
 
   }
@@ -222,29 +322,46 @@ print_coef <- function(x,...){
 
 #' Summarize \code{coef} Objects
 #'
-#' @param object an object of class \code{coef}
-#' @param cred credible interval width used for the decision rule
+#' Summarize regression parameters with the posterior mean,
+#' standard deviation, and credible interval.
+#'
+#' @param object An object of class \code{coef}.
+#'
+#' @param cred Numeric. The credible interval width for summarizing the posterior
+#' distributions (defaults to 0.95; must be between 0 and 1).
+#'
 #' @param ... Currently ignored
 #'
-#' @return a list of length \emph{p} including the
+#' @return A list of length \emph{p} including the
 #'         summaries for each multiple regression.
-#' @export
 #'
+#' @note
+#'
+#' See \code{\link{coef.estimate}} and \code{\link{coef.explore}} for examples.
+#'
+#' @export
 summary.coef <- function(object,
                          cred = 0.95,
                          ...){
 
   lb <- (1 - cred) / 2
+
   ub <- 1 - lb
+
   p <- object$object$p
 
   post_mean <- t(sapply(1:p, function(x)  apply(object$betas[[x]], MARGIN = 2, mean )))
+
   post_sd   <- t(sapply(1:p, function(x)  apply(object$betas[[x]], MARGIN = 2, sd)))
+
   post_lb   <- t(sapply(1:p, function(x)  apply(object$betas[[x]], MARGIN = 2, quantile, lb)))
+
   post_ub   <- t(sapply(1:p, function(x)  apply(object$betas[[x]], MARGIN = 2, quantile, ub)))
 
   res_i <- list()
+
   for(i in 1:p){
+
     res_i[[i]] <- round(data.frame(post_mean = post_mean[i,],
                                    post_sd = post_sd[i,],
                                    post_lb = post_lb[i,],

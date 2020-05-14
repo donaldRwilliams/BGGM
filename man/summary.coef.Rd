@@ -7,16 +7,21 @@
 \method{summary}{coef}(object, cred = 0.95, ...)
 }
 \arguments{
-\item{object}{an object of class \code{coef}}
+\item{object}{An object of class \code{coef}.}
 
-\item{cred}{credible interval width used for the decision rule}
+\item{cred}{Numeric. The credible interval width for summarizing the posterior
+distributions (defaults to 0.95; must be between 0 and 1).}
 
 \item{...}{Currently ignored}
 }
 \value{
-a list of length \emph{p} including the
+A list of length \emph{p} including the
         summaries for each multiple regression.
 }
 \description{
-Summarize \code{coef} Objects
+Summarize regression parameters with the posterior mean,
+standard deviation, and credible interval.
+}
+\note{
+See \code{\link{coef.estimate}} and \code{\link{coef.explore}} for examples.
 }

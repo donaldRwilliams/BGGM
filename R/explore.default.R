@@ -1,13 +1,10 @@
-#' @title GGM: Exploratory Bayesian Hypothesis Testing
+#' @title GGM: Exploratory Hypothesis Testing
 #'
 #' @name explore
 #'
-#' @description Learn the conditional (in)dependence structure with the Bayes factor using the matrix-F prior distribution
-#' \insertCite{Mulder2018}{BGGM}. It is possible to test for only positive or negative edges, as well as two sided hypothesis
-#' testing (which is the customary approach). Further there is also an exhaustive option that provides the posterior
-#' probability of the null, greater than zero, and less than zero.
-#' These methods were introduced in \insertCite{Williams2019_bf;textual}{BGGM}.
-#' The graph is selected with \code{\link{select.estimate}} and
+#' @description Learn the conditional (in)dependence structure with the Bayes factor using the matrix-F
+#' prior distribution \insertCite{Mulder2018}{BGGM}. These methods were introduced in
+#' \insertCite{Williams2019_bf;textual}{BGGM}. The graph is selected with \code{\link{select.explore}} and
 #' then plotted with \code{\link{plot.select}}.
 #'
 #' @param Y  Matrix (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).
@@ -15,18 +12,18 @@
 #' @param formula An object of class \code{\link[stats]{formula}}. This allows for including
 #' control variables in the model (i.e., \code{~ gender}).
 #'
-#' @param type Character string. Which type of data for \strong{Y} ? The options include \code{continuous},
+#' @param type Character string. Which type of data for \code{Y} ? The options include \code{continuous},
 #' \code{binary}, \code{ordinal}, or \code{mixed} (semi-parametric copula). See the note for further details.
 #'
 #' @param mixed_type Numeric vector. An indicator of length p for which varibles should be treated as ranks.
-#' (1 for rank and 0 to assume normality). The default is currently (dev version) to treat all integer
-#' variables as ranks when \code{type = "mixed"} and \code{NULL} otherwise. See note for further details.
+#' (1 for rank and 0 to assume normality). The default is to treat all integer variables as ranks
+#' when \code{type = "mixed"} and \code{NULL} otherwise. See note for further details.
 #'
 #' @param analytic Logical. Should the analytic solution be computed (default is \code{FALSE})?
 #'                 (currently not implemented)
 #'
-#' @param prior_sd Scale of the prior distribution, approximately the standard deviation of a beta distribution.
-#' (defaults to 0.25).
+#' @param prior_sd Scale of the prior distribution, approximately the standard deviation
+#'                 of a beta distribution (defaults to 0.25).
 #'
 #' @param iter Number of iterations (posterior samples; defaults to 5000).
 #'
@@ -101,21 +98,21 @@
 #' This readily allows for visiualizing uncertainty in the estimates. This feature works
 #' with all data types and is accomplished by plotting the summary of the \code{explore} object
 #' (i.e., \code{plot(summary(fit))}). Note that in contrast to \code{estimate} (credible intervals),
-#' the posterior standard deviation is plotted with \code{explore} objects.
+#' the posterior standard deviation is plotted for \code{explore} objects.
 #'
 #'
 #' \strong{"Default" Prior}:
 #'
 #'  In Bayesian statistics, a default Bayes factor needs to have several properties. I refer
 #'  interested users to \insertCite{@section 2.2 in @dablander2020default;textual}{BGGM}. In
-#'  \insertCite{Williams2019_bf;textual}{BGGM}, some of these propteries were investigated, such
-#'  model selection consistency. That said, we would not consider this a "default" Bayes factor and
-#'  thus we encourage users to perform sensitivity analyses by varying the scale of the prior
-#'  distribution.
+#'  \insertCite{Williams2019_bf;textual}{BGGM}, some of these propteries were investigated including
+#'  model selection consistency. That said, we would not consider this a "default" (or "automatic")
+#'  Bayes factor and thus we encourage users to perform sensitivity analyses by varying
+#'  the scale of the prior distribution.
 #'
 #'  Furthermore, it is important to note there is no "correct" prior and, also, there is no need
 #'  to entertain the possibility of a "true" model. Rather, the Bayes factor can be interpreted as
-#'  which hypothesis best (relative to each other) predicts the observed data
+#'  which hypothesis best (\strong{relative} to each other) predicts the observed data
 #'  \insertCite{@Section 3.2 in @Kass1995}{BGGM}.
 #'
 #' \strong{Interpretation of Conditional (In)dependence Models for Latent Data}:

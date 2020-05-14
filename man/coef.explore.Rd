@@ -7,11 +7,11 @@
 \method{coef}{explore}(object, iter = NULL, ...)
 }
 \arguments{
-\item{object}{An Object of class \code{estimate}}
+\item{object}{An Object of class \code{explore}.}
 
 \item{iter}{Number of iterations (posterior samples; defaults to the number in the object).}
 
-\item{...}{Not currently used.}
+\item{...}{Currently ignored.}
 }
 \value{
 An object of class \code{coef}, containting two lists.
@@ -28,6 +28,58 @@ posterior samples
 There is a direct correspondence between the inverse covariance matrix and
  multiple regression \insertCite{kwan2014regression,Stephens1998}{BGGM}. This readily allows
  for converting the GGM paramters to regression coefficients. All data types are supported.
+}
+\examples{
+\donttest{
+# note: iter = 250 for demonstrative purposes
+
+data
+Y <- ptsd
+#########################################
+### example 1: continuous and ordinal ###
+#########################################
+
+# fit model
+fit <- explore(Y, type = "continuous",
+               iter = 250)
+
+# regression
+reg <- coef(fit)
+
+# summary
+summ <- summary(reg)
+
+summ
+
+# ordinal
+
+# fit model (note + 1, due to zeros)
+fit <- explore(Y + 1, type = "ordinal",
+               iter = 250)
+
+# summarize the partial correlations
+reg <- coef(fit)
+
+# summary
+summ <- summary(reg)
+
+#########################
+### example 2: binary ###
+#########################
+# data
+Y <- women_math
+
+# fit model
+fit <- explore(Y, type = "binary",
+               iter = 250)
+
+# summarize the partial correlations
+reg <- coef(fit)
+
+# summary
+summ <- summary(reg)
+
+}
 }
 \references{
 \insertAllCited{}
