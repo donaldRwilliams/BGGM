@@ -143,7 +143,7 @@ print_roll_your_own <- function(x, cred = 0.95, ...) {
 #'
 #' @return An object of class \code{ggplot}
 #'
-#' @importFrom ggridges stat_density_ridges
+#' @importFrom ggridges geom_density_ridges
 #'
 
 #' @export

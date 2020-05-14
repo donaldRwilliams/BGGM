@@ -65,9 +65,9 @@ The graph is selected with \code{\link{select.estimate}} and then plotted with \
 \details{
 The default is to draw samples from the posterior distribution (\code{analytic = FALSE}). The samples are
 required for computing edge differences (see \code{\link{ggm_compare_estimate}}), Bayesian R2 introduced in
-\insertCite{gelman_r2_2019;textual}{BGGM} (see \code{\link{predictability}}), etc. If the goal is to *only* determine
-the non-zero effects, this can be accomplished by setting \code{analytic = TRUE}. This is particularly useful
-when a fast solution is needed (see the examples in \code{\link{ggm_compare_ppc}})
+\insertCite{gelman_r2_2019;textual}{BGGM} (see \code{\link{predictability}}), etc. If the goal is
+to *only* determine the non-zero effects, this can be accomplished by setting \code{analytic = TRUE}.
+This is particularly useful when a fast solution is needed (see the examples in \code{\link{ggm_compare_ppc}})
 
 \strong{Controlling for Variables}:
 
@@ -86,11 +86,9 @@ should be included in the GGM. An example is provided below.
  as data points!
 
  The option \code{mixed_type} allows the user to determine  which variable should be treated as ranks
- and the "emprical" distribution is used otherwise. This is accomplished by specifying an indicator
- vector of length \emph{p}. A one indicates to use the ranks, whereas a zero indicates to "ignore"
- that variable. By default all integer variables are handled as ranks.
-
-
+ and the "emprical" distribution is used otherwise \insertCite{hoff2007extending}{BGGM}. This is
+ accomplished by specifying an indicator vector of length \emph{p}. A one indicates to use the ranks,
+ whereas a zero indicates to "ignore" that variable. By default all integer variables are treated as ranks.
 
 \strong{Dealing with Errors}:
 
@@ -125,6 +123,70 @@ with all data types and is accomplished by plotting the summary of the \code{est
 
 See \code{\link{BGGM-package}} for details about interpreting GGMs based on latent data
 (i.e, all data types besides \code{"continuous"})
+}
+\examples{
+\donttest{
+library(BGGM)
+library(mice)
+# data
+Y <- ptsd
+
+# matrix for indices
+mat <- matrix(0, nrow = 221, ncol = 20)
+
+# indices
+indices <- which(mat == 0, arr.ind = TRUE)
+
+# 50 NAs
+Y[indices[sample(1:nrow(indices), 50),]] <- NA
+
+# impute
+x <- mice(Y, m = 5, print = FALSE)
+
+#########################
+###### continuous #######
+#########################
+
+# estimate the model
+fit_est <- bggm_missing(x, type = "continuous",
+                        iter = 250)
+
+# summary
+summ <- summary(fit_est)
+
+# plot summary
+plt_summ <- plot(summ)
+
+# select edge set
+E <- select(fit_est, alternative = "greater")
+
+# plot edge set
+plt_E <- plot(E)
+
+#########################
+#######   copula    #####
+#########################
+# rank based parital correlations
+
+# estimate the model
+fit_rank <-  bggm_missing(x, type =  "mixed",
+                          iter = 250)
+
+# summary
+summ <- summary(fit_rank)
+
+# plot summary
+plt_summ <- plot(summ)
+
+# select edge set
+E <- select(fit_rank)
+
+# plot edge set
+plt_E <- plot(E)
+
+# plot edge set
+plt_E
+}
 }
 \references{
 \insertAllCited{}
