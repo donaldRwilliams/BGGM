@@ -15,32 +15,31 @@ Description: Fit Bayesian Gaussian graphical models. The methods are separated i
     Williams, Rast, Pericchi, and Mulder (2019) <doi:10.31234/osf.io/yt386>.
 Depends: R (>= 3.5.0)
 License: GPL-2
-Imports: 
+Imports:
+    abind,
     BFpack,
+    GGally (>= 1.4.0),
+    ggplot2 (>= 3.2.1),
+    ggridges (>= 0.5.1),
+    grDevices,
     MASS,
     Matrix,
+    methods,
+    mice,
     mvtnorm (>= 1.0.11),
+    mvnfast,
     network (>= 1.15),
+    pracma,
     reshape,
     Rcpp (>= 1.0.4.6),
     RcppProgress (>= 0.1),
     Rdpack,
     sna (>= 2.5),
-    GGally (>= 1.4.0),
-    ggplot2 (>= 3.2.1),
-    ggridges (>= 0.5.1),
     stats,
     utils,
-    stringr, 
-    methods
+    stringr
 Suggests: 
- knitr,
- mice,
- mvnfast,
- networktools,
- rmarkdown,
- abind,
- assortnet
+ knitr
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.0

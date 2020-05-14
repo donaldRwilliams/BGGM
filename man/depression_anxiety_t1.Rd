@@ -34,9 +34,9 @@ likert scale (depression: 9; anxiety: 7).
                      in some way?
 }
 
+  \strong{Anxiety}
   \itemize{
 
-  \strong{Anxiety}
 
 
   \item \code{GAD1} Feeling nervous, anxious, or on edge
