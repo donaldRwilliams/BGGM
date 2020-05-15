@@ -40,6 +40,17 @@ Provides the selected graph (of differences) based on the Bayes factor
 ##################
 ### example 1: ###
 ##################
+# data
+Y <- bfi
+
+# males and females
+Ymale <- subset(Y, gender == 1,
+                   select = -c(gender,
+                               education))[,1:10]
+
+Yfemale <- subset(Y, gender == 2,
+                     select = -c(gender,
+                                 education))[,1:10]
 
 # fit model
 fit <- ggm_compare_explore(Ymale, Yfemale,

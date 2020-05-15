@@ -1,23 +1,53 @@
-#'  GGSelect Partial Correlattion Differences for \code{ggm_compare_estimate} Objects
+#' @title Graph Selection for \code{ggm_compare_estimate} Objects
+
+#' @description Provides the selected graph (of differences) based on credible intervals for
+#' the partial correlations that did not contain zero
+#' \inserCite{Williams2019}{BGGM}.
 #'
-#' @name select.ggm_compare_estimate
+#' @name select.estimate
 #'
-#' @param object object of class \code{ggm_compare_estimate}
+#' @param object An object of class \code{estimate.default}.
 #'
-#' @param cred credible interval width used for the decision rule
+#' @param cred Numeric. The credible interval width for selecting the graph
+#'  (defaults to 0.95; must be between 0 and 1).
 #'
 #' @param ... not currently used
 #'
-#' @return A list of class \code{select.ggm_compare_estimate}:
-#' \code{rope} = NULL:
+#' @return The returned object of class \code{select.ggm_compare_estimate} contains a lot of information that
+#'         is used for printing and plotting the results. For users of \strong{BGGM}, the following
+#'         are the useful objects:
+#'
+#'
 #' \itemize{
-#' \item \code{mat_adj} adjacency matrix (one for each contrast)
-#' \item \code{mat_pcor} selected partial correlations (one for each contrast)
-#' \item \code{call} \code{match.call()}
-#' \item \code{object} object of class \code{ggm_compare_estimate}
-#' \item \code{rope} region of practical equivalence
-#' \item \code{cred} credible interval
-#' \item \code{prob} posterior probability
+#'
+#' \item \code{mean_diff} A list of matrices for each group comparsion (partial correlation differences).
+#'
+#' \item \code{pcor_adj} A list of weighted adjacency matrices for each group comparsion.
+#'
+#' \item \code{adj} A list of adjacency matrices for each group comparsion.
+#'
+#' }
+#'
+#' @examples
+#' \donttest{
+#'
+#' ##################
+#' ### example 1: ###
+#' ##################
+#' data
+#' Y <- bfi
+#' males and females
+#'
+#' Ymale <- subset(Y, gender == 1,
+#'                select = -c(gender,
+#'                            education))
+#' # fit model
+#' fit <- ggm_compare_estimate(Ymale, Yfemale,
+#'                            type = "continuous")
+#'
+#'
+#' E <- select(fit)
+#'
 #' }
 #' @export
 select.ggm_compare_estimate <- function(object,
