@@ -8,6 +8,4 @@ os:
   - linux
   - osx
 
-install:
-  - Rscript -e "if (!require('devtools')) install.packages('devtools')"
-  - Rscript -e "devtools::install_github('cjvanlissa/bain')"
+r_packages: lavaan
