@@ -45,13 +45,15 @@ The methods in **BGGM** build upon existing algorithms that are
 well-known in the literature. The central contribution of **BGGM** is to
 extend those approaches:
 
-<!-- and (2) hypothesis testing -->
+1.  Bayesian estimation with the novel matrix\(-F\) prior distribution .
 
-<!-- \insertCite{Williams2019_bf}{BGGM}. The key distinction is that the former focuses on either the -->
+<!-- end list -->
 
-<!-- posterior or posterior predictive distribution, whereas the latter focuses on model comparison -->
+  - Estimation [`estimate`](#Estimate)
 
-<!-- with the Bayes factor. The methods in \strong{BGGM} build upon existing algorithms that are well-known in the literature. The central contribution of \strong{BGGM} is to extend those approaches: -->
+# Illustrative Examples
+
+## Estimate
 
 ## References
 
