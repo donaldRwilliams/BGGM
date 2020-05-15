@@ -26,8 +26,8 @@ library(BGGM)
 
 The `R` package **BGGM** provides tools for making Bayesian inference in
 Gaussian graphical models (GGM). The methods are organized around two general 
-approaches for Bayesian inference: (1) estimation [@Williams2019a] and (2) hypothesis 
-testing [@Williams201b]. The key distinction is that the former focuses on either 
+approaches for Bayesian inference: (1) estimation [@Williams2019] and (2) hypothesis 
+testing [@Williams2019_bf]. The key distinction is that the former focuses on either 
 the posterior or posterior predictive distribution, whereas the latter focuses on 
 model comparison with the Bayes factor.
 
@@ -60,17 +60,17 @@ The central contribution of **BGGM** is to extend those approaches:
 
 1.  Bayesian estimation with the novel matrix-F prior distribution [@Mulder2018]
   
-    + [Estimation](#bayesian-estimation) [@Williams2019a]
+    + [Estimation](#bayesian-estimation) [@Williams2019]
 
 2. Bayesian hypothesis testing with the matrix-F prior distribution [@Mulder2018].
 
-    + [Exploratory hypothesis testing](#Exploratory) [@Williams2019b].
+    + [Exploratory hypothesis testing](#Exploratory) [@Williams2019_bf].
   
-    + [Confirmatory hypothesis testing](#Confirmatory) [@Williams2019b].
+    + [Confirmatory hypothesis testing](#Confirmatory) [@Williams2019_bf].
     
 3. Comparing Gaussian graphical models
     
-    + [Partial correlation differences](#partial-correlation-differences) [@Williams2019a]
+    + [Partial correlation differences](#partial-correlation-differences) [@Williams2019]
     
     + [Posterior predictive check](#posterior-predictive check) [@williams2020comparing]
     
@@ -80,10 +80,10 @@ The central contribution of **BGGM** is to extend those approaches:
 
 4. Extending inference beyond the conditional (in)dependence structure
 
-    +  [Predictability](#Predictability) [@Williams2019a]
+    +  [Predictability](#Predictability) [@Williams2019]
     
     +  [Posterior uncertainty intervals](#posterior-uncertainty) in the 
-       partial correlations [@Williams2019a]
+       partial correlations [@Williams2019]
        
     +  [Custom Network Statistics](#custom-network-statistics)
     
@@ -91,7 +91,22 @@ The central contribution of **BGGM** is to extend those approaches:
 The computationally intensive tasks are written in `c++` via the `R` package **Rcpp** [@eddelbuettel2011rcpp] and the `c++` library **Armadillo** [@sanderson2016armadillo]. The Bayes factors are computed with the `R` package **BFpack** [@mulder2019bfpack]. Furthermore, there are plotting functions
 for each method, control variables can be included in the model (e.g., `~ gender`), and there is support for missing values (see `bggm_missing`).
 
+## Supported Data Types:
 
+* **Continuous**--the continuous method was described [in  @Williams2019_bf].
+
+* **Binary**--the binary method builds directly upon [-@talhouk2012efficient]
+  that, in turn, built upon the approaches of [-lawrence2008bayesian] and
+  [-webb2008bayesian;textual] (to name a few).
+  
+* **Ordinal**--the ordinal methods require sampling thresholds. There are two approach 
+   included in **BGGM**. The customary approach described in [-@albert1993bayesian] 
+   (the default) andthe 'Cowles' algorithm described in [- @cowles1996accelerating].
+   
+* **Mixed**--the mixed data (a combination of discrete and continuous) method was introduced
+ in [-@hoff2007extending;textual]. This is a semi-parametric copula model
+ (i.e., a copula GGM) based on the ranked likelihood. Note that this can be used for data
+ consisting entirely of ordinal data (not restricted to "mixed" data).
 
 # Illustrative Examples
 

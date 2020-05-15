@@ -12,11 +12,10 @@ Status](https://travis-ci.org/donaldRwilliams/BGGM.svg?branch=master)](https://t
 The `R` package **BGGM** provides tools for making Bayesian inference in
 Gaussian graphical models (GGM). The methods are organized around two
 general approaches for Bayesian inference: (1) estimation (D. R.
-Williams 2019) and (2) hypothesis testing
-(<span class="citeproc-not-found" data-reference-id="Williams201b">**???**</span>).
-The key distinction is that the former focuses on either the posterior
-or posterior predictive distribution, whereas the latter focuses on
-model comparison with the Bayes factor.
+Williams 2019) and (2) hypothesis testing (D. R. Williams and Mulder
+2019). The key distinction is that the former focuses on either the
+posterior or posterior predictive distribution, whereas the latter
+focuses on model comparison with the Bayes factor.
 
 ## Installation
 
@@ -92,6 +91,26 @@ Furthermore, there are plotting functions for each method, control
 variables can be included in the model (e.g., `~ gender`), and there is
 support for missing values (see `bggm_missing`).
 
+## Supported Data Types:
+
+  - **Continuous**–the continuous method was described (in D. R.
+    Williams and Mulder 2019).
+
+  - **Binary**–the binary method builds directly upon (2012) that, in
+    turn, built upon the approaches of \[-lawrence2008bayesian\] and
+    \[-webb2008bayesian;textual\] (to name a few).
+
+  - **Ordinal**–the ordinal methods require sampling thresholds. There
+    are two approach included in **BGGM**. The customary approach
+    described in (1993) (the default) andthe ‘Cowles’ algorithm
+    described in (- Cowles 1996).
+
+  - **Mixed**–the mixed data (a combination of discrete and continuous)
+    method was introduced in \[(2007);textual\]. This is a
+    semi-parametric copula model (i.e., a copula GGM) based on the
+    ranked likelihood. Note that this can be used for data consisting
+    entirely of ordinal data (not restricted to “mixed” data).
+
 # Illustrative Examples
 
 ## Bayesian Estimation
@@ -128,11 +147,34 @@ support for missing values (see `bggm_missing`).
 
 <div id="refs" class="references">
 
+<div id="ref-albert1993bayesian">
+
+Albert, James H, and Siddhartha Chib. 1993. “Bayesian Analysis of Binary
+and Polychotomous Response Data.” *Journal of the American Statistical
+Association* 88 (422): 669–79.
+
+</div>
+
+<div id="ref-cowles1996accelerating">
+
+Cowles, Mary Kathryn. 1996. “Accelerating Monte Carlo Markov Chain
+Convergence for Cumulative-Link Generalized Linear Models.” *Statistics
+and Computing* 6 (2): 101–11.
+
+</div>
+
 <div id="ref-eddelbuettel2011rcpp">
 
 Eddelbuettel, Dirk, Romain François, J Allaire, Kevin Ushey, Qiang Kou,
 N Russel, John Chambers, and D Bates. 2011. “Rcpp: Seamless R and C++
 Integration.” *Journal of Statistical Software* 40 (8): 1–18.
+
+</div>
+
+<div id="ref-hoff2007extending">
+
+Hoff, Peter D. 2007. “Extending the Rank Likelihood for Semiparametric
+Copula Estimation.” *The Annals of Applied Statistics* 1 (1): 265–83.
 
 </div>
 
@@ -161,7 +203,16 @@ C++ Library for Linear Algebra.” *Journal of Open Source Software* 1
 
 </div>
 
-<div id="ref-Williams2019a">
+<div id="ref-talhouk2012efficient">
+
+Talhouk, Aline, Arnaud Doucet, and Kevin Murphy. 2012. “Efficient
+Bayesian Inference for Multivariate Probit Models with Sparse Inverse
+Correlation Matrices.” *Journal of Computational and Graphical
+Statistics* 21 (3): 739–57.
+
+</div>
+
+<div id="ref-Williams2019">
 
 Williams, Donald R. 2019. “Bayesian Estimation for Gaussian Graphical
 Models: Structure Learning, Predictability, and Network Comparisons.”
@@ -169,7 +220,7 @@ Models: Structure Learning, Predictability, and Network Comparisons.”
 
 </div>
 
-<div id="ref-Williams2019b">
+<div id="ref-Williams2019_bf">
 
 Williams, Donald R., and Joris Mulder. 2019. “Bayesian Hypothesis
 Testing for Gaussian Graphical Models: Conditional Independence and
