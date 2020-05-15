@@ -7,3 +7,7 @@ warnings_are_errors: false
 os:
   - linux
   - osx
+
+install:
+  - Rscript -e "if (!require('devtools')) install.packages('devtools')"
+  - Rscript -e "devtools::install_github('cjvanlissa/bain')"
