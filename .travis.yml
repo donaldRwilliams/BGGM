@@ -8,4 +8,16 @@ os:
   - linux
   - osx
 
-r_packages: lavaan
+r_packages:
+  - lavaan
+  - BFpack
+  - mice
+  - glue
+  - scales
+  - ellipsis
+  - vctrs
+  - backports
+  - tidyselect
+  - tidygraph
+  - glmnet
+  - maptools
