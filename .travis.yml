@@ -9,13 +9,13 @@ os:
   - osx
 
 r_packages:
+  - glue
+  - vctrs
   - lavaan
   - BFpack
   - mice
-  - glue
   - scales
   - ellipsis
-  - vctrs
   - backports
   - tidyselect
   - tidygraph
