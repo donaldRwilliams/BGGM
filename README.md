@@ -45,19 +45,41 @@ The methods in **BGGM** build upon existing algorithms that are
 well-known in the literature. The central contribution of **BGGM** is to
 extend those approaches:
 
-1.  Bayesian estimation with the novel matrix\(-F\) prior distribution .
+1.  Bayesian estimation with the novel matrix-F prior distribution
+    (Mulder and Pericchi 2018).
 
 <!-- end list -->
 
-  - Estimation [`estimate`](#Estimate)
+  - Estimation [`estimate`](#Estimate) (Williams 2019)
 
+<!-- end list -->
+
+2.  Bayesian hypothesis testing with the matrix-F prior distribution
+    (Mulder and Pericchi 2018).
+
+<!-- end list -->
+
+  - [Exploratory hypothesis testing](Exploratory%20Hypothesis%20Testing)
+    (Williams and Mulder 2019).
+
+  - 
 # Illustrative Examples
 
 ## Estimate
 
+## Exploratory Hypothesis Testing
+
 ## References
 
 <div id="refs" class="references">
+
+<div id="ref-Mulder2018">
+
+Mulder, Joris, and Luis Pericchi. 2018. “The Matrix-F Prior for
+Estimating and Testing Covariance Matrices.” *Bayesian Analysis*, no. 4:
+1–22. <https://doi.org/10.1214/17-BA1092>.
+
+</div>
 
 <div id="ref-Williams2019">
 
