@@ -14,8 +14,9 @@ Gaussian graphical models (GGM). The methods are organized around two
 general approaches for Bayesian inference: (1) estimation (Williams
 2018) and (2) hypothesis testing (Williams and Mulder 2019). The key
 distinction is that the former focuses on either the posterior or
-posterior predictive distribution, whereas the latter focuses on model
-comparison with the Bayes factor.
+posterior predictive distribution (Gelman, Meng, and Stern 1996; see
+section 5 in Rubin 1984) , whereas the latter focuses on model
+comparison with the Bayes factor (Jeffreys 1961; Kass and Raftery 1995).
 
 ## Installation
 
@@ -62,7 +63,7 @@ extend those approaches:
       - [Partial correlation
         differences](#partial-correlation-differences)
     
-      - [Posterior predictive check](#posterior-predictive%20check)
+      - [Posterior predictive check](#posterior-predictive-check)
     
       - [Exploratory hypothesis testing](#exploratory-groups)
     
@@ -73,7 +74,7 @@ extend those approaches:
     
       - [Predictability](#Predictability)
     
-      - [Posterior uncertainty intervals](#posterior-uncertainty) in the
+      - [Posterior uncertainty intervals](#posterior-uncertatiny) in the
         partial correlations
     
       - [Custom Network Statistics](#custom-network-statistics)
@@ -90,18 +91,18 @@ support for missing values (see `bggm_missing`).
 
   - **Continuous**: the continuous method was described in Williams
     (2018). Note that this is based on the customary [Wishart
-    distribution](https://en.wikipedia.org/wiki/Wishart_distribution)
+    distribution](https://en.wikipedia.org/wiki/Wishart_distribution).
 
-  - **Binary**: the binary method builds directly upon Talhouk, Doucet,
+  - **Binary**: The binary method builds directly upon Talhouk, Doucet,
     and Murphy (2012) that, in turn, built upon the approaches of
     Lawrence et al. (2008) and Webb and Forster (2008) (to name a few).
 
-  - **Ordinal**: the ordinal methods require sampling thresholds. There
+  - **Ordinal**: The ordinal methods require sampling thresholds. There
     are two approach included in **BGGM**. The customary approach
     described in Albert and Chib (1993) (the default) and the ‘Cowles’
     algorithm described in Cowles (1996).
 
-  - **Mixed**: the mixed data (a combination of discrete and continuous)
+  - **Mixed**: The mixed data (a combination of discrete and continuous)
     method was introduced in Hoff (2007). This is a semi-parametric
     copula model (i.e., a copula GGM) based on the ranked likelihood.
     Note that this can be used for *only* ordinal data (not restricted
@@ -206,10 +207,32 @@ Integration.” *Journal of Statistical Software* 40 (8): 1–18.
 
 </div>
 
+<div id="ref-Gelman1996a">
+
+Gelman, Andrew, Xiao-Li Meng, and Hal Stern. 1996. “Posterior predictive
+assessment of model fitness via realized discrepancies. Vol.6, No.4.”
+*Statistica Sinica* 6 (4): 733–807. <https://doi.org/10.1.1.142.9951>.
+
+</div>
+
 <div id="ref-hoff2007extending">
 
 Hoff, Peter D. 2007. “Extending the Rank Likelihood for Semiparametric
 Copula Estimation.” *The Annals of Applied Statistics* 1 (1): 265–83.
+
+</div>
+
+<div id="ref-Jeffreys1961">
+
+Jeffreys, Harold. 1961. *The theory of probability*. Oxford: Oxford
+University Press.
+
+</div>
+
+<div id="ref-Kass1995">
+
+Kass, Robert E, and Adrian E Raftery. 1995. “Bayes Factors.” *Journal of
+the American Statistical Association* 90 (430): 773–95.
 
 </div>
 
@@ -235,6 +258,14 @@ Böing-Messing, Herbert Hoijtink, Marlyne Meijerink, et al. 2019.
 Mulder, Joris, and Luis Pericchi. 2018. “The Matrix-F Prior for
 Estimating and Testing Covariance Matrices.” *Bayesian Analysis*, no. 4:
 1–22. <https://doi.org/10.1214/17-BA1092>.
+
+</div>
+
+<div id="ref-rubin1984bayesianly">
+
+Rubin, Donald B. 1984. “Bayesianly Justifiable and Relevant Frequency
+Calculations for the Applied Statistician.” *The Annals of Statistics*,
+1151–72.
 
 </div>
 

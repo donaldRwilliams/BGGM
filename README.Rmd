@@ -28,8 +28,7 @@ The `R` package **BGGM** provides tools for making Bayesian inference in
 Gaussian graphical models (GGM). The methods are organized around two general 
 approaches for Bayesian inference: (1) estimation [@Williams2019] and (2) hypothesis 
 testing [@Williams2019_bf]. The key distinction is that the former focuses on either 
-the posterior or posterior predictive distribution, whereas the latter focuses on 
-model comparison with the Bayes factor.
+the posterior or posterior predictive distribution [@Gelman1996a; see section 5 in @rubin1984bayesianly] , whereas the latter focuses on model comparison with the Bayes factor [@Jeffreys1961; @Kass1995].
 
 ## Installation
 
@@ -72,7 +71,7 @@ The central contribution of **BGGM** is to extend those approaches:
     
     + [Partial correlation differences](#partial-correlation-differences) 
     
-    + [Posterior predictive check](#posterior-predictive check)
+    + [Posterior predictive check](#posterior-predictive-check)
     
     + [Exploratory hypothesis testing](#exploratory-groups) 
     
@@ -82,29 +81,30 @@ The central contribution of **BGGM** is to extend those approaches:
 
     +  [Predictability](#Predictability) 
     
-    +  [Posterior uncertainty intervals](#posterior-uncertainty) in the 
+    +  [Posterior uncertainty intervals](#posterior-uncertatiny) in the 
        partial correlations
        
     +  [Custom Network Statistics](#custom-network-statistics)
     
     
 The computationally intensive tasks are written in `c++` via the `R` package **Rcpp** [@eddelbuettel2011rcpp] and the `c++` library **Armadillo** [@sanderson2016armadillo]. The Bayes factors are computed with the `R` package **BFpack** [@mulder2019bfpack]. Furthermore, there are plotting functions
-for each method, control variables can be included in the model (e.g., `~ gender`), and there is support for missing values (see `bggm_missing`).
+for each method, control variables can be included in the model (e.g., `~ gender`), 
+and there is support for missing values (see `bggm_missing`).
 
 ## Supported Data Types
 
 * **Continuous**: the continuous method was described in  @Williams2019. Note that 
-                  this is based on the customary [Wishart distribution](https://en.wikipedia.org/wiki/Wishart_distribution)
+                  this is based on the customary [Wishart distribution](https://en.wikipedia.org/wiki/Wishart_distribution).
 
-* **Binary**: the binary method builds directly upon @talhouk2012efficient
+* **Binary**: The binary method builds directly upon @talhouk2012efficient
   that, in turn, built upon the approaches of @lawrence2008bayesian and
   @webb2008bayesian (to name a few).
   
-* **Ordinal**: the ordinal methods require sampling thresholds. There are two approach 
+* **Ordinal**: The ordinal methods require sampling thresholds. There are two approach 
    included in **BGGM**. The customary approach described in @albert1993bayesian 
    (the default) and the 'Cowles' algorithm described in @cowles1996accelerating.
    
-* **Mixed**: the mixed data (a combination of discrete and continuous) method was introduced
+* **Mixed**: The mixed data (a combination of discrete and continuous) method was introduced
  in @hoff2007extending. This is a semi-parametric copula model
  (i.e., a copula GGM) based on the ranked likelihood. Note that this can be used for *only* ordinal data 
  (not restricted to "mixed" data).
