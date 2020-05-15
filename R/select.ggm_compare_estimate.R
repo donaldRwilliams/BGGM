@@ -41,6 +41,11 @@
 #' Ymale <- subset(Y, gender == 1,
 #'                select = -c(gender,
 #'                            education))
+#'
+#' Yfemale <- subset(Y, gender == 2,
+#'                   select = -c(gender,
+#'                               education))
+#'
 #' # fit model
 #' fit <- ggm_compare_estimate(Ymale, Yfemale,
 #'                            type = "continuous")
