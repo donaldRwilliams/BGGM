@@ -1,11 +1,10 @@
-#'  Select Partial Correlattion Differences for \code{ggm_compare_estimate} Objects
+#'  GGSelect Partial Correlattion Differences for \code{ggm_compare_estimate} Objects
+#'
 #' @name select.ggm_compare_estimate
 #'
 #' @param object object of class \code{ggm_compare_estimate}
 #'
 #' @param cred credible interval width used for the decision rule
-#'
-#' @param rope region of practical equivalence
 #'
 #' @param ... not currently used
 #'
@@ -23,7 +22,6 @@
 #' @export
 select.ggm_compare_estimate <- function(object,
                                         cred = 0.95,
-                                        rope = NULL,
                                         ...) {
 
   # number of contrasts

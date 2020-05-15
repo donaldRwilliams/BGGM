@@ -2,16 +2,14 @@
 % Please edit documentation in R/select.ggm_compare_estimate.R
 \name{select.ggm_compare_estimate}
 \alias{select.ggm_compare_estimate}
-\title{Select Partial Correlattion Differences for \code{ggm_compare_estimate} Objects}
+\title{GGSelect Partial Correlattion Differences for \code{ggm_compare_estimate} Objects}
 \usage{
-\method{select}{ggm_compare_estimate}(object, cred = 0.95, rope = NULL, ...)
+\method{select}{ggm_compare_estimate}(object, cred = 0.95, ...)
 }
 \arguments{
 \item{object}{object of class \code{ggm_compare_estimate}}
 
 \item{cred}{credible interval width used for the decision rule}
-
-\item{rope}{region of practical equivalence}
 
 \item{...}{not currently used}
 }
@@ -29,5 +27,5 @@ A list of class \code{select.ggm_compare_estimate}:
 }
 }
 \description{
-Select Partial Correlattion Differences for \code{ggm_compare_estimate} Objects
+GGSelect Partial Correlattion Differences for \code{ggm_compare_estimate} Objects
 }

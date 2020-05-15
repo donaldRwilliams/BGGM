@@ -7,17 +7,103 @@
 \method{select}{explore}(object, BF_cut = 3, alternative = "two.sided", ...)
 }
 \arguments{
-\item{object}{object of class \code{explore.default}}
+\item{object}{An object of class \code{explore.default}}
 
-\item{BF_cut}{evidentiary threshold}
+\item{BF_cut}{Numeric. Threshold for including an edge (defaults to 3).}
 
-\item{alternative}{type of hypothesis (see notes)}
+\item{alternative}{A character string specifying the alternative hypothesis. It
+must be one of "two.sided" (default), "greater", "less",
+or "exhuastive". See note for futher details.}
 
-\item{...}{currently not used}
+\item{...}{Currently ignored.}
 }
 \value{
-list of class \code{select.explore}:
+The returned object of class \code{select.explore} contains a lot of information that
+        is used for printing and plotting the results. For users of \strong{BGGM}, the following
+        are the useful objects:
+
+
+\code{alternative = "two.sided"}
+
+ \itemize{
+
+ \item \code{pcor_mat_zero} Selected partial correlation matrix (weighted adjacency).
+
+ \item \code{pcor_mat} Partial correlation matrix (posterior mean).
+
+ \item \code{Adj_10} Adjacency matrix for the selected edges.
+
+ \item \code{Adj_01} Adjacency matrix for which there was
+                     evidence for the null hypothesis.
+ }
+
+\code{alternative = "greater"} and \code{"less"}
+
+ \itemize{
+
+ \item \code{pcor_mat_zero} Selected partial correlation matrix (weighted adjacency).
+
+ \item \code{pcor_mat} Partial correlation matrix (posterior mean).
+
+ \item \code{Adj_20} Adjacency matrix for the selected edges.
+
+ \item \code{Adj_02} Adjacency matrix for which there was
+                     evidence for the null hypothesis (see note).
+ }
+
+\code{alternative = "exhaustive"}
+
+\itemize{
+
+\item \code{post_prob} A data frame that included the posterior hypothesis probabilities.
+
+\item \code{neg_mat} Adjacency matrix for which there was evidence for negative edges.
+
+\item \code{pos_mat} Adjacency matrix for which there was evidence for positive edges.
+
+\item \code{neg_mat} Adjacency matrix for which there was
+                     evidence for the null hypothesis (see note).
+
+ \item \code{pcor_mat} Partial correlation matrix (posterior mean). The weighted adjacency
+ matrices can be computed by multiplying \code{pcor_mat} with an adjacency matrix.
+
+}
 }
 \description{
-GGM Select: Explore
+Provides the selected graph based on the Bayes factor
+\inserCite{Williams2019_bf}{BGGM}.
+}
+\details{
+Exhaustive provide the posterior hypothesis probabilities for
+a positive, negative, or null relation \inserCite{@see Table 3 in @Williams2019_bf}{BGGM}.
+}
+\note{
+Care must be taken with the options \code{alternative = "less"} and
+      \code{alternative = "greater"}. This is because the full parameter space is not included,
+      such, for  \code{alternative = "greater"}, there can be evidence for the "null" when
+      the relation is negative. This inference is correct: the null model better predicted
+      the data than the positive model. But note this is relative and does \strong{not}
+      provide absolute evidence for the null hypothesis.
+}
+\examples{
+
+\donttest{
+#################
+### example 1 ###
+#################
+
+#  data
+Y <- bfi[,1:25]
+
+# fit model
+fit <- explore(Y)
+
+# edge set
+E <- select(fit,
+            alternative = "exhaustive")
+
+}
+}
+\seealso{
+\code{\link{explore}} and \code{\link{ggm_compare_explore}} for several examples.
 }

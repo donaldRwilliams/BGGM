@@ -2,7 +2,7 @@
 % Please edit documentation in R/select.estimate.R
 \name{select.estimate}
 \alias{select.estimate}
-\title{GGM Select: Estimation}
+\title{Graph Selection for \code{estimate} Objects}
 \usage{
 \method{select}{estimate}(object, cred = 0.95, alternative = "two.sided", ...)
 }
@@ -16,7 +16,7 @@
 must be one of "two.sided" (default), "greater"  or "less".
 See note for futher details.}
 
-\item{...}{Not currently used.}
+\item{...}{Currently ignored.}
 }
 \value{
 The returned object of class \code{select.estimate} contains a lot of information that
@@ -24,6 +24,7 @@ The returned object of class \code{select.estimate} contains a lot of informatio
         are the useful objects:
 
 \itemize{
+
 \item \code{pcor_adj} Selected partial correlation matrix (weighted adjacency).
 \item \code{adj} Adjacency matrix for the selected edges
 \item \code{object} An object of class \code{estimate} (the fitted model).
@@ -31,8 +32,9 @@ The returned object of class \code{select.estimate} contains a lot of informatio
 }
 }
 \description{
-Provides the selected graph based on credible intervals for the partial correlations
-that did not contain of zero \inserCite{Williams2019}{BGGM}.
+Provides the selected graph based on credible intervals for
+the partial correlations that did not contain zero
+\inserCite{Williams2019}{BGGM}.
 }
 \details{
 This package was built for the social-behavioral sciences in particular. In these applications, there is
@@ -57,6 +59,9 @@ E <- select(fit)
 }
 
 }
+\references{
+\insertAllCited{}
+}
 \seealso{
-estimate ggm_compare_estimate
+\code{\link{estimate}} and \code{\link{ggm_compare_estimate}} for several examples.
 }
