@@ -7,3 +7,8 @@ warnings_are_errors: false
 os:
   - linux
   - osx
+
+ homebrew:
+    packages:
+    - lavaan
+    - bain
