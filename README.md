@@ -12,10 +12,11 @@ Status](https://travis-ci.org/donaldRwilliams/BGGM.svg?branch=master)](https://t
 The `R` package **BGGM** provides tools for making Bayesian inference in
 Gaussian graphical models (GGM). The methods are organized around two
 general approaches for Bayesian inference: (1) estimation (D. R.
-Williams 2019) and (2) hypothesis testing (D. R. Williams and Mulder
-2019). The key distinction is that the former focuses on either the
-posterior or posterior predictive distribution, whereas the latter
-focuses on model comparison with the Bayes factor.
+Williams 2019) and (2) hypothesis testing
+(<span class="citeproc-not-found" data-reference-id="Williams201b">**???**</span>).
+The key distinction is that the former focuses on either the posterior
+or posterior predictive distribution, whereas the latter focuses on
+model comparison with the Bayes factor.
 
 ## Installation
 
@@ -160,7 +161,7 @@ C++ Library for Linear Algebra.” *Journal of Open Source Software* 1
 
 </div>
 
-<div id="ref-Williams2019">
+<div id="ref-Williams2019a">
 
 Williams, Donald R. 2019. “Bayesian Estimation for Gaussian Graphical
 Models: Structure Learning, Predictability, and Network Comparisons.”
@@ -168,7 +169,7 @@ Models: Structure Learning, Predictability, and Network Comparisons.”
 
 </div>
 
-<div id="ref-Williams2019_bf">
+<div id="ref-Williams2019b">
 
 Williams, Donald R., and Joris Mulder. 2019. “Bayesian Hypothesis
 Testing for Gaussian Graphical Models: Conditional Independence and

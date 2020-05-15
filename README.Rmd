@@ -26,8 +26,8 @@ library(BGGM)
 
 The `R` package **BGGM** provides tools for making Bayesian inference in
 Gaussian graphical models (GGM). The methods are organized around two general 
-approaches for Bayesian inference: (1) estimation [@Williams2019] and (2) hypothesis 
-testing [@Williams2019_bf]. The key distinction is that the former focuses on either 
+approaches for Bayesian inference: (1) estimation [@Williams2019a] and (2) hypothesis 
+testing [@Williams201b]. The key distinction is that the former focuses on either 
 the posterior or posterior predictive distribution, whereas the latter focuses on 
 model comparison with the Bayes factor.
 
@@ -60,17 +60,17 @@ The central contribution of **BGGM** is to extend those approaches:
 
 1.  Bayesian estimation with the novel matrix-F prior distribution [@Mulder2018]
   
-    + [Estimation](#bayesian-estimation) [@Williams2019]
+    + [Estimation](#bayesian-estimation) [@Williams2019a]
 
 2. Bayesian hypothesis testing with the matrix-F prior distribution [@Mulder2018].
 
-    + [Exploratory hypothesis testing](#Exploratory) [@Williams2019_bf].
+    + [Exploratory hypothesis testing](#Exploratory) [@Williams2019b].
   
-    + [Confirmatory hypothesis testing](#Confirmatory) [@Williams2019_bf].
+    + [Confirmatory hypothesis testing](#Confirmatory) [@Williams2019b].
     
 3. Comparing Gaussian graphical models
     
-    + [Partial correlation differences](#partial-correlation-differences) [@Williams2019]
+    + [Partial correlation differences](#partial-correlation-differences) [@Williams2019a]
     
     + [Posterior predictive check](#posterior-predictive check) [@williams2020comparing]
     
@@ -80,10 +80,10 @@ The central contribution of **BGGM** is to extend those approaches:
 
 4. Extending inference beyond the conditional (in)dependence structure
 
-    +  [Predictability](#Predictability) [@Williams2019]
+    +  [Predictability](#Predictability) [@Williams2019a]
     
     +  [Posterior uncertainty intervals](#posterior-uncertainty) in the 
-       partial correlations [@Williams2019]
+       partial correlations [@Williams2019a]
        
     +  [Custom Network Statistics](#custom-network-statistics)
     
