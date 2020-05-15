@@ -49,7 +49,7 @@ remotes::install_github("donaldRwilliams/BGGM")
 ```
 
 Note that the developmental version is recommended, due to the algorithims being written in `c++` and 
-support for all data types (e.g., ordinal). As of 5/15/2020, the developmental version is essentially
+support for all data types. The developmental version is essentially
 **BGGM** version 2.0.0.
 
 
@@ -93,7 +93,7 @@ for each method, control variables can be included in the model (e.g., `~ gender
 
 ## Supported Data Types
 
-* **Continuous**: the continuous method was described [in  @Williams2019].
+* **Continuous**: the continuous method was described in  @Williams2019.
 
 * **Binary**: the binary method builds directly upon [-@talhouk2012efficient]
   that, in turn, built upon the approaches of [-lawrence2008bayesian] and

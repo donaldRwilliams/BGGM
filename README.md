@@ -11,11 +11,11 @@ Status](https://travis-ci.org/donaldRwilliams/BGGM.svg?branch=master)](https://t
 
 The `R` package **BGGM** provides tools for making Bayesian inference in
 Gaussian graphical models (GGM). The methods are organized around two
-general approaches for Bayesian inference: (1) estimation (D. R.
-Williams 2019) and (2) hypothesis testing (D. R. Williams and Mulder
-2019). The key distinction is that the former focuses on either the
-posterior or posterior predictive distribution, whereas the latter
-focuses on model comparison with the Bayes factor.
+general approaches for Bayesian inference: (1) estimation (Williams
+2018) and (2) hypothesis testing (Williams and Mulder 2019). The key
+distinction is that the former focuses on either the posterior or
+posterior predictive distribution, whereas the latter focuses on model
+comparison with the Bayes factor.
 
 ## Installation
 
@@ -35,9 +35,8 @@ remotes::install_github("donaldRwilliams/BGGM")
 ```
 
 Note that the developmental version is recommended, due to the
-algorithims being written in `c++` and support for all data types (e.g.,
-ordinal). As of 5/15/2020, the developmental version is essentially
-**BGGM** version 2.0.0.
+algorithims being written in `c++` and support for all data types. The
+developmental version is essentially **BGGM** version 2.0.0.
 
 # Overview
 
@@ -48,22 +47,21 @@ extend those approaches:
 1.  Bayesian estimation with the novel matrix-F prior distribution
     (Mulder and Pericchi 2018)
     
-      - [Estimation](#bayesian-estimation) (D. R. Williams 2019)
+      - [Estimation](#bayesian-estimation) (Williams 2018)
 
 2.  Bayesian hypothesis testing with the matrix-F prior distribution
     (Mulder and Pericchi 2018).
     
-      - [Exploratory hypothesis testing](#Exploratory) (D. R. Williams
-        and Mulder 2019).
+      - [Exploratory hypothesis testing](#Exploratory) (Williams and
+        Mulder 2019).
     
-      - [Confirmatory hypothesis testing](#Confirmatory) (D. R. Williams
-        and Mulder 2019).
+      - [Confirmatory hypothesis testing](#Confirmatory) (Williams and
+        Mulder 2019).
 
 3.  Comparing Gaussian graphical models
     
       - [Partial correlation
-        differences](#partial-correlation-differences) (D. R. Williams
-        2019)
+        differences](#partial-correlation-differences) (Williams 2018)
     
       - [Posterior predictive check](#posterior-predictive%20check)
         (Williams et al. 2020)
@@ -76,10 +74,10 @@ extend those approaches:
 
 4.  Extending inference beyond the conditional (in)dependence structure
     
-      - [Predictability](#Predictability) (D. R. Williams 2019)
+      - [Predictability](#Predictability) (Williams 2018)
     
       - [Posterior uncertainty intervals](#posterior-uncertainty) in the
-        partial correlations (D. R. Williams 2019)
+        partial correlations (Williams 2018)
     
       - [Custom Network Statistics](#custom-network-statistics)
 
@@ -91,21 +89,21 @@ Furthermore, there are plotting functions for each method, control
 variables can be included in the model (e.g., `~ gender`), and there is
 support for missing values (see `bggm_missing`).
 
-## Supported Data Types:
+## Supported Data Types
 
-  - **Continuous**–the continuous method was described (in D. R.
-    Williams and Mulder 2019).
+  - **Continuous**: the continuous method was described in Williams
+    (2018).
 
-  - **Binary**–the binary method builds directly upon (2012) that, in
+  - **Binary**: the binary method builds directly upon (2012) that, in
     turn, built upon the approaches of \[-lawrence2008bayesian\] and
     \[-webb2008bayesian;textual\] (to name a few).
 
-  - **Ordinal**–the ordinal methods require sampling thresholds. There
+  - **Ordinal**: the ordinal methods require sampling thresholds. There
     are two approach included in **BGGM**. The customary approach
     described in (1993) (the default) andthe ‘Cowles’ algorithm
     described in (- Cowles 1996).
 
-  - **Mixed**–the mixed data (a combination of discrete and continuous)
+  - **Mixed**: the mixed data (a combination of discrete and continuous)
     method was introduced in \[(2007);textual\]. This is a
     semi-parametric copula model (i.e., a copula GGM) based on the
     ranked likelihood. Note that this can be used for data consisting
@@ -214,7 +212,7 @@ Statistics* 21 (3): 739–57.
 
 <div id="ref-Williams2019">
 
-Williams, Donald R. 2019. “Bayesian Estimation for Gaussian Graphical
+Williams, Donald R. 2018. “Bayesian Estimation for Gaussian Graphical
 Models: Structure Learning, Predictability, and Network Comparisons.”
 *arXiv*. <https://doi.org/10.31234/OSF.IO/X8DPR>.
 
