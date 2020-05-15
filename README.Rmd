@@ -156,13 +156,17 @@ The residue is a suite of useful methods not explicitly for GGMs:
   and continous (Pearson's) data.
   
   + Tetrachoric
-  
-```{r}
+
+```{r, echo=FALSE}
+load(file = "readme_models/binary_cors.rda")
+```
+
+```{r, eval=FALSE}
 # binary data
 Y <- women_math[1:500,]
-.Random.seed <- .Random.seed
-cors <- zero_order_cors(Y, type = "binary", iter = 250)
 
+cors <- zero_order_cors(Y, type = "binary", 
+                        iter = 250)
 ```
 
 ```{r, echo=FALSE}
@@ -173,6 +177,7 @@ knitr::kable(round(cors$R_mean, 3),
              caption = "Tetrachoric Correlations")
 ```
 
+Note that the object `cors` also includes the sampled correlation matrices (in this case 250) in an array.
   
 * Multivariate regression for binary (probit), ordinal (probit),
   mixed (rank likelihood), and continous data.

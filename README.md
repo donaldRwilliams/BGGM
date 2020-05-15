@@ -147,8 +147,33 @@ inverse covariance matrix). The residue is a suite of useful methods not
 explicitly for GGMs:
 
   - Bivariate correlations for binary (tetrachoric), ordinal
-    (polychoric), mixed (rank based), and continous (Pearson’s) data
-    (`zero_order_cors`).
+    (polychoric), mixed (rank based), and continous (Pearson’s) data.
+    
+      - Tetrachoric
+
+<!-- end list -->
+
+``` r
+# binary data
+Y <- women_math[1:500,]
+
+cors <- zero_order_cors(Y, type = "binary", 
+                        iter = 250)
+```
+
+|   |       1 |       2 |       3 |       4 |       5 |       6 |
+| - | ------: | ------: | ------: | ------: | ------: | ------: |
+| 1 |   1.000 | \-0.198 |   0.506 |   0.122 | \-0.140 |   0.098 |
+| 2 | \-0.198 |   1.000 | \-0.482 | \-0.013 | \-0.146 | \-0.146 |
+| 3 |   0.506 | \-0.482 |   1.000 |   0.310 | \-0.343 |   0.351 |
+| 4 |   0.122 | \-0.013 |   0.310 |   1.000 | \-0.363 |   0.169 |
+| 5 | \-0.140 | \-0.146 | \-0.343 | \-0.363 |   1.000 | \-0.194 |
+| 6 |   0.098 | \-0.146 |   0.351 |   0.169 | \-0.194 |   1.000 |
+
+Tetrachoric Correlations
+
+Note that the object `cors` also includes the sampled correlation
+matrices (in this case 250) in an array.
 
   - Multivariate regression for binary (probit), ordinal (probit), mixed
     (rank likelihood), and continous data.
