@@ -94,16 +94,15 @@ for each method, control variables can be included in the model (e.g., `~ gender
 ## Supported Data Types
 
 * **Continuous**: the continuous method was described in  @Williams2019. Note that 
-                  this is based on the customary Wishart distribution                 
-                  ([Wikipedia](https://en.wikipedia.org/wiki/Wishart_distribution))
+                  this is based on the customary [Wishart distribution](https://en.wikipedia.org/wiki/Wishart_distribution))
 
 * **Binary**: the binary method builds directly upon @talhouk2012efficient
-  that, in turn, built upon the approaches of lawrence2008bayesian and
+  that, in turn, built upon the approaches of @lawrence2008bayesian and
   @webb2008bayesian (to name a few).
   
 * **Ordinal**: the ordinal methods require sampling thresholds. There are two approach 
-   included in **BGGM**. The customary approach described in [-@albert1993bayesian] 
-   (the default) andthe 'Cowles' algorithm described in @cowles1996accelerating.
+   included in **BGGM**. The customary approach described in @albert1993bayesian 
+   (the default) and the 'Cowles' algorithm described in @cowles1996accelerating.
    
 * **Mixed**: the mixed data (a combination of discrete and continuous) method was introduced
  in @hoff2007extending. This is a semi-parametric copula model

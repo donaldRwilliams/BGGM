@@ -89,18 +89,17 @@ support for missing values (see `bggm_missing`).
 ## Supported Data Types
 
   - **Continuous**: the continuous method was described in Williams
-    (2018). Note that this is based on the customary Wishart
-    distribution  
-    ([Wikipedia](https://en.wikipedia.org/wiki/Wishart_distribution))
+    (2018). Note that this is based on the customary [Wishart
+    distribution](https://en.wikipedia.org/wiki/Wishart_distribution))
 
   - **Binary**: the binary method builds directly upon Talhouk, Doucet,
     and Murphy (2012) that, in turn, built upon the approaches of
-    lawrence2008bayesian and Webb and Forster (2008) (to name a few).
+    Lawrence et al. (2008) and Webb and Forster (2008) (to name a few).
 
   - **Ordinal**: the ordinal methods require sampling thresholds. There
     are two approach included in **BGGM**. The customary approach
-    described in (1993) (the default) andthe ‘Cowles’ algorithm
-    described in (- Cowles 1996).
+    described in Albert and Chib (1993) (the default) and the ‘Cowles’
+    algorithm described in Cowles (1996).
 
   - **Mixed**: the mixed data (a combination of discrete and continuous)
     method was introduced in Hoff (2007). This is a semi-parametric
@@ -172,6 +171,14 @@ Integration.” *Journal of Statistical Software* 40 (8): 1–18.
 
 Hoff, Peter D. 2007. “Extending the Rank Likelihood for Semiparametric
 Copula Estimation.” *The Annals of Applied Statistics* 1 (1): 265–83.
+
+</div>
+
+<div id="ref-lawrence2008bayesian">
+
+Lawrence, Earl, Derek Bingham, Chuanhai Liu, and Vijayan N Nair. 2008.
+“Bayesian Inference for Multivariate Ordinal Data Using Parameter
+Expansion.” *Technometrics* 50 (2): 182–91.
 
 </div>
 
