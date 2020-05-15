@@ -31,7 +31,7 @@ Y <- ptsd[,1:5]
 fit <- estimate(Y, type = "continuous",
                 iter = 250)
 
-posterior_samples(fit)
+samps <- posterior_samples(fit)
 
 ########################################
 ### example 2: control  with formula ###
@@ -50,7 +50,7 @@ fit <- estimate(Y, formula = ~ gender,
                 iter = 250)
 
 # note regression coefficients
-posterior_samples(fit)
+samps <- posterior_samples(fit)
 
 }
 

@@ -1,39 +1,38 @@
 #' GGM Selection: Estimation
+#' @title Graph selection for \code{estimate} Object
+#'
+#' @description Provides the selected graph based on credible intervals for the partial correlations
+#' that did not contain of zero \inserCite{Williams2019}{BGGM}.
+#'
 #' @name select.estimate
 #'
-#' @description Select the edge set for \code{estimate} objects. The graph is determined with
-#' the posterior distribution, in particular credible interval exclusion of zero. This
-#' corresponds to a directional posterior probability \insertCite{Marsman2017a}{BGGM}. For example,
-#' the probability (conditional on the model) of a positive edge is at least 97.5% when the 95%
-#' credible interval excludes zero.
+#' @param object An object of class \code{estimate.default}.
 #'
-#' @param object object of class \code{estimate.default}
-#' @param cred credible interval width used for the decision rule
+#' @param cred Numeric. The credible interval width for selecting the graph
+#'  (defaults to 0.95; must be between 0 and 1).
 #'
-#' @param alternative a character string specifying the alternative hypothesis,
+#' @param alternative A character string specifying the alternative hypothesis. It
 #'                    must be one of "two.sided" (default), "greater"  or "less".
 #'                    See note for futher details.
 
-#' @param ... Not currently used
+#' @param ... Not currently used.
 #'
-#' @references
-#' \insertAllCited{}
 #'
-#' @return An object of class \code{select.estimate}:
+#' @return The returned object of class \code{select.estimate} contains a lot of information that
+#'         is used for printing and plotting the results. For users of \strong{BGGM}, the following
+#'         are the useful objects:
 #'
 #' \itemize{
-#' \item \code{pcor_adj} selected partial correlation matrix
-#' \item \code{adj} adjacency matrix for the selected edges
-#' \item \code{ci} credible interval width
-#' \item \code{object} object of class \code{estimate}
+#' \item \code{pcor_adj} Selected partial correlation matrix (weighted adjacency).
+#' \item \code{adj} Adjacency matrix for the selected edges
+#' \item \code{object} An object of class \code{estimate} (the fitted model).
+#'
 #' }
 #'
-
+#' @seealso estimate ggm_compare_estimate
 #'
 #'
-#' @note
-#'
-#' \strong{Alternative Default:}
+#' @details
 #'
 #' This package was built for the social-behavioral sciences in particular. In these applications, there is
 #' strong theory that expects \emph{all} effects to be positive. This is known as a "positive manifold" and
@@ -41,6 +40,21 @@
 #' \code{alternative = "greater"}. This results in the estimted structure including only positive edges. Further
 #' details can be found at the blog "Dealing with Negative (Red) Edges in Psychological Networks: Frequentist Edition"
 #' (\href{https://donaldrwilliams.github.io/2020/03/29/dealing-with-negative-red-edges-in-psychological-networks-frequentist-edition/}{link})
+#'
+#'
+#' @examples
+#' \donttest{
+#' # data
+#' Y <- bfi[,1:25]
+#'
+#' # estimate
+#' fit <- estimate(Y, iter = 250)
+#'
+#'
+#' # select edge set
+#' E <- select(fit)
+#'
+#' }
 #'
 #' @export
 select.estimate <- function(object,

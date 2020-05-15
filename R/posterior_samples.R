@@ -22,7 +22,7 @@
 #' fit <- estimate(Y, type = "continuous",
 #'                 iter = 250)
 #'
-#' posterior_samples(fit)
+#' samps <- posterior_samples(fit)
 #'
 #' ########################################
 #' ### example 2: control  with formula ###
@@ -41,7 +41,7 @@
 #'                 iter = 250)
 #'
 #' # note regression coefficients
-#' posterior_samples(fit)
+#' samps <- posterior_samples(fit)
 #'
 #' }
 #'
