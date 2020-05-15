@@ -12,3 +12,7 @@ os:
     packages:
     - lavaan
     - bain
+
+addons:
+  apt:
+    packages: libgsl0-dev
