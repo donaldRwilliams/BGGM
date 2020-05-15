@@ -1,7 +1,8 @@
-#' @title GGM Select: Estimation
+#' @title Graph Selection for \code{estimate} Objects
 #'
-#' @description Provides the selected graph based on credible intervals for the partial correlations
-#' that did not contain of zero \inserCite{Williams2019}{BGGM}.
+#' @description Provides the selected graph based on credible intervals for
+#' the partial correlations that did not contain zero
+#' \inserCite{Williams2019}{BGGM}.
 #'
 #' @name select.estimate
 #'
@@ -14,21 +15,24 @@
 #'                    must be one of "two.sided" (default), "greater"  or "less".
 #'                    See note for futher details.
 
-#' @param ... Not currently used.
+#' @param ... Currently ignored.
 #'
+#' @references
+#' \insertAllCited{}
 #'
 #' @return The returned object of class \code{select.estimate} contains a lot of information that
 #'         is used for printing and plotting the results. For users of \strong{BGGM}, the following
 #'         are the useful objects:
 #'
 #' \itemize{
+#'
 #' \item \code{pcor_adj} Selected partial correlation matrix (weighted adjacency).
 #' \item \code{adj} Adjacency matrix for the selected edges
 #' \item \code{object} An object of class \code{estimate} (the fitted model).
 #'
 #' }
 #'
-#' @seealso estimate ggm_compare_estimate
+#' @seealso \code{\link{estimate}} and \code{\link{ggm_compare_estimate}} for several examples.
 #'
 #'
 #' @details
