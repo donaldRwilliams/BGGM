@@ -60,7 +60,7 @@ The central contribution of **BGGM** is to extend those approaches:
 
 1.  Bayesian estimation with the novel matrix-F prior distribution [@Mulder2018]
   
-    + [Estimation](#Bayesian Estimation) [@Williams2019]
+    + [Estimation](#bayesian-estimation) [@Williams2019]
 
 2. Bayesian hypothesis testing with the matrix-F prior distribution [@Mulder2018].
 

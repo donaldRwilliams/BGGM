@@ -11,11 +11,11 @@ Status](https://travis-ci.org/donaldRwilliams/BGGM.svg?branch=master)](https://t
 
 The `R` package **BGGM** provides tools for making Bayesian inference in
 Gaussian graphical models (GGM). The methods are organized around two
-general approaches for Bayesian inference: (1) estimation (Donald R.
-Williams 2019) and (2) hypothesis testing (Donald R. Williams and Mulder
-2019). The key distinction is that the former focuses on either the
-posterior or posterior predictive distribution, whereas the latter
-focuses on model comparison with the Bayes factor.
+general approaches for Bayesian inference: (1) estimation (Williams
+2019) and (2) hypothesis testing (Williams and Mulder 2019). The key
+distinction is that the former focuses on either the posterior or
+posterior predictive distribution, whereas the latter focuses on model
+comparison with the Bayes factor.
 
 ## Installation
 
@@ -48,22 +48,22 @@ extend those approaches:
 1.  Bayesian estimation with the novel matrix-F prior distribution
     (Mulder and Pericchi 2018)
     
-      - [Estimation](#Bayesian%20Estimation) (Donald R. Williams 2019)
+      - [Estimation](#bayesian-estimation) (Williams 2019)
 
 2.  Bayesian hypothesis testing with the matrix-F prior distribution
     (Mulder and Pericchi 2018).
     
-      - [Exploratory hypothesis testing](#Exploratory) (Donald R.
-        Williams and Mulder 2019).
+      - [Exploratory hypothesis testing](#Exploratory) (Williams and
+        Mulder 2019).
     
-      - [Confirmatory hypothesis testing](#Confirmatory) (Donald R.
-        Williams and Mulder 2019).
+      - [Confirmatory hypothesis testing](#Confirmatory) (Williams and
+        Mulder 2019).
 
 3.  Comparing Gaussian Graphical Models
     
       - [Partial correlation
-        differences](#Partial%20Correlation%20Differences)(Donald R.
-        Williams 2019)
+        differences](#Partial%20Correlation%20Differences)(Williams
+        2019)
     
       - [Posterior predictive
         check](#Posterior%20Predictive%20Check)(Williams et al. 2020)
@@ -126,7 +126,7 @@ Order Constraints.” *PsyArXiv*. <https://doi.org/10.31234/osf.io/ypxd8>.
 
 <div id="ref-williams2020comparing">
 
-Williams, Donald R, Philippe Rast, Luis R Pericchi, and Joris Mulder.
+Williams, Donald R., Philippe Rast, Luis R Pericchi, and Joris Mulder.
 2020. “Comparing Gaussian Graphical Models with the Posterior Predictive
 Distribution and Bayesian Model Selection.” *Psychological Methods*.
 
