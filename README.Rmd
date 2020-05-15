@@ -103,7 +103,7 @@ for each method, control variables can be included in the model (e.g., `~ gender
   
 * **Ordinal**: the ordinal methods require sampling thresholds. There are two approach 
    included in **BGGM**. The customary approach described in [-@albert1993bayesian] 
-   (the default) andthe 'Cowles' algorithm described in [- @cowles1996accelerating].
+   (the default) andthe 'Cowles' algorithm described in @cowles1996accelerating.
    
 * **Mixed**: the mixed data (a combination of discrete and continuous) method was introduced
  in @hoff2007extending. This is a semi-parametric copula model
