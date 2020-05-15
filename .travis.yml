@@ -6,7 +6,6 @@ warnings_are_errors: false
 
 os:
   - linux
-  - osx
 
 r_packages:
   - glue
