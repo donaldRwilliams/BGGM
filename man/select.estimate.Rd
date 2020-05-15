@@ -2,7 +2,7 @@
 % Please edit documentation in R/select.estimate.R
 \name{select.estimate}
 \alias{select.estimate}
-\title{Graph selection for \code{estimate} Object}
+\title{GGM Select: Estimation}
 \usage{
 \method{select}{estimate}(object, cred = 0.95, alternative = "two.sided", ...)
 }
@@ -35,10 +35,6 @@ Provides the selected graph based on credible intervals for the partial correlat
 that did not contain of zero \inserCite{Williams2019}{BGGM}.
 }
 \details{
-GGM Selection: Estimation
-
-
-
 This package was built for the social-behavioral sciences in particular. In these applications, there is
 strong theory that expects \emph{all} effects to be positive. This is known as a "positive manifold" and
 this notion has a rich tradition in psychometrics. Hence, this can be incorportated into the graph with

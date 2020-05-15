@@ -1,4 +1,6 @@
-#' @title select explore
+#' GGM Select: Explore
+#'
+#' @title Graph selection for \code{explore} Objects
 #'
 #' @name select.explore
 #'

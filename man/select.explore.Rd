@@ -2,7 +2,7 @@
 % Please edit documentation in R/select.explore.R
 \name{select.explore}
 \alias{select.explore}
-\title{select explore}
+\title{Graph selection for \code{explore} Objects}
 \usage{
 \method{select}{explore}(object, BF_cut = 3, alternative = "two.sided", ...)
 }
@@ -19,5 +19,5 @@
 list of class \code{select.explore}:
 }
 \description{
-select explore
+GGM Select: Explore
 }

@@ -61,6 +61,8 @@ The central contribution of \strong{BGGM} is to extend those approaches:
 
 \item Posterior uncertainty in the partial correlations \code{\link{estimate}}.
 
+\item Custom Network Statistics \code{\link{roll_your_own}}.
+
 
 }
 

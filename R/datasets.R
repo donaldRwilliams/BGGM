@@ -560,11 +560,9 @@ NULL
 
 #' @title Data: Sachs Network
 #'
-#' Protein expression in human immune system cells
+#' @description Protein expression in human immune system cells
 #'
 #' @name Sachs
-#'
-#'
 #'
 #' @docType data
 #'

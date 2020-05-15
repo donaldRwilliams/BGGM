@@ -33,9 +33,41 @@
 #'
 #' @examples
 #' \donttest{
+#' ####################################
+#' ###### example 1: assortment #######
+#' ####################################
+#' # assortment
+#' library(assortnet)
+#'
+#' Y <- BGGM::bfi[,1:10]
+#' membership <- c(rep("a", 5), rep("c", 5))
+#'
+#' # fit model
+#' fit <- estimate(Y = Y, iter = 1000)
+#'
+#' # membership
+#' membership <- c(rep("a", 5), rep("c", 5))
+#'
+#' # define function
+#' f <- function(x,...){
+#'  assortment.discrete(x, ...)$r
+#'}
+#'
+#'
+#' net_stat <- roll_your_own(object = fit,
+#'                           FUN = f,
+#'                           types = membership,
+#'                           weighted = TRUE,
+#'                           SE = FALSE, M = 1)
+#'
+#' # print
+#' net_stat
+#'
+#' # plot
+#' plot(net_stat)
 #'
 #' ############################################
-#' ###### example 1: expected influence #######
+#' ###### example 2: expected influence #######
 #' ############################################
 #' # expected influence from this package
 #' library(networktools)
@@ -63,7 +95,7 @@
 #'
 #'
 #' #######################################
-#' ### example 2: mixed data & bridge ####
+#' ### example 3: mixed data & bridge ####
 #' #######################################
 #' # bridge from this package
 #' library(networktools)

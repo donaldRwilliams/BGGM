@@ -57,6 +57,8 @@
 #'
 #' \item Posterior uncertainty in the partial correlations \code{\link{estimate}}.
 #'
+#' \item Custom Network Statistics \code{\link{roll_your_own}}.
+#'
 #'
 #' }
 #'

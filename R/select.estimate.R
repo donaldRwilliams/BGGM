@@ -1,5 +1,4 @@
-#' GGM Selection: Estimation
-#' @title Graph selection for \code{estimate} Object
+#' @title GGM Select: Estimation
 #'
 #' @description Provides the selected graph based on credible intervals for the partial correlations
 #' that did not contain of zero \inserCite{Williams2019}{BGGM}.
@@ -138,10 +137,10 @@ select.estimate <- function(object,
   returned_object
 }
 
-#' @title S3 select method
+#' @title S3 \code{select} method
 #' @name select
 #' @description S3 select method
-#' @param object object of class \code{estimate}, \code{explore}, or ..
+#' @param object object of class \code{estimate} or\code{explore}
 #' @param ... not currently used
 #' @return \code{select} works with the following methods:
 #' \itemize{

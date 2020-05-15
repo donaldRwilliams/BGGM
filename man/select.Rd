@@ -2,12 +2,12 @@
 % Please edit documentation in R/select.estimate.R
 \name{select}
 \alias{select}
-\title{S3 select method}
+\title{S3 \code{select} method}
 \usage{
 select(object, ...)
 }
 \arguments{
-\item{object}{object of class \code{estimate}, \code{explore}, or ..}
+\item{object}{object of class \code{estimate} or\code{explore}}
 
 \item{...}{not currently used}
 }
