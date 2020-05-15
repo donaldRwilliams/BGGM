@@ -11,11 +11,11 @@ os:
 r_packages:
   - glue
   - vctrs
+  - ellipsis
   - lavaan
   - BFpack
   - mice
   - scales
-  - ellipsis
   - backports
   - tidyselect
   - tidygraph

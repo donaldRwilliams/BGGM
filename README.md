@@ -38,7 +38,7 @@ Note that the developmental version is recommended, due to the
 algorithims being written in `c++` and support for all data types. The
 developmental version is essentially **BGGM** version 2.0.0.
 
-# Overview
+## Overview
 
 The methods in **BGGM** build upon existing algorithms that are
 well-known in the literature. The central contribution of **BGGM** is to
@@ -64,9 +64,9 @@ extend those approaches:
     
       - [Posterior predictive check](#posterior-predictive%20check)
     
-      - [Exploratory hypothesis testing](#exploratory-\(groups\))
+      - [Exploratory hypothesis testing](#exploratory-groups)
     
-      - [Confirmatory hypothesis testing](#confirmatory-\(groups\))
+      - [Confirmatory hypothesis testing](#confirmatory-groups)
 
 4.  Extending inference beyond the conditional (in)dependence structure
     (Williams 2018)
@@ -107,39 +107,39 @@ support for missing values (see `bggm_missing`).
     Note that this can be used for *only* ordinal data (not restricted
     to “mixed” data).
 
-# Illustrative Examples
+## Illustrative Examples
 
-## Bayesian Estimation
+### Bayesian Estimation
 
-### Posterior Sampling
+#### Posterior Sampling
 
-### Analytic
+#### Analytic
 
-## Bayesian Hypothesis Testing
+### Bayesian Hypothesis Testing
 
-### Exploratory
+#### Exploratory
 
-### Confirmatory
+#### Confirmatory
 
-## Comparing Gaussian Graphical Models
+### Comparing Gaussian Graphical Models
 
-### Partial Correlation Differences
+#### Partial Correlation Differences
 
-### Posterior Predictive Check
+#### Posterior Predictive Check
 
-### Exploratory (groups)
+#### Exploratory (groups)
 
-### Confirmatory (groups)
+#### Confirmatory (groups)
 
-## Beyond the Conditional (in)dependence Structure
+### Beyond the Conditional (in)dependence Structure
 
-### Predictability
+#### Predictability
 
-### Posterior Uncertatiny
+#### Posterior Uncertatiny
 
-### Custom Network Statistics
+#### Custom Network Statistics
 
-# Methodological Residue
+## Methodological Residue
 
 The primary focus of **BGGM** is Gaussian graphical modeling (the
 inverse covariance matrix). The residue is a suite of useful methods not
@@ -147,7 +147,7 @@ explicitly for GGMs:
 
   - Bivariate correlations for binary (tetrachoric), ordinal
     (polychoric), mixed (rank based), and continous (Pearson’s) data
-    [zero\_order\_cors](zero_order_cors).
+    (`zero_order_cors`).
 
   - Multivariate regression for binary (probit), ordinal (probit), mixed
     (rank likelihood), and continous data.
@@ -155,7 +155,7 @@ explicitly for GGMs:
   - Multiple regression for binary (probit), ordinal (probit), mixed
     (rank likelihood), and continous data.
 
-# Note on Conditional (In)dependence Models for Latent Data
+## Note on Conditional (In)dependence Models for Latent Data
 
 All of the data types (besides continuous) model latent data. That is,
 unoboserved data that is assumed to be Gaussian distributed. For
@@ -169,7 +169,7 @@ space. This implies that interpration is similar to continuous data, but
 with respect to latent variables. We refer interested users to (see page
 2364, section 2.2, in Webb and Forster 2008).
 
-# High Dimensional Data?
+## High Dimensional Data?
 
 **BGGM** was builit specificially for social-behvarioal scientists. Of
 course, the methods can be used by all researchers. However, there is
@@ -178,7 +178,7 @@ than observations) that are common place in, say, the genetics
 literature. These data are rare in the social-behavioral sciences. In
 the future, support for high-dimensional data may be added to **BGGM**.
 
-# References
+## References
 
 <div id="refs" class="references">
 
