@@ -90,7 +90,7 @@ support for missing values (see `bggm_missing`).
 
   - **Continuous**: the continuous method was described in Williams
     (2018). Note that this is based on the customary [Wishart
-    distribution](https://en.wikipedia.org/wiki/Wishart_distribution))
+    distribution](https://en.wikipedia.org/wiki/Wishart_distribution)
 
   - **Binary**: the binary method builds directly upon Talhouk, Doucet,
     and Murphy (2012) that, in turn, built upon the approaches of
@@ -139,7 +139,46 @@ support for missing values (see `bggm_missing`).
 
 ### Custom Network Statistics
 
-## References
+# Methodological Residue
+
+The primary focus of **BGGM** is Gaussian graphical modeling (the
+inverse covariance matrix). The residue is a suite of useful methods not
+explicitly for GGMs:
+
+  - Bivariate correlations for binary (tetrachoric), ordinal
+    (polychoric), mixed (rank based), and continous (Pearson’s) data
+    [zero\_order\_cors](zero_order_cors).
+
+  - Multivariate regression for binary (probit), ordinal (probit), mixed
+    (rank likelihood), and continous data.
+
+  - Multiple regression for binary (probit), ordinal (probit), mixed
+    (rank likelihood), and continous data.
+
+# Note on Conditional (In)dependence Models for Latent Data
+
+All of the data types (besides continuous) model latent data. That is,
+unoboserved data that is assumed to be Gaussian distributed. For
+example, a tetrachoric correlation (binary data) is a special case of a
+polychoric correlation (ordinal data). Both relations are between
+"theorized normally distributed continuous *latent* variables
+[Wikepedia](https://en.wikipedia.org/wiki/Polychoric_correlation). In
+both instances, the correpsonding partial correlation between observed
+variables is conditioned on the remaining variables in the *latent*
+space. This implies that interpration is similar to continuous data, but
+with respect to latent variables. We refer interested users to (see page
+2364, section 2.2, in Webb and Forster 2008).
+
+# High Dimensional Data?
+
+**BGGM** was builit specificially for social-behvarioal scientists. Of
+course, the methods can be used by all researchers. However, there is
+currently *not* support for high-dimensonal data (i.e., more variables
+than observations) that are common place in, say, the genetics
+literature. These data are rare in the social-behavioral sciences. In
+the future, support for high-dimensional data may be added to **BGGM**.
+
+# References
 
 <div id="refs" class="references">
 
