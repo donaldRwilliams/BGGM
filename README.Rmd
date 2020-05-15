@@ -58,22 +58,26 @@ support for all data types (e.g., ordinal). As of 5/15/2020, the developmental v
 The methods in **BGGM** build upon existing algorithms that are well-known in the literature.
 The central contribution of **BGGM** is to extend those approaches:
 
-1.  Bayesian estimation with the novel matrix-F prior distribution [@Mulder2018].
+1.  Bayesian estimation with the novel matrix-F prior distribution [@Mulder2018]
   
-  + Estimation [`estimate`](#Estimate) [@Williams2019]
+    + Estimation (#Estimation) [@Williams2019]
 
 2. Bayesian hypothesis testing with the matrix-F prior distribution [@Mulder2018].
 
-  + [Exploratory hypothesis testing](Exploratory Hypothesis Testing) [@Williams2019_bf].
+    + [Exploratory hypothesis testing](#Exploratory Hypothesis Testing) [@Williams2019_bf].
   
-  +
+    + [Confirmatory hypothesis testing](#Exploratory Hypothesis Testing) [@Williams2019_bf].
+    
+3. Comparing Gaussian Graphical Models
 
 # Illustrative Examples
 
-## Estimate
+## Estimation
 
 
 ## Exploratory Hypothesis Testing
+
+## Confirmatory Hypothesis Testing
 
 ## References
 
