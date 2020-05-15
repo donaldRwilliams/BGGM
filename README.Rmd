@@ -60,24 +60,52 @@ The central contribution of **BGGM** is to extend those approaches:
 
 1.  Bayesian estimation with the novel matrix-F prior distribution [@Mulder2018]
   
-    + Estimation (#Estimation) [@Williams2019]
+    + [Estimation](#Bayesian Estimation) [@Williams2019]
 
 2. Bayesian hypothesis testing with the matrix-F prior distribution [@Mulder2018].
 
-    + [Exploratory hypothesis testing](#Exploratory Hypothesis Testing) [@Williams2019_bf].
+    + [Exploratory hypothesis testing](#Exploratory) [@Williams2019_bf].
   
-    + [Confirmatory hypothesis testing](#Exploratory Hypothesis Testing) [@Williams2019_bf].
+    + [Confirmatory hypothesis testing](#Confirmatory) [@Williams2019_bf].
     
 3. Comparing Gaussian Graphical Models
+    
+    + [Partial correlation differences](#Partial Correlation Differences)[@Williams2019]
+    
+    + [Posterior predictive check](#Posterior Predictive Check)[@williams2020comparing]
+    
+    + [Exploratory hypothesis testing](#Exploratory (groups))[@williams2020comparing]
+    
+    
+    +
 
 # Illustrative Examples
 
-## Estimation
+## Bayesian Estimation
+
+### Posterior Sampling
+
+### Analytic
 
 
-## Exploratory Hypothesis Testing
+## Bayesian Hypothesis Testing
 
-## Confirmatory Hypothesis Testing
+### Exploratory
+
+### Confirmatory
+
+
+
+## Comparing Gaussian Graphical Models
+
+
+### Partial Correlation Differences
+
+### Posterior Predictive Check
+
+### Exploratory (groups)
+
+### Confirmatory (groups)
 
 ## References
 
