@@ -68,16 +68,30 @@ The central contribution of **BGGM** is to extend those approaches:
   
     + [Confirmatory hypothesis testing](#Confirmatory) [@Williams2019_bf].
     
-3. Comparing Gaussian Graphical Models
+3. Comparing Gaussian graphical models
     
-    + [Partial correlation differences](#Partial Correlation Differences)[@Williams2019]
+    + [Partial correlation differences](#partial-correlation-differences) [@Williams2019]
     
-    + [Posterior predictive check](#Posterior Predictive Check)[@williams2020comparing]
+    + [Posterior predictive check](#posterior-predictive check) [@williams2020comparing]
     
-    + [Exploratory hypothesis testing](#Exploratory (groups))[@williams2020comparing]
+    + [Exploratory hypothesis testing](#exploratory-(groups)) [@williams2020comparing]
+    
+    + [Confirmatory hypothesis testing](#confirmatory-(groups)) [@williams2020comparing]
+
+4. Extending inference beyond the conditional (in)dependence structure
+
+    +  [Predictability](#Predictability) [@Williams2019]
+    
+    +  [Posterior uncertainty intervals](#posterior-uncertainty) in the 
+       partial correlations [@Williams2019]
+       
+    +  [Custom Network Statistics](#custom-network-statistics)
     
     
-    +
+The computationally intensive tasks are written in `c++` via the `R` package **Rcpp** [@eddelbuettel2011rcpp] and the `c++` library **Armadillo** [@sanderson2016armadillo]. The Bayes factors are computed with the `R` package **BFpack** [@mulder2019bfpack]. Furthermore, there are plotting functions
+for each method, control variables can be included in the model (e.g., `~ gender`), and there is support for missing values (see `bggm_missing`).
+
+
 
 # Illustrative Examples
 
@@ -106,6 +120,15 @@ The central contribution of **BGGM** is to extend those approaches:
 ### Exploratory (groups)
 
 ### Confirmatory (groups)
+
+## Beyond the Conditional (in)dependence Structure
+
+### Predictability
+
+### Posterior Uncertatiny
+
+### Custom Network Statistics
+
 
 ## References
 
