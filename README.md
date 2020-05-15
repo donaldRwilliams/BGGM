@@ -140,7 +140,7 @@ support for missing values (see `bggm_missing`).
 
 #### Custom Network Statistics
 
-## Methodological Residue
+## Additional Features
 
 The primary focus of **BGGM** is Gaussian graphical modeling (the
 inverse covariance matrix). The residue is a suite of useful methods not
