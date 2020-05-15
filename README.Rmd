@@ -2,6 +2,7 @@
 output: github_document
 bibliography: inst/REFERENCES.bib
 ---
+
 ```{r, echo = FALSE, message=F}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -26,8 +27,8 @@ library(BGGM)
 
 The `R` package **BGGM** provides tools for making Bayesian inference in
 Gaussian graphical models (GGM). The methods are organized around two general 
-approaches for Bayesian inference: (1) estimation [@Williams2019] and (2) hypothesis 
-testing [@Williams2019_bf]. The key distinction is that the former focuses on either 
+approaches for Bayesian inference: (1) estimation and (2) hypothesis 
+testing. The key distinction is that the former focuses on either 
 the posterior or posterior predictive distribution [@Gelman1996a; see section 5 in @rubin1984bayesianly] , whereas the latter focuses on model comparison with the Bayes factor [@Jeffreys1961; @Kass1995].
 
 ## Installation
@@ -152,7 +153,26 @@ The primary focus of **BGGM** is Gaussian graphical modeling (the inverse covari
 The residue is a suite of useful methods not explicitly for GGMs:
   
 * Bivariate correlations for binary (tetrachoric), ordinal (polychoric), mixed (rank based),
-  and continous (Pearson's) data (`zero_order_cors`).
+  and continous (Pearson's) data.
+  
+  + Tetrachoric
+  
+```{r}
+# binary data
+Y <- women_math[1:500,]
+.Random.seed <- .Random.seed
+cors <- zero_order_cors(Y, type = "binary", iter = 250)
+
+```
+
+```{r, echo=FALSE}
+row.names(cors$R_mean) <- 1:6
+knitr::kable(round(cors$R_mean, 3), 
+             col.names = c("1", "2", "3","4","5", "6"), 
+             row.names = TRUE,
+             caption = "Tetrachoric Correlations")
+```
+
   
 * Multivariate regression for binary (probit), ordinal (probit),
   mixed (rank likelihood), and continous data.
