@@ -12,7 +12,38 @@ Status](https://travis-ci.org/donaldRwilliams/BGGM.svg?branch=master)](https://t
 The `R` package **BGGM** provides tools for making Bayesian inference in
 Gaussian graphical models (GGM). The methods are organized around two
 general approaches for Bayesian inference: (1) estimation (Williams
-2019) and (2) hypothesis testing (Williams and Mulder 2019).
+2019) and (2) hypothesis testing (Williams and Mulder 2019). The key
+distinction is that the former focuses on either the posterior or
+posterior predictive distribution, whereas the latter focuses on model
+comparison with the Bayes factor.
+
+## Installation
+
+To install the latest release version (1.0.0) from CRAN use
+
+``` r
+install.packages("BGGM")    
+```
+
+The current developmental version can be installed with
+
+``` r
+if (!requireNamespace("remotes")) { 
+  install.packages("remotes")   
+}   
+remotes::install_github("donaldRwilliams/BGGM")
+```
+
+Note that the developmental version is recommended, due to the
+algorithims being written in `c++` and support for all data types (e.g.,
+ordinal). As of 5/15/2020, the developmental version is essentially
+**BGGM** version 2.0.0.
+
+# Overview
+
+The methods in **BGGM** build upon existing algorithms that are
+well-known in the literature. The central contribution of **BGGM** is to
+extend those approaches:
 
 <!-- and (2) hypothesis testing -->
 
