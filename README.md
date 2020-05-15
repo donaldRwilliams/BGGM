@@ -168,8 +168,6 @@ cors <- zero_order_cors(Y, type = "binary")
 | 5 | \-0.140 | \-0.146 | \-0.343 | \-0.363 |   1.000 | \-0.194 |
 | 6 |   0.098 | \-0.146 |   0.351 |   0.169 | \-0.194 |   1.000 |
 
-Tetrachoric
-
 The object `cors` also includes the sampled correlation matrices (in
 this case 250) in an array.
 

@@ -168,9 +168,9 @@ Y <- women_math[1:500,]
 cors <- zero_order_cors(Y, type = "binary")
 ```
 
-```{r, echo=FALSE, results='asis'}
+```{r, echo = FALSE, results='asis'}
 row.names(cors$R_mean) <- 1:6
-knitr::kable(round(cors$R_mean, 3), caption = "Tetrachoric",
+knitr::kable(round(cors$R_mean, 3),
              col.names = c("1", "2", "3","4","5", "6"), 
              row.names = TRUE)
 ```
