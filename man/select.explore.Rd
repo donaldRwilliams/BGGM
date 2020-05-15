@@ -71,11 +71,11 @@ The returned object of class \code{select.explore} contains a lot of information
 }
 \description{
 Provides the selected graph based on the Bayes factor
-\inserCite{Williams2019_bf}{BGGM}.
+\insertCite{Williams2019_bf}{BGGM}.
 }
 \details{
 Exhaustive provides the posterior hypothesis probabilities for
-a positive, negative, or null relation \inserCite{@see Table 3 in @Williams2019_bf}{BGGM}.
+a positive, negative, or null relation \insertCite{@see Table 3 in @Williams2019_bf}{BGGM}.
 }
 \note{
 Care must be taken with the options \code{alternative = "less"} and

@@ -2,7 +2,7 @@
 
 #' @description Provides the selected graph (of differences) based on credible intervals for
 #' the partial correlations that did not contain zero
-#' \inserCite{Williams2019}{BGGM}.
+#' \insertCite{Williams2019}{BGGM}.
 #'
 #' @name select.estimate
 #'
@@ -36,8 +36,8 @@
 #' ##################
 #' data
 #' Y <- bfi
-#' males and females
 #'
+#' # males and females
 #' Ymale <- subset(Y, gender == 1,
 #'                select = -c(gender,
 #'                            education))

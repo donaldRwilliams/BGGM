@@ -2,11 +2,13 @@
 % Please edit documentation in R/select.ggm_compare_bf.R
 \name{select.ggm_compare_explore}
 \alias{select.ggm_compare_explore}
-\title{Graph selection for \code{explore} Objects}
+\title{Graph selection for \code{ggm_compare_explore} Objects}
 \usage{
 \method{select}{ggm_compare_explore}(object, post_prob = 0.5, BF_cut = NULL, ...)
 }
 \arguments{
+\item{object}{An object of class \code{ggm_compare_explore}.}
+
 \item{post_prob}{Numeric. Posterior `inclusion` probability (defaults to 0.50)
 for including an edge.}
 
@@ -32,7 +34,7 @@ For users of \strong{BGGM}, the following are the useful objects:
 }
 \description{
 Provides the selected graph (of differences) based on the Bayes factor
-\inserCite{williams2020comparing}{BGGM}.
+\insertCite{williams2020comparing}{BGGM}.
 }
 \examples{
 \donttest{

@@ -53,11 +53,11 @@ The returned object of class \code{select.ggm_compare_estimate} contains a lot o
 \description{
 Provides the selected graph based on credible intervals for
 the partial correlations that did not contain zero
-\inserCite{Williams2019}{BGGM}.
+\insertCitet{Williams2019}{BGGM}.
 
 Provides the selected graph (of differences) based on credible intervals for
 the partial correlations that did not contain zero
-\inserCite{Williams2019}{BGGM}.
+\insertCite{Williams2019}{BGGM}.
 }
 \details{
 This package was built for the social-behavioral sciences in particular. In these applications, there is
@@ -88,8 +88,8 @@ E <- select(fit)
 ##################
 data
 Y <- bfi
-males and females
 
+# males and females
 Ymale <- subset(Y, gender == 1,
                select = -c(gender,
                            education))

@@ -2,7 +2,7 @@
 #'
 #' @description Provides the selected graph based on credible intervals for
 #' the partial correlations that did not contain zero
-#' \inserCite{Williams2019}{BGGM}.
+#' \insertCitet{Williams2019}{BGGM}.
 #'
 #' @name select.estimate
 #'

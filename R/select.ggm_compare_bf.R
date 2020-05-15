@@ -1,7 +1,9 @@
-#' @title Graph selection for \code{explore} Objects
+#' @title Graph selection for \code{ggm_compare_explore} Objects
 #'
 #' @description Provides the selected graph (of differences) based on the Bayes factor
-#' \inserCite{williams2020comparing}{BGGM}.
+#' \insertCite{williams2020comparing}{BGGM}.
+#'
+#'@param object An object of class \code{ggm_compare_explore}.
 #'
 #' @param post_prob Numeric. Posterior `inclusion` probability (defaults to 0.50)
 #'                  for including an edge.
