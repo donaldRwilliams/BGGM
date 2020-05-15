@@ -19,7 +19,7 @@
 \arguments{
 \item{x}{An object of class \code{select}.}
 
-\item{layout}{Character string. Which graph layout (defaults is \code{circle}) ?.
+\item{layout}{Character string. Which graph layout (defaults is \code{circle}) ?
 See \link[sna]{gplot.layout}.}
 
 \item{pos_col}{Character string. Color for the positive edges (defaults to \code{green}).}

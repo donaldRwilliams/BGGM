@@ -4,7 +4,7 @@
 #'
 #' @param x An object of class \code{select}.
 #'
-#' @param layout Character string. Which graph layout (defaults is \code{circle}) ?.
+#' @param layout Character string. Which graph layout (defaults is \code{circle}) ?
 #'                See \link[sna]{gplot.layout}.
 #'
 #' @param pos_col Character string. Color for the positive edges (defaults to \code{green}).

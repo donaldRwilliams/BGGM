@@ -40,7 +40,7 @@ Imports:
     stringr
 Suggests: 
  knitr,
- assortment,
+ assortnet,
  networktools
 Encoding: UTF-8
 LazyData: true
