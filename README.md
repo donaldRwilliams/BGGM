@@ -50,31 +50,29 @@ extend those approaches:
       - [Estimation](#bayesian-estimation) (Williams 2018)
 
 2.  Bayesian hypothesis testing with the matrix-F prior distribution
-    (Mulder and Pericchi 2018).
+    (Williams and Mulder 2019)
     
-      - [Exploratory hypothesis testing](#Exploratory) (Williams and
-        Mulder 2019).
+      - [Exploratory hypothesis testing](#Exploratory)
     
       - [Confirmatory hypothesis testing](#Confirmatory) (Williams and
-        Mulder 2019).
+        Mulder 2019)
 
-3.  Comparing Gaussian graphical models
+3.  Comparing Gaussian graphical models (Williams 2018; Williams et al.
+    2020)
     
       - [Partial correlation
-        differences](#partial-correlation-differences) (Williams 2018)
+        differences](#partial-correlation-differences)
     
       - [Posterior predictive check](#posterior-predictive%20check)
-        (Williams et al. 2020)
     
       - [Exploratory hypothesis testing](#exploratory-\(groups\))
-        (Williams et al. 2020)
     
       - [Confirmatory hypothesis testing](#confirmatory-\(groups\))
-        (Williams et al. 2020)
 
 4.  Extending inference beyond the conditional (in)dependence structure
+    (Williams 2018)
     
-      - [Predictability](#Predictability) (Williams 2018)
+      - [Predictability](#Predictability)
     
       - [Posterior uncertainty intervals](#posterior-uncertainty) in the
         partial correlations (Williams 2018)

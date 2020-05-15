@@ -62,25 +62,25 @@ The central contribution of **BGGM** is to extend those approaches:
   
     + [Estimation](#bayesian-estimation) [@Williams2019]
 
-2. Bayesian hypothesis testing with the matrix-F prior distribution [@Mulder2018].
+2. Bayesian hypothesis testing with the matrix-F prior distribution [@Williams2019_bf]
 
-    + [Exploratory hypothesis testing](#Exploratory) [@Williams2019_bf].
+    + [Exploratory hypothesis testing](#Exploratory)
   
-    + [Confirmatory hypothesis testing](#Confirmatory) [@Williams2019_bf].
+    + [Confirmatory hypothesis testing](#Confirmatory) [@Williams2019_bf]
     
-3. Comparing Gaussian graphical models
+3. Comparing Gaussian graphical models [@Williams2019; @williams2020comparing]
     
-    + [Partial correlation differences](#partial-correlation-differences) [@Williams2019]
+    + [Partial correlation differences](#partial-correlation-differences) 
     
-    + [Posterior predictive check](#posterior-predictive check) [@williams2020comparing]
+    + [Posterior predictive check](#posterior-predictive check)
     
-    + [Exploratory hypothesis testing](#exploratory-(groups)) [@williams2020comparing]
+    + [Exploratory hypothesis testing](#exploratory-(groups)) 
     
-    + [Confirmatory hypothesis testing](#confirmatory-(groups)) [@williams2020comparing]
+    + [Confirmatory hypothesis testing](#confirmatory-(groups))
 
-4. Extending inference beyond the conditional (in)dependence structure
+4. Extending inference beyond the conditional (in)dependence structure [@Williams2019]
 
-    +  [Predictability](#Predictability) [@Williams2019]
+    +  [Predictability](#Predictability) 
     
     +  [Posterior uncertainty intervals](#posterior-uncertainty) in the 
        partial correlations [@Williams2019]
