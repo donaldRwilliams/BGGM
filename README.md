@@ -54,8 +54,7 @@ extend those approaches:
     
       - [Exploratory hypothesis testing](#Exploratory)
     
-      - [Confirmatory hypothesis testing](#Confirmatory) (Williams and
-        Mulder 2019)
+      - [Confirmatory hypothesis testing](#Confirmatory)
 
 3.  Comparing Gaussian graphical models (Williams 2018; Williams et al.
     2020)
@@ -75,7 +74,7 @@ extend those approaches:
       - [Predictability](#Predictability)
     
       - [Posterior uncertainty intervals](#posterior-uncertainty) in the
-        partial correlations (Williams 2018)
+        partial correlations
     
       - [Custom Network Statistics](#custom-network-statistics)
 
@@ -90,11 +89,13 @@ support for missing values (see `bggm_missing`).
 ## Supported Data Types
 
   - **Continuous**: the continuous method was described in Williams
-    (2018).
+    (2018). Note that this is based on the customary Wishart
+    distribution  
+    ([Wikipedia](https://en.wikipedia.org/wiki/Wishart_distribution))
 
-  - **Binary**: the binary method builds directly upon (2012) that, in
-    turn, built upon the approaches of \[-lawrence2008bayesian\] and
-    \[-webb2008bayesian;textual\] (to name a few).
+  - **Binary**: the binary method builds directly upon Talhouk, Doucet,
+    and Murphy (2012) that, in turn, built upon the approaches of
+    lawrence2008bayesian and Webb and Forster (2008) (to name a few).
 
   - **Ordinal**: the ordinal methods require sampling thresholds. There
     are two approach included in **BGGM**. The customary approach
@@ -102,10 +103,10 @@ support for missing values (see `bggm_missing`).
     described in (- Cowles 1996).
 
   - **Mixed**: the mixed data (a combination of discrete and continuous)
-    method was introduced in \[(2007);textual\]. This is a
-    semi-parametric copula model (i.e., a copula GGM) based on the
-    ranked likelihood. Note that this can be used for data consisting
-    entirely of ordinal data (not restricted to “mixed” data).
+    method was introduced in Hoff (2007). This is a semi-parametric
+    copula model (i.e., a copula GGM) based on the ranked likelihood.
+    Note that this can be used for *only* ordinal data (not restricted
+    to “mixed” data).
 
 # Illustrative Examples
 
@@ -205,6 +206,14 @@ Talhouk, Aline, Arnaud Doucet, and Kevin Murphy. 2012. “Efficient
 Bayesian Inference for Multivariate Probit Models with Sparse Inverse
 Correlation Matrices.” *Journal of Computational and Graphical
 Statistics* 21 (3): 739–57.
+
+</div>
+
+<div id="ref-webb2008bayesian">
+
+Webb, Emily L, and Jonathan J Forster. 2008. “Bayesian Model
+Determination for Multivariate Ordinal and Binary Data.” *Computational
+Statistics & Data Analysis* 52 (5): 2632–49.
 
 </div>
 
