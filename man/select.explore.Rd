@@ -74,7 +74,7 @@ Provides the selected graph based on the Bayes factor
 \inserCite{Williams2019_bf}{BGGM}.
 }
 \details{
-Exhaustive provide the posterior hypothesis probabilities for
+Exhaustive provides the posterior hypothesis probabilities for
 a positive, negative, or null relation \inserCite{@see Table 3 in @Williams2019_bf}{BGGM}.
 }
 \note{
@@ -103,6 +103,9 @@ E <- select(fit,
             alternative = "exhaustive")
 
 }
+}
+\references{
+\insertAllCited{}
 }
 \seealso{
 \code{\link{explore}} and \code{\link{ggm_compare_explore}} for several examples.

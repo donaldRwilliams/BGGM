@@ -24,6 +24,10 @@ select.ggm_compare_estimate <- function(object,
                                         cred = 0.95,
                                         ...) {
 
+
+  # rope removed, but will add to minor realeses
+  rope = NULL
+
   # number of contrasts
   contrasts <- nrow(object$info$pairwise)
 

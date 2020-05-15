@@ -1,27 +1,50 @@
-#' Select Graph: \code{ggm_compare_explore} Objects
+#' @title Graph selection for \code{explore} Objects
 #'
-#' @param object object of class \code{ggm_compare_bf}.
+#' @description Provides the selected graph (of differences) based on the Bayes factor
+#' \inserCite{williams2020comparing}{BGGM}.
 #'
-#' @param post_prob numeric. Posterior `inclusion` probability.  The default is set to 0.50.
+#' @param post_prob Numeric. Posterior `inclusion` probability (defaults to 0.50)
+#'                  for including an edge.
 #'
-#' @param BF_cut Numeric.
+#' @param BF_cut Numeric. Threshold for including an edge (defaults to 3).
 #'
-#' @param ... not currently used.
+#' @param ... Currently ignored.
 #'
-#' @return list of class \code{select.ggm_compare_bf}
+#' @return The returned object of class \code{select.ggm_compare_explore} contains
+#' a lot of information that is used for printing and plotting the results.
+#' For users of \strong{BGGM}, the following are the useful objects:
+#'
 #'
 #' \itemize{
-#' \item \code{BF_10} Bayes factors for the alternative ("not equal")
-#' \item \code{BF_01} Bayes factors for the null hypothesis
-#' \item \code{BF_10_adj} Bayes factor adjacency matrix for the alternative ("not equal")
-#' \item \code{BF_01_adj} Bayes factor adjacency matrix for the null hypothesis
-#' \item \code{adj_10} adjacency matrix for the selected edges (in favor of the "not equal")
-#' \item \code{adj_01} adjacency matrix for the selected edges (in favor of the null hypothesis)
-#' \item \code{pcor_mat_10} partial correlation matrix for the alternative ("not equal")
+#'
+#' \item \code{adj_10} Adjacency matrix for which there was evidence for a difference.
+#'
+#' \item \code{adj_10} Adjacency matrix for which there was evidence for a null relation
+#'
+#' \item \code{pcor_mat_10} Selected partial correlation matrix (weighted adjacency; only for two groups).
+#'
+#' }
+#'
+#' @seealso \code{\link{explore}} and \code{\link{ggm_compare_explore}} for several examples.
+#'
+#' @examples
+#' \donttest{
+#'
+#' ##################
+#' ### example 1: ###
+#' ##################
+#'
+#' # fit model
+#' fit <- ggm_compare_explore(Ymale, Yfemale,
+#'                            iter = 250,
+#'                            type = "continuous")
+#'
+#'
+#' E <- select(fit, post_prob = 0.50)
+#'
 #' }
 #'
 #' @export
-
 select.ggm_compare_explore <- function(object,
                                        post_prob = 0.50,
                                        BF_cut = NULL,...){

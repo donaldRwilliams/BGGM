@@ -15,7 +15,10 @@
 #'
 #' @param ... Currently ignored.
 #'
-#' @details Exhaustive provide the posterior hypothesis probabilities for
+#' @references
+#' \insertAllCited{}
+#'
+#' @details Exhaustive provides the posterior hypothesis probabilities for
 #' a positive, negative, or null relation \inserCite{@see Table 3 in @Williams2019_bf}{BGGM}.
 #'
 #' @note Care must be taken with the options \code{alternative = "less"} and
