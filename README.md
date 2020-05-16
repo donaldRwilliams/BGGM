@@ -10,6 +10,7 @@ Version](http://www.r-pkg.org/badges/version/BGGM)](https://cran.r-project.org/p
 Status](https://travis-ci.org/donaldRwilliams/BGGM.svg?branch=master)](https://travis-ci.org/donaldRwilliams/BGGM)
 
 The `R` package **BGGM** provides tools for making Bayesian inference in
+
 Gaussian graphical models (GGM). The methods are organized around two
 general approaches for Bayesian inference: (1) estimation and (2)
 hypothesis testing. The key distinction is that the former focuses on
@@ -676,3 +677,11 @@ Distribution and Bayesian Model Selection.” *Psychological Methods*.
 </div>
 
 </div>
+=======
+Gaussian graphical models (GGM). <!-- and (2) hypothesis testing -->
+<!-- \insertCite{Williams2019_bf}{BGGM}. The key distinction is that the former focuses on either the -->
+<!-- posterior or posterior predictive distribution, whereas the latter focuses on model comparison -->
+<!-- with the Bayes factor. The methods in \strong{BGGM} build upon existing algorithms that are well-known in the literature. The central contribution of \strong{BGGM} is to extend those approaches: -->
+
+## References
+

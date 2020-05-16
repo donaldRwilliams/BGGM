@@ -26,6 +26,7 @@ library(BGGM)
 
 
 The `R` package **BGGM** provides tools for making Bayesian inference in
+
 Gaussian graphical models (GGM). The methods are organized around two general 
 approaches for Bayesian inference: (1) estimation and (2) hypothesis 
 testing. The key distinction is that the former focuses on either 
@@ -37,7 +38,6 @@ To install the latest release version (1.0.0) from CRAN use
 ```{r gh-installation, eval = FALSE}	
 install.packages("BGGM")	
 ```
-
 
 The current developmental version can be installed with	
 
