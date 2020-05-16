@@ -303,9 +303,7 @@ testing expectations, as opposed to feeding the data to, say,
 `estimate`, and seeing what happens to emerge.
 
 In this example, the focus is on suicidal thoughts (`PHQ9`) in a
-comorbidity network. The question of interest seeks to understand the
-interrelations with other nodes in the model. Here is an example set of
-hypotheses
+comorbidity network. Here is an example set of hypotheses
 
 ``` r
 # data (+ 1)

@@ -220,9 +220,7 @@ When using `plot(E)`, there is a network plot for each hypothesis.
 A central contribution of **BGGM** is confirmatory hypothesis testing of (in)equality constraints [@Hoijtink2011]. By this we are referring to testing expectations, as opposed to feeding the data to, say, `estimate`,
 and seeing what happens to emerge. 
 
-In this example, the focus is on suicidal thoughts (`PHQ9`) in a comorbidity network. The 
-question of interest seeks to understand the interrelations with other nodes in the 
-model. Here is an example set of hypotheses
+In this example, the focus is on suicidal thoughts (`PHQ9`) in a comorbidity network. Here is an example set of hypotheses
 
 ```{r}
 # data (+ 1)
