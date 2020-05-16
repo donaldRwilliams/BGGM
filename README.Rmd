@@ -111,10 +111,41 @@ and there is support for missing values (see `bggm_missing`).
  (not restricted to "mixed" data).
 
 ## Illustrative Examples
+The following includes brief examples for *some* of the methods in **BGGM**.
 
 ### Bayesian Estimation
 
 #### Posterior Sampling
+An ordinal GGM is estimated with
+
+```{r, echo=FALSE}
+load(file = "readme_models/fit_sample.rda")
+fit <- fit_sample
+```
+
+```{r, eval = FALSE}
+# data
+Y <- ptsd[,1:5] + 1
+
+# ordinal
+fit <- estimate(Y, type = "ordinal", 
+                analytic = FALSE)
+```
+
+Notice the `+ 1`. This is required, because the first category must be `1` when `type = "ordinal"`. The partial correlations can the be summarized with
+
+```{r}
+summary(fit)
+```
+
+The returned object can also be plotted, which allows for visualzing the posterior uncertainty intervals 
+for each relation. An example is provided below in [Posterior uncertainty intervals](#posterior-uncertatiny). 
+The partial correlation matrix is accesed with 
+
+```{r}
+
+```
+
 
 #### Analytic
 
@@ -145,6 +176,7 @@ and there is support for missing values (see `bggm_missing`).
 #### Posterior Uncertainty
 
 #### Custom Network Statistics
+
 
 
 ## Additional Features
