@@ -217,13 +217,7 @@ When using `plot(E)`, there is a network plot for each hypothesis.
 
 
 #### Confirmatory
-Theories are formulated in the language of mathematics, which, in turn,
-can be expressed as hypotheses with (in)equality constraints on the parameters of interest
-[@Hoijtink2011]. In a GGM, it may be expected that a set of partial correlations
-are approximately equal to each other (given a maximal upper bound), larger or smaller
-than another set of partial correlations, or larger or smaller than a constant (typically zero).
-
-A central contribution of **BGGM** is confirmatory hypothesis testing of (in)equality constraints. By this we are referring to testing expectations, as opposed to feeding the data to, say, `estimate`,
+A central contribution of **BGGM** is confirmatory hypothesis testing of (in)equality constraints [@Hoijtink2011]. By this we are referring to testing expectations, as opposed to feeding the data to, say, `estimate`,
 and seeing what happens to emerge. 
 
 In this example, the focus is on suicidal thoughts (`PHQ9`) in a comorbidity network. The 
@@ -234,8 +228,7 @@ model. Here is an example set of hypotheses
 # data (+ 1)
 Y <- depression_anxiety_t1 + 1
 
-
-# example hypothesis
+# example hypotheses
 hyp <- c("PHQ2--PHQ9 > PHQ1--PHQ9 > 0; 
           PHQ2--PHQ9 = PHQ1--PHQ9 = 0")
 ```
@@ -258,6 +251,10 @@ The object `fit` is then printed
 ```{r}
 fit
 ```
+
+The posterior hypothesis probability of `0.895` which provides some evidence for the order 
+constraint. The Bayes factor matrix divides the posterior probabilities, which provide a measure
+of relative support for which hypothesis best predicted the data. 
 
 ### Comparing Gaussian Graphical Models
 
