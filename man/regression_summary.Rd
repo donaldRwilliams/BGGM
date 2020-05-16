@@ -26,7 +26,7 @@ Summarary Method for Multivariate or Univarate Regression
 # note: iter = 250 for demonstrative purposes
 
 # data
-# Y <- bfi
+Y <- bfi
 
 Y <- subset(Y, select = c("E5", "N5",
                           "gender", "education"))
@@ -36,6 +36,6 @@ fit_mv_ordinal <- estimate(Y, formula = ~ gender + as.factor(education),
                            type = "ordinal",
                            iter = 250)
 
-fit_mv_ordinal
+regression_summary(fit_mv_ordinal)
 }
 }

@@ -17,7 +17,7 @@
 #' # note: iter = 250 for demonstrative purposes
 #'
 #' # data
-#' # Y <- bfi
+#' Y <- bfi
 #'
 #' Y <- subset(Y, select = c("E5", "N5",
 #'                           "gender", "education"))
@@ -27,7 +27,7 @@
 #'                            type = "ordinal",
 #'                            iter = 250)
 #'
-#' fit_mv_ordinal
+#' regression_summary(fit_mv_ordinal)
 #'}
 regression_summary <- function(object, cred = 0.95, ...){
 
@@ -61,7 +61,7 @@ regression_summary <- function(object, cred = 0.95, ...){
 
 
     summ[[i]] <- round(data.frame(Post.mean = post_mean[,i],
-                                  Post.sd = post_mean[,i],
+                                  Post.sd = post_sd[,i],
                                   Cred.lb = post_lb[,i],
                                   Cred.ub = post_ub[,i] ), 3)
 
@@ -112,7 +112,8 @@ print_regression_summary <- function(x, ...){
 
   for(i in 1:outcomes){
     cat(names(x$reg_summary)[i], "\n")
-    print(x$reg_summary$E5)
+
+    print(x$reg_summary[[i]])
     cat("--- \n")
   }
 

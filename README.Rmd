@@ -152,9 +152,6 @@ and there is support for missing values (see `bggm_missing`).
 The primary focus of **BGGM** is Gaussian graphical modeling (the inverse covariance matrix).
 The residue is a suite of useful methods not explicitly for GGMs. For example, 
 
-<br>
-<br>
-
 ### Bivariate Correlations
 
 Bivariate correlations for `binary` (tetrachoric), `ordinal` (polychoric), `mixed` (rank based),
@@ -183,9 +180,6 @@ knitr::kable(round(cors$R_mean, 3),
 ```
 
 The object `cors` also includes the sampled correlation matrices (in this case 250) in an array. 
-
-<br>
-<br>
 
 ### Multivariate Regresssion
 
@@ -221,6 +215,7 @@ fit a multivariate probit model (each variable included in `formula` is removed 
 regression_summary(mv_probit)
 ```
 
+This basic idea can also be used to fit regression models with a single outcome.
 
 ## Note on Conditional (In)dependence Models for Latent Data
 

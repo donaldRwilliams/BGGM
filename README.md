@@ -146,8 +146,6 @@ The primary focus of **BGGM** is Gaussian graphical modeling (the
 inverse covariance matrix). The residue is a suite of useful methods not
 explicitly for GGMs. For example,
 
-<br> <br>
-
 ### Bivariate Correlations
 
 Bivariate correlations for `binary` (tetrachoric), `ordinal`
@@ -175,8 +173,6 @@ cors$R
 
 The object `cors` also includes the sampled correlation matrices (in
 this case 250) in an array.
-
-<br> <br>
 
 ### Multivariate Regresssion
 
@@ -217,21 +213,21 @@ regression_summary(mv_probit)
 #>  
 #> E5 
 #>                       Post.mean Post.sd Cred.lb Cred.ub
-#> (Intercept)               1.852   1.852   1.049   3.142
-#> gender                    0.169   0.169   0.065   0.295
-#> as.factor(education)2     0.215   0.215   0.024   0.437
-#> as.factor(education)3     0.271   0.271   0.089   0.445
-#> as.factor(education)4     0.206   0.206   0.019   0.404
-#> as.factor(education)5     0.345   0.345   0.120   0.593
+#> (Intercept)               1.852   0.533   1.049   3.142
+#> gender                    0.169   0.066   0.065   0.295
+#> as.factor(education)2     0.215   0.109   0.024   0.437
+#> as.factor(education)3     0.271   0.104   0.089   0.445
+#> as.factor(education)4     0.206   0.103   0.019   0.404
+#> as.factor(education)5     0.345   0.128   0.120   0.593
 #> --- 
 #> N5 
 #>                       Post.mean Post.sd Cred.lb Cred.ub
-#> (Intercept)               1.852   1.852   1.049   3.142
-#> gender                    0.169   0.169   0.065   0.295
-#> as.factor(education)2     0.215   0.215   0.024   0.437
-#> as.factor(education)3     0.271   0.271   0.089   0.445
-#> as.factor(education)4     0.206   0.206   0.019   0.404
-#> as.factor(education)5     0.345   0.345   0.120   0.593
+#> (Intercept)               0.210   0.114  -0.012   0.434
+#> gender                    0.502   0.140   0.291   0.835
+#> as.factor(education)2    -0.127   0.103  -0.345   0.058
+#> as.factor(education)3    -0.104   0.081  -0.258   0.034
+#> as.factor(education)4    -0.218   0.104  -0.427  -0.024
+#> as.factor(education)5    -0.229   0.103  -0.449  -0.038
 #> --- 
 #> Residual Correlation Matrix: 
 #>       E5    N5
@@ -239,6 +235,9 @@ regression_summary(mv_probit)
 #> N5 -0.18  1.00
 #> ---
 ```
+
+This basic idea can also be used to fit regression models with a single
+outcome.
 
 ## Note on Conditional (In)dependence Models for Latent Data
 
