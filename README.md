@@ -247,7 +247,7 @@ Check](#posterior-predictive-check).
 
 ### Bayesian Hypothesis Testing
 
-The Bayes factor based method allow for determining the conditional
+The Bayes factor based methods allow for determining the conditional
 **in**dependence structure (evidence for the null hypothesis).
 
 #### Exploratory
@@ -258,15 +258,46 @@ fit<- explore(Y, type = "ordinal")
 
 # select 
 E <- select(fit, alternative = "exhaustive")
-
-summary(E)
 ```
 
 The option `alternative = "exhaustive"` compares three hypotheses: (1) a
 null relation; (2) a positive relation; and (3) a negative relation.
 When using `plot(E)`, there is a network plot for each hypothesis.
 
+``` r
+summary(E)
+#> BGGM: Bayesian Gaussian Graphical Models 
+#> --- 
+#> Type: ordinal 
+#> Alternative: exhaustive 
+#> --- 
+#> Call:
+#> select.explore(object = fit, alternative = "exhaustive")
+#> --- 
+#> Hypotheses: 
+#> H0: rho = 0
+#> H1: rho > 0
+#> H2: rho < 0 
+#> --- 
+#> 
+#>  Relation Post.mean Post.sd Pr.H0 Pr.H1 Pr.H2
+#>  B1--B2    0.263    0.080   0.000 0.999 0.001
+#>  B1--B3    0.020    0.081   0.710 0.173 0.116
+#>  B2--B3    0.523    0.073   0.000 1.000 0.000
+#>  B1--B4    0.362    0.070   0.000 1.000 0.000
+#>  B2--B4   -0.082    0.068   0.459 0.061 0.480
+#>  B3--B4    0.252    0.073   0.000 1.000 0.000
+#>  B1--B5    0.129    0.072   0.120 0.847 0.033
+#>  B2--B5    0.118    0.078   0.223 0.726 0.051
+#>  B3--B5    0.213    0.077   0.001 0.996 0.003
+#>  B4--B5    0.348    0.072   0.000 1.000 0.000
+```
+
 #### Confirmatory
+
+A central contribution of **BGGM** is confirmatory hypothesis testing.
+By this we are referring to testing expectations, as opposed to feeding
+the data to, say, `estimate`, and seeing what happens to emerge.
 
 ### Comparing Gaussian Graphical Models
 

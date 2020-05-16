@@ -190,13 +190,14 @@ plot(select(fit))
 This is quite handy when (1) only the conditional dependence structure is of interest and (2) an immediate solution is desirable. An example of (2) is provided  in [Posterior Predictive Check](#posterior-predictive-check).
 
 ### Bayesian Hypothesis Testing
-The Bayes factor based method allow for determining the conditional **in**dependence structure 
+The Bayes factor based methods allow for determining the conditional **in**dependence structure 
 (evidence for the null hypothesis).
 
 #### Exploratory
 ```{r, echo=FALSE, warning = FALSE}
 load(file = "readme_models/fit_explore.rda")
 fit <- fit_explore
+E <- select(fit, alternative = "exhaustive")
 ```
 
 ```{r, eval=FALSE}
@@ -205,14 +206,22 @@ fit<- explore(Y, type = "ordinal")
 
 # select 
 E <- select(fit, alternative = "exhaustive")
-
-summary(E)
 ```
 
 The option `alternative = "exhaustive"` compares three hypotheses: (1) a null relation; (2) a positive
 relation; and (3) a negative relation. When using `plot(E)`, there is a network plot for each hypothesis.
 
+```{r}
+summary(E)
+```
+
 #### Confirmatory
+A central contribution of **BGGM** is confirmatory hypothesis testing. By this
+we are referring to testing expectations, as opposed to feeding the data to, say, `estimate`,
+and seeing what happens to emerge. 
+
+
+
 
 
 
