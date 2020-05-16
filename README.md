@@ -162,10 +162,11 @@ summary(fit)
 #> ---
 ```
 
-The returned object can also be plotted, which allows for visualzing the
-posterior uncertainty interval for each relation. An example is provided
-below in [Posterior uncertainty intervals](#posterior-uncertatiny). The
-partial correlation matrix is accesed with
+The returned object can also be plotted, which allows for visualizing
+the posterior uncertainty interval for each relation. An example is
+provided below in [Posterior uncertainty
+intervals](#posterior-uncertatiny). The partial correlation matrix is
+accedes with
 
 ``` r
 pcor_mat(fit)
@@ -227,7 +228,7 @@ more involved network plot is provided below.
 #### Analytic
 
 There is also an analytic solution that is based on the Wishart
-distribution. This simple solution provides competivie performance with
+distribution. This simple solution provides competitive performance with
 “state-of-the-art” methods, assuming that *n* (observations) \> *p*
 (variables) The one caveat is that it works only for `type =
 "continuous"` (the default).
@@ -262,7 +263,6 @@ E <- select(fit, alternative = "exhaustive")
 
 The option `alternative = "exhaustive"` compares three hypotheses: (1) a
 null relation; (2) a positive relation; and (3) a negative relation.
-When using `plot(E)`, there is a network plot for each hypothesis.
 
 ``` r
 summary(E)
@@ -293,11 +293,87 @@ summary(E)
 #>  B4--B5    0.348    0.072   0.000 1.000 0.000
 ```
 
+When using `plot(E)`, there is a network plot for each hypothesis.
+
 #### Confirmatory
 
-A central contribution of **BGGM** is confirmatory hypothesis testing.
-By this we are referring to testing expectations, as opposed to feeding
-the data to, say, `estimate`, and seeing what happens to emerge.
+Theories are formulated in the language of mathematics, which, in turn,
+can be expressed as hypotheses with (in)equality constraints on the
+parameters of interest (Hoijtink 2011). In a GGM, it may be expected
+that a set of partial correlations are approximately equal to each other
+(given a maximal upper bound), larger or smaller than another set of
+partial correlations, or larger or smaller than a constant (typically
+zero).
+
+A central contribution of **BGGM** is confirmatory hypothesis testing of
+(in)equality constraints. By this we are referring to testing
+expectations, as opposed to feeding the data to, say, `estimate`, and
+seeing what happens to emerge.
+
+In this example, the focus is on suicidal thoughts (`PHQ9`) in a
+comorbidity network. The question of interest seeks to understand the
+interrelations with other nodes in the model. Here is an example set of
+hypotheses
+
+``` r
+# data (+ 1)
+Y <- depression_anxiety_t1 + 1
+
+
+# example hypothesis
+hyp <- c("PHQ2--PHQ9 > PHQ1--PHQ9 > 0; 
+          PHQ2--PHQ9 = PHQ1--PHQ9 = 0")
+```
+
+There are two hypotheses separated by (`;`). The first expresses that
+the relation `PHQ2--PHA9` (“feeling down, depressed, or hopeless” and
+“suicidal thoughts”) is larger than `PHQ1--PHA9` (“little interest or
+pleasure in doing things” and “suicidal thoughts”). In other words, that
+the partial correlation is larger for `PHQ2--PHA9`. There is an
+additional constraint to positive values (`> 0`) for both relations. The
+second hypothesis is then a “null” model.
+
+``` r
+# (try to) confirm
+fit <- confirm(Y = Y, hypothesis = hyp, 
+               type = "ordinal")
+```
+
+The object `fit` is then printed
+
+``` r
+fit
+#> BGGM: Bayesian Gaussian Graphical Models 
+#> Type: ordinal 
+#> --- 
+#> Posterior Samples: 250 
+#> Observations (n): 403 
+#> Variables (p): 16 
+#> Delta: 15 
+#> --- 
+#> Call:
+#> confirm(Y = Y + 1, hypothesis = hyp, type = "ordinal", iter = 250)
+#> --- 
+#> Hypotheses: 
+#> 
+#> H1: PHQ2--PHQ9>PHQ1--PHQ9>0
+#> H2: PHQ2--PHQ9=PHQ1--PHQ9=0
+#> H3: complement
+#> --- 
+#> Posterior prob: 
+#> 
+#> p(H1|data) = 0.895
+#> p(H2|data) = 0.002
+#> p(H3|data) = 0.103
+#> --- 
+#> Bayes factor matrix: 
+#>       H1      H2    H3
+#> H1 1.000 529.910 8.666
+#> H2 0.002   1.000 0.016
+#> H3 0.115  61.147 1.000
+#> --- 
+#> note: equal hypothesis prior probabilities
+```
 
 ### Comparing Gaussian Graphical Models
 
@@ -481,6 +557,13 @@ assessment of model fitness via realized discrepancies. Vol.6, No.4.”
 
 Hoff, Peter D. 2007. “Extending the Rank Likelihood for Semiparametric
 Copula Estimation.” *The Annals of Applied Statistics* 1 (1): 265–83.
+
+</div>
+
+<div id="ref-Hoijtink2011">
+
+Hoijtink, H. 2011. *Informative hypotheses: Theory and practice for
+behavioral and social scientists*. Chapman; Hall/CRC.
 
 </div>
 

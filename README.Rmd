@@ -140,8 +140,8 @@ Notice the `+ 1`. This is required, because the first category must be `1` when 
 summary(fit)
 ```
 
-The returned object can also be plotted, which allows for visualzing the posterior uncertainty interval for each relation. An example is provided below in [Posterior uncertainty intervals](#posterior-uncertatiny). 
-The partial correlation matrix is accesed with 
+The returned object can also be plotted, which allows for visualizing the posterior uncertainty interval for each relation. An example is provided below in [Posterior uncertainty intervals](#posterior-uncertatiny). 
+The partial correlation matrix is accedes with 
 
 ```{r, eval=FALSE}
 pcor_mat(fit)
@@ -175,7 +175,7 @@ is provided below.
 
 #### Analytic
 There is also an analytic solution that is based on the Wishart distribution. This 
-simple solution provides competivie performance with "state-of-the-art" methods, assuming that
+simple solution provides competitive performance with "state-of-the-art" methods, assuming that
 *n* (observations) > *p* (variables) The one 
 caveat is that it works only for `type = "continuous"` (the default).
 
@@ -209,21 +209,55 @@ E <- select(fit, alternative = "exhaustive")
 ```
 
 The option `alternative = "exhaustive"` compares three hypotheses: (1) a null relation; (2) a positive
-relation; and (3) a negative relation. When using `plot(E)`, there is a network plot for each hypothesis.
-
+relation; and (3) a negative relation. 
 ```{r}
 summary(E)
 ```
+When using `plot(E)`, there is a network plot for each hypothesis.
+
 
 #### Confirmatory
-A central contribution of **BGGM** is confirmatory hypothesis testing. By this
-we are referring to testing expectations, as opposed to feeding the data to, say, `estimate`,
+Theories are formulated in the language of mathematics, which, in turn,
+can be expressed as hypotheses with (in)equality constraints on the parameters of interest
+[@Hoijtink2011]. In a GGM, it may be expected that a set of partial correlations
+are approximately equal to each other (given a maximal upper bound), larger or smaller
+than another set of partial correlations, or larger or smaller than a constant (typically zero).
+
+A central contribution of **BGGM** is confirmatory hypothesis testing of (in)equality constraints. By this we are referring to testing expectations, as opposed to feeding the data to, say, `estimate`,
 and seeing what happens to emerge. 
 
+In this example, the focus is on suicidal thoughts (`PHQ9`) in a comorbidity network. The 
+question of interest seeks to understand the interrelations with other nodes in the 
+model. Here is an example set of hypotheses
+
+```{r}
+# data (+ 1)
+Y <- depression_anxiety_t1 + 1
 
 
+# example hypothesis
+hyp <- c("PHQ2--PHQ9 > PHQ1--PHQ9 > 0; 
+          PHQ2--PHQ9 = PHQ1--PHQ9 = 0")
+```
 
+There are two hypotheses separated by (`;`). The first expresses that the relation `PHQ2--PHA9` ("feeling down, depressed, or hopeless" and "suicidal thoughts") is larger than `PHQ1--PHA9` ("little interest or pleasure in doing things" and "suicidal thoughts"). In other words, that the partial correlation is larger for `PHQ2--PHA9`. There is an additional constraint to positive values (`> 0`) for both relations. The second hypothesis is then a "null" model.
 
+```{r, echo=FALSE, warning = FALSE}
+load(file = "readme_models/fit_hyp1.rda")
+fit <- fit_hyp1
+```
+
+```{r, eval=FALSE}
+# (try to) confirm
+fit <- confirm(Y = Y, hypothesis = hyp, 
+               type = "ordinal")
+
+```
+
+The object `fit` is then printed
+```{r}
+fit
+```
 
 ### Comparing Gaussian Graphical Models
 
