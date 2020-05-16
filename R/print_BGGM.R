@@ -10,6 +10,10 @@
 print.BGGM <- function(x, ...) {
   # print estimate methods
 
+  if(is(x, "regression_summary")){
+    print_regression_summary(x,...)
+  }
+
   if(is(x, "estimate")) {
 
     if(is(x, "default")) {
@@ -157,5 +161,7 @@ if(is(x, "roll_your_own")){
 
   print_roll_your_own(x, ...)
  }
+
+
 
 }

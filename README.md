@@ -144,7 +144,7 @@ support for missing values (see `bggm_missing`).
 
 The primary focus of **BGGM** is Gaussian graphical modeling (the
 inverse covariance matrix). The residue is a suite of useful methods not
-explicitly for GGMs:
+explicitly for GGMs. For example,
 
   - Bivariate correlations for `binary` (tetrachoric), `ordinal`
     (polychoric), `mixed` (rank based), and `continuous` (Pearson’s)
@@ -157,6 +157,8 @@ Here is an example for computing tetrachoric correlations:
 Y <- women_math[1:500,]
 
 cors <- zero_order_cors(Y, type = "binary")
+
+cors$R
 ```
 
 |   |       1 |       2 |       3 |       4 |       5 |       6 |
@@ -174,8 +176,31 @@ this case 250) in an array.
   - Multivariate regression for binary (probit), ordinal (probit), mixed
     (rank likelihood), and continous data.
 
-  - Multiple regression for binary (probit), ordinal (probit), mixed
-    (rank likelihood), and continous data.
+Here is an example for a multivarate probit model with an ordinal
+outcome, where `E5` (“take charge”) and `N5` (“panic easily”) are
+predicted by `gender` and `education`:
+
+``` r
+# personality data
+Y <- bfi
+
+# variables
+Y <- subset(Y, select = c("E5", "N5", 
+                          "gender", "education"))
+
+
+mv_probit <- estimate(Y, formula = ~ gender + as.factor(education), 
+                      type = "ordinal")
+
+
+regression_summary(mv_probit)
+```
+
+Note that **BGGM** does not use the customary `model.matrix`
+formulation. This is for good reason, as each variable in the GGM does
+not need to be written out. Here we effectively “tricked” **BGGM** to
+fit a multivariate probit model (each variable included in `formula` is
+removed from `Y`).
 
 ## Note on Conditional (In)dependence Models for Latent Data
 

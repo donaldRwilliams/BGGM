@@ -6,17 +6,3 @@ warnings_are_errors: false
 
 os:
   - linux
-
-r_packages:
-  - glue
-  - vctrs
-  - ellipsis
-  - lavaan
-  - BFpack
-  - mice
-  - scales
-  - backports
-  - tidyselect
-  - tidygraph
-  - glmnet
-  - maptools
