@@ -4,11 +4,15 @@
 \alias{pcor_mat}
 \title{Extract the Partial Correlation Matrix}
 \usage{
-pcor_mat(object, ...)
+pcor_mat(object, difference = FALSE, ...)
 }
 \arguments{
 \item{object}{A model estimated with \strong{BGGM}. All classes are supported, assuming
-there is matrix to extract.}
+there is matrix to be extracted.}
+
+\item{difference}{Logical. Should the difference be returned (defaults to \code{FALSE}) ? Note
+that this assumes there is a difference (e.g., an object of class \code{ggm_compare_estimate})
+and ignored otherwise.}
 
 \item{...}{Currently ignored.}
 }
@@ -16,7 +20,11 @@ there is matrix to extract.}
 The estimated partial correlation matrix.
 }
 \description{
-Extract the Partial Correlation Matrix
+Extract the partial correlation matrix (posterior mean)
+from \code{\link{estimate}}, \code{\link{explore}}, \code{\link{ggm_compare_estimate}},
+and \code{\link{ggm_compare_explore}} objects. It is also possible to extract the
+partial correlation differences for \code{\link{ggm_compare_estimate}} and
+\code{\link{ggm_compare_explore}} objects.
 }
 \examples{
 \donttest{

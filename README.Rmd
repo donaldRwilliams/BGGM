@@ -256,7 +256,6 @@ of relative support for which hypothesis the data were more likely under.
 
 ### Comparing Gaussian Graphical Models
 
-
 #### Partial Correlation Differences
 
 #### Posterior Predictive Check
