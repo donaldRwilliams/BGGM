@@ -88,13 +88,13 @@ The central contribution of **BGGM** is to extend those approaches:
     +  [Custom Network Statistics](#custom-network-statistics)
     
     
-The computationally intensive tasks are written in `c++` via the `R` package **Rcpp** [@eddelbuettel2011rcpp] and the `c++` library **Armadillo** [@sanderson2016armadillo]. The Bayes factors are computed with the `R` package **BFpack** [@mulder2019bfpack]. Furthermore, there are plotting functions
+The computationally intensive tasks are written in `c++` via the `R` package **Rcpp** [@eddelbuettel2011rcpp] and the `c++` library **Armadillo** [@sanderson2016armadillo]. The Bayes factors are computed with the `R` package **BFpack** [@mulder2019bfpack]. Furthermore, there are [plotting](#example-network-plot) functions
 for each method, control variables can be included in the model (e.g., `~ gender`), 
 and there is support for missing values (see `bggm_missing`).
 
 ## Supported Data Types
 
-* **Continuous**: the continuous method was described in  @Williams2019. Note that 
+* **Continuous**: The continuous method was described in  @Williams2019. Note that 
                   this is based on the customary [Wishart distribution](https://en.wikipedia.org/wiki/Wishart_distribution).
 
 * **Binary**: The binary method builds directly upon @talhouk2012efficient
@@ -107,8 +107,8 @@ and there is support for missing values (see `bggm_missing`).
    
 * **Mixed**: The mixed data (a combination of discrete and continuous) method was introduced
  in @hoff2007extending. This is a semi-parametric copula model
- (i.e., a copula GGM) based on the ranked likelihood. Note that this can be used for *only* ordinal data 
- (not restricted to "mixed" data).
+ (i.e., a copula GGM) based on the ranked likelihood. Note that this can be used for 
+ *only* ordinal data (not restricted to "mixed" data).
 
 ## Illustrative Examples
 The following includes brief examples for *some* of the methods in **BGGM**.
@@ -121,6 +121,8 @@ An ordinal GGM is estimated with
 ```{r, echo=FALSE}
 load(file = "readme_models/fit_sample.rda")
 fit <- fit_sample
+# data
+Y <- ptsd[,1:5] + 1
 ```
 
 ```{r, eval = FALSE}
@@ -138,14 +140,38 @@ Notice the `+ 1`. This is required, because the first category must be `1` when 
 summary(fit)
 ```
 
-The returned object can also be plotted, which allows for visualzing the posterior uncertainty intervals 
-for each relation. An example is provided below in [Posterior uncertainty intervals](#posterior-uncertatiny). 
+The returned object can also be plotted, which allows for visualzing the posterior uncertainty interval for each relation. This summary can the be plotted. An example is provided below in [Posterior uncertainty intervals](#posterior-uncertatiny). 
 The partial correlation matrix is accesed with 
 
-```{r}
-
+```{r, eval=FALSE}
+pcor_mat(fit)
 ```
 
+```{r, echo = FALSE, results='asis'}
+pcors <- pcor_mat(fit)
+knitr::kable(pcors, row.names = TRUE)
+```
+
+The graph is selected with
+```{r}
+select(fit)
+```
+
+and then plotted
+
+```{r}
+# "communities"
+comm <- substring(colnames(Y), 1, 1)
+
+plot(select(fit), 
+     groups = comm,
+     edge_magnify = 5, 
+     palette = "Pastel1", 
+     node_size = 12)
+```
+
+This basic "workflow" can be used with all methods and data types. A more involved network plot
+is provided below.
 
 #### Analytic
 
@@ -178,6 +204,7 @@ The partial correlation matrix is accesed with
 #### Custom Network Statistics
 
 
+### Example Network Plot
 
 ## Additional Features
 

@@ -83,13 +83,13 @@ The computationally intensive tasks are written in `c++` via the `R`
 package **Rcpp** (Eddelbuettel et al. 2011) and the `c++` library
 **Armadillo** (Sanderson and Curtin 2016). The Bayes factors are
 computed with the `R` package **BFpack** (Mulder et al. 2019).
-Furthermore, there are plotting functions for each method, control
-variables can be included in the model (e.g., `~ gender`), and there is
-support for missing values (see `bggm_missing`).
+Furthermore, there are [plotting](#example-network-plot) functions for
+each method, control variables can be included in the model (e.g., `~
+gender`), and there is support for missing values (see `bggm_missing`).
 
 ## Supported Data Types
 
-  - **Continuous**: the continuous method was described in Williams
+  - **Continuous**: The continuous method was described in Williams
     (2018). Note that this is based on the customary [Wishart
     distribution](https://en.wikipedia.org/wiki/Wishart_distribution).
 
@@ -110,9 +110,123 @@ support for missing values (see `bggm_missing`).
 
 ## Illustrative Examples
 
+The following includes brief examples for *some* of the methods in
+**BGGM**.
+
 ### Bayesian Estimation
 
 #### Posterior Sampling
+
+An ordinal GGM is estimated with
+
+    #> Warning: namespace 'BGGM ' is not available and has been replaced
+    #> by .GlobalEnv when processing object 'fit_sample'
+
+``` r
+# data
+Y <- ptsd[,1:5] + 1
+
+# ordinal
+fit <- estimate(Y, type = "ordinal", 
+                analytic = FALSE)
+```
+
+Notice the `+ 1`. This is required, because the first category must be
+`1` when `type = "ordinal"`. The partial correlations can the be
+summarized with
+
+``` r
+summary(fit)
+#> BGGM: Bayesian Gaussian Graphical Models 
+#> --- 
+#> Type: ordinal 
+#> Analytic: FALSE 
+#> Formula:  
+#> Posterior Samples: 250 
+#> Observations (n):
+#> Nodes (p): 5 
+#> Relations: 10 
+#> --- 
+#> Call: 
+#> estimate(Y = Y, type = "ordinal", analytic = FALSE, iter = 250)
+#> --- 
+#> Estimates:
+#>  Relation Post.mean Post.sd Cred.lb Cred.ub
+#>    B1--B2     0.258   0.079   0.105   0.418
+#>    B1--B3     0.028   0.086  -0.127   0.189
+#>    B2--B3     0.517   0.058   0.406   0.616
+#>    B1--B4     0.356   0.070   0.210   0.486
+#>    B2--B4    -0.076   0.078  -0.219   0.063
+#>    B3--B4     0.246   0.077   0.107   0.385
+#>    B1--B5     0.131   0.080  -0.020   0.279
+#>    B2--B5     0.127   0.083  -0.040   0.284
+#>    B3--B5     0.202   0.079   0.063   0.366
+#>    B4--B5     0.349   0.070   0.209   0.474
+#> ---
+```
+
+The returned object can also be plotted, which allows for visualzing the
+posterior uncertainty interval for each relation. This summary can the
+be plotted. An example is provided below in [Posterior uncertainty
+intervals](#posterior-uncertatiny). The partial correlation matrix is
+accesed with
+
+``` r
+pcor_mat(fit)
+```
+
+|    |    B1 |      B2 |    B3 |      B4 |    B5 |
+| -- | ----: | ------: | ----: | ------: | ----: |
+| B1 | 0.000 |   0.258 | 0.028 |   0.356 | 0.131 |
+| B2 | 0.258 |   0.000 | 0.517 | \-0.076 | 0.127 |
+| B3 | 0.028 |   0.517 | 0.000 |   0.246 | 0.202 |
+| B4 | 0.356 | \-0.076 | 0.246 |   0.000 | 0.349 |
+| B5 | 0.131 |   0.127 | 0.202 |   0.349 | 0.000 |
+
+The graph is selected with
+
+``` r
+select(fit)
+#> BGGM: Bayesian Gaussian Graphical Models 
+#> --- 
+#> Type: ordinal 
+#> Analytic: FALSE 
+#> Formula:  
+#> Posterior Samples: 250 
+#> Credible Interval: 95 % 
+#> --- 
+#> Call: 
+#> estimate(Y = Y, type = "ordinal", analytic = FALSE, iter = 250)
+#> --- 
+#> Selected:
+#> 
+#>       1     2     3     4     5
+#> 1 0.000 0.258 0.000 0.356 0.000
+#> 2 0.258 0.000 0.517 0.000 0.000
+#> 3 0.000 0.517 0.000 0.246 0.202
+#> 4 0.356 0.000 0.246 0.000 0.349
+#> 5 0.000 0.000 0.202 0.349 0.000
+#> ---
+```
+
+and then plotted
+
+``` r
+# "communities"
+comm <- substring(colnames(Y), 1, 1)
+
+plot(select(fit), 
+     groups = comm,
+     edge_magnify = 5, 
+     palette = "Pastel1", 
+     node_size = 12)
+#> $plt
+```
+
+<img src="joss_paperunnamed-chunk-9-1.png" style="display: block; margin: auto;" />
+
+This basic “workflow” can be used with all methods and data types. A
+more involved network plot is provided below.
 
 #### Analytic
 
@@ -139,6 +253,8 @@ support for missing values (see `bggm_missing`).
 #### Posterior Uncertainty
 
 #### Custom Network Statistics
+
+### Example Network Plot
 
 ## Additional Features
 
