@@ -166,7 +166,7 @@ The returned object can also be plotted, which allows for visualizing
 the posterior uncertainty interval for each relation. An example is
 provided below in [Posterior uncertainty
 intervals](#posterior-uncertatiny). The partial correlation matrix is
-accedes with
+accessed with
 
 ``` r
 pcor_mat(fit)
@@ -220,7 +220,7 @@ plot(select(fit),
 #> $plt
 ```
 
-<img src="joss_paperunnamed-chunk-9-1.png" width="50%" style="display: block; margin: auto;" />
+<img src="joss_paperunnamed-chunk-9-1.png" width="65%" style="display: block; margin: auto;" />
 
 This basic “workflow” can be used with all methods and data types. A
 more involved network plot is provided below.
@@ -230,7 +230,7 @@ more involved network plot is provided below.
 There is also an analytic solution that is based on the Wishart
 distribution. This simple solution provides competitive performance with
 “state-of-the-art” methods, assuming that *n* (observations) \> *p*
-(variables) The one caveat is that it works only for `type =
+(variables). The one caveat is that it works only for `type =
 "continuous"` (the default).
 
 ``` r
@@ -293,7 +293,9 @@ summary(E)
 #>  B4--B5    0.348    0.072   0.000 1.000 0.000
 ```
 
-When using `plot(E)`, there is a network plot for each hypothesis.
+The posterior hypothesis probabilites are provided in the last three
+columns. When using `plot(E)`, there is a network plot for each
+hypothesis.
 
 #### Confirmatory
 
@@ -366,8 +368,25 @@ fit
 
 The posterior hypothesis probability is `0.895` which provides some
 evidence for the order constraint. The Bayes factor matrix then divides
-the posterior probabilities. This provide a measure of relative support
-for which hypothesis the data were more likely under.
+the posterior probabilities. This provide a measure of *relative*
+support for which hypothesis the data were more likely under.
+
+Finally, the results can be plotted
+
+``` r
+plot(fit) + 
+  scale_fill_brewer(palette = "Set2", 
+                    name = "Posterior Prob")
+#> Scale for 'fill' is already present. Adding another scale for 'fill', which
+#> will replace the existing scale.
+```
+
+<img src="joss_paperunnamed-chunk-18-1.png" width="65%" style="display: block; margin: auto;" />
+
+This demonstrates that all the `plot()` functions in **BGGM** return
+`ggplot` objects that can be futher customized. Note that **BGGM** is
+not focused on making publication ready plots. Typically the bare
+mimumium is provided that can then be honed in.
 
 ### Comparing Gaussian Graphical Models
 
@@ -379,7 +398,7 @@ for which hypothesis the data were more likely under.
 
 #### Confirmatory (groups)
 
-### Beyond the Conditional (in)dependence Structure
+### Beyond the Conditional (In)dependence Structure
 
 #### Predictability
 
