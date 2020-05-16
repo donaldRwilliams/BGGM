@@ -146,9 +146,12 @@ The primary focus of **BGGM** is Gaussian graphical modeling (the
 inverse covariance matrix). The residue is a suite of useful methods not
 explicitly for GGMs. For example,
 
-  - Bivariate correlations for `binary` (tetrachoric), `ordinal`
-    (polychoric), `mixed` (rank based), and `continuous` (Pearson’s)
-    data.
+<br> <br>
+
+### Bivariate Correlations
+
+Bivariate correlations for `binary` (tetrachoric), `ordinal`
+(polychoric), `mixed` (rank based), and `continuous` (Pearson’s) data.
 
 Here is an example for computing tetrachoric correlations:
 
@@ -173,8 +176,12 @@ cors$R
 The object `cors` also includes the sampled correlation matrices (in
 this case 250) in an array.
 
-  - Multivariate regression for binary (probit), ordinal (probit), mixed
-    (rank likelihood), and continous data.
+<br> <br>
+
+### Multivariate Regresssion
+
+Multivariate regression for binary (probit), ordinal (probit), mixed
+(rank likelihood), and continous data.
 
 Here is an example for a multivarate probit model with an ordinal
 outcome, where `E5` (“take charge”) and `N5` (“panic easily”) are
