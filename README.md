@@ -119,9 +119,6 @@ The following includes brief examples for *some* of the methods in
 
 An ordinal GGM is estimated with
 
-    #> Warning: namespace 'BGGM ' is not available and has been replaced
-    #> by .GlobalEnv when processing object 'fit_sample'
-
 ``` r
 # data
 Y <- ptsd[,1:5] + 1
@@ -223,7 +220,7 @@ plot(select(fit),
 #> $plt
 ```
 
-<img src="joss_paperunnamed-chunk-9-1.png" style="display: block; margin: auto;" />
+<img src="joss_paperunnamed-chunk-9-1.png" width="40%" style="display: block; margin: auto;" />
 
 This basic “workflow” can be used with all methods and data types. A
 more involved network plot is provided below.

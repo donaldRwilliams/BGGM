@@ -118,7 +118,7 @@ The following includes brief examples for *some* of the methods in **BGGM**.
 #### Posterior Sampling
 An ordinal GGM is estimated with
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, warning = FALSE}
 load(file = "readme_models/fit_sample.rda")
 fit <- fit_sample
 # data
@@ -159,7 +159,7 @@ select(fit)
 
 and then plotted
 
-```{r}
+```{r,  out.width = '40%'}
 # "communities"
 comm <- substring(colnames(Y), 1, 1)
 
