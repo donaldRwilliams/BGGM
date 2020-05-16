@@ -677,11 +677,3 @@ Distribution and Bayesian Model Selection.” *Psychological Methods*.
 </div>
 
 </div>
-=======
-Gaussian graphical models (GGM). <!-- and (2) hypothesis testing -->
-<!-- \insertCite{Williams2019_bf}{BGGM}. The key distinction is that the former focuses on either the -->
-<!-- posterior or posterior predictive distribution, whereas the latter focuses on model comparison -->
-<!-- with the Bayes factor. The methods in \strong{BGGM} build upon existing algorithms that are well-known in the literature. The central contribution of \strong{BGGM} is to extend those approaches: -->
-
-## References
-
