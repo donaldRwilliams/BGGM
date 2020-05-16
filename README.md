@@ -317,10 +317,10 @@ hyp <- c("PHQ2--PHQ9 > PHQ1--PHQ9 > 0;
 ```
 
 There are two hypotheses separated by (`;`). The first expresses that
-the relation `PHQ2--PHA9` (“feeling down, depressed, or hopeless” and
-“suicidal thoughts”) is larger than `PHQ1--PHA9` (“little interest or
+the relation `PHQ2--PHQ9` (“feeling down, depressed, or hopeless” and
+“suicidal thoughts”) is larger than `PHQ1--PHQ9` (“little interest or
 pleasure in doing things” and “suicidal thoughts”). In other words, that
-the partial correlation is larger for `PHQ2--PHA9`. There is an
+the partial correlation is larger for `PHQ2--PHQ9`. There is an
 additional constraint to positive values (`> 0`) for both relations. The
 second hypothesis is then a “null” model.
 
