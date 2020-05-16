@@ -220,12 +220,31 @@ plot(select(fit),
 #> $plt
 ```
 
-<img src="joss_paperunnamed-chunk-9-1.png" width="40%" style="display: block; margin: auto;" />
+<img src="joss_paperunnamed-chunk-9-1.png" width="50%" style="display: block; margin: auto;" />
 
 This basic “workflow” can be used with all methods and data types. A
 more involved network plot is provided below.
 
 #### Analytic
+
+There is also an analytic solution that is based on the Wishart
+distribution. This simple solution provides competivie performance with
+“state-of-the-art” methods, assuming that *n* (observations) \> *p*
+(variables) The one caveat is that it works only for `type =
+"continuous"` (the default).
+
+``` r
+# analytic
+fit <- estimate(Y, analytic = TRUE)
+
+# network plot
+plot(select(fit))
+```
+
+This is quite handy when (1) only the conditional dependence structure
+is of interest and (2) an immediate solution is desirable. An example of
+(2) is provided in [Posterior Predictive
+Check](#posterior-predictive-check).
 
 ### Bayesian Hypothesis Testing
 
