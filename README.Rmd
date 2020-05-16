@@ -140,7 +140,7 @@ Notice the `+ 1`. This is required, because the first category must be `1` when 
 summary(fit)
 ```
 
-The returned object can also be plotted, which allows for visualzing the posterior uncertainty interval for each relation. This summary can the be plotted. An example is provided below in [Posterior uncertainty intervals](#posterior-uncertatiny). 
+The returned object can also be plotted, which allows for visualzing the posterior uncertainty interval for each relation. An example is provided below in [Posterior uncertainty intervals](#posterior-uncertatiny). 
 The partial correlation matrix is accesed with 
 
 ```{r, eval=FALSE}
@@ -190,8 +190,27 @@ plot(select(fit))
 This is quite handy when (1) only the conditional dependence structure is of interest and (2) an immediate solution is desirable. An example of (2) is provided  in [Posterior Predictive Check](#posterior-predictive-check).
 
 ### Bayesian Hypothesis Testing
+The Bayes factor based method allow for determining the conditional **in**dependence structure 
+(evidence for the null hypothesis).
 
 #### Exploratory
+```{r, echo=FALSE, warning = FALSE}
+load(file = "readme_models/fit_explore.rda")
+fit <- fit_explore
+```
+
+```{r, eval=FALSE}
+# exploratory hypothesis testing
+fit<- explore(Y, type = "ordinal")
+
+# select 
+E <- select(fit, alternative = "exhaustive")
+
+summary(E)
+```
+
+The option `alternative = "exhaustive"` compares three hypotheses: (1) a null relation; (2) a positive
+relation; and (3) a negative relation. When using `plot(E)`, there is a network plot for each hypothesis.
 
 #### Confirmatory
 

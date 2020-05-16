@@ -163,10 +163,9 @@ summary(fit)
 ```
 
 The returned object can also be plotted, which allows for visualzing the
-posterior uncertainty interval for each relation. This summary can the
-be plotted. An example is provided below in [Posterior uncertainty
-intervals](#posterior-uncertatiny). The partial correlation matrix is
-accesed with
+posterior uncertainty interval for each relation. An example is provided
+below in [Posterior uncertainty intervals](#posterior-uncertatiny). The
+partial correlation matrix is accesed with
 
 ``` r
 pcor_mat(fit)
@@ -248,7 +247,24 @@ Check](#posterior-predictive-check).
 
 ### Bayesian Hypothesis Testing
 
+The Bayes factor based method allow for determining the conditional
+**in**dependence structure (evidence for the null hypothesis).
+
 #### Exploratory
+
+``` r
+# exploratory hypothesis testing
+fit<- explore(Y, type = "ordinal")
+
+# select 
+E <- select(fit, alternative = "exhaustive")
+
+summary(E)
+```
+
+The option `alternative = "exhaustive"` compares three hypotheses: (1) a
+null relation; (2) a positive relation; and (3) a negative relation.
+When using `plot(E)`, there is a network plot for each hypothesis.
 
 #### Confirmatory
 
