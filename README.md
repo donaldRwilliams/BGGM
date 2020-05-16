@@ -364,10 +364,10 @@ fit
 #> note: equal hypothesis prior probabilities
 ```
 
-The posterior hypothesis probability of `0.895` which provides some
-evidence for the order constraint. The Bayes factor matrix divides the
-posterior probabilities, which provide a measure of relative support for
-which hypothesis best predicted the data.
+The posterior hypothesis probability is `0.895` which provides some
+evidence for the order constraint. The Bayes factor matrix then divides
+the posterior probabilities. This provide a measure of relative support
+for which hypothesis the data were more likely under.
 
 ### Comparing Gaussian Graphical Models
 
