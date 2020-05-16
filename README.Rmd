@@ -256,10 +256,11 @@ of *relative* support for which hypothesis the data were more likely under.
 
 Finally, the results can be plotted
 
-```{r, out.width = '65%'}
+```{r, out.width = '65%', warning = FALSE, message=FALSE}
 plot(fit) + 
   scale_fill_brewer(palette = "Set2", 
-                    name = "Posterior Prob")
+                    name = "Posterior Prob") +
+  ggtitle("Confirmatory: Comorbidity Network")
 ```
 
 This demonstrates that all the `plot()` functions in **BGGM** return `ggplot` objects that can be futher customized.

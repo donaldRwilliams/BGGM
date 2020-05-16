@@ -376,9 +376,8 @@ Finally, the results can be plotted
 ``` r
 plot(fit) + 
   scale_fill_brewer(palette = "Set2", 
-                    name = "Posterior Prob")
-#> Scale for 'fill' is already present. Adding another scale for 'fill', which
-#> will replace the existing scale.
+                    name = "Posterior Prob") +
+  ggtitle("Confirmatory: Comorbidity Network")
 ```
 
 <img src="joss_paperunnamed-chunk-18-1.png" width="65%" style="display: block; margin: auto;" />
