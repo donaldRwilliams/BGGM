@@ -2,6 +2,7 @@
 output: github_document
 bibliography: inst/REFERENCES.bib
 ---
+
 ```{r, echo = FALSE, message=F}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -25,11 +26,359 @@ library(BGGM)
 
 
 The `R` package **BGGM** provides tools for making Bayesian inference in
-Gaussian graphical models (GGM). 
-<!-- and (2) hypothesis testing -->
-<!-- \insertCite{Williams2019_bf}{BGGM}. The key distinction is that the former focuses on either the -->
-<!-- posterior or posterior predictive distribution, whereas the latter focuses on model comparison -->
-<!-- with the Bayes factor. The methods in \strong{BGGM} build upon existing algorithms that are well-known in the literature. The central contribution of \strong{BGGM} is to extend those approaches: -->
+
+Gaussian graphical models (GGM). The methods are organized around two general 
+approaches for Bayesian inference: (1) estimation and (2) hypothesis 
+testing. The key distinction is that the former focuses on either 
+the posterior or posterior predictive distribution [@Gelman1996a; see section 5 in @rubin1984bayesianly] , whereas the latter focuses on model comparison with the Bayes factor [@Jeffreys1961; @Kass1995].
+
+## Installation
+
+To install the latest release version (1.0.0) from CRAN use
+```{r gh-installation, eval = FALSE}	
+install.packages("BGGM")	
+```
+
+The current developmental version can be installed with	
+
+```{r, eval = FALSE}	
+if (!requireNamespace("remotes")) {	
+  install.packages("remotes")	
+}	
+remotes::install_github("donaldRwilliams/BGGM")
+```
+
+Note that the developmental version is recommended, due to the algorithms being written in `c++` and 
+support for all data types. The developmental version is essentially
+**BGGM** version 2.0.0.
+
+
+
+## Overview
+The methods in **BGGM** build upon existing algorithms that are well-known in the literature.
+The central contribution of **BGGM** is to extend those approaches:
+
+1.  Bayesian estimation with the novel matrix-F prior distribution [@Mulder2018]
+  
+    + [Estimation](#bayesian-estimation) [@Williams2019]
+
+2. Bayesian hypothesis testing with the matrix-F prior distribution [@Williams2019_bf]
+
+    + [Exploratory hypothesis testing](#Exploratory)
+  
+    + [Confirmatory hypothesis testing](#Confirmatory)
+    
+3. Comparing Gaussian graphical models [@Williams2019; @williams2020comparing]
+    
+    + [Partial correlation differences](#partial-correlation-differences) 
+    
+    + [Posterior predictive check](#posterior-predictive-check)
+    
+    + [Exploratory hypothesis testing](#exploratory-groups) 
+    
+    + [Confirmatory hypothesis testing](#confirmatory-groups)
+
+4. Extending inference beyond the conditional (in)dependence structure [@Williams2019]
+
+    +  [Predictability](#Predictability) 
+    
+    +  [Posterior uncertainty intervals](#posterior-uncertatiny) in the 
+       partial correlations
+       
+    +  [Custom Network Statistics](#custom-network-statistics)
+    
+    
+The computationally intensive tasks are written in `c++` via the `R` package **Rcpp** [@eddelbuettel2011rcpp] and the `c++` library **Armadillo** [@sanderson2016armadillo]. The Bayes factors are computed with the `R` package **BFpack** [@mulder2019bfpack]. Furthermore, there are [plotting](#example-network-plot) functions
+for each method, control variables can be included in the model (e.g., `~ gender`), 
+and there is support for missing values (see `bggm_missing`).
+
+## Supported Data Types
+
+* **Continuous**: The continuous method was described in  @Williams2019. Note that 
+                  this is based on the customary [Wishart distribution](https://en.wikipedia.org/wiki/Wishart_distribution).
+
+* **Binary**: The binary method builds directly upon @talhouk2012efficient
+  that, in turn, built upon the approaches of @lawrence2008bayesian and
+  @webb2008bayesian (to name a few).
+  
+* **Ordinal**: The ordinal methods require sampling thresholds. There are two approach 
+   included in **BGGM**. The customary approach described in @albert1993bayesian 
+   (the default) and the 'Cowles' algorithm described in @cowles1996accelerating.
+   
+* **Mixed**: The mixed data (a combination of discrete and continuous) method was introduced
+ in @hoff2007extending. This is a semi-parametric copula model
+ (i.e., a copula GGM) based on the ranked likelihood. Note that this can be used for 
+ *only* ordinal data (not restricted to "mixed" data).
+
+## Illustrative Examples
+The following includes brief examples for *some* of the methods in **BGGM**.
+
+### Bayesian Estimation
+
+#### Posterior Sampling
+An ordinal GGM is estimated with
+
+```{r, echo=FALSE, warning = FALSE}
+load(file = "readme_models/fit_sample.rda")
+fit <- fit_sample
+# data
+Y <- ptsd[,1:5] + 1
+```
+
+```{r, eval = FALSE}
+# data
+Y <- ptsd[,1:5] + 1
+
+# ordinal
+fit <- estimate(Y, type = "ordinal", 
+                analytic = FALSE)
+```
+
+Notice the `+ 1`. This is required, because the first category must be `1` when `type = "ordinal"`. The partial correlations can the be summarized with
+
+```{r}
+summary(fit)
+```
+
+The returned object can also be plotted, which allows for visualizing the posterior uncertainty interval for each relation. An example is provided below in [Posterior uncertainty intervals](#posterior-uncertatiny). 
+The partial correlation matrix is accessed with 
+
+```{r, eval=FALSE}
+pcor_mat(fit)
+```
+
+```{r, echo = FALSE, results='asis'}
+pcors <- pcor_mat(fit)
+knitr::kable(pcors, row.names = TRUE)
+```
+
+The graph is selected with
+```{r}
+select(fit)
+```
+
+and then plotted
+
+```{r,  out.width = '65%'}
+# "communities"
+comm <- substring(colnames(Y), 1, 1)
+
+plot(select(fit), 
+     groups = comm,
+     edge_magnify = 5, 
+     palette = "Pastel1", 
+     node_size = 12)
+```
+
+This basic "workflow" can be used with all methods and data types. A more involved network plot
+is provided below.
+
+#### Analytic
+There is also an analytic solution that is based on the Wishart distribution. This 
+simple solution provides competitive performance with "state-of-the-art" methods, assuming that
+*n* (observations) > *p* (variables). The one 
+caveat is that it works only for `type = "continuous"` (the default).
+
+```{r, eval=FALSE}
+# analytic
+fit <- estimate(Y, analytic = TRUE)
+
+# network plot
+plot(select(fit))
+```
+
+This is quite handy when (1) only the conditional dependence structure is of interest and (2) an immediate solution is desirable. An example of (2) is provided  in [Posterior Predictive Check](#posterior-predictive-check).
+
+### Bayesian Hypothesis Testing
+The Bayes factor based methods allow for determining the conditional **in**dependence structure 
+(evidence for the null hypothesis).
+
+#### Exploratory
+```{r, echo=FALSE, warning = FALSE}
+load(file = "readme_models/fit_explore.rda")
+fit <- fit_explore
+E <- select(fit, alternative = "exhaustive")
+```
+
+```{r, eval=FALSE}
+# exploratory hypothesis testing
+fit<- explore(Y, type = "ordinal")
+
+# select 
+E <- select(fit, alternative = "exhaustive")
+```
+
+The option `alternative = "exhaustive"` compares three hypotheses: (1) a null relation; (2) a positive
+relation; and (3) a negative relation. 
+```{r}
+summary(E)
+```
+The posterior hypothesis probabilites are provided in the last three columns.
+When using `plot(E)`, there is a network plot for each hypothesis.
+
+
+#### Confirmatory
+A central contribution of **BGGM** is confirmatory hypothesis testing of (in)equality constraints [@Hoijtink2011]. By this we are referring to testing expectations, as opposed to feeding the data to, say, `estimate`,
+and seeing what happens to emerge. 
+
+In this example, the focus is on suicidal thoughts (`PHQ9`) in a comorbidity network. Here is an example set of hypotheses
+
+```{r}
+# data (+ 1)
+Y <- depression_anxiety_t1 + 1
+
+# example hypotheses
+hyp <- c("PHQ2--PHQ9 > PHQ1--PHQ9 > 0; 
+          PHQ2--PHQ9 = PHQ1--PHQ9 = 0")
+```
+
+There are two hypotheses separated by (`;`). The first expresses that the relation `PHQ2--PHA9` ("feeling down, depressed, or hopeless" and "suicidal thoughts") is larger than `PHQ1--PHA9` ("little interest or pleasure in doing things" and "suicidal thoughts"). In other words, that the partial correlation is larger for `PHQ2--PHA9`. There is an additional constraint to positive values (`> 0`) for both relations. The second hypothesis is then a "null" model.
+
+```{r, echo=FALSE, warning = FALSE}
+load(file = "readme_models/fit_hyp1.rda")
+fit <- fit_hyp1
+```
+
+```{r, eval=FALSE}
+# (try to) confirm
+fit <- confirm(Y = Y, hypothesis = hyp, 
+               type = "ordinal")
+```
+
+The object `fit` is then printed
+```{r}
+fit
+```
+
+The posterior hypothesis probability is `0.895` which provides some evidence for the order 
+constraint. The Bayes factor matrix then divides the posterior probabilities. This provide a measure
+of *relative* support for which hypothesis the data were more likely under. 
+
+Finally, the results can be plotted
+
+```{r, out.width = '65%', warning = FALSE, message=FALSE}
+plot(fit) + 
+  scale_fill_brewer(palette = "Set2", 
+                    name = "Posterior Prob") +
+  ggtitle("Confirmatory: Comorbidity Network")
+```
+
+This demonstrates that all the `plot()` functions in **BGGM** return `ggplot` objects that can be futher customized.
+Note that **BGGM** is not focused on making publication ready plots. Typically the bare mimumium is provided 
+that can then be honed in.
+
+
+### Comparing Gaussian Graphical Models
+
+#### Partial Correlation Differences
+
+#### Posterior Predictive Check
+
+#### Exploratory (groups)
+
+#### Confirmatory (groups)
+
+### Beyond the Conditional (In)dependence Structure
+
+#### Predictability
+
+#### Posterior Uncertainty
+
+#### Custom Network Statistics
+
+
+### Example Network Plot
+
+## Additional Features
+
+The primary focus of **BGGM** is Gaussian graphical modeling (the inverse covariance matrix).
+The residue is a suite of useful methods not explicitly for GGMs. For example, 
+
+### Bivariate Correlations
+
+Bivariate correlations for `binary` (tetrachoric), `ordinal` (polychoric), `mixed` (rank based),
+and `continuous` (Pearson's) data.
+  
+Here is an example for computing tetrachoric correlations:
+
+```{r, echo=FALSE}
+load(file = "readme_models/binary_cors.rda")
+```
+
+```{r, eval=FALSE}
+# binary data
+Y <- women_math[1:500,]
+
+cors <- zero_order_cors(Y, type = "binary")
+
+cors$R
+```
+
+```{r, echo = FALSE, results='asis'}
+row.names(cors$R_mean) <- 1:6
+knitr::kable(round(cors$R_mean, 3),
+             col.names = c("1", "2", "3","4","5", "6"), 
+             row.names = TRUE)
+```
+
+The object `cors` also includes the sampled correlation matrices (in this case 250) in an array. 
+
+### Multivariate Regression
+
+Multivariate regression for binary (probit), ordinal (probit),
+mixed (rank likelihood), and continuous data.
+  
+Here is an example for a multivariate probit model with an ordinal outcome, where 
+`E5` ("take charge") and `N5` ("panic easily") are predicted by `gender` and `education`:
+
+```{r,echo=FALSE}
+load("readme_models/mv_probit.rda")
+```
+
+```{r, eval = F}
+# personality data
+Y <- bfi
+
+# variables
+Y <- subset(Y, select = c("E5", "N5", 
+                          "gender", "education"))
+
+
+mv_probit <- estimate(Y, formula = ~ gender + as.factor(education), 
+                      type = "ordinal")
+
+```
+
+Note that **BGGM** does not use the customary `model.matrix` formulation. This is for good reason, as 
+each variable in the GGM does not need to be written out. Here we effectively "tricked" **BGGM** to 
+fit a multivariate probit model (each variable included in `formula` is removed from `Y`). 
+
+```{r}
+regression_summary(mv_probit)
+```
+
+This basic idea can also be used to fit regression models with a single outcome.
+
+## Note on Conditional (In)dependence Models for Latent Data
+
+All of the data types (besides continuous) model latent data. That is, unobserved data 
+that is assumed to be Gaussian distributed. For example, a  tetrachoric correlation 
+(binary data) is a special case of a polychoric correlation (ordinal data). 
+Both relations are between "theorized normally distributed continuous *latent* 
+variables [Wikepedia](https://en.wikipedia.org/wiki/Polychoric_correlation). 
+In both instances, the corresponding partial correlation between observed 
+variables is conditioned on the remaining variables in the *latent* space. 
+This implies that interpretation is similar to continuous data, but with respect 
+to latent variables. We refer interested users to 
+[see page 2364, section 2.2, in  @webb2008bayesian].
+
+
+## High Dimensional Data?
+
+**BGGM** was built specifically for social-behavioral scientists. Of course, the methods
+can be used by all researchers. However, there is currently *not* support for high-dimensional data
+(i.e., more variables than observations) that are common place in, say, the genetics literature.
+These data are rare in the social-behavioral sciences. In the future, support for high-dimensional
+data may be added to **BGGM**.
 
 ## References
-

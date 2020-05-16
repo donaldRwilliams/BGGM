@@ -53,7 +53,7 @@ The returned object of class \code{select.ggm_compare_estimate} contains a lot o
 \description{
 Provides the selected graph based on credible intervals for
 the partial correlations that did not contain zero
-\insertCitet{Williams2019}{BGGM}.
+\insertCite{Williams2019}{BGGM}.
 
 Provides the selected graph (of differences) based on credible intervals for
 the partial correlations that did not contain zero

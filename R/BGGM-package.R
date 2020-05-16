@@ -92,7 +92,7 @@
 #'
 #' }
 #'
-#' \bold{Methodological Residue}:
+#' \bold{Additional Features}:
 #'
 #'  The primary focus of \code{BGGM} is Gaussian graphical modeling (the inverse covariance matrix).
 #'  The residue is a suite of useful methods not explicitly for GGMs:
