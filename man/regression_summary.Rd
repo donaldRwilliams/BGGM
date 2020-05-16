@@ -23,7 +23,7 @@ Summarary Method for Multivariate or Univarate Regression
 }
 \examples{
 \donttest{
-note: iter = 250 for demonstrative purposes
+# note: iter = 250 for demonstrative purposes
 
 # data
 # Y <- bfi

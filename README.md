@@ -191,9 +191,6 @@ Y <- subset(Y, select = c("E5", "N5",
 
 mv_probit <- estimate(Y, formula = ~ gender + as.factor(education), 
                       type = "ordinal")
-
-
-regression_summary(mv_probit)
 ```
 
 Note that **BGGM** does not use the customary `model.matrix`
@@ -201,6 +198,40 @@ formulation. This is for good reason, as each variable in the GGM does
 not need to be written out. Here we effectively “tricked” **BGGM** to
 fit a multivariate probit model (each variable included in `formula` is
 removed from `Y`).
+
+``` r
+regression_summary(mv_probit)
+#> BGGM: Bayesian Gaussian Graphical Models 
+#> --- 
+#> Type: ordinal 
+#> Formula: ~ gender + as.factor(education) 
+#> --- 
+#> Coefficients: 
+#>  
+#> E5 
+#>                       Post.mean Post.sd Cred.lb Cred.ub
+#> (Intercept)               1.852   1.852   1.049   3.142
+#> gender                    0.169   0.169   0.065   0.295
+#> as.factor(education)2     0.215   0.215   0.024   0.437
+#> as.factor(education)3     0.271   0.271   0.089   0.445
+#> as.factor(education)4     0.206   0.206   0.019   0.404
+#> as.factor(education)5     0.345   0.345   0.120   0.593
+#> --- 
+#> N5 
+#>                       Post.mean Post.sd Cred.lb Cred.ub
+#> (Intercept)               1.852   1.852   1.049   3.142
+#> gender                    0.169   0.169   0.065   0.295
+#> as.factor(education)2     0.215   0.215   0.024   0.437
+#> as.factor(education)3     0.271   0.271   0.089   0.445
+#> as.factor(education)4     0.206   0.206   0.019   0.404
+#> as.factor(education)5     0.345   0.345   0.120   0.593
+#> --- 
+#> Residual Correlation Matrix: 
+#>       E5    N5
+#> E5  1.00 -0.18
+#> N5 -0.18  1.00
+#> ---
+```
 
 ## Note on Conditional (In)dependence Models for Latent Data
 
