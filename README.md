@@ -395,9 +395,11 @@ mimumium is provided that can then be honed in.
 
 #### Posterior Predictive Check
 
-The predictive check method uses Jensen-Shannon divergence (symmetric KL
-divergence) or the Sum of squared error (for the partial correlation
-matrices) to compare groups (Williams et al. 2020).
+The predictive check method uses Jensen-Shannon divergence (i.e.,
+symmetric Kullback-Leibler divergence
+[Wikipedia](https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence))
+and the Sum of squared error (for the partial correlation matrices) to
+compare groups (Williams et al. 2020).
 
 In this first example, personality networks are compared for males and
 females.
