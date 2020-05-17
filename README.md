@@ -646,16 +646,39 @@ hypothesis states the that conditionaly dependenet effects are larger
 for female than males (note the `&`), with the additional contraint to
 positive values, whereas the second hypothesis is a “null” model.
 
+Fit the model
+
 ``` r
 fit <- ggm_compare_confirm(Yfemales, Ymales, hypothesis = hyp)
+```
 
+Then print the results
+
+``` r
 # print
 fit
+#> BGGM: Bayesian Gaussian Graphical Models 
+#> --- 
+#> Test: Global Predictive Check 
+#> Posterior Samples: 250 
+#>   Group 1: 805 
+#>   Group 2: 1631 
+#> Nodes:  25 
+#> Relations: 300 
+#> --- 
+#> Call: 
+#> ggm_compare_ppc(Ymales, Yfemales, iter = 250, FUN = f, custom_obs = obs)
+#> --- 
+#> Custom: 
+#>  
+#>    contrast custom.obs p.value
+#>  Yg1 vs Yg2         75   0.576
+#> ---
 
 #> BGGM: Bayesian Gaussian Graphical Models
 #> Type: continuous
-#>  ---
-#>  Posterior Samples: 500
+#> ---
+#> Posterior Samples: 500
 #>   Group 1: 1631
 #>   Group 2: 805
 #> Variables (p): 25
@@ -685,6 +708,13 @@ fit
 #> ---
 #> note: equal hypothesis prior probabilities
 ```
+
+The posterior hypothesis probability is 0.989 which provides strong
+evidence for the hypothesis that predicted these “agreeableness”
+relations would be larger in females than in males. This can also be
+plotted, as in [Confirmatory (one group)](#confirmatory). See Rodriguez
+et al. (2020) for a full treatment of confirmatory testing in
+substantative applications.
 
 ### Beyond the Conditional (In)dependence Structure
 
@@ -962,6 +992,14 @@ Böing-Messing, Herbert Hoijtink, Marlyne Meijerink, et al. 2019.
 Mulder, Joris, and Luis Pericchi. 2018. “The Matrix-F Prior for
 Estimating and Testing Covariance Matrices.” *Bayesian Analysis*, no. 4:
 1–22. <https://doi.org/10.1214/17-BA1092>.
+
+</div>
+
+<div id="ref-rodriguez2020formalizing">
+
+Rodriguez, Josue E, Donald R Williams, Philippe Rast, and Joris Mulder.
+2020. “On Formalizing Theoretical Expectations: Bayesian Testing of
+Central Structures in Psychological Networks.”
 
 </div>
 

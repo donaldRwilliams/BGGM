@@ -447,18 +447,23 @@ hyp <- c("g1_A2--A4 > g2_A2--A4 > 0 & g1_A4--A5 > g2_A4--A5 > 0;
 
 where the variables are `A2` ("inquire about others' well being"), `A4` ("love children"), 
 and `A5` ("make people feel at ease"). The first hypothesis states the that conditionaly 
-dependenet effects are larger for female than males (note the `&`), with the additional contraint to positive values, whereas the second hypothesis is a "null" model.
+dependenet effects are larger for female than males (note the `&`), with the additional 
+contraint to positive values, whereas the second hypothesis is a "null" model.
 
+Fit the model
 ```{r, eval=FALSE}
 fit <- ggm_compare_confirm(Yfemales, Ymales, hypothesis = hyp)
+```
 
+Then print the results
+```{r}
 # print
 fit
 
 #> BGGM: Bayesian Gaussian Graphical Models
 #> Type: continuous
-#>  ---
-#>  Posterior Samples: 500
+#> ---
+#> Posterior Samples: 500
 #>   Group 1: 1631
 #>   Group 2: 805
 #> Variables (p): 25
@@ -489,8 +494,10 @@ fit
 #> note: equal hypothesis prior probabilities
 ```
 
-
-
+The posterior hypothesis probability is 0.989 which provides strong evidence for the 
+hypothesis that predicted these "agreeableness" relations would be larger in females 
+than in males. This can also be plotted, as in [Confirmatory (one group)](#confirmatory). 
+See @rodriguez2020formalizing for a full treatment of confirmatory testing in substantative applications.
 
 ### Beyond the Conditional (In)dependence Structure
 
