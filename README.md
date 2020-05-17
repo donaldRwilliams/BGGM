@@ -462,6 +462,7 @@ plot(fit,
 ```
 
 <img src="joss_paperunnamed-chunk-23-1.png" width="65%" style="display: block; margin: auto;" />
+
 where the red region is the “critical” area and the black point is the
 observed KL divergence for the networks. This again shows that the
 “distance” between the networks is much more than expected, assuming
@@ -469,8 +470,9 @@ that the groups were actually the same.
 
 This next example is a new feature in **BGGM** (`2.0.0`), that allows
 for comparing GGMs any way the user wants. All that is required is to
-(1) decide on a test-statistic and (2) write a custom function. Here is
-an example using Hamming distance
+(1) decide on a test-statistic and (2) write a custom function.
+
+Here is an example using Hamming distance
 ([Wikipedia](https://en.wikipedia.org/wiki/Hamming_distance)), which is
 essentially the squared error between adjacency matrices (a test for
 different structures).
@@ -549,8 +551,8 @@ groups are different for this test-statistic. This may seem
 contradictory to the previous results, but it is important to note that
 Hamming distance asks a much different question related to the adjacency
 matrices (no other information, such as edge weigths, is considered).
-Note that `FUN` only requires that the user defined function accepts to
-data sets as the input and returns a single number (the chosen
+Note that `FUN` only requires that the user defined function accepts two
+datasets as the input and returns a single number (the chosen
 test-statistic).
 
 #### Exploratory (groups)
