@@ -278,7 +278,7 @@ summary(E)
 #>  B4--B5    0.348    0.072   0.000 1.000 0.000
 ```
 
-The posterior hypothesis probabilites are provided in the last three
+The posterior hypothesis probabilities are provided in the last three
 columns. When using `plot(E)`, there is a network plot for each
 hypothesis.
 
@@ -370,9 +370,9 @@ plot(fit) +
 ![](readme_models/confirm_hyp.png)
 
 This demonstrates that all the `plot()` functions in **BGGM** return
-`ggplot` objects that can be futher customized. Note that **BGGM** is
+`ggplot` objects that can be further customized. Note that **BGGM** is
 not focused on making publication ready plots. Typically the bare
-mimumium is provided that can then be honed in.
+minimum is provided that can then be honed in.
 
 <br>
 
@@ -412,12 +412,7 @@ difference
 
 ``` r
 # plot summary
-plot(summary(fit))[[1]] +
-  theme_bw() +
-  theme(panel.grid = element_blank(), 
-        axis.text.x = element_blank()) +
-  geom_hline(yintercept = 0, 
-             linetype = "dotted")
+plot(summary(fit))0
 ```
 
 ![](readme_models/ggm_compare_estimate.png)
@@ -425,8 +420,8 @@ plot(summary(fit))[[1]] +
 Note that it is also possible to use `select` for the object `fit` and
 then plot the results. This produces a network plot including the
 selected differences. Furthermore, it is also possible to plot the
-partial correlations (not the differences). This is accomplised by using
-`plot` with the summary computed from an `estimate` object ([see
+partial correlations (not the differences). This is accomplished by
+using `plot` with the summary computed from an `estimate` object ([see
 above](#bayesian-estimation)).
 
 #### Posterior Predictive Check
@@ -447,6 +442,32 @@ Then print the summary output with
 
 ``` r
 fit
+
+#> BGGM: Bayesian Gaussian Graphical Models 
+#> --- 
+#> Test: Global Predictive Check 
+#> Posterior Samples: 500 
+#>   Group 1: 805 
+#>   Group 2: 1631 
+#> Nodes:  25 
+#> Relations: 300 
+#> --- 
+#> Call: 
+#> ggm_compare_ppc(Ymales, Yfemales, iter = 500)
+#> --- 
+#> Symmetric KL divergence (JSD): 
+#>  
+#>    contrast JSD.obs p_value
+#>  Yg1 vs Yg2   0.442       0
+#> --- 
+#>  
+#> Sum of Squared Error: 
+#>  
+#>    contrast SSE.obs p.value
+#>  Yg1 vs Yg2   0.759       0
+#> --- 
+#> note:
+#> JSD is Jensen-Shannon divergence 
 ```
 
 In this case, there seems to be decisive evidence that the networks are
@@ -457,6 +478,8 @@ predictive distribution can also be plotted
 plot(fit, 
      critical = 0.05)$plot_jsd
 ```
+
+![](readme_models/ppc_1.png)
 
 where the red region is the “critical” area and the black point is the
 observed KL divergence for the networks. This again shows that the
@@ -517,12 +540,10 @@ then compare the groups
 fit <- ggm_compare_ppc(Ymales, Yfemales,
                              FUN = f,
                              custom_obs  = obs)
-```
 
-and finally print the results
-
-``` r
+# print
 fit
+
 #> BGGM: Bayesian Gaussian Graphical Models 
 #> --- 
 #> Test: Global Predictive Check 
@@ -539,14 +560,14 @@ fit
 #>  
 #>    contrast custom.obs p.value
 #>  Yg1 vs Yg2         75   0.576
-#> ---
+#> --- 
 ```
 
 In this case, the *p*-value does not indicate that the groups are
 different for this test-statistic. This may seem contradictory to the
 previous results, but it is important to note that Hamming distance asks
 a much different question related to the adjacency matrices (no other
-information, such as edge weigths, is considered).
+information, such as edge weights, is considered).
 
 #### Exploratory (groups)
 
@@ -594,8 +615,8 @@ hyp <- c("g1_A2--A4 > g2_A2--A4 > 0 & g1_A4--A5 > g2_A4--A5 > 0;
 
 where the variables are `A2` (“inquire about others’ well being”), `A4`
 (“love children”), and `A5` (“make people feel at ease”). The first
-hypothesis states the that conditionaly dependenet effects are larger
-for female than males (note the `&`), with the additional contraint to
+hypothesis states that the conditionally dependent effects are larger
+for female than males (note the `&`), with the additional constraint to
 positive values, whereas the second hypothesis is a “null” model.
 
 Fit the model
@@ -609,23 +630,6 @@ Then print the results
 ``` r
 # print
 fit
-#> BGGM: Bayesian Gaussian Graphical Models 
-#> --- 
-#> Test: Global Predictive Check 
-#> Posterior Samples: 250 
-#>   Group 1: 805 
-#>   Group 2: 1631 
-#> Nodes:  25 
-#> Relations: 300 
-#> --- 
-#> Call: 
-#> ggm_compare_ppc(Ymales, Yfemales, iter = 250, FUN = f, custom_obs = obs)
-#> --- 
-#> Custom: 
-#>  
-#>    contrast custom.obs p.value
-#>  Yg1 vs Yg2         75   0.576
-#> ---
 
 #> BGGM: Bayesian Gaussian Graphical Models
 #> Type: continuous
@@ -666,17 +670,125 @@ evidence for the hypothesis that predicted these “agreeableness”
 relations would be larger in females than in males. This can also be
 plotted, as in [Confirmatory (one group)](#confirmatory). See Rodriguez
 et al. (2020) for a full treatment of confirmatory testing in
-substantative applications.
+substantive applications.
 
 ### Beyond the Conditional (In)dependence Structure
 
 #### Predictability
+
+In this example, predictability is computed for each node in the network
+(see here for rationale Haslbeck and Waldorp 2018). Currently **BGGM**
+computes Bayesian variance explained for all data types (Gelman et al.
+2019).
+
+The following computes predictability for binary data
+
+``` r
+# binary
+Y <- women_math
+
+# fit model
+fit <- estimate(Y, type = "binary")
+
+# compute r2
+r2 <- predictability(fit, iter = 500)
+
+# plot
+plot(r2, type = "ridgeline")
+```
+
+![](readme_models/predictability.png)
 
 #### Posterior Uncertainty
 
 See [Partial Correlation Differences](#partial-correlation-differences)
 
 #### Custom Network Statistics
+
+A new feature to **BGGM** allows for computing user defined network
+statistics, given a partial correlation or weighted adjacency matrix.
+
+Here is an example for bridge centrality (Jones, Ma, and McNally 2019).
+The first step is to define the function
+
+``` r
+# need this package 
+library(networktools)
+
+# custom function
+f <- function(x, ...){
+ bridge(x, ...)$`Bridge Strength`
+}
+```
+
+Note that `x` takes the matrix and `f` can return either a single number
+of a number for each node. The next step is to fit the model and compute
+the network statistics
+
+``` r
+# data
+Y <- ptsd
+
+# clusters
+communities <- substring(colnames(Y), 1, 1)
+
+# estimate the model
+fit <- estimate(Y)
+
+# bridge strength
+net_stat <- roll_your_own(fit,
+                          FUN = f,
+                          select = TRUE,
+                          communities = communities)
+```
+
+The function `f` is provided to `FUN` and `communities` is passed to
+`brigde` via `...`. The results can be printed
+
+``` r
+# print
+net_stat
+
+#> BGGM: Bayesian Gaussian Graphical Models 
+#> --- 
+#> Network Stats: Roll Your Own
+#> Posterior Samples: 100 
+#> --- 
+#> Estimates: 
+#> 
+#>  Node Post.mean Post.sd Cred.lb Cred.ub
+#>     1     0.340   0.097   0.166   0.546
+#>     2     0.319   0.100   0.176   0.513
+#>     3     0.000   0.000   0.000   0.000
+#>     4     0.337   0.086   0.189   0.489
+#>     5     0.559   0.133   0.332   0.791
+#>     6     0.188   0.073   0.029   0.320
+#>     7     0.505   0.138   0.241   0.781
+#>     8     0.153   0.070   0.022   0.286
+#>     9     0.175   0.063   0.041   0.281
+#>    10     0.000   0.000   0.000   0.000
+#>    11     0.365   0.107   0.178   0.627
+#>    12     0.479   0.093   0.280   0.637
+#>    13     0.155   0.074   0.022   0.301
+#>    14     0.000   0.000   0.000   0.000
+#>    15     0.374   0.097   0.175   0.550
+#>    16     0.174   0.065   0.034   0.295
+#>    17     0.000   0.000   0.000   0.000
+#>    18     0.491   0.132   0.238   0.745
+#>    19     0.613   0.113   0.408   0.825
+#>    20     0.144   0.066   0.038   0.289
+#> --- 
+```
+
+And then plotted
+
+``` r
+plot(net_stat)
+```
+
+![](readme_models/bridge.png)
+
+There are additional examples in the documentation.
 
 ### Example Network Plot
 
@@ -886,11 +998,27 @@ Integration.” *Journal of Statistical Software* 40 (8): 1–18.
 
 </div>
 
+<div id="ref-gelman_r2_2019">
+
+Gelman, Andrew, Ben Goodrich, Jonah Gabry, and Aki Vehtari. 2019.
+“R-squared for Bayesian Regression Models.” *American Statistician* 73
+(3): 307–9. <https://doi.org/10.1080/00031305.2018.1549100>.
+
+</div>
+
 <div id="ref-Gelman1996a">
 
 Gelman, Andrew, Xiao-Li Meng, and Hal Stern. 1996. “Posterior predictive
 assessment of model fitness via realized discrepancies. Vol.6, No.4.”
 *Statistica Sinica* 6 (4): 733–807. <https://doi.org/10.1.1.142.9951>.
+
+</div>
+
+<div id="ref-haslbeck2018well">
+
+Haslbeck, Jonas MB, and Lourens J Waldorp. 2018. “How Well Do Network
+Models Predict Observations? On the Importance of Predictability in
+Network Models.” *Behavior Research Methods* 50 (2): 853–61.
 
 </div>
 
@@ -912,6 +1040,14 @@ behavioral and social scientists*. Chapman; Hall/CRC.
 
 Jeffreys, Harold. 1961. *The theory of probability*. Oxford: Oxford
 University Press.
+
+</div>
+
+<div id="ref-jones2019bridge">
+
+Jones, Payton J, Ruofan Ma, and Richard J McNally. 2019. “Bridge
+Centrality: A Network Approach to Understanding Comorbidity.”
+*Multivariate Behavioral Research*, 1–15.
 
 </div>
 
