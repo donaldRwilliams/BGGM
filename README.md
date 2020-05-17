@@ -412,7 +412,7 @@ difference
 
 ``` r
 # plot summary
-plot(summary(fit))0
+plot(summary(fit))
 ```
 
 ![](readme_models/ggm_compare_estimate.png)
@@ -610,7 +610,7 @@ Here is a set of hypotheses
 
 ``` r
 hyp <- c("g1_A2--A4 > g2_A2--A4 > 0 & g1_A4--A5 > g2_A4--A5 > 0;
-         g1_A4--A5 = g2_A4--A5 = 0  & g1_A2--A4 = g2_A2--A4 = 0")
+          g1_A4--A5 = g2_A4--A5 = 0  & g1_A2--A4 = g2_A2--A4 = 0")
 ```
 
 where the variables are `A2` (“inquire about others’ well being”), `A4`
@@ -619,15 +619,12 @@ hypothesis states that the conditionally dependent effects are larger
 for female than males (note the `&`), with the additional constraint to
 positive values, whereas the second hypothesis is a “null” model.
 
-Fit the model
+The hypothesis is tested with the following
 
 ``` r
-fit <- ggm_compare_confirm(Yfemales, Ymales, hypothesis = hyp)
-```
+fit <- ggm_compare_confirm(Yfemales, Ymales, 
+                           hypothesis = hyp)
 
-Then print the results
-
-``` r
 # print
 fit
 
