@@ -280,9 +280,11 @@ In this first example, personality networks are compared for males and females.
 ```{r}
 # data
 Y <- bfi
+
 # males
 Ymales <- subset(Y, gender == 1, 
                  select = -c(gender, education))
+
 # females
 Yfemales <- subset(Y, gender == 2, 
                  select = -c(gender, education))
@@ -291,16 +293,87 @@ Yfemales <- subset(Y, gender == 2,
 
 ```{r, echo=FALSE, warning = FALSE}
 load(file = "readme_models/fit_ppc1.rda")
-fit <- fit_hyp1
+fit <- fit_ppc1
 ```
 
 The following compares the groups
-```{r, eval=2}
+```{r, eval=FALSE}
 fit <- ggm_compare_ppc(Ymales, Yfemales)
+```
 
+Then print the summary output with
+```{r}
 fit
 ```
 
+In this case, there seems to be decisive evidence that the networks are different (as indicated by the
+posterior predictive *p*-value). The predictive distribution can also be plotted
+```{r}
+plot(fit, 
+     critical = 0.05)$plot_jsd
+```
+where the red region is the "critical" area and the black point is the observed KL divergence for the networks. This again shows that the "distance" between the networks is much more than expected, assuming that the groups were actually the same.
+
+
+This next example is a new feature in **BGGM** (`2.0.0`), that allows for comparing GGMs any way the user wants. All that is required is to (1) decide on a test-statistic and (2) write a custom function. 
+Here is an example using Hamming distance ([Wikipedia](https://en.wikipedia.org/wiki/Hamming_distance)), which is essentially the squared error between adjacency matrices (a test for different structures).
+
+First define the custom function
+```{r}
+f <- function(Yg1, Yg2){
+
+# remove NA
+x <- na.omit(Yg1)
+y <- na.omit(Yg2)
+
+# nodes
+p <- ncol(x)
+
+# identity matrix
+I_p <- diag(p)
+
+# estimate graphs
+fit1 <-  estimate(x, analytic = TRUE)
+fit2 <-  estimate(y, analytic = TRUE)
+
+# select graphs
+sel1 <- select(fit1)
+sel2 <- select(fit2)
+
+# Hamming distance
+sum((sel1$adj[upper.tri(I_p)] - sel2$adj[upper.tri(I_p)])^2)
+}
+```
+
+Notice that `analytic = TRUE` is being used, which is needed in this case because two graphs are 
+estimated for each iteration (or draw from the posterior predictive distribution). The next step is to compute the observed Hamming distance
+
+```{r}
+# observed difference
+obs <- f(Ymales, Yfemales)
+```
+
+```{r, echo=FALSE, warning = FALSE}
+load(file = "readme_models/global_hd.rda")
+fit <- global_hd
+```
+
+then compare the groups
+
+```{r, eval = FALSE}
+fit <- ggm_compare_ppc(Ymales, Yfemales,
+                             FUN = f,
+                             custom_obs  = obs)
+```
+
+and finally print the results
+
+```{r}
+fit
+```
+In this case, the *p*-value is 0.556 which does not indicate that the groups are different for this test-statistic. This may seem contradictory to the previous results, but it is important to note that
+Hamming distance asks a much different question related to the adjacency matrices (no other
+information, such as edge weigths, is considered). Note that `FUN` only requires that the user defined function accepts to data sets as the input and returns a single number (the chosen test-statistic).
 
 #### Exploratory (groups)
 

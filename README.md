@@ -404,9 +404,11 @@ females.
 ``` r
 # data
 Y <- bfi
+
 # males
 Ymales <- subset(Y, gender == 1, 
                  select = -c(gender, education))
+
 # females
 Yfemales <- subset(Y, gender == 2, 
                  select = -c(gender, education))
@@ -415,10 +417,55 @@ Yfemales <- subset(Y, gender == 2,
 The following compares the groups
 
 ``` r
-## fit <- ggm_compare_ppc(Ymales, Yfemales)
-
-## fit
+fit <- ggm_compare_ppc(Ymales, Yfemales)
 ```
+
+Then print the summary output with
+
+``` r
+fit
+#> BGGM: Bayesian Gaussian Graphical Models 
+#> --- 
+#> Test: Global Predictive Check 
+#> Posterior Samples: 500 
+#>   Group 1: 805 
+#>   Group 2: 1631 
+#> Nodes:  25 
+#> Relations: 300 
+#> --- 
+#> Call: 
+#> ggm_compare_ppc(Ymales, Yfemales, iter = 500)
+#> --- 
+#> Symmetric KL divergence (JSD): 
+#>  
+#>    contrast JSD.obs p_value
+#>  Yg1 vs Yg2   0.442       0
+#> --- 
+#>  
+#> Sum of Squared Error: 
+#>  
+#>    contrast SSE.obs p.value
+#>  Yg1 vs Yg2   0.759       0
+#> --- 
+#> note:
+#> JSD is Jensen-Shannon divergence
+```
+
+In this case, there seem to be decisive evidence that the networks are
+different (as indicated by the posterior predictive *p*-value). The
+predictive distribution can also be plotted
+
+``` r
+plot(fit, 
+     critical = 0.05)$plot_jsd
+#> Picking joint bandwidth of 0.00628
+```
+
+<img src="joss_paperunnamed-chunk-23-1.png" style="display: block; margin: auto;" />
+where the red region is the “critical” area and the black point is the
+observed KL divergence for the networks. This again shows that the
+“distance” is much more than expected, assuming the groups were
+actually the same.
 
 #### Exploratory (groups)
 
