@@ -7,7 +7,7 @@ bibliography: inst/REFERENCES.bib
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "joss_paper",
+  fig.path = "man/figures/README-",
   dev = "png",
   dpi = 500,
   fig.align = "center"
@@ -383,7 +383,7 @@ and finally print the results
 fit
 ```
 
-In this case, the *p*-value is 0.556 which does not indicate that the groups are different for this test-statistic. This may seem contradictory to the previous results, but it is important to note that
+In this case, the *p*-value does not indicate that the groups are different for this test-statistic. This may seem contradictory to the previous results, but it is important to note that
 Hamming distance asks a much different question related to the adjacency matrices (no other
 information, such as edge weigths, is considered).
 

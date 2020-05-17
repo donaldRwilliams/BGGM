@@ -221,7 +221,7 @@ plot(select(fit),
 #> $plt
 ```
 
-<img src="joss_paperunnamed-chunk-9-1.png" width="65%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-9-1.png" width="65%" style="display: block; margin: auto;" />
 
 This basic “workflow” can be used with all methods and data types. A
 more involved network plot is provided below.
@@ -380,7 +380,7 @@ plot(fit) +
   ggtitle("Confirmatory: Comorbidity Network")
 ```
 
-<img src="joss_paperunnamed-chunk-18-1.png" width="65%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-18-1.png" width="65%" style="display: block; margin: auto;" />
 
 This demonstrates that all the `plot()` functions in **BGGM** return
 `ggplot` objects that can be futher customized. Note that **BGGM** is
@@ -463,7 +463,7 @@ plot(fit,
      critical = 0.05)$plot_jsd
 ```
 
-<img src="joss_paperunnamed-chunk-23-1.png" width="65%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-23-1.png" width="65%" style="display: block; margin: auto;" />
 
 where the red region is the “critical” area and the black point is the
 observed KL divergence for the networks. This again shows that the
@@ -549,11 +549,11 @@ fit
 #> ---
 ```
 
-In this case, the *p*-value is 0.556 which does not indicate that the
-groups are different for this test-statistic. This may seem
-contradictory to the previous results, but it is important to note that
-Hamming distance asks a much different question related to the adjacency
-matrices (no other information, such as edge weigths, is considered).
+In this case, the *p*-value does not indicate that the groups are
+different for this test-statistic. This may seem contradictory to the
+previous results, but it is important to note that Hamming distance asks
+a much different question related to the adjacency matrices (no other
+information, such as edge weigths, is considered).
 
 #### Exploratory (groups)
 
@@ -613,7 +613,7 @@ plot(E,
                      palette = "Set2")
 ```
 
-<img src="joss_paperunnamed-chunk-32-1.png" width="65%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-32-1.png" width="65%" style="display: block; margin: auto;" />
 
 Note that `layout` can be changed to any option provided in the `R`
 package **sna** (Butts 2019).
