@@ -401,9 +401,58 @@ information, such as edge weigths, is considered).
 
 
 ### Example Network Plot
+Here is an example of a more involved network plot. In this case, the graph is estimated with a semi-parametric copula (`type = "mixed"`), where two control variables are included in the model.
+
+```{r, echo=FALSE}
+load(file = "readme_models/fit_plt_ex.rda")
+fit <- fit_plt_ex
+# select graph
+E <- select(fit)
+```
+
+```{r, eval=FALSE}
+# personality (includes gender and education)
+Y <- bfi
+
+# fit copula GGM
+fit <- estimate(Y, type = "mixed")
+
+# select graph
+E <- select(fit)
+```
+
+The graph is then plotted
+```{r, out.width = '65%', warning = FALSE, message = FALSE}
+# extract communities
+comm <- substring(colnames(Y), 1, 1)
+
+# plot
+plot(E, 
+     # enlarge edges
+     edge_magnify = 5, 
+     # cluster nodes
+     groups = comm, 
+     # change layout
+     layout = "circle")$plt +
+  # plot title
+  ggtitle("Semi-Parametric Copula") +
+  # add custom labels
+  scale_color_brewer(breaks = c("A", "C", 
+                                "E", "N", 
+                                "O", "e",  
+                                "g"), 
+                     labels =   c("A", "C", 
+                                 "E", "N", 
+                                 "O",  
+                                 "Education",   
+                                 "Gender"), 
+                     palette = "Set2")
+```
+
+Note that `layout` can be changed to any option provided in the `R` package **sna** [@sna].
+
 
 ## Additional Features
-
 The primary focus of **BGGM** is Gaussian graphical modeling (the inverse covariance matrix).
 The residue is a suite of useful methods not explicitly for GGMs. For example, 
 

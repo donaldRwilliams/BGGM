@@ -569,6 +569,55 @@ matrices (no other information, such as edge weigths, is considered).
 
 ### Example Network Plot
 
+Here is an example of a more involved network plot. In this case, the
+graph is estimated with a semi-parametric copula (`type = "mixed"`),
+where two control variables are included in the model.
+
+``` r
+# personality (includes gender and education)
+Y <- bfi
+
+# fit copula GGM
+fit <- estimate(Y, type = "mixed")
+
+# select graph
+E <- select(fit)
+```
+
+The graph is then plotted
+
+``` r
+# extract communities
+comm <- substring(colnames(Y), 1, 1)
+
+# plot
+plot(E, 
+     # enlarge edges
+     edge_magnify = 5, 
+     # cluster nodes
+     groups = comm, 
+     # change layout
+     layout = "circle")$plt +
+  # plot title
+  ggtitle("Semi-Parametric Copula") +
+  # add custom labels
+  scale_color_brewer(breaks = c("A", "C", 
+                                "E", "N", 
+                                "O", "e",  
+                                "g"), 
+                     labels =   c("A", "C", 
+                                 "E", "N", 
+                                 "O",  
+                                 "Education",   
+                                 "Gender"), 
+                     palette = "Set2")
+```
+
+<img src="joss_paperunnamed-chunk-32-1.png" width="65%" style="display: block; margin: auto;" />
+
+Note that `layout` can be changed to any option provided in the `R`
+package **sna** (Butts 2019).
+
 ## Additional Features
 
 The primary focus of **BGGM** is Gaussian graphical modeling (the
@@ -700,6 +749,13 @@ the future, support for high-dimensional data may be added to **BGGM**.
 Albert, James H, and Siddhartha Chib. 1993. “Bayesian Analysis of Binary
 and Polychotomous Response Data.” *Journal of the American Statistical
 Association* 88 (422): 669–79.
+
+</div>
+
+<div id="ref-sna">
+
+Butts, Carter T. 2019. *Sna: Tools for Social Network Analysis*.
+<https://CRAN.R-project.org/package=sna>.
 
 </div>
 
