@@ -26,10 +26,7 @@ library(BGGM)
 [![Build Status](https://travis-ci.org/donaldRwilliams/BGGM.svg?branch=master)](https://travis-ci.org/donaldRwilliams/BGGM)
 
 
-The `R` package **BGGM** provides tools for making Bayesian inference in
-
-Gaussian graphical models (GGM). The methods are organized around two general 
-approaches for Bayesian inference: (1) estimation and (2) hypothesis 
+The `R` package **BGGM** provides tools for making Bayesian inference in Gaussian graphical models (GGM). The methods are organized around two general approaches for Bayesian inference: (1) estimation and (2) hypothesis 
 testing. The key distinction is that the former focuses on either 
 the posterior or posterior predictive distribution [@Gelman1996a; see section 5 in @rubin1984bayesianly] , whereas the latter focuses on model comparison with the Bayes factor [@Jeffreys1961; @Kass1995].
 
