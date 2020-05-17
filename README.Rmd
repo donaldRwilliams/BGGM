@@ -269,6 +269,7 @@ Note that **BGGM** is not focused on making publication ready plots. Typically t
 that can then be honed in.
 
 <br>
+
 ### Comparing Gaussian Graphical Models
 
 #### Partial Correlation Differences
@@ -315,7 +316,6 @@ plot(fit,
      critical = 0.05)$plot_jsd
 ```
 where the red region is the "critical" area and the black point is the observed KL divergence for the networks. This again shows that the "distance" between the networks is much more than expected, assuming that the groups were actually the same.
-
 
 This next example is a new feature in **BGGM** (`2.0.0`), that allows for comparing GGMs any way the user wants. All that is required is to (1) decide on a test-statistic and (2) write a custom function. 
 Here is an example using Hamming distance ([Wikipedia](https://en.wikipedia.org/wiki/Hamming_distance)), which is essentially the squared error between adjacency matrices (a test for different structures).

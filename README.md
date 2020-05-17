@@ -387,7 +387,9 @@ This demonstrates that all the `plot()` functions in **BGGM** return
 not focused on making publication ready plots. Typically the bare
 mimumium is provided that can then be honed in.
 
-<br> \#\#\# Comparing Gaussian Graphical Models
+<br>
+
+### Comparing Gaussian Graphical Models
 
 #### Partial Correlation Differences
 
