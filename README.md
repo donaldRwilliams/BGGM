@@ -652,38 +652,38 @@ fit <- ggm_compare_confirm(Yfemales, Ymales, hypothesis = hyp)
 # print
 fit
 
-BGGM: Bayesian Gaussian Graphical Models 
-Type: continuous 
---- 
-Posterior Samples: 500 
-  Group 1: 1631 
-  Group 2: 805 
-Variables (p): 25 
-Relations: 300 
-Delta: 15 
---- 
-Call:
-ggm_compare_confirm(Yfemales, Ymales, hypothesis = hyp, iter = 500)
---- 
-Hypotheses: 
-
-H1: g1_A2--A4>g2_A2--A4>0&g1_A4--A5>g2_A4--A5>0
-H2: g1_A4--A5=g2_A4--A5=0&g1_A2--A4=g2_A2--A4=0
-H3: complement
---- 
-Posterior prob: 
-
-p(H1|data) = 0.989
-p(H2|data) = 0
-p(H3|data) = 0.011
---- 
-Bayes factor matrix: 
-      H1           H2     H3
-H1 1.000 1.180798e+14 92.115
-H2 0.000 1.000000e+00  0.000
-H3 0.011 1.281873e+12  1.000
---- 
-note: equal hypothesis prior probabilities
+#> BGGM: Bayesian Gaussian Graphical Models
+#> Type: continuous
+#>  ---
+#>  Posterior Samples: 500
+#>   Group 1: 1631
+#>   Group 2: 805
+#> Variables (p): 25
+#> Relations: 300
+#> Delta: 15
+#> ---
+#> Call:
+#> ggm_compare_confirm(Yfemales, Ymales, hypothesis = hyp, iter = 500)
+#> ---
+#> Hypotheses:
+#> 
+#> H1: g1_A2--A4>g2_A2--A4>0&g1_A4--A5>g2_A4--A5>0
+#> H2: g1_A4--A5=g2_A4--A5=0&g1_A2--A4=g2_A2--A4=0
+#> H3: complement
+#> ---
+#> Posterior prob:
+#> 
+#> p(H1|data) = 0.989
+#> p(H2|data) = 0
+#> p(H3|data) = 0.011
+#> ---
+#> Bayes factor matrix:
+#>       H1           H2     H3
+#> H1 1.000 1.180798e+14 92.115
+#> H2 0.000 1.000000e+00  0.000
+#> H3 0.011 1.281873e+12  1.000
+#> ---
+#> note: equal hypothesis prior probabilities
 ```
 
 ### Beyond the Conditional (In)dependence Structure
