@@ -250,6 +250,7 @@ null relation; (2) a positive relation; and (3) a negative relation.
 
 ``` r
 summary(E)
+
 #> BGGM: Bayesian Gaussian Graphical Models 
 #> --- 
 #> Type: ordinal 
@@ -364,7 +365,7 @@ plot(fit) +
   ggtitle("Confirmatory: Comorbidity Network")
 ```
 
-<img src="man/figures/README-unnamed-chunk-17-1.png" width="65%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-16-1.png" width="65%" style="display: block; margin: auto;" />
 
 This demonstrates that all the `plot()` functions in **BGGM** return
 `ggplot` objects that can be futher customized. Note that **BGGM** is
