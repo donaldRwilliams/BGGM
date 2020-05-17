@@ -319,6 +319,7 @@ The object `fit` is then printed
 
 ``` r
 fit
+
 #> BGGM: Bayesian Gaussian Graphical Models 
 #> Type: ordinal 
 #> --- 
@@ -328,7 +329,8 @@ fit
 #> Delta: 15 
 #> --- 
 #> Call:
-#> confirm(Y = Y + 1, hypothesis = hyp, type = "ordinal", iter = 250)
+#> confirm(Y = Y + 1, hypothesis = hyp, type = "ordinal", 
+#>     iter = 250)
 #> --- 
 #> Hypotheses: 
 #> 
@@ -365,7 +367,7 @@ plot(fit) +
   ggtitle("Confirmatory: Comorbidity Network")
 ```
 
-<img src="man/figures/README-unnamed-chunk-16-1.png" width="65%" style="display: block; margin: auto;" />
+![](readme_models/confirm_hyp.png)
 
 This demonstrates that all the `plot()` functions in **BGGM** return
 `ggplot` objects that can be futher customized. Note that **BGGM** is
@@ -445,36 +447,6 @@ Then print the summary output with
 
 ``` r
 fit
-#> BGGM: Bayesian Gaussian Graphical Models 
-#> Type: ordinal 
-#> --- 
-#> Posterior Samples: 250 
-#> Observations (n): 403 
-#> Variables (p): 16 
-#> Delta: 15 
-#> --- 
-#> Call:
-#> confirm(Y = Y + 1, hypothesis = hyp, type = "ordinal", iter = 250)
-#> --- 
-#> Hypotheses: 
-#> 
-#> H1: PHQ2--PHQ9>PHQ1--PHQ9>0
-#> H2: PHQ2--PHQ9=PHQ1--PHQ9=0
-#> H3: complement
-#> --- 
-#> Posterior prob: 
-#> 
-#> p(H1|data) = 0.895
-#> p(H2|data) = 0.002
-#> p(H3|data) = 0.103
-#> --- 
-#> Bayes factor matrix: 
-#>       H1      H2    H3
-#> H1 1.000 529.910 8.666
-#> H2 0.002   1.000 0.016
-#> H3 0.115  61.147 1.000
-#> --- 
-#> note: equal hypothesis prior probabilities
 ```
 
 In this case, there seems to be decisive evidence that the networks are
@@ -484,7 +456,6 @@ predictive distribution can also be plotted
 ``` r
 plot(fit, 
      critical = 0.05)$plot_jsd
-#> NULL
 ```
 
 where the red region is the “critical” area and the black point is the
@@ -980,7 +951,7 @@ Estimating and Testing Covariance Matrices.” *Bayesian Analysis*, no. 4:
 
 Rodriguez, Josue E, Donald R Williams, Philippe Rast, and Joris Mulder.
 2020. “On Formalizing Theoretical Expectations: Bayesian Testing of
-Central Structures in Psychological Networks.”
+Central Structures in Psychological Networks.” *PsyArXiv*.
 
 </div>
 

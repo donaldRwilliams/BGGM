@@ -279,11 +279,6 @@ hyp <- c("PHQ2--PHQ9 > PHQ1--PHQ9 > 0;
 
 There are two hypotheses separated by (`;`). The first expresses that the relation `PHQ2--PHQ9` ("feeling down, depressed, or hopeless" and "suicidal thoughts") is larger than `PHQ1--PHQ9` ("little interest or pleasure in doing things" and "suicidal thoughts"). In other words, that the partial correlation is larger for `PHQ2--PHQ9`. There is an additional constraint to positive values (`> 0`) for both relations. The second hypothesis is then a "null" model.
 
-```{r, echo=FALSE, warning = FALSE}
-load(file = "readme_models/fit_hyp1.rda")
-fit <- fit_hyp1
-```
-
 ```{r, eval=FALSE}
 # (try to) confirm
 fit <- confirm(Y = Y, hypothesis = hyp, 
@@ -291,8 +286,40 @@ fit <- confirm(Y = Y, hypothesis = hyp,
 ```
 
 The object `fit` is then printed
-```{r}
+```{r, eval=FALSE}
 fit
+
+#> BGGM: Bayesian Gaussian Graphical Models 
+#> Type: ordinal 
+#> --- 
+#> Posterior Samples: 250 
+#> Observations (n): 403 
+#> Variables (p): 16 
+#> Delta: 15 
+#> --- 
+#> Call:
+#> confirm(Y = Y + 1, hypothesis = hyp, type = "ordinal", 
+#>     iter = 250)
+#> --- 
+#> Hypotheses: 
+#> 
+#> H1: PHQ2--PHQ9>PHQ1--PHQ9>0
+#> H2: PHQ2--PHQ9=PHQ1--PHQ9=0
+#> H3: complement
+#> --- 
+#> Posterior prob: 
+#> 
+#> p(H1|data) = 0.895
+#> p(H2|data) = 0.002
+#> p(H3|data) = 0.103
+#> --- 
+#> Bayes factor matrix: 
+#>       H1      H2    H3
+#> H1 1.000 529.910 8.666
+#> H2 0.002   1.000 0.016
+#> H3 0.115  61.147 1.000
+#> --- 
+#> note: equal hypothesis prior probabilities
 ```
 
 The posterior hypothesis probability is `0.895` which provides some evidence for the order 
@@ -301,15 +328,15 @@ of *relative* support for which hypothesis the data were more likely under.
 
 Finally, the results can be plotted
 
-```{r, out.width = '65%', warning = FALSE, message=FALSE}
+```{r, eval=FALSE}
 plot(fit) + 
   scale_fill_brewer(palette = "Set2", 
                     name = "Posterior Prob") +
   ggtitle("Confirmatory: Comorbidity Network")
 ```
+![](readme_models/confirm_hyp.png)
 
-This demonstrates that all the `plot()` functions in **BGGM** return `ggplot` objects that can be futher customized.
-Note that **BGGM** is not focused on making publication ready plots. Typically the bare mimumium is provided that can then be honed in.
+This demonstrates that all the `plot()` functions in **BGGM** return `ggplot` objects that can be futher customized. Note that **BGGM** is not focused on making publication ready plots. Typically the bare mimumium is provided that can then be honed in.
 
 <br>
 
@@ -372,13 +399,13 @@ fit <- ggm_compare_ppc(Ymales, Yfemales)
 ```
 
 Then print the summary output with
-```{r}
+```{r, eval=FALSE}
 fit
 ```
 
 In this case, there seems to be decisive evidence that the networks are different (as indicated by the
 posterior predictive *p*-value). The predictive distribution can also be plotted
-```{r, out.width = '65%', warning = FALSE, message=FALSE}
+```{r, eval=FALSE, out.width = '65%', warning = FALSE, message=FALSE}
 plot(fit, 
      critical = 0.05)$plot_jsd
 ```
