@@ -394,6 +394,32 @@ mimumium is provided that can then be honed in.
 
 #### Posterior Predictive Check
 
+The predictive check method uses Jensen-Shannon divergence (symmetric KL
+divergence) or the Sum of squared error (for the partial correlation
+matrices) to compare groups (Williams et al. 2020).
+
+In this first example, personality networks are compared for males and
+females.
+
+``` r
+# data
+Y <- bfi
+# males
+Ymales <- subset(Y, gender == 1, 
+                 select = -c(gender, education))
+# females
+Yfemales <- subset(Y, gender == 2, 
+                 select = -c(gender, education))
+```
+
+The following compares the groups
+
+``` r
+## fit <- ggm_compare_ppc(Ymales, Yfemales)
+
+## fit
+```
+
 #### Exploratory (groups)
 
 #### Confirmatory (groups)
