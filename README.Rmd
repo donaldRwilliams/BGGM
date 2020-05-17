@@ -26,7 +26,10 @@ library(BGGM)
 [![Build Status](https://travis-ci.org/donaldRwilliams/BGGM.svg?branch=master)](https://travis-ci.org/donaldRwilliams/BGGM)
 
 
-The `R` package **BGGM** provides tools for making Bayesian inference in Gaussian graphical models (GGM). The methods are organized around two general approaches for Bayesian inference: (1) estimation and (2) hypothesis 
+
+The `R` package **BGGM** provides tools for making Bayesian inference in 
+Gaussian graphical models (GGM). The methods are organized around two general 
+approaches for Bayesian inference: (1) estimation and (2) hypothesis 
 testing. The key distinction is that the former focuses on either 
 the posterior or posterior predictive distribution [@Gelman1996a; see section 5 in @rubin1984bayesianly] , whereas the latter focuses on model comparison with the Bayes factor [@Jeffreys1961; @Kass1995].
 
@@ -275,6 +278,14 @@ hyp <- c("PHQ2--PHQ9 > PHQ1--PHQ9 > 0;
 ```
 
 There are two hypotheses separated by (`;`). The first expresses that the relation `PHQ2--PHQ9` ("feeling down, depressed, or hopeless" and "suicidal thoughts") is larger than `PHQ1--PHQ9` ("little interest or pleasure in doing things" and "suicidal thoughts"). In other words, that the partial correlation is larger for `PHQ2--PHQ9`. There is an additional constraint to positive values (`> 0`) for both relations. The second hypothesis is then a "null" model.
+
+=======
+
+```{r, echo=FALSE, warning = FALSE}
+load(file = "readme_models/fit_hyp1.rda")
+fit <- fit_hyp1
+```
+
 
 ```{r, eval=FALSE}
 # (try to) confirm
