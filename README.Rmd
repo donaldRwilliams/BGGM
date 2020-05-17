@@ -119,13 +119,6 @@ The following includes brief examples for *some* of the methods in **BGGM**.
 #### Posterior Sampling
 An ordinal GGM is estimated with
 
-```{r, echo=FALSE, warning = FALSE}
-load(file = "readme_models/fit_sample.rda")
-fit <- fit_sample
-# data
-Y <- ptsd[,1:5] + 1
-```
-
 ```{r, eval = FALSE}
 # data
 Y <- ptsd[,1:5] + 1
@@ -137,8 +130,35 @@ fit <- estimate(Y, type = "ordinal",
 
 Notice the `+ 1`. This is required, because the first category must be `1` when `type = "ordinal"`. The partial correlations can the be summarized with
 
-```{r}
+```{r, eval = FALSE}
 summary(fit)
+
+#> BGGM: Bayesian Gaussian Graphical Models 
+#> --- 
+#> Type: ordinal 
+#> Analytic: FALSE 
+#> Formula:  
+#> Posterior Samples: 250 
+#> Observations (n):
+#> Nodes (p): 5 
+#> Relations: 10 
+#> --- 
+#> Call: 
+#> estimate(Y = Y, type = "ordinal", analytic = FALSE, iter = 250)
+#> --- 
+#> Estimates:
+#>  Relation Post.mean Post.sd Cred.lb Cred.ub
+#>    B1--B2     0.258   0.079   0.105   0.418
+#>    B1--B3     0.028   0.086  -0.127   0.189
+#>    B2--B3     0.517   0.058   0.406   0.616
+#>    B1--B4     0.356   0.070   0.210   0.486
+#>    B2--B4    -0.076   0.078  -0.219   0.063
+#>    B3--B4     0.246   0.077   0.107   0.385
+#>    B1--B5     0.131   0.080  -0.020   0.279
+#>    B2--B5     0.127   0.083  -0.040   0.284
+#>    B3--B5     0.202   0.079   0.063   0.366
+#>    B4--B5     0.349   0.070   0.209   0.474
+#> --- 
 ```
 
 The returned object can also be plotted, which allows for visualizing the posterior uncertainty interval for each relation. An example is provided below in [Posterior uncertainty intervals](#posterior-uncertatiny). 
@@ -149,18 +169,17 @@ pcor_mat(fit)
 ```
 
 ```{r, echo = FALSE, results='asis'}
-pcors <- pcor_mat(fit)
-knitr::kable(pcors, row.names = TRUE)
+load(file = "readme_models/pcor_ex.rda")
+knitr::kable(pcor_ex, row.names = TRUE)
 ```
 
 The graph is selected with
-```{r}
-select(fit)
+```{r, eval=FALSE}
+E <- select(fit)
 ```
 
 and then plotted
-
-```{r,  out.width = '65%'}
+```{r, eval = FALSE}
 # "communities"
 comm <- substring(colnames(Y), 1, 1)
 
@@ -171,13 +190,15 @@ plot(select(fit),
      node_size = 12)
 ```
 
+![](readme_models/plt_est_net.png)
+
 This basic "workflow" can be used with all methods and data types. A more involved network plot
 is provided below.
 
 #### Analytic
 There is also an analytic solution that is based on the Wishart distribution. This 
-simple solution provides competitive performance with "state-of-the-art" methods, assuming that
-*n* (observations) > *p* (variables). The one 
+simple solution provides competitive performance with "state-of-the-art" methods, 
+assuming that *n* (observations) > *p* (variables). The one 
 caveat is that it works only for `type = "continuous"` (the default).
 
 ```{r, eval=FALSE}

@@ -136,6 +136,7 @@ summarized with
 
 ``` r
 summary(fit)
+
 #> BGGM: Bayesian Gaussian Graphical Models 
 #> --- 
 #> Type: ordinal 
@@ -161,7 +162,7 @@ summary(fit)
 #>    B2--B5     0.127   0.083  -0.040   0.284
 #>    B3--B5     0.202   0.079   0.063   0.366
 #>    B4--B5     0.349   0.070   0.209   0.474
-#> ---
+#> --- 
 ```
 
 The returned object can also be plotted, which allows for visualizing
@@ -185,27 +186,7 @@ pcor_mat(fit)
 The graph is selected with
 
 ``` r
-select(fit)
-#> BGGM: Bayesian Gaussian Graphical Models 
-#> --- 
-#> Type: ordinal 
-#> Analytic: FALSE 
-#> Formula:  
-#> Posterior Samples: 250 
-#> Credible Interval: 95 % 
-#> --- 
-#> Call: 
-#> estimate(Y = Y, type = "ordinal", analytic = FALSE, iter = 250)
-#> --- 
-#> Selected:
-#> 
-#>       1     2     3     4     5
-#> 1 0.000 0.258 0.000 0.356 0.000
-#> 2 0.258 0.000 0.517 0.000 0.000
-#> 3 0.000 0.517 0.000 0.246 0.202
-#> 4 0.356 0.000 0.246 0.000 0.349
-#> 5 0.000 0.000 0.202 0.349 0.000
-#> ---
+E <- select(fit)
 ```
 
 and then plotted
@@ -219,10 +200,9 @@ plot(select(fit),
      edge_magnify = 5, 
      palette = "Pastel1", 
      node_size = 12)
-#> $plt
 ```
 
-<img src="man/figures/README-unnamed-chunk-9-1.png" width="65%" style="display: block; margin: auto;" />
+![](readme_models/plt_est_net.png)
 
 This basic “workflow” can be used with all methods and data types. A
 more involved network plot is provided below.
@@ -384,7 +364,7 @@ plot(fit) +
   ggtitle("Confirmatory: Comorbidity Network")
 ```
 
-<img src="man/figures/README-unnamed-chunk-18-1.png" width="65%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-17-1.png" width="65%" style="display: block; margin: auto;" />
 
 This demonstrates that all the `plot()` functions in **BGGM** return
 `ggplot` objects that can be futher customized. Note that **BGGM** is
