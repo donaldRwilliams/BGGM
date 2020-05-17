@@ -75,8 +75,9 @@ extend those approaches:
     
       - [Predictability](#Predictability)
     
-      - [Posterior uncertainty intervals](#posterior-uncertatiny) in the
-        partial correlations
+      - [Posterior uncertainty
+        intervals](#partial-correlation-differences) for the partial
+        correlations
     
       - [Custom Network Statistics](#custom-network-statistics)
 
@@ -247,9 +248,12 @@ is of interest and (2) an immediate solution is desirable. An example of
 (2) is provided in [Posterior Predictive
 Check](#posterior-predictive-check).
 
-<br> \#\#\# Bayesian Hypothesis Testing The Bayes factor based methods
-allow for determining the conditional **in**dependence structure
-(evidence for the null hypothesis).
+<br>
+
+### Bayesian Hypothesis Testing
+
+The Bayes factor based methods allow for determining the conditional
+**in**dependence structure (evidence for the null hypothesis).
 
 #### Exploratory
 
@@ -393,16 +397,13 @@ mimumium is provided that can then be honed in.
 
 #### Partial Correlation Differences
 
-#### Posterior Predictive Check
+This method compares groups by computing the difference for each
+relation in the model. In other words, there are pairwise contrasts for
+each partial correlation, resulting in a posterior distribution for each
+difference.
 
-The predictive check method uses Jensen-Shannon divergence (i.e.,
-symmetric Kullback-Leibler divergence
-[Wikipedia](https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence))
-and the sum of squared error (for the partial correlation matrices) to
-compare groups (Williams et al. 2020).
-
-In this first example, personality networks are compared for males and
-females.
+In all examples in this section, personality networks are compared for
+males and females.
 
 ``` r
 # data
@@ -416,6 +417,42 @@ Ymales <- subset(Y, gender == 1,
 Yfemales <- subset(Y, gender == 2, 
                  select = -c(gender, education))
 ```
+
+Fit the model
+
+``` r
+fit <- ggm_compare_estimate(Ymales, Yfemales)
+```
+
+Then plot the results, in this case the posterior distribution for each
+difference
+
+``` r
+# plot summary
+plot(summary(fit))[[1]] +
+  theme_bw() +
+  theme(panel.grid = element_blank(), 
+        axis.text.x = element_blank()) +
+  geom_hline(yintercept = 0, 
+             linetype = "dotted")
+```
+
+![](readme_models/ggm_compare_estimate.png)
+
+Note that it is also possible to use `select` for the object `fit` and
+then plot the results. This produces a network plot including the
+selected differences. Furthermore, it is also possible to plot the
+partial correlations (not the differences). This is accomplised by using
+`plot` with the summary computed from an `estimate` object ([see
+above](#bayesian-estimation)).
+
+#### Posterior Predictive Check
+
+The predictive check method uses Jensen-Shannon divergence (i.e.,
+symmetric Kullback-Leibler divergence
+[Wikipedia](https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence))
+and the sum of squared error (for the partial correlation matrices) to
+compare groups (Williams et al. 2020).
 
 The following compares the groups
 
@@ -463,7 +500,7 @@ plot(fit,
      critical = 0.05)$plot_jsd
 ```
 
-<img src="man/figures/README-unnamed-chunk-23-1.png" width="65%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-26-1.png" width="65%" style="display: block; margin: auto;" />
 
 where the red region is the “critical” area and the black point is the
 observed KL divergence for the networks. This again shows that the
@@ -565,6 +602,8 @@ information, such as edge weigths, is considered).
 
 #### Posterior Uncertainty
 
+See [Partial Correlation Differences](#partial-correlation-differences)
+
 #### Custom Network Statistics
 
 ### Example Network Plot
@@ -613,7 +652,7 @@ plot(E,
                      palette = "Set2")
 ```
 
-<img src="man/figures/README-unnamed-chunk-32-1.png" width="65%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-35-1.png" width="65%" style="display: block; margin: auto;" />
 
 Note that `layout` can be changed to any option provided in the `R`
 package **sna** (Butts 2019).
