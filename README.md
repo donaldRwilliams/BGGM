@@ -247,10 +247,9 @@ is of interest and (2) an immediate solution is desirable. An example of
 (2) is provided in [Posterior Predictive
 Check](#posterior-predictive-check).
 
-### Bayesian Hypothesis Testing
-
-The Bayes factor based methods allow for determining the conditional
-**in**dependence structure (evidence for the null hypothesis).
+<br> \#\#\# Bayesian Hypothesis Testing The Bayes factor based methods
+allow for determining the conditional **in**dependence structure
+(evidence for the null hypothesis).
 
 #### Exploratory
 
@@ -388,7 +387,7 @@ This demonstrates that all the `plot()` functions in **BGGM** return
 not focused on making publication ready plots. Typically the bare
 mimumium is provided that can then be honed in.
 
-### Comparing Gaussian Graphical Models
+<br> \#\#\# Comparing Gaussian Graphical Models
 
 #### Partial Correlation Differences
 
@@ -451,21 +450,106 @@ fit
 #> JSD is Jensen-Shannon divergence
 ```
 
-In this case, there seem to be decisive evidence that the networks are
+In this case, there seems to be decisive evidence that the networks are
 different (as indicated by the posterior predictive *p*-value). The
 predictive distribution can also be plotted
 
 ``` r
 plot(fit, 
      critical = 0.05)$plot_jsd
-#> Picking joint bandwidth of 0.00628
 ```
 
-<img src="joss_paperunnamed-chunk-23-1.png" style="display: block; margin: auto;" />
+<img src="joss_paperunnamed-chunk-23-1.png" width="65%" style="display: block; margin: auto;" />
 where the red region is the “critical” area and the black point is the
 observed KL divergence for the networks. This again shows that the
-“distance” is much more than expected, assuming the groups were
-actually the same.
+“distance” between the networks is much more than expected, assuming
+that the groups were actually the same.
+
+This next example is a new feature in **BGGM** (`2.0.0`), that allows
+for comparing GGMs any way the user wants. All that is required is to
+(1) decide on a test-statistic and (2) write a custom function. Here is
+an example using Hamming distance
+([Wikipedia](https://en.wikipedia.org/wiki/Hamming_distance)), which is
+essentially the squared error between adjacency matrices (a test for
+different structures).
+
+First define the custom function
+
+``` r
+f <- function(Yg1, Yg2){
+
+# remove NA
+x <- na.omit(Yg1)
+y <- na.omit(Yg2)
+
+# nodes
+p <- ncol(x)
+
+# identity matrix
+I_p <- diag(p)
+
+# estimate graphs
+fit1 <-  estimate(x, analytic = TRUE)
+fit2 <-  estimate(y, analytic = TRUE)
+
+# select graphs
+sel1 <- select(fit1)
+sel2 <- select(fit2)
+
+# Hamming distance
+sum((sel1$adj[upper.tri(I_p)] - sel2$adj[upper.tri(I_p)])^2)
+}
+```
+
+Notice that `analytic = TRUE` is being used, which is needed in this
+case because two graphs are estimated for each iteration (or draw from
+the posterior predictive distribution). The next step is to compute the
+observed Hamming distance
+
+``` r
+# observed difference
+obs <- f(Ymales, Yfemales)
+```
+
+then compare the groups
+
+``` r
+fit <- ggm_compare_ppc(Ymales, Yfemales,
+                             FUN = f,
+                             custom_obs  = obs)
+```
+
+and finally print the results
+
+``` r
+fit
+#> BGGM: Bayesian Gaussian Graphical Models 
+#> --- 
+#> Test: Global Predictive Check 
+#> Posterior Samples: 250 
+#>   Group 1: 805 
+#>   Group 2: 1631 
+#> Nodes:  25 
+#> Relations: 300 
+#> --- 
+#> Call: 
+#> ggm_compare_ppc(Ymales, Yfemales, iter = 250, FUN = f, custom_obs = obs)
+#> --- 
+#> Custom: 
+#>  
+#>    contrast custom.obs p.value
+#>  Yg1 vs Yg2         75   0.576
+#> ---
+```
+
+In this case, the *p*-value is 0.556 which does not indicate that the
+groups are different for this test-statistic. This may seem
+contradictory to the previous results, but it is important to note that
+Hamming distance asks a much different question related to the adjacency
+matrices (no other information, such as edge weigths, is considered).
+Note that `FUN` only requires that the user defined function accepts to
+data sets as the input and returns a single number (the chosen
+test-statistic).
 
 #### Exploratory (groups)
 

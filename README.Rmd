@@ -189,6 +189,7 @@ plot(select(fit))
 
 This is quite handy when (1) only the conditional dependence structure is of interest and (2) an immediate solution is desirable. An example of (2) is provided  in [Posterior Predictive Check](#posterior-predictive-check).
 
+<br>
 ### Bayesian Hypothesis Testing
 The Bayes factor based methods allow for determining the conditional **in**dependence structure 
 (evidence for the null hypothesis).
@@ -267,10 +268,11 @@ This demonstrates that all the `plot()` functions in **BGGM** return `ggplot` ob
 Note that **BGGM** is not focused on making publication ready plots. Typically the bare mimumium is provided 
 that can then be honed in.
 
-
+<br>
 ### Comparing Gaussian Graphical Models
 
 #### Partial Correlation Differences
+
 
 #### Posterior Predictive Check
 The predictive check method uses Jensen-Shannon divergence (symmetric KL divergence) or the Sum of squared error (for the partial correlation matrices) to compare groups [@williams2020comparing].
@@ -308,7 +310,7 @@ fit
 
 In this case, there seems to be decisive evidence that the networks are different (as indicated by the
 posterior predictive *p*-value). The predictive distribution can also be plotted
-```{r}
+```{r, out.width = '65%', warning = FALSE, message=FALSE}
 plot(fit, 
      critical = 0.05)$plot_jsd
 ```
@@ -348,7 +350,11 @@ sum((sel1$adj[upper.tri(I_p)] - sel2$adj[upper.tri(I_p)])^2)
 Notice that `analytic = TRUE` is being used, which is needed in this case because two graphs are 
 estimated for each iteration (or draw from the posterior predictive distribution). The next step is to compute the observed Hamming distance
 
-```{r}
+```{r, echo=FALSE, warning = FALSE}
+load(file = "readme_models/obs.rda")
+```
+
+```{r, eval=FALSE}
 # observed difference
 obs <- f(Ymales, Yfemales)
 ```
