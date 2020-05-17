@@ -465,30 +465,35 @@ Then print the summary output with
 ``` r
 fit
 #> BGGM: Bayesian Gaussian Graphical Models 
+#> Type: ordinal 
 #> --- 
-#> Test: Global Predictive Check 
-#> Posterior Samples: 500 
-#>   Group 1: 805 
-#>   Group 2: 1631 
-#> Nodes:  25 
-#> Relations: 300 
+#> Posterior Samples: 250 
+#> Observations (n): 403 
+#> Variables (p): 16 
+#> Delta: 15 
 #> --- 
-#> Call: 
-#> ggm_compare_ppc(Ymales, Yfemales, iter = 500)
+#> Call:
+#> confirm(Y = Y + 1, hypothesis = hyp, type = "ordinal", iter = 250)
 #> --- 
-#> Symmetric KL divergence (JSD): 
-#>  
-#>    contrast JSD.obs p_value
-#>  Yg1 vs Yg2   0.442       0
+#> Hypotheses: 
+#> 
+#> H1: PHQ2--PHQ9>PHQ1--PHQ9>0
+#> H2: PHQ2--PHQ9=PHQ1--PHQ9=0
+#> H3: complement
 #> --- 
-#>  
-#> Sum of Squared Error: 
-#>  
-#>    contrast SSE.obs p.value
-#>  Yg1 vs Yg2   0.759       0
+#> Posterior prob: 
+#> 
+#> p(H1|data) = 0.895
+#> p(H2|data) = 0.002
+#> p(H3|data) = 0.103
 #> --- 
-#> note:
-#> JSD is Jensen-Shannon divergence
+#> Bayes factor matrix: 
+#>       H1      H2    H3
+#> H1 1.000 529.910 8.666
+#> H2 0.002   1.000 0.016
+#> H3 0.115  61.147 1.000
+#> --- 
+#> note: equal hypothesis prior probabilities
 ```
 
 In this case, there seems to be decisive evidence that the networks are
@@ -498,9 +503,8 @@ predictive distribution can also be plotted
 ``` r
 plot(fit, 
      critical = 0.05)$plot_jsd
+#> NULL
 ```
-
-<img src="man/figures/README-unnamed-chunk-26-1.png" width="65%" style="display: block; margin: auto;" />
 
 where the red region is the “critical” area and the black point is the
 observed KL divergence for the networks. This again shows that the
@@ -594,7 +598,93 @@ information, such as edge weigths, is considered).
 
 #### Exploratory (groups)
 
+The Bayes factor based methods allow for determining the conditional
+**in**dependence structure (evidence for the null hypothesis), in this
+case for group equality.
+
+Fit the model
+
+``` r
+fit <- ggm_compare_explore(Ymales, Yfemales)
+```
+
+Then plot the results
+
+``` r
+plot(summary(fit)) +
+  theme_bw() +
+  theme(panel.grid = element_blank(), 
+        axis.text.y = element_blank()) 
+```
+
+![](readme_models/plt_ggm_compare_explore.png)
+
+Here the posterior probability for a difference is visualized for each
+relation in the GGM. Note that it is also possible to use `select` for
+the object `fit` and then plot the results. This produces a network plot
+including the selected differences, in addition to a plot depicting the
+relations for which there was evidence for the null hypothesis.
+
 #### Confirmatory (groups)
+
+A central contribution of **BGGM** is confirmatory hypothesis testing of
+(in)equality constraints (Hoijtink 2011), in this case for comparing
+groups. By this we are referring to testing expectations, as opposed to
+feeding the data to, say, `estimate`, and seeing what happens to emerge.
+
+In this example, the focus is on agreeableness in a personality network.
+Here is a set of hypotheses
+
+``` r
+hyp <- c("g1_A2--A4 > g2_A2--A4 > 0 & g1_A4--A5 > g2_A4--A5 > 0;
+         g1_A4--A5 = g2_A4--A5 = 0  & g1_A2--A4 = g2_A2--A4 = 0")
+```
+
+where the variables are `A2` (“inquire about others’ well being”), `A4`
+(“love children”), and `A5` (“make people feel at ease”). The first
+hypothesis states the that conditionaly dependenet effects are larger
+for female than males (note the `&`), with the additional contraint to
+positive values, whereas the second hypothesis is a “null” model.
+
+``` r
+fit <- ggm_compare_confirm(Yfemales, Ymales, hypothesis = hyp)
+
+# print
+fit
+
+BGGM: Bayesian Gaussian Graphical Models 
+Type: continuous 
+--- 
+Posterior Samples: 500 
+  Group 1: 1631 
+  Group 2: 805 
+Variables (p): 25 
+Relations: 300 
+Delta: 15 
+--- 
+Call:
+ggm_compare_confirm(Yfemales, Ymales, hypothesis = hyp, iter = 500)
+--- 
+Hypotheses: 
+
+H1: g1_A2--A4>g2_A2--A4>0&g1_A4--A5>g2_A4--A5>0
+H2: g1_A4--A5=g2_A4--A5=0&g1_A2--A4=g2_A2--A4=0
+H3: complement
+--- 
+Posterior prob: 
+
+p(H1|data) = 0.989
+p(H2|data) = 0
+p(H3|data) = 0.011
+--- 
+Bayes factor matrix: 
+      H1           H2     H3
+H1 1.000 1.180798e+14 92.115
+H2 0.000 1.000000e+00  0.000
+H3 0.011 1.281873e+12  1.000
+--- 
+note: equal hypothesis prior probabilities
+```
 
 ### Beyond the Conditional (In)dependence Structure
 
@@ -652,7 +742,7 @@ plot(E,
                      palette = "Set2")
 ```
 
-<img src="man/figures/README-unnamed-chunk-35-1.png" width="65%" style="display: block; margin: auto;" />
+![](readme_models/plt_net_example.png)
 
 Note that `layout` can be changed to any option provided in the `R`
 package **sna** (Butts 2019).
