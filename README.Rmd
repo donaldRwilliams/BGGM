@@ -334,6 +334,7 @@ plot(fit) +
                     name = "Posterior Prob") +
   ggtitle("Confirmatory: Comorbidity Network")
 ```
+
 ![](readme_models/confirm_hyp.png)
 
 This demonstrates that all the `plot()` functions in **BGGM** return `ggplot` objects that can be futher customized. Note that **BGGM** is not focused on making publication ready plots. Typically the bare mimumium is provided that can then be honed in.
