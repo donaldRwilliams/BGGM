@@ -720,7 +720,7 @@ f <- function(x, ...){
 
 Note that `x` takes the matrix and `f` can return either a single number
 of a number for each node. The next step is to fit the model and compute
-the network statistics
+the network statistic
 
 ``` r
 # data
@@ -740,7 +740,7 @@ net_stat <- roll_your_own(fit,
 ```
 
 The function `f` is provided to `FUN` and `communities` is passed to
-`brigde` via `...`. The results can be printed
+`brigde` (inside of `f`) via `...`. The results can be printed
 
 ``` r
 # print
