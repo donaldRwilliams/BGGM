@@ -276,7 +276,7 @@ that can then be honed in.
 
 
 #### Posterior Predictive Check
-The predictive check method uses Jensen-Shannon divergence (i.e., symmetric Kullback-Leibler divergence [Wikipedia](https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence)) and the Sum of squared error (for the partial correlation matrices) to compare groups [@williams2020comparing].
+The predictive check method uses Jensen-Shannon divergence (i.e., symmetric Kullback-Leibler divergence [Wikipedia](https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence)) and the sum of squared error (for the partial correlation matrices) to compare groups [@williams2020comparing].
 
 In this first example, personality networks are compared for males and females.
 
@@ -352,8 +352,8 @@ sum((sel1$adj[upper.tri(I_p)] - sel2$adj[upper.tri(I_p)])^2)
 }
 ```
 
-Notice that `analytic = TRUE` is being used, which is needed in this case because two graphs are 
-estimated for each iteration (or draw from the posterior predictive distribution). The next step is to compute the observed Hamming distance
+Note that (1) `analytic = TRUE` is being used, which is needed in this case because two graphs are 
+estimated for each iteration (or draw from the posterior predictive distribution) and (2) `f` requires two datasets as the input and returns a single number (the chosen test-statistic). The next step is to compute the observed Hamming distance
 
 ```{r, echo=FALSE, warning = FALSE}
 load(file = "readme_models/obs.rda")
@@ -382,9 +382,10 @@ and finally print the results
 ```{r}
 fit
 ```
+
 In this case, the *p*-value is 0.556 which does not indicate that the groups are different for this test-statistic. This may seem contradictory to the previous results, but it is important to note that
 Hamming distance asks a much different question related to the adjacency matrices (no other
-information, such as edge weigths, is considered). Note that `FUN` only requires that the user defined function accepts two datasets as the input and returns a single number (the chosen test-statistic).
+information, such as edge weigths, is considered).
 
 #### Exploratory (groups)
 

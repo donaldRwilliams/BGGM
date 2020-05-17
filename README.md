@@ -398,7 +398,7 @@ mimumium is provided that can then be honed in.
 The predictive check method uses Jensen-Shannon divergence (i.e.,
 symmetric Kullback-Leibler divergence
 [Wikipedia](https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence))
-and the Sum of squared error (for the partial correlation matrices) to
+and the sum of squared error (for the partial correlation matrices) to
 compare groups (Williams et al. 2020).
 
 In this first example, personality networks are compared for males and
@@ -507,10 +507,11 @@ sum((sel1$adj[upper.tri(I_p)] - sel2$adj[upper.tri(I_p)])^2)
 }
 ```
 
-Notice that `analytic = TRUE` is being used, which is needed in this
+Note that (1) `analytic = TRUE` is being used, which is needed in this
 case because two graphs are estimated for each iteration (or draw from
-the posterior predictive distribution). The next step is to compute the
-observed Hamming distance
+the posterior predictive distribution) and (2) `f` requires two datasets
+as the input and returns a single number (the chosen test-statistic).
+The next step is to compute the observed Hamming distance
 
 ``` r
 # observed difference
@@ -553,9 +554,6 @@ groups are different for this test-statistic. This may seem
 contradictory to the previous results, but it is important to note that
 Hamming distance asks a much different question related to the adjacency
 matrices (no other information, such as edge weigths, is considered).
-Note that `FUN` only requires that the user defined function accepts two
-datasets as the input and returns a single number (the chosen
-test-statistic).
 
 #### Exploratory (groups)
 
