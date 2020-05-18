@@ -70,7 +70,7 @@ select.ggm_compare_explore <- function(object,
 
     } else {
 
-      BF_cut <- post_prob
+      BF_cut <- BF_cut
 
   }
 

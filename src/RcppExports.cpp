@@ -374,6 +374,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// mvnrnd
+arma::mat mvnrnd(int n, arma::vec mu, arma::mat Sigma);
+RcppExport SEXP _BGGM_mvnrnd(SEXP nSEXP, SEXP muSEXP, SEXP SigmaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Sigma(SigmaSEXP);
+    rcpp_result_gen = Rcpp::wrap(mvnrnd(n, mu, Sigma));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_BGGM_Theta_continuous", (DL_FUNC) &_BGGM_Theta_continuous, 8},
@@ -401,6 +414,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_BGGM_hamming_distance", (DL_FUNC) &_BGGM_hamming_distance, 7},
     {"_BGGM_correlation", (DL_FUNC) &_BGGM_correlation, 2},
     {"_BGGM_ppc_helper_fast", (DL_FUNC) &_BGGM_ppc_helper_fast, 9},
+    {"_BGGM_mvnrnd", (DL_FUNC) &_BGGM_mvnrnd, 3},
     {NULL, NULL, 0}
 };
 

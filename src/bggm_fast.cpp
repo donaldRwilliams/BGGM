@@ -1906,3 +1906,13 @@ Rcpp::List ppc_helper_fast(arma::cube Theta,
 
 }
 
+
+// [[Rcpp::export]]
+arma::mat mvnrnd(int n, arma::vec mu, arma::mat Sigma){
+
+  arma::mat Y = mvnrnd(mu, Sigma, n).t();
+
+  return Y;
+
+}
+
