@@ -16,7 +16,6 @@ Description: Fit Bayesian Gaussian graphical models. The methods are separated i
 Depends: R (>= 3.5.0)
 License: GPL-2
 Imports:
-    abind,
     BFpack,
     GGally (>= 1.4.0),
     ggplot2 (>= 3.2.1),
@@ -39,6 +38,7 @@ Imports:
     utils,
     stringr
 Suggests: 
+ abind,
  knitr,
  assortnet,
  networktools

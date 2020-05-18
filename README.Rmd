@@ -653,7 +653,7 @@ f <- function(x, ...){
 }
 ```
 
-Note that `x` takes the matrix and `f` can return either a single number of a number for each node. The next step is to fit the model and compute the network statistic
+Note that `x` takes the matrix and `f` can return either a single number or a number for each node. The next step is to fit the model and compute the network statistic
 
 ```{r, eval=FALSE}
 # data
@@ -791,7 +791,7 @@ load(file = "readme_models/binary_cors.rda")
 # binary data
 Y <- women_math[1:500,]
 
-cors <- zero_order_cors(Y, type = "binary")
+cors <- zero_order_cors(Y, type = "binary", iter = 250)
 
 cors$R
 ```

@@ -308,6 +308,8 @@ the partial correlation is larger for `PHQ2--PHQ9`. There is an
 additional constraint to positive values (`> 0`) for both relations. The
 second hypothesis is then a “null” model.
 
+\=======
+
 ``` r
 # (try to) confirm
 fit <- confirm(Y = Y, hypothesis = hyp, 
@@ -718,7 +720,7 @@ f <- function(x, ...){
 ```
 
 Note that `x` takes the matrix and `f` can return either a single number
-of a number for each node. The next step is to fit the model and compute
+or a number for each node. The next step is to fit the model and compute
 the network statistic
 
 ``` r
@@ -854,7 +856,7 @@ Here is an example for computing tetrachoric correlations:
 # binary data
 Y <- women_math[1:500,]
 
-cors <- zero_order_cors(Y, type = "binary")
+cors <- zero_order_cors(Y, type = "binary", iter = 250)
 
 cors$R
 ```
