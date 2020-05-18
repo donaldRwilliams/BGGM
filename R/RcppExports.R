@@ -101,3 +101,7 @@ ppc_helper_fast <- function(Theta, n1, n2, p, BF_cut, dens, ppc_ss, ppc_cors, pp
     .Call(`_BGGM_ppc_helper_fast`, Theta, n1, n2, p, BF_cut, dens, ppc_ss, ppc_cors, ppc_hd)
 }
 
+mvnrnd <- function(n, mu, Sigma) {
+    .Call(`_BGGM_mvnrnd`, n, mu, Sigma)
+}
+
