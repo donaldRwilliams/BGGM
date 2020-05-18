@@ -1330,7 +1330,7 @@ create_matrices <- function(framed, varnames) {
   R_ei <- rbind(R_e, R_i)
   r_ei <- rbind(r_e, r_i)
   Rr_ei <- cbind(R_ei, r_ei)
-  beta_zero <- MASS::ginv(R_ei) %*% r_ei
+  # beta_zero <- MASS::ginv(R_ei) %*% r_ei
 
   if (nrow(Rr_ei) > 1) {
     # rref_ei <- pracma::rref(Rr_ei)
@@ -1342,9 +1342,8 @@ create_matrices <- function(framed, varnames) {
       }
     }
   }
-
-
-  list(
+  # beta_zero = beta_zero,
+list(
     R_i = R_i,
     r_i = r_i,
     R_e = R_e,
@@ -1352,7 +1351,6 @@ create_matrices <- function(framed, varnames) {
     R_ei = R_ei,
     Rr_ei = Rr_ei,
     r_ei = r_ei,
-    beta_zero = beta_zero,
     comparisons = comparisons
   )
 
