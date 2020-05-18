@@ -15,7 +15,7 @@
 #' control variables in the model (i.e., \code{~ gender}).
 #'
 #' @param prior_sd Numeric. The scale of the prior distribution (centered at zero), in reference to a beta distribtuion.
-#' The `default` is 0.25. See note for further details.
+#' The `default` is 0.20. See note for further details.
 #'
 #' @param type Character string. Which type of data for \code{Y} ? The options include \code{continuous},
 #' \code{binary}, or \code{ordinal}. See the note for further details.

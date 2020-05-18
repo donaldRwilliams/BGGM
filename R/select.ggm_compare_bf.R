@@ -59,8 +59,7 @@
 #'
 #' @export
 select.ggm_compare_explore <- function(object,
-                                       post_prob = 0.50,
-                                       BF_cut = NULL,...){
+                                       BF_cut = 3,...){
 
   x <- object
 
@@ -70,11 +69,11 @@ select.ggm_compare_explore <- function(object,
 
     } else {
 
-      BF_cut <- post_prob
+      BF_cut <- BF_cut
 
   }
 
-  BF_10 <- 1/ x$BF_01
+  BF_10 <- 1 / x$BF_01
 
   diag(BF_10) <- 0
 
