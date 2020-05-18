@@ -28,8 +28,8 @@ See \link[sna]{gplot.layout}.}
 
 \item{node_size}{Numeric. The size of the nodes (defaults to \code{10}).}
 
-\item{edge_magnify}{Numeric. A value that is multiplied by the edge weights. This can increase (> 1) or
-derease (< 1) the line widths.}
+\item{edge_magnify}{Numeric. A value that is multiplied by the edge weights. This increases (> 1) or
+decrease (< 1) the line widths (defaults to 1).}
 
 \item{groups}{A character string of length \emph{p} (the number of nodes in the model).
 This indicates groups of nodes that should be the same color

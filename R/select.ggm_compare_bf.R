@@ -56,13 +56,15 @@
 #'
 #' @export
 select.ggm_compare_explore <- function(object,
-                                       BF_cut = 3,...){
+                                       BF_cut = 3,
+                                       ...){
 
+  # change to x
   x <- object
 
   if(is.null(BF_cut)){
 
-    BF_cut = (post_prob) / (1 - post_prob)
+    BF_cut <- (post_prob) / (1 - post_prob)
 
     } else {
 
@@ -70,8 +72,13 @@ select.ggm_compare_explore <- function(object,
 
   }
 
+  # post
+  post_prob <- BF_cut / (BF_cut + 1)
+
+  # BF
   BF_10 <- 1 / x$BF_01
 
+  # BF mat diagonal
   diag(BF_10) <- 0
 
   adj_10 <- ifelse(BF_10 > BF_cut, 1, 0)
@@ -112,3 +119,47 @@ select.ggm_compare_explore <- function(object,
   returned_object
 
 }
+
+
+print_select_ggm_compare_bf <- function(x,...){
+
+  groups <- x$object$groups
+  p <- x$p
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Type:",  x$object$type, "\n")
+  # number of iterations
+  cat("Posterior Samples:", x$object$iter, "\n")
+  # number of observations
+  cat("Observations (n):\n")
+  groups <- length(x$object$info$dat)
+  for(i in 1:groups){
+    cat("  Group", paste( i, ":", sep = "") , x$object$info$dat_info$n[[i]], "\n")
+  }
+  # number of variables
+  cat("Variables (p):", x$object$p, "\n")
+  # number of edges
+  cat("Relations:", .5 * (x$object$p * (x$object$p-1)), "\n")
+  cat("Delta:", x$object$delta, "\n")
+  cat("--- \n")
+  cat("Call: \n")
+  print(x$object$call)
+  cat("--- \n")
+  cat("Hypotheses:\n")
+  cat("H0:", paste0("rho_g", 1:groups, collapse = " = "), "\n")
+  cat("H1:", paste0("rho_g", 1:groups, collapse = " - "), " = 0\n")
+  cat("--- \n\n")
+  if(groups ==2){
+    cat("Partial Correlations:\n\n")
+    colnames(x$pcor_mat_10) <- 1:p
+    row.names(x$pcor_mat_10) <- 1:p
+    print(round(x$pcor_mat_10, 2))
+    cat("--- \n")
+  }
+  cat("Adjacency:\n\n")
+  colnames(x$adj_10) <- 1:p
+  row.names(x$adj_10) <- 1:p
+  print(round(x$adj_10, 2))
+
+}
+

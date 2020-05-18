@@ -37,9 +37,8 @@ remove_predictors_helper <- function(Y_groups, formula){
   # number of groups
   groups <- length(Y_groups)
 
-
+  # Y groups
   Y_groups <- lapply(seq_len(groups), function(x)  na.omit(Y_groups[[x]]) )
-
 
   model_matrices <- lapply(seq_len(groups) , function(x) {
     stats::model.matrix(formula, Y_groups[[x]])
@@ -71,12 +70,9 @@ remove_predictors_helper <- function(Y_groups, formula){
     })
   }
 
-
-
-
   list(Y_groups = Y_groups, model_matrices = model_matrices)
 
-}
+  }
 
 
 
@@ -100,6 +96,8 @@ binary_latent_helper <- function(x){
                                                mean = 0, sd = 1))
   # latent data (sd = 1)
   latent_data <- scale(latent_data)
+
+  # latent data
   latent_data
 }
 
@@ -112,6 +110,7 @@ ordinal_latent_helper <- function(x, thresholds){
   # variables
   p <- ncol(x)
 
+  # mean of thresholds
   thresholds <- t(sapply(1:p, function(x) colMeans(thresholds[,,x])))
 
   latent_data <- sapply(1:p, function(z)  qnorm(runif(n, min = pnorm(thresholds[z, x[,z]],
@@ -121,25 +120,33 @@ ordinal_latent_helper <- function(x, thresholds){
                                                                      mean = 0,
                                                                      sd = 1)),
                                                 mean = 0, sd = 1))
-
+  # latent data
   latent_data <- scale(latent_data)
 
+  # latent data
   latent_data
 
-}
-
+  }
 
 rank_helper <- function(Y){
 
   # adapted from hoff (2008). See documentation.
   p <- ncol(Y)
+
   levels  <- apply(Y, 2, function(x) {match(x, sort(unique(x)))})
+
   K <-  apply(levels, 2, max, na.rm = TRUE)
+
   ranks <- apply(Y, 2, rank, ties.method = "max", na.last = "keep")
+
   n_complete <- apply(!is.na(ranks), 2, sum)
+
   U <- t(t(ranks)/(n_complete + 1))
+
   Z <- qnorm(U)
+
   S <- cov(Z)
+
   list(K = K,
        levels = levels,
        Sigma_start = S,
@@ -216,7 +223,6 @@ prior_helper_2 <- function(p, delta , epsilon){
 
   parcorMat <- corMat <- ThetaMat <- SigmaMat <- array(0, dim=c(1e4 , k , k))
 
-
   for(s in 1:dim(parcorMat)[1]){
 
     Psi <- rWishart(1,df = nu, Sigma = 1/nu*diag(k))[,,1]
@@ -234,352 +240,9 @@ prior_helper_2 <- function(p, delta , epsilon){
   parcorMat
 }
 
-
-sampling_helper_poly <- function(Y, delta, iter, type, mixed_type= NULL){
-
-  if(type == "binary"){
-
-  fit_mvn <- mv_binary(Y, matrix(1, nrow = nrow(Y)),
-                        delta = delta,
-                        epsilon = 0.001,
-                        iter = iter,
-                        beta_prior = 0.0001,
-                        cutpoints = c(-Inf, 0, Inf) )
-
-  } else if(type == "ordinal"){
-
-    K <- max(apply(Y, 2, FUN = function(x) {max(unique(Y))} ))
-
-    fit_mvn <- mv_ordinal_albert(Y, matrix(1, nrow = nrow(Y)),
-                          delta = delta,
-                          epsilon = 0.1,
-                          iter = iter, K = K)
-
-  } else if(type == "mixed"){
-
-
-
-    rank_vars <- rank_helper(Y)
-
-    if(is.null(mixed_type)) {
-
-      idx = colMeans(round(Y) == Y)
-      idx = ifelse(idx == 1, 1, 0)
-
-    } else {
-
-      idx = mixed_type
-
-    }
-
-    fit_mvn <- copula(z0_start = rank_vars$z0_start,
-                      levels = rank_vars$levels,
-                      K = rank_vars$K,
-                      Sigma_start = rank_vars$Sigma_start,
-                      iter = iter,
-                      delta = delta,
-                      epsilon = 0.1,
-                      idx = idx)
-
-
-  }
-
-  X <- Y
-
-  X <- as.matrix(X)
-  p <- ncol(X)
-  n <- nrow(X)
-  pcors <- (p * (p - 1))/2
-  col_names <- numbers2words(1:p)
-  mat_name <- matrix(unlist(lapply(col_names, function(x) paste(col_names,
-                                                                x, sep = ""))), p, p)
-  mat_name_up <- mat_name[upper.tri(mat_name)]
-  mat_name_low <- mat_name[lower.tri(mat_name)]
-
-  prior_samples <- prior_helper_2(p = p,
-                                  delta = delta,
-                                  epsilon = 0.0001)
-
-  pcor_store_up <- t(sapply(50:iter, function(x){
-    mat <- fit_mvn$pcors[,,x];
-    mat[upper.tri(mat)]
-  }
-  ))
-
-
-  pcor_store_low <- t(sapply(50:iter, function(x){
-    mat <- fit_mvn$pcors[,,x];
-    mat[lower.tri(mat)]
-  }
-  ))
-
-
-  prior_store_up <- t(sapply(1:iter, function(x){
-    mat <- prior_samples[x,,];
-    mat[upper.tri(mat)]
-  }
-  ))
-
-
-  prior_store_low <- t(sapply(1:iter, function(x){
-    mat <- prior_samples[x,,];
-    mat[lower.tri(mat)]
-  }
-  ))
-
-
-  fisher_z_post_up <- apply(pcor_store_up, 2, fisher_z)
-  fisher_z_post_low <- apply(pcor_store_low, 2, fisher_z)
-  fisher_z_prior_up <- apply(prior_store_up, 2, fisher_z)
-  fisher_z_prior_low <- apply(prior_store_low, 2, fisher_z)
-
-
-  colnames(fisher_z_prior_up) <- mat_name_up
-  colnames(fisher_z_post_up) <- mat_name_up
-  colnames(pcor_store_up) <- mat_name_up
-  colnames(fisher_z_prior_low) <- mat_name_low
-  colnames(fisher_z_post_low) <- mat_name_low
-  colnames(pcor_store_low) <- mat_name_low
-
-  list(fisher_z_post = cbind(fisher_z_post_up, fisher_z_post_low),
-       pcor_post = cbind(pcor_store_up, pcor_store_low), inv_cov_post = fit_mvn$Theta,
-       pcor_prior = cbind(prior_store_up, prior_store_low),
-       fisher_z_prior = cbind(fisher_z_prior_up, fisher_z_prior_low))
-
-
-}
-
-
-print_select_ggm_compare_bf <- function(x,...){
-
-  groups <- x$object$groups
-  p <- x$p
-  cat("BGGM: Bayesian Gaussian Graphical Models \n")
-  cat("--- \n")
-  cat("Type:",  x$object$type, "\n")
-  # number of iterations
-  cat("Posterior Samples:", x$object$iter, "\n")
-  # number of observations
-  cat("Observations (n):\n")
-  groups <- length(x$object$info$dat)
-  for(i in 1:groups){
-    cat("  Group", paste( i, ":", sep = "") , x$object$info$dat_info$n[[i]], "\n")
-  }
-  # number of variables
-  cat("Variables (p):", x$object$p, "\n")
-  # number of edges
-  cat("Relations:", .5 * (x$object$p * (x$object$p-1)), "\n")
-  cat("Delta:", x$object$delta, "\n")
-  cat("--- \n")
-  cat("Call: \n")
-  print(x$object$call)
-  cat("--- \n")
-  cat("Hypotheses:\n")
-  cat("H0:", paste0("rho_g", 1:groups, collapse = " = "), "\n")
-  cat("H1:", paste0("rho_g", 1:groups, collapse = " - "), " = 0\n")
-  cat("--- \n\n")
-  if(groups ==2){
-    cat("Partial Correlations:\n\n")
-    colnames(x$pcor_mat_10) <- 1:p
-    row.names(x$pcor_mat_10) <- 1:p
-    print(round(x$pcor_mat_10, 2))
-    cat("--- \n")
-  }
-  cat("Adjacency:\n\n")
-  colnames(x$adj_10) <- 1:p
-  row.names(x$adj_10) <- 1:p
-  print(round(x$adj_10, 2))
-
-}
-
-
-
-
-
-
-
-
-
-
 print_summary_explore <- function(x,...){
   summary(x$dat_results, summarize = TRUE)
 }
-
-
-print_select_estimate <- function(x, summarize = FALSE, ...){
-
-  p <- ncol(x$partials_non_zero)
-
-  cat("BGGM: Bayesian Gaussian Graphical Models \n")
-  cat("--- \n")
-
-  if (!is.null(x$analytic)) {
-    cat("Type: Selected Graph (Analytic Solution) \n")
-  } else{
-    cat("Type: ", x$type, "\n")
-
-  }
-
-  if(isFALSE(summarize)) {
-    if (is.null(x$rope)) {
-      cat("Credible Interval:",  gsub("*0.", "", formatC(
-        round(x$ci, 4), format = 'f', digits = 2
-      )), "% \n")
-      cat("Connectivity:", round(mean(x$adjacency_non_zero[upper.tri(x$adjacency_non_zero)]) * 100, 1), "% \n")
-      cat("--- \n")
-      cat("Call:\n")
-      print(x$call)
-      cat("--- \n")
-      cat("Selected:\n \n")
-      colnames(x$partials_non_zero)  <- 1:p
-      row.names(x$partials_non_zero) <- 1:p
-      colnames(x$partials_non_zero)  <- 1:p
-      row.names(x$partials_non_zero) <- 1:p
-      cat("Partial correlations \n \n")
-      print(x$partials_non_zero, digits = 2)
-      cat("--- \n \n")
-      cat("Adjacency \n \n")
-      colnames(x$adjacency_non_zero) <- 1:p
-      row.names(x$adjacency_non_zero) <- 1:p
-      print(x$adjacency_non_zero)
-      cat("--- \n")
-
-    } else{
-      cat("Probability:", x$prob, "\n")
-      cat("Region of Practical Equivalence:",
-          "[",
-          -1 * x$rope,
-          ", ",
-          x$rope,
-          "]",
-          "\n",
-          sep = "")
-      cat("Connectivity:", round(mean(x$adjacency_non_zero[upper.tri(x$adjacency_non_zero)]) * 100, 1), "% \n")
-      cat("--- \n")
-      cat("Call:\n")
-      print(x$call)
-      cat("--- \n")
-      cat("Selected:\n \n")
-      colnames(x$partials_non_zero) <- 1:p
-      row.names(x$partials_non_zero) <- 1:p
-      cat("Partial correlations \n \n")
-      print(x$partials_non_zero, digits = 2)
-      cat("--- \n \n")
-      cat("Adjacency non-zero \n \n")
-      colnames(x$adjacency_non_zero) <- 1:p
-      rownames(x$adjacency_non_zero) <- 1:p
-      print(x$adjacency_non_zero)
-      cat("--- \n \n")
-      cat("Adjacency zero \n \n")
-      colnames(x$adjacency_zero) <- 1:p
-      rownames(x$adjacency_zero) <- 1:p
-      print(x$adjacency_zero)
-    }
-  }
-  if (isTRUE(summarize)) {
-    if (isTRUE(x$analytic)) {
-      stop("summary not available for the analytic solution")
-    }
-    if (is.null(x$rope)) {
-      p <- ncol(x$partials_non_zero)
-      mat_names <-
-        mu_mat <- ci_low <- ci_up <- mat_temp <- matrix(0, p, p)
-      mat_names[] <-
-        unlist(lapply(1:p, function(z)
-          paste(1:p, z, sep = "--")))
-
-      low <- (1 - x$ci) / 2
-      up  <-  1 - low
-
-      mu_mat[] <-  colMeans(x$pcor_samples)
-      sd <-  x$pcor_sd[upper.tri(x$pcor_sd)]
-      cis <- apply(x$pcor_samples, 2, quantile, c(low, up))
-      ci_low[] <- cis[1, ]
-      ci_up[] <- cis[2, ]
-
-      summ <- data.frame(
-        edge = mat_names[upper.tri(mat_names)],
-        post_mean = mu_mat[upper.tri(mu_mat)],
-        post_sd = x$pcor_sd[upper.tri(x$pcor_sd)],
-        temp1 = ci_low[upper.tri(ci_low)],
-        temp2 = ci_up[upper.tri(ci_up)],
-        check.names = F
-      )
-
-      colnames(summ) <-
-        c("Edge",
-          "Estimate",
-          "Est.Error",
-          paste(c("lb.", "ub."),
-                gsub(
-                  "*0.", "", formatC(round(x$ci, 4), format = 'f', digits = 2)
-                ), "%", sep = ""))
-      cat("Credible Interval:", gsub("^.*\\.", "", x$ci), "% \n")
-      cat("Connectivity:", round(mean(x$adjacency_non_zero[upper.tri(x$adjacency_non_zero)]) * 100, 1), "% \n")
-      cat("--- \n")
-      cat("Call:\n")
-      print(x$call)
-      cat("--- \n")
-      cat("Estimates: \n \n")
-      print(summ, row.names = F, ...)
-      cat("--- \n")
-
-    } else{
-      cat("Probability:", x$prob, "\n")
-      cat("Region of Practical Equivalence:",
-          "[",
-          -1 * x$rope,
-          ", ",
-          x$rope,
-          "]",
-          "\n",
-          sep = "")
-      cat("Connectivity:", round(mean(x$adjacency_non_zero[upper.tri(x$adjacency_non_zero)]) * 100, 1), "% \n")
-      cat("--- \n")
-      cat("Call:\n")
-      print(x$call)
-      cat("--- \n")
-      cat("Pr.out: post prob outside of rope \n")
-      cat("Pr.in: post prob inside of rope \n")
-      cat("--- \n")
-
-      p <- ncol(x$partials_non_zero)
-      mat_names <- mu_mat <- rope_in  <- matrix(0, p, p)
-      mat_names[] <-
-        unlist(lapply(1:p, function(z)
-          paste(1:p, z, sep = "--")))
-
-      low <- (1 - x$ci) / 2
-      up  <-  1 - low
-
-      mu_mat[] <-  colMeans(x$pcor_samples)
-      sd <-  x$pcor_sd[upper.tri(x$pcor_sd)]
-
-      rope_in[] <- x$in_rope
-
-      cat("Estimates: \n \n")
-      summ <- data.frame(
-        edge = mat_names[upper.tri(mat_names)],
-        post_mean = mu_mat[upper.tri(mu_mat)],
-        post_sd = x$pcor_sd[upper.tri(x$pcor_sd)],
-        "pr_out" = 1 - rope_in[upper.tri(rope_in)],
-        "pr_in" = rope_in[upper.tri(rope_in)],
-        check.names = F
-      )
-
-      colnames(summ) <- c("Edge", "Estimate",
-                          "Est.Error",  "Pr.out", "Pr.in")
-      print(summ, row.names = F, ...)
-      cat("--- \n")
-    }
-  }
-}
-
-
-
-
-
-
 
 
 print_post_pred <- function(x,...){
@@ -592,17 +255,6 @@ print_post_pred <- function(x,...){
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
 print_map <- function(x,...){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
@@ -610,7 +262,6 @@ print_map <- function(x,...){
   cat("--- \n")
   print(x$pcor)
 }
-
 
 
 print_fitted <- function(x,...){
@@ -725,9 +376,6 @@ analytic_solve <- function(X){
        inv_var = inv_var,
        pcor_mat = pcor_mat)
 }
-
-
-
 
 rope_helper <- function(x, rope){
   mean(- rope < x & x < rope )
