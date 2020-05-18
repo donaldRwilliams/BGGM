@@ -51,6 +51,25 @@ Currently the default to include all nodes in the model when computing R2. This 
 then sets those edges not detected to zero. This is accomplished by subsetting the correlation matrix according to each neighborhood
 of relations.
 }
+\examples{
+\donttest{
+
+# data
+Y <- ptsd
+
+fit <- estimate(Y, iter = 250)
+
+r2 <- predictability(fit, select = TRUE, iter = 250)
+
+# summary
+r2
+
+# plot
+plot(r2)
+
+}
+
+}
 \references{
 \insertAllCited{}
 }

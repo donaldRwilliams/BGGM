@@ -43,6 +43,24 @@
 #' @references
 #' \insertAllCited{}
 #'
+#' @examples
+#' \donttest{
+#'
+#' # data
+#' Y <- ptsd
+#'
+#' fit <- estimate(Y, iter = 250)
+#'
+#' r2 <- predictability(fit, select = TRUE, iter = 250)
+#'
+#' # summary
+#' r2
+#'
+#' # plot
+#' plot(r2)
+#'
+#' }
+#'
 #' @export
 predictability <- function(object,
                            select = FALSE,
