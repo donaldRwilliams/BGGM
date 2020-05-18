@@ -21,6 +21,18 @@ A dataframe containing the summarized posterior distributions.
 Summarize the posterior distribution for each partial correlation
 with the posterior mean and standard deviation.
 }
+\examples{
+\donttest{
+# note: iter = 250 for demonstrative purposes
+
+Y <- ptsd
+
+fit <- explore(Y, iter = 250)
+
+summary(fit)
+
+}
+}
 \seealso{
 \code{\link{select.explore}}
 }

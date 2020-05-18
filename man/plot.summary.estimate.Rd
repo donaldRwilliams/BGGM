@@ -24,6 +24,20 @@ A \code{ggplot} object.
 \description{
 Visualize the posterior distributions for each partial correlation.
 }
+\examples{
+\donttest{
+# data
+Y <- ptsd
+
+fit <- estimate(Y, iter = 250)
+
+summary(fit)
+
+plot(summary(fit))
+
+}
+
+}
 \seealso{
 \code{\link{estimate}}
 }

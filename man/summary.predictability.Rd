@@ -7,12 +7,26 @@
 \method{summary}{predictability}(object, cred = 0.95, ...)
 }
 \arguments{
-\item{object}{an object of class \code{predictability}}
+\item{object}{An object of class \code{predictability}.}
 
-\item{cred}{credible interval}
+\item{cred}{Numeric. The credible interval width for summarizing the posterior
+distributions (defaults to 0.95; must be between 0 and 1).}
 
-\item{...}{currently ignored}
+\item{...}{Currently ignored}
 }
 \description{
 Summary Method for \code{predictability} Objects
+}
+\examples{
+\donttest{
+Y <- ptsd
+
+fit <- explore(Y, iter = 250)
+
+r2 <- predictability(fit, iter = 250)
+
+summary(r2)
+
+}
+
 }
