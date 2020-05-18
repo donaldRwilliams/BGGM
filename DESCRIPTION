@@ -21,8 +21,10 @@ Imports:
     ggplot2 (>= 3.2.1),
     ggridges (>= 0.5.1),
     grDevices,
+    MASS,
     Matrix,
     methods,
+    mice,
     mvtnorm (>= 1.0.11),
     mvnfast,
     network (>= 1.15),
@@ -36,11 +38,9 @@ Imports:
     utils,
     stringr
 Suggests: 
- abind,
  knitr,
  assortnet,
- networktools,
- mice
+ networktools
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.0
