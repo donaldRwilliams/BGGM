@@ -18,6 +18,19 @@
 #'         4 (posterior summary),
 #'         p (number of nodes). \code{summary = FALSE}:
 #'         list containing predictions for each variable
+#'
+#'
+#' @examples
+#' \donttest{
+#' # # data
+#' Y <- ptsd
+#'
+#' fit <- estimate(Y, iter = 250)
+#'
+#' pred <- predict(fit)
+#'
+#' }
+#'
 #' @export
 predict.estimate <- function(object,
                            newdata = NULL,
@@ -72,9 +85,6 @@ predict.estimate <- function(object,
 
     stop("type not currently supported. must be continuous")
 }
-
-
-
   if(object$p != p){
 
     stop(paste0("the number of nodes in the newdata does",
@@ -170,6 +180,19 @@ predict.estimate <- function(object,
 #'         4 (posterior summary),
 #'         p (number of nodes). \code{summary = FALSE}:
 #'         list containing predictions for each variable
+#'
+#' @examples
+#' \donttest{
+#' # data
+#' Y <- ptsd
+#'
+#' # fit model
+#' fit <- explore(Y, iter = 250)
+#'
+#' # predict
+#' pred <- predict(fit)
+#'
+#' }
 #' @export
 predict.explore <- function(object,
                              newdata = NULL,

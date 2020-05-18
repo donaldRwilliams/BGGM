@@ -28,3 +28,15 @@
 \description{
 Model Predictions for \code{estimate} Objects
 }
+\examples{
+\donttest{
+# # data
+Y <- ptsd
+
+fit <- estimate(Y, iter = 250)
+
+pred <- predict(fit)
+
+}
+
+}

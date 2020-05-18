@@ -32,7 +32,7 @@ as ranks when \code{type = "mixed"} and \code{NULL} otherwise. See note for furt
 \item{analytic}{logical. Should the analytic solution be computed (default is \code{FALSE}) ? See note for details.}
 
 \item{prior_sd}{Numeric. The scale of the prior distribution (centered at zero), in reference to a beta distribtuion.
-The `default` is 0.25. See note for further details.}
+The `default` is 0.20. See note for further details.}
 
 \item{iter}{number of iterations (posterior samples; defaults to 5000).}
 
@@ -162,7 +162,7 @@ plot(summary(fit))
 select(fit)
 
 # plot graph
-plot(select(fit))
+# plot(select(fit))
 
 ##########################
 ### example 2: ordinal ###

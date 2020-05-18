@@ -6,6 +6,66 @@
 
 using namespace Rcpp;
 
+// Sigma_i_not_i
+arma::mat Sigma_i_not_i(arma::mat x, int index);
+RcppExport SEXP _BGGM_Sigma_i_not_i(SEXP xSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type index(indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(Sigma_i_not_i(x, index));
+    return rcpp_result_gen;
+END_RCPP
+}
+// select_col
+arma::vec select_col(arma::mat x, int index);
+RcppExport SEXP _BGGM_select_col(SEXP xSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type index(indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(select_col(x, index));
+    return rcpp_result_gen;
+END_RCPP
+}
+// select_row
+arma::mat select_row(arma::mat x, int index);
+RcppExport SEXP _BGGM_select_row(SEXP xSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type index(indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(select_row(x, index));
+    return rcpp_result_gen;
+END_RCPP
+}
+// remove_row
+arma::mat remove_row(arma::mat x, int which);
+RcppExport SEXP _BGGM_remove_row(SEXP xSEXP, SEXP whichSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type which(whichSEXP);
+    rcpp_result_gen = Rcpp::wrap(remove_row(x, which));
+    return rcpp_result_gen;
+END_RCPP
+}
+// remove_col
+arma::mat remove_col(arma::mat x, int index);
+RcppExport SEXP _BGGM_remove_col(SEXP xSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type index(indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(remove_col(x, index));
+    return rcpp_result_gen;
+END_RCPP
+}
 // Theta_continuous
 Rcpp::List Theta_continuous(arma::mat Y, int iter, float delta, float epsilon, int prior_only, int explore, arma::mat start, bool progress);
 RcppExport SEXP _BGGM_Theta_continuous(SEXP YSEXP, SEXP iterSEXP, SEXP deltaSEXP, SEXP epsilonSEXP, SEXP prior_onlySEXP, SEXP exploreSEXP, SEXP startSEXP, SEXP progressSEXP) {
@@ -89,66 +149,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::mat >::type start(startSEXP);
     Rcpp::traits::input_parameter< bool >::type progress(progressSEXP);
     rcpp_result_gen = Rcpp::wrap(mv_binary(Y, X, delta, epsilon, iter, beta_prior, cutpoints, start, progress));
-    return rcpp_result_gen;
-END_RCPP
-}
-// Sigma_i_not_i
-arma::mat Sigma_i_not_i(arma::mat x, int index);
-RcppExport SEXP _BGGM_Sigma_i_not_i(SEXP xSEXP, SEXP indexSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
-    Rcpp::traits::input_parameter< int >::type index(indexSEXP);
-    rcpp_result_gen = Rcpp::wrap(Sigma_i_not_i(x, index));
-    return rcpp_result_gen;
-END_RCPP
-}
-// select_col
-arma::vec select_col(arma::mat x, int index);
-RcppExport SEXP _BGGM_select_col(SEXP xSEXP, SEXP indexSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
-    Rcpp::traits::input_parameter< int >::type index(indexSEXP);
-    rcpp_result_gen = Rcpp::wrap(select_col(x, index));
-    return rcpp_result_gen;
-END_RCPP
-}
-// select_row
-arma::mat select_row(arma::mat x, int index);
-RcppExport SEXP _BGGM_select_row(SEXP xSEXP, SEXP indexSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
-    Rcpp::traits::input_parameter< int >::type index(indexSEXP);
-    rcpp_result_gen = Rcpp::wrap(select_row(x, index));
-    return rcpp_result_gen;
-END_RCPP
-}
-// remove_row
-arma::mat remove_row(arma::mat x, int which);
-RcppExport SEXP _BGGM_remove_row(SEXP xSEXP, SEXP whichSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
-    Rcpp::traits::input_parameter< int >::type which(whichSEXP);
-    rcpp_result_gen = Rcpp::wrap(remove_row(x, which));
-    return rcpp_result_gen;
-END_RCPP
-}
-// remove_col
-arma::mat remove_col(arma::mat x, int index);
-RcppExport SEXP _BGGM_remove_col(SEXP xSEXP, SEXP indexSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
-    Rcpp::traits::input_parameter< int >::type index(indexSEXP);
-    rcpp_result_gen = Rcpp::wrap(remove_col(x, index));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -389,16 +389,16 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_BGGM_Theta_continuous", (DL_FUNC) &_BGGM_Theta_continuous, 8},
-    {"_BGGM_sample_prior", (DL_FUNC) &_BGGM_sample_prior, 7},
-    {"_BGGM_mv_continuous", (DL_FUNC) &_BGGM_mv_continuous, 7},
-    {"_BGGM_trunc_mvn", (DL_FUNC) &_BGGM_trunc_mvn, 5},
-    {"_BGGM_mv_binary", (DL_FUNC) &_BGGM_mv_binary, 9},
     {"_BGGM_Sigma_i_not_i", (DL_FUNC) &_BGGM_Sigma_i_not_i, 2},
     {"_BGGM_select_col", (DL_FUNC) &_BGGM_select_col, 2},
     {"_BGGM_select_row", (DL_FUNC) &_BGGM_select_row, 2},
     {"_BGGM_remove_row", (DL_FUNC) &_BGGM_remove_row, 2},
     {"_BGGM_remove_col", (DL_FUNC) &_BGGM_remove_col, 2},
+    {"_BGGM_Theta_continuous", (DL_FUNC) &_BGGM_Theta_continuous, 8},
+    {"_BGGM_sample_prior", (DL_FUNC) &_BGGM_sample_prior, 7},
+    {"_BGGM_mv_continuous", (DL_FUNC) &_BGGM_mv_continuous, 7},
+    {"_BGGM_trunc_mvn", (DL_FUNC) &_BGGM_trunc_mvn, 5},
+    {"_BGGM_mv_binary", (DL_FUNC) &_BGGM_mv_binary, 9},
     {"_BGGM_mv_ordinal_cowles", (DL_FUNC) &_BGGM_mv_ordinal_cowles, 6},
     {"_BGGM_mv_ordinal_albert", (DL_FUNC) &_BGGM_mv_ordinal_albert, 8},
     {"_BGGM_copula", (DL_FUNC) &_BGGM_copula, 9},

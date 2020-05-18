@@ -4,13 +4,10 @@
 \alias{select.ggm_compare_explore}
 \title{Graph selection for \code{ggm_compare_explore} Objects}
 \usage{
-\method{select}{ggm_compare_explore}(object, post_prob = 0.5, BF_cut = NULL, ...)
+\method{select}{ggm_compare_explore}(object, BF_cut = 3, ...)
 }
 \arguments{
 \item{object}{An object of class \code{ggm_compare_explore}.}
-
-\item{post_prob}{Numeric. Posterior `inclusion` probability (defaults to 0.50)
-for including an edge.}
 
 \item{BF_cut}{Numeric. Threshold for including an edge (defaults to 3).}
 

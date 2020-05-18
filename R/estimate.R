@@ -664,6 +664,17 @@ estimate  <- function(Y,
 #'
 #' @return A dataframe containing the summarized posterior distributions.
 #'
+#' @examples
+#' \donttest{
+#' # data
+#' Y <- ptsd
+#'
+#' fit <- estimate(Y, iter = 250)
+#'
+#' summary(fit)
+#'
+#'}
+#'
 #' @export
 summary.estimate <- function(object,
                              col_names = TRUE,
@@ -815,6 +826,20 @@ print_estimate <- function(x, ...){
 #' @seealso \code{\link{estimate}}
 #'
 #' @return A \code{ggplot} object.
+#'
+#' @examples
+#' \donttest{
+#' # data
+#' Y <- ptsd
+#'
+#' fit <- estimate(Y, iter = 250)
+#'
+#' summary(fit)
+#'
+#' plot(summary(fit))
+#'
+#' }
+#'
 #' @export
 plot.summary.estimate <- function(x,
                                   color = "black",

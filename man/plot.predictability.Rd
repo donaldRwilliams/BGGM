@@ -2,7 +2,7 @@
 % Please edit documentation in R/predictability.R
 \name{plot.predictability}
 \alias{plot.predictability}
-\title{Plot \code{metric} Objects}
+\title{Plot \code{predictability} Objects}
 \usage{
 \method{plot}{predictability}(
   x,
@@ -17,28 +17,45 @@
 )
 }
 \arguments{
-\item{x}{object of class \code{metric}}
+\item{x}{An object of class \code{predictability}}
 
-\item{type}{\code{"error_bar"} or \code{"ridgeline"}}
+\item{type}{Character string. Which type of plot ? The options
+are \code{"error_bar"} or \code{"ridgeline"} (defaults to \code{"error_bar"}).}
 
-\item{cred}{credible interval}
+\item{cred}{Numeric. The credible interval width for summarizing the posterior
+distributions (defaults to 0.95; must be between 0 and 1).}
 
-\item{alpha}{transparency of tail region (\code{type = "ridgeline"})}
+\item{alpha}{Numeric. Transparancey of the ridges}
 
-\item{scale}{overlap of densities (\code{type = "ridgeline"})}
+\item{scale}{Numeric. This controls the overlap of densities
+for \code{type = "ridgeline"} (defaults to 1).}
 
-\item{width}{width of error bar end (\code{type = "error_bar"})}
+\item{width}{Numeric. The width of error bar ends (defaults to \code{0})
+for \code{type = "error_bar"}.}
 
-\item{size}{point size (\code{type = "error_bar"})}
+\item{size}{Numeric. The size for the points (defaults to \code{2})
+for \code{type = "error_bar"}.}
 
-\item{color}{point (\code{type = "error_bar"}) or
-tail region (\code{type = "ridgeline"} ) color}
+\item{color}{Character string. What color for the point (\code{type = "error_bar"}) or
+tail region (\code{type = "ridgeline"} ) ? Defaults to \code{"blue"}.}
 
-\item{...}{currently ignored}
+\item{...}{Currently ignored.}
 }
 \value{
-\code{ggplot}
+An object of class \code{ggplot}.
 }
 \description{
-Plot \code{metric} Objects
+Plot \code{predictability} Objects
+}
+\examples{
+\donttest{
+Y <- ptsd
+
+fit <- explore(Y, iter = 250)
+
+r2 <- predictability(fit, iter = 250)
+
+plot(r2)
+}
+
 }

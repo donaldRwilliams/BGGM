@@ -294,15 +294,15 @@ explore <- function(Y,
 
   dot_dot_dot <- list(...)
 
-  # check for groups
-  if(length(dot_dot_dot) == 0){
-
+  # # check for groups
+  # if(length(dot_dot_dot) == 0){
+  #
     eps <- 0.01
-
-  } else {
-
-    eps <- 0.1
-  }
+  #
+  # } else {
+  #
+  #   eps <- 0.1
+  # }
 
   # delta parameter
   delta <- delta_solve(prior_sd)
@@ -661,6 +661,17 @@ explore <- function(Y,
 #'
 #' @return A dataframe containing the summarized posterior distributions.
 #'
+#' @examples
+#' \donttest{
+#' # note: iter = 250 for demonstrative purposes
+#'
+#' Y <- ptsd
+#'
+#' fit <- explore(Y, iter = 250)
+#'
+#' summary(fit)
+#'
+#' }
 #' @export
 summary.explore <- function(object,
                              col_names = TRUE, ...) {
@@ -774,6 +785,17 @@ print_explore <- function(x,...){
 #'
 #' @seealso \code{\link{explore}}
 #'
+#' @examples
+#' \donttest{
+#' # note: iter = 250 for demonstrative purposes
+#'
+#' Y <- ptsd
+#'
+#' fit <- explore(Y, iter = 250)
+#'
+#' plot(summary(fit))
+#'
+#' }
 #' @export
 plot.summary.explore <- function(x,
                                  color = "black",

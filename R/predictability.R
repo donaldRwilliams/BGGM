@@ -43,6 +43,24 @@
 #' @references
 #' \insertAllCited{}
 #'
+#' @examples
+#' \donttest{
+#'
+#' # data
+#' Y <- ptsd
+#'
+#' fit <- estimate(Y, iter = 250)
+#'
+#' r2 <- predictability(fit, select = TRUE, iter = 250)
+#'
+#' # summary
+#' r2
+#'
+#' # plot
+#' plot(r2)
+#'
+#' }
+#'
 #' @export
 predictability <- function(object,
                            select = FALSE,
@@ -214,14 +232,26 @@ predictability <- function(object,
 
 #' Summary Method for \code{predictability} Objects
 #'
-#' @param object an object of class \code{predictability}
+#' @param object An object of class \code{predictability}.
 #'
-#' @param cred  credible interval
+#' @param cred Numeric. The credible interval width for summarizing the posterior
+#' distributions (defaults to 0.95; must be between 0 and 1).
 #'
-#' @param ... currently ignored
+#' @param ... Currently ignored
+#'
+#' @examples
+#' \donttest{
+#' Y <- ptsd
+#'
+#' fit <- explore(Y, iter = 250)
+#'
+#' r2 <- predictability(fit, iter = 250)
+#'
+#' summary(r2)
+#'
+#' }
 #'
 #' @export
-
 summary.predictability <- function(object, cred = 0.95, ...){
 
   lb <- (1 - cred) / 2
@@ -298,32 +328,51 @@ print_summary_metric <- function(x, digits = 2,...){
 
 
 
-#' Plot \code{metric} Objects
+#' Plot \code{predictability} Objects
 #'
-#' @param x object of class \code{metric}
+#' @param x An object of class \code{predictability}
 #'
-#' @param type \code{"error_bar"} or \code{"ridgeline"}
+#' @param type Character string. Which type of plot ? The options
+#' are \code{"error_bar"} or \code{"ridgeline"} (defaults to \code{"error_bar"}).
 #'
-#' @param cred credible interval
+#' @param cred Numeric. The credible interval width for summarizing the posterior
+#' distributions (defaults to 0.95; must be between 0 and 1).
 #'
-#' @param width width of error bar end (\code{type = "error_bar"})
+#' @param width Numeric. The width of error bar ends (defaults to \code{0})
+#' for \code{type = "error_bar"}.
 #'
-#' @param size point size (\code{type = "error_bar"})
+##' @param size Numeric. The size for the points (defaults to \code{2})
+##' for \code{type = "error_bar"}.
 #'
-#' @param color point (\code{type = "error_bar"}) or
-#' tail region (\code{type = "ridgeline"} ) color
+#' @param color Character string. What color for the point (\code{type = "error_bar"}) or
+#' tail region (\code{type = "ridgeline"} ) ? Defaults to \code{"blue"}.
 #'
-#' @param alpha transparency of tail region (\code{type = "ridgeline"})
+#' @param alpha Numeric. Transparancey of the ridges
 #'
-#' @param scale overlap of densities (\code{type = "ridgeline"})
+#' @param scale Numeric. This controls the overlap of densities
+#'              for \code{type = "ridgeline"} (defaults to 1).
 #'
-#' @param ... currently ignored
+#' @param ... Currently ignored.
 #'
-#' @return \code{ggplot}
+#' @return An object of class \code{ggplot}.
+#'
 #' @importFrom reshape melt
-#' @importFrom ggridges stat_density_ridges
-#' @export
 #'
+#' @importFrom ggridges stat_density_ridges
+#'
+#'
+#' @examples
+#' \donttest{
+#' Y <- ptsd
+#'
+#' fit <- explore(Y, iter = 250)
+#'
+#' r2 <- predictability(fit, iter = 250)
+#'
+#' plot(r2)
+#'}
+#'
+#' @export
 plot.predictability <- function(x, type = "error_bar",
                         cred = 0.95,
                         alpha = 0.5,

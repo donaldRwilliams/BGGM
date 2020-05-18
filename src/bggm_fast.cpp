@@ -9,11 +9,42 @@
 // [[Rcpp::depends(RcppArmadillo, RcppDist, RcppProgress)]]
 
 
+// [[Rcpp::export]]
+arma::mat Sigma_i_not_i(arma::mat x, int index) {
+  arma::mat sub_x = x.row(index);
+  sub_x.shed_col(index);
+  return(sub_x);
+}
+
+
+// [[Rcpp::export]]
+arma::vec select_col(arma::mat x, int index){
+  arma::vec z = x.col(index);
+  return(z);
+}
+
+// [[Rcpp::export]]
+arma::mat select_row(arma::mat x, int index){
+  arma::mat z = x.row(index);
+  return(z);
+}
+
+// [[Rcpp::export]]
+arma::mat remove_row(arma::mat x, int which){
+  x.shed_row(which);
+  return(x);
+}
+
+// [[Rcpp::export]]
+arma::mat remove_col(arma::mat x, int index){
+  x.shed_col(index);
+  return(x);
+}
+
+
 // matrix F continous sampler
 // Williams, D. R., & Mulder, J. (2019). Bayesian hypothesis testing for Gaussian
 // graphical models:  Conditional independence and order constraints.
-
-// matrix F for the precision matrix
 
 // [[Rcpp::export]]
 Rcpp::List Theta_continuous(arma::mat Y,
@@ -220,8 +251,12 @@ Rcpp::List sample_prior(arma::mat Y,
 
   for(int  s = 0; s < iter; ++s){
 
-    if (s % 250 == 0){
+    p.increment();
+
+    if(s % 250 == 0){
+
       Rcpp::checkUserInterrupt();
+
     }
 
 
@@ -601,6 +636,8 @@ Rcpp::List mv_binary(arma::mat Y,
   // Rinv update
   arma::cube Rinv(k, k, 1, arma::fill::zeros);
 
+  arma::cube R(k, k, 1, arma::fill::zeros);
+
   // coefficients
   arma::mat M(p, k, arma::fill::zeros);
 
@@ -620,6 +657,10 @@ Rcpp::List mv_binary(arma::mat Y,
   Psi.slice(0).fill(arma::fill::eye);
   Dinv.slice(0).fill(arma::fill::eye);
   Rinv.slice(0).fill(arma::fill::eye);
+  R.slice(0).fill(arma::fill::eye);
+
+  arma::mat ss(1, 1);
+  arma::mat mm(n,1);
 
   // start sampling
   for(int s = 0; s < iter; ++s){
@@ -629,6 +670,51 @@ Rcpp::List mv_binary(arma::mat Y,
     if (s % 250 == 0){
       Rcpp::checkUserInterrupt();
     }
+
+
+    for(int i = 0; i < k; ++i){
+
+      mm = Xbhat.slice(0).col(i).t() +
+        Sigma_i_not_i(R.slice(0), i) *
+        inv(remove_row(remove_col(R.slice(0), i), i)) *
+        (remove_col(z0.slice(0), i).t() - remove_col(Xbhat.slice(0), i).t());
+
+      ss = select_row(R.slice(0), i).col(i) -
+        Sigma_i_not_i(R.slice(0), i) *
+        inv(remove_row(remove_col(R.slice(0), i), i)) *
+        Sigma_i_not_i(R.slice(0), i).t();
+
+
+      for(int j = 0 ; j < n; ++j){
+
+        arma::vec temp = Y.col(i).row(j);
+
+        if(temp(0) == 0){
+
+
+          arma::vec temp_j = rtruncnorm(1,   mm(j),  sqrt(ss(0)),  -arma::datum::inf,  0);
+
+          z0.slice(0).col(i).row(j) =   temp_j;
+
+
+        } else {
+
+
+
+          arma::vec temp_j = rtruncnorm(1,   mm(j),  sqrt(ss(0)),  0, arma::datum::inf);
+
+          z0.slice(0).col(i).row(j) =   temp_j;
+
+        }
+
+
+
+      }
+
+
+    }
+
+
 
     // D matrix
     for(int i = 0; i < k; ++i){
@@ -675,20 +761,23 @@ Rcpp::List mv_binary(arma::mat Y,
 
     Rinv.slice(0)   = inv(cors);
 
-    // latent data
-    for(int i = 0; i < n; ++i){
+    R.slice(0) = cors;
 
-      Rcpp::List z_samples = trunc_mvn(Xbhat.slice(0).row(i).t(),
-                                       Rinv.slice(0),
-                                       z0.slice(0).row(i).t(),
-                                       Y.row(i).t(),
-                                       cutpoints);
 
-      arma::mat z_i = z_samples[0];
-
-      z0.slice(0).row(i) = z_i.t();
-
-    }
+    // // latent data
+    // for(int i = 0; i < n; ++i){
+    //
+    //   Rcpp::List z_samples = trunc_mvn(Xbhat.slice(0).row(i).t(),
+    //                                    Rinv.slice(0),
+    //                                    z0.slice(0).row(i).t(),
+    //                                    Y.row(i).t(),
+    //                                    cutpoints);
+    //
+    //   arma::mat z_i = z_samples[0];
+    //
+    //   z0.slice(0).row(i) = z_i.t();
+    //
+    // }
 
     beta_mcmc.slice(s) =reshape(beta, p,k);
     pcors_mcmc.slice(s) =  -(pcors - I_k);
@@ -704,40 +793,6 @@ Rcpp::List mv_binary(arma::mat Y,
   ret["beta"] = beta_mcmc;
   ret["fisher_z"] = fisher_z;
   return  ret;
-}
-
-
-
-// [[Rcpp::export]]
-arma::mat Sigma_i_not_i(arma::mat x, int index) {
-  arma::mat sub_x = x.row(index);
-  sub_x.shed_col(index);
-  return(sub_x);
-}
-
-
-// [[Rcpp::export]]
-arma::vec select_col(arma::mat x, int index){
-  arma::vec z = x.col(index);
-  return(z);
-}
-
-// [[Rcpp::export]]
-arma::mat select_row(arma::mat x, int index){
-  arma::mat z = x.row(index);
-  return(z);
-}
-
-// [[Rcpp::export]]
-arma::mat remove_row(arma::mat x, int which){
-  x.shed_row(which);
-  return(x);
-}
-
-// [[Rcpp::export]]
-arma::mat remove_col(arma::mat x, int index){
-  x.shed_col(index);
-  return(x);
 }
 
 

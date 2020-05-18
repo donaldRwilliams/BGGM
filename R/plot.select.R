@@ -13,8 +13,8 @@
 #'
 #' @param node_size Numeric. The size of the nodes (defaults to \code{10}).
 #'
-#' @param edge_magnify Numeric. A value that is multiplied by the edge weights. This can increase (> 1) or
-#'                     derease (< 1) the line widths.
+#' @param edge_magnify Numeric. A value that is multiplied by the edge weights. This increases (> 1) or
+#'                     decrease (< 1) the line widths (defaults to 1).
 #'
 #' @param groups A character string of length \emph{p} (the number of nodes in the model).
 #'               This indicates groups of nodes that should be the same color

@@ -28,3 +28,16 @@
 \description{
 Model Predictions for \code{explore} Objects
 }
+\examples{
+\donttest{
+# data
+Y <- ptsd
+
+# fit model
+fit <- explore(Y, iter = 250)
+
+# predict
+pred <- predict(fit)
+
+}
+}

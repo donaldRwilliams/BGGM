@@ -24,6 +24,18 @@ A \code{ggplot} object
 \description{
 Visualize the posterior distributions for each partial correlation.
 }
+\examples{
+\donttest{
+# note: iter = 250 for demonstrative purposes
+
+Y <- ptsd
+
+fit <- explore(Y, iter = 250)
+
+plot(summary(fit))
+
+}
+}
 \seealso{
 \code{\link{explore}}
 }

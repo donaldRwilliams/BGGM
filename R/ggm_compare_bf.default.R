@@ -15,7 +15,7 @@
 #' control variables in the model (i.e., \code{~ gender}).
 #'
 #' @param prior_sd Numeric. The scale of the prior distribution (centered at zero), in reference to a beta distribtuion.
-#' The `default` is 0.25. See note for further details.
+#' The `default` is 0.20. See note for further details.
 #'
 #' @param type Character string. Which type of data for \code{Y} ? The options include \code{continuous},
 #' \code{binary}, or \code{ordinal}. See the note for further details.
@@ -151,7 +151,7 @@
 #' select(fit)
 #'
 #' # plot graph
-#' plot(select(fit))
+#' # plot(select(fit))
 #'
 #' ##########################
 #' ### example 2: ordinal ###
@@ -307,10 +307,10 @@ ggm_compare_explore <- function(...,
                             mu = mu_post,
                             sigma = s_post,
                             log = TRUE) -
-      mvnfast::dmvn(X = t(mats$r_e),
-                    mu = mu_prior,
-                    sigma = s_prior,
-                    log = TRUE)
+              mvnfast::dmvn(X = t(mats$r_e),
+                            mu = mu_prior,
+                            sigma = s_prior,
+                            log = TRUE)
 
     BF_01_mat[ rho_ij[1], rho_ij[2] ] <- exp(log_BF)
 
