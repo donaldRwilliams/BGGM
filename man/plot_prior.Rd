@@ -20,8 +20,9 @@ Visualize the implied prior distribution for the partial correlations. This is
              particularly useful for the Bayesian hypothesis testing methods.
 }
 \examples{
+\donttest{
 # note: iter = 250 for demonstrative purposes
 
 plot_prior(prior_sd = 0.25, iter = 250)
-
+}
 }

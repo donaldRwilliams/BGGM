@@ -9,15 +9,16 @@
 #' @importFrom stats model.matrix terms cor
 
 
-
 hyp_converter <- function (x) {
 
   hyp_converted <- x
 
-  extract_numbers <- unlist(stringr::str_extract_all(hyp_converted,
-                                                     "\\d+"))
+  extract_numbers <-strsplit(  gsub("[^\\d]+", "",
+                                    hyp_converted, perl = TRUE),
+                               split = "" )[[1]]
 
-  extract_numbers <- extract_numbers[unlist(extract_numbers) != 0]
+  extract_numbers <- extract_numbers[unlist(extract_numbers) >= 1]
+
   words <- NA
 
   for (i in 1:length(extract_numbers)) {
@@ -26,9 +27,10 @@ hyp_converter <- function (x) {
     hyp_converted <- sub(temp, numbers2words(as.numeric(temp)),
                          hyp_converted)
   }
-  hyp_converted <- stringr::str_remove_all(hyp_converted, "--")
+
   list(hyp_converted = hyp_converted, words = words)
 }
+
 
 remove_predictors_helper <- function(Y_groups, formula){
 

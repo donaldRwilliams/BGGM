@@ -151,7 +151,7 @@
 #' select(fit)
 #'
 #' # plot graph
-#' plot(select(fit))
+#' # plot(select(fit))
 #'
 #' ##########################
 #' ### example 2: ordinal ###
