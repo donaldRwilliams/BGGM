@@ -303,14 +303,14 @@ ggm_compare_explore <- function(...,
     s_prior <- mats$R_e %*% cov_prior %*% t(mats$R_e)
 
     # bayes factor
-    log_BF <- mvtnorm::dmvnorm(x = t(mats$r_e),
-                                 mean = mu_post,
-                                 sigma = s_post,
-                                 log = TRUE) -
-                mvtnorm::dmvnorm(x = t(mats$r_e),
-                                 mean = mu_prior,
-                                 sigma = s_prior,
-                                 log = TRUE)
+    log_BF <- mvnfast::dmvn(X = t(mats$r_e),
+                            mu = mu_post,
+                            sigma = s_post,
+                            log = TRUE) -
+              mvnfast::dmvn(X = t(mats$r_e),
+                            mu = mu_prior,
+                            sigma = s_prior,
+                            log = TRUE)
 
     BF_01_mat[ rho_ij[1], rho_ij[2] ] <- exp(log_BF)
 

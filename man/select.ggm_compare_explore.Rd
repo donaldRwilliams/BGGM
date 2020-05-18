@@ -12,9 +12,6 @@
 \item{BF_cut}{Numeric. Threshold for including an edge (defaults to 3).}
 
 \item{...}{Currently ignored.}
-
-\item{post_prob}{Numeric. Posterior `inclusion` probability (defaults to 0.50)
-for including an edge.}
 }
 \value{
 The returned object of class \code{select.ggm_compare_explore} contains

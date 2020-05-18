@@ -5,9 +5,6 @@
 #'
 #'@param object An object of class \code{ggm_compare_explore}.
 #'
-#' @param post_prob Numeric. Posterior `inclusion` probability (defaults to 0.50)
-#'                  for including an edge.
-#'
 #' @param BF_cut Numeric. Threshold for including an edge (defaults to 3).
 #'
 #' @param ... Currently ignored.
