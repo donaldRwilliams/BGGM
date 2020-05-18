@@ -20,7 +20,7 @@
 \item{x}{An object of class \code{predictability}}
 
 \item{type}{Character string. Which type of plot ? The options
-are \code{"error_bar"} or \code{"ridgeline"} (defaults to \code{"error_bar}).}
+are \code{"error_bar"} or \code{"ridgeline"} (defaults to \code{"error_bar"}).}
 
 \item{cred}{Numeric. The credible interval width for summarizing the posterior
 distributions (defaults to 0.95; must be between 0 and 1).}

@@ -333,7 +333,7 @@ print_summary_metric <- function(x, digits = 2,...){
 #' @param x An object of class \code{predictability}
 #'
 #' @param type Character string. Which type of plot ? The options
-#' are \code{"error_bar"} or \code{"ridgeline"} (defaults to \code{"error_bar}).
+#' are \code{"error_bar"} or \code{"ridgeline"} (defaults to \code{"error_bar"}).
 #'
 #' @param cred Numeric. The credible interval width for summarizing the posterior
 #' distributions (defaults to 0.95; must be between 0 and 1).
