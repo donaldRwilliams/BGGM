@@ -664,6 +664,17 @@ estimate  <- function(Y,
 #'
 #' @return A dataframe containing the summarized posterior distributions.
 #'
+#' @examples
+#' \donttest{
+#' # data
+#' Y <- ptsd
+#'
+#' fit <- estimate(Y, iter = 250)
+#'
+#' summary(fit)
+#'
+#'}
+#'
 #' @export
 summary.estimate <- function(object,
                              col_names = TRUE,
