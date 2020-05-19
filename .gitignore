@@ -10,4 +10,4 @@
 src/*.o
 src/*.so
 src/*.dll
-doc/
+
