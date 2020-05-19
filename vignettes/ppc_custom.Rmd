@@ -1,0 +1,441 @@
+---
+title: "Custom Network Comparisons"
+author: "Donny Williams"
+date: "5/19/2020"
+bibliography: ../inst/REFERENCES.bib
+output: 
+  rmarkdown::html_vignette:
+    toc: yes
+vignette: >
+  %\VignetteIndexEntry{Custom Network Comparisons}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+# Background
+It is quite common to have partial correlation networks (GGMs) for various subgroups, 
+say, males and females, a control and treatment group, or perhaps several educational 
+levels. In this case, it is important to not only determine whether the groups are 
+different, but actually compare the groups in a way that answers a specific question 
+of interest. 
+
+To date, most `R` packages provide a few ways to compare groups, including **BGGM** (version `1.0.0`). 
+In version `2.0.0`, however, **BGGM** includes a new feature for the function `ggm_compare_ppc` that enables 
+users to **compare networks in any way the want**. 
+
+# Basic Idea
+The techical details of the approach are described in [@williams2020comparing]. The basic idea is to
+
+1. Draw samples from the posterior distribution, assuming the groups are equal (i.e., the "null" model).
+
+2. Generate the posterior **predictive** distribution for the chosen test-statistic (how the groups 
+   are being compared)
+
+    + This can be understood as what we would expect to observe in the future 
+    (e.g., in replication), assuming the groups were in fact equal.
+
+3. Compute the test-statistic for the observed groups.
+
+4. Then compare the observed test-statisic to the predictive distribution 
+   (what is expected under the "null" model). 
+
+    + If the observed error is larger than the model assuming group equality, this 
+      suggests that the groups are different.
+
+
+In **BGGM**, the default is to compare the groups with respect to (symmetric) Kullback-Leibler 
+divergence (i.e., "distance" between multivariate normal distributions)  and the sum of 
+squared error (for the partial correlation matrix). This was shown to be quite powerful in @williams2020comparing, while also having a 
+low false positive rate. 
+
+In the following, the focus is on defining custom functions
+and using them with `ggm_compare_ppc`. In all examples, post-traumatic stress disorder
+networks are compared [@fried2018replicability].
+
+### R packages
+```{r, eval = FALSE}
+# need the developmental version
+if (!requireNamespace("remotes")) { 
+  install.packages("remotes")   
+}   
+
+# install from github
+remotes::install_github("donaldRwilliams/BGGM")
+
+```
+
+
+### Data
+Only the correlation matrices are available. Hence, multivarite normal data is generated with that *exact* 
+correlation structure via the `R` package **MASS**.
+```{r, warning =FALSE, message=FALSE}
+# need these packages
+library(BGGM)
+library(ggplot2)
+library(assortnet)
+library(networktools)
+library(MASS)
+
+# group 1
+Yg1 <- MASS::mvrnorm(n = 926, 
+                     mu = rep(0, 16), 
+                     Sigma = ptsd_cor3, 
+                     empirical = TRUE)
+
+# group 2
+Yg2 <- MASS::mvrnorm(n = 956, 
+                     mu = rep(0, 16), 
+                     Sigma = ptsd_cor4, 
+                     empirical = TRUE)
+```
+
+
+# Illustrative Examples
+
+## Correlation
+This first example looks at the correlation between partial correlations of the two networks. Note that
+it could be two networks have what is considered a large correlation. However, the question here is, 
+assumming the groups are equal, just how large should the correlation be? This is needed to interpret
+the observed test-statistic.
+
+
+### Step 1: Define Custom Function
+The first step is to define a custom function that takes two data matrices and the output 
+is the chosen test-statistic (in this case a correlation)
+```{r}
+f <- function(Yg1, Yg2){
+  # number of nodes
+  p <- ncol(Yg1)
+  
+  # index of off-diagonal
+  indices <- upper.tri( diag(p))
+  
+  # group 1:
+  # fit model
+  g1_fit <- estimate(Yg1, analytic = TRUE)
+  # pcors
+  g1_pcors <- pcor_mat(g1_fit)[indices]
+  
+  # group 2
+  # fit model
+  g2_fit <- estimate(Yg2, analytic = TRUE)
+  # pcors
+  g2_pcors <- pcor_mat(g2_fit)[indices]
+  
+  # test-statistic
+  cor(g1_pcors, g2_pcors)
+  }
+```
+
+
+### Step 2: Compute the Observed Score
+The next step is to compute the observed test-statistic, that is, the correlation between the partial correlations.
+```{r}
+obs <- f(Yg1, Yg2)
+
+# observed
+obs
+```
+
+
+### Step 3: Predictive Check
+With the function, `f`, and the observed scores, `obs`, in hand, what is left is the predictive check
+
+```{r, message=FALSE, results='hide'}
+ppc <- BGGM::ggm_compare_ppc(Yg1, Yg2, 
+                       FUN = f, 
+                       custom_obs = obs, 
+                       iter = 1000, 
+                       loss = FALSE)
+```
+
+Note that `loss = FALSE` controls how the p-value is computed. It is an indicator of whether the test-statisic is 
+a "loss" (a bad thing). In this case, a large correlation is a good thing so it is set to `FALSE`. The results
+can then be printed
+
+```{r}
+ppc
+```
+
+which shows the posterior predictive p-value is zero. This indicates that the observed correlation is lower than
+the entire predictive distribution (the distribution of correlations for future data, assuming group equality)
+
+and finally plot the results
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+plot(ppc, col_critical = "lightblue", 
+     col_noncritical = "lightblue")[[1]] +
+  xlab("Predictive Correlation")
+
+```
+
+And then plot the results
+```{r, eval=FALSE}
+plot(ppc)
+```
+
+The density is the predictive distribution for the correlation. Recall that this is the correlation that we would expect, given the groups were actually the same, and the black point is the observed correlation. In this case, it seems quite clear that the "null model" is in adequate--the groups are apparently quite different.
+
+## Hamming Distance
+The next example is [Hamming distance](https://en.wikipedia.org/wiki/Hamming_distance), which, in this case, is the squared error for the adjacency matrices. It seems reasonable to think of this as a test for 
+different network structures or patterns of zeros and ones.
+
+
+### Step 1: Define Custom Function
+The first step is to define a custom function that takes two data matrices and the output 
+is the chosen test-statistic (in this case Hamming distance)
+```{r}
+f <- function(Yg1, Yg2){
+  # nodes
+  p <- ncol(Yg1)
+  
+  # index of off-diagonal
+  indices <- upper.tri( diag(p))
+
+  # fit models
+  fit1 <-  BGGM::estimate(Yg1, analytic = TRUE)
+  fit2 <-  BGGM::estimate(Yg2, analytic = TRUE)
+  
+  # select graphs
+  sel1 <- BGGM::select(fit1)
+  sel2 <- BGGM::select(fit2)
+  
+  # hamming distance
+  sum((sel1$adj[indices] - sel2$adj[indices]) ^ 2)
+}
+```
+
+
+### Step 2: Compute the Observed Score
+The next step is to compute the observed test-statistic, that is, the Hamming distance between adjacency matrices
+
+```{r}
+obs <- f(Yg1, Yg2)
+
+# observed
+obs
+```
+
+### Step 3: Predictive Check
+With the function, `f`, and the observed scores, `obs`, in hand, what is left is the predictive check
+```{r, message=FALSE, results='hide'}
+ppc <- BGGM::ggm_compare_ppc(Yg1, Yg2, 
+                       FUN = f, 
+                       custom_obs = obs, 
+                       iter = 1000)
+```
+
+The results can then be printed
+```{r}
+ppc
+```
+
+And then plot the results
+```{r, message=FALSE, warning=FALSE}
+plot(ppc)
+```
+
+This is a quite striking result. Whereas the correlation looked at the partial correlation, here there seems to be evidence 
+that the adjacency matrices are different (perhaps suggesting that the conditional indepedence structure is different).
+
+
+## Partial Correlation Matrix Distance
+There might also be interest in the so-called correlation matrix distance [@herdin2005correlation]. This is also easily tested, in this case for the partial correlation matrix.
+
+### Step 1: Define Custom Function
+```{r}
+f <- function(Yg1, Yg2){
+  # nodes
+  p <- ncol(Yg1)
+  
+  # index of off-diagonal
+  indices <- upper.tri( diag(p))
+
+  # fit models
+  fit1 <-  BGGM::estimate(Yg1, analytic = TRUE)
+  fit2 <-  BGGM::estimate(Yg2, analytic = TRUE)
+  
+  pcor1 <- BGGM::pcor_mat(fit1) 
+  pcor2 <- BGGM::pcor_mat(fit2)
+  
+  # CDM for partial correlations
+  # note: numerator is the trace; denominator is the Frobenius norm
+  1 - (sum(diag(pcor1 %*% pcor2)) / (norm(pcor1, type = "f") * norm(pcor2, type = "f")))
+}
+```
+
+### Step 2: Compute the Observed Score
+The next step is to compute the observed test-statistic, that is, the Partial Correlation Matrix Distance
+```{r}
+obs <- f(Yg1, Yg2)
+
+# observed
+obs
+```
+
+### Step 3: Predictive Check
+With the function, `f`, and the observed scores, `obs`, in hand, what is left is the predictive check
+```{r, message=FALSE, results='hide'}
+ppc <- BGGM::ggm_compare_ppc(Yg1, Yg2, 
+                       FUN = f, 
+                       custom_obs = obs, 
+                       iter = 1000)
+```
+
+The results can then be printed
+```{r}
+ppc
+```
+which again provides a p-value of zero.
+
+Note that the object `ppc` includes the predictive samples that allows for user defined plots (in the event something custom is desired).
+
+```{r}
+hist(ppc$predictive_custom, 
+     xlim = c(0, obs), 
+     main = "Partial Correlation Matrix Distance")
+abline(v = obs)
+```
+
+Note that the line is the observed which again makes it clear that the distance is quite surprising, 
+assuming the null model were true.
+
+
+## Assortment
+This next example is assortment [@newman2003mixing], which is a measure related 
+to clustering in a network. Here the test is for a differene in assortment. 
+This is computed by taking the difference (absolute value) for each draw 
+from the predictive distribution.
+
+### Step 1: Define Custom Function
+```{r}
+# clusters based on DSM-5
+comms <- c(
+  rep("A", 4),
+  rep("B", 7),
+  rep("C", 5)
+)
+
+f <- function(Yg1, Yg2){
+
+  fit1 <-  BGGM::estimate(Yg1, analytic = TRUE)
+  fit2 <-  BGGM::estimate(Yg2, analytic = TRUE)
+
+  pcor1 <- BGGM::pcor_mat(fit1)
+  pcor2 <- BGGM::pcor_mat(fit2)
+
+  assort1 <- assortnet::assortment.discrete(pcor1, types = comms,
+                                         weighted = TRUE,
+                                         SE = FALSE, M = 1)$r
+
+  assort2 <- assortnet::assortment.discrete(pcor2, types = comms,
+                                          weighted = TRUE,
+                                          SE = FALSE, M = 1)$r
+  abs(assort1 - assort2)
+}
+```
+
+
+### Step 2: Compute the Observed Score
+The next step is to compute the observed test-statistic, that is, assortment for the two groups
+```{r}
+obs <- f(Yg1, Yg2)
+
+# observed
+obs
+```
+
+### Step 3: Predictive Check
+With the function, `f`, and the observed score, `obs`, in hand, the next step is the predictive check
+
+```{r, message=FALSE, results='hide'}
+ppc <- BGGM::ggm_compare_ppc(Yg1, Yg2, 
+                       FUN = f, 
+                       custom_obs = obs, 
+                       iter = 1000)
+```
+
+The results can then be printed
+```{r}
+ppc
+```
+
+and plotted
+
+```{r}
+plot(ppc)
+```
+
+which shows that the clustering in the data appears to be different (given the observed value exceeds
+the entire predictive distribution).
+
+
+
+## Expected Influence
+This last example looks at the expected influence for the network [@robinaugh2016identifying]. In this case, the sum of squared error is the test statistic. This is computed from the squared error for each
+draw from the predictive distribution.
+
+### Step 1: Define Custom Function
+```{r}
+f <- function(Yg1, Yg2){
+
+  fit1 <-  BGGM::estimate(Yg1, analytic = TRUE)
+  fit2 <-  BGGM::estimate(Yg2, analytic = TRUE)
+
+  pcor1 <- BGGM::pcor_mat(fit1)
+  pcor2 <- BGGM::pcor_mat(fit2)
+
+  ei1 <- networktools::expectedInf(pcor1)$step1
+ 
+  ei2 <- networktools::expectedInf(pcor2)$step1
+   sum((ei1 - ei2)^2)
+}
+```
+
+
+### Step 2: Compute the Observed Score
+The next step is to compute the observed test-statistic, that is, the sum of squared error
+for expected influence
+```{r}
+obs <- f(Yg1, Yg2)
+
+# observed
+obs
+```
+
+
+### Step 3: Predictive Check
+With the function, `f`, and the observed scores, `obs`, in hand, what is left is the predictive check
+```{r, message=FALSE, results='hide'}
+ppc <- BGGM:::ggm_compare_ppc(Yg1, Yg2, 
+                       FUN = f, 
+                       custom_obs = obs, 
+                       iter = 1000)
+```
+
+The results can then be printed
+```{r}
+ppc
+```
+
+and plotted 
+
+```{r}
+hist(ppc$predictive_custom, 
+    xlim = c(0, obs),
+     main = "Expected Influence\n Sum of Squared Error")
+abline(v = obs)
+```
+which again shows the sum of squared error for expected influence far exceeds what would be expected, assuming
+the null model were true.
+
+## Two Notes of Caution
+
+1. Note that only the default in **BGGM** have been shown to have nominal error rates. However, there is   a proof in X that suggests the error rate cannot be larger than $2\alpha$ [@meng1994posterior], and, futher, a predictive check is typically below $\alpha$ [i.e., a tendency to be conservative, @gelman2013two]. 
+
+2. Failing to reject the null model does not indicate the groups are the same! To test for 
+equality see `ggm_compare_explore` and `ggm_compare_confirm`.
+
+## Conclusion
+These example certainly open the door for tailoring   the test-statisitc to ask specific question of interest (which I would hope is not the same for each network analysis). And for methods focused researchers perhaps simulations comparing these, among other options, would be a very nice contribution indeed.
+
+## References
