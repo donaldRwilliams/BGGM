@@ -107,7 +107,7 @@
 <ol style="list-style-type: decimal">
 <li><p>Draw samples from the posterior distribution, assuming the groups are equal (i.e., the “null” model).</p></li>
 <li>
-<p>Generate the posterior <strong>predictive</strong> distribution for the chose test-statistic (how the groups are being compared)</p>
+<p>Generate the posterior <strong>predictive</strong> distribution for the chosen test-statistic (how the groups are being compared)</p>
 <ul>
 <li>This can be understood as what we would expect to observe in the future (e.g., in replication), assuming the groups were in fact equal.</li>
 </ul>
@@ -116,12 +116,12 @@
 <li>
 <p>Then compare the observed test-statisic to the predictive distribution (what is expected under the “null” model).</p>
 <ul>
-<li>For example, if the observed error is larger than the model assuming group equality, this suggests that the groups are different.</li>
+<li>If the observed error is larger than the model assuming group equality, this suggests that the groups are different.</li>
 </ul>
 </li>
 </ol>
 <p>In <strong>BGGM</strong>, the default is to compare the groups with respect to (symmetric) Kullback-Leibler divergence (i.e., “distance” between multivariate normal distributions) and the sum of squared error (for the partial correlation matrix). This was shown to be quite powerful in <span class="citation">Williams et al. (2020)</span>, while also having a low false positive rate.</p>
-<p>In the following, the focus is on defining custom functions and using them with <code>ggm_compare_pcc</code>. In all examples, post-traumatic stress disorder networks are compared <span class="citation">(Fried et al. 2018)</span>.</p>
+<p>In the following, the focus is on defining custom functions and using them with <code>ggm_compare_ppc</code>. In all examples, post-traumatic stress disorder networks are compared <span class="citation">(Fried et al. 2018)</span>.</p>
 <div id="r-packages" class="section level3">
 <h3 class="hasAnchor">
 <a href="#r-packages" class="anchor"></a>R packages</h3>
@@ -151,7 +151,6 @@
                      <span class="kw">empirical</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
 
 <span class="co"># group 2</span>
-
 <span class="no">Yg2</span> <span class="kw">&lt;-</span> <span class="kw pkg">MASS</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/mvrnorm.html">mvrnorm</a></span>(<span class="kw">n</span> <span class="kw">=</span> <span class="fl">956</span>,
                      <span class="kw">mu</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fl">0</span>, <span class="fl">16</span>),
                      <span class="kw">Sigma</span> <span class="kw">=</span> <span class="no">ptsd_cor4</span>,
@@ -164,7 +163,7 @@
 <div id="correlation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#correlation" class="anchor"></a>Correlation</h2>
-<p>This first example looks at the correlation between partial correlations of the two networks.</p>
+<p>This first example looks at the correlation between partial correlations of the two networks. Note that it could be two networks have what is considered a large correlation. However, the question here is, assumming the groups are equal, just how large should the correlation be? This is needed to interpret the observed test-statistic.</p>
 <div id="step-1-define-custom-function" class="section level3">
 <h3 class="hasAnchor">
 <a href="#step-1-define-custom-function" class="anchor"></a>Step 1: Define Custom Function</h3>
@@ -312,7 +311,7 @@
 <div id="partial-correlation-matrix-distance" class="section level2">
 <h2 class="hasAnchor">
 <a href="#partial-correlation-matrix-distance" class="anchor"></a>Partial Correlation Matrix Distance</h2>
-<p>There might also be interest in the so-called correlation matrix distance (CDM, X). This is also easily tested</p>
+<p>There might also be interest in the so-called correlation matrix distance <span class="citation">(Herdin et al. 2005)</span>. This is also easily tested, in this case for the partial correlation matrix.</p>
 <div id="step-1-define-custom-function-2" class="section level3">
 <h3 class="hasAnchor">
 <a href="#step-1-define-custom-function-2" class="anchor"></a>Step 1: Define Custom Function</h3>
@@ -375,7 +374,8 @@
 <p>which again provides a p-value of zero.</p>
 <p>Note that the object <code>ppc</code> includes the predictive samples that allows for user defined plots (in the event something custom is desired).</p>
 <div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span>(<span class="no">ppc</span>$<span class="no">predictive_custom</span>,
-     <span class="kw">xlim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="no">obs</span>), <span class="kw">main</span> <span class="kw">=</span> <span class="st">"Partial Correlation Matrix Distance"</span>)
+     <span class="kw">xlim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="no">obs</span>),
+     <span class="kw">main</span> <span class="kw">=</span> <span class="st">"Partial Correlation Matrix Distance"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(<span class="kw">v</span> <span class="kw">=</span> <span class="no">obs</span>)</pre></body></html></div>
 <p><img src="ppc_custom_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
 <p>Note that the line is the observed which again makes it clear that the distance is quite surprising, assuming the null model were true.</p>
@@ -453,7 +453,7 @@
 <p>and plotted</p>
 <div class="sourceCode" id="cb31"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">ppc</span>)</pre></body></html></div>
 <pre><code>## $plot_custom</code></pre>
-<pre><code>## Picking joint bandwidth of 0.00439</code></pre>
+<pre><code>## Picking joint bandwidth of 0.00411</code></pre>
 <p><img src="ppc_custom_files/figure-html/unnamed-chunk-23-1.png" width="700"></p>
 <p>which shows that the clustering in the data appears to be different (given the observed value exceeds the entire predictive distribution).</p>
 </div>
@@ -517,9 +517,11 @@
 ##  Yg1 vs Yg2      0.518       0
 ## ---</code></pre>
 <p>and plotted</p>
-<div class="sourceCode" id="cb40"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span>(<span class="no">ppc</span>$<span class="no">predictive_custom</span>, <span class="kw">main</span> <span class="kw">=</span> <span class="st">"Expected Influence\n Sum of Squared Error"</span>)
+<div class="sourceCode" id="cb40"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span>(<span class="no">ppc</span>$<span class="no">predictive_custom</span>,
+    <span class="kw">xlim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="no">obs</span>),
+     <span class="kw">main</span> <span class="kw">=</span> <span class="st">"Expected Influence\n Sum of Squared Error"</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(<span class="kw">v</span> <span class="kw">=</span> <span class="no">obs</span>)</pre></body></html></div>
-<p><img src="ppc_custom_files/figure-html/unnamed-chunk-28-1.png" width="700"> which again shows the sum of squared error for expected influence far exceed what would be expected, assuming the null model were true.</p>
+<p><img src="ppc_custom_files/figure-html/unnamed-chunk-28-1.png" width="700"> which again shows the sum of squared error for expected influence far exceeds what would be expected, assuming the null model were true.</p>
 </div>
 </div>
 <div id="two-notes-of-caution" class="section level2">
@@ -534,12 +536,19 @@
 <h2 class="hasAnchor">
 <a href="#conclusion" class="anchor"></a>Conclusion</h2>
 <p>These example certainly open the door for tailoring the test-statisitc to ask specific question of interest (which I would hope is not the same for each network analysis). And for methods focused researchers perhaps simulations comparing these, among other options, would be a very nice contribution indeed.</p>
+</div>
+<div id="references" class="section level2 unnumbered">
+<h2 class="hasAnchor">
+<a href="#references" class="anchor"></a>References</h2>
 <div id="refs" class="references">
 <div id="ref-fried2018replicability">
 <p>Fried, Eiko I, Marloes B Eidhof, Sabina Palic, Giulio Costantini, Hilde M Huisman-van Dijk, Claudi LH Bockting, Iris Engelhard, Cherie Armour, Anni BS Nielsen, and Karen-Inge Karstoft. 2018. “Replicability and Generalizability of Posttraumatic Stress Disorder (Ptsd) Networks: A Cross-Cultural Multisite Study of Ptsd Symptoms in Four Trauma Patient Samples.” <em>Clinical Psychological Science</em> 6 (3): 335–51.</p>
 </div>
 <div id="ref-gelman2013two">
 <p>Gelman, Andrew, and others. 2013. “Two Simple Examples for Understanding Posterior P-Values Whose Distributions Are Far from Uniform.” <em>Electronic Journal of Statistics</em> 7: 2595–2602.</p>
+</div>
+<div id="ref-herdin2005correlation">
+<p>Herdin, Markus, Nicolai Czink, Hüseyin Ozcelik, and Ernst Bonek. 2005. “Correlation Matrix Distance, a Meaningful Measure for Evaluation of Non-Stationary Mimo Channels.” In <em>2005 Ieee 61st Vehicular Technology Conference</em>, 1:136–40. IEEE.</p>
 </div>
 <div id="ref-meng1994posterior">
 <p>Meng, Xiao-Li, and others. 1994. “Posterior Predictive <span class="math inline">\(p\)</span>-Values.” <em>The Annals of Statistics</em> 22 (3): 1142–60.</p>
