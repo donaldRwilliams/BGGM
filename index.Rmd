@@ -60,35 +60,35 @@ The central contribution of **BGGM** is to extend those approaches:
 
 1.  Bayesian estimation with the novel matrix-F prior distribution [@Mulder2018]
   
-    + [Estimation](#bayesian-estimation) [@Williams2019]
+    + Estimation [@Williams2019]
 
 2. Bayesian hypothesis testing with the matrix-F prior distribution [@Williams2019_bf]
 
-    + [Exploratory hypothesis testing](#Exploratory)
+    + Exploratory hypothesis testing
   
-    + [Confirmatory hypothesis testing](#Confirmatory)
+    + Confirmatory hypothesis testing
     
 3. Comparing Gaussian graphical models [@Williams2019; @williams2020comparing]
     
-    + [Partial correlation differences](#partial-correlation-differences) 
+    + Partial correlation differences
     
-    + [Posterior predictive check](#posterior-predictive-check)
+    + Posterior predictive check
     
-    + [Exploratory hypothesis testing](#exploratory-groups) 
+    + Exploratory hypothesis testing
     
-    + [Confirmatory hypothesis testing](#confirmatory-groups)
+    + Confirmatory hypothesis testing
 
 4. Extending inference beyond the conditional (in)dependence structure [@Williams2019]
 
-    +  [Predictability](#Predictability) 
+    +  Predictability 
     
-    +  [Posterior uncertainty intervals](#partial-correlation-differences) for the 
+    +  Posterior uncertainty intervals for the 
        partial correlations
        
-    +  [Custom Network Statistics](#custom-network-statistics)
+    +  Custom Network Statistics
     
     
-The computationally intensive tasks are written in `c++` via the `R` package **Rcpp** [@eddelbuettel2011rcpp] and the `c++` library **Armadillo** [@sanderson2016armadillo]. The Bayes factors are computed with the `R` package **BFpack** [@mulder2019bfpack]. Furthermore, there are [plotting](#example-network-plot) functions
+The computationally intensive tasks are written in `c++` via the `R` package **Rcpp** [@eddelbuettel2011rcpp] and the `c++` library **Armadillo** [@sanderson2016armadillo]. The Bayes factors are computed with the `R` package **BFpack** [@mulder2019bfpack]. Furthermore, there are plotting functions
 for each method, control variables can be included in the model (e.g., `~ gender`), 
 and there is support for missing values (see `bggm_missing`).
 

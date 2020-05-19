@@ -308,8 +308,6 @@ the partial correlation is larger for `PHQ2--PHQ9`. There is an
 additional constraint to positive values (`> 0`) for both relations. The
 second hypothesis is then a “null” model.
 
-\=======
-
 ``` r
 # (try to) confirm
 fit <- confirm(Y = Y, hypothesis = hyp, 
