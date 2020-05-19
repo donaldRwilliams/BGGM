@@ -72,12 +72,11 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-
-<p><img src="joss_paper/hex.png" width="250"></p>
-<div id="bggm-bayesian-gaussian-graphical-models" class="section level1">
+<div id="bayesian-gaussian-graphical-models-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#bggm-bayesian-gaussian-graphical-models" class="anchor"></a>BGGM: Bayesian Gaussian Graphical Models</h1></div>
-<p><a href="https://cran.r-project.org/package=BGGM"><img src="http://www.r-pkg.org/badges/version/BGGM" alt="CRAN Version"></a> <a href="https://cran.r-project.org/package=BGGM"><img src="https://cranlogs.r-pkg.org/badges/BGGM" alt="Downloads"></a> <a href="https://travis-ci.org/donaldRwilliams/BGGM"><img src="https://travis-ci.org/donaldRwilliams/BGGM.svg?branch=master" alt="Build Status"></a></p>
+<a href="#bayesian-gaussian-graphical-models-" class="anchor"></a>Bayesian Gaussian Graphical Models <img src="joss_paper/hex.png" align="right" alt="" width="240">
+</h1></div>
+
 <p>The <code>R</code> package <strong>BGGM</strong> provides tools for making Bayesian inference in Gaussian graphical models (GGM). The methods are organized around two general approaches for Bayesian inference: (1) estimation and (2) hypothesis testing. The key distinction is that the former focuses on either the posterior or posterior predictive distribution (Gelman, Meng, and Stern 1996; see section 5 in Rubin 1984) , whereas the latter focuses on model comparison with the Bayes factor (Jeffreys 1961; Kass and Raftery 1995).</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
@@ -99,36 +98,35 @@
 <li>
 <p>Bayesian estimation with the novel matrix-F prior distribution (Mulder and Pericchi 2018)</p>
 <ul>
-<li>
-<a href="#bayesian-estimation">Estimation</a> (Williams 2018)</li>
+<li>Estimation (Williams 2018)</li>
 </ul>
 </li>
 <li>
 <p>Bayesian hypothesis testing with the matrix-F prior distribution (Williams and Mulder 2019)</p>
 <ul>
-<li><p><a href="#Exploratory">Exploratory hypothesis testing</a></p></li>
-<li><p><a href="#Confirmatory">Confirmatory hypothesis testing</a></p></li>
+<li><p>Exploratory hypothesis testing</p></li>
+<li><p>Confirmatory hypothesis testing</p></li>
 </ul>
 </li>
 <li>
 <p>Comparing Gaussian graphical models (Williams 2018; Williams et al. 2020)</p>
 <ul>
-<li><p><a href="#partial-correlation-differences">Partial correlation differences</a></p></li>
-<li><p><a href="#posterior-predictive-check">Posterior predictive check</a></p></li>
-<li><p><a href="#exploratory-groups">Exploratory hypothesis testing</a></p></li>
-<li><p><a href="#confirmatory-groups">Confirmatory hypothesis testing</a></p></li>
+<li><p>Partial correlation differences</p></li>
+<li><p>Posterior predictive check</p></li>
+<li><p>Exploratory hypothesis testing</p></li>
+<li><p>Confirmatory hypothesis testing</p></li>
 </ul>
 </li>
 <li>
 <p>Extending inference beyond the conditional (in)dependence structure (Williams 2018)</p>
 <ul>
-<li><p><a href="#Predictability">Predictability</a></p></li>
-<li><p><a href="#partial-correlation-differences">Posterior uncertainty intervals</a> for the partial correlations</p></li>
-<li><p><a href="#custom-network-statistics">Custom Network Statistics</a></p></li>
+<li><p>Predictability</p></li>
+<li><p>Posterior uncertainty intervals for the partial correlations</p></li>
+<li><p>Custom Network Statistics</p></li>
 </ul>
 </li>
 </ol>
-<p>The computationally intensive tasks are written in <code>c++</code> via the <code>R</code> package <strong>Rcpp</strong> (Eddelbuettel et al. 2011) and the <code>c++</code> library <strong>Armadillo</strong> (Sanderson and Curtin 2016). The Bayes factors are computed with the <code>R</code> package <strong>BFpack</strong> (Mulder et al. 2019). Furthermore, there are <a href="#example-network-plot">plotting</a> functions for each method, control variables can be included in the model (e.g., <code>~ gender</code>), and there is support for missing values (see <code>bggm_missing</code>).</p>
+<p>The computationally intensive tasks are written in <code>c++</code> via the <code>R</code> package <strong>Rcpp</strong> (Eddelbuettel et al. 2011) and the <code>c++</code> library <strong>Armadillo</strong> (Sanderson and Curtin 2016). The Bayes factors are computed with the <code>R</code> package <strong>BFpack</strong> (Mulder et al. 2019). Furthermore, there are plotting functions for each method, control variables can be included in the model (e.g., <code>~ gender</code>), and there is support for missing values (see <code>bggm_missing</code>).</p>
 </div>
 <div id="supported-data-types" class="section level2">
 <h2 class="hasAnchor">
@@ -143,696 +141,7 @@
 <div id="illustrative-examples" class="section level2">
 <h2 class="hasAnchor">
 <a href="#illustrative-examples" class="anchor"></a>Illustrative Examples</h2>
-<p>The following includes brief examples for <em>some</em> of the methods in <strong>BGGM</strong>.</p>
-<div id="bayesian-estimation" class="section level3">
-<h3 class="hasAnchor">
-<a href="#bayesian-estimation" class="anchor"></a>Bayesian Estimation</h3>
-<div id="posterior-sampling" class="section level4">
-<h4 class="hasAnchor">
-<a href="#posterior-sampling" class="anchor"></a>Posterior Sampling</h4>
-<p>An ordinal GGM is estimated with</p>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="co"># data</span>
-<span class="no">Y</span> <span class="kw">&lt;-</span> <span class="no">ptsd</span>[,<span class="fl">1</span>:<span class="fl">5</span>] + <span class="fl">1</span>
-
-<span class="co"># ordinal</span>
-<span class="no">fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/estimate.html">estimate</a></span>(<span class="no">Y</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"ordinal"</span>,
-                <span class="kw">analytic</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></div>
-<p>Notice the <code>+ 1</code>. This is required, because the first category must be <code>1</code> when <code>type = "ordinal"</code>. The partial correlations can the be summarized with</p>
-<div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">fit</span>)
-
-<span class="co">#&gt; BGGM: Bayesian Gaussian Graphical Models </span>
-<span class="co">#&gt; --- </span>
-<span class="co">#&gt; Type: ordinal </span>
-<span class="co">#&gt; Analytic: FALSE </span>
-<span class="co">#&gt; Formula:  </span>
-<span class="co">#&gt; Posterior Samples: 250 </span>
-<span class="co">#&gt; Observations (n):</span>
-<span class="co">#&gt; Nodes (p): 5 </span>
-<span class="co">#&gt; Relations: 10 </span>
-<span class="co">#&gt; --- </span>
-<span class="co">#&gt; Call: </span>
-<span class="co">#&gt; estimate(Y = Y, type = "ordinal", analytic = FALSE, iter = 250)</span>
-<span class="co">#&gt; --- </span>
-<span class="co">#&gt; Estimates:</span>
-<span class="co">#&gt;  Relation Post.mean Post.sd Cred.lb Cred.ub</span>
-<span class="co">#&gt;    B1--B2     0.258   0.079   0.105   0.418</span>
-<span class="co">#&gt;    B1--B3     0.028   0.086  -0.127   0.189</span>
-<span class="co">#&gt;    B2--B3     0.517   0.058   0.406   0.616</span>
-<span class="co">#&gt;    B1--B4     0.356   0.070   0.210   0.486</span>
-<span class="co">#&gt;    B2--B4    -0.076   0.078  -0.219   0.063</span>
-<span class="co">#&gt;    B3--B4     0.246   0.077   0.107   0.385</span>
-<span class="co">#&gt;    B1--B5     0.131   0.080  -0.020   0.279</span>
-<span class="co">#&gt;    B2--B5     0.127   0.083  -0.040   0.284</span>
-<span class="co">#&gt;    B3--B5     0.202   0.079   0.063   0.366</span>
-<span class="co">#&gt;    B4--B5     0.349   0.070   0.209   0.474</span>
-<span class="co">#&gt; --- </span></pre></div>
-<p>The returned object can also be plotted, which allows for visualizing the posterior uncertainty interval for each relation. An example is provided below in <a href="#posterior-uncertatiny">Posterior uncertainty intervals</a>. The partial correlation matrix is accessed with</p>
-<div class="sourceCode" id="cb5"><pre class="r"><span class="fu"><a href="reference/pcor_mat.html">pcor_mat</a></span>(<span class="no">fit</span>)</pre></div>
-<table class="table">
-<thead><tr class="header">
-<th></th>
-<th align="right">B1</th>
-<th align="right">B2</th>
-<th align="right">B3</th>
-<th align="right">B4</th>
-<th align="right">B5</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td>B1</td>
-<td align="right">0.000</td>
-<td align="right">0.258</td>
-<td align="right">0.028</td>
-<td align="right">0.356</td>
-<td align="right">0.131</td>
-</tr>
-<tr class="even">
-<td>B2</td>
-<td align="right">0.258</td>
-<td align="right">0.000</td>
-<td align="right">0.517</td>
-<td align="right">-0.076</td>
-<td align="right">0.127</td>
-</tr>
-<tr class="odd">
-<td>B3</td>
-<td align="right">0.028</td>
-<td align="right">0.517</td>
-<td align="right">0.000</td>
-<td align="right">0.246</td>
-<td align="right">0.202</td>
-</tr>
-<tr class="even">
-<td>B4</td>
-<td align="right">0.356</td>
-<td align="right">-0.076</td>
-<td align="right">0.246</td>
-<td align="right">0.000</td>
-<td align="right">0.349</td>
-</tr>
-<tr class="odd">
-<td>B5</td>
-<td align="right">0.131</td>
-<td align="right">0.127</td>
-<td align="right">0.202</td>
-<td align="right">0.349</td>
-<td align="right">0.000</td>
-</tr>
-</tbody>
-</table>
-<p>The graph is selected with</p>
-<div class="sourceCode" id="cb6"><pre class="r"><span class="no">E</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/select.html">select</a></span>(<span class="no">fit</span>)</pre></div>
-<p>and then plotted</p>
-<div class="sourceCode" id="cb7"><pre class="r"><span class="co"># "communities"</span>
-<span class="no">comm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/substr.html">substring</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="no">Y</span>), <span class="fl">1</span>, <span class="fl">1</span>)
-
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="fu"><a href="reference/select.html">select</a></span>(<span class="no">fit</span>),
-     <span class="kw">groups</span> <span class="kw">=</span> <span class="no">comm</span>,
-     <span class="kw">edge_magnify</span> <span class="kw">=</span> <span class="fl">5</span>,
-     <span class="kw">palette</span> <span class="kw">=</span> <span class="st">"Pastel1"</span>,
-     <span class="kw">node_size</span> <span class="kw">=</span> <span class="fl">12</span>)</pre></div>
-<p><img src="readme_models/plt_est_net.png"></p>
-<p>This basic “workflow” can be used with all methods and data types. A more involved network plot is provided below.</p>
-</div>
-<div id="analytic" class="section level4">
-<h4 class="hasAnchor">
-<a href="#analytic" class="anchor"></a>Analytic</h4>
-<p>There is also an analytic solution that is based on the Wishart distribution. This simple solution provides competitive performance with “state-of-the-art” methods, assuming that <em>n</em> (observations) &gt; <em>p</em> (variables). The one caveat is that it works only for <code>type = "continuous"</code> (the default).</p>
-<div class="sourceCode" id="cb8"><pre class="r"><span class="co"># analytic</span>
-<span class="no">fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/estimate.html">estimate</a></span>(<span class="no">Y</span>, <span class="kw">analytic</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
-
-<span class="co"># network plot</span>
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="fu"><a href="reference/select.html">select</a></span>(<span class="no">fit</span>))</pre></div>
-<p>This is quite handy when (1) only the conditional dependence structure is of interest and (2) an immediate solution is desirable. An example of</p>
-<p>(2) is provided in <a href="#posterior-predictive-check">Posterior Predictive Check</a>.</p>
-<p><br></p>
-</div>
-</div>
-<div id="bayesian-hypothesis-testing" class="section level3">
-<h3 class="hasAnchor">
-<a href="#bayesian-hypothesis-testing" class="anchor"></a>Bayesian Hypothesis Testing</h3>
-<p>The Bayes factor based methods allow for determining the conditional <strong>in</strong>dependence structure (evidence for the null hypothesis).</p>
-<div id="exploratory" class="section level4">
-<h4 class="hasAnchor">
-<a href="#exploratory" class="anchor"></a>Exploratory</h4>
-<div class="sourceCode" id="cb9"><pre class="r"><span class="co"># exploratory hypothesis testing</span>
-<span class="no">fit</span><span class="kw">&lt;-</span> <span class="fu"><a href="reference/explore.html">explore</a></span>(<span class="no">Y</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"ordinal"</span>)
-
-<span class="co"># select </span>
-<span class="no">E</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/select.html">select</a></span>(<span class="no">fit</span>, <span class="kw">alternative</span> <span class="kw">=</span> <span class="st">"exhaustive"</span>)</pre></div>
-<p>The option <code>alternative = "exhaustive"</code> compares three hypotheses: (1) a null relation; (2) a positive relation; and (3) a negative relation.</p>
-<div class="sourceCode" id="cb10"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">E</span>)
-
-<span class="co">#&gt; BGGM: Bayesian Gaussian Graphical Models </span>
-<span class="co">#&gt; --- </span>
-<span class="co">#&gt; Type: ordinal </span>
-<span class="co">#&gt; Alternative: exhaustive </span>
-<span class="co">#&gt; --- </span>
-<span class="co">#&gt; Call:</span>
-<span class="co">#&gt; select.explore(object = fit, alternative = "exhaustive")</span>
-<span class="co">#&gt; --- </span>
-<span class="co">#&gt; Hypotheses: </span>
-<span class="co">#&gt; H0: rho = 0</span>
-<span class="co">#&gt; H1: rho &gt; 0</span>
-<span class="co">#&gt; H2: rho &lt; 0 </span>
-<span class="co">#&gt; --- </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Relation Post.mean Post.sd Pr.H0 Pr.H1 Pr.H2</span>
-<span class="co">#&gt;  B1--B2    0.263    0.080   0.000 0.999 0.001</span>
-<span class="co">#&gt;  B1--B3    0.020    0.081   0.710 0.173 0.116</span>
-<span class="co">#&gt;  B2--B3    0.523    0.073   0.000 1.000 0.000</span>
-<span class="co">#&gt;  B1--B4    0.362    0.070   0.000 1.000 0.000</span>
-<span class="co">#&gt;  B2--B4   -0.082    0.068   0.459 0.061 0.480</span>
-<span class="co">#&gt;  B3--B4    0.252    0.073   0.000 1.000 0.000</span>
-<span class="co">#&gt;  B1--B5    0.129    0.072   0.120 0.847 0.033</span>
-<span class="co">#&gt;  B2--B5    0.118    0.078   0.223 0.726 0.051</span>
-<span class="co">#&gt;  B3--B5    0.213    0.077   0.001 0.996 0.003</span>
-<span class="co">#&gt;  B4--B5    0.348    0.072   0.000 1.000 0.000</span></pre></div>
-<p>The posterior hypothesis probabilities are provided in the last three columns. When using <code><a href="https://rdrr.io/r/base/plot.html">plot(E)</a></code>, there is a network plot for each hypothesis.</p>
-</div>
-<div id="confirmatory" class="section level4">
-<h4 class="hasAnchor">
-<a href="#confirmatory" class="anchor"></a>Confirmatory</h4>
-<p>A central contribution of <strong>BGGM</strong> is confirmatory hypothesis testing of (in)equality constraints (Hoijtink 2011). By this we are referring to testing expectations, as opposed to feeding the data to, say, <code>estimate</code>, and seeing what happens to emerge.</p>
-<p>In this example, the focus is on suicidal thoughts (<code>PHQ9</code>) in a comorbidity network. Here is an example set of hypotheses</p>
-<div class="sourceCode" id="cb11"><pre class="r"><span class="co"># data (+ 1)</span>
-<span class="no">Y</span> <span class="kw">&lt;-</span> <span class="no">depression_anxiety_t1</span> + <span class="fl">1</span>
-
-<span class="co"># example hypotheses</span>
-<span class="no">hyp</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"PHQ2--PHQ9 &gt; PHQ1--PHQ9 &gt; 0; 
-          PHQ2--PHQ9 = PHQ1--PHQ9 = 0"</span>)</pre></div>
-<p>There are two hypotheses separated by (<code>;</code>). The first expresses that the relation <code>PHQ2--PHQ9</code> (“feeling down, depressed, or hopeless” and “suicidal thoughts”) is larger than <code>PHQ1--PHQ9</code> (“little interest or pleasure in doing things” and “suicidal thoughts”). In other words, that the partial correlation is larger for <code>PHQ2--PHQ9</code>. There is an additional constraint to positive values (<code>&gt; 0</code>) for both relations. The second hypothesis is then a “null” model.</p>
-<p>=======</p>
-<div class="sourceCode" id="cb12"><pre class="r"><span class="co"># (try to) confirm</span>
-<span class="no">fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/confirm.html">confirm</a></span>(<span class="kw">Y</span> <span class="kw">=</span> <span class="no">Y</span>, <span class="kw">hypothesis</span> <span class="kw">=</span> <span class="no">hyp</span>,
-               <span class="kw">type</span> <span class="kw">=</span> <span class="st">"ordinal"</span>)</pre></div>
-<p>The object <code>fit</code> is then printed</p>
-<div class="sourceCode" id="cb13"><pre class="r"><span class="no">fit</span>
-
-<span class="co">#&gt; BGGM: Bayesian Gaussian Graphical Models </span>
-<span class="co">#&gt; Type: ordinal </span>
-<span class="co">#&gt; --- </span>
-<span class="co">#&gt; Posterior Samples: 250 </span>
-<span class="co">#&gt; Observations (n): 403 </span>
-<span class="co">#&gt; Variables (p): 16 </span>
-<span class="co">#&gt; Delta: 15 </span>
-<span class="co">#&gt; --- </span>
-<span class="co">#&gt; Call:</span>
-<span class="co">#&gt; confirm(Y = Y + 1, hypothesis = hyp, type = "ordinal", </span>
-<span class="co">#&gt;     iter = 250)</span>
-<span class="co">#&gt; --- </span>
-<span class="co">#&gt; Hypotheses: </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; H1: PHQ2--PHQ9&gt;PHQ1--PHQ9&gt;0</span>
-<span class="co">#&gt; H2: PHQ2--PHQ9=PHQ1--PHQ9=0</span>
-<span class="co">#&gt; H3: complement</span>
-<span class="co">#&gt; --- </span>
-<span class="co">#&gt; Posterior prob: </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; p(H1|data) = 0.895</span>
-<span class="co">#&gt; p(H2|data) = 0.002</span>
-<span class="co">#&gt; p(H3|data) = 0.103</span>
-<span class="co">#&gt; --- </span>
-<span class="co">#&gt; Bayes factor matrix: </span>
-<span class="co">#&gt;       H1      H2    H3</span>
-<span class="co">#&gt; H1 1.000 529.910 8.666</span>
-<span class="co">#&gt; H2 0.002   1.000 0.016</span>
-<span class="co">#&gt; H3 0.115  61.147 1.000</span>
-<span class="co">#&gt; --- </span>
-<span class="co">#&gt; note: equal hypothesis prior probabilities</span></pre></div>
-<p>The posterior hypothesis probability is <code>0.895</code> which provides some evidence for the order constraint. The Bayes factor matrix then divides the posterior probabilities. This provide a measure of <em>relative</em> support for which hypothesis the data were more likely under.</p>
-<p>Finally, the results can be plotted</p>
-<div class="sourceCode" id="cb14"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">fit</span>) +
-  <span class="fu">scale_fill_brewer</span>(<span class="kw">palette</span> <span class="kw">=</span> <span class="st">"Set2"</span>,
-                    <span class="kw">name</span> <span class="kw">=</span> <span class="st">"Posterior Prob"</span>) +
-  <span class="fu">ggtitle</span>(<span class="st">"Confirmatory: Comorbidity Network"</span>)</pre></div>
-<p><img src="readme_models/confirm_hyp.png"></p>
-<p>This demonstrates that all the <code><a href="https://rdrr.io/r/base/plot.html">plot()</a></code> functions in <strong>BGGM</strong> return <code>ggplot</code> objects that can be further customized. Note that <strong>BGGM</strong> is not focused on making publication ready plots. Typically the bare minimum is provided that can then be honed in.</p>
-<p><br></p>
-</div>
-</div>
-<div id="comparing-gaussian-graphical-models" class="section level3">
-<h3 class="hasAnchor">
-<a href="#comparing-gaussian-graphical-models" class="anchor"></a>Comparing Gaussian Graphical Models</h3>
-<div id="partial-correlation-differences" class="section level4">
-<h4 class="hasAnchor">
-<a href="#partial-correlation-differences" class="anchor"></a>Partial Correlation Differences</h4>
-<p>This method compares groups by computing the difference for each relation in the model. In other words, there are pairwise contrasts for each partial correlation, resulting in a posterior distribution for each difference.</p>
-<p>In all examples in this section, personality networks are compared for males and females.</p>
-<div class="sourceCode" id="cb15"><pre class="r"><span class="co"># data</span>
-<span class="no">Y</span> <span class="kw">&lt;-</span> <span class="no">bfi</span>
-
-<span class="co"># males</span>
-<span class="no">Ymales</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span>(<span class="no">Y</span>, <span class="no">gender</span> <span class="kw">==</span> <span class="fl">1</span>,
-                 <span class="kw">select</span> <span class="kw">=</span> -<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="no">gender</span>, <span class="no">education</span>))
-
-<span class="co"># females</span>
-<span class="no">Yfemales</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span>(<span class="no">Y</span>, <span class="no">gender</span> <span class="kw">==</span> <span class="fl">2</span>,
-                 <span class="kw">select</span> <span class="kw">=</span> -<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="no">gender</span>, <span class="no">education</span>))</pre></div>
-<p>Fit the model</p>
-<div class="sourceCode" id="cb16"><pre class="r"><span class="no">fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/ggm_compare_estimate.html">ggm_compare_estimate</a></span>(<span class="no">Ymales</span>, <span class="no">Yfemales</span>)</pre></div>
-<p>Then plot the results, in this case the posterior distribution for each difference</p>
-<div class="sourceCode" id="cb17"><pre class="r"><span class="co"># plot summary</span>
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">fit</span>))</pre></div>
-<p><img src="readme_models/ggm_compare_estimate.png"></p>
-<p>Note that it is also possible to use <code>select</code> for the object <code>fit</code> and then plot the results. This produces a network plot including the selected differences. Furthermore, it is also possible to plot the partial correlations (not the differences). This is accomplished by using <code>plot</code> with the summary computed from an <code>estimate</code> object (<a href="#bayesian-estimation">see above</a>).</p>
-</div>
-<div id="posterior-predictive-check" class="section level4">
-<h4 class="hasAnchor">
-<a href="#posterior-predictive-check" class="anchor"></a>Posterior Predictive Check</h4>
-<p>The predictive check method uses Jensen-Shannon divergence (i.e., symmetric Kullback-Leibler divergence <a href="https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence">Wikipedia</a>) and the sum of squared error (for the partial correlation matrices) to compare groups (Williams et al. 2020).</p>
-<p>The following compares the groups</p>
-<div class="sourceCode" id="cb18"><pre class="r"><span class="no">fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/ggm_compare_ppc.html">ggm_compare_ppc</a></span>(<span class="no">Ymales</span>, <span class="no">Yfemales</span>)</pre></div>
-<p>Then print the summary output with</p>
-<div class="sourceCode" id="cb19"><pre class="r"><span class="no">fit</span>
-
-<span class="co">#&gt; BGGM: Bayesian Gaussian Graphical Models </span>
-<span class="co">#&gt; --- </span>
-<span class="co">#&gt; Test: Global Predictive Check </span>
-<span class="co">#&gt; Posterior Samples: 500 </span>
-<span class="co">#&gt;   Group 1: 805 </span>
-<span class="co">#&gt;   Group 2: 1631 </span>
-<span class="co">#&gt; Nodes:  25 </span>
-<span class="co">#&gt; Relations: 300 </span>
-<span class="co">#&gt; --- </span>
-<span class="co">#&gt; Call: </span>
-<span class="co">#&gt; ggm_compare_ppc(Ymales, Yfemales, iter = 500)</span>
-<span class="co">#&gt; --- </span>
-<span class="co">#&gt; Symmetric KL divergence (JSD): </span>
-<span class="co">#&gt;  </span>
-<span class="co">#&gt;    contrast JSD.obs p_value</span>
-<span class="co">#&gt;  Yg1 vs Yg2   0.442       0</span>
-<span class="co">#&gt; --- </span>
-<span class="co">#&gt;  </span>
-<span class="co">#&gt; Sum of Squared Error: </span>
-<span class="co">#&gt;  </span>
-<span class="co">#&gt;    contrast SSE.obs p.value</span>
-<span class="co">#&gt;  Yg1 vs Yg2   0.759       0</span>
-<span class="co">#&gt; --- </span>
-<span class="co">#&gt; note:</span>
-<span class="co">#&gt; JSD is Jensen-Shannon divergence </span></pre></div>
-<p>In this case, there seems to be decisive evidence that the networks are different (as indicated by the posterior predictive <em>p</em>-value). The predictive distribution can also be plotted</p>
-<div class="sourceCode" id="cb20"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">fit</span>,
-     <span class="kw">critical</span> <span class="kw">=</span> <span class="fl">0.05</span>)$<span class="no">plot_jsd</span></pre></div>
-<p><img src="readme_models/ppc_1.png"></p>
-<p>where the red region is the “critical” area and the black point is the observed KL divergence for the networks. This again shows that the “distance” between the networks is much more than expected, assuming that the groups were actually the same.</p>
-<p>This next example is a new feature in <strong>BGGM</strong> (<code>2.0.0</code>), that allows for comparing GGMs any way the user wants. All that is required is to</p>
-<p>(1) decide on a test-statistic and (2) write a custom function.</p>
-<p>Here is an example using Hamming distance (<a href="https://en.wikipedia.org/wiki/Hamming_distance">Wikipedia</a>), which is essentially the squared error between adjacency matrices (a test for different structures).</p>
-<p>First define the custom function</p>
-<div class="sourceCode" id="cb21"><pre class="r"><span class="no">f</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">Yg1</span>, <span class="no">Yg2</span>){
-
-<span class="co"># remove NA</span>
-<span class="no">x</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html">na.omit</a></span>(<span class="no">Yg1</span>)
-<span class="no">y</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html">na.omit</a></span>(<span class="no">Yg2</span>)
-
-<span class="co"># nodes</span>
-<span class="no">p</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(<span class="no">x</span>)
-
-<span class="co"># identity matrix</span>
-<span class="no">I_p</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="no">p</span>)
-
-<span class="co"># estimate graphs</span>
-<span class="no">fit1</span> <span class="kw">&lt;-</span>  <span class="fu"><a href="reference/estimate.html">estimate</a></span>(<span class="no">x</span>, <span class="kw">analytic</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
-<span class="no">fit2</span> <span class="kw">&lt;-</span>  <span class="fu"><a href="reference/estimate.html">estimate</a></span>(<span class="no">y</span>, <span class="kw">analytic</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
-
-<span class="co"># select graphs</span>
-<span class="no">sel1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/select.html">select</a></span>(<span class="no">fit1</span>)
-<span class="no">sel2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/select.html">select</a></span>(<span class="no">fit2</span>)
-
-<span class="co"># Hamming distance</span>
-<span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>((<span class="no">sel1</span>$<span class="no">adj</span>[<span class="fu"><a href="https://rdrr.io/r/base/lower.tri.html">upper.tri</a></span>(<span class="no">I_p</span>)] - <span class="no">sel2</span>$<span class="no">adj</span>[<span class="fu"><a href="https://rdrr.io/r/base/lower.tri.html">upper.tri</a></span>(<span class="no">I_p</span>)])^<span class="fl">2</span>)
-}</pre></div>
-<p>Note that (1) <code>analytic = TRUE</code> is being used, which is needed in this case because two graphs are estimated for each iteration (or draw from the posterior predictive distribution) and (2) <code>f</code> requires two datasets as the input and returns a single number (the chosen test-statistic). The next step is to compute the observed Hamming distance</p>
-<div class="sourceCode" id="cb22"><pre class="r"><span class="co"># observed difference</span>
-<span class="no">obs</span> <span class="kw">&lt;-</span> <span class="fu">f</span>(<span class="no">Ymales</span>, <span class="no">Yfemales</span>)</pre></div>
-<p>then compare the groups</p>
-<div class="sourceCode" id="cb23"><pre class="r"><span class="no">fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/ggm_compare_ppc.html">ggm_compare_ppc</a></span>(<span class="no">Ymales</span>, <span class="no">Yfemales</span>,
-                             <span class="kw">FUN</span> <span class="kw">=</span> <span class="no">f</span>,
-                             <span class="kw">custom_obs</span>  <span class="kw">=</span> <span class="no">obs</span>)
-
-<span class="co"># print</span>
-<span class="no">fit</span>
-
-<span class="co">#&gt; BGGM: Bayesian Gaussian Graphical Models </span>
-<span class="co">#&gt; --- </span>
-<span class="co">#&gt; Test: Global Predictive Check </span>
-<span class="co">#&gt; Posterior Samples: 250 </span>
-<span class="co">#&gt;   Group 1: 805 </span>
-<span class="co">#&gt;   Group 2: 1631 </span>
-<span class="co">#&gt; Nodes:  25 </span>
-<span class="co">#&gt; Relations: 300 </span>
-<span class="co">#&gt; --- </span>
-<span class="co">#&gt; Call: </span>
-<span class="co">#&gt; ggm_compare_ppc(Ymales, Yfemales, iter = 250, FUN = f, custom_obs = obs)</span>
-<span class="co">#&gt; --- </span>
-<span class="co">#&gt; Custom: </span>
-<span class="co">#&gt;  </span>
-<span class="co">#&gt;    contrast custom.obs p.value</span>
-<span class="co">#&gt;  Yg1 vs Yg2         75   0.576</span>
-<span class="co">#&gt; --- </span></pre></div>
-<p>In this case, the <em>p</em>-value does not indicate that the groups are different for this test-statistic. This may seem contradictory to the previous results, but it is important to note that Hamming distance asks a much different question related to the adjacency matrices (no other information, such as edge weights, is considered).</p>
-</div>
-<div id="exploratory-groups" class="section level4">
-<h4 class="hasAnchor">
-<a href="#exploratory-groups" class="anchor"></a>Exploratory (groups)</h4>
-<p>The Bayes factor based methods allow for determining the conditional <strong>in</strong>dependence structure (evidence for the null hypothesis), in this case for group equality.</p>
-<p>Fit the model</p>
-<div class="sourceCode" id="cb24"><pre class="r"><span class="no">fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/ggm_compare_explore.html">ggm_compare_explore</a></span>(<span class="no">Ymales</span>, <span class="no">Yfemales</span>)</pre></div>
-<p>Then plot the results</p>
-<div class="sourceCode" id="cb25"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">fit</span>)) +
-  <span class="fu">theme_bw</span>() +
-  <span class="fu">theme</span>(<span class="kw">panel.grid</span> <span class="kw">=</span> <span class="fu">element_blank</span>(),
-        <span class="kw">axis.text.y</span> <span class="kw">=</span> <span class="fu">element_blank</span>())</pre></div>
-<p><img src="readme_models/plt_ggm_compare_explore.png"></p>
-<p>Here the posterior probability for a difference is visualized for each relation in the GGM. Note that it is also possible to use <code>select</code> for the object <code>fit</code> and then plot the results. This produces a network plot including the selected differences, in addition to a plot depicting the relations for which there was evidence for the null hypothesis.</p>
-</div>
-<div id="confirmatory-groups" class="section level4">
-<h4 class="hasAnchor">
-<a href="#confirmatory-groups" class="anchor"></a>Confirmatory (groups)</h4>
-<p>A central contribution of <strong>BGGM</strong> is confirmatory hypothesis testing of (in)equality constraints (Hoijtink 2011), in this case for comparing groups. By this we are referring to testing expectations, as opposed to feeding the data to, say, <code>estimate</code>, and seeing what happens to emerge.</p>
-<p>In this example, the focus is on agreeableness in a personality network. Here is a set of hypotheses</p>
-<div class="sourceCode" id="cb26"><pre class="r"><span class="no">hyp</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"g1_A2--A4 &gt; g2_A2--A4 &gt; 0 &amp; g1_A4--A5 &gt; g2_A4--A5 &gt; 0;
-          g1_A4--A5 = g2_A4--A5 = 0  &amp; g1_A2--A4 = g2_A2--A4 = 0"</span>)</pre></div>
-<p>where the variables are <code>A2</code> (“inquire about others’ well being”), <code>A4</code> (“love children”), and <code>A5</code> (“make people feel at ease”). The first hypothesis states that the conditionally dependent effects are larger for female than males (note the <code><a href="https://rdrr.io/r/base/Logic.html">&amp;</a></code>), with the additional constraint to positive values, whereas the second hypothesis is a “null” model.</p>
-<p>The hypothesis is tested with the following</p>
-<div class="sourceCode" id="cb27"><pre class="r"><span class="no">fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/ggm_compare_confirm.html">ggm_compare_confirm</a></span>(<span class="no">Yfemales</span>, <span class="no">Ymales</span>,
-                           <span class="kw">hypothesis</span> <span class="kw">=</span> <span class="no">hyp</span>)
-
-<span class="co"># print</span>
-<span class="no">fit</span>
-
-<span class="co">#&gt; BGGM: Bayesian Gaussian Graphical Models</span>
-<span class="co">#&gt; Type: continuous</span>
-<span class="co">#&gt; ---</span>
-<span class="co">#&gt; Posterior Samples: 500</span>
-<span class="co">#&gt;   Group 1: 1631</span>
-<span class="co">#&gt;   Group 2: 805</span>
-<span class="co">#&gt; Variables (p): 25</span>
-<span class="co">#&gt; Relations: 300</span>
-<span class="co">#&gt; Delta: 15</span>
-<span class="co">#&gt; ---</span>
-<span class="co">#&gt; Call:</span>
-<span class="co">#&gt; ggm_compare_confirm(Yfemales, Ymales, hypothesis = hyp, iter = 500)</span>
-<span class="co">#&gt; ---</span>
-<span class="co">#&gt; Hypotheses:</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; H1: g1_A2--A4&gt;g2_A2--A4&gt;0&amp;g1_A4--A5&gt;g2_A4--A5&gt;0</span>
-<span class="co">#&gt; H2: g1_A4--A5=g2_A4--A5=0&amp;g1_A2--A4=g2_A2--A4=0</span>
-<span class="co">#&gt; H3: complement</span>
-<span class="co">#&gt; ---</span>
-<span class="co">#&gt; Posterior prob:</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; p(H1|data) = 0.989</span>
-<span class="co">#&gt; p(H2|data) = 0</span>
-<span class="co">#&gt; p(H3|data) = 0.011</span>
-<span class="co">#&gt; ---</span>
-<span class="co">#&gt; Bayes factor matrix:</span>
-<span class="co">#&gt;       H1           H2     H3</span>
-<span class="co">#&gt; H1 1.000 1.180798e+14 92.115</span>
-<span class="co">#&gt; H2 0.000 1.000000e+00  0.000</span>
-<span class="co">#&gt; H3 0.011 1.281873e+12  1.000</span>
-<span class="co">#&gt; ---</span>
-<span class="co">#&gt; note: equal hypothesis prior probabilities</span></pre></div>
-<p>The posterior hypothesis probability is 0.989 which provides strong evidence for the hypothesis that predicted these “agreeableness” relations would be larger in females than in males. This can also be plotted, as in <a href="#confirmatory">Confirmatory (one group)</a>. See Rodriguez et al. (2020) for a full treatment of confirmatory testing in substantive applications.</p>
-</div>
-</div>
-<div id="beyond-the-conditional-independence-structure" class="section level3">
-<h3 class="hasAnchor">
-<a href="#beyond-the-conditional-independence-structure" class="anchor"></a>Beyond the Conditional (In)dependence Structure</h3>
-<div id="predictability" class="section level4">
-<h4 class="hasAnchor">
-<a href="#predictability" class="anchor"></a>Predictability</h4>
-<p>In this example, predictability is computed for each node in the network (see here for rationale Haslbeck and Waldorp 2018). Currently <strong>BGGM</strong> computes Bayesian variance explained for all data types (Gelman et al. 2019).</p>
-<p>The following computes predictability for binary data</p>
-<div class="sourceCode" id="cb28"><pre class="r"><span class="co"># binary</span>
-<span class="no">Y</span> <span class="kw">&lt;-</span> <span class="no">women_math</span>
-
-<span class="co"># fit model</span>
-<span class="no">fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/estimate.html">estimate</a></span>(<span class="no">Y</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"binary"</span>)
-
-<span class="co"># compute r2</span>
-<span class="no">r2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/predictability.html">predictability</a></span>(<span class="no">fit</span>, <span class="kw">iter</span> <span class="kw">=</span> <span class="fl">500</span>)
-
-<span class="co"># plot</span>
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">r2</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"ridgeline"</span>)</pre></div>
-<p><img src="readme_models/predictability.png"></p>
-</div>
-<div id="posterior-uncertainty" class="section level4">
-<h4 class="hasAnchor">
-<a href="#posterior-uncertainty" class="anchor"></a>Posterior Uncertainty</h4>
-<p>See <a href="#partial-correlation-differences">Partial Correlation Differences</a></p>
-</div>
-<div id="custom-network-statistics" class="section level4">
-<h4 class="hasAnchor">
-<a href="#custom-network-statistics" class="anchor"></a>Custom Network Statistics</h4>
-<p>A new feature to <strong>BGGM</strong> allows for computing user defined network statistics, given a partial correlation or weighted adjacency matrix.</p>
-<p>Here is an example for bridge centrality (Jones, Ma, and McNally 2019). The first step is to define the function</p>
-<div class="sourceCode" id="cb29"><pre class="r"><span class="co"># need this package </span>
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">networktools</span>)
-
-<span class="co"># custom function</span>
-<span class="no">f</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>, <span class="no">...</span>){
- <span class="fu"><a href="https://rdrr.io/pkg/networktools/man/bridge.html">bridge</a></span>(<span class="no">x</span>, <span class="no">...</span>)$<span class="no">`Bridge Strength`</span>
-}</pre></div>
-<p>Note that <code>x</code> takes the matrix and <code>f</code> can return either a single number or a number for each node. The next step is to fit the model and compute the network statistic</p>
-<div class="sourceCode" id="cb30"><pre class="r"><span class="co"># data</span>
-<span class="no">Y</span> <span class="kw">&lt;-</span> <span class="no">ptsd</span>
-
-<span class="co"># clusters</span>
-<span class="no">communities</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/substr.html">substring</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="no">Y</span>), <span class="fl">1</span>, <span class="fl">1</span>)
-
-<span class="co"># estimate the model</span>
-<span class="no">fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/estimate.html">estimate</a></span>(<span class="no">Y</span>)
-
-<span class="co"># bridge strength</span>
-<span class="no">net_stat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/roll_your_own.html">roll_your_own</a></span>(<span class="no">fit</span>,
-                          <span class="kw">FUN</span> <span class="kw">=</span> <span class="no">f</span>,
-                          <span class="kw">select</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
-                          <span class="kw">communities</span> <span class="kw">=</span> <span class="no">communities</span>)</pre></div>
-<p>The function <code>f</code> is provided to <code>FUN</code> and <code>communities</code> is passed to <code>brigde</code> (inside of <code>f</code>) via <code>...</code>. The results can be printed</p>
-<div class="sourceCode" id="cb31"><pre class="r"><span class="co"># print</span>
-<span class="no">net_stat</span>
-
-<span class="co">#&gt; BGGM: Bayesian Gaussian Graphical Models </span>
-<span class="co">#&gt; --- </span>
-<span class="co">#&gt; Network Stats: Roll Your Own</span>
-<span class="co">#&gt; Posterior Samples: 100 </span>
-<span class="co">#&gt; --- </span>
-<span class="co">#&gt; Estimates: </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Node Post.mean Post.sd Cred.lb Cred.ub</span>
-<span class="co">#&gt;     1     0.340   0.097   0.166   0.546</span>
-<span class="co">#&gt;     2     0.319   0.100   0.176   0.513</span>
-<span class="co">#&gt;     3     0.000   0.000   0.000   0.000</span>
-<span class="co">#&gt;     4     0.337   0.086   0.189   0.489</span>
-<span class="co">#&gt;     5     0.559   0.133   0.332   0.791</span>
-<span class="co">#&gt;     6     0.188   0.073   0.029   0.320</span>
-<span class="co">#&gt;     7     0.505   0.138   0.241   0.781</span>
-<span class="co">#&gt;     8     0.153   0.070   0.022   0.286</span>
-<span class="co">#&gt;     9     0.175   0.063   0.041   0.281</span>
-<span class="co">#&gt;    10     0.000   0.000   0.000   0.000</span>
-<span class="co">#&gt;    11     0.365   0.107   0.178   0.627</span>
-<span class="co">#&gt;    12     0.479   0.093   0.280   0.637</span>
-<span class="co">#&gt;    13     0.155   0.074   0.022   0.301</span>
-<span class="co">#&gt;    14     0.000   0.000   0.000   0.000</span>
-<span class="co">#&gt;    15     0.374   0.097   0.175   0.550</span>
-<span class="co">#&gt;    16     0.174   0.065   0.034   0.295</span>
-<span class="co">#&gt;    17     0.000   0.000   0.000   0.000</span>
-<span class="co">#&gt;    18     0.491   0.132   0.238   0.745</span>
-<span class="co">#&gt;    19     0.613   0.113   0.408   0.825</span>
-<span class="co">#&gt;    20     0.144   0.066   0.038   0.289</span>
-<span class="co">#&gt; --- </span></pre></div>
-<p>And then plotted</p>
-<div class="sourceCode" id="cb32"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">net_stat</span>)</pre></div>
-<p><img src="readme_models/bridge.png"></p>
-<p>There are additional examples in the documentation.</p>
-</div>
-</div>
-<div id="example-network-plot" class="section level3">
-<h3 class="hasAnchor">
-<a href="#example-network-plot" class="anchor"></a>Example Network Plot</h3>
-<p>Here is an example of a more involved network plot. In this case, the graph is estimated with a semi-parametric copula (<code>type = "mixed"</code>), where two control variables are included in the model.</p>
-<div class="sourceCode" id="cb33"><pre class="r"><span class="co"># personality (includes gender and education)</span>
-<span class="no">Y</span> <span class="kw">&lt;-</span> <span class="no">bfi</span>
-
-<span class="co"># fit copula GGM</span>
-<span class="no">fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/estimate.html">estimate</a></span>(<span class="no">Y</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"mixed"</span>)
-
-<span class="co"># select graph</span>
-<span class="no">E</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/select.html">select</a></span>(<span class="no">fit</span>)</pre></div>
-<p>The graph is then plotted</p>
-<div class="sourceCode" id="cb34"><pre class="r"><span class="co"># extract communities</span>
-<span class="no">comm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/substr.html">substring</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="no">Y</span>), <span class="fl">1</span>, <span class="fl">1</span>)
-
-<span class="co"># plot</span>
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">E</span>,
-     <span class="co"># enlarge edges</span>
-     <span class="kw">edge_magnify</span> <span class="kw">=</span> <span class="fl">5</span>,
-     <span class="co"># cluster nodes</span>
-     <span class="kw">groups</span> <span class="kw">=</span> <span class="no">comm</span>,
-     <span class="co"># change layout</span>
-     <span class="kw">layout</span> <span class="kw">=</span> <span class="st">"circle"</span>)$<span class="no">plt</span> +
-  <span class="co"># plot title</span>
-  <span class="fu">ggtitle</span>(<span class="st">"Semi-Parametric Copula"</span>) +
-  <span class="co"># add custom labels</span>
-  <span class="fu">scale_color_brewer</span>(<span class="kw">breaks</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A"</span>, <span class="st">"C"</span>,
-                                <span class="st">"E"</span>, <span class="st">"N"</span>,
-                                <span class="st">"O"</span>, <span class="st">"e"</span>,
-                                <span class="st">"g"</span>),
-                     <span class="kw">labels</span> <span class="kw">=</span>   <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A"</span>, <span class="st">"C"</span>,
-                                 <span class="st">"E"</span>, <span class="st">"N"</span>,
-                                 <span class="st">"O"</span>,
-                                 <span class="st">"Education"</span>,
-                                 <span class="st">"Gender"</span>),
-                     <span class="kw">palette</span> <span class="kw">=</span> <span class="st">"Set2"</span>)</pre></div>
-<p><img src="readme_models/plt_net_example.png"></p>
-<p>Note that <code>layout</code> can be changed to any option provided in the <code>R</code> package <strong>sna</strong> (Butts 2019).</p>
-</div>
-</div>
-<div id="additional-features" class="section level2">
-<h2 class="hasAnchor">
-<a href="#additional-features" class="anchor"></a>Additional Features</h2>
-<p>The primary focus of <strong>BGGM</strong> is Gaussian graphical modeling (the inverse covariance matrix). The residue is a suite of useful methods not explicitly for GGMs. For example,</p>
-<div id="bivariate-correlations" class="section level3">
-<h3 class="hasAnchor">
-<a href="#bivariate-correlations" class="anchor"></a>Bivariate Correlations</h3>
-<p>Bivariate correlations for <code>binary</code> (tetrachoric), <code>ordinal</code> (polychoric), <code>mixed</code> (rank based), and <code>continuous</code> (Pearson’s) data.</p>
-<p>Here is an example for computing tetrachoric correlations:</p>
-<div class="sourceCode" id="cb35"><pre class="r"><span class="co"># binary data</span>
-<span class="no">Y</span> <span class="kw">&lt;-</span> <span class="no">women_math</span>[<span class="fl">1</span>:<span class="fl">500</span>,]
-
-<span class="no">cors</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/zero_order_cors.html">zero_order_cors</a></span>(<span class="no">Y</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"binary"</span>, <span class="kw">iter</span> <span class="kw">=</span> <span class="fl">250</span>)
-
-<span class="no">cors</span>$<span class="no">R</span></pre></div>
-<table class="table">
-<thead><tr class="header">
-<th></th>
-<th align="right">1</th>
-<th align="right">2</th>
-<th align="right">3</th>
-<th align="right">4</th>
-<th align="right">5</th>
-<th align="right">6</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td>1</td>
-<td align="right">1.000</td>
-<td align="right">-0.198</td>
-<td align="right">0.506</td>
-<td align="right">0.122</td>
-<td align="right">-0.140</td>
-<td align="right">0.098</td>
-</tr>
-<tr class="even">
-<td>2</td>
-<td align="right">-0.198</td>
-<td align="right">1.000</td>
-<td align="right">-0.482</td>
-<td align="right">-0.013</td>
-<td align="right">-0.146</td>
-<td align="right">-0.146</td>
-</tr>
-<tr class="odd">
-<td>3</td>
-<td align="right">0.506</td>
-<td align="right">-0.482</td>
-<td align="right">1.000</td>
-<td align="right">0.310</td>
-<td align="right">-0.343</td>
-<td align="right">0.351</td>
-</tr>
-<tr class="even">
-<td>4</td>
-<td align="right">0.122</td>
-<td align="right">-0.013</td>
-<td align="right">0.310</td>
-<td align="right">1.000</td>
-<td align="right">-0.363</td>
-<td align="right">0.169</td>
-</tr>
-<tr class="odd">
-<td>5</td>
-<td align="right">-0.140</td>
-<td align="right">-0.146</td>
-<td align="right">-0.343</td>
-<td align="right">-0.363</td>
-<td align="right">1.000</td>
-<td align="right">-0.194</td>
-</tr>
-<tr class="even">
-<td>6</td>
-<td align="right">0.098</td>
-<td align="right">-0.146</td>
-<td align="right">0.351</td>
-<td align="right">0.169</td>
-<td align="right">-0.194</td>
-<td align="right">1.000</td>
-</tr>
-</tbody>
-</table>
-<p>The object <code>cors</code> also includes the sampled correlation matrices (in this case 250) in an array.</p>
-</div>
-<div id="multivariate-regression" class="section level3">
-<h3 class="hasAnchor">
-<a href="#multivariate-regression" class="anchor"></a>Multivariate Regression</h3>
-<p>Multivariate regression for binary (probit), ordinal (probit), mixed (rank likelihood), and continuous data.</p>
-<p>Here is an example for a multivariate probit model with an ordinal outcome, where <code>E5</code> (“take charge”) and <code>N5</code> (“panic easily”) are predicted by <code>gender</code> and <code>education</code>:</p>
-<div class="sourceCode" id="cb36"><pre class="r"><span class="co"># personality data</span>
-<span class="no">Y</span> <span class="kw">&lt;-</span> <span class="no">bfi</span>
-
-<span class="co"># variables</span>
-<span class="no">Y</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span>(<span class="no">Y</span>, <span class="kw">select</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"E5"</span>, <span class="st">"N5"</span>,
-                          <span class="st">"gender"</span>, <span class="st">"education"</span>))
-
-
-<span class="no">mv_probit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/estimate.html">estimate</a></span>(<span class="no">Y</span>, <span class="kw">formula</span> <span class="kw">=</span> ~ <span class="no">gender</span> + <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span>(<span class="no">education</span>),
-                      <span class="kw">type</span> <span class="kw">=</span> <span class="st">"ordinal"</span>)</pre></div>
-<p>Note that <strong>BGGM</strong> does not use the customary <code>model.matrix</code> formulation. This is for good reason, as each variable in the GGM does not need to be written out. Here we effectively “tricked” <strong>BGGM</strong> to fit a multivariate probit model (each variable included in <code>formula</code> is removed from <code>Y</code>).</p>
-<div class="sourceCode" id="cb37"><pre class="r"><span class="fu"><a href="reference/regression_summary.html">regression_summary</a></span>(<span class="no">mv_probit</span>)
-<span class="co">#&gt; BGGM: Bayesian Gaussian Graphical Models </span>
-<span class="co">#&gt; --- </span>
-<span class="co">#&gt; Type: ordinal </span>
-<span class="co">#&gt; Formula: ~ gender + as.factor(education) </span>
-<span class="co">#&gt; --- </span>
-<span class="co">#&gt; Coefficients: </span>
-<span class="co">#&gt;  </span>
-<span class="co">#&gt; E5 </span>
-<span class="co">#&gt;                       Post.mean Post.sd Cred.lb Cred.ub</span>
-<span class="co">#&gt; (Intercept)               1.852   0.533   1.049   3.142</span>
-<span class="co">#&gt; gender                    0.169   0.066   0.065   0.295</span>
-<span class="co">#&gt; as.factor(education)2     0.215   0.109   0.024   0.437</span>
-<span class="co">#&gt; as.factor(education)3     0.271   0.104   0.089   0.445</span>
-<span class="co">#&gt; as.factor(education)4     0.206   0.103   0.019   0.404</span>
-<span class="co">#&gt; as.factor(education)5     0.345   0.128   0.120   0.593</span>
-<span class="co">#&gt; --- </span>
-<span class="co">#&gt; N5 </span>
-<span class="co">#&gt;                       Post.mean Post.sd Cred.lb Cred.ub</span>
-<span class="co">#&gt; (Intercept)               0.210   0.114  -0.012   0.434</span>
-<span class="co">#&gt; gender                    0.502   0.140   0.291   0.835</span>
-<span class="co">#&gt; as.factor(education)2    -0.127   0.103  -0.345   0.058</span>
-<span class="co">#&gt; as.factor(education)3    -0.104   0.081  -0.258   0.034</span>
-<span class="co">#&gt; as.factor(education)4    -0.218   0.104  -0.427  -0.024</span>
-<span class="co">#&gt; as.factor(education)5    -0.229   0.103  -0.449  -0.038</span>
-<span class="co">#&gt; --- </span>
-<span class="co">#&gt; Residual Correlation Matrix: </span>
-<span class="co">#&gt;       E5    N5</span>
-<span class="co">#&gt; E5  1.00 -0.18</span>
-<span class="co">#&gt; N5 -0.18  1.00</span>
-<span class="co">#&gt; ---</span></pre></div>
-<p>This basic idea can also be used to fit regression models with a single outcome.</p>
-</div>
-</div>
-<div id="note-on-conditional-independence-models-for-latent-data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#note-on-conditional-independence-models-for-latent-data" class="anchor"></a>Note on Conditional (In)dependence Models for Latent Data</h2>
-<p>All of the data types (besides continuous) model latent data. That is, unobserved data that is assumed to be Gaussian distributed. For example, a tetrachoric correlation (binary data) is a special case of a polychoric correlation (ordinal data). Both relations are between "theorized normally distributed continuous <em>latent</em> variables <a href="https://en.wikipedia.org/wiki/Polychoric_correlation">Wikepedia</a>. In both instances, the corresponding partial correlation between observed variables is conditioned on the remaining variables in the <em>latent</em> space. This implies that interpretation is similar to continuous data, but with respect to latent variables. We refer interested users to (see page 2364, section 2.2, in Webb and Forster 2008).</p>
-</div>
-<div id="high-dimensional-data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#high-dimensional-data" class="anchor"></a>High Dimensional Data?</h2>
-<p><strong>BGGM</strong> was built specifically for social-behavioral scientists. Of course, the methods can be used by all researchers. However, there is currently <em>not</em> support for high-dimensional data (i.e., more variables than observations) that are common place in, say, the genetics literature. These data are rare in the social-behavioral sciences. In the future, support for high-dimensional data may be added to <strong>BGGM</strong>.</p>
+<p>There are several tutorials in the vignette section.</p>
 </div>
 <div id="references" class="section level2">
 <h2 class="hasAnchor">
@@ -841,35 +150,20 @@
 <div id="ref-albert1993bayesian">
 <p>Albert, James H, and Siddhartha Chib. 1993. “Bayesian Analysis of Binary and Polychotomous Response Data.” <em>Journal of the American Statistical Association</em> 88 (422): 669–79.</p>
 </div>
-<div id="ref-sna">
-<p>Butts, Carter T. 2019. <em>Sna: Tools for Social Network Analysis</em>. <a href="https://CRAN.R-project.org/package=sna" class="uri">https://CRAN.R-project.org/package=sna</a>.</p>
-</div>
 <div id="ref-cowles1996accelerating">
 <p>Cowles, Mary Kathryn. 1996. “Accelerating Monte Carlo Markov Chain Convergence for Cumulative-Link Generalized Linear Models.” <em>Statistics and Computing</em> 6 (2): 101–11.</p>
 </div>
 <div id="ref-eddelbuettel2011rcpp">
 <p>Eddelbuettel, Dirk, Romain François, J Allaire, Kevin Ushey, Qiang Kou, N Russel, John Chambers, and D Bates. 2011. “Rcpp: Seamless R and C++ Integration.” <em>Journal of Statistical Software</em> 40 (8): 1–18.</p>
 </div>
-<div id="ref-gelman_r2_2019">
-<p>Gelman, Andrew, Ben Goodrich, Jonah Gabry, and Aki Vehtari. 2019. “R-squared for Bayesian Regression Models.” <em>American Statistician</em> 73 (3): 307–9. <a href="https://doi.org/10.1080/00031305.2018.1549100" class="uri">https://doi.org/10.1080/00031305.2018.1549100</a>.</p>
-</div>
 <div id="ref-Gelman1996a">
 <p>Gelman, Andrew, Xiao-Li Meng, and Hal Stern. 1996. “Posterior predictive assessment of model fitness via realized discrepancies. Vol.6, No.4.” <em>Statistica Sinica</em> 6 (4): 733–807. <a href="https://doi.org/10.1.1.142.9951" class="uri">https://doi.org/10.1.1.142.9951</a>.</p>
-</div>
-<div id="ref-haslbeck2018well">
-<p>Haslbeck, Jonas MB, and Lourens J Waldorp. 2018. “How Well Do Network Models Predict Observations? On the Importance of Predictability in Network Models.” <em>Behavior Research Methods</em> 50 (2): 853–61.</p>
 </div>
 <div id="ref-hoff2007extending">
 <p>Hoff, Peter D. 2007. “Extending the Rank Likelihood for Semiparametric Copula Estimation.” <em>The Annals of Applied Statistics</em> 1 (1): 265–83.</p>
 </div>
-<div id="ref-Hoijtink2011">
-<p>Hoijtink, H. 2011. <em>Informative hypotheses: Theory and practice for behavioral and social scientists</em>. Chapman; Hall/CRC.</p>
-</div>
 <div id="ref-Jeffreys1961">
 <p>Jeffreys, Harold. 1961. <em>The theory of probability</em>. Oxford: Oxford University Press.</p>
-</div>
-<div id="ref-jones2019bridge">
-<p>Jones, Payton J, Ruofan Ma, and Richard J McNally. 2019. “Bridge Centrality: A Network Approach to Understanding Comorbidity.” <em>Multivariate Behavioral Research</em>, 1–15.</p>
 </div>
 <div id="ref-Kass1995">
 <p>Kass, Robert E, and Adrian E Raftery. 1995. “Bayes Factors.” <em>Journal of the American Statistical Association</em> 90 (430): 773–95.</p>
@@ -882,12 +176,6 @@
 </div>
 <div id="ref-Mulder2018">
 <p>Mulder, Joris, and Luis Pericchi. 2018. “The Matrix-F Prior for Estimating and Testing Covariance Matrices.” <em>Bayesian Analysis</em>, no. 4: 1–22. <a href="https://doi.org/10.1214/17-BA1092" class="uri">https://doi.org/10.1214/17-BA1092</a>.</p>
-</div>
-<div id="ref-rodriguez2020formalizing">
-<p>Rodriguez, Josue E, Donald R Williams, Philippe Rast, and Joris Mulder.</p>
-<ol>
-<li>“On Formalizing Theoretical Expectations: Bayesian Testing of Central Structures in Psychological Networks.” <em>PsyArXiv</em>.</li>
-</ol>
 </div>
 <div id="ref-rubin1984bayesianly">
 <p>Rubin, Donald B. 1984. “Bayesianly Justifiable and Relevant Frequency Calculations for the Applied Statistician.” <em>The Annals of Statistics</em>, 1151–72.</p>
@@ -916,7 +204,6 @@
 </div>
 </div>
 </div>
-
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -941,7 +228,15 @@
 </ul>
 </div>
 
-  </div>
+  <div class="dev-status">
+<h2>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://cran.r-project.org/package=BGGM"><img src="http://www.r-pkg.org/badges/version/BGGM" alt="CRAN Version"></a></li>
+<li><a href="https://cran.r-project.org/package=BGGM"><img src="https://cranlogs.r-pkg.org/badges/BGGM" alt="Downloads"></a></li>
+<li><a href="https://travis-ci.org/donaldRwilliams/BGGM"><img src="https://travis-ci.org/donaldRwilliams/BGGM.svg?branch=master" alt="Build Status"></a></li>
+</ul>
+</div>
+</div>
 </div>
 
 

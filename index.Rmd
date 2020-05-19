@@ -1,5 +1,6 @@
 ---
 output: github_document
+bibliography: inst/REFERENCES.bib
 ---
 
 ```{r, echo = FALSE, message=F}
@@ -16,7 +17,7 @@ library(ggplot2)
 library(BGGM)
 ```
 
-#  BGGM: Bayesian Gaussian Graphical Models <img src="joss_paper/hex.pn" align="right" alt="" width="120" />
+# Bayesian Gaussian Graphical Models <img src="joss_paper/hex.png" align="right" alt="" width="240" />
 
 
 
@@ -109,3 +110,9 @@ and there is support for missing values (see `bggm_missing`).
  in @hoff2007extending. This is a semi-parametric copula model
  (i.e., a copula GGM) based on the ranked likelihood. Note that this can be used for 
  *only* ordinal data (not restricted to "mixed" data).
+
+
+## Illustrative Examples
+There are several tutorials in the vignette section.
+
+## References
