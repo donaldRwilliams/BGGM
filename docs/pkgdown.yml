@@ -3,7 +3,7 @@ pkgdown: 1.5.1
 pkgdown_sha: ~
 articles:
   ppc_custom: ppc_custom.html
-last_built: 2020-05-19T21:55Z
+last_built: 2020-05-19T22:32Z
 urls:
   reference: https://donaldrwilliams.github.io/BGGM//reference
   article: https://donaldrwilliams.github.io/BGGM//articles

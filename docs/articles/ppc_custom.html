@@ -98,7 +98,7 @@
 <h1 class="hasAnchor">
 <a href="#background" class="anchor"></a>Background</h1>
 <p>It is quite common to have partial correlation networks (GGMs) for various subgroups, say, males and females, a control and treatment group, or perhaps several educational levels. In this case, it is important to not only determine whether the groups are different, but actually compare the groups in a way that answers a specific question of interest.</p>
-<p>To date, most <code>R</code> packages provide a few ways to compare groups, including <strong>BGGM</strong> (version <code>1.0.0</code>). In version <code>2.0.0</code>, however, <strong>BGGM</strong> includes a new feature for the function <code>ggm_compare_ppc</code> that enables users to <strong>compare networks in any way the want</strong>.</p>
+<p>To date, most <code>R</code> packages provide a few ways to compare groups, including <strong>BGGM</strong> (version <code>1.0.0</code>). In version <code>2.0.0</code>, however, <strong>BGGM</strong> includes a new feature for the function <code>ggm_compare_ppc</code> that enables users to <strong>compare networks in any way they want</strong>.</p>
 </div>
 <div id="basic-idea" class="section level1">
 <h1 class="hasAnchor">
@@ -453,7 +453,7 @@
 <p>and plotted</p>
 <div class="sourceCode" id="cb31"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">ppc</span>)</pre></body></html></div>
 <pre><code>## $plot_custom</code></pre>
-<pre><code>## Picking joint bandwidth of 0.00411</code></pre>
+<pre><code>## Picking joint bandwidth of 0.00432</code></pre>
 <p><img src="ppc_custom_files/figure-html/unnamed-chunk-23-1.png" width="700"></p>
 <p>which shows that the clustering in the data appears to be different (given the observed value exceeds the entire predictive distribution).</p>
 </div>
@@ -524,22 +524,23 @@
 <p><img src="ppc_custom_files/figure-html/unnamed-chunk-28-1.png" width="700"> which again shows the sum of squared error for expected influence far exceeds what would be expected, assuming the null model were true.</p>
 </div>
 </div>
-<div id="two-notes-of-caution" class="section level2">
-<h2 class="hasAnchor">
-<a href="#two-notes-of-caution" class="anchor"></a>Two Notes of Caution</h2>
+</div>
+<div id="two-notes-of-caution" class="section level1">
+<h1 class="hasAnchor">
+<a href="#two-notes-of-caution" class="anchor"></a>Two Notes of Caution</h1>
 <ol style="list-style-type: decimal">
-<li><p>Note that only the default in <strong>BGGM</strong> have been shown to have nominal error rates. However, there is a proof in X that suggests the error rate cannot be larger than <span class="math inline">\(2\alpha\)</span> <span class="citation">(Meng and others 1994)</span>, and, futher, a predictive check is typically below <span class="math inline">\(\alpha\)</span> <span class="citation">(i.e., a tendency to be conservative, Gelman and others 2013)</span>.</p></li>
+<li><p>Note that only the default in <strong>BGGM</strong> have been shown to have nominal error rates. However, there is a proof that suggests the error rate cannot be larger than <span class="math inline">\(2\alpha\)</span> <span class="citation">(Meng and others 1994)</span>, and, futher, a predictive check is typically below <span class="math inline">\(\alpha\)</span> <span class="citation">(i.e., a tendency to be conservative, Gelman and others 2013)</span>.</p></li>
 <li><p>Failing to reject the null model does not indicate the groups are the same! To test for equality see <code>ggm_compare_explore</code> and <code>ggm_compare_confirm</code>.</p></li>
 </ol>
 </div>
-<div id="conclusion" class="section level2">
-<h2 class="hasAnchor">
-<a href="#conclusion" class="anchor"></a>Conclusion</h2>
-<p>These example certainly open the door for tailoring the test-statisitc to ask specific question of interest (which I would hope is not the same for each network analysis). And for methods focused researchers perhaps simulations comparing these, among other options, would be a very nice contribution indeed.</p>
+<div id="conclusion" class="section level1">
+<h1 class="hasAnchor">
+<a href="#conclusion" class="anchor"></a>Conclusion</h1>
+<p>These example certainly open the door for tailoring the test-statisitc to answer specific research questions.</p>
 </div>
-<div id="references" class="section level2 unnumbered">
-<h2 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h2>
+<div id="references" class="section level1 unnumbered">
+<h1 class="hasAnchor">
+<a href="#references" class="anchor"></a>References</h1>
 <div id="refs" class="references">
 <div id="ref-fried2018replicability">
 <p>Fried, Eiko I, Marloes B Eidhof, Sabina Palic, Giulio Costantini, Hilde M Huisman-van Dijk, Claudi LH Bockting, Iris Engelhard, Cherie Armour, Anni BS Nielsen, and Karen-Inge Karstoft. 2018. “Replicability and Generalizability of Posttraumatic Stress Disorder (Ptsd) Networks: A Cross-Cultural Multisite Study of Ptsd Symptoms in Four Trauma Patient Samples.” <em>Clinical Psychological Science</em> 6 (3): 335–51.</p>
@@ -561,7 +562,6 @@
 </div>
 <div id="ref-williams2020comparing">
 <p>Williams, Donald R., Philippe Rast, Luis R Pericchi, and Joris Mulder. 2020. “Comparing Gaussian Graphical Models with the Posterior Predictive Distribution and Bayesian Model Selection.” <em>Psychological Methods</em>.</p>
-</div>
 </div>
 </div>
 </div>

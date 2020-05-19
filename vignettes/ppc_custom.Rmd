@@ -21,7 +21,7 @@ of interest.
 
 To date, most `R` packages provide a few ways to compare groups, including **BGGM** (version `1.0.0`). 
 In version `2.0.0`, however, **BGGM** includes a new feature for the function `ggm_compare_ppc` that enables 
-users to **compare networks in any way the want**. 
+users to **compare networks in any way they want**. 
 
 # Basic Idea
 The techical details of the approach are described in [@williams2020comparing]. The basic idea is to
@@ -428,14 +428,14 @@ abline(v = obs)
 which again shows the sum of squared error for expected influence far exceeds what would be expected, assuming
 the null model were true.
 
-## Two Notes of Caution
+# Two Notes of Caution
 
-1. Note that only the default in **BGGM** have been shown to have nominal error rates. However, there is   a proof in X that suggests the error rate cannot be larger than $2\alpha$ [@meng1994posterior], and, futher, a predictive check is typically below $\alpha$ [i.e., a tendency to be conservative, @gelman2013two]. 
+1. Note that only the default in **BGGM** have been shown to have nominal error rates. However, there is a proof that suggests the error rate cannot be larger than $2\alpha$ [@meng1994posterior], and, futher, a predictive check is typically below $\alpha$ [i.e., a tendency to be conservative, @gelman2013two]. 
 
 2. Failing to reject the null model does not indicate the groups are the same! To test for 
 equality see `ggm_compare_explore` and `ggm_compare_confirm`.
 
-## Conclusion
-These example certainly open the door for tailoring   the test-statisitc to ask specific question of interest (which I would hope is not the same for each network analysis). And for methods focused researchers perhaps simulations comparing these, among other options, would be a very nice contribution indeed.
+# Conclusion
+These example certainly open the door for tailoring the test-statisitc to answer specific research questions.
 
-## References
+# References
