@@ -1,5 +1,5 @@
 
-# Bayesian Gaussian Graphical Models <img src="man/figures/hex.png" align="right" alt="" width="120" />
+# Bayesian Gaussian Graphical Models <img src="man/figures/hex.png" align="right" alt="" width="240" />
 
 <!-- badges: start -->
 
