@@ -35,11 +35,14 @@ Imports:
 Suggests: 
     abind (>= 1.4-5),
     assortnet (>= 0.12),
-    knitr (>= 1.28),
     networktools (>= 1.2.3),
-    mice (>= 3.8.0)
+    mice (>= 3.8.0),
+    knitr,
+    rmarkdown
 Encoding: UTF-8
 LazyData: true
+VignetteBuilder: 
+    knitr
 RoxygenNote: 7.1.0
 LinkingTo: Rcpp, 
            RcppArmadillo, 
