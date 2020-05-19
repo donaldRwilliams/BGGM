@@ -3,7 +3,7 @@ pkgdown: 1.5.1
 pkgdown_sha: ~
 articles:
   test_vig: test_vig.html
-last_built: 2020-05-19T13:38Z
+last_built: 2020-05-19T13:41Z
 urls:
   reference: https://donaldrwilliams.github.io/BGGM//reference
   article: https://donaldrwilliams.github.io/BGGM//articles

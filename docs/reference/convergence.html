@@ -8,6 +8,13 @@
 
 <title>MCMC Convergence — convergence • BGGM</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -41,6 +48,7 @@
 
 <meta property="og:title" content="MCMC Convergence — convergence" />
 <meta property="og:description" content="Monitor convergence of the MCMC algorithms." />
+<meta property="og:image" content="https://donaldrwilliams.github.io/BGGM/logo.png" />
 
 
 
@@ -54,16 +62,6 @@
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 
-
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-12345678-0"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-12345678-0');
-</script>
 
 
   </head>
@@ -96,6 +94,21 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/test_vig.html">Put the title of your vignette here</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -168,41 +181,59 @@ can be used to first determine the parameter names to specify in <code>type</cod
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='estimate.html'>estimate</a></span>(<span class='no'>Y</span> + <span class='fl'>1</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"ordinal"</span>,
                 <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>)</div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='input'>
 <span class='co'># print names first</span>
-<span class='no'>param_names</span> <span class='kw'>&lt;-</span> <span class='fu'>convergence</span>(<span class='no'>fit</span>, <span class='kw'>print_names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;   [1] "B1--B2"         "B1--B3"         "B2--B3"         "B1--B4"         "B2--B4"         "B3--B4"        
-#&gt;   [7] "B1--B5"         "B2--B5"         "B3--B5"         "B4--B5"         "B1--C1"         "B2--C1"        
-#&gt;  [13] "B3--C1"         "B4--C1"         "B5--C1"         "B1--C2"         "B2--C2"         "B3--C2"        
-#&gt;  [19] "B4--C2"         "B5--C2"         "C1--C2"         "B1--D1"         "B2--D1"         "B3--D1"        
-#&gt;  [25] "B4--D1"         "B5--D1"         "C1--D1"         "C2--D1"         "B1--D2"         "B2--D2"        
-#&gt;  [31] "B3--D2"         "B4--D2"         "B5--D2"         "C1--D2"         "C2--D2"         "D1--D2"        
-#&gt;  [37] "B1--D3"         "B2--D3"         "B3--D3"         "B4--D3"         "B5--D3"         "C1--D3"        
-#&gt;  [43] "C2--D3"         "D1--D3"         "D2--D3"         "B1--D4"         "B2--D4"         "B3--D4"        
-#&gt;  [49] "B4--D4"         "B5--D4"         "C1--D4"         "C2--D4"         "D1--D4"         "D2--D4"        
-#&gt;  [55] "D3--D4"         "B1--D5"         "B2--D5"         "B3--D5"         "B4--D5"         "B5--D5"        
-#&gt;  [61] "C1--D5"         "C2--D5"         "D1--D5"         "D2--D5"         "D3--D5"         "D4--D5"        
-#&gt;  [67] "B1--D6"         "B2--D6"         "B3--D6"         "B4--D6"         "B5--D6"         "C1--D6"        
-#&gt;  [73] "C2--D6"         "D1--D6"         "D2--D6"         "D3--D6"         "D4--D6"         "D5--D6"        
-#&gt;  [79] "B1--D7"         "B2--D7"         "B3--D7"         "B4--D7"         "B5--D7"         "C1--D7"        
-#&gt;  [85] "C2--D7"         "D1--D7"         "D2--D7"         "D3--D7"         "D4--D7"         "D5--D7"        
-#&gt;  [91] "D6--D7"         "B1--E1"         "B2--E1"         "B3--E1"         "B4--E1"         "B5--E1"        
-#&gt;  [97] "C1--E1"         "C2--E1"         "D1--E1"         "D2--E1"         "D3--E1"         "D4--E1"        
-#&gt; [103] "D5--E1"         "D6--E1"         "D7--E1"         "B1--E2"         "B2--E2"         "B3--E2"        
-#&gt; [109] "B4--E2"         "B5--E2"         "C1--E2"         "C2--E2"         "D1--E2"         "D2--E2"        
-#&gt; [115] "D3--E2"         "D4--E2"         "D5--E2"         "D6--E2"         "D7--E2"         "E1--E2"        
-#&gt; [121] "B1--E3"         "B2--E3"         "B3--E3"         "B4--E3"         "B5--E3"         "C1--E3"        
-#&gt; [127] "C2--E3"         "D1--E3"         "D2--E3"         "D3--E3"         "D4--E3"         "D5--E3"        
-#&gt; [133] "D6--E3"         "D7--E3"         "E1--E3"         "E2--E3"         "B1--E4"         "B2--E4"        
-#&gt; [139] "B3--E4"         "B4--E4"         "B5--E4"         "C1--E4"         "C2--E4"         "D1--E4"        
-#&gt; [145] "D2--E4"         "D3--E4"         "D4--E4"         "D5--E4"         "D6--E4"         "D7--E4"        
-#&gt; [151] "E1--E4"         "E2--E4"         "E3--E4"         "B1--E5"         "B2--E5"         "B3--E5"        
-#&gt; [157] "B4--E5"         "B5--E5"         "C1--E5"         "C2--E5"         "D1--E5"         "D2--E5"        
-#&gt; [163] "D3--E5"         "D4--E5"         "D5--E5"         "D6--E5"         "D7--E5"         "E1--E5"        
-#&gt; [169] "E2--E5"         "E3--E5"         "E4--E5"         "B1--E6"         "B2--E6"         "B3--E6"        
-#&gt; [175] "B4--E6"         "B5--E6"         "C1--E6"         "C2--E6"         "D1--E6"         "D2--E6"        
-#&gt; [181] "D3--E6"         "D4--E6"         "D5--E6"         "D6--E6"         "D7--E6"         "E1--E6"        
-#&gt; [187] "E2--E6"         "E3--E6"         "E4--E6"         "E5--E6"         "B1_(Intercept)" "B2_(Intercept)"
-#&gt; [193] "B3_(Intercept)" "B4_(Intercept)" "B5_(Intercept)" "C1_(Intercept)" "C2_(Intercept)" "D1_(Intercept)"
-#&gt; [199] "D2_(Intercept)" "D3_(Intercept)" "D4_(Intercept)" "D5_(Intercept)" "D6_(Intercept)" "D7_(Intercept)"
-#&gt; [205] "E1_(Intercept)" "E2_(Intercept)" "E3_(Intercept)" "E4_(Intercept)" "E5_(Intercept)" "E6_(Intercept)"</div><div class='input'>
+<span class='no'>param_names</span> <span class='kw'>&lt;-</span> <span class='fu'>convergence</span>(<span class='no'>fit</span>, <span class='kw'>print_names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;   [1] "B1--B2"         "B1--B3"         "B2--B3"         "B1--B4"        
+#&gt;   [5] "B2--B4"         "B3--B4"         "B1--B5"         "B2--B5"        
+#&gt;   [9] "B3--B5"         "B4--B5"         "B1--C1"         "B2--C1"        
+#&gt;  [13] "B3--C1"         "B4--C1"         "B5--C1"         "B1--C2"        
+#&gt;  [17] "B2--C2"         "B3--C2"         "B4--C2"         "B5--C2"        
+#&gt;  [21] "C1--C2"         "B1--D1"         "B2--D1"         "B3--D1"        
+#&gt;  [25] "B4--D1"         "B5--D1"         "C1--D1"         "C2--D1"        
+#&gt;  [29] "B1--D2"         "B2--D2"         "B3--D2"         "B4--D2"        
+#&gt;  [33] "B5--D2"         "C1--D2"         "C2--D2"         "D1--D2"        
+#&gt;  [37] "B1--D3"         "B2--D3"         "B3--D3"         "B4--D3"        
+#&gt;  [41] "B5--D3"         "C1--D3"         "C2--D3"         "D1--D3"        
+#&gt;  [45] "D2--D3"         "B1--D4"         "B2--D4"         "B3--D4"        
+#&gt;  [49] "B4--D4"         "B5--D4"         "C1--D4"         "C2--D4"        
+#&gt;  [53] "D1--D4"         "D2--D4"         "D3--D4"         "B1--D5"        
+#&gt;  [57] "B2--D5"         "B3--D5"         "B4--D5"         "B5--D5"        
+#&gt;  [61] "C1--D5"         "C2--D5"         "D1--D5"         "D2--D5"        
+#&gt;  [65] "D3--D5"         "D4--D5"         "B1--D6"         "B2--D6"        
+#&gt;  [69] "B3--D6"         "B4--D6"         "B5--D6"         "C1--D6"        
+#&gt;  [73] "C2--D6"         "D1--D6"         "D2--D6"         "D3--D6"        
+#&gt;  [77] "D4--D6"         "D5--D6"         "B1--D7"         "B2--D7"        
+#&gt;  [81] "B3--D7"         "B4--D7"         "B5--D7"         "C1--D7"        
+#&gt;  [85] "C2--D7"         "D1--D7"         "D2--D7"         "D3--D7"        
+#&gt;  [89] "D4--D7"         "D5--D7"         "D6--D7"         "B1--E1"        
+#&gt;  [93] "B2--E1"         "B3--E1"         "B4--E1"         "B5--E1"        
+#&gt;  [97] "C1--E1"         "C2--E1"         "D1--E1"         "D2--E1"        
+#&gt; [101] "D3--E1"         "D4--E1"         "D5--E1"         "D6--E1"        
+#&gt; [105] "D7--E1"         "B1--E2"         "B2--E2"         "B3--E2"        
+#&gt; [109] "B4--E2"         "B5--E2"         "C1--E2"         "C2--E2"        
+#&gt; [113] "D1--E2"         "D2--E2"         "D3--E2"         "D4--E2"        
+#&gt; [117] "D5--E2"         "D6--E2"         "D7--E2"         "E1--E2"        
+#&gt; [121] "B1--E3"         "B2--E3"         "B3--E3"         "B4--E3"        
+#&gt; [125] "B5--E3"         "C1--E3"         "C2--E3"         "D1--E3"        
+#&gt; [129] "D2--E3"         "D3--E3"         "D4--E3"         "D5--E3"        
+#&gt; [133] "D6--E3"         "D7--E3"         "E1--E3"         "E2--E3"        
+#&gt; [137] "B1--E4"         "B2--E4"         "B3--E4"         "B4--E4"        
+#&gt; [141] "B5--E4"         "C1--E4"         "C2--E4"         "D1--E4"        
+#&gt; [145] "D2--E4"         "D3--E4"         "D4--E4"         "D5--E4"        
+#&gt; [149] "D6--E4"         "D7--E4"         "E1--E4"         "E2--E4"        
+#&gt; [153] "E3--E4"         "B1--E5"         "B2--E5"         "B3--E5"        
+#&gt; [157] "B4--E5"         "B5--E5"         "C1--E5"         "C2--E5"        
+#&gt; [161] "D1--E5"         "D2--E5"         "D3--E5"         "D4--E5"        
+#&gt; [165] "D5--E5"         "D6--E5"         "D7--E5"         "E1--E5"        
+#&gt; [169] "E2--E5"         "E3--E5"         "E4--E5"         "B1--E6"        
+#&gt; [173] "B2--E6"         "B3--E6"         "B4--E6"         "B5--E6"        
+#&gt; [177] "C1--E6"         "C2--E6"         "D1--E6"         "D2--E6"        
+#&gt; [181] "D3--E6"         "D4--E6"         "D5--E6"         "D6--E6"        
+#&gt; [185] "D7--E6"         "E1--E6"         "E2--E6"         "E3--E6"        
+#&gt; [189] "E4--E6"         "E5--E6"         "B1_(Intercept)" "B2_(Intercept)"
+#&gt; [193] "B3_(Intercept)" "B4_(Intercept)" "B5_(Intercept)" "C1_(Intercept)"
+#&gt; [197] "C2_(Intercept)" "D1_(Intercept)" "D2_(Intercept)" "D3_(Intercept)"
+#&gt; [201] "D4_(Intercept)" "D5_(Intercept)" "D6_(Intercept)" "D7_(Intercept)"
+#&gt; [205] "E1_(Intercept)" "E2_(Intercept)" "E3_(Intercept)" "E4_(Intercept)"
+#&gt; [209] "E5_(Intercept)" "E6_(Intercept)"</div><div class='input'>
 <span class='co'># trace plots</span>
 <span class='fu'>convergence</span>(<span class='no'>fit</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"trace"</span>,
             <span class='kw'>param</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"B1--B2"</span>, <span class='st'>"B1--B3"</span>))<span class='kw'>[[</span><span class='fl'>1</span>]]</div><div class='img'><img src='convergence-1.png' alt='' width='700' height='433' /></div><div class='input'>
