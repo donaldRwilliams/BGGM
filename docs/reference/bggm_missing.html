@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>GGM: Missing Data — bggm_missing • MODIStsp</title>
+<title>GGM: Missing Data — bggm_missing • BGGM</title>
 
 
 <!-- jquery -->
@@ -81,7 +81,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">MODIStsp</a>
+        <a class="navbar-link" href="../index.html">BGGM</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.0</span>
       </span>
     </div>
@@ -166,7 +166,7 @@ options are <code>"estimate"</code> and <code>"explore"</code>.</p></td>
 <span class='co'># note: iter = 250 for demonstrative purposes</span>
 
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>mice</span>)</div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: 'mice'</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:base':</span>
+#&gt; <span class='message'>Attaching package: ‘mice’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    cbind, rbind</span></div><div class='input'>
 <span class='co'># data</span>
@@ -183,26 +183,6 @@ options are <code>"estimate"</code> and <code>"explore"</code>.</p></td>
 
 <span class='co'># impute</span>
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://stefvanbuuren.github.io/mice/reference/mice.html'>mice</a></span>(<span class='no'>Y</span>, <span class='kw'>m</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>print</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-
-<span class='co'>#########################</span>
-<span class='co'>###### continuous #######</span>
-<span class='co'>#########################</span>
-
-<span class='co'># estimate the model</span>
-<span class='no'>fit_est</span> <span class='kw'>&lt;-</span> <span class='fu'>bggm_missing</span>(<span class='no'>x</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"continuous"</span>,
-                        <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>)</div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='input'>
-<span class='co'># select edge set</span>
-<span class='no'>E</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='select.html'>select</a></span>(<span class='no'>fit_est</span>)
-
-<span class='co'># explore</span>
-<span class='no'>fit_exp</span> <span class='kw'>&lt;-</span>  <span class='fu'>bggm_missing</span>(<span class='no'>x</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"continuous"</span>,
-                         <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"explore"</span>,
-                         <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>)</div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Prior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Prior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Prior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Prior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Prior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='input'>
-<span class='co'># select edge set</span>
-<span class='no'>E</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='select.html'>select</a></span>(<span class='no'>fit_exp</span>)
-
-<span class='co'># plot E</span>
-<span class='no'>plt_E</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>E</span>)
 
 <span class='co'>#########################</span>
 <span class='co'>#######   copula    #####</span>

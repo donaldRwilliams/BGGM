@@ -32,40 +32,6 @@ There is a direct correspondence between the inverse covariance matrix and
 \examples{
 \donttest{
 # note: iter = 250 for demonstrative purposes
-
-# data
-Y <- ptsd
-#########################################
-### example 1: continuous and ordinal ###
-#########################################
-
-# fit model
-fit <- explore(Y, type = "continuous",
-               iter = 250)
-
-# regression
-reg <- coef(fit)
-
-# summary
-summ <- summary(reg)
-
-summ
-
-# ordinal
-
-# fit model (note + 1, due to zeros)
-fit <- explore(Y + 1, type = "ordinal",
-               iter = 250)
-
-# summarize the partial correlations
-reg <- coef(fit)
-
-# summary
-summ <- summary(reg)
-
-#########################
-### example 2: binary ###
-#########################
 # data
 Y <- women_math
 

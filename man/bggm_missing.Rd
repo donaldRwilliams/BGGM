@@ -60,28 +60,6 @@ Y[indices[sample(1:nrow(indices), 50),]] <- NA
 x <- mice(Y, m = 5, print = FALSE)
 
 #########################
-###### continuous #######
-#########################
-
-# estimate the model
-fit_est <- bggm_missing(x, type = "continuous",
-                        iter = 250)
-
-# select edge set
-E <- select(fit_est)
-
-# explore
-fit_exp <-  bggm_missing(x, type = "continuous",
-                         method = "explore",
-                         iter = 250)
-
-# select edge set
-E <- select(fit_exp)
-
-# plot E
-plt_E <- plot(E)
-
-#########################
 #######   copula    #####
 #########################
 # rank based parital correlations

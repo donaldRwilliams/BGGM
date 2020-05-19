@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Predictability: Bayesian Variance Explained (R2) — predictability • MODIStsp</title>
+<title>Predictability: Bayesian Variance Explained (R2) — predictability • BGGM</title>
 
 
 <!-- jquery -->
@@ -84,7 +84,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">MODIStsp</a>
+        <a class="navbar-link" href="../index.html">BGGM</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.0</span>
       </span>
     </div>
@@ -204,7 +204,7 @@ doi: <a href='https://doi.org/10.31234/OSF.IO/X8DPR'>10.31234/OSF.IO/X8DPR</a>
 <span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='no'>ptsd</span>
 
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='estimate.html'>estimate</a></span>(<span class='no'>Y</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>)</div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='input'>
-<span class='no'>r2</span> <span class='kw'>&lt;-</span> <span class='fu'>predictability</span>(<span class='no'>fit</span>, <span class='kw'>select</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>)</div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |====                                                                  |   5%  |                                                                              |=======                                                               |  10%  |                                                                              |==========                                                            |  15%  |                                                                              |==============                                                        |  20%  |                                                                              |==================                                                    |  25%  |                                                                              |=====================                                                 |  30%  |                                                                              |========================                                              |  35%  |                                                                              |============================                                          |  40%  |                                                                              |================================                                      |  45%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================                                |  55%  |                                                                              |==========================================                            |  60%  |                                                                              |==============================================                        |  65%  |                                                                              |=================================================                     |  70%  |                                                                              |====================================================                  |  75%  |                                                                              |========================================================              |  80%  |                                                                              |============================================================          |  85%  |                                                                              |===============================================================       |  90%  |                                                                              |==================================================================    |  95%  |                                                                              |======================================================================| 100%</div><div class='input'>
+<span class='no'>r2</span> <span class='kw'>&lt;-</span> <span class='fu'>predictability</span>(<span class='no'>fit</span>, <span class='kw'>select</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>)</div><div class='output co'>#&gt;   |                                                                                                             |                                                                                                     |   0%  |                                                                                                             |=====                                                                                                |   5%  |                                                                                                             |==========                                                                                           |  10%  |                                                                                                             |===============                                                                                      |  15%  |                                                                                                             |====================                                                                                 |  20%  |                                                                                                             |=========================                                                                            |  25%  |                                                                                                             |==============================                                                                       |  30%  |                                                                                                             |===================================                                                                  |  35%  |                                                                                                             |========================================                                                             |  40%  |                                                                                                             |=============================================                                                        |  45%  |                                                                                                             |==================================================                                                   |  50%  |                                                                                                             |========================================================                                             |  55%  |                                                                                                             |=============================================================                                        |  60%  |                                                                                                             |==================================================================                                   |  65%  |                                                                                                             |=======================================================================                              |  70%  |                                                                                                             |============================================================================                         |  75%  |                                                                                                             |=================================================================================                    |  80%  |                                                                                                             |======================================================================================               |  85%  |                                                                                                             |===========================================================================================          |  90%  |                                                                                                             |================================================================================================     |  95%  |                                                                                                             |=====================================================================================================| 100%</div><div class='input'>
 <span class='co'># summary</span>
 <span class='no'>r2</span></div><div class='output co'>#&gt; BGGM: Bayesian Gaussian Graphical Models 
 #&gt; --- 
@@ -214,26 +214,26 @@ doi: <a href='https://doi.org/10.31234/OSF.IO/X8DPR'>10.31234/OSF.IO/X8DPR</a>
 #&gt; Estimates:
 #&gt; 
 #&gt;  Node Post.mean Post.sd Cred.lb Cred.ub
-#&gt;    B1     0.488   0.051   0.392   0.593
-#&gt;    B2     0.526   0.051   0.437   0.623
-#&gt;    B3     0.529   0.047   0.438   0.626
-#&gt;    B4     0.512   0.048   0.422   0.606
-#&gt;    B5     0.513   0.051   0.416   0.613
-#&gt;    C1     0.200   0.043   0.120   0.271
-#&gt;    C2     0.326   0.056   0.212   0.444
+#&gt;    B1     0.486   0.048   0.402   0.583
+#&gt;    B2     0.525   0.051   0.441   0.632
+#&gt;    B3     0.522   0.048   0.435   0.619
+#&gt;    B4     0.512   0.047   0.422   0.612
+#&gt;    B5     0.510   0.050   0.416   0.603
+#&gt;    C1     0.199   0.045   0.112   0.281
+#&gt;    C2     0.325   0.054   0.233   0.430
 #&gt;    D1     0.000   0.000   0.000   0.000
-#&gt;    D2     0.357   0.050   0.261   0.477
-#&gt;    D3     0.394   0.048   0.308   0.489
-#&gt;    D4     0.593   0.051   0.501   0.690
-#&gt;    D5     0.428   0.051   0.334   0.524
-#&gt;    D6     0.488   0.049   0.401   0.590
-#&gt;    D7     0.435   0.049   0.335   0.533
-#&gt;    E1     0.375   0.055   0.276   0.483
-#&gt;    E2     0.239   0.048   0.140   0.331
+#&gt;    D2     0.358   0.046   0.279   0.442
+#&gt;    D3     0.397   0.047   0.311   0.487
+#&gt;    D4     0.590   0.051   0.508   0.697
+#&gt;    D5     0.430   0.050   0.317   0.534
+#&gt;    D6     0.488   0.051   0.403   0.600
+#&gt;    D7     0.441   0.050   0.339   0.557
+#&gt;    E1     0.377   0.050   0.272   0.471
+#&gt;    E2     0.239   0.048   0.141   0.335
 #&gt;    E3     0.486   0.053   0.391   0.569
-#&gt;    E4     0.397   0.046   0.320   0.494
-#&gt;    E5     0.423   0.049   0.344   0.531
-#&gt;    E6     0.279   0.047   0.181   0.362</div><div class='input'>
+#&gt;    E4     0.396   0.049   0.307   0.495
+#&gt;    E5     0.424   0.048   0.339   0.522
+#&gt;    E6     0.281   0.049   0.186   0.380</div><div class='input'>
 <span class='co'># plot</span>
 <span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>r2</span>)</div><div class='img'><img src='predictability-1.png' alt='' width='700' height='433' /></div><div class='input'>
 # }

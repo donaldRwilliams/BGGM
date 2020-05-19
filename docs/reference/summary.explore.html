@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Summary Method for <code>explore.default</code> Objects — summary.explore • MODIStsp</title>
+<title>Summary Method for <code>explore.default</code> Objects — summary.explore • BGGM</title>
 
 
 <!-- jquery -->
@@ -82,7 +82,7 @@ with the posterior mean and standard deviation." />
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">MODIStsp</a>
+        <a class="navbar-link" href="../index.html">BGGM</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.0</span>
       </span>
     </div>
@@ -159,214 +159,9 @@ Setting to <code>FALSE</code> includes the column numbers (e.g., <code>1--2</cod
 <span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='no'>ptsd</span>
 
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='explore.html'>explore</a></span>(<span class='no'>Y</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>)</div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Prior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>fit</span>)</div><div class='output co'>#&gt; BGGM: Bayesian Gaussian Graphical Models 
-#&gt; --- 
-#&gt; Type: continuous 
-#&gt; Analytic: FALSE 
-#&gt; Formula:  
-#&gt; Posterior Samples: 250 
-#&gt; Observations (n):
-#&gt; Nodes (p): 20 
-#&gt; Relations: 190 
-#&gt; --- 
-#&gt; Call: 
-#&gt; explore(Y = Y, iter = 250)
-#&gt; --- 
-#&gt; Estimates:
-#&gt;  Relation Post.mean Post.sd
-#&gt;    B1--B2     0.186   0.073
-#&gt;    B1--B3     0.016   0.077
-#&gt;    B2--B3     0.400   0.059
-#&gt;    B1--B4     0.322   0.069
-#&gt;    B2--B4    -0.031   0.073
-#&gt;    B3--B4     0.262   0.068
-#&gt;    B1--B5     0.144   0.068
-#&gt;    B2--B5     0.034   0.070
-#&gt;    B3--B5     0.113   0.070
-#&gt;    B4--B5     0.213   0.070
-#&gt;    B1--C1    -0.040   0.076
-#&gt;    B2--C1    -0.020   0.075
-#&gt;    B3--C1    -0.042   0.070
-#&gt;    B4--C1     0.130   0.071
-#&gt;    B5--C1     0.188   0.072
-#&gt;    B1--C2    -0.051   0.070
-#&gt;    B2--C2     0.094   0.071
-#&gt;    B3--C2    -0.004   0.068
-#&gt;    B4--C2     0.158   0.072
-#&gt;    B5--C2     0.139   0.076
-#&gt;    C1--C2     0.197   0.070
-#&gt;    B1--D1     0.057   0.076
-#&gt;    B2--D1    -0.008   0.073
-#&gt;    B3--D1    -0.018   0.075
-#&gt;    B4--D1    -0.021   0.074
-#&gt;    B5--D1    -0.075   0.073
-#&gt;    C1--D1     0.107   0.064
-#&gt;    C2--D1     0.077   0.070
-#&gt;    B1--D2    -0.048   0.068
-#&gt;    B2--D2    -0.096   0.066
-#&gt;    B3--D2    -0.114   0.066
-#&gt;    B4--D2     0.179   0.071
-#&gt;    B5--D2    -0.054   0.077
-#&gt;    C1--D2    -0.129   0.069
-#&gt;    C2--D2    -0.034   0.081
-#&gt;    D1--D2     0.059   0.077
-#&gt;    B1--D3    -0.071   0.076
-#&gt;    B2--D3     0.043   0.070
-#&gt;    B3--D3     0.019   0.067
-#&gt;    B4--D3     0.080   0.069
-#&gt;    B5--D3     0.075   0.071
-#&gt;    C1--D3     0.095   0.071
-#&gt;    C2--D3     0.003   0.076
-#&gt;    D1--D3     0.097   0.073
-#&gt;    D2--D3     0.093   0.074
-#&gt;    B1--D4     0.205   0.066
-#&gt;    B2--D4     0.058   0.071
-#&gt;    B3--D4     0.024   0.072
-#&gt;    B4--D4     0.058   0.074
-#&gt;    B5--D4    -0.007   0.068
-#&gt;    C1--D4    -0.064   0.069
-#&gt;    C2--D4     0.004   0.073
-#&gt;    D1--D4     0.011   0.076
-#&gt;    D2--D4     0.224   0.067
-#&gt;    D3--D4     0.484   0.057
-#&gt;    B1--D5     0.094   0.065
-#&gt;    B2--D5     0.085   0.074
-#&gt;    B3--D5     0.116   0.071
-#&gt;    B4--D5    -0.116   0.071
-#&gt;    B5--D5    -0.020   0.071
-#&gt;    C1--D5    -0.002   0.074
-#&gt;    C2--D5     0.194   0.061
-#&gt;    D1--D5    -0.016   0.071
-#&gt;    D2--D5     0.206   0.068
-#&gt;    D3--D5    -0.136   0.072
-#&gt;    D4--D5     0.041   0.074
-#&gt;    B1--D6     0.062   0.070
-#&gt;    B2--D6     0.054   0.074
-#&gt;    B3--D6    -0.059   0.066
-#&gt;    B4--D6    -0.085   0.071
-#&gt;    B5--D6    -0.049   0.072
-#&gt;    C1--D6     0.082   0.074
-#&gt;    C2--D6    -0.005   0.081
-#&gt;    D1--D6     0.002   0.073
-#&gt;    D2--D6     0.073   0.074
-#&gt;    D3--D6    -0.003   0.079
-#&gt;    D4--D6     0.059   0.074
-#&gt;    D5--D6     0.116   0.070
-#&gt;    B1--D7     0.030   0.073
-#&gt;    B2--D7    -0.100   0.075
-#&gt;    B3--D7     0.105   0.067
-#&gt;    B4--D7    -0.112   0.069
-#&gt;    B5--D7    -0.023   0.076
-#&gt;    C1--D7     0.031   0.070
-#&gt;    C2--D7     0.084   0.075
-#&gt;    D1--D7    -0.053   0.074
-#&gt;    D2--D7     0.150   0.070
-#&gt;    D3--D7    -0.056   0.071
-#&gt;    D4--D7    -0.042   0.067
-#&gt;    D5--D7     0.076   0.069
-#&gt;    D6--D7     0.452   0.054
-#&gt;    B1--E1     0.047   0.072
-#&gt;    B2--E1    -0.079   0.078
-#&gt;    B3--E1     0.017   0.072
-#&gt;    B4--E1     0.005   0.074
-#&gt;    B5--E1     0.189   0.069
-#&gt;    C1--E1    -0.033   0.077
-#&gt;    C2--E1     0.121   0.068
-#&gt;    D1--E1     0.038   0.070
-#&gt;    D2--E1     0.118   0.066
-#&gt;    D3--E1    -0.077   0.074
-#&gt;    D4--E1     0.173   0.073
-#&gt;    D5--E1     0.039   0.076
-#&gt;    D6--E1     0.007   0.075
-#&gt;    D7--E1     0.145   0.078
-#&gt;    B1--E2    -0.013   0.070
-#&gt;    B2--E2     0.162   0.072
-#&gt;    B3--E2     0.001   0.066
-#&gt;    B4--E2    -0.056   0.068
-#&gt;    B5--E2    -0.042   0.071
-#&gt;    C1--E2     0.001   0.078
-#&gt;    C2--E2     0.045   0.070
-#&gt;    D1--E2     0.115   0.068
-#&gt;    D2--E2    -0.041   0.072
-#&gt;    D3--E2     0.131   0.072
-#&gt;    D4--E2    -0.039   0.071
-#&gt;    D5--E2     0.001   0.073
-#&gt;    D6--E2     0.056   0.072
-#&gt;    D7--E2     0.065   0.076
-#&gt;    E1--E2     0.258   0.069
-#&gt;    B1--E3    -0.029   0.078
-#&gt;    B2--E3    -0.026   0.063
-#&gt;    B3--E3     0.114   0.072
-#&gt;    B4--E3    -0.001   0.072
-#&gt;    B5--E3    -0.056   0.074
-#&gt;    C1--E3     0.121   0.067
-#&gt;    C2--E3     0.020   0.069
-#&gt;    D1--E3     0.096   0.071
-#&gt;    D2--E3     0.112   0.073
-#&gt;    D3--E3    -0.046   0.068
-#&gt;    D4--E3     0.025   0.072
-#&gt;    D5--E3     0.000   0.071
-#&gt;    D6--E3     0.058   0.082
-#&gt;    D7--E3     0.016   0.071
-#&gt;    E1--E3    -0.007   0.068
-#&gt;    E2--E3     0.055   0.069
-#&gt;    B1--E4    -0.156   0.070
-#&gt;    B2--E4     0.116   0.067
-#&gt;    B3--E4     0.047   0.078
-#&gt;    B4--E4     0.037   0.079
-#&gt;    B5--E4     0.189   0.070
-#&gt;    C1--E4    -0.040   0.075
-#&gt;    C2--E4     0.043   0.075
-#&gt;    D1--E4    -0.031   0.080
-#&gt;    D2--E4    -0.016   0.069
-#&gt;    D3--E4    -0.136   0.072
-#&gt;    D4--E4     0.074   0.072
-#&gt;    D5--E4     0.009   0.074
-#&gt;    D6--E4     0.146   0.074
-#&gt;    D7--E4    -0.105   0.072
-#&gt;    E1--E4     0.022   0.070
-#&gt;    E2--E4     0.132   0.078
-#&gt;    E3--E4     0.314   0.066
-#&gt;    B1--E5     0.036   0.068
-#&gt;    B2--E5    -0.080   0.079
-#&gt;    B3--E5     0.065   0.073
-#&gt;    B4--E5    -0.053   0.070
-#&gt;    B5--E5     0.037   0.078
-#&gt;    C1--E5    -0.014   0.069
-#&gt;    C2--E5    -0.161   0.067
-#&gt;    D1--E5     0.142   0.072
-#&gt;    D2--E5     0.041   0.071
-#&gt;    D3--E5     0.112   0.071
-#&gt;    D4--E5     0.004   0.074
-#&gt;    D5--E5     0.300   0.069
-#&gt;    D6--E5     0.135   0.070
-#&gt;    D7--E5     0.053   0.077
-#&gt;    E1--E5     0.017   0.068
-#&gt;    E2--E5    -0.050   0.069
-#&gt;    E3--E5    -0.038   0.074
-#&gt;    E4--E5     0.158   0.073
-#&gt;    B1--E6     0.053   0.077
-#&gt;    B2--E6     0.145   0.068
-#&gt;    B3--E6     0.049   0.069
-#&gt;    B4--E6    -0.002   0.074
-#&gt;    B5--E6     0.076   0.069
-#&gt;    C1--E6    -0.022   0.070
-#&gt;    C2--E6    -0.064   0.073
-#&gt;    D1--E6    -0.034   0.069
-#&gt;    D2--E6    -0.020   0.075
-#&gt;    D3--E6     0.031   0.066
-#&gt;    D4--E6    -0.055   0.074
-#&gt;    D5--E6     0.015   0.070
-#&gt;    D6--E6     0.107   0.071
-#&gt;    D7--E6     0.055   0.069
-#&gt;    E1--E6     0.019   0.069
-#&gt;    E2--E6    -0.065   0.067
-#&gt;    E3--E6     0.056   0.072
-#&gt;    E4--E6     0.107   0.076
-#&gt;    E5--E6     0.197   0.073
-#&gt; --- </div><div class='input'>
-# }
-</div></pre>
+<span class='no'>summ</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>fit</span>)
+
+<span class='co'># }</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

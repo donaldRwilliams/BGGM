@@ -50,34 +50,6 @@ reg <- coef(fit)
 # summary
 summ <- summary(reg)
 
-# ordinal
-
-# fit model (note + 1, due to zeros)
-fit <- estimate(Y + 1, type = "ordinal",
-                iter = 250)
-
-# summarize the partial correlations
-reg <- coef(fit)
-
-# summary
-summ <- summary(reg)
-
-#########################
-### example 2: binary ###
-#########################
-# data
-Y <- women_math
-
-# fit model
-fit <- estimate(Y, type = "binary",
-                iter = 250)
-
-# summarize the partial correlations
-reg <- coef(fit)
-
-# summary
-summ <- summary(reg)
-
 }
 }
 \references{
