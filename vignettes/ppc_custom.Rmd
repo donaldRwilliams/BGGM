@@ -24,7 +24,7 @@ In version `2.0.0`, however, **BGGM** includes a new feature for the function `g
 users to **compare networks in any way they want**. 
 
 # Basic Idea
-The techical details of the approach are described in [@williams2020comparing]. The basic idea is to
+The technical details of the approach are described in [@williams2020comparing]. The basic idea is to
 
 1. Draw samples from the posterior distribution, assuming the groups are equal (i.e., the "null" model).
 
@@ -36,7 +36,7 @@ The techical details of the approach are described in [@williams2020comparing]. 
 
 3. Compute the test-statistic for the observed groups.
 
-4. Then compare the observed test-statisic to the predictive distribution 
+4. Then compare the observed test-statistic to the predictive distribution 
    (what is expected under the "null" model). 
 
     + If the observed error is larger than the model assuming group equality, this 
@@ -66,7 +66,7 @@ remotes::install_github("donaldRwilliams/BGGM")
 
 
 ### Data
-Only the correlation matrices are available. Hence, multivarite normal data is generated with that *exact* 
+Only the correlation matrices are available. Hence, multivariate normal data is generated with that *exact* 
 correlation structure via the `R` package **MASS**.
 ```{r, warning =FALSE, message=FALSE}
 # need these packages
@@ -95,7 +95,7 @@ Yg2 <- MASS::mvrnorm(n = 956,
 ## Correlation
 This first example looks at the correlation between partial correlations of the two networks. Note that
 it could be two networks have what is considered a large correlation. However, the question here is, 
-assumming the groups are equal, just how large should the correlation be? This is needed to interpret
+assuming the groups are equal, just how large should the correlation be? This is needed to interpret
 the observed test-statistic.
 
 
@@ -149,7 +149,7 @@ ppc <- BGGM::ggm_compare_ppc(Yg1, Yg2,
                        loss = FALSE)
 ```
 
-Note that `loss = FALSE` controls how the p-value is computed. It is an indicator of whether the test-statisic is 
+Note that `loss = FALSE` controls how the p-value is computed. It is an indicator of whether the test-statistic is 
 a "loss" (a bad thing). In this case, a large correlation is a good thing so it is set to `FALSE`. The results
 can then be printed
 
@@ -161,6 +161,10 @@ which shows the posterior predictive p-value is zero. This indicates that the ob
 the entire predictive distribution (the distribution of correlations for future data, assuming group equality)
 
 and finally plot the results
+```{r, eval=FALSE}
+plot(ppc)
+```
+
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 plot(ppc, col_critical = "lightblue", 
      col_noncritical = "lightblue")[[1]] +
@@ -168,12 +172,9 @@ plot(ppc, col_critical = "lightblue",
 
 ```
 
-And then plot the results
-```{r, eval=FALSE}
-plot(ppc)
-```
 
-The density is the predictive distribution for the correlation. Recall that this is the correlation that we would expect, given the groups were actually the same, and the black point is the observed correlation. In this case, it seems quite clear that the "null model" is in adequate--the groups are apparently quite different.
+
+The density is the predictive distribution for the correlation. Recall that this is the correlation that we would expect, given the groups were actually the same, and the black point is the observed correlation. In this case, it seems quite clear that the "null model" is inadequate--the groups are apparently quite different.
 
 ## Hamming Distance
 The next example is [Hamming distance](https://en.wikipedia.org/wiki/Hamming_distance), which, in this case, is the squared error for the adjacency matrices. It seems reasonable to think of this as a test for 
@@ -234,8 +235,8 @@ And then plot the results
 plot(ppc)
 ```
 
-This is a quite striking result. Whereas the correlation looked at the partial correlation, here there seems to be evidence 
-that the adjacency matrices are different (perhaps suggesting that the conditional indepedence structure is different).
+This result is intriguing. Whereas the correlation looked at the relation between partial correlation, here there seems to be evidence 
+that the adjacency matrices are different (perhaps suggesting that the conditional independence structure is different).
 
 
 ## Partial Correlation Matrix Distance
@@ -302,7 +303,7 @@ assuming the null model were true.
 
 ## Assortment
 This next example is assortment [@newman2003mixing], which is a measure related 
-to clustering in a network. Here the test is for a differene in assortment. 
+to clustering in a network. Here the test is for a difference in assortment. 
 This is computed by taking the difference (absolute value) for each draw 
 from the predictive distribution.
 
@@ -430,12 +431,12 @@ the null model were true.
 
 # Two Notes of Caution
 
-1. Note that only the default in **BGGM** have been shown to have nominal error rates. However, there is a proof that suggests the error rate cannot be larger than $2\alpha$ [@meng1994posterior], and, futher, a predictive check is typically below $\alpha$ [i.e., a tendency to be conservative, @gelman2013two]. 
+1. Note that only the default in **BGGM** have been shown to have nominal error rates. However, there is a proof that suggests the error rate cannot be larger than $2\alpha$ [@meng1994posterior], and, further, a predictive check is typically below $\alpha$ [i.e., a tendency to be conservative, @gelman2013two]. 
 
 2. Failing to reject the null model does not indicate the groups are the same! To test for 
 equality see `ggm_compare_explore` and `ggm_compare_confirm`.
 
 # Conclusion
-These example certainly open the door for tailoring the test-statisitc to answer specific research questions.
+These example certainly open the door for tailoring network comparison to answer specific research questions.
 
 # References

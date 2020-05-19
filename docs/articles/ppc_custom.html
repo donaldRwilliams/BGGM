@@ -103,7 +103,7 @@
 <div id="basic-idea" class="section level1">
 <h1 class="hasAnchor">
 <a href="#basic-idea" class="anchor"></a>Basic Idea</h1>
-<p>The techical details of the approach are described in <span class="citation">(Williams et al. 2020)</span>. The basic idea is to</p>
+<p>The technical details of the approach are described in <span class="citation">(Williams et al. 2020)</span>. The basic idea is to</p>
 <ol style="list-style-type: decimal">
 <li><p>Draw samples from the posterior distribution, assuming the groups are equal (i.e., the “null” model).</p></li>
 <li>
@@ -114,7 +114,7 @@
 </li>
 <li><p>Compute the test-statistic for the observed groups.</p></li>
 <li>
-<p>Then compare the observed test-statisic to the predictive distribution (what is expected under the “null” model).</p>
+<p>Then compare the observed test-statistic to the predictive distribution (what is expected under the “null” model).</p>
 <ul>
 <li>If the observed error is larger than the model assuming group equality, this suggests that the groups are different.</li>
 </ul>
@@ -136,7 +136,7 @@
 <div id="data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#data" class="anchor"></a>Data</h3>
-<p>Only the correlation matrices are available. Hence, multivarite normal data is generated with that <em>exact</em> correlation structure via the <code>R</code> package <strong>MASS</strong>.</p>
+<p>Only the correlation matrices are available. Hence, multivariate normal data is generated with that <em>exact</em> correlation structure via the <code>R</code> package <strong>MASS</strong>.</p>
 <div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="co"># need these packages</span>
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">BGGM</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)
@@ -163,7 +163,7 @@
 <div id="correlation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#correlation" class="anchor"></a>Correlation</h2>
-<p>This first example looks at the correlation between partial correlations of the two networks. Note that it could be two networks have what is considered a large correlation. However, the question here is, assumming the groups are equal, just how large should the correlation be? This is needed to interpret the observed test-statistic.</p>
+<p>This first example looks at the correlation between partial correlations of the two networks. Note that it could be two networks have what is considered a large correlation. However, the question here is, assuming the groups are equal, just how large should the correlation be? This is needed to interpret the observed test-statistic.</p>
 <div id="step-1-define-custom-function" class="section level3">
 <h3 class="hasAnchor">
 <a href="#step-1-define-custom-function" class="anchor"></a>Step 1: Define Custom Function</h3>
@@ -210,7 +210,7 @@
                        <span class="kw">custom_obs</span> <span class="kw">=</span> <span class="no">obs</span>,
                        <span class="kw">iter</span> <span class="kw">=</span> <span class="fl">1000</span>,
                        <span class="kw">loss</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></body></html></div>
-<p>Note that <code>loss = FALSE</code> controls how the p-value is computed. It is an indicator of whether the test-statisic is a “loss” (a bad thing). In this case, a large correlation is a good thing so it is set to <code>FALSE</code>. The results can then be printed</p>
+<p>Note that <code>loss = FALSE</code> controls how the p-value is computed. It is an indicator of whether the test-statistic is a “loss” (a bad thing). In this case, a large correlation is a good thing so it is set to <code>FALSE</code>. The results can then be printed</p>
 <div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">ppc</span></pre></body></html></div>
 <pre><code>## BGGM: Bayesian Gaussian Graphical Models 
 ## --- 
@@ -231,10 +231,10 @@
 ##  Yg1 vs Yg2       0.54       0
 ## ---</code></pre>
 <p>which shows the posterior predictive p-value is zero. This indicates that the observed correlation is lower than the entire predictive distribution (the distribution of correlations for future data, assuming group equality)</p>
-<p>and finally plot the results <img src="ppc_custom_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
-<p>And then plot the results</p>
+<p>and finally plot the results</p>
 <div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">ppc</span>)</pre></body></html></div>
-<p>The density is the predictive distribution for the correlation. Recall that this is the correlation that we would expect, given the groups were actually the same, and the black point is the observed correlation. In this case, it seems quite clear that the “null model” is in adequate–the groups are apparently quite different.</p>
+<p><img src="ppc_custom_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
+<p>The density is the predictive distribution for the correlation. Recall that this is the correlation that we would expect, given the groups were actually the same, and the black point is the observed correlation. In this case, it seems quite clear that the “null model” is inadequate–the groups are apparently quite different.</p>
 </div>
 </div>
 <div id="hamming-distance" class="section level2">
@@ -305,7 +305,7 @@
 <div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">ppc</span>)</pre></body></html></div>
 <pre><code>## $plot_custom</code></pre>
 <p><img src="ppc_custom_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
-<p>This is a quite striking result. Whereas the correlation looked at the partial correlation, here there seems to be evidence that the adjacency matrices are different (perhaps suggesting that the conditional indepedence structure is different).</p>
+<p>This result is intriguing. Whereas the correlation looked at the relation between partial correlation, here there seems to be evidence that the adjacency matrices are different (perhaps suggesting that the conditional independence structure is different).</p>
 </div>
 </div>
 <div id="partial-correlation-matrix-distance" class="section level2">
@@ -384,7 +384,7 @@
 <div id="assortment" class="section level2">
 <h2 class="hasAnchor">
 <a href="#assortment" class="anchor"></a>Assortment</h2>
-<p>This next example is assortment <span class="citation">(Newman 2003)</span>, which is a measure related to clustering in a network. Here the test is for a differene in assortment. This is computed by taking the difference (absolute value) for each draw from the predictive distribution.</p>
+<p>This next example is assortment <span class="citation">(Newman 2003)</span>, which is a measure related to clustering in a network. Here the test is for a difference in assortment. This is computed by taking the difference (absolute value) for each draw from the predictive distribution.</p>
 <div id="step-1-define-custom-function-3" class="section level3">
 <h3 class="hasAnchor">
 <a href="#step-1-define-custom-function-3" class="anchor"></a>Step 1: Define Custom Function</h3>
@@ -453,7 +453,7 @@
 <p>and plotted</p>
 <div class="sourceCode" id="cb31"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">ppc</span>)</pre></body></html></div>
 <pre><code>## $plot_custom</code></pre>
-<pre><code>## Picking joint bandwidth of 0.00432</code></pre>
+<pre><code>## Picking joint bandwidth of 0.00442</code></pre>
 <p><img src="ppc_custom_files/figure-html/unnamed-chunk-23-1.png" width="700"></p>
 <p>which shows that the clustering in the data appears to be different (given the observed value exceeds the entire predictive distribution).</p>
 </div>
@@ -529,14 +529,14 @@
 <h1 class="hasAnchor">
 <a href="#two-notes-of-caution" class="anchor"></a>Two Notes of Caution</h1>
 <ol style="list-style-type: decimal">
-<li><p>Note that only the default in <strong>BGGM</strong> have been shown to have nominal error rates. However, there is a proof that suggests the error rate cannot be larger than <span class="math inline">\(2\alpha\)</span> <span class="citation">(Meng and others 1994)</span>, and, futher, a predictive check is typically below <span class="math inline">\(\alpha\)</span> <span class="citation">(i.e., a tendency to be conservative, Gelman and others 2013)</span>.</p></li>
+<li><p>Note that only the default in <strong>BGGM</strong> have been shown to have nominal error rates. However, there is a proof that suggests the error rate cannot be larger than <span class="math inline">\(2\alpha\)</span> <span class="citation">(Meng and others 1994)</span>, and, further, a predictive check is typically below <span class="math inline">\(\alpha\)</span> <span class="citation">(i.e., a tendency to be conservative, Gelman and others 2013)</span>.</p></li>
 <li><p>Failing to reject the null model does not indicate the groups are the same! To test for equality see <code>ggm_compare_explore</code> and <code>ggm_compare_confirm</code>.</p></li>
 </ol>
 </div>
 <div id="conclusion" class="section level1">
 <h1 class="hasAnchor">
 <a href="#conclusion" class="anchor"></a>Conclusion</h1>
-<p>These example certainly open the door for tailoring the test-statisitc to answer specific research questions.</p>
+<p>These example certainly open the door for tailoring network comparison to answer specific research questions.</p>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">
