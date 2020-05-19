@@ -1,5 +1,7 @@
 
-# Bayesian Gaussian Graphical Models <img src="man/figures/hex.png" align="right" alt="" width="240" />
+# Bayesian Gaussian Graphical Models
+
+<!-- <img src="man/figures/hex.png" align="right" alt="" width="150" /> -->
 
 <!-- badges: start -->
 
@@ -15,9 +17,9 @@ Gaussian graphical models (GGM). The methods are organized around two
 general approaches for Bayesian inference: (1) estimation and (2)
 hypothesis testing. The key distinction is that the former focuses on
 either the posterior or posterior predictive distribution (Gelman, Meng,
-and Stern 1996; see section 5 in Rubin 1984) , whereas the latter
-focuses on model comparison with the Bayes factor (Jeffreys 1961; Kass
-and Raftery 1995).
+and Stern 1996; see section 5 in Rubin 1984), whereas the latter focuses
+on model comparison with the Bayes factor (Jeffreys 1961; Kass and
+Raftery 1995).
 
 ## Installation
 
