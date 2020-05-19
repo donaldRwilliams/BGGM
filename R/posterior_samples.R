@@ -106,7 +106,7 @@ posterior_samples <- function(object, ...){
     n_beta_terms <- length(beta_terms)
 
     # posterior samples
-    beta_samples <- fit$post_samp$beta
+    beta_samples <- object$post_samp$beta
 
 
     if(is.null(cn)){

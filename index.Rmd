@@ -1,0 +1,115 @@
+---
+title: "index"
+author: "Donny Williams"
+date: "5/18/2020"
+output: html_document
+---
+
+```{r, echo = FALSE, message=F}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  dev = "png",
+  dpi = 500,
+  fig.align = "center",
+  knitr::opts_chunk$set(comment = NA)
+  )
+library(ggplot2)
+library(BGGM)
+```
+
+![](joss_paper/hex.png)
+
+
+# BGGM: Bayesian Gaussian Graphical Models
+
+[![CRAN Version](http://www.r-pkg.org/badges/version/BGGM)](https://cran.r-project.org/package=BGGM)
+[![Downloads](https://cranlogs.r-pkg.org/badges/BGGM)](https://cran.r-project.org/package=BGGM)
+[![Build Status](https://travis-ci.org/donaldRwilliams/BGGM.svg?branch=master)](https://travis-ci.org/donaldRwilliams/BGGM)
+
+
+
+The `R` package **BGGM** provides tools for making Bayesian inference in 
+Gaussian graphical models (GGM). The methods are organized around two general 
+approaches for Bayesian inference: (1) estimation and (2) hypothesis 
+testing. The key distinction is that the former focuses on either 
+the posterior or posterior predictive distribution [@Gelman1996a; see section 5 in @rubin1984bayesianly] , whereas the latter focuses on model comparison with the Bayes factor [@Jeffreys1961; @Kass1995].
+
+## Installation
+
+To install the latest release version (1.0.0) from CRAN use
+```{r gh-installation, eval = FALSE}	
+install.packages("BGGM")	
+```
+
+The current developmental version can be installed with	
+
+```{r, eval = FALSE}	
+if (!requireNamespace("remotes")) {	
+  install.packages("remotes")	
+}	
+remotes::install_github("donaldRwilliams/BGGM")
+```
+
+Note that the developmental version is recommended, due to the algorithms being written in `c++` and 
+support for all data types. The developmental version is essentially
+**BGGM** version 2.0.0.
+
+
+
+## Overview
+The methods in **BGGM** build upon existing algorithms that are well-known in the literature.
+The central contribution of **BGGM** is to extend those approaches:
+
+1.  Bayesian estimation with the novel matrix-F prior distribution [@Mulder2018]
+  
+    + [Estimation](#bayesian-estimation) [@Williams2019]
+
+2. Bayesian hypothesis testing with the matrix-F prior distribution [@Williams2019_bf]
+
+    + [Exploratory hypothesis testing](#Exploratory)
+  
+    + [Confirmatory hypothesis testing](#Confirmatory)
+    
+3. Comparing Gaussian graphical models [@Williams2019; @williams2020comparing]
+    
+    + [Partial correlation differences](#partial-correlation-differences) 
+    
+    + [Posterior predictive check](#posterior-predictive-check)
+    
+    + [Exploratory hypothesis testing](#exploratory-groups) 
+    
+    + [Confirmatory hypothesis testing](#confirmatory-groups)
+
+4. Extending inference beyond the conditional (in)dependence structure [@Williams2019]
+
+    +  [Predictability](#Predictability) 
+    
+    +  [Posterior uncertainty intervals](#partial-correlation-differences) for the 
+       partial correlations
+       
+    +  [Custom Network Statistics](#custom-network-statistics)
+    
+    
+The computationally intensive tasks are written in `c++` via the `R` package **Rcpp** [@eddelbuettel2011rcpp] and the `c++` library **Armadillo** [@sanderson2016armadillo]. The Bayes factors are computed with the `R` package **BFpack** [@mulder2019bfpack]. Furthermore, there are [plotting](#example-network-plot) functions
+for each method, control variables can be included in the model (e.g., `~ gender`), 
+and there is support for missing values (see `bggm_missing`).
+
+## Supported Data Types
+
+* **Continuous**: The continuous method was described in  @Williams2019. Note that 
+                  this is based on the customary [Wishart distribution](https://en.wikipedia.org/wiki/Wishart_distribution).
+
+* **Binary**: The binary method builds directly upon @talhouk2012efficient
+  that, in turn, built upon the approaches of @lawrence2008bayesian and
+  @webb2008bayesian (to name a few).
+  
+* **Ordinal**: The ordinal methods require sampling thresholds. There are two approach 
+   included in **BGGM**. The customary approach described in @albert1993bayesian 
+   (the default) and the 'Cowles' algorithm described in @cowles1996accelerating.
+   
+* **Mixed**: The mixed data (a combination of discrete and continuous) method was introduced
+ in @hoff2007extending. This is a semi-parametric copula model
+ (i.e., a copula GGM) based on the ranked likelihood. Note that this can be used for 
+ *only* ordinal data (not restricted to "mixed" data).
