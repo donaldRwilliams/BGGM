@@ -1791,7 +1791,7 @@ float hamming_distance(arma::mat Rinv_1,
   arma::mat se_2  = sqrt((1 - square(Rinv_2)) / (df2));
 
   // upper-triangular
-  arma::uvec ids = trimatu_ind(size(se_1), 1);
+  arma::uvec ids = arma::trimatu_ind(size(se_1), 1);
 
   // partial correlations
   arma::vec r_1 = Rinv_1(ids);
@@ -1847,7 +1847,7 @@ float hamming_distance(arma::mat Rinv_1,
 float correlation(arma::mat Rinv_1,
                   arma::mat Rinv_2){
 
-  arma::uvec ids = trimatu_ind(size(Rinv_1), 1);
+  arma::uvec ids = arma::trimatu_ind(size(Rinv_1), 1);
 
   arma::vec r_1 = Rinv_1(ids);
 
