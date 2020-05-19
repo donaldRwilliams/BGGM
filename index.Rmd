@@ -17,7 +17,7 @@ library(ggplot2)
 library(BGGM)
 ```
 
-# Bayesian Gaussian Graphical Models <img src="man/figures/hex.png" align="right" alt="" width="80" />
+# Bayesian Gaussian Graphical Models <img src="man/figures/hex.png" align="right" alt="" width="50" />
 
 
 <!-- badges: start -->
