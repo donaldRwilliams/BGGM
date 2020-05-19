@@ -34,7 +34,7 @@ There is a direct correspondence between the inverse covariance matrix and
 \donttest{
 # note: iter = 250 for demonstrative purposes
 
-data
+# data
 Y <- ptsd
 #########################################
 ### example 1: continuous and ordinal ###
