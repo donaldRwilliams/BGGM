@@ -11,3 +11,6 @@
 ^paper\.md$
 ^LICENSE$
 ^readme_models$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

@@ -31,7 +31,7 @@
 #' \donttest{
 #' # note: iter = 250 for demonstrative purposes
 #'
-#' data
+#' # data
 #' Y <- ptsd
 #' #########################################
 #' ### example 1: continuous and ordinal ###
@@ -169,7 +169,7 @@ coef.estimate <- function(object, iter = NULL,...) {
 #' \donttest{
 #' # note: iter = 250 for demonstrative purposes
 #'
-#' data
+#' # data
 #' Y <- ptsd
 #' #########################################
 #' ### example 1: continuous and ordinal ###
