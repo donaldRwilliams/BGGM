@@ -1,2 +1,5 @@
 title: BGGM
 url: https://donaldrwilliams.github.io/BGGM/
+template:
+  params:
+    bootswatch: flatly
