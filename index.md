@@ -111,7 +111,8 @@ support for missing values (see `bggm_missing`).
 
 ## Illustrative Examples
 
-There are several tutorials in the vignette section.
+There are several vignettes in the
+[Articles](https://donaldrwilliams.github.io/BGGM/articles/) section.
 
 ## References
 
