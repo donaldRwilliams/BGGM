@@ -57,7 +57,7 @@ Y <- ptsd[,1:7]
 ### Fit Model
 For these data, the GGM is estimated with a semi-parametric copula [@hoff2007extending]. 
 In **BGGM**, this implemented with `type = mixed` which is kind of a misnomer because the data do not 
-have to be "mixed" (consisting of continuous and discrete nodes). 
+have to be "mixed" (consisting of continuous and discrete variables). 
 Note that the model is fitted only once which highlights that only the posterior samples 
 are needed to compute any network statistic based on the sampled partial correlation matrices.
 
