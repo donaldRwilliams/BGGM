@@ -133,7 +133,7 @@
 <div id="fit-model" class="section level3">
 <h3 class="hasAnchor">
 <a href="#fit-model" class="anchor"></a>Fit Model</h3>
-<p>Because the data is ordinal, semi-parametric copula model is fitted <span class="citation">(Hoff 2007)</span>. In <strong>BGGM</strong>, this is <code>type = mixed</code> which is kind of a misnomer because the data do not have to be “mixed” (continuous and discrete). Note that I fit the model only once which highlights that only the posterior samples are needed to compute any network statistic based on a partial correlation matrix.</p>
+<p>For these data, the GGM is estimated with a semi-parametric copula <span class="citation">(Hoff 2007)</span>. In <strong>BGGM</strong>, this implemented with <code>type = mixed</code> which is kind of a misnomer because the data do not have to be “mixed” (consisting of continuous and discrete nodes). Note that the model is fitted only once which highlights that only the posterior samples are needed to compute any network statistic based on the sampled partial correlation matrices.</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">BGGM</span>)
 <span class="co"># copula ggm</span>
 <span class="no">fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/estimate.html">estimate</a></span>(<span class="no">Y</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"mixed"</span>, <span class="kw">iter</span> <span class="kw">=</span> <span class="fl">1000</span>)</pre></body></html></div>
@@ -175,7 +175,7 @@
 ##     6     0.491   0.092   0.329   0.679
 ##     7     0.698   0.098   0.521   0.878
 ## ---</code></pre>
-<p>The option <code>select = FALSE</code> indicates to compute the statistics from the partial correlation matrices (nothing set to zero). This can be changed by with <code>setting = TRUE</code>. Internally, each of the sampled partial correlation matrices is multiplied by the adjacency matrix.</p>
+<p>The option <code>select = FALSE</code> indicates to compute the statistics from the partial correlation matrices (nothing set to zero). This can be changed with <code>select = TRUE</code>. Internally, each of the sampled partial correlation matrices is multiplied by the adjacency matrix.</p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">net_stat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/roll_your_own.html">roll_your_own</a></span>(<span class="kw">object</span> <span class="kw">=</span> <span class="no">fit</span>,
                           <span class="kw">FUN</span> <span class="kw">=</span> <span class="no">f</span>,
                           <span class="kw">select</span> <span class="kw">=</span> <span class="fl">TRUE</span>,

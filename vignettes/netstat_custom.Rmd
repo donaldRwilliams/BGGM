@@ -55,11 +55,11 @@ Y <- ptsd[,1:7]
 ```
 
 ### Fit Model
-Because the data is ordinal, semi-parametric copula model is fitted [@hoff2007extending]. 
-In **BGGM**, this is `type = mixed` which is kind of a misnomer because the data do not 
-have to be "mixed" (continuous and discrete). Note that I fit the model only once which 
-highlights that only the posterior samples are needed to compute any network statistic based
-on a partial correlation matrix.
+For these data, the GGM is estimated with a semi-parametric copula [@hoff2007extending]. 
+In **BGGM**, this implemented with `type = mixed` which is kind of a misnomer because the data do not 
+have to be "mixed" (consisting of continuous and discrete nodes). 
+Note that the model is fitted only once which highlights that only the posterior samples 
+are needed to compute any network statistic based on the sampled partial correlation matrices.
 
 ```{r, echo=FALSE}
 load(file = "netstat_fit.rda")
@@ -101,7 +101,7 @@ net_stat
 ```
 
 
-The option `select = FALSE` indicates to compute the statistics from the partial correlation matrices (nothing set to zero). This can be changed by with `setting = TRUE`. Internally, each of the sampled
+The option `select = FALSE` indicates to compute the statistics from the partial correlation matrices (nothing set to zero). This can be changed with `select = TRUE`. Internally, each of the sampled
 partial correlation matrices is multiplied by the adjacency matrix.
 ```{r, eval = TRUE, results='hide'}
 net_stat <- roll_your_own(object = fit,
