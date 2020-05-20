@@ -13,7 +13,7 @@ vignette: >
 ---
 
 # Background
-This vignette desribes a new feature to **BGGM** (`2.0.0`) that allows for 
+This vignette describes a new feature to **BGGM** (`2.0.0`) that allows for 
 computing network predictability for binary and ordinal data. Currently 
 the available option is Bayesian $R^2$ [@gelman_r2_2019].
 
@@ -31,7 +31,7 @@ library(BGGM)
 ```
 
 # Binary
-The first example looks at Binary data, consisting of 1190 observations and six variable. The data are are called `women_math` and the variable descriptions are provided in **BGGM**.
+The first example looks at Binary data, consisting of 1190 observations and 6 variables. The data are are called `women_math` and the variable descriptions are provided in **BGGM**.
 
 The model is estimated with
 ```{r, eval=FALSE}
@@ -88,7 +88,7 @@ plot(r2,
 ![](../man/figures/binary_r2_ridge.png)
 
 # Ordinal
-In the following, the `ptsd` data is used (5-level Likert). The variable descriptions are provided in **BGGM**. This is based on the polychoric partial correlations and then $R^2$ is computed from the corresponding correlations. This is done for all of the approaches, due to the correspondence between the correlation matrix and multiple regression.
+In the following, the `ptsd` data is used (5-level Likert). The variable descriptions are provided in **BGGM**. This is based on the polychoric partial correlations, with $R^2$ computed from the corresponding correlations (due to the correspondence between the correlation matrix and multiple regression).
 
 ```{r, eval=FALSE}
 Y <- ptsd
@@ -144,11 +144,10 @@ plot(r2)
 
 ![](../man/figures/ordinal_r2_error.png)
 
-Note that the plot can be futher honed in (e.g,. adding the variable names).
+Note that the plot object is a `ggplot` which allows for further customization (e.g,. adding the variable names, a title, etc.).
 
 # Continuous
-It is quite common to compute predictability assuming that the data are Gaussian. This can also be implemented in
-**BGGM**.
+It is quite common to compute predictability assuming that the data are Gaussian. In the context of Bayesian GGMs, this was introduced in [@Williams2019]. This can also be implemented in **BGGM**.
 
 ```{r, eval=FALSE}
 # fit model
@@ -162,6 +161,7 @@ r2 <- predictability(fit)
 
 # Note
 $R^2$ for binary and ordinal data is computed for the underlying latent variables. This is also the case
-when `type = "mixed` (a semi-parametric copula).
+when `type = "mixed` (a semi-parametric copula). In future releases, there will be support for predicting 
+the variables on the observed scale.
 
 # References

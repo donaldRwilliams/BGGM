@@ -103,7 +103,7 @@
 <div id="background" class="section level1">
 <h1 class="hasAnchor">
 <a href="#background" class="anchor"></a>Background</h1>
-<p>This vignette desribes a new feature to <strong>BGGM</strong> (<code>2.0.0</code>) that allows for computing network predictability for binary and ordinal data. Currently the available option is Bayesian <span class="math inline">\(R^2\)</span> <span class="citation">(Gelman et al. 2019)</span>.</p>
+<p>This vignette describes a new feature to <strong>BGGM</strong> (<code>2.0.0</code>) that allows for computing network predictability for binary and ordinal data. Currently the available option is Bayesian <span class="math inline">\(R^2\)</span> <span class="citation">(Gelman et al. 2019)</span>.</p>
 <div id="r-packages" class="section level3">
 <h3 class="hasAnchor">
 <a href="#r-packages" class="anchor"></a>R packages</h3>
@@ -120,7 +120,7 @@
 <div id="binary" class="section level1">
 <h1 class="hasAnchor">
 <a href="#binary" class="anchor"></a>Binary</h1>
-<p>The first example looks at Binary data, consisting of 1190 observations and six variable. The data are are called <code>women_math</code> and the variable descriptions are provided in <strong>BGGM</strong>.</p>
+<p>The first example looks at Binary data, consisting of 1190 observations and 6 variables. The data are are called <code>women_math</code> and the variable descriptions are provided in <strong>BGGM</strong>.</p>
 <p>The model is estimated with</p>
 <div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="co"># binary data</span>
 <span class="no">Y</span> <span class="kw">&lt;-</span> <span class="no">women_math</span>
@@ -163,7 +163,7 @@
 <div id="ordinal" class="section level1">
 <h1 class="hasAnchor">
 <a href="#ordinal" class="anchor"></a>Ordinal</h1>
-<p>In the following, the <code>ptsd</code> data is used (5-level Likert). The variable descriptions are provided in <strong>BGGM</strong>. This is based on the polychoric partial correlations and then <span class="math inline">\(R^2\)</span> is computed from the corresponding correlations. This is done for all of the approaches, due to the correspondence between the correlation matrix and multiple regression.</p>
+<p>In the following, the <code>ptsd</code> data is used (5-level Likert). The variable descriptions are provided in <strong>BGGM</strong>. This is based on the polychoric partial correlations, with <span class="math inline">\(R^2\)</span> computed from the corresponding correlations (due to the correspondence between the correlation matrix and multiple regression).</p>
 <div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">Y</span> <span class="kw">&lt;-</span> <span class="no">ptsd</span>
 
 <span class="no">fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/estimate.html">estimate</a></span>(<span class="no">Y</span> + <span class="fl">1</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"ordinal"</span>)</pre></body></html></div>
@@ -205,12 +205,12 @@
 <p>Here is the <code>error_bar</code> plot.</p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">r2</span>)</pre></body></html></div>
 <p><img src="../man/figures/ordinal_r2_error.png"></p>
-<p>Note that the plot can be futher honed in (e.g,. adding the variable names).</p>
+<p>Note that the plot object is a <code>ggplot</code> which allows for further customization (e.g,. adding the variable names, a title, etc.).</p>
 </div>
 <div id="continuous" class="section level1">
 <h1 class="hasAnchor">
 <a href="#continuous" class="anchor"></a>Continuous</h1>
-<p>It is quite common to compute predictability assuming that the data are Gaussian. This can also be implemented in <strong>BGGM</strong>.</p>
+<p>It is quite common to compute predictability assuming that the data are Gaussian. In the context of Bayesian GGMs, this was introduced in <span class="citation">(Williams 2018)</span>. This can also be implemented in <strong>BGGM</strong>.</p>
 <div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="co"># fit model</span>
 <span class="no">fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/estimate.html">estimate</a></span>(<span class="no">Y</span>)
 
@@ -221,7 +221,7 @@
 <div id="note" class="section level1">
 <h1 class="hasAnchor">
 <a href="#note" class="anchor"></a>Note</h1>
-<p><span class="math inline">\(R^2\)</span> for binary and ordinal data is computed for the underlying latent variables. This is also the case when <code>type = "mixed</code> (a semi-parametric copula).</p>
+<p><span class="math inline">\(R^2\)</span> for binary and ordinal data is computed for the underlying latent variables. This is also the case when <code>type = "mixed</code> (a semi-parametric copula). In future releases, there will be support for predicting the variables on the observed scale.</p>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">
@@ -229,6 +229,9 @@
 <div id="refs" class="references">
 <div id="ref-gelman_r2_2019">
 <p>Gelman, Andrew, Ben Goodrich, Jonah Gabry, and Aki Vehtari. 2019. “R-squared for Bayesian Regression Models.” <em>American Statistician</em> 73 (3): 307–9. <a href="https://doi.org/10.1080/00031305.2018.1549100">https://doi.org/10.1080/00031305.2018.1549100</a>.</p>
+</div>
+<div id="ref-Williams2019">
+<p>Williams, Donald R. 2018. “Bayesian Estimation for Gaussian Graphical Models: Structure Learning, Predictability, and Network Comparisons.” <em>arXiv</em>. <a href="https://doi.org/10.31234/OSF.IO/X8DPR">https://doi.org/10.31234/OSF.IO/X8DPR</a>.</p>
 </div>
 </div>
 </div>
