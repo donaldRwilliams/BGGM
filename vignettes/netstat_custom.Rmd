@@ -1,0 +1,193 @@
+---
+title: "Custom Network Statistics"
+author: "Donny Williams"
+date: "5/19/2020"
+bibliography: ../inst/REFERENCES.bib
+output: 
+  rmarkdown::html_vignette:
+    toc: yes
+vignette: >
+  %\VignetteIndexEntry{Custom Network Statistics}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+
+# Background
+This vignette desribes a new feature to **BGGM** (`2.0.0`) that allows for 
+computing custom network statistics (e.g., centrality). The new funciton is
+called `roll_your_own` and it was suggested by a user of **BGGM**  ([see feature request here](https://github.com/donaldRwilliams/BGGM/issues/12)).
+
+# Basic Idea
+The basic idea is to compute the chosen network statistic for each of the sampled partial 
+correlations, resulting in a distribution. All that is required is to define a function
+that takes either a partial correlation matrix or a weighted adjacency matrix 
+(the partial correlation matrix with values set to zero) as the first argument. 
+Several examples are provided below.
+
+
+
+### R packages
+```{r, eval = FALSE}
+# need the developmental version
+if (!requireNamespace("remotes")) { 
+  install.packages("remotes")   
+}   
+
+# install from github
+remotes::install_github("donaldRwilliams/BGGM")
+```
+
+
+### Data
+In all examples, a subset of `ptsd` data is used. The subset includes two of the "communities" of 
+symptoms [details for these data can be found in @armour2017network]. The data are ordinal (5-level Likert).
+```{r, warning =FALSE, message=FALSE}
+# need these packages
+library(BGGM)
+library(ggplot2)
+library(assortnet)
+library(networktools)
+library(MASS)
+
+Y <- ptsd[,1:7]
+
+```
+
+### Fit Model
+Because the data is ordinal, semi-parametric copula model is fitted [@hoff2007extending]. 
+In **BGGM**, this is `type = mixed` which is kind of a misnomer because the data do not 
+have to be "mixed" (continuous and disrete). Note that I fit the model only once which 
+highlights that only the posterior samples are needed to compute any network statistic based
+on a partial correlation matrix.
+
+```{r, echo=FALSE}
+load(file = "netstat_fit.rda")
+```
+
+```{r, message=FALSE, warning=FALSE, eval=FALSE}
+library(BGGM)
+# copula ggm
+fit <- estimate(Y, type = "mixed", iter = 1000)
+```
+
+
+# Examples
+
+## Expected Influence
+The first example computes expected influence [@robinaugh2016identifying]. The first step is to define a function
+```{r}
+# define function
+f <- function(x,...){
+  networktools::expectedInf(x,...)$step1
+}
+```
+
+Note that `x` takes the matrix which is then passed to `expectedInf`. The `...` allows for 
+passing additional arguments to the `expectedInf` function. An example is provided below. 
+With the function defined, the next step is to compute the network statistic.
+
+```{r, eval = TRUE, message=FALSE, results='hide'}
+# iter = 250 for demonstrative purposes
+# (but note even 1000 iters takes less than 1 second)
+# compute
+net_stat <- roll_your_own(object = fit,
+                          FUN = f,
+                          select = FALSE,
+                          iter = 250)
+```
+```{r}
+net_stat
+```
+
+
+The option `select = FALSE` indicates to compute the statistics from the partial correlation matrices (nothing set to zero). This can be changed by with `setting = TRUE`. Internally, each of the sampled
+partial correlation matrices is multiplied by the adjacency matrix.
+```{r, eval = TRUE, results='hide'}
+net_stat <- roll_your_own(object = fit,
+                          FUN = f,
+                          select = TRUE,
+                          iter = 250)
+```
+```{r}
+net_stat
+```
+
+
+The results are then plotted with 
+```{r, message=FALSE}
+plot(net_stat)
+```
+
+
+## Bridge Strength
+The next example computes bridge strength [@jones2019bridge]. This requires the user to define clusters or "communities".
+
+```{r, eval = TRUE, message=FALSE, results='hide'}
+# clusters
+communities <- substring(colnames(Y), 1, 1)
+
+# function is slow
+f <- function(x, ...){
+networktools::bridge(x, ...)$`Bridge Strength`
+}
+
+
+# compute
+net_stat <- roll_your_own(object = fit,
+                          FUN = f, 
+                          communities = communities,
+                          iter = 250)
+
+```
+
+
+Notice `communities`. This is passed to `...` in the function, `f`, which, in turn, is passed to the function `bridge`. Any number of arguments can be passed this way. Here are the results
+
+```{r}
+net_stat
+```
+
+which can then be plotted
+```{r, message = FALSE}
+plot(net_stat, 
+     fill = "lightblue")
+```
+
+
+## Assortment
+The next example computes assortment [@newman2003mixing].
+
+
+```{r, eval = TRUE, message=FALSE, results='hide'}
+# clusters
+communities <- substring(colnames(Y), 1, 1)
+
+# define function
+f <- function(x,...){
+ assortment.discrete(x, ...)$r
+}
+
+net_stat <- roll_your_own(object = fit,
+                          FUN = f,
+                          types = communities,
+                          weighted = TRUE,
+                          SE = FALSE, M = 1, 
+                          iter = 250)
+```
+
+
+This example demonstrate that `...` can take several arguments.
+```{r}
+net_stat
+```
+
+The results are stored in the `net_stat` object. They can be accessed with 
+
+```{r}
+hist(net_stat$results, main = "Assortment")
+```
+
+
+# Note
+The function `roll_your_own` is expecting the custom function to return either a single number or a number for each node. This ensures all the printing and plotting functions work. However, you could return anything you want and then access the results to plot, summarize, etc.

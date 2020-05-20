@@ -331,7 +331,7 @@ f <- function(Yg1, Yg2){
   assort2 <- assortnet::assortment.discrete(pcor2, types = comms,
                                           weighted = TRUE,
                                           SE = FALSE, M = 1)$r
-  abs(assort1 - assort2)
+  (assort1 - assort2)
 }
 ```
 
