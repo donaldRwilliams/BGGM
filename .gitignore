@@ -12,4 +12,3 @@ src/*.so
 src/*.dll
 doc
 Meta
-^readme_models$
