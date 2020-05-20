@@ -31,7 +31,7 @@ library(BGGM)
 ```
 
 # Binary
-The first example looks at Binary data, consisting of 1190 observations and 6 variables. The data are are called `women_math` and the variable descriptions are provided in **BGGM**.
+The first example looks at Binary data, consisting of 1190 observations and 6 variables. The data are called `women_math` and the variable descriptions are provided in **BGGM**.
 
 The model is estimated with
 ```{r, eval=FALSE}
