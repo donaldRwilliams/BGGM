@@ -14,8 +14,8 @@ vignette: >
 
 
 # Background
-This vignette desribes a new feature to **BGGM** (`2.0.0`) that allows for 
-computing custom network statistics (e.g., centrality). The new funciton is
+This vignette describes a new feature to **BGGM** (`2.0.0`) that allows for 
+computing custom network statistics (e.g., centrality). The new function is
 called `roll_your_own` and it was suggested by a user of **BGGM**  ([see feature request here](https://github.com/donaldRwilliams/BGGM/issues/12)).
 
 # Basic Idea
@@ -57,7 +57,7 @@ Y <- ptsd[,1:7]
 ### Fit Model
 Because the data is ordinal, semi-parametric copula model is fitted [@hoff2007extending]. 
 In **BGGM**, this is `type = mixed` which is kind of a misnomer because the data do not 
-have to be "mixed" (continuous and disrete). Note that I fit the model only once which 
+have to be "mixed" (continuous and discrete). Note that I fit the model only once which 
 highlights that only the posterior samples are needed to compute any network statistic based
 on a partial correlation matrix.
 
@@ -191,3 +191,5 @@ hist(net_stat$results, main = "Assortment")
 
 # Note
 The function `roll_your_own` is expecting the custom function to return either a single number or a number for each node. This ensures all the printing and plotting functions work. However, you could return anything you want and then access the results to plot, summarize, etc.
+
+# References
