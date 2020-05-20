@@ -4,7 +4,8 @@ pkgdown_sha: ~
 articles:
   netstat_custom: netstat_custom.html
   ppc_custom: ppc_custom.html
-last_built: 2020-05-20T15:50Z
+  predictability: predictability.html
+last_built: 2020-05-20T20:44Z
 urls:
   reference: https://donaldrwilliams.github.io/BGGM//reference
   article: https://donaldrwilliams.github.io/BGGM//articles
