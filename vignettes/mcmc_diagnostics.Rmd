@@ -1,0 +1,131 @@
+---
+title: "MCMC Diagnostics"
+author: "Donny Williams"
+date: "5/20/2020"
+bibliography: ../inst/REFERENCES.bib
+output: 
+  rmarkdown::html_vignette:
+    toc: yes
+vignette: >
+  %\VignetteIndexEntry{MCMC Diagnostics}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+
+# Introduction
+The algorithms in **BGGM** are based on Gibbs samplers. In the context of 
+covariance matrix estimation, as opposed, to, say, hierarchical models, 
+this allows for efficiently sampling the posterior distribution. Furthermore, in all samplers 
+the empirical covariance matrix is used as the starting value which reduces 
+the length of the burn-in (or warm-up). Still yet it is important to monitor convergence. See [here](http://sbfnk.github.io/mfiidd/mcmc_diagnostics.html) for an introduction to MCMC diagnostics.
+
+### R packages
+```{r, eval = FALSE, message=FALSE}
+# need the developmental version
+if (!requireNamespace("remotes")) { 
+  install.packages("remotes")   
+}   
+
+# install from github
+remotes::install_github("donaldRwilliams/BGGM")
+library(BGGM)
+```
+```{r, echo=FALSE}
+library(BGGM)
+```
+
+# ACF plot
+This first example includes an "acf" plot that looks at the auto correlation of the samples. In general,
+we do not want the samples to be strongly correlated or related to the previous samples (or lags $k$). 
+I am not sure there are general guidelines, but typically we do not want "auto correlation...for higher values of k, [because] this indicates a high degree of correlation between our samples and slow mixing."
+
+Here is an example for ordinal data. 
+
+```{r, eval=FALSE}
+# data
+Y <- ptsd[,1:10]
+
+# fit model
+# + 1 makes first category a 1
+fit <- estimate(Y + 1, type = "ordinal")
+```
+
+To check the convergence of a partial correlation, we need the parameter name. These are printed as follows
+```{r, eval=FALSE}
+convergence(fit, print_names = TRUE)
+
+#>  [1] "B1--B2"         "B1--B3"         "B2--B3"         "B1--B4"         "B2--B4"         "B3--B4"         "B1--B5"        
+#>  [8] "B2--B5"         "B3--B5"         "B4--B5"         "B1--C1"         "B2--C1"         "B3--C1"         "B4--C1"        
+#> [15] "B5--C1"         "B1--C2"         "B2--C2"         "B3--C2"         "B4--C2"         "B5--C2"         "C1--C2"        
+#> [22] "B1--D1"         "B2--D1"         "B3--D1"         "B4--D1"         "B5--D1"         "C1--D1"         "C2--D1"        
+#> [29] "B1--D2"         "B2--D2"         "B3--D2"         "B4--D2"         "B5--D2"         "C1--D2"         "C2--D2"        
+#> [36] "D1--D2"         "B1--D3"         "B2--D3"         "B3--D3"         "B4--D3"         "B5--D3"         "C1--D3"        
+#> [43] "C2--D3"         "D1--D3"         "D2--D3"         "B1_(Intercept)" "B2_(Intercept)" "B3_(Intercept)" "B4_(Intercept)"
+#> [50] "B5_(Intercept)" "C1_(Intercept)" "C2_(Intercept)" "D1_(Intercept)" "D2_(Intercept)" "D3_(Intercept)"
+```
+
+
+Note the `(Intercept)` which reflect the fact that the ordinal approach is a multivariate probit model with only intercepts.
+
+```{r, eval=FALSE}
+
+convergence(fit, param = "B1--B2", type = "acf")
+
+```
+
+![](../man/figures/acf.png)
+
+The argument `param` can take any number of parameters and a plot will be made for each (e.g.., `param = c("B1--B2", B1--B3)`). In this case, the auto correlations looks acceptable and actually really good (note the drop to zero). A problematic `acf` plot would have the black lines start at `1.0`
+and perhaps never go below `0.20`.  
+
+To make this clear, I simulated time series data taking the code from [here](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/arima.sim.html)
+
+```{r, eval=FALSE}
+# sim time series
+ts.sim <- arima.sim(list(order = c(1,1,0), ar = 0.7), n = 200)
+
+acf(ts.sim)
+```
+![](../man/figures/acf_problem.png)
+
+This would be considered problematic. If this occurs, one solution could be to thin the samples manually
+```{r, eval=FALSE}
+# extract samples
+samps <- fit$post_samp$pcors
+
+# iterations
+iter <- fit$iter
+
+# thinning interval 
+thin <-  5
+
+# save every 5th (add 50 which is the burnin)
+new_iter <- length(seq(1,to = iter + 50 , by = thin))
+
+# replace (add 50 which is the burnin)
+fit$post_samp$pcors <- samps[,,seq(1,to = iter + 50, by = thin)]
+
+# replace iter
+fit$iter <- new_iter - 50
+
+# check thinned
+convergence(fit, param = "B1--B2", type = "acf")
+```
+
+or perhaps just running the model for more iterations (e.g., increasing `iter` in `estimate`). The above is quite convoluted but note convergence should not typically be an issue. And it might come in handy to know that the samples can be replaced and the other functions
+in **BGGM** will still work with the object `fit`.
+
+
+# Trace plot
+The next example is a trace plot. Here we are looking for good "mixing".
+
+```{r, eval=FALSE}
+convergence(fit, param = "B1--B2", type = "trace")
+```
+
+![](../man/figures/trace.png)
+
+Admittedly the "mixing" is vague. But in general the plot should look like this example,
+where there is no place that the chain is "stuck". See [here](https://stats.stackexchange.com/questions/311151/evaluation-of-mcmc-samples) for 
+problematic trace plots.
