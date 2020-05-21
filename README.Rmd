@@ -871,8 +871,7 @@ data may be added to **BGGM**.
 ## Bug Reports, Feature Requests, and Contributing
 Bug reports and feature requests can be made by opening an issue on [Github](https://github.com/donaldRwilliams/BGGM/issues). To contribute towards
 the development of **BGGM**, you can start a branch with a pull request and we can 
-discuss the proposed changes there. All code *must* be written in base `R`, `c ++`, 
-or `fortran` (preferably `c ++`). 
+discuss the proposed changes there.
 
 ## Comparison to Other Software
 **BGGM** is the only `R` package to implement all of these algorithms and methods. The `mixed` data approach 

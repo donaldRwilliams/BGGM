@@ -972,8 +972,7 @@ the future, support for high-dimensional data may be added to **BGGM**.
 Bug reports and feature requests can be made by opening an issue on
 [Github](https://github.com/donaldRwilliams/BGGM/issues). To contribute
 towards the development of **BGGM**, you can start a branch with a pull
-request and we can discuss the proposed changes there. All code *must*
-be written in base `R`, `c ++`, or `fortran` (preferably `c ++`).
+request and we can discuss the proposed changes there.
 
 ## Comparison to Other Software
 
