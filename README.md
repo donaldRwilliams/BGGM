@@ -122,6 +122,9 @@ The following includes brief examples for *some* of the methods in
 An ordinal GGM is estimated with
 
 ``` r
+library(BGGM)
+library(ggplot2)
+
 # data
 Y <- ptsd[,1:5] + 1
 
@@ -238,8 +241,11 @@ The Bayes factor based methods allow for determining the conditional
 #### Exploratory
 
 ``` r
+# now 10 nodes
+Y <- ptsd[,1:10]
+
 # exploratory hypothesis testing
-fit<- explore(Y, type = "ordinal")
+fit<- explore(Y)
 
 # select 
 E <- select(fit, alternative = "exhaustive")

@@ -88,7 +88,8 @@ for each method, control variables can be included in the model (e.g., `~ gender
 and there is support for missing values (see `bggm_missing`).
 
 # Comparsion to Other Software
-**BGGM** is the only `R` package to implement all of these algorithms and methods.
+**BGGM** is the only `R` package to implement all of these algorithms and methods. The `mixed` data approach 
+is also implemeted in the package **sbgcop** in based `R` [@hoff2007extending]. The `R` package **BDgraph** implements a Gaussian copula graphical model in `c++` [@mohammadi2015bdgraph], but not the binary or ordinal approaches. Futhermore, **BGGM** is the only package for confirmatory testing and comparing graphical models with the methods described in @williams2020comparing
 
 # Acknowledgements
 DRW was supported by a National Science Foundation Graduate Research Fellowship
