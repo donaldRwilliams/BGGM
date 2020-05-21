@@ -87,6 +87,9 @@ The computationally intensive tasks are written in `c++` via the `R` package **R
 for each method, control variables can be included in the model (e.g., `~ gender`), 
 and there is support for missing values (see `bggm_missing`).
 
+# Comparsion to Other Software
+**BGGM** is the only `R` package to implement all of these algorithms and methods.
+
 # Acknowledgements
 DRW was supported by a National Science Foundation Graduate Research Fellowship
 under Grant No. 1650042 and JM was supported by a ERC Starting Grant (758791).
