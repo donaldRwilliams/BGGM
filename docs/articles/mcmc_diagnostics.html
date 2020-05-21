@@ -123,7 +123,7 @@
 <div id="acf-plot" class="section level1">
 <h1 class="hasAnchor">
 <a href="#acf-plot" class="anchor"></a>ACF plot</h1>
-<p>This first example includes an “acf” plot that looks at the auto correlation of the samples. In general, we do not want the samples to be strongly correlated or related to the previous samples (or lags <span class="math inline">\(k\)</span>). I am not sure there are general guidelines, but typically we do not want “auto correlation…for higher values of k, [because] this indicates a high degree of correlation between our samples and slow mixing.”</p>
+<p>This first example includes an “acf” plot that looks at the auto correlation of the samples. In general, we do not want the samples to be strongly correlated or related to the previous samples (or lags <span class="math inline">\(k\)</span>). I am not sure there are general guidelines, but typically we do not want “auto correlation…for higher values of k, [because] this indicates a high degree of correlation between our samples and slow mixing” <a href="http://sbfnk.github.io/mfiidd/mcmc_diagnostics.html">source</a></p>
 <p>Here is an example for ordinal data.</p>
 <div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="co"># data</span>
 <span class="no">Y</span> <span class="kw">&lt;-</span> <span class="no">ptsd</span>[,<span class="fl">1</span>:<span class="fl">10</span>]
@@ -181,7 +181,7 @@
 <p>The next example is a trace plot. Here we are looking for good “mixing”.</p>
 <div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="../reference/convergence.html">convergence</a></span>(<span class="no">fit</span>, <span class="kw">param</span> <span class="kw">=</span> <span class="st">"B1--B2"</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"trace"</span>)</pre></body></html></div>
 <p><img src="../man/figures/trace.png"></p>
-<p>Admittedly the “mixing” is vague. But in general the plot should look like this example, where there is no place that the chain is “stuck”. See <a href="https://stats.stackexchange.com/questions/311151/evaluation-of-mcmc-samples">here</a> for problematic trace plots.</p>
+<p>Admittedly the term “mixing” is vague. But in general the plot should look like this example, where there is no place that the chain is “stuck”. See <a href="https://stats.stackexchange.com/questions/311151/evaluation-of-mcmc-samples">here</a> for problematic trace plots.</p>
 </div>
   </div>
 
