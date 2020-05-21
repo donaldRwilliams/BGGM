@@ -72,7 +72,11 @@ plot(E)
 ### Customize Plot
 The above is `ggplot` that can be futher honed in. Here is an example.
 
+
 ```{r, eval=FALSE}
+# extract communities
+comm <- substring(colnames(Y), 1, 1)
+
 plot(E, 
      # enlarge edges
      edge_magnify = 5, 
@@ -93,7 +97,13 @@ plot(E,
 
 ```
 
+The `edge_magnify` is a value that is multiplied by the edges, `groups` allows for grouping the 
+variables (e.g., those thought to belong to the same "community" will be the same color), and the
+`scale_color_brewer` is from the package `ggplot2` (`pallete` controls the color of the `groups`).
+
+
 ![](../man/figures/netplot_2.png)
+
 
 This is just scratching the surface of possibilities, as essentially any change 
 can be made to the plot. There is lots of support for making nice plots readily available
@@ -101,7 +111,6 @@ online.
 
 #### Layout
 It is also possible to change the layout. This is done with the **sna** package, which is linked in the documentation for `plot.select` in **BGGM**. Here is an example using `layout = "random"`
-
 ```{r, eval=FALSE}
 plot(E, 
      # enlarge edges
@@ -121,7 +130,6 @@ plot(E,
                                   "Opennness"),
                      palette = "Set2")
 ```
-
 ![](../man/figures/netplot_3.png)
 
 
