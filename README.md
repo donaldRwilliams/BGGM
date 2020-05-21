@@ -969,17 +969,20 @@ the future, support for high-dimensional data may be added to **BGGM**.
 ## Bug Reports and Feature Requests
 
 Bug reports and feature requests can be made by opening an issue on
-[Github](https://github.com/donaldRwilliams/BGGM/issues).
+[Github](https://github.com/donaldRwilliams/BGGM/issues). To contribute
+towards the development of **BGGM**, you can start a branch with a pull
+request and we can discuss the proposed changes there. All code *must*
+be written in base `R`, `c ++`, or `fortran` (preferably `c ++`).
 
-## Comparsion to Other Software
+## Comparison to Other Software
 
 **BGGM** is the only `R` package to implement all of these algorithms
-and methods. The `mixed` data approach is also implemeted in the package
-**sbgcop** (base `R`, Hoff 2007). The `R` package **BDgraph** implements
-a Gaussian copula graphical model in `c++` (Mohammadi and Wit 2015), but
-not the binary or ordinal approaches. Futhermore, **BGGM** is the only
-package for confirmatory testing and comparing graphical models with the
-methods described in Williams et al. (2020).
+and methods. The `mixed` data approach is also implemented in the
+package **sbgcop** (base `R`, Hoff 2007). The `R` package **BDgraph**
+implements a Gaussian copula graphical model in `c++` (Mohammadi and Wit
+2015), but not the binary or ordinal approaches. Furthermore, **BGGM**
+is the only package for confirmatory testing and comparing graphical
+models with the methods described in Williams et al. (2020).
 
 ## References
 
