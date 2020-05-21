@@ -98,7 +98,9 @@ plot(E,
 
 The `edge_magnify` is a value that is multiplied by the edges, `groups` allows for grouping the 
 variables (e.g., those thought to belong to the same "community" will be the same color), and the
-`scale_color_brewer` is from the package `ggplot2` (`pallete` controls the color of the `groups`).
+`scale_color_brewer` is from the package `ggplot2` (`pallete` controls the color of the `groups`). 
+By default the edge colors are from a color blind palette. This can be changed in `plot` with 
+the arguments `pos_col` (the color for positive edges) and `pos_neg` (the color for negative edges).
 
 This is just scratching the surface of possibilities, as essentially any change 
 can be made to the plot. There is lots of support for making nice plots readily available
