@@ -3,7 +3,6 @@
 ^/\.gitattributes$
 ^\.travis\.yml$
 ^Meta$
-^joss_paper$
 ^data-raw$
 ^README\.Rmd$
 ^README\.md$
