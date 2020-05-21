@@ -36,9 +36,10 @@ if (!requireNamespace("remotes")) {
 remotes::install_github("donaldRwilliams/BGGM")
 ```
 
-Note that the developmental version is recommended, due to the
-algorithms being written in `c++` and support for all data types. The
-developmental version is essentially **BGGM** version 2.0.0.
+Note that the developmental version is recommended (and required to run
+the following examples), due to the algorithms being written in `c++`
+and support for all data types. The developmental version is essentially
+**BGGM** version 2.0.0.
 
 ## Overview
 
