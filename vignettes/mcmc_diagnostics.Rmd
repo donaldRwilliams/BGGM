@@ -68,15 +68,13 @@ convergence(fit, print_names = TRUE)
 
 Note the `(Intercept)` which reflect the fact that the ordinal approach is a multivariate probit model with only intercepts.
 
+The next step is to make the plot
 ```{r, eval=FALSE}
-
 convergence(fit, param = "B1--B2", type = "acf")
-
 ```
+![](../man/figures/acf_new2.png)
 
 
-![](../man/figures/acf.png)
-[link if broken image](https://github.com/donaldRwilliams/BGGM/blob/master/man/figures/acf.png)
 
 The argument `param` can take any number of parameters and a plot will be made for each (e.g.., `param = c("B1--B2", B1--B3)`). In this case, the auto correlations looks acceptable and actually really good (note the drop to zero). A problematic `acf` plot would have the black lines start at `1.0`
 and perhaps never go below `0.20`.  
