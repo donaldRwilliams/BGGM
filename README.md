@@ -959,6 +959,11 @@ than observations) that are common place in, say, the genetics
 literature. These data are rare in the social-behavioral sciences. In
 the future, support for high-dimensional data may be added to **BGGM**.
 
+## Bug Reports and Feature Requests
+
+Bug reports and feature requests can be made by opening an issue on
+[Github](https://github.com/donaldRwilliams/BGGM/issues).
+
 ## References
 
 <div id="refs" class="references">
