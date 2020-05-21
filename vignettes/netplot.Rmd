@@ -135,4 +135,5 @@ Forthcoming
 allows for combining them rather easily. An example is included in another vignette that shows how to 
 combine several plots made with various methods in **BGGM**
 
+
 # References
