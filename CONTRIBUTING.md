@@ -1,4 +1,4 @@
-# Contributing to BGGM development
+ # Contributing to BGGM development
 
 Some of this is copied from the `ggplot2` contributing [file](https://github.com/tidyverse/ggplot2/blob/master/CONTRIBUTING.md)
 
