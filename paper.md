@@ -57,7 +57,7 @@ The central contribution of **BGGM** is to extend those approaches:
 
 4. Extending inference beyond the conditional (in)dependence structure [@Williams2019]
 
-    +  [Predictability](https://github.com/donaldRwilliams/BGGM#Predictability) 
+    +  [Predictability](https://github.com/donaldRwilliams/BGGM#Predictability)[e.g., @haslbeck2018well]
     
     +  [Posterior uncertaintyintervals](https://github.com/donaldRwilliams/BGGM#partial-correlation-differences) for the 
        partial correlations
