@@ -144,7 +144,7 @@
 <span class="co">#&gt; [50] "B5_(Intercept)" "C1_(Intercept)" "C2_(Intercept)" "D1_(Intercept)" "D2_(Intercept)" "D3_(Intercept)"</span></pre></body></html></div>
 <p>Note the <code>(Intercept)</code> which reflect the fact that the ordinal approach is a multivariate probit model with only intercepts.</p>
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="../reference/convergence.html">convergence</a></span>(<span class="no">fit</span>, <span class="kw">param</span> <span class="kw">=</span> <span class="st">"B1--B2"</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"acf"</span>)</pre></body></html></div>
-<p><img src="../man/figures/acf.png"></p>
+<p><img src="../man/figures/acf.png"><a href="https://github.com/donaldRwilliams/BGGM/blob/master/man/figures/acf.png">link if broken image</a></p>
 <p>The argument <code>param</code> can take any number of parameters and a plot will be made for each (e.g.., <code>param = c("B1--B2", B1--B3)</code>). In this case, the auto correlations looks acceptable and actually really good (note the drop to zero). A problematic <code>acf</code> plot would have the black lines start at <code>1.0</code> and perhaps never go below <code>0.20</code>.</p>
 <p>To make this clear, I simulated time series data taking the code from <a href="https://stat.ethz.ch/R-manual/R-devel/library/stats/html/arima.sim.html">here</a></p>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="co"># sim time series</span>
