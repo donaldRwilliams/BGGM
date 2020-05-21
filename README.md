@@ -971,6 +971,16 @@ the future, support for high-dimensional data may be added to **BGGM**.
 Bug reports and feature requests can be made by opening an issue on
 [Github](https://github.com/donaldRwilliams/BGGM/issues).
 
+## Comparsion to Other Software
+
+**BGGM** is the only `R` package to implement all of these algorithms
+and methods. The `mixed` data approach is also implemeted in the package
+**sbgcop** (base `R`, Hoff 2007). The `R` package **BDgraph** implements
+a Gaussian copula graphical model in `c++` (Mohammadi and Wit 2015), but
+not the binary or ordinal approaches. Futhermore, **BGGM** is the only
+package for confirmatory testing and comparing graphical models with the
+methods described in Williams et al. (2020).
+
 ## References
 
 <div id="refs" class="references">
@@ -1071,6 +1081,14 @@ the American Statistical Association* 90 (430): 773–95.
 Lawrence, Earl, Derek Bingham, Chuanhai Liu, and Vijayan N Nair. 2008.
 “Bayesian Inference for Multivariate Ordinal Data Using Parameter
 Expansion.” *Technometrics* 50 (2): 182–91.
+
+</div>
+
+<div id="ref-mohammadi2015bdgraph">
+
+Mohammadi, Reza, and Ernst C Wit. 2015. “BDgraph: An R Package for
+Bayesian Structure Learning in Graphical Models.” *arXiv Preprint
+arXiv:1501.05108*.
 
 </div>
 
