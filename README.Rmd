@@ -868,7 +868,7 @@ can be used by all researchers. However, there is currently *not* support for hi
 These data are rare in the social-behavioral sciences. In the future, support for high-dimensional
 data may be added to **BGGM**.
 
-## Bug Reports and Feature Requests
+## Bug Reports, Feature Requests, and Contributing
 Bug reports and feature requests can be made by opening an issue on [Github](https://github.com/donaldRwilliams/BGGM/issues). To contribute towards
 the development of **BGGM**, you can start a branch with a pull request and we can 
 discuss the proposed changes there. All code *must* be written in base `R`, `c ++`, 
