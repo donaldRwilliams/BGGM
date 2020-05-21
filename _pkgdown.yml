@@ -5,7 +5,7 @@ template:
     bootswatch: flatly
   opengraph:
     image:
-      src: docs/apple-touch-icon.png
+      src: man/figures/logo.jpg
     twitter:
       creator: "wdonald_1985"
-      card: summary_large_image
+      card: summary
