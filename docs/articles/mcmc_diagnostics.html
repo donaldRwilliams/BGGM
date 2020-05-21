@@ -118,13 +118,6 @@
 <span class="co"># install from github</span>
 <span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"donaldRwilliams/BGGM"</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">BGGM</span>)</pre></body></html></div>
-<pre><code>## Registered S3 methods overwritten by 'BFpack':
-##   method               from
-##   get_estimates.lm     bain
-##   get_estimates.t_test bain</code></pre>
-<pre><code>## Registered S3 method overwritten by 'GGally':
-##   method from   
-##   +.gg   ggplot2</code></pre>
 </div>
 </div>
 <div id="acf-plot" class="section level1">
@@ -132,14 +125,14 @@
 <a href="#acf-plot" class="anchor"></a>ACF plot</h1>
 <p>This first example includes an “acf” plot that looks at the auto correlation of the samples. In general, we do not want the samples to be strongly correlated or related to the previous samples (or lags <span class="math inline">\(k\)</span>). I am not sure there are general guidelines, but typically we do not want “auto correlation…for higher values of k, [because] this indicates a high degree of correlation between our samples and slow mixing.”</p>
 <p>Here is an example for ordinal data.</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="co"># data</span>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="co"># data</span>
 <span class="no">Y</span> <span class="kw">&lt;-</span> <span class="no">ptsd</span>[,<span class="fl">1</span>:<span class="fl">10</span>]
 
 <span class="co"># fit model</span>
 <span class="co"># + 1 makes first category a 1</span>
 <span class="no">fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/estimate.html">estimate</a></span>(<span class="no">Y</span> + <span class="fl">1</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"ordinal"</span>)</pre></body></html></div>
 <p>To check the convergence of a partial correlation, we need the parameter name. These are printed as follows</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="../reference/convergence.html">convergence</a></span>(<span class="no">fit</span>, <span class="kw">print_names</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="../reference/convergence.html">convergence</a></span>(<span class="no">fit</span>, <span class="kw">print_names</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
 
 <span class="co">#&gt;  [1] "B1--B2"         "B1--B3"         "B2--B3"         "B1--B4"         "B2--B4"         "B3--B4"         "B1--B5"        </span>
 <span class="co">#&gt;  [8] "B2--B5"         "B3--B5"         "B4--B5"         "B1--C1"         "B2--C1"         "B3--C1"         "B4--C1"        </span>
@@ -150,17 +143,17 @@
 <span class="co">#&gt; [43] "C2--D3"         "D1--D3"         "D2--D3"         "B1_(Intercept)" "B2_(Intercept)" "B3_(Intercept)" "B4_(Intercept)"</span>
 <span class="co">#&gt; [50] "B5_(Intercept)" "C1_(Intercept)" "C2_(Intercept)" "D1_(Intercept)" "D2_(Intercept)" "D3_(Intercept)"</span></pre></body></html></div>
 <p>Note the <code>(Intercept)</code> which reflect the fact that the ordinal approach is a multivariate probit model with only intercepts.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="../reference/convergence.html">convergence</a></span>(<span class="no">fit</span>, <span class="kw">param</span> <span class="kw">=</span> <span class="st">"B1--B2"</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"acf"</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="../reference/convergence.html">convergence</a></span>(<span class="no">fit</span>, <span class="kw">param</span> <span class="kw">=</span> <span class="st">"B1--B2"</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"acf"</span>)</pre></body></html></div>
 <p><img src="../man/figures/acf.png"></p>
 <p>The argument <code>param</code> can take any number of parameters and a plot will be made for each (e.g.., <code>param = c("B1--B2", B1--B3)</code>). In this case, the auto correlations looks acceptable and actually really good (note the drop to zero). A problematic <code>acf</code> plot would have the black lines start at <code>1.0</code> and perhaps never go below <code>0.20</code>.</p>
 <p>To make this clear, I simulated time series data taking the code from <a href="https://stat.ethz.ch/R-manual/R-devel/library/stats/html/arima.sim.html">here</a></p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="co"># sim time series</span>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="co"># sim time series</span>
 <span class="no">ts.sim</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/arima.sim.html">arima.sim</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">order</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">0</span>), <span class="kw">ar</span> <span class="kw">=</span> <span class="fl">0.7</span>), <span class="kw">n</span> <span class="kw">=</span> <span class="fl">200</span>)
 
 <span class="fu"><a href="https://rdrr.io/r/stats/acf.html">acf</a></span>(<span class="no">ts.sim</span>)</pre></body></html></div>
 <p><img src="../man/figures/acf_problem.png"></p>
 <p>This would be considered problematic. If this occurs, one solution could be to thin the samples manually</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="co"># extract samples</span>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="co"># extract samples</span>
 <span class="no">samps</span> <span class="kw">&lt;-</span> <span class="no">fit</span>$<span class="no">post_samp</span>$<span class="no">pcors</span>
 
 <span class="co"># iterations</span>
@@ -186,7 +179,7 @@
 <h1 class="hasAnchor">
 <a href="#trace-plot" class="anchor"></a>Trace plot</h1>
 <p>The next example is a trace plot. Here we are looking for good “mixing”.</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="../reference/convergence.html">convergence</a></span>(<span class="no">fit</span>, <span class="kw">param</span> <span class="kw">=</span> <span class="st">"B1--B2"</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"trace"</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="../reference/convergence.html">convergence</a></span>(<span class="no">fit</span>, <span class="kw">param</span> <span class="kw">=</span> <span class="st">"B1--B2"</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"trace"</span>)</pre></body></html></div>
 <p><img src="../man/figures/trace.png"></p>
 <p>Admittedly the “mixing” is vague. But in general the plot should look like this example, where there is no place that the chain is “stuck”. See <a href="https://stats.stackexchange.com/questions/311151/evaluation-of-mcmc-samples">here</a> for problematic trace plots.</p>
 </div>
