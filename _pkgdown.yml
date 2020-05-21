@@ -3,6 +3,9 @@ url: https://donaldrwilliams.github.io/BGGM/
 template:
   params:
     bootswatch: flatly
-template:
   opengraph:
-    img: docs/apple-touch-icon.png
+    image:
+      src: docs/apple-touch-icon.png
+    twitter:
+      creator: "wdonald_1985"
+      card: summary_large_image
