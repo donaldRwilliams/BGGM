@@ -1,0 +1,127 @@
+---
+title: "Network Plots"
+author: "Donny Williams"
+date: "5/20/2020"
+bibliography: ../inst/REFERENCES.bib
+output: 
+  rmarkdown::html_vignette:
+    toc: yes
+vignette: >
+  %\VignetteIndexEntry{Network Plots}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+# Introduction
+This vignette shows how to make network plots.
+
+### R packages
+```{r, eval = FALSE, message=FALSE}
+# need the developmental version
+if (!requireNamespace("remotes")) { 
+  install.packages("remotes")   
+}   
+
+# install from github
+remotes::install_github("donaldRwilliams/BGGM")
+library(BGGM)
+```
+```{r, echo=FALSE, message=FALSE}
+library(BGGM)
+```
+
+# Estimate
+For the estimate methods, it is currently only possible detect non-zero relations and 
+the others are set to zero (no connection in the graph). In a future release, it will be possible 
+to define a region of equivalence to directly assess null values. Hence, it is important to note those nodes
+not connected are not necessarily conditionally independent (absence of evidence is not evidence of absence).
+
+## Fit Model
+In this example, I use the `bfi` data which consists of 25 variables measureing different aspects of personality.
+
+```{r, eval=FALSE}
+# data
+Y <- bfi[,1:25]
+
+# fit model
+fit <- estimate(Y)
+```
+
+## Select Graph
+The next step is to selec the graph or those relations for which the credible excludes zero
+```{r, eval=FALSE}
+# select the edge set
+E <- select(fit, 
+            cred = 0.95, 
+            alternative = "two.sided")
+```
+
+`alternative` can be changed to, say, `"greater"` which would then perform a one-sided hypothesis
+test for postive relations. This is ideal for many applications in psychology, because often 
+**all** relations are expected to be positive. See this [blog](https://donaldrwilliams.github.io/2020/03/29/dealing-with-negative-red-edges-in-psychological-networks-frequentist-edition/) for more about this topic.
+
+
+## Plot Graph
+Here is the basic plot. This works for any object from `select` (e.g., comparing groups).
+```{r, eval=FALSE}
+plot(E)
+```
+
+![](../man/figures/netplot_1.png)
+
+### Customize Plot
+The above is `ggplot` that can be futher honed in. Here is an example.
+
+```{r, eval=FALSE}
+plot(E, 
+     # enlarge edges
+     edge_magnify = 5, 
+     # cluster nodes
+     groups = comm, 
+     # change layout
+     layout = "circle")$plt +
+  # add custom labels
+  scale_color_brewer(breaks = c("A", 
+                                "C", 
+                                "E", 
+                                "N", 
+                                "O"), 
+                     labels =   c("Agreeableness", "Conscientiousness", 
+                                  "Extraversion", "Neuroticism", 
+                                  "Opennness"),
+                     palette = "Set2")
+
+```
+
+![](../man/figures/netplot_2.png)
+
+This is just scratching the surface of possibilities, as essentially any change 
+can be made to the plot. There is lots of support for making nice plots readily available
+online.
+
+#### Layout
+It is also possible to change the layout. This is done with the **sna** package, which is linked in the documentation for `plot.select` in **BGGM**. Here is an example using `layout = "random"`
+
+```{r, eval=FALSE}
+plot(E, 
+     # enlarge edges
+     edge_magnify = 5, 
+     # cluster nodes
+     groups = comm, 
+     # change layout
+     layout = "random")$plt +
+  # add custom labels
+  scale_color_brewer(breaks = c("A", 
+                                "C", 
+                                "E", 
+                                "N", 
+                                "O"), 
+                     labels =   c("Agreeableness", "Conscientiousness", 
+                                  "Extraversion", "Neuroticism", 
+                                  "Opennness"),
+                     palette = "Set2")
+```
+
+![](../man/figures/netplot_3.png)
+
+

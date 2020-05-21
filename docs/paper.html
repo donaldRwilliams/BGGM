@@ -108,6 +108,9 @@
       <a href="articles/mcmc_diagnostics.html">MCMC Diagnostics</a>
     </li>
     <li>
+      <a href="articles/netplot.html">Network Plots</a>
+    </li>
+    <li>
       <a href="articles/netstat_custom.html">Custom Network Statistics</a>
     </li>
     <li>
@@ -157,309 +160,76 @@
 </ul>
 </li>
 <li>name: Department of Psychology, University of California, Davis index: 1</li>
-<li>name: Department of Methodology and Statistics, Tilburg University index: 2 citation_author: Williams and Mulder date: 07 January 2020 year: 2020 bibliography: joss_paper/paper.bib output: rticles::joss_article csl: joss_paper/apa.csl journal: JOSS submitted: 07 January 2020 published: (pre-print) —</li>
+<li>name: Department of Methodology and Statistics, Tilburg University index: 2 citation_author: Williams and Mulder date: 05 May 2020 year: 2020 bibliography: inst/REFERENCES.bib —</li>
 </ul>
 </div>
-<div id="summary" class="section level1">
+<div id="bggm-bayesian-gaussian-graphical-models" class="section level1">
 <h1 class="hasAnchor">
-<a href="#summary" class="anchor"></a>Summary</h1>
-<p>Gaussian graphical models (GGM) allow for learning conditional (in)dependence structures that are encoded by partial correlations. Whereas there are several <code>R</code> packages for classical methods [see @Kuismin2017, Table 1], there are only two that implement a Bayesian approach [@Leday2018; @Mohammadi2015a]. These are exclusively focused on identifying the graphical structure. The package <strong>BGGM</strong> not only contains novel Bayesian methods for this purpose, but it also includes Bayesian methodology for extending inference beyond identifying non-zero relations.</p>
-<p><strong>BGGM</strong> is built around two approaches for <em>Bayesian</em> inference–estimation and hypothesis testing. This distinction is arbitrary [see @Rouder2018], but is used to organize this work. The former focuses on the posterior distribution and includes extensions to assess predictability [@Haslbeck2018], as well as methodology to compare partial correlations. The latter includes methods for Bayesian hypothesis testing, in both exploratory and confirmatory contexts, with the novel matrix-<span class="math inline"><em>F</em></span> prior distribution [@Mulder2018]. This allows for testing the null hypothesis of conditional independence, as well as inequality and equality constrained hypotheses. Further, there are several approaches for comparing GGMs across any number of groups. The package also includes a suite of options for model checking. Together, <strong>BGGM</strong> is a comprehensive toolbox for Gaussian graphical modeling in <code>R</code>.</p>
-<div id="estimation" class="section level2">
+<a href="#bggm-bayesian-gaussian-graphical-models" class="anchor"></a>BGGM: Bayesian Gaussian Graphical Models</h1>
+<p>The <code>R</code> package <strong>BGGM</strong> provides tools for making Bayesian inference in Gaussian graphical models (GGM). The methods are organized around two general approaches for Bayesian inference: (1) estimation and (2) hypothesis testing. The key distinction is that the former focuses on either the posterior or posterior predictive distribution [@Gelman1996a; see section 5 in @rubin1984bayesianly] , whereas the latter focuses on model comparison with the Bayes factor [@Jeffreys1961; @Kass1995].</p>
+</div>
+<div id="overview" class="section level1">
+<h1 class="hasAnchor">
+<a href="#overview" class="anchor"></a>Overview</h1>
+<p>The methods in <strong>BGGM</strong> build upon existing algorithms that are well-known in the literature. The central contribution of <strong>BGGM</strong> is to extend those approaches:</p>
+<ol>
+<li>
+<p>Bayesian estimation with the novel matrix-F prior distribution [@Mulder2018]</p>
+<ul>
+<li>
+<a href="https://github.com/donaldRwilliams/BGGM#bayesian-estimation">Estimation</a> [@Williams2019]</li>
+</ul>
+</li>
+<li>
+<p>Bayesian hypothesis testing with the matrix-F prior distribution [@Williams2019_bf]</p>
+<ul>
+<li><p><a href="https://github.com/donaldRwilliams/BGGM#Exploratory">Exploratory hypothesis testing</a></p></li>
+<li><p><a href="https://github.com/donaldRwilliams/BGGM#Confirmatory">Confirmatory hypothesis testing</a></p></li>
+</ul>
+</li>
+<li>
+<p>Comparing Gaussian graphical models [@Williams2019; @williams2020comparing]</p>
+<ul>
+<li><p><a href="https://github.com/donaldRwilliams/BGGM#partial-correlation-differences">Partial correlation differences</a></p></li>
+<li><p><a href="https://github.com/donaldRwilliams/BGGM#posterior-predictive-check">Posterior predictive check</a></p></li>
+<li><p><a href="https://github.com/donaldRwilliams/BGGM#exploratory-groups">Exploratory hypothesis testing</a></p></li>
+<li><p><a href="https://github.com/donaldRwilliams/BGGM#confirmatory-groups">Confirmatory hypothesis testing</a></p></li>
+</ul>
+</li>
+<li>
+<p>Extending inference beyond the conditional (in)dependence structure [@Williams2019]</p>
+<ul>
+<li><p><a href="https://github.com/donaldRwilliams/BGGM#Predictability">Predictability</a>[e.g., @haslbeck2018well]</p></li>
+<li><p><a href="https://github.com/donaldRwilliams/BGGM#partial-correlation-differences">Posterior uncertaintyintervals</a> for the partial correlations</p></li>
+<li><p><a href="https://github.com/donaldRwilliams/BGGM#custom-network-statistics">Custom Network Statistics</a></p></li>
+</ul>
+</li>
+</ol>
+<div id="supported-data-types" class="section level2">
 <h2 class="hasAnchor">
-<a href="#estimation" class="anchor"></a>Estimation</h2>
-<p>There are two possibilities for <em>estimating</em> GGMs. The first is an analytic solution and the second samples from the posterior distribution [described in @Williams2018bayes]. Sampling is recommended because the samples are required for various functions in <strong>BGGM</strong> (e.g., posterior predictive checks and prediction).</p>
-<div id="structure-learning" class="section level3">
-<h3 class="hasAnchor">
-<a href="#structure-learning" class="anchor"></a>Structure Learning</h3>
-<p>Structure learning refers to determining which partial correlations are non-zero. This is implemented with:</p>
-<div class="sourceCode" id="cb1"><html><pre class="r"># data (p = 5 for demonstrative purposes)
-Y &lt;- BGGM::bfi[,1:5]
-
-# fit model
-fit &lt;- estimate(Y = Y, 
-                analytic = FALSE, 
-                iter = 1000)
-
-# select graph
-E &lt;- select(fit, ci_width = 0.95)
-
-# summary
-summary(E)
-
-# output
-
-BGGM: Bayesian Gaussian Graphical Models 
---- 
-Type: Selected Graph (Analytic Solution) 
-Credible Interval: 95 % 
-Connectivity: 80 % 
---- 
-Call:
-select.estimate(x = fit_analytic, ci_width = 0.95)
---- 
-Selected:
- 
-Partial correlations 
- 
-      1     2     3    4    5
-1  0.00 -0.24 -0.11 0.00 0.00
-2 -0.24  0.00  0.29 0.16 0.16
-3 -0.11  0.29  0.00 0.18 0.36
-4  0.00  0.16  0.18 0.00 0.12
-5  0.00  0.16  0.36 0.12 0.00
---- 
- 
-Adjacency 
- 
-  1 2 3 4 5
-1 0 1 1 0 0
-2 1 0 1 1 1
-3 1 1 0 1 1
-4 0 1 1 0 1
-5 0 1 1 1 0
---- </pre></html></div>
-<p>It is customary to plot the estimated structure. The implement ion for plotting <code>E</code> is described below, as the same call is also used for the hypothesis testing methodology.</p>
-<p>The partial correlations are plotted with:</p>
-<div class="sourceCode" id="cb2"><html><pre class="r"><span class="co"># summarize the posterior distributions</span>
-<span class="no">fit_summary</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">fit</span>, <span class="kw">cred</span> <span class="kw">=</span> <span class="fl">0.95</span>)
-
-<span class="co"># plot summary</span>
-<span class="no">fig_1a</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">fit_summary</span>)</pre></html></div>
-<p><img src="joss_paper/figure1.jpeg" alt="A) Partial correlations summarized with posterior means and 95% credible intervals. The red points denote intervals that excluded zero. B) Bayesian variance explained summarized with probability densities. C) Posterior predictive (symmetric) KL-divergence. The red area corresponds to the critical region and the black point is the observed value."></p>
-<p>The object <code>fit_summary</code> includes the partial correlation that have been summarized with the posterior mean, standard deviation, and a given credible interval. The object <code>fig_1a</code> is a <code>ggplot</code> [@ggplot], which allows for further customization. This is possible with all <code><a href="https://rdrr.io/r/base/plot.html">plot()</a></code> functions in <strong>BGGM</strong>. An example is provided below.</p>
-</div>
-<div id="predictability" class="section level3">
-<h3 class="hasAnchor">
-<a href="#predictability" class="anchor"></a>Predictability</h3>
-<p>A central aspect of <strong>BGGM</strong> is to extend inference beyond the individual partial correlations. Assessing <em>predictability</em> provides a measure of “self-determination” [@Haslbeck2018], for example, how much variance is explained by the variables included in the model. To this end, <strong>BGGM</strong> provides several options to assess predictability . In this example, we compute Bayesian <span class="math inline"><em>R</em><sup>2</sup></span> [@gelman_r2_2019]:</p>
-<div class="sourceCode" id="cb3"><html><pre class="r"># bayes r2
-r2 &lt;- bayes_R2(fit)
-
-fig_1b &lt;- plot(r2, 
-               type = "ridgeline")
-
-# output
-BGGM: Bayesian Gaussian Graphical Models 
---- 
-Metric: Bayes R2
-Type: post.pred 
-Credible Interval: 0.95 
---- 
-Estimates:
-
- Node Post.mean Post.sd Cred.lb Cred.ub
-    1      0.13    0.01    0.10    0.15
-    2      0.33    0.02    0.30    0.36
-    3      0.38    0.02    0.35    0.41
-    4      0.18    0.01    0.15    0.20
-    5      0.29    0.02    0.26    0.32</pre></html></div>
-<p><code>fig_1b</code> is made with the help of the <strong>ggridges</strong> package [@ggridges].</p>
-</div>
-<div id="comparing-ggms" class="section level3">
-<h3 class="hasAnchor">
-<a href="#comparing-ggms" class="anchor"></a>Comparing GGMs</h3>
-<p>There is additional methodology that allows for comparing GGMs [described in @williams_ggmcompare]. For the estimation based methods, there are three possibilities, including <code><a href="reference/ggm_compare_estimate.html">ggm_compare_estimate()</a></code>, <code>assess_predictability()</code> and <code><a href="reference/ggm_compare_ppc.html">ggm_compare_ppc()</a></code> . We encourage user to explore all of those functions. The following is based on the posterior predictive distribution. In this example, we use data from a resilience survey to compare GGMs between males and females [@brigantiresilience].</p>
-<div class="sourceCode" id="cb4"><html><pre class="r"># data
-Ym &lt;- subset(rsa, gender == "M", 
-             select = - gender)
-Yf &lt;- subset(rsa, gender == "F", 
-             select = - gender )
-
-# predictive check
-ppc &lt;- ggm_compare_ppc(Ym, Yf)
-
-fig_1c &lt;- plot(ppc)
-
-# summary
-summary(ppc)
-
-# output
-BGGM: Bayesian Gaussian Graphical Models 
---- 
-Type: GGM Comparison (Global Predictive Check) 
-Posterior Samples: 5000 
-  Group 1: 278 
-  Group 2: 397 
-Variables (p): 33 
-Edges: 528 
---- 
-Call: 
-ggm_compare_ppc(Ym, Yf)
---- 
-Estimates: 
- 
-     contrast      KLD p_value
- Y_g1 vs Y_g2 2.512792       0
---- 
-note: 
-p_value = p(T(Y_rep) &gt; T(Y)|Y)
-KLD = (symmetric) Kullback-Leibler divergence</pre></html></div>
-<p>Note that this method can be used to compare any number of groups.</p>
+<a href="#supported-data-types" class="anchor"></a>Supported Data Types</h2>
+<ul>
+<li><p><strong>Continuous</strong>: The continuous method was described in @Williams2019. Note that this is based on the customary<a href="https://en.wikipedia.org/wiki/Wishart_distribution">Wishartdistribution</a>.</p></li>
+<li><p><strong>Binary</strong>: The binary method builds directly upon @talhouk2012efficient that, in turn, built upon the approaches of @lawrence2008bayesian and @webb2008bayesian (to name a few).</p></li>
+<li><p><strong>Ordinal</strong>: The ordinal methods require sampling thresholds. There are two approach included in <strong>BGGM</strong>. The customary approach described in @albert1993bayesian (the default) and the ‘Cowles’ algorithm described in @cowles1996accelerating.</p></li>
+<li><p><strong>Mixed</strong>: The mixed data (a combination of discrete and continuous) method was introduced in @hoff2007extending. This is a semi-parametric copula model (i.e., a copula GGM) based on the ranked likelihood. Note that this can be used for <em>only</em> ordinal data (not restricted to “mixed” data).</p></li>
+</ul>
+<p>The computationally intensive tasks are written in <code>c++</code> via the <code>R</code> package <strong>Rcpp</strong> [@eddelbuettel2011rcpp] and the <code>c++</code> library <strong>Armadillo</strong> [@sanderson2016armadillo]. The Bayes factors are computed with the <code>R</code> package <strong>BFpack</strong> [@mulder2019bfpack]. Furthermore, there are <a href="https://github.com/donaldRwilliams/BGGM#example-network-plot">plotting</a> functions for each method, control variables can be included in the model (e.g., <code>~ gender</code>), and there is support for missing values (see <code>bggm_missing</code>).</p>
 </div>
 </div>
-<div id="hypothesis-testing" class="section level2">
-<h2 class="hasAnchor">
-<a href="#hypothesis-testing" class="anchor"></a>Hypothesis Testing</h2>
-<p>The following methods were described in @williams_bayesian_2019. Note that each function has <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code>, <code><a href="https://rdrr.io/r/base/print.html">print()</a></code>, and <code><a href="https://rdrr.io/r/base/plot.html">plot()</a></code> functions. The implementation is similar to the estimation based methods, and thus not included here.</p>
-<div id="structure-learning-1" class="section level3">
-<h3 class="hasAnchor">
-<a href="#structure-learning-1" class="anchor"></a>Structure Learning</h3>
-<p>The Bayes factor methods allow for gaining evidence for null effects, as well as for one-sided hypothesis testing.</p>
-<div class="sourceCode" id="cb5"><html><pre class="r"><span class="co"># data</span>
-<span class="no">Y</span> <span class="kw">&lt;-</span> <span class="no">bfi</span>[,<span class="fl">1</span>:<span class="fl">5</span>]
-
-<span class="co"># fit model</span>
-<span class="no">fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/explore.html">explore</a></span>(<span class="no">Y</span>)
-
-<span class="co"># select graph</span>
-<span class="no">E</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/select.html">select</a></span>(<span class="no">fit</span>,
-            <span class="kw">BF_cut</span> <span class="kw">=</span> <span class="fl">3</span>,
-            <span class="kw">alternative</span> <span class="kw">=</span> <span class="st">"greater"</span>)</pre></html></div>
-<p>The object <code>E</code> includes the selected graphs for which there was evidence for a positive effect and a null effect. This can be plotted with <code><a href="https://rdrr.io/r/base/plot.html">plot(E)</a></code>. An example is provided below.</p>
+<div id="comparsion-to-other-software" class="section level1">
+<h1 class="hasAnchor">
+<a href="#comparsion-to-other-software" class="anchor"></a>Comparsion to Other Software</h1>
+<p><strong>BGGM</strong> is the only <code>R</code> package to implement all of these algorithms and methods.</p>
 </div>
-<div id="confirmatory-hypothesis-testing" class="section level3">
-<h3 class="hasAnchor">
-<a href="#confirmatory-hypothesis-testing" class="anchor"></a>Confirmatory Hypothesis Testing</h3>
-<p>GGMs are typically data driven and thus inherently exploratory. Another key contribution of <strong>BGGM</strong> is extending hypothesis testing beyond exploratory and to confirmatory in GGMs [ @williams_bayesian_2019]. The former is essentially feeding the data to the functions in <strong>BGGM</strong> and seeing what comes back. In other words, there are no specific, hypothesized models under consideration. On the other hand, confirmatory hypothesis testing allows for comparing theoretical models or (actual) predictions. A researcher may expect, for example, that a set of partial correlations is larger than another set. This is tested with:</p>
-<div class="sourceCode" id="cb6"><html><pre class="r"># define hypothesis
-hypothesis &lt;- c("(A1--A2, A1--A3) &gt;  
-                 (A1--A4, A1--A5)")
-
-# test inequality contraint
-test_order &lt;-  confirm(Y = Y, 
-                       hypothesis  = hypothesis,
-                       prior_sd = 0.5, iter = 5000,
-                       cores = 2)
-# output
-BGGM: Bayesian Gaussian Graphical Models 
-Type: Confirmatory Hypothesis Testing 
---- 
-Call:
-confirm(Y = Y, hypothesis = hypothesis, prior_sd = 0.5, iter = 5000, 
-    cores = 2)
---- 
-Hypotheses: 
-                                   
- H1 (A1--A2,A1--A3)&gt;(A1--A4,A1--A5)
- Hc                        'not H1'
---- 
-Posterior prob: 
-            
- p(H1|Y) = 0
- p(Hc|Y) = 1
---- 
-Bayes factor matrix: 
-   H1  Hc
-H1  1 Inf
-Hc  0   1
---- 
-note: equal hypothesis prior probabilities</pre></html></div>
-<p>Note that <code>A1--A2</code> denotes the partial correlation between variables A1 and A2. Any number of hypothesis can be tested. They just need to be separated by a a semi-colon, e.g., <code>hypothesis = c(A1--A2 &gt; 0; A1--A2 = 0)</code>, which also demonstrates that it is possible to simultaneously test both inequality (<code><a href="https://rdrr.io/r/base/Comparison.html">&gt;</a></code> or <code><a href="https://rdrr.io/r/base/Comparison.html">&lt;</a></code>) and equality (<code>=</code>) restrictions.</p>
-</div>
-<div id="comparing-ggms-1" class="section level3">
-<h3 class="hasAnchor">
-<a href="#comparing-ggms-1" class="anchor"></a>Comparing GGMs</h3>
-<p>The Bayes factor approach can also be used to compare GGMs [see @williams_ggmcompare].</p>
-<div class="sourceCode" id="cb7"><html><pre class="r"><span class="co"># compare</span>
-<span class="no">bf_comp</span> <span class="kw">&lt;-</span> <span class="fu">ggm_compare_bf</span>(<span class="no">Ym</span>, <span class="no">Yf</span>,
-                          <span class="kw">prior_sd</span> <span class="kw">=</span> <span class="fl">0.20</span>)
-
-<span class="co"># select</span>
-<span class="no">sel</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/select.html">select</a></span>(<span class="no">bf_comp</span>,
-              <span class="kw">BF_cut</span> <span class="kw">=</span> <span class="fl">3</span>)
-
-<span class="co"># figure 2</span>
-<span class="no">fig_2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">sel</span>)</pre></html></div>
-<p><img src="joss_paper/figure2.jpeg" alt="A) Heatmap depiticing partial correlation differences in favor of a difference. B) Heatmap depicting partial correlation differences in favor of the null hypothesis (no difference)"></p>
-<p>The results are provided in Figure 2. Note that confirmatory hypothesis testing is also possible. This uses the same arguments as those provided above.</p>
-</div>
-</div>
-<div id="plotting-ggms" class="section level2">
-<h2 class="hasAnchor">
-<a href="#plotting-ggms" class="anchor"></a>Plotting GGMs</h2>
-<p>Plotting both the estimate and hypothesis testing graphs uses the same arguments. The following is an example of plotting a graph estimated with <code>explore</code>.</p>
-<div class="sourceCode" id="cb8"><html><pre class="r"><span class="co"># resilience scale</span>
-<span class="no">Y</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span>(<span class="no">rsa</span>, <span class="kw">select</span> <span class="kw">=</span> - <span class="no">gender</span>)
-
-<span class="co"># fit model </span>
-<span class="no">fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/explore.html">explore</a></span>(<span class="no">Y</span>)
-
-<span class="co"># select graph</span>
-<span class="no">E</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/select.html">select</a></span>(<span class="no">fit</span>,
-            <span class="kw">BF_cut</span> <span class="kw">=</span> <span class="fl">3</span>,
-            <span class="kw">alternative</span> <span class="kw">=</span> <span class="st">"greater"</span>)
-
-<span class="co"># plot graph</span>
-<span class="no">fig_3</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">E</span>, <span class="kw">layout</span> <span class="kw">=</span> <span class="st">"mds"</span>,
-              <span class="kw">node_labels_color</span> <span class="kw">=</span> <span class="st">"black"</span>,
-              <span class="kw">node_groups</span> <span class="kw">=</span> <span class="kw pkg">BGGM</span><span class="kw ns">:::</span><span class="no">rsa_labels</span>,
-              <span class="kw">txt_size</span> <span class="kw">=</span> <span class="fl">4</span>, <span class="kw">node_outer_size</span> <span class="kw">=</span> <span class="fl">8</span>,
-              <span class="kw">node_inner_size</span> <span class="kw">=</span> <span class="fl">6</span>,
-              <span class="kw">edge_multiplier</span> <span class="kw">=</span> <span class="fl">5</span>,
-              <span class="kw">alpha</span> <span class="kw">=</span> <span class="fl">0.3</span>)$<span class="no">plt</span> +
-  <span class="co"># remove legend name and set palette</span>
-  <span class="fu">scale_color_brewer</span>(<span class="kw">name</span> <span class="kw">=</span> <span class="kw">NULL</span>,
-                     <span class="kw">palette</span> <span class="kw">=</span> <span class="st">"Set1"</span>)  +
-  <span class="co"># add title</span>
-  <span class="fu">ggtitle</span>(<span class="st">"Conditional Dependence Structure"</span>) +
-  <span class="co"># make title larger and add box around legend</span>
-  <span class="fu">theme</span>(<span class="kw">plot.title</span> <span class="kw">=</span> <span class="fu">element_text</span>(<span class="kw">size</span> <span class="kw">=</span> <span class="fl">14</span>),
-        <span class="kw">legend.background</span> <span class="kw">=</span> <span class="fu">element_rect</span>(<span class="kw">color</span> <span class="kw">=</span> <span class="st">"black"</span>))</pre></html></div>
-<p><img src="joss_paper/figure3.jpeg" alt="Estimated conditional dependence structure"></p>
-<p><img src="joss_paper/figure4.jpeg" alt="A) Regression diagnostics. B) Posterior predictive check of the standard deviation. C) MCMC trace plot for a partial correlation."></p>
-</div>
-<div id="model-checking" class="section level2">
-<h2 class="hasAnchor">
-<a href="#model-checking" class="anchor"></a>Model Checking</h2>
-<p>The methods in <strong>BGGM</strong> use custom samplers to estimate the partial correlations. There are several functions to monitor convergence. Additionally, there are a variety of methods to check the adequacy of the fitted model.</p>
-<div id="regression-diagnostics" class="section level3">
-<h3 class="hasAnchor">
-<a href="#regression-diagnostics" class="anchor"></a>Regression Diagnostics</h3>
-<p>GGMs have a direct correspondence to multiple regression [@Stephens2018; @Kwan2014]. Hence regression diagnostics can be used to evaluate the fitted model.</p>
-<div class="sourceCode" id="cb9"><html><pre class="r"><span class="co"># data</span>
-<span class="no">Y</span> <span class="kw">&lt;-</span> <span class="no">bfi</span>[,<span class="fl">1</span>:<span class="fl">5</span>]
-
-<span class="co"># fit model</span>
-<span class="no">fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/estimate.html">estimate</a></span>(<span class="no">Y</span>)
-
-<span class="co"># plot</span>
-<span class="no">fig_4a</span> <span class="kw">&lt;-</span> <span class="fu">diagnostics</span>(<span class="no">fit</span>, <span class="kw">iter</span> <span class="kw">=</span> <span class="fl">100</span>)</pre></html></div>
-<p>The object <code>fig_4a</code> contains one plot for each variable in model (in this case five). One of those plots is included in Figure 4 (panel A).</p>
-</div>
-<div id="posterior-predictive-checks" class="section level3">
-<h3 class="hasAnchor">
-<a href="#posterior-predictive-checks" class="anchor"></a>Posterior Predictive Checks</h3>
-<p>In <strong>BGGM</strong>, posterior predictive checks are carried out with the <code>R</code> package <strong>bayesplot</strong> [@bayesplot]. Some internal code was borrowed from <strong>brms</strong> to achieve consistent between packages .</p>
-<div class="sourceCode" id="cb10"><html><pre class="r"><span class="no">fig_4b</span> <span class="kw">&lt;-</span> <span class="fu">pp_check</span>(<span class="no">fit</span>,
-                   <span class="kw">type</span> <span class="kw">=</span> <span class="st">"stat"</span>,
-                   <span class="kw">stat</span> <span class="kw">=</span> <span class="st">"sd"</span>)</pre></html></div>
-<p>The object <code>fig_4b</code> also contains one plot for each variable in model. One of those plots is included in Figure 4 (panel B). Note that this implementation is based on the internals of the <code>pp_check()</code> function from <strong>brms</strong> [@brms], but adapted for GGMs. This ensures that there is consistency between packages using <strong>bayesplot</strong>.</p>
-</div>
-<div id="mcmc-convergence" class="section level3">
-<h3 class="hasAnchor">
-<a href="#mcmc-convergence" class="anchor"></a>MCMC Convergence</h3>
-<p><strong>BGGM</strong> uses Gibbs samplers to estimate GGMs. The models are not terribly difficult to estimate, so convergence should typically not be an issue. To verify convergence, however, <strong>BGGM</strong> provide both trace and acf plots. An example of the former is implemented with:</p>
-<div class="sourceCode" id="cb11"><html><pre class="r"><span class="no">fig_4c</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/convergence.html">convergence</a></span>(<span class="no">fit</span>,
-                      <span class="kw">type</span> <span class="kw">=</span> <span class="st">"trace"</span>,
-                      <span class="kw">param</span> <span class="kw">=</span> <span class="st">"1--2"</span>)</pre></html></div>
-<p>This plot is in Figure 4 (panel C). Note that it is possible to check the convergence of several parameters (e.g., <code>param = c(1--2, 1--3)</code>).</p>
-</div>
-</div>
-<div id="discussion" class="section level2">
-<h2 class="hasAnchor">
-<a href="#discussion" class="anchor"></a>Discussion</h2>
-<p>There are several additional functions in <strong>BGGM</strong> not discussed in this work. For example, there are a variety of options for predictability (e.g., mean squared error), plotting capabilities for <code><a href="reference/confirm.html">confirm()</a></code>, among others. We encourage users to explore the package documentation. We are committed to further developing <strong>BGGM</strong>. In the next version, all of the methods will accommodate ordinal, binary, and mixed data. Currently, there is one <strong>shiny</strong> application freely available online that implements the <code><a href="reference/confirm.html">confirm()</a></code> method <a href="https://donald-williams.shinyapps.io/confirm/">(link)</a> [@shinyapp]. In the near future, all of the methods in <strong>BGGM</strong> will be implemented in a <strong>shinydashboard</strong> [@shinydb].</p>
-</div>
-<div id="acknowledgements" class="section level2">
-<h2 class="hasAnchor">
-<a href="#acknowledgements" class="anchor"></a>Acknowledgements</h2>
+<div id="acknowledgements" class="section level1">
+<h1 class="hasAnchor">
+<a href="#acknowledgements" class="anchor"></a>Acknowledgements</h1>
 <p>DRW was supported by a National Science Foundation Graduate Research Fellowship under Grant No. 1650042 and JM was supported by a ERC Starting Grant (758791).</p>
 </div>
-<div id="references" class="section level2">
-<h2 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h2>
-</div>
+<div id="references" class="section level1">
+<h1 class="hasAnchor">
+<a href="#references" class="anchor"></a>References</h1>
 </div>
 
 
