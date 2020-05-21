@@ -126,6 +126,6 @@ convergence(fit, param = "B1--B2", type = "trace")
 
 ![](../man/figures/trace.png)
 
-Admittedly the "mixing" is vague. But in general the plot should look like this example,
+Admittedly the term "mixing" is vague. But in general the plot should look like this example,
 where there is no place that the chain is "stuck". See [here](https://stats.stackexchange.com/questions/311151/evaluation-of-mcmc-samples) for 
 problematic trace plots.
