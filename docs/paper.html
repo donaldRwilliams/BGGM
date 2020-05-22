@@ -126,7 +126,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/donaldRwilliams/BGGM/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -216,11 +221,11 @@
 </ul>
 <p>The computationally intensive tasks are written in <code>c++</code> via the <code>R</code> package <strong>Rcpp</strong> [@eddelbuettel2011rcpp] and the <code>c++</code> library <strong>Armadillo</strong> [@sanderson2016armadillo]. The Bayes factors are computed with the <code>R</code> package <strong>BFpack</strong> [@mulder2019bfpack]. Furthermore, there are <a href="https://github.com/donaldRwilliams/BGGM#example-network-plot">plotting</a> functions for each method, control variables can be included in the model (e.g., <code>~ gender</code>), and there is support for missing values (see <code>bggm_missing</code>).</p>
 </div>
+<div id="comparison-to-other-software" class="section level2">
+<h2 class="hasAnchor">
+<a href="#comparison-to-other-software" class="anchor"></a>Comparison to Other Software</h2>
+<p><strong>BGGM</strong> is the only <code>R</code> package to implement all of these algorithms and methods. The <code>mixed</code> data approach is also implemented in the package <strong>sbgcop</strong> [base <code>R</code>, @hoff2007extending]. The <code>R</code> package <strong>BDgraph</strong> implements a Gaussian copula graphical model in <code>c++</code> [@mohammadi2015bdgraph], but not the binary or ordinal approaches. Furthermore, <strong>BGGM</strong> is the only package for confirmatory testing and comparing graphical models with the methods described in @williams2020comparing.</p>
 </div>
-<div id="comparsion-to-other-software" class="section level1">
-<h1 class="hasAnchor">
-<a href="#comparsion-to-other-software" class="anchor"></a>Comparsion to Other Software</h1>
-<p><strong>BGGM</strong> is the only <code>R</code> package to implement all of these algorithms and methods.</p>
 </div>
 <div id="acknowledgements" class="section level1">
 <h1 class="hasAnchor">

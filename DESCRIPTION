@@ -49,3 +49,4 @@ LinkingTo: Rcpp,
            RcppDist, 
            RcppProgress
 RdMacros: Rdpack
+BugReports: https://github.com/donaldRwilliams/BGGM/issues
