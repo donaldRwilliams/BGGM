@@ -122,8 +122,9 @@
 }
 
 <span class="co"># install from github</span>
-<span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"donaldRwilliams/BGGM"</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">BGGM</span>)</pre></body></html></div>
+<span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/remotes/man/install_github.html">install_github</a></span>(<span class="st">"donaldRwilliams/BGGM"</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">BGGM</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">cowplot</span>)</pre></body></html></div>
 </div>
 </div>
 <div id="estimate" class="section level1">
@@ -209,10 +210,35 @@
 </div>
 </div>
 </div>
-<div id="hypothesis-testing" class="section level1">
+<div id="bayesian-hypothesis-testing" class="section level1">
 <h1 class="hasAnchor">
-<a href="#hypothesis-testing" class="anchor"></a>Hypothesis Testing</h1>
-<p>Forthcoming</p>
+<a href="#bayesian-hypothesis-testing" class="anchor"></a>Bayesian Hypothesis Testing</h1>
+<p>The Bayesian hypothesis testing methods offer several advantages, for example, that evidence for the null hypothesis of conditional independence is formally evaluated. As a result, the <code>explore</code> method in <strong>BGGM</strong> provides plots for both the conditional dependence and independence structure, in addition to a plot for which the evidence was ambiguous.</p>
+<p>To highlight this advantage, <code>ptsd</code> data is used that has a relatively small sample size.</p>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="co"># fit model</span>
+<span class="no">fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/explore.html">explore</a></span>(<span class="no">Y</span>)
+
+<span class="no">E</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/select.html">select</a></span>(<span class="no">fit</span>, <span class="kw">BF_cut</span> <span class="kw">=</span> <span class="fl">3</span>)</pre></body></html></div>
+<p>Then plot the results. Note that there are three plots, so the package <strong>cowplot</strong> is used to combine them into one plot.</p>
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">plts</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">E</span>,
+             <span class="kw">edge_magnify</span> <span class="kw">=</span> <span class="fl">5</span>,
+             <span class="kw">groups</span> <span class="kw">=</span> <span class="no">comm</span>)
+
+<span class="fu"><a href="https://rdrr.io/pkg/cowplot/man/plot_grid.html">plot_grid</a></span>(
+<span class="no">plts</span>$<span class="no">H1_plt</span> +
+  <span class="fu">ggtitle</span>(<span class="st">"Conditional Dependence"</span>) +
+  <span class="fu">theme</span>(<span class="kw">legend.position</span> <span class="kw">=</span>  <span class="st">"none"</span>),
+
+<span class="no">plts</span>$<span class="no">H0_plt</span> +
+  <span class="fu">ggtitle</span>(<span class="st">"Conditional Independence"</span>) +
+  <span class="fu">theme</span>(<span class="kw">legend.position</span> <span class="kw">=</span>  <span class="st">"none"</span>),
+<span class="no">plts</span>$<span class="no">ambiguous_plt</span> +
+  <span class="fu">ggtitle</span>(<span class="st">"Ambiguous"</span>),
+<span class="kw">nrow</span> <span class="kw">=</span> <span class="fl">1</span>,
+<span class="kw">rel_widths</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1.1</span>)
+)</pre></body></html></div>
+<p><img src="../man/figures/hyp_plot.png"></p>
+<p>As can be seen, there is not evidence for conditional independence for any of the relations. And the ambiguous network makes clear there is large uncertainty as to what or what might not be the “true” network structure. This basic idea of having three adjacency matrices was proposed in <span class="citation">Williams and Mulder (2019)</span>.</p>
 </div>
 <div id="note" class="section level1">
 <h1 class="hasAnchor">
@@ -225,6 +251,9 @@
 <div id="refs" class="references">
 <div id="ref-epskamp2012qgraph">
 <p>Epskamp, Sacha, Angélique OJ Cramer, Lourens J Waldorp, Verena D Schmittmann, Denny Borsboom, and others. 2012. “Qgraph: Network Visualizations of Relationships in Psychometric Data.” <em>Journal of Statistical Software</em> 48 (4): 1–18.</p>
+</div>
+<div id="ref-Williams2019_bf">
+<p>Williams, Donald R., and Joris Mulder. 2019. “Bayesian Hypothesis Testing for Gaussian Graphical Models: Conditional Independence and Order Constraints.” <em>PsyArXiv</em>. <a href="https://doi.org/10.31234/osf.io/ypxd8">https://doi.org/10.31234/osf.io/ypxd8</a>.</p>
 </div>
 </div>
 </div>
