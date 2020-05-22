@@ -121,8 +121,10 @@ There are several vignettes in the [Articles](https://donaldrwilliams.github.io/
 It is common to have some combination of continuous and discrete (e.g., ordinal, binary, etc.) variables. **BGGM** (as of version `2.0.0`) can readily be used for these kinds of data. In this example, a model is fitted for the `gss` data in **BGGM**. 
 
 ### Visualize
-The data are first visualized with the **psych** package
+The data are first visualized with the **psych** package, which readily shows the data are "mixed". 
 ```r
+# dev version
+library(BGGM)
 library(psych)
 
 # data
@@ -132,7 +134,9 @@ Y <- gss
 psych::multi.hist(Y, density = FALSE)
 ```
 ![](man/figures/index_hist.png)
-which readily shows the data is "mixed". 
+
+
+
 
 ### Fit Model
 A Gaussian copula graphical model is estimated as follows

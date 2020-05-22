@@ -132,9 +132,12 @@ fitted for the `gss` data in **BGGM**.
 
 ### Visualize
 
-The data are first visualized with the **psych** package
+The data are first visualized with the **psych** package, which readily
+shows the data are “mixed”.
 
 ``` r
+# dev version
+library(BGGM)
 library(psych)
 
 # data
@@ -144,7 +147,7 @@ Y <- gss
 psych::multi.hist(Y, density = FALSE)
 ```
 
-![](man/figures/index_hist.png) which readily shows the data is “mixed”.
+![](man/figures/index_hist.png)
 
 ### Fit Model
 
