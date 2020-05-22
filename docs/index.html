@@ -162,15 +162,17 @@
 <div id="visualize" class="section level3">
 <h3 class="hasAnchor">
 <a href="#visualize" class="anchor"></a>Visualize</h3>
-<p>The data are first visualized with the <strong>psych</strong> package</p>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">psych</span>)
+<p>The data are first visualized with the <strong>psych</strong> package, which readily shows the data are “mixed”.</p>
+<div class="sourceCode" id="cb3"><pre class="r"><span class="co"># dev version</span>
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">BGGM</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">psych</span>)
 
 <span class="co"># data</span>
 <span class="no">Y</span> <span class="kw">&lt;-</span> <span class="no">gss</span>
 
 <span class="co"># histogram for each node</span>
 <span class="kw pkg">psych</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/psych/man/multi.hist.html">multi.hist</a></span>(<span class="no">Y</span>, <span class="kw">density</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></div>
-<p><img src="reference/figures/index_hist.png"> which readily shows the data is “mixed”.</p>
+<p><img src="reference/figures/index_hist.png"></p>
 </div>
 <div id="fit-model" class="section level3">
 <h3 class="hasAnchor">
