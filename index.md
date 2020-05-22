@@ -13,13 +13,13 @@ Status](https://travis-ci.org/donaldRwilliams/BGGM.svg?branch=master)](https://t
 <!-- badges: end -->
 
 The `R` package **BGGM** provides tools for making Bayesian inference in
-Gaussian graphical models (GGM). The methods are organized around two
-general approaches for Bayesian inference: (1) estimation and (2)
-hypothesis testing. The key distinction is that the former focuses on
-either the posterior or posterior predictive distribution (Gelman, Meng,
-and Stern 1996; see section 5 in Rubin 1984), whereas the latter focuses
-on model comparison with the Bayes factor (Jeffreys 1961; Kass and
-Raftery 1995).
+Gaussian graphical models (GGM, Donald R Williams and Mulder 2020). The
+methods are organized around two general approaches for Bayesian
+inference: (1) estimation and (2) hypothesis testing. The key
+distinction is that the former focuses on either the posterior or
+posterior predictive distribution (Gelman, Meng, and Stern 1996; see
+section 5 in Rubin 1984), whereas the latter focuses on model comparison
+with the Bayes factor (Jeffreys 1961; Kass and Raftery 1995).
 
 ## Installation
 
@@ -56,29 +56,38 @@ extend those approaches:
 2.  Bayesian hypothesis testing with the matrix-F prior distribution
     (Williams and Mulder 2019)
     
-      - Exploratory hypothesis testing
+      - [Exploratory hypothesis
+        testing](https://github.com/donaldRwilliams/BGGM#Exploratory)
     
-      - Confirmatory hypothesis testing
+      - [Confirmatory hypothesis
+        testing](https://github.com/donaldRwilliams/BGGM#confirmatory)
 
-3.  Comparing Gaussian graphical models (Williams 2018; Williams et al.
-    2020)
+3.  Comparing Gaussian graphical models (Williams 2018; Donald R.
+    Williams et al. 2020)
     
-      - Partial correlation differences
+      - [Partial correlation
+        differences](https://github.com/donaldRwilliams/BGGM#partial-correlation-differences)
     
-      - Posterior predictive check
+      - [Posterior predictive
+        check](https://github.com/donaldRwilliams/BGGM#posterior-predictive-check)
     
-      - Exploratory hypothesis testing
+      - [Exploratory hypothesis
+        testing](https://github.com/donaldRwilliams/BGGM#exploratory-groups)
     
-      - Confirmatory hypothesis testing
+      - [Confirmatory hypothesis
+        testing](https://github.com/donaldRwilliams/BGGM#confirmatory-groups)
 
 4.  Extending inference beyond the conditional (in)dependence structure
     (Williams 2018)
     
-      - Predictability
+      - [Predictability](https://github.com/donaldRwilliams/BGGM#predictability)
     
-      - Posterior uncertainty intervals for the partial correlations
+      - [Posterior uncertainty
+        intervals](https://github.com/donaldRwilliams/BGGM#posterior-uncertainty)
+        for the partial correlations
     
-      - Custom Network Statistics
+      - [Custom Network
+        Statistics](https://github.com/donaldRwilliams/BGGM#custom-network-statistics)
 
 The computationally intensive tasks are written in `c++` via the `R`
 package **Rcpp** (Eddelbuettel et al. 2011) and the `c++` library
@@ -113,6 +122,111 @@ support for missing values (see `bggm_missing`).
 
 There are several vignettes in the
 [Articles](https://donaldrwilliams.github.io/BGGM/articles/) section.
+
+## Basic Usage
+
+It is common to have some combination of continuous and discrete (e.g.,
+ordinal, binary, etc.) variables. **BGGM** (as of version `2.0.0`) can
+readily be used for these kinds of data. In this example, a model is
+fitted for the `gss` data in **BGGM**.
+
+### Visualize
+
+The data are first visualized with the **psych** package
+
+``` r
+library(psych)
+
+# data
+Y <- gss
+
+# histogram for each node
+psych::multi.hist(Y, density = FALSE)
+```
+
+![](man/figures/index_hist.png) which readily shows the data is “mixed”.
+
+### Fit Model
+
+A Gaussian copula graphical model is estimated as follows
+
+``` r
+fit <- estimate(Y, type = "mixed")
+```
+
+`type` can be `continuous`, `binary`, `ordinal`, or `mixed`. Note that
+`type` is a misnomer, as the data can consist of *only* ordinal
+variables (for example).
+
+### Summarize Relations
+
+The estimated relations are summarized with
+
+``` r
+summary(fit)
+
+#> BGGM: Bayesian Gaussian Graphical Models 
+#> --- 
+#> Type: mixed 
+#> Analytic: FALSE 
+#> Formula:  
+#> Posterior Samples: 5000 
+#> Observations (n): 464  
+#> Nodes (p): 7 
+#> Relations: 21 
+#> --- 
+#> Call: 
+#> estimate(Y = Y, type = "mixed")
+#> --- 
+#> Estimates:
+#>  Relation Post.mean Post.sd Cred.lb Cred.ub
+#>  INC--DEG     0.463   0.042   0.377   0.544
+#>  INC--CHI     0.148   0.053   0.047   0.251
+#>  DEG--CHI    -0.133   0.058  -0.244  -0.018
+#>  INC--PIN     0.087   0.054  -0.019   0.196
+#>  DEG--PIN    -0.050   0.058  -0.165   0.062
+#>  CHI--PIN    -0.045   0.057  -0.155   0.067
+#>  INC--PDE     0.061   0.057  -0.050   0.175
+#>  DEG--PDE     0.326   0.056   0.221   0.438
+#>  CHI--PDE    -0.043   0.062  -0.162   0.078
+#>  PIN--PDE     0.345   0.059   0.239   0.468
+#>  INC--PCH     0.052   0.052  -0.052   0.150
+#>  DEG--PCH    -0.121   0.056  -0.228  -0.012
+#>  CHI--PCH     0.113   0.056   0.007   0.224
+#>  PIN--PCH    -0.080   0.059  -0.185   0.052
+#>  PDE--PCH    -0.200   0.058  -0.305  -0.082
+#>  INC--AGE     0.211   0.050   0.107   0.306
+#>  DEG--AGE     0.046   0.055  -0.061   0.156
+#>  CHI--AGE     0.522   0.039   0.442   0.594
+#>  PIN--AGE    -0.020   0.054  -0.122   0.085
+#>  PDE--AGE    -0.141   0.057  -0.251  -0.030
+#>  PCH--AGE    -0.033   0.051  -0.132   0.063
+#> --- 
+```
+
+The summary can also be plotted
+
+``` r
+plot(summary(fit))
+```
+
+![](man/figures/index_summ.png)
+
+### Graph Selection
+
+The graph is selected and plotted with
+
+``` r
+E <- select(fit)
+
+plot(E, node_size = 12,
+     edge_magnify = 5)
+```
+
+![](man/figures/netplot_index.png)
+
+The Bayes factor testing approach is readily implemented by changing
+`estimate` to `explore`.
 
 ## References
 
@@ -234,6 +348,13 @@ Statistics & Data Analysis* 52 (5): 2632–49.
 Williams, Donald R. 2018. “Bayesian Estimation for Gaussian Graphical
 Models: Structure Learning, Predictability, and Network Comparisons.”
 *arXiv*. <https://doi.org/10.31234/OSF.IO/X8DPR>.
+
+</div>
+
+<div id="ref-williams2020bggm">
+
+Williams, Donald R, and Joris Mulder. 2020. “BGGM: Bayesian Gaussian
+Graphical Models in R.” *PsyArXiv*.
 
 </div>
 

@@ -140,7 +140,7 @@ plot.select <- function(x,
                     edge.size = "abs_weights",
                     edge.color = "edge_color",
                     node.size = 1,
-                    mode = layout) +
+                    mode = layout, ...) +
         geom_point(color = "black",
                    size = node_size+1) +
         geom_point(size = node_size, color = "white")  +
@@ -158,7 +158,7 @@ plot.select <- function(x,
                      edge.color = "edge_color",
                      node.color = "group",
                      node.size = 1,
-                     mode = layout) +
+                     mode = layout, .__C__.environment) +
         geom_point(aes(color = groups),
                    size = node_size + 2,
                    alpha = 0.2) +

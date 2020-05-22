@@ -55,40 +55,13 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
+  <a href="articles/index.html">Vignettes</a>
 </li>
 <li>
-  <a href="reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="articles/mcmc_diagnostics.html">MCMC Diagnostics</a>
-    </li>
-    <li>
-      <a href="articles/netplot.html">Network Plots</a>
-    </li>
-    <li>
-      <a href="articles/netstat_custom.html">Custom Network Statistics</a>
-    </li>
-    <li>
-      <a href="articles/ppc_custom.html">Custom Network Comparisons</a>
-    </li>
-    <li>
-      <a href="articles/predictability.html">Predictability: Binary, Ordinal, and Continuous</a>
-    </li>
-  </ul>
+  <a href="reference/index.html">Functions</a>
 </li>
 <li>
-  <a href="news/index.html">Changelog</a>
+  <a href="news/index.html">News</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -116,7 +89,7 @@
 <!-- <img src="man/figures/hex.png" align="right" alt="" width="150" /> -->
 <!-- badges: start -->
 
-<p>The <code>R</code> package <strong>BGGM</strong> provides tools for making Bayesian inference in Gaussian graphical models (GGM). The methods are organized around two general approaches for Bayesian inference: (1) estimation and (2) hypothesis testing. The key distinction is that the former focuses on either the posterior or posterior predictive distribution (Gelman, Meng, and Stern 1996; see section 5 in Rubin 1984), whereas the latter focuses on model comparison with the Bayes factor (Jeffreys 1961; Kass and Raftery 1995).</p>
+<p>The <code>R</code> package <strong>BGGM</strong> provides tools for making Bayesian inference in Gaussian graphical models (GGM, Donald R Williams and Mulder 2020). The methods are organized around two general approaches for Bayesian inference: (1) estimation and (2) hypothesis testing. The key distinction is that the former focuses on either the posterior or posterior predictive distribution (Gelman, Meng, and Stern 1996; see section 5 in Rubin 1984), whereas the latter focuses on model comparison with the Bayes factor (Jeffreys 1961; Kass and Raftery 1995).</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
@@ -143,25 +116,25 @@
 <li>
 <p>Bayesian hypothesis testing with the matrix-F prior distribution (Williams and Mulder 2019)</p>
 <ul>
-<li><p>Exploratory hypothesis testing</p></li>
-<li><p>Confirmatory hypothesis testing</p></li>
+<li><p><a href="https://github.com/donaldRwilliams/BGGM#Exploratory">Exploratory hypothesis testing</a></p></li>
+<li><p><a href="https://github.com/donaldRwilliams/BGGM#confirmatory">Confirmatory hypothesis testing</a></p></li>
 </ul>
 </li>
 <li>
-<p>Comparing Gaussian graphical models (Williams 2018; Williams et al. 2020)</p>
+<p>Comparing Gaussian graphical models (Williams 2018; Donald R. Williams et al. 2020)</p>
 <ul>
-<li><p>Partial correlation differences</p></li>
-<li><p>Posterior predictive check</p></li>
-<li><p>Exploratory hypothesis testing</p></li>
-<li><p>Confirmatory hypothesis testing</p></li>
+<li><p><a href="https://github.com/donaldRwilliams/BGGM#partial-correlation-differences">Partial correlation differences</a></p></li>
+<li><p><a href="https://github.com/donaldRwilliams/BGGM#posterior-predictive-check">Posterior predictive check</a></p></li>
+<li><p><a href="https://github.com/donaldRwilliams/BGGM#exploratory-groups">Exploratory hypothesis testing</a></p></li>
+<li><p><a href="https://github.com/donaldRwilliams/BGGM#confirmatory-groups">Confirmatory hypothesis testing</a></p></li>
 </ul>
 </li>
 <li>
 <p>Extending inference beyond the conditional (in)dependence structure (Williams 2018)</p>
 <ul>
-<li><p>Predictability</p></li>
-<li><p>Posterior uncertainty intervals for the partial correlations</p></li>
-<li><p>Custom Network Statistics</p></li>
+<li><p><a href="https://github.com/donaldRwilliams/BGGM#predictability">Predictability</a></p></li>
+<li><p><a href="https://github.com/donaldRwilliams/BGGM#posterior-uncertainty">Posterior uncertainty intervals</a> for the partial correlations</p></li>
+<li><p><a href="https://github.com/donaldRwilliams/BGGM#custom-network-statistics">Custom Network Statistics</a></p></li>
 </ul>
 </li>
 </ol>
@@ -181,6 +154,89 @@
 <h2 class="hasAnchor">
 <a href="#illustrative-examples" class="anchor"></a>Illustrative Examples</h2>
 <p>There are several vignettes in the <a href="https://donaldrwilliams.github.io/BGGM/articles/">Articles</a> section.</p>
+</div>
+<div id="basic-usage" class="section level2">
+<h2 class="hasAnchor">
+<a href="#basic-usage" class="anchor"></a>Basic Usage</h2>
+<p>It is common to have some combination of continuous and discrete (e.g., ordinal, binary, etc.) variables. <strong>BGGM</strong> (as of version <code>2.0.0</code>) can readily be used for these kinds of data. In this example, a model is fitted for the <code>gss</code> data in <strong>BGGM</strong>.</p>
+<div id="visualize" class="section level3">
+<h3 class="hasAnchor">
+<a href="#visualize" class="anchor"></a>Visualize</h3>
+<p>The data are first visualized with the <strong>psych</strong> package</p>
+<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">psych</span>)
+
+<span class="co"># data</span>
+<span class="no">Y</span> <span class="kw">&lt;-</span> <span class="no">gss</span>
+
+<span class="co"># histogram for each node</span>
+<span class="kw pkg">psych</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/psych/man/multi.hist.html">multi.hist</a></span>(<span class="no">Y</span>, <span class="kw">density</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></div>
+<p><img src="reference/figures/index_hist.png"> which readily shows the data is “mixed”.</p>
+</div>
+<div id="fit-model" class="section level3">
+<h3 class="hasAnchor">
+<a href="#fit-model" class="anchor"></a>Fit Model</h3>
+<p>A Gaussian copula graphical model is estimated as follows</p>
+<div class="sourceCode" id="cb4"><pre class="r"><span class="no">fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/estimate.html">estimate</a></span>(<span class="no">Y</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"mixed"</span>)</pre></div>
+<p><code>type</code> can be <code>continuous</code>, <code>binary</code>, <code>ordinal</code>, or <code>mixed</code>. Note that <code>type</code> is a misnomer, as the data can consist of <em>only</em> ordinal variables (for example).</p>
+</div>
+<div id="summarize-relations" class="section level3">
+<h3 class="hasAnchor">
+<a href="#summarize-relations" class="anchor"></a>Summarize Relations</h3>
+<p>The estimated relations are summarized with</p>
+<div class="sourceCode" id="cb5"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">fit</span>)
+
+<span class="co">#&gt; BGGM: Bayesian Gaussian Graphical Models </span>
+<span class="co">#&gt; --- </span>
+<span class="co">#&gt; Type: mixed </span>
+<span class="co">#&gt; Analytic: FALSE </span>
+<span class="co">#&gt; Formula:  </span>
+<span class="co">#&gt; Posterior Samples: 5000 </span>
+<span class="co">#&gt; Observations (n): 464  </span>
+<span class="co">#&gt; Nodes (p): 7 </span>
+<span class="co">#&gt; Relations: 21 </span>
+<span class="co">#&gt; --- </span>
+<span class="co">#&gt; Call: </span>
+<span class="co">#&gt; estimate(Y = Y, type = "mixed")</span>
+<span class="co">#&gt; --- </span>
+<span class="co">#&gt; Estimates:</span>
+<span class="co">#&gt;  Relation Post.mean Post.sd Cred.lb Cred.ub</span>
+<span class="co">#&gt;  INC--DEG     0.463   0.042   0.377   0.544</span>
+<span class="co">#&gt;  INC--CHI     0.148   0.053   0.047   0.251</span>
+<span class="co">#&gt;  DEG--CHI    -0.133   0.058  -0.244  -0.018</span>
+<span class="co">#&gt;  INC--PIN     0.087   0.054  -0.019   0.196</span>
+<span class="co">#&gt;  DEG--PIN    -0.050   0.058  -0.165   0.062</span>
+<span class="co">#&gt;  CHI--PIN    -0.045   0.057  -0.155   0.067</span>
+<span class="co">#&gt;  INC--PDE     0.061   0.057  -0.050   0.175</span>
+<span class="co">#&gt;  DEG--PDE     0.326   0.056   0.221   0.438</span>
+<span class="co">#&gt;  CHI--PDE    -0.043   0.062  -0.162   0.078</span>
+<span class="co">#&gt;  PIN--PDE     0.345   0.059   0.239   0.468</span>
+<span class="co">#&gt;  INC--PCH     0.052   0.052  -0.052   0.150</span>
+<span class="co">#&gt;  DEG--PCH    -0.121   0.056  -0.228  -0.012</span>
+<span class="co">#&gt;  CHI--PCH     0.113   0.056   0.007   0.224</span>
+<span class="co">#&gt;  PIN--PCH    -0.080   0.059  -0.185   0.052</span>
+<span class="co">#&gt;  PDE--PCH    -0.200   0.058  -0.305  -0.082</span>
+<span class="co">#&gt;  INC--AGE     0.211   0.050   0.107   0.306</span>
+<span class="co">#&gt;  DEG--AGE     0.046   0.055  -0.061   0.156</span>
+<span class="co">#&gt;  CHI--AGE     0.522   0.039   0.442   0.594</span>
+<span class="co">#&gt;  PIN--AGE    -0.020   0.054  -0.122   0.085</span>
+<span class="co">#&gt;  PDE--AGE    -0.141   0.057  -0.251  -0.030</span>
+<span class="co">#&gt;  PCH--AGE    -0.033   0.051  -0.132   0.063</span>
+<span class="co">#&gt; --- </span></pre></div>
+<p>The summary can also be plotted</p>
+<div class="sourceCode" id="cb6"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">fit</span>))</pre></div>
+<p><img src="reference/figures/index_summ.png"></p>
+</div>
+<div id="graph-selection" class="section level3">
+<h3 class="hasAnchor">
+<a href="#graph-selection" class="anchor"></a>Graph Selection</h3>
+<p>The graph is selected and plotted with</p>
+<div class="sourceCode" id="cb7"><pre class="r"><span class="no">E</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/select.html">select</a></span>(<span class="no">fit</span>)
+
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">E</span>, <span class="kw">node_size</span> <span class="kw">=</span> <span class="fl">12</span>,
+     <span class="kw">edge_magnify</span> <span class="kw">=</span> <span class="fl">5</span>)</pre></div>
+<p><img src="reference/figures/netplot_index.png"></p>
+<p>The Bayes factor testing approach is readily implemented by changing <code>estimate</code> to <code>explore</code>.</p>
+</div>
 </div>
 <div id="references" class="section level2">
 <h2 class="hasAnchor">
@@ -231,6 +287,9 @@
 <div id="ref-Williams2019">
 <p>Williams, Donald R. 2018. “Bayesian Estimation for Gaussian Graphical Models: Structure Learning, Predictability, and Network Comparisons.” <em>arXiv</em>. <a href="https://doi.org/10.31234/OSF.IO/X8DPR" class="uri">https://doi.org/10.31234/OSF.IO/X8DPR</a>.</p>
 </div>
+<div id="ref-williams2020bggm">
+<p>Williams, Donald R, and Joris Mulder. 2020. “BGGM: Bayesian Gaussian Graphical Models in R.” <em>PsyArXiv</em>.</p>
+</div>
 <div id="ref-Williams2019_bf">
 <p>Williams, Donald R., and Joris Mulder. 2019. “Bayesian Hypothesis Testing for Gaussian Graphical Models: Conditional Independence and Order Constraints.” <em>PsyArXiv</em>. <a href="https://doi.org/10.31234/osf.io/ypxd8" class="uri">https://doi.org/10.31234/osf.io/ypxd8</a>.</p>
 </div>
@@ -261,6 +320,12 @@
 <h2>License</h2>
 <ul class="list-unstyled">
 <li><a href="https://www.r-project.org/Licenses/GPL-2">GPL-2</a></li>
+</ul>
+</div>
+<div class="citation">
+<h2>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html">Citing BGGM</a></li>
 </ul>
 </div>
 <div class="developers">

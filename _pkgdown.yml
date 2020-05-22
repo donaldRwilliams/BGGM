@@ -9,3 +9,12 @@ template:
     twitter:
       creator: "@wdonald_1985"
       card: summary
+navbar:
+  title: "BGGM"
+  left:
+    - text: "Vignettes"
+      href: articles/index.html
+    - text: "Functions"
+      href: reference/index.html
+    - text: "News"
+      href: news/index.html

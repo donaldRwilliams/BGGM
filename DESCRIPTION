@@ -37,6 +37,7 @@ Suggests:
     assortnet (>= 0.12),
     networktools (>= 1.2.3),
     mice (>= 3.8.0),
+    psych,
     knitr,
     rmarkdown
 Encoding: UTF-8
