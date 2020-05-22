@@ -1,4 +1,9 @@
-title: BGGM
+home:
+  title: BGGM
+  links:
+  - text: Ask a question about BGGM
+    href: mailto:drwwilliams@ucdavis.edu
+
 url: https://donaldrwilliams.github.io/BGGM/
 template:
   params:
