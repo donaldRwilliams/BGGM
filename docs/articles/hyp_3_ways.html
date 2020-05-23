@@ -188,9 +188,9 @@ Y_females &lt;- subset(Y, gender == 2, select = -c(education, gender))[,1:5]</co
 #&gt; -0.06498586  0.12481253 </code></pre>
 </div>
 </div>
-<div id="approach-2-predict-check" class="section level1">
+<div id="approach-2-predictive-check" class="section level1">
 <h1 class="hasAnchor">
-<a href="#approach-2-predict-check" class="anchor"></a>Approach 2: Predict Check</h1>
+<a href="#approach-2-predictive-check" class="anchor"></a>Approach 2: Predictive Check</h1>
 <p>The next approach is based on a posterior predictive check. The hypothesis is essentially the same as above, but for the predictive distribution, that is,</p>
 <p><span class="math display">\[
 \begin{align}
@@ -278,7 +278,7 @@ Y_females &lt;- subset(Y, gender == 2, select = -c(education, gender))[,1:5]</co
 </div>
 <div id="approach-3-bayesian-hypothesis-testing" class="section level1">
 <h1 class="hasAnchor">
-<a href="#approach-3-bayesian-hypothesis-testing" class="anchor"></a>Approach 3: Bayesian Hypothesis testing</h1>
+<a href="#approach-3-bayesian-hypothesis-testing" class="anchor"></a>Approach 3: Bayesian Hypothesis Testing</h1>
 <p>The above approaches cannot provide evidence that the sum is equal. In other words, just because there was not a difference, this does not provide evidence for equality. The Bayes factor methods allow for formally assessing the equality model, that is,</p>
 <p><span class="math display">\[
 \begin{align}

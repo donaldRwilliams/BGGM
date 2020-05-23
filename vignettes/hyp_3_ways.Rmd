@@ -125,7 +125,7 @@ quantile(diff, probs = c(0.025, 0.975))
 #> -0.06498586  0.12481253 
 ```
 
-# Approach 2: Predict Check
+# Approach 2: Predictive Check
 The next approach is based on a posterior predictive check. The hypothesis is essentially the same as above, but for the predictive distribution, that is,
 
 $$
@@ -218,7 +218,7 @@ plot(ppc)
 
 where the red is the critical region.
 
-# Approach 3: Bayesian Hypothesis testing
+# Approach 3: Bayesian Hypothesis Testing
 The above approaches cannot provide evidence that the sum is equal. In other words, just because there was 
 not a difference, this does not provide evidence for equality. The Bayes factor methods allow for formally 
 assessing the equality model, that is,
