@@ -16,7 +16,7 @@ options are \code{"estimate"} and \code{"explore"}.}
 \code{\link{estimate}} or \code{\link{explore}}.}
 }
 \value{
-an object of class \code{estimate} or \code{explore}
+An object of class \code{estimate} or \code{explore}
 }
 \description{
 Estimation and exploratory hypothesis testing with missing data.
@@ -42,13 +42,14 @@ Currently, \strong{BGGM} is compatible with the package \code{\link[mice]{mice}}
 \donttest{
 # note: iter = 250 for demonstrative purposes
 
-library(mice)
+# need this package
+library(mice, warn.conflicts = FALSE)
 
 # data
-Y <- ptsd
+Y <- ptsd[,1:5]
 
 # matrix for indices
-mat <- matrix(0, nrow = 221, ncol = 20)
+mat <- matrix(0, nrow = 221, ncol = 5)
 
 # indices
 indices <- which(mat == 0, arr.ind = TRUE)
@@ -65,14 +66,18 @@ x <- mice(Y, m = 5, print = FALSE)
 # rank based parital correlations
 
 # estimate the model
-fit_est <-  bggm_missing(x, type =  "mixed",
-                         iter = 250)
+fit_est <-  bggm_missing(x,
+                         method = "estimate",
+                         type =  "mixed",
+                         iter = 250,
+                         progress = FALSE)
 
 # select edge set
 E <- select(fit_est)
 
 # plot E
-plt_E <- plot(E)
+plt_E <- plot(E)$plt
 
+plt_E
 }
 }

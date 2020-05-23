@@ -33,11 +33,17 @@ There is a direct correspondence between the inverse covariance matrix and
 \donttest{
 # note: iter = 250 for demonstrative purposes
 # data
-Y <- women_math
+Y <- ptsd[,1:4]
 
-# fit model
-fit <- explore(Y, type = "binary",
-               iter = 250)
+##########################
+### example 1: ordinal ###
+##########################
+
+# fit model (note + 1, due to zeros)
+fit <- explore(Y + 1,
+               type = "ordinal",
+               iter = 250,
+               progress = FALSE)
 
 # summarize the partial correlations
 reg <- coef(fit)
@@ -45,6 +51,7 @@ reg <- coef(fit)
 # summary
 summ <- summary(reg)
 
+summ
 }
 }
 \references{

@@ -197,71 +197,15 @@ An error is most likely to arise when \code{type = "ordinal"}. The are two commo
 \donttest{
 # note: iter = 250 for demonstrative purposes
 
-
 ##########################
-### example 1: numbers ###
+### example 1: cheating ##
 ##########################
+# Here a true hypothesis is tested,
+# which shows the method works nicely
+# (peeked at partials beforehand)
 
 # data
 Y <- BGGM::bfi[,1:10]
-
-# hypothesis
-hypothesis <- c("1--2 > 1--3 > 1--4 > 1--5")
-
-# test inequality contraints
-test_order <-  confirm(Y = Y, hypothesis  = hypothesis,
-                       iter = 250)
-
-
-########################
-### example 2: names ###
-########################
-
-# hypothesis
-hypothesis <- c("A1--A2 > A1--A3 > A1--A4 > A1--A5")
-
-# test inequality contraints
-test_order <-  confirm(Y = Y,
-                      type = "continuous",
-                      hypothesis  = hypothesis,
-                      iter = 250)
-
-########################
-### example 3: mixed ###
-########################
-# rank likelihood
-
-# hypothesis
-hypothesis <- c("A1--A2 > A1--A3 > A1--A4 > A1--A5")
-
-# test inequality contraints
-test_order <-  confirm(Y = Y,
-                       type = "mixed",
-                       hypothesis  = hypothesis,
-                       iter = 250)
-
-
-###################################
-### example 4: two  hypotheses ####
-###################################
-
-hypothesis <- c("A1--A2 > A1--A3 = A1--A4 = 0;
-                 A1--A2 = A1--A3 = A1--A4 = 0")
-
-# test inequality contraint
-test_two <-  confirm(Y = Y,
-                     type = "continuous",
-                     hypothesis  = hypothesis,
-                     iter = 250)
-
-###############################
-##### example 5: cheating #####
-###############################
-
-# All examples thus far the hypotheses
-# were not confirmed. Here a true hypothesis
-# is tested, which shows the method works nicely
-# (peeked at partials beforehand)
 
 hypothesis <- c("A1--A2 < A1--A3 < A1--A4 = A1--A5")
 
@@ -269,7 +213,8 @@ hypothesis <- c("A1--A2 < A1--A3 < A1--A4 = A1--A5")
 test_cheat <-  confirm(Y = Y,
                        type = "continuous",
                        hypothesis  = hypothesis,
-                       iter = 250)
+                       iter = 250,
+                       progress = FALSE)
 
 # print (probabilty of nearly 1 !)
 test_cheat

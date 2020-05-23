@@ -31,22 +31,24 @@
 #' \donttest{
 #' # note: iter = 250 for demonstrative purposes
 #'
+#' #########################
+#' ### example 1: binary ###
+#' #########################
 #' # data
-#' Y <- ptsd
-#' #########################################
-#' ### example 1: continuous and ordinal ###
-#' #########################################
+#' Y <- women_math[1:500, ]
 #'
 #' # fit model
-#' fit <- estimate(Y, type = "continuous",
-#'                iter = 250)
+#' fit <- estimate(Y, type = "binary",
+#'                 iter = 250,
+#'                 progress = FALSE)
 #'
-#' # regression
+#' # summarize the partial correlations
 #' reg <- coef(fit)
 #'
 #' # summary
 #' summ <- summary(reg)
 #'
+#' summ
 #'}
 #' @export
 coef.estimate <- function(object, iter = NULL,...) {
@@ -140,12 +142,19 @@ coef.estimate <- function(object, iter = NULL,...) {
 #' @examples
 #' \donttest{
 #' # note: iter = 250 for demonstrative purposes
-#' # data
-#' Y <- women_math
 #'
-#' # fit model
-#' fit <- explore(Y, type = "binary",
-#'                iter = 250)
+#' # data
+#' Y <- ptsd[,1:4]
+#'
+#' ##########################
+#' ### example 1: ordinal ###
+#' ##########################
+#'
+#' # fit model (note + 1, due to zeros)
+#' fit <- explore(Y + 1,
+#'                type = "ordinal",
+#'                iter = 250,
+#'                progress = FALSE)
 #'
 #' # summarize the partial correlations
 #' reg <- coef(fit)
@@ -153,6 +162,7 @@ coef.estimate <- function(object, iter = NULL,...) {
 #' # summary
 #' summ <- summary(reg)
 #'
+#' summ
 #'}
 #' @export
 coef.explore <- function(object,

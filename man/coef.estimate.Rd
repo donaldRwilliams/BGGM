@@ -34,21 +34,25 @@ There is a direct correspondence between the inverse covariance matrix and
 \donttest{
 # note: iter = 250 for demonstrative purposes
 
+#########################
+### example 1: binary ###
+#########################
 # data
-Y <- ptsd
-#########################################
-### example 1: continuous and ordinal ###
-#########################################
+Y <- women_math[1:500, ]
 
 # fit model
-fit <- estimate(Y, type = "continuous",
-               iter = 250)
+fit <- estimate(Y, type = "binary",
+                iter = 250,
+                progress = FALSE)
 
-# regression
+# summarize the partial correlations
+
 reg <- coef(fit)
 
 # summary
 summ <- summary(reg)
+
+summ
 
 }
 }
