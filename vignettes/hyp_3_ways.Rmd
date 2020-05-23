@@ -1,0 +1,49 @@
+---
+title: "Three Ways to Test the Same Hypothesis"
+author: "Donny Williams"
+date: "5/23/2020"
+bibliography: ../inst/REFERENCES.bib
+output:
+rmarkdown::html_vignette:
+  toc: yes
+vignette: >
+  %\VignetteIndexEntry{hree Ways to Test the Same Hypothesis}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+# Introduction
+On a Facebook methods group, there was a question about testing hypotheses in network model. In 
+the comments, it was suggested that **BGGM** could be used to test the hypothesis. And it turns
+out that **BGGM** really shines for testing expections or predictions. In this vignette, I demonstrate 
+three ways to go about testing the same hypothesis, which was essentially testing for a difference
+in the **sum** of partrial correlations between groups.
+
+### R package
+```{r, eval = FALSE, message=FALSE}
+# need the developmental version
+if (!requireNamespace("remotes")) { 
+  install.packages("remotes")   
+}   
+
+# install from github
+remotes::install_github("donaldRwilliams/BGGM")
+library(BGGM)
+```
+
+### Data
+For demonstrative purposed, I use the `bfi` data and test the hypotheses in males and females
+
+```
+# data
+Y <- bfi
+
+# males
+Y_males <- subset(Y, gender == 1, select = -c(education, gender))[,1:5]
+
+# females
+Y_females <- subset(Y, gender == 2, select = -c(education, gender))[,1:5]
+```
+
+# Approach 1: Posterior Difference
+The first approach
