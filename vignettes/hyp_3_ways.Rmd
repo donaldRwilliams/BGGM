@@ -15,9 +15,10 @@ vignette: >
 # Introduction
 On a Facebook methods group, there was a question about testing hypotheses in networks. In 
 the comments, it was suggested that **BGGM** could be used to test the hypothesis. And it turns
-out that **BGGM** really shines for testing exceptions or predictions. In this vignette, I demonstrate 
-three ways to go about testing the same hypothesis, which was essentially testing for a difference
-in the **sum** of partial correlations between groups.
+out that **BGGM** really shines for testing expectations [see for example @rodriguez2020formalizing]. 
+
+In this vignette, I demonstrate three ways to go about testing the same hypothesis, which is
+essentially testing for a difference in the **sum** of partial correlations between groups.
 
 ### R package
 ```{r, eval = FALSE, message=FALSE}
@@ -285,7 +286,7 @@ test
 ```
 
 
-Note the posterior hypothesis probability for the equality model is 0.825. The Bayes factor matrix then divides those values, for example, $BF_21$ indicates the data were 18 times more likely under $\mathcal{H}_2$ than $\mathcal{H}_1$. 
+Note the posterior hypothesis probability for the equality model is 0.825. The Bayes factor matrix then divides those values, for example, $BF_{21}$ indicates the data were 18 times more likely under $\mathcal{H}_2$ than $\mathcal{H}_1$. 
 
 ## Plot Hypothesis
 The hypothesis can be plotted
@@ -312,3 +313,6 @@ which results in a probability of 0.75 for $\mathcal{H}_2$ ($BF_{21} = 4.04$).
 
 # Conclusion
 Three approaches for testing the same hypothesis were demonstrated in this vignette. This highlights that any hypothesis can be tested in **BGGM** and in several ways. 
+
+
+# References

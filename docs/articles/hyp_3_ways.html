@@ -92,7 +92,8 @@
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
-<p>On a Facebook methods group, there was a question about testing hypotheses in networks. In the comments, it was suggested that <strong>BGGM</strong> could be used to test the hypothesis. And it turns out that <strong>BGGM</strong> really shines for testing exceptions or predictions. In this vignette, I demonstrate three ways to go about testing the same hypothesis, which was essentially testing for a difference in the <strong>sum</strong> of partial correlations between groups.</p>
+<p>On a Facebook methods group, there was a question about testing hypotheses in networks. In the comments, it was suggested that <strong>BGGM</strong> could be used to test the hypothesis. And it turns out that <strong>BGGM</strong> really shines for testing expectations <span class="citation">(see for example Rodriguez et al. 2020)</span>.</p>
+<p>In this vignette, I demonstrate three ways to go about testing the same hypothesis, which is essentially testing for a difference in the <strong>sum</strong> of partial correlations between groups.</p>
 <div id="r-package" class="section level3">
 <h3 class="hasAnchor">
 <a href="#r-package" class="anchor"></a>R package</h3>
@@ -334,7 +335,7 @@ Y_females &lt;- subset(Y, gender == 2, select = -c(education, gender))[,1:5]</co
 <span class="co">#&gt; H3 0.351 0.055  1.000</span>
 <span class="co">#&gt; --- </span>
 <span class="co">#&gt; note: equal hypothesis prior probabilities</span></pre></body></html></div>
-<p>Note the posterior hypothesis probability for the equality model is 0.825. The Bayes factor matrix then divides those values, for example, <span class="math inline">\(BF_21\)</span> indicates the data were 18 times more likely under <span class="math inline">\(\mathcal{H}_2\)</span> than <span class="math inline">\(\mathcal{H}_1\)</span>.</p>
+<p>Note the posterior hypothesis probability for the equality model is 0.825. The Bayes factor matrix then divides those values, for example, <span class="math inline">\(BF_{21}\)</span> indicates the data were 18 times more likely under <span class="math inline">\(\mathcal{H}_2\)</span> than <span class="math inline">\(\mathcal{H}_1\)</span>.</p>
 </div>
 <div id="plot-hypothesis" class="section level2">
 <h2 class="hasAnchor">
@@ -361,6 +362,15 @@ Y_females &lt;- subset(Y, gender == 2, select = -c(education, gender))[,1:5]</co
 <h1 class="hasAnchor">
 <a href="#conclusion" class="anchor"></a>Conclusion</h1>
 <p>Three approaches for testing the same hypothesis were demonstrated in this vignette. This highlights that any hypothesis can be tested in <strong>BGGM</strong> and in several ways.</p>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1 class="hasAnchor">
+<a href="#references" class="anchor"></a>References</h1>
+<div id="refs" class="references">
+<div id="ref-rodriguez2020formalizing">
+<p>Rodriguez, Josue E, Donald R Williams, Philippe Rast, and Joris Mulder. 2020. “On Formalizing Theoretical Expectations: Bayesian Testing of Central Structures in Psychological Networks.” <em>PsyArXiv</em>.</p>
+</div>
+</div>
 </div>
   </div>
 
