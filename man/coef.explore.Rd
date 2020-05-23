@@ -4,12 +4,14 @@
 \alias{coef.explore}
 \title{Compute Regression Parameters for \code{explore} Objects}
 \usage{
-\method{coef}{explore}(object, iter = NULL, ...)
+\method{coef}{explore}(object, iter = NULL, progress = TRUE, ...)
 }
 \arguments{
 \item{object}{An Object of class \code{explore}.}
 
 \item{iter}{Number of iterations (posterior samples; defaults to the number in the object).}
+
+\item{progress}{Logical. Should a progress bar be included (defaults to \code{TRUE}) ?}
 
 \item{...}{Currently ignored.}
 }
@@ -32,6 +34,7 @@ There is a direct correspondence between the inverse covariance matrix and
 \examples{
 \donttest{
 # note: iter = 250 for demonstrative purposes
+
 # data
 Y <- ptsd[,1:4]
 
@@ -46,7 +49,7 @@ fit <- explore(Y + 1,
                progress = FALSE)
 
 # summarize the partial correlations
-reg <- coef(fit)
+reg <- coef(fit, progress = FALSE)
 
 # summary
 summ <- summary(reg)
