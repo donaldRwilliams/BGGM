@@ -47,8 +47,9 @@ Y_females <- subset(Y, gender == 2, select = -c(education, gender))[,1:5]
 ```
 
 # Approach 1: Posterior Difference
-The first approach is rather straightforward, with the caveat that the method needs to be implemented by the user
-Note that I could certainly implement this in **BGGM**, assuming there is enough interest. Please make a feature request [here](https://github.com/donaldRwilliams/BGGM/issues).
+The first approach is rather straightforward, with the caveat that the method needs to be 
+implemented by the user. Note that I could certainly implement this in **BGGM**, assuming there 
+is enough interest. Please make a feature request [here](https://github.com/donaldRwilliams/BGGM/issues).
 
 ## Hypothesis
 The hypothesis was that a sum of relations was larger in one group, for example,
@@ -169,7 +170,9 @@ f <- function(Yg1, Yg2){
 }
 ```
 
-Note that the function takes two data matrices and then returns a single value.
+Note that the function takes two data matrices and then returns a single value. 
+Also, the default in **BGGM** does not require a custom function 
+(only needs the data from each group).
 
 ## Predictive Check
 The next step is to compute the observed difference and then perform the check.
@@ -286,7 +289,7 @@ test
 ```
 
 
-Note the posterior hypothesis probability for the equality model is 0.825. The Bayes factor matrix then divides those values, for example, $BF_{21}$ indicates the data were 18 times more likely under $\mathcal{H}_2$ than $\mathcal{H}_1$. 
+Note the posterior hypothesis probability for the equality model is 0.825. The Bayes factor matrix then divides those values, for example, $BF_{21}$ indicates the data were about 6 times more likely under $\mathcal{H}_2$ than $\mathcal{H}_1$. 
 
 ## Plot Hypothesis
 The hypothesis can be plotted

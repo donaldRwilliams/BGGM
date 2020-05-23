@@ -123,7 +123,7 @@ Y_females &lt;- subset(Y, gender == 2, select = -c(education, gender))[,1:5]</co
 <div id="approach-1-posterior-difference" class="section level1">
 <h1 class="hasAnchor">
 <a href="#approach-1-posterior-difference" class="anchor"></a>Approach 1: Posterior Difference</h1>
-<p>The first approach is rather straightforward, with the caveat that the method needs to be implemented by the user Note that I could certainly implement this in <strong>BGGM</strong>, assuming there is enough interest. Please make a feature request <a href="https://github.com/donaldRwilliams/BGGM/issues">here</a>.</p>
+<p>The first approach is rather straightforward, with the caveat that the method needs to be implemented by the user. Note that I could certainly implement this in <strong>BGGM</strong>, assuming there is enough interest. Please make a feature request <a href="https://github.com/donaldRwilliams/BGGM/issues">here</a>.</p>
 <div id="hypothesis" class="section level2">
 <h2 class="hasAnchor">
 <a href="#hypothesis" class="anchor"></a>Hypothesis</h2>
@@ -230,7 +230,7 @@ Y_females &lt;- subset(Y, gender == 2, select = -c(education, gender))[,1:5]</co
   <span class="no">sum1</span> - <span class="no">sum2</span>
 
 }</pre></body></html></div>
-<p>Note that the function takes two data matrices and then returns a single value.</p>
+<p>Note that the function takes two data matrices and then returns a single value. Also, the default in <strong>BGGM</strong> does not require a custom function (only needs the data from each group).</p>
 </div>
 <div id="predictive-check" class="section level2">
 <h2 class="hasAnchor">
@@ -335,7 +335,7 @@ Y_females &lt;- subset(Y, gender == 2, select = -c(education, gender))[,1:5]</co
 <span class="co">#&gt; H3 0.351 0.055  1.000</span>
 <span class="co">#&gt; --- </span>
 <span class="co">#&gt; note: equal hypothesis prior probabilities</span></pre></body></html></div>
-<p>Note the posterior hypothesis probability for the equality model is 0.825. The Bayes factor matrix then divides those values, for example, <span class="math inline">\(BF_{21}\)</span> indicates the data were 18 times more likely under <span class="math inline">\(\mathcal{H}_2\)</span> than <span class="math inline">\(\mathcal{H}_1\)</span>.</p>
+<p>Note the posterior hypothesis probability for the equality model is 0.825. The Bayes factor matrix then divides those values, for example, <span class="math inline">\(BF_{21}\)</span> indicates the data were about 6 times more likely under <span class="math inline">\(\mathcal{H}_2\)</span> than <span class="math inline">\(\mathcal{H}_1\)</span>.</p>
 </div>
 <div id="plot-hypothesis" class="section level2">
 <h2 class="hasAnchor">
