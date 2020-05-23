@@ -307,7 +307,7 @@ test$out_hyp_prob
 
 #> 0.18523406 0.74906147 0.06570447
 ```
-which results in a probability of 0.75 for $\mathcal{H}_1$ ($BF_{12} = 4.04$).
+which results in a probability of 0.75 for $\mathcal{H}_2$ ($BF_{21} = 4.04$).
 
 
 # Conclusion
