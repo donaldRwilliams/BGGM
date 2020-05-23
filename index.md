@@ -95,7 +95,7 @@ Furthermore, there are plotting functions for each method, control
 variables can be included in the model (e.g., `~ gender`), and there is
 support for missing values (see `bggm_missing`).
 
-## Supported Data Types
+## <i class="fas fa-clipboard-list"></i> Supported Data Types
 
   - **Continuous**: The continuous method was described in Williams
     (2018). Note that this is based on the customary [Wishart
@@ -116,7 +116,7 @@ support for missing values (see `bggm_missing`).
     Note that this can be used for *only* ordinal data (not restricted
     to “mixed” data).
 
-## Illustrative Examples
+## <i class="fas fa-external-link-square-alt"></i> Illustrative Examples
 
 There are several examples in the
 [Vignettes](https://donaldrwilliams.github.io/BGGM/articles/) section.
@@ -128,7 +128,7 @@ ordinal, binary, etc.) variables. **BGGM** (as of version `2.0.0`) can
 readily be used for these kinds of data. In this example, a model is
 fitted for the `gss` data in **BGGM**.
 
-### Visualize
+### <i class="fas fa-terminal"></i> Visualize
 
 The data are first visualized with the **psych** package, which readily
 shows the data are “mixed”.
@@ -147,7 +147,7 @@ psych::multi.hist(Y, density = FALSE)
 
 ![](man/figures/index_hist.png)
 
-### Fit Model
+### <i class="fas fa-terminal"></i> Fit Model
 
 A Gaussian copula graphical model is estimated as follows
 
@@ -159,7 +159,7 @@ fit <- estimate(Y, type = "mixed")
 `type` is a misnomer, as the data can consist of *only* ordinal
 variables (for example).
 
-### Summarize Relations
+### <i class="fas fa-terminal"></i> Summarize Relations
 
 The estimated relations are summarized with
 
@@ -213,7 +213,7 @@ plot(summary(fit))
 
 ![](man/figures/index_summ.png)
 
-### Graph Selection
+### <i class="fas fa-terminal"></i> Graph Selection
 
 The graph is selected and plotted with
 
@@ -229,7 +229,7 @@ plot(E, node_size = 12,
 The Bayes factor testing approach is readily implemented by changing
 `estimate` to `explore`.
 
-## References
+## <i class="fas fa-pen-square"></i> References
 
 <div id="refs" class="references">
 
