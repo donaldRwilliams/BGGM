@@ -121,7 +121,7 @@ support for missing values (see `bggm_missing`).
 ## Illustrative Examples
 
 There are several vignettes in the
-[Articles](https://donaldrwilliams.github.io/BGGM/articles/) section.
+[Vignettes](https://donaldrwilliams.github.io/BGGM/articles/) section.
 
 ## Basic Usage
 
