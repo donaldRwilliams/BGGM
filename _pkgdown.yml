@@ -23,7 +23,6 @@ navbar:
       href: reference/index.html
     - text: "News"
       href: news/index.html
-    - text: "dplyr"
 
 articles:
   - title: "Getting Started"
