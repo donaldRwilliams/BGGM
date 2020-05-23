@@ -95,7 +95,7 @@ Furthermore, there are plotting functions for each method, control
 variables can be included in the model (e.g., `~ gender`), and there is
 support for missing values (see `bggm_missing`).
 
-## <i class="fas fa-clipboard-list"></i> Supported Data Types
+## Supported Data Types
 
   - **Continuous**: The continuous method was described in Williams
     (2018). Note that this is based on the customary [Wishart
@@ -128,7 +128,7 @@ ordinal, binary, etc.) variables. **BGGM** (as of version `2.0.0`) can
 readily be used for these kinds of data. In this example, a model is
 fitted for the `gss` data in **BGGM**.
 
-### <i class="fas fa-terminal"></i> Visualize
+### Visualize
 
 The data are first visualized with the **psych** package, which readily
 shows the data are “mixed”.
@@ -147,7 +147,7 @@ psych::multi.hist(Y, density = FALSE)
 
 ![](man/figures/index_hist.png)
 
-### <i class="fas fa-terminal"></i> Fit Model
+### Fit Model
 
 A Gaussian copula graphical model is estimated as follows
 
@@ -159,7 +159,7 @@ fit <- estimate(Y, type = "mixed")
 `type` is a misnomer, as the data can consist of *only* ordinal
 variables (for example).
 
-### <i class="fas fa-terminal"></i> Summarize Relations
+### Summarize Relations
 
 The estimated relations are summarized with
 
@@ -213,7 +213,7 @@ plot(summary(fit))
 
 ![](man/figures/index_summ.png)
 
-### <i class="fas fa-terminal"></i> Graph Selection
+### Graph Selection
 
 The graph is selected and plotted with
 
