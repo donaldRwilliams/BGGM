@@ -23,3 +23,15 @@ navbar:
       href: reference/index.html
     - text: "News"
       href: news/index.html
+
+
+articles:
+  - title: "Getting Started"
+    desc: >
+      These vignettes provide an introduction to the various methods in **BGGM**.
+    contents:
+      - mcmc_diagnostics
+      - netplot
+      - netstat_custom
+      - ppc_custom
+      - predictability

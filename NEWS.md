@@ -1,5 +1,3 @@
-# BGGM (developmental version)
+# BGGM 1.0.0
 
-* Highlighting of empty expressions was restored (#1310)
-
-datra
+Initial CRAN release
