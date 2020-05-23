@@ -33,7 +33,7 @@ library(BGGM)
 ```
 
 ### Data
-For demonstrative purposed, I use the `bfi` data and test the hypotheses in males and females
+For demonstrative purposes, I use the `bfi` data and test the hypotheses in males and females
 
 ```
 # data

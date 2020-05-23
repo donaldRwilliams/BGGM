@@ -221,7 +221,8 @@ Yfemale <- subset(Y, gender == 2,
 # test hyp
 test <- ggm_compare_confirm(Ymale,  Yfemale,
                             hypothesis = hypothesis,
-                            iter = 250)
+                            iter = 250,
+                            progress = FALSE)
 
 # print (evidence not strong)
 test
@@ -236,7 +237,8 @@ test <- ggm_compare_confirm(Ymale,
                             Yfemale,
                             prior_sd = 0.1,
                             hypothesis = hypothesis,
-                            iter = 250)
+                            iter = 250,
+                            progress = FALSE)
 
 # print
 test
@@ -246,7 +248,8 @@ test <- ggm_compare_confirm(Ymale,
                             Yfemale,
                             prior_sd = 0.5,
                             hypothesis = hypothesis,
-                            iter = 250)
+                            iter = 250,
+                            progress = FALSE)
 
 # print
 test
@@ -264,7 +267,8 @@ test <- ggm_compare_confirm(Ymale,
                             Yfemale,
                             type = "mixed",
                             hypothesis = hypothesis,
-                            iter = 250)
+                            iter = 250,
+                            progress = FALSE)
 
 # print
 test
@@ -290,7 +294,8 @@ test <- ggm_compare_confirm(Ymale,
                              Yfemale,
                              formula = ~ education,
                              hypothesis = hypothesis,
-                             iter = 250)
+                             iter = 250,
+                             progress = FALSE)
 # print
 test
 
@@ -319,9 +324,13 @@ Yfemale <- subset(Y, gender == 2,
 test <- ggm_compare_confirm(Ymale,
                             Yfemale,
                              hypothesis = hypothesis,
-                             iter = 250)
+                             iter = 250,
+                             progress = FALSE)
 
 # print
 test
 }
+}
+\references{
+\insertAllCited{}
 }

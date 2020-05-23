@@ -46,14 +46,12 @@ fit <- estimate(Y, type = "binary",
                 progress = FALSE)
 
 # summarize the partial correlations
-
 reg <- coef(fit)
 
 # summary
 summ <- summary(reg)
 
 summ
-
 }
 }
 \references{
