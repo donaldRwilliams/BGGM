@@ -17,8 +17,8 @@ library(ggplot2)
 library(BGGM)
 ```
 
-# Bayesian Gaussian Graphical Models 
-<!-- <img src="man/figures/hex.png" align="right" alt="" width="150" /> -->
+# <i class="fas fa-headset"></i> Bayesian Gaussian Graphical Models 
+< img src="man/figures/logo.png" align="right" alt="" width="150" />
 
 
 <!-- badges: start -->
@@ -57,7 +57,7 @@ support for all data types. The developmental version is essentially
 
 
 
-## Overview
+## <i class="fas fa-terminal"></i> Overview
 The methods in **BGGM** build upon existing algorithms that are well-known in the literature.
 The central contribution of **BGGM** is to extend those approaches:
 
@@ -115,7 +115,7 @@ and there is support for missing values (see `bggm_missing`).
 
 
 ## Illustrative Examples
-There are several vignettes in the [Vignettes](https://donaldrwilliams.github.io/BGGM/articles/) section.
+There are several examples in the [Vignettes](https://donaldrwilliams.github.io/BGGM/articles/) section.
 
 ## Basic Usage
 It is common to have some combination of continuous and discrete (e.g., ordinal, binary, etc.) variables. **BGGM** (as of version `2.0.0`) can readily be used for these kinds of data. In this example, a model is fitted for the `gss` data in **BGGM**. 
