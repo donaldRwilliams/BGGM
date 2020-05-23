@@ -1,10 +1,9 @@
 
-# <i class="fas fa-headphones"></i> Bayesian Gaussian Graphical Models <img src="man/figures/logo.png" align="right" alt="" width="150" />
+# Bayesian Gaussian Graphical Models <img src="man/figures/logo.png" align="right" alt="" width="150" />
 
 <!-- badges: start -->
 
-[![CRAN
-Version](http://www.r-pkg.org/badges/version/BGGM)](https://cran.r-project.org/package=BGGM)
+[![CRAN Version](http://www.r-pkg.org/badges/version/BGGM)](https://cran.r-project.org/package=BGGM)
 [![Downloads](https://cranlogs.r-pkg.org/badges/BGGM)](https://cran.r-project.org/package=BGGM)
 [![Build
 Status](https://travis-ci.org/donaldRwilliams/BGGM.svg?branch=master)](https://travis-ci.org/donaldRwilliams/BGGM)
