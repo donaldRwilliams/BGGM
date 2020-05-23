@@ -294,7 +294,7 @@ Y_females &lt;- subset(Y, gender == 2, select = -c(education, gender))[,1:5]</co
 <p>The hypothesis is easily translated to <code>R</code> code</p>
 <div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">hyp</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"g1_A1--A2 + g1_A1--A3 &gt; g2_A1--A2 + g2_A1--A3; 
           g1_A1--A2 + g1_A1--A3 = g2_A1--A2 + g2_A1--A3"</span>)</pre></body></html></div>
-<p>Note the <code>g1</code> indicates the group and <code>;</code> separates the hypotheses.</p>
+<p>Note the <code>g1</code> indicates the group and <code>;</code> separates the hypotheses. I again assume the data is Gaussian (although this can be changed to <code>type = "ordinal"</code> or <code>type = "mixed"</code>; see <a href="https://donaldrwilliams.github.io/BGGM/reference/ggm_compare_confirm.html">here</a>)</p>
 <div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="no">test</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/ggm_compare_confirm.html">ggm_compare_confirm</a></span>(<span class="no">Y_males</span>, <span class="no">Y_females</span>,
                             <span class="kw">hypothesis</span> <span class="kw">=</span> <span class="no">hyp</span>)
 

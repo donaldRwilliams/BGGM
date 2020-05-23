@@ -243,7 +243,8 @@ hyp <- c("g1_A1--A2 + g1_A1--A3 > g2_A1--A2 + g2_A1--A3;
           g1_A1--A2 + g1_A1--A3 = g2_A1--A2 + g2_A1--A3")
 ```
 
-Note the `g1` indicates the group and `;` separates the hypotheses.
+Note the `g1` indicates the group and `;` separates the hypotheses. I again assume the data is Gaussian 
+(although this can be changed to `type = "ordinal"` or `type = "mixed"`; see [here](https://donaldrwilliams.github.io/BGGM/reference/ggm_compare_confirm.html))
 
 ```r
 test <- ggm_compare_confirm(Y_males, Y_females, 
