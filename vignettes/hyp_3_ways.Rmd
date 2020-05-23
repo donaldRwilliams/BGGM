@@ -47,15 +47,15 @@ Y_females <- subset(Y, gender == 2, select = -c(education, gender))[,1:5]
 
 # Approach 1: Posterior Difference
 The first approach is rather straightforward, with the caveat that the method needs to be implemented by the user
-Note that I could certainly implement this in **BGGM**, assuming there is enough interest. Please make a feature request here.
+Note that I could certainly implement this in **BGGM**, assuming there is enough interest. Please make a feature request [here](https://github.com/donaldRwilliams/BGGM/issues).
 
 ## Hypothesis
 The hypothesis was that a sum of relations was larger in one group, for example,
 
 $$
 \begin{align}
-\mathcal{H}_0: (\rho^{male}_{A1--A2}\; + \; \rho^{female}_{A1--A3}) = (\rho^{female}_{A1--A2}\; + \; \rho^{female}_{A1--A3}) \\
-\mathcal{H}_1: (\rho^{male}_{A1--A2}\; + \; \rho^{female}_{A1--A3}) > (\rho^{female}_{A1--A2}\; + \; \rho^{female}_{A1--A3})
+\mathcal{H}_0: (\rho^{male}_{A1--A2}\; + \; \rho^{male}_{A1--A3}) = (\rho^{female}_{A1--A2}\; + \; \rho^{female}_{A1--A3}) \\
+\mathcal{H}_1: (\rho^{male}_{A1--A2}\; + \; \rho^{male}_{A1--A3}) > (\rho^{female}_{A1--A2}\; + \; \rho^{female}_{A1--A3})
 \end{align}
 $$
 Note that the hypothesis is related to the sum of relations, which is readily tested in **BGGM**. 
@@ -129,8 +129,8 @@ The next approach is based on a posterior predictive check. The hypothesis is es
 
 $$
 \begin{align}
-\mathcal{H}_0: (\rho^{male^{yrep}}_{A1--A2}\; + \; \rho^{female^{yrep}}_{A1--A3}) = (\rho^{female^{yrep}}_{A1--A2}\; + \; \rho^{female^{yrep}}_{A1--A3}) \\
-\mathcal{H}_1: (\rho^{male^{yrep}}_{A1--A2}\; + \; \rho^{female^{yrep}}_{A1--A3}) > (\rho^{female^{yrep}}_{A1--A2}\; + \; \rho^{female^{yrep}}_{A1--A3})
+\mathcal{H}_0: (\rho^{male^{yrep}}_{A1--A2}\; + \; \rho^{male^{yrep}}_{A1--A3}) = (\rho^{female^{yrep}}_{A1--A2}\; + \; \rho^{female^{yrep}}_{A1--A3}) \\
+\mathcal{H}_1: (\rho^{male^{yrep}}_{A1--A2}\; + \; \rho^{male^{yrep}}_{A1--A3}) > (\rho^{female^{yrep}}_{A1--A2}\; + \; \rho^{female^{yrep}}_{A1--A3})
 \end{align}
 $$
 where the only difference is $yrep$. See more details [here](https://donaldrwilliams.github.io/BGGM/articles/ppc_custom.html).
@@ -224,8 +224,8 @@ assessing the equality model, that is,
 
 $$
 \begin{align}
-\mathcal{H}_1&: (\rho^{male}_{A1--A2}\; + \; \rho^{female}_{A1--A3}) > (\rho^{female}_{A1--A2}\; + \; \rho^{female}_{A1--A3}) \\
-\mathcal{H}_2&: (\rho^{male}_{A1--A2}\; + \; \rho^{female}_{A1--A3}) = (\rho^{female}_{A1--A2}\; + \; \rho^{female}_{A1--A3}) \\
+\mathcal{H}_1&: (\rho^{male}_{A1--A2}\; + \; \rho^{male}_{A1--A3}) > (\rho^{female}_{A1--A2}\; + \; \rho^{female}_{A1--A3}) \\
+\mathcal{H}_2&: (\rho^{male}_{A1--A2}\; + \; \rho^{male}_{A1--A3}) = (\rho^{female}_{A1--A2}\; + \; \rho^{female}_{A1--A3}) \\
 \mathcal{H}_3&: \text{not} \; \mathcal{H}_1 \; \text{or} \; \mathcal{H}_2
 \end{align}
 $$

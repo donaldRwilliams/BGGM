@@ -122,15 +122,15 @@ Y_females &lt;- subset(Y, gender == 2, select = -c(education, gender))[,1:5]</co
 <div id="approach-1-posterior-difference" class="section level1">
 <h1 class="hasAnchor">
 <a href="#approach-1-posterior-difference" class="anchor"></a>Approach 1: Posterior Difference</h1>
-<p>The first approach is rather straightforward, with the caveat that the method needs to be implemented by the user Note that I could certainly implement this in <strong>BGGM</strong>, assuming there is enough interest. Please make a feature request here.</p>
+<p>The first approach is rather straightforward, with the caveat that the method needs to be implemented by the user Note that I could certainly implement this in <strong>BGGM</strong>, assuming there is enough interest. Please make a feature request <a href="https://github.com/donaldRwilliams/BGGM/issues">here</a>.</p>
 <div id="hypothesis" class="section level2">
 <h2 class="hasAnchor">
 <a href="#hypothesis" class="anchor"></a>Hypothesis</h2>
 <p>The hypothesis was that a sum of relations was larger in one group, for example,</p>
 <p><span class="math display">\[
 \begin{align}
-\mathcal{H}_0: (\rho^{male}_{A1--A2}\; + \; \rho^{female}_{A1--A3}) = (\rho^{female}_{A1--A2}\; + \; \rho^{female}_{A1--A3}) \\
-\mathcal{H}_1: (\rho^{male}_{A1--A2}\; + \; \rho^{female}_{A1--A3}) &gt; (\rho^{female}_{A1--A2}\; + \; \rho^{female}_{A1--A3})
+\mathcal{H}_0: (\rho^{male}_{A1--A2}\; + \; \rho^{male}_{A1--A3}) = (\rho^{female}_{A1--A2}\; + \; \rho^{female}_{A1--A3}) \\
+\mathcal{H}_1: (\rho^{male}_{A1--A2}\; + \; \rho^{male}_{A1--A3}) &gt; (\rho^{female}_{A1--A2}\; + \; \rho^{female}_{A1--A3})
 \end{align}
 \]</span> Note that the hypothesis is related to the sum of relations, which is readily tested in <strong>BGGM</strong>.</p>
 </div>
@@ -193,10 +193,10 @@ Y_females &lt;- subset(Y, gender == 2, select = -c(education, gender))[,1:5]</co
 <p>The next approach is based on a posterior predictive check. The hypothesis is essentially the same as above, but for the predictive distribution, that is,</p>
 <p><span class="math display">\[
 \begin{align}
-\mathcal{H}_0: (\rho^{male^{yrep}}_{A1--A2}\; + \; \rho^{female^{yrep}}_{A1--A3}) = (\rho^{female^{yrep}}_{A1--A2}\; + \; \rho^{female^{yrep}}_{A1--A3}) \\
-\mathcal{H}_1: (\rho^{male^{yrep}}_{A1--A2}\; + \; \rho^{female^{yrep}}_{A1--A3}) &gt; (\rho^{female^{yrep}}_{A1--A2}\; + \; \rho^{female^{yrep}}_{A1--A3})
+\mathcal{H}_0: (\rho^{male^{yrep}}_{A1--A2}\; + \; \rho^{male^{yrep}}_{A1--A3}) = (\rho^{female^{yrep}}_{A1--A2}\; + \; \rho^{female^{yrep}}_{A1--A3}) \\
+\mathcal{H}_1: (\rho^{male^{yrep}}_{A1--A2}\; + \; \rho^{male^{yrep}}_{A1--A3}) &gt; (\rho^{female^{yrep}}_{A1--A2}\; + \; \rho^{female^{yrep}}_{A1--A3})
 \end{align}
-\]</span> where the only difference is <span class="math inline">\(yrep\)</span>. See more details [here].</p>
+\]</span> where the only difference is <span class="math inline">\(yrep\)</span>. See more details <a href="https://donaldrwilliams.github.io/BGGM/articles/ppc_custom.html">here</a>.</p>
 <div id="define-function" class="section level2">
 <h2 class="hasAnchor">
 <a href="#define-function" class="anchor"></a>Define Function</h2>
@@ -281,8 +281,8 @@ Y_females &lt;- subset(Y, gender == 2, select = -c(education, gender))[,1:5]</co
 <p>The above approaches cannot provide evidence that the sum is equal. In other words, just because there was not a difference, this does not provide evidence for equality. The Bayes factor methods allow for formally assessing the equality model, that is,</p>
 <p><span class="math display">\[
 \begin{align}
-\mathcal{H}_1&amp;: (\rho^{male}_{A1--A2}\; + \; \rho^{female}_{A1--A3}) &gt; (\rho^{female}_{A1--A2}\; + \; \rho^{female}_{A1--A3}) \\
-\mathcal{H}_2&amp;: (\rho^{male}_{A1--A2}\; + \; \rho^{female}_{A1--A3}) = (\rho^{female}_{A1--A2}\; + \; \rho^{female}_{A1--A3}) \\
+\mathcal{H}_1&amp;: (\rho^{male}_{A1--A2}\; + \; \rho^{male}_{A1--A3}) &gt; (\rho^{female}_{A1--A2}\; + \; \rho^{female}_{A1--A3}) \\
+\mathcal{H}_2&amp;: (\rho^{male}_{A1--A2}\; + \; \rho^{male}_{A1--A3}) = (\rho^{female}_{A1--A2}\; + \; \rho^{female}_{A1--A3}) \\
 \mathcal{H}_3&amp;: \text{not} \; \mathcal{H}_1 \; \text{or} \; \mathcal{H}_2
 \end{align}
 \]</span></p>
