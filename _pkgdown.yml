@@ -34,5 +34,6 @@ articles:
       - netstat_custom
       - ppc_custom
       - predictability
+      - hyp_3_ways
 
 

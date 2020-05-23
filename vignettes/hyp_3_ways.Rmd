@@ -13,7 +13,7 @@ vignette: >
 ---
 
 # Introduction
-On a Facebook methods group, there was a question about testing hypotheses in network model. In 
+On a Facebook methods group, there was a question about testing hypotheses in networks. In 
 the comments, it was suggested that **BGGM** could be used to test the hypothesis. And it turns
 out that **BGGM** really shines for testing exceptions or predictions. In this vignette, I demonstrate 
 three ways to go about testing the same hypothesis, which was essentially testing for a difference
@@ -70,7 +70,7 @@ fit_female <- estimate(Y_females, seed = 2)
 # fit males
 fit_male <- estimate(Y_males, seed = 1)
 ```
-For an example, I used the default which is to assume the data is Gaussian. This can be chaged with `type = ` either `binary`, `ordinal`, or `mixed`.
+For an example, I used the default which is to assume the data is Gaussian. This can be changed with `type = ` either `binary`, `ordinal`, or `mixed`.
 
 ## Extract the Samples
 The next step is to extract the posterior samples for each relation
@@ -133,7 +133,7 @@ $$
 \mathcal{H}_1: (\rho^{male^{yrep}}_{A1--A2}\; + \; \rho^{female^{yrep}}_{A1--A3}) > (\rho^{female^{yrep}}_{A1--A2}\; + \; \rho^{female^{yrep}}_{A1--A3})
 \end{align}
 $$
-where the only difference is $yrep$. See more details here.
+where the only difference is $yrep$. See more details [here](https://donaldrwilliams.github.io/BGGM/articles/ppc_custom.html).
 
 ## Define Function
 The first step is to define a function to compute the difference in sums
@@ -218,30 +218,30 @@ plot(ppc)
 where the red is the critical region.
 
 # Approach 3: Bayesian Hypothesis testing
-The above approaches cannot provide evidence that the sum is equal. In other workds, just because there was 
+The above approaches cannot provide evidence that the sum is equal. In other words, just because there was 
 not a difference, this does not provide evidence for equality. The Bayes factor methods allow for formally 
-asssessing the equality model, that is,
+assessing the equality model, that is,
 
 $$
 \begin{align}
-\mathcal{H}_1&: (\rho^{male}_{A1--A2}\; + \; \rho^{female}_{A1--A3}) = (\rho^{female}_{A1--A2}\; + \; \rho^{female}_{A1--A3}) \\
+\mathcal{H}_1&: (\rho^{male}_{A1--A2}\; + \; \rho^{female}_{A1--A3}) > (\rho^{female}_{A1--A2}\; + \; \rho^{female}_{A1--A3}) \\
 \mathcal{H}_2&: (\rho^{male}_{A1--A2}\; + \; \rho^{female}_{A1--A3}) = (\rho^{female}_{A1--A2}\; + \; \rho^{female}_{A1--A3}) \\
 \mathcal{H}_3&: \text{not} \; \mathcal{H}_1 \; \text{or} \; \mathcal{H}_2
 \end{align}
 $$
 
-where $\matchal{H}_3$ is the complement and can be understood as neither the fist or second hypothesis.
+where $\mathcal{H}_3$ is the complement and can be understood as neither the fist or second hypothesis.
 
 ## Test Hypothesis 
 This above hypothesis is readily tested
 ```r
 hyp <- c("g1_A1--A2 + g1_A1--A3 > g2_A1--A2 + g2_A1--A3; 
           g1_A1--A2 + g1_A1--A3 = g2_A1--A2 + g2_A1--A3")
-          ```
+```
 
-Note the `g1` indicates the group and `;` seperates the hypotheses.
+Note the `g1` indicates the group and `;` separates the hypotheses.
 
-```{r}
+```r
 test <- ggm_compare_confirm(Y_males, Y_females, 
                             hypothesis = hyp)
 
@@ -311,5 +311,4 @@ which results in a probability of 0.75 for $\mathcal{H}_1$ ($BF_{12} = 4.04$).
 
 
 # Conclusion
-Three approaches for testing the same hypothesis were demonstrated in this vignette--any hypothesis can be tested in 
-**BGGM** and in several ways. 
+Three approaches for testing the same hypothesis were demonstrated in this vignette. This highlights that any hypothesis can be tested in **BGGM** and in several ways. 

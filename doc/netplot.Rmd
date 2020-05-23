@@ -130,7 +130,7 @@ plot(E,
 ```
 ![](../man/figures/netplot_3.png)
 
-# Hypothesis Testing
+# Bayesian Hypothesis Testing
 The Bayesian hypothesis testing methods offer several advantages, for example, that 
 evidence for the null hypothesis of conditional independence is formally evaluated. 
 As a result, the `explore` method in **BGGM** provides plots for both the conditional 
@@ -146,7 +146,7 @@ fit <- explore(Y)
 E <- select(fit, BF_cut = 3)
 ```
 
-The plot the resits. Note that there are three plots, so the package **cowplot** is used
+Then plot the results. Note that there are three plots, so the package **cowplot** is used
 to combine them into one plot.
 
 ```r
@@ -172,7 +172,7 @@ rel_widths = c(1, 1, 1.1)
 ![](../man/figures/hyp_plot.png)
 
 As can be seen, there is not evidence for conditional independence for any of the relations. And
-the ambiguous network makes clear there is large uncertainty as to what or what might not be the "true" network structure. This basic idea, that is, having three adjacency matrices, was proposed in @Williams2019_bf.
+the ambiguous network makes clear there is large uncertainty as to what or what might not be the "true" network structure. This basic idea of having three adjacency matrices was proposed in @Williams2019_bf.
 
 
 # Note
