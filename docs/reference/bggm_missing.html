@@ -151,7 +151,7 @@ options are <code>"estimate"</code> and <code>"explore"</code>.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>an object of class <code>estimate</code> or <code>explore</code></p>
+    <p>An object of class <code>estimate</code> or <code>explore</code></p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>Currently, <strong>BGGM</strong> is compatible with the package <code><a href='http://stefvanbuuren.github.io/mice/reference/mice.html'>mice</a></code> for handling
@@ -171,15 +171,14 @@ options are <code>"estimate"</code> and <code>"explore"</code>.</p></td>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
 <span class='co'># note: iter = 250 for demonstrative purposes</span>
 
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>mice</span>)</div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: 'mice'</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:base':</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    cbind, rbind</span></div><div class='input'>
+<span class='co'># need this package</span>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>mice</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
 <span class='co'># data</span>
-<span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='no'>ptsd</span>
+<span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='no'>ptsd</span>[,<span class='fl'>1</span>:<span class='fl'>5</span>]
 
 <span class='co'># matrix for indices</span>
-<span class='no'>mat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>0</span>, <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>221</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>20</span>)
+<span class='no'>mat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>0</span>, <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>221</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>5</span>)
 
 <span class='co'># indices</span>
 <span class='no'>indices</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='no'>mat</span> <span class='kw'>==</span> <span class='fl'>0</span>, <span class='kw'>arr.ind</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
@@ -196,15 +195,20 @@ options are <code>"estimate"</code> and <code>"explore"</code>.</p></td>
 <span class='co'># rank based parital correlations</span>
 
 <span class='co'># estimate the model</span>
-<span class='no'>fit_est</span> <span class='kw'>&lt;-</span>  <span class='fu'>bggm_missing</span>(<span class='no'>x</span>, <span class='kw'>type</span> <span class='kw'>=</span>  <span class='st'>"mixed"</span>,
-                         <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>)</div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='input'>
+<span class='no'>fit_est</span> <span class='kw'>&lt;-</span>  <span class='fu'>bggm_missing</span>(<span class='no'>x</span>,
+                         <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"estimate"</span>,
+                         <span class='kw'>type</span> <span class='kw'>=</span>  <span class='st'>"mixed"</span>,
+                         <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>,
+                         <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
 <span class='co'># select edge set</span>
 <span class='no'>E</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='select.html'>select</a></span>(<span class='no'>fit_est</span>)
 
 <span class='co'># plot E</span>
-<span class='no'>plt_E</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>E</span>)
+<span class='no'>plt_E</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>E</span>)$<span class='no'>plt</span>
 
-<span class='co'># }</span></div></pre>
+<span class='no'>plt_E</span></div><div class='img'><img src='bggm_missing-1.png' alt='' width='700' height='433' /></div><div class='input'># }
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
