@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Donny Williams" />
+
+
+<title>Custom Network Comparisons</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Custom Network Comparisons</h1>
+<h4 class="author">Donny Williams</h4>
+<h4 class="date">5/19/2020</h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#background">Background</a></li>
+<li><a href="#basic-idea">Basic Idea</a><ul>
+<li><a href="#r-packages">R packages</a></li>
+<li><a href="#data">Data</a></li>
+</ul></li>
+<li><a href="#illustrative-examples">Illustrative Examples</a><ul>
+<li><a href="#correlation">Correlation</a><ul>
+<li><a href="#step-1-define-custom-function">Step 1: Define Custom Function</a></li>
+<li><a href="#step-2-compute-the-observed-score">Step 2: Compute the Observed Score</a></li>
+<li><a href="#step-3-predictive-check">Step 3: Predictive Check</a></li>
+</ul></li>
+<li><a href="#hamming-distance">Hamming Distance</a><ul>
+<li><a href="#step-1-define-custom-function-1">Step 1: Define Custom Function</a></li>
+<li><a href="#step-2-compute-the-observed-score-1">Step 2: Compute the Observed Score</a></li>
+<li><a href="#step-3-predictive-check-1">Step 3: Predictive Check</a></li>
+</ul></li>
+<li><a href="#partial-correlation-matrix-distance">Partial Correlation Matrix Distance</a><ul>
+<li><a href="#step-1-define-custom-function-2">Step 1: Define Custom Function</a></li>
+<li><a href="#step-2-compute-the-observed-score-2">Step 2: Compute the Observed Score</a></li>
+<li><a href="#step-3-predictive-check-2">Step 3: Predictive Check</a></li>
+</ul></li>
+<li><a href="#assortment">Assortment</a><ul>
+<li><a href="#step-1-define-custom-function-3">Step 1: Define Custom Function</a></li>
+<li><a href="#step-2-compute-the-observed-score-3">Step 2: Compute the Observed Score</a></li>
+<li><a href="#step-3-predictive-check-3">Step 3: Predictive Check</a></li>
+</ul></li>
+<li><a href="#expected-influence">Expected Influence</a><ul>
+<li><a href="#step-1-define-custom-function-4">Step 1: Define Custom Function</a></li>
+<li><a href="#step-2-compute-the-observed-score-4">Step 2: Compute the Observed Score</a></li>
+<li><a href="#step-3-predictive-check-4">Step 3: Predictive Check</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#two-notes-of-caution">Two Notes of Caution</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+<li><a href="#references">References</a></li>
+</ul>
+</div>
+
+<div id="background" class="section level1">
+<h1>Background</h1>
+<p>It is quite common to have partial correlation networks (GGMs) for various subgroups, say, males and females, a control and treatment group, or perhaps several educational levels. In this case, it is important to not only determine whether the groups are different, but actually compare the groups in a way that answers a specific question of interest.</p>
+<p>To date, most <code>R</code> packages provide a few ways to compare groups, including <strong>BGGM</strong> (version <code>1.0.0</code>). In version <code>2.0.0</code>, however, <strong>BGGM</strong> includes a new feature for the function <code>ggm_compare_ppc</code> that enables users to <strong>compare networks in any way they want</strong>.</p>
+</div>
+<div id="basic-idea" class="section level1">
+<h1>Basic Idea</h1>
+<p>The technical details of the approach are described in <span class="citation">(Williams et al. 2020)</span>. The basic idea is to</p>
+<ol style="list-style-type: decimal">
+<li><p>Draw samples from the posterior distribution, assuming the groups are equal (i.e., the “null” model).</p></li>
+<li><p>Generate the posterior <strong>predictive</strong> distribution for the chosen test-statistic (how the groups are being compared)</p>
+<ul>
+<li>This can be understood as what we would expect to observe in the future (e.g., in replication), assuming the groups were in fact equal.</li>
+</ul></li>
+<li><p>Compute the test-statistic for the observed groups.</p></li>
+<li><p>Then compare the observed test-statistic to the predictive distribution (what is expected under the “null” model).</p>
+<ul>
+<li>If the observed error is larger than the model assuming group equality, this suggests that the groups are different.</li>
+</ul></li>
+</ol>
+<p>In <strong>BGGM</strong>, the default is to compare the groups with respect to (symmetric) Kullback-Leibler divergence (i.e., “distance” between multivariate normal distributions) and the sum of squared error (for the partial correlation matrix). This was shown to be quite powerful in <span class="citation">Williams et al. (2020)</span>, while also having a low false positive rate.</p>
+<p>In the following, the focus is on defining custom functions and using them with <code>ggm_compare_ppc</code>. In all examples, post-traumatic stress disorder networks are compared <span class="citation">(Fried et al. 2018)</span>.</p>
+<div id="r-packages" class="section level3">
+<h3>R packages</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co"># need the developmental version</span></a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">&quot;remotes&quot;</span>)) { </a>
+<a class="sourceLine" id="cb1-3" title="3">  <span class="kw">install.packages</span>(<span class="st">&quot;remotes&quot;</span>)   </a>
+<a class="sourceLine" id="cb1-4" title="4">}   </a>
+<a class="sourceLine" id="cb1-5" title="5"></a>
+<a class="sourceLine" id="cb1-6" title="6"><span class="co"># install from github</span></a>
+<a class="sourceLine" id="cb1-7" title="7">remotes<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;donaldRwilliams/BGGM&quot;</span>)</a></code></pre></div>
+</div>
+<div id="data" class="section level3">
+<h3>Data</h3>
+<p>Only the correlation matrices are available. Hence, multivariate normal data is generated with that <em>exact</em> correlation structure via the <code>R</code> package <strong>MASS</strong>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co"># need these packages</span></a>
+<a class="sourceLine" id="cb2-2" title="2"><span class="kw">library</span>(BGGM)</a>
+<a class="sourceLine" id="cb2-3" title="3"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb2-4" title="4"><span class="kw">library</span>(assortnet)</a>
+<a class="sourceLine" id="cb2-5" title="5"><span class="kw">library</span>(networktools)</a>
+<a class="sourceLine" id="cb2-6" title="6"><span class="kw">library</span>(MASS)</a>
+<a class="sourceLine" id="cb2-7" title="7"></a>
+<a class="sourceLine" id="cb2-8" title="8"><span class="co"># group 1</span></a>
+<a class="sourceLine" id="cb2-9" title="9">Yg1 &lt;-<span class="st"> </span>MASS<span class="op">::</span><span class="kw">mvrnorm</span>(<span class="dt">n =</span> <span class="dv">926</span>, </a>
+<a class="sourceLine" id="cb2-10" title="10">                     <span class="dt">mu =</span> <span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">16</span>), </a>
+<a class="sourceLine" id="cb2-11" title="11">                     <span class="dt">Sigma =</span> ptsd_cor3, </a>
+<a class="sourceLine" id="cb2-12" title="12">                     <span class="dt">empirical =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb2-13" title="13"></a>
+<a class="sourceLine" id="cb2-14" title="14"><span class="co"># group 2</span></a>
+<a class="sourceLine" id="cb2-15" title="15">Yg2 &lt;-<span class="st"> </span>MASS<span class="op">::</span><span class="kw">mvrnorm</span>(<span class="dt">n =</span> <span class="dv">956</span>, </a>
+<a class="sourceLine" id="cb2-16" title="16">                     <span class="dt">mu =</span> <span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">16</span>), </a>
+<a class="sourceLine" id="cb2-17" title="17">                     <span class="dt">Sigma =</span> ptsd_cor4, </a>
+<a class="sourceLine" id="cb2-18" title="18">                     <span class="dt">empirical =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+</div>
+</div>
+<div id="illustrative-examples" class="section level1">
+<h1>Illustrative Examples</h1>
+<div id="correlation" class="section level2">
+<h2>Correlation</h2>
+<p>This first example looks at the correlation between partial correlations of the two networks. Note that it could be two networks have what is considered a large correlation. However, the question here is, assuming the groups are equal, just how large should the correlation be? This is needed to interpret the observed test-statistic.</p>
+<div id="step-1-define-custom-function" class="section level3">
+<h3>Step 1: Define Custom Function</h3>
+<p>The first step is to define a custom function that takes two data matrices and the output is the chosen test-statistic (in this case a correlation)</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">f &lt;-<span class="st"> </span><span class="cf">function</span>(Yg1, Yg2){</a>
+<a class="sourceLine" id="cb3-2" title="2">  <span class="co"># number of nodes</span></a>
+<a class="sourceLine" id="cb3-3" title="3">  p &lt;-<span class="st"> </span><span class="kw">ncol</span>(Yg1)</a>
+<a class="sourceLine" id="cb3-4" title="4">  </a>
+<a class="sourceLine" id="cb3-5" title="5">  <span class="co"># index of off-diagonal</span></a>
+<a class="sourceLine" id="cb3-6" title="6">  indices &lt;-<span class="st"> </span><span class="kw">upper.tri</span>( <span class="kw">diag</span>(p))</a>
+<a class="sourceLine" id="cb3-7" title="7">  </a>
+<a class="sourceLine" id="cb3-8" title="8">  <span class="co"># group 1:</span></a>
+<a class="sourceLine" id="cb3-9" title="9">  <span class="co"># fit model</span></a>
+<a class="sourceLine" id="cb3-10" title="10">  g1_fit &lt;-<span class="st"> </span><span class="kw">estimate</span>(Yg1, <span class="dt">analytic =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb3-11" title="11">  <span class="co"># pcors</span></a>
+<a class="sourceLine" id="cb3-12" title="12">  g1_pcors &lt;-<span class="st"> </span><span class="kw">pcor_mat</span>(g1_fit)[indices]</a>
+<a class="sourceLine" id="cb3-13" title="13">  </a>
+<a class="sourceLine" id="cb3-14" title="14">  <span class="co"># group 2</span></a>
+<a class="sourceLine" id="cb3-15" title="15">  <span class="co"># fit model</span></a>
+<a class="sourceLine" id="cb3-16" title="16">  g2_fit &lt;-<span class="st"> </span><span class="kw">estimate</span>(Yg2, <span class="dt">analytic =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb3-17" title="17">  <span class="co"># pcors</span></a>
+<a class="sourceLine" id="cb3-18" title="18">  g2_pcors &lt;-<span class="st"> </span><span class="kw">pcor_mat</span>(g2_fit)[indices]</a>
+<a class="sourceLine" id="cb3-19" title="19">  </a>
+<a class="sourceLine" id="cb3-20" title="20">  <span class="co"># test-statistic</span></a>
+<a class="sourceLine" id="cb3-21" title="21">  <span class="kw">cor</span>(g1_pcors, g2_pcors)</a>
+<a class="sourceLine" id="cb3-22" title="22">  }</a></code></pre></div>
+</div>
+<div id="step-2-compute-the-observed-score" class="section level3">
+<h3>Step 2: Compute the Observed Score</h3>
+<p>The next step is to compute the observed test-statistic, that is, the correlation between the partial correlations.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">obs &lt;-<span class="st"> </span><span class="kw">f</span>(Yg1, Yg2)</a>
+<a class="sourceLine" id="cb4-2" title="2"></a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="co"># observed</span></a>
+<a class="sourceLine" id="cb4-4" title="4">obs</a></code></pre></div>
+<pre><code>## [1] 0.5399268</code></pre>
+</div>
+<div id="step-3-predictive-check" class="section level3">
+<h3>Step 3: Predictive Check</h3>
+<p>With the function, <code>f</code>, and the observed scores, <code>obs</code>, in hand, what is left is the predictive check</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">ppc &lt;-<span class="st"> </span>BGGM<span class="op">::</span><span class="kw">ggm_compare_ppc</span>(Yg1, Yg2, </a>
+<a class="sourceLine" id="cb6-2" title="2">                       <span class="dt">FUN =</span> f, </a>
+<a class="sourceLine" id="cb6-3" title="3">                       <span class="dt">custom_obs =</span> obs, </a>
+<a class="sourceLine" id="cb6-4" title="4">                       <span class="dt">iter =</span> <span class="dv">1000</span>, </a>
+<a class="sourceLine" id="cb6-5" title="5">                       <span class="dt">loss =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<p>Note that <code>loss = FALSE</code> controls how the p-value is computed. It is an indicator of whether the test-statistic is a “loss” (a bad thing). In this case, a large correlation is a good thing so it is set to <code>FALSE</code>. The results can then be printed</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">ppc</a></code></pre></div>
+<pre><code>## BGGM: Bayesian Gaussian Graphical Models 
+## --- 
+## Test: Global Predictive Check 
+## Posterior Samples: 1000 
+##   Group 1: 926 
+##   Group 2: 956 
+## Nodes:  16 
+## Relations: 120 
+## --- 
+## Call: 
+## BGGM::ggm_compare_ppc(Yg1, Yg2, iter = 1000, FUN = f, custom_obs = obs, 
+##     loss = FALSE)
+## --- 
+## Custom: 
+##  
+##    contrast custom.obs p.value
+##  Yg1 vs Yg2       0.54       0
+## ---</code></pre>
+<p>which shows the posterior predictive p-value is zero. This indicates that the observed correlation is lower than the entire predictive distribution (the distribution of correlations for future data, assuming group equality)</p>
+<p>and finally plot the results</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">plot</span>(ppc)</a></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>The density is the predictive distribution for the correlation. Recall that this is the correlation that we would expect, given the groups were actually the same, and the black point is the observed correlation. In this case, it seems quite clear that the “null model” is inadequate–the groups are apparently quite different.</p>
+</div>
+</div>
+<div id="hamming-distance" class="section level2">
+<h2>Hamming Distance</h2>
+<p>The next example is <a href="https://en.wikipedia.org/wiki/Hamming_distance">Hamming distance</a>, which, in this case, is the squared error for the adjacency matrices. It seems reasonable to think of this as a test for different network structures or patterns of zeros and ones.</p>
+<div id="step-1-define-custom-function-1" class="section level3">
+<h3>Step 1: Define Custom Function</h3>
+<p>The first step is to define a custom function that takes two data matrices and the output is the chosen test-statistic (in this case Hamming distance)</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">f &lt;-<span class="st"> </span><span class="cf">function</span>(Yg1, Yg2){</a>
+<a class="sourceLine" id="cb10-2" title="2">  <span class="co"># nodes</span></a>
+<a class="sourceLine" id="cb10-3" title="3">  p &lt;-<span class="st"> </span><span class="kw">ncol</span>(Yg1)</a>
+<a class="sourceLine" id="cb10-4" title="4">  </a>
+<a class="sourceLine" id="cb10-5" title="5">  <span class="co"># index of off-diagonal</span></a>
+<a class="sourceLine" id="cb10-6" title="6">  indices &lt;-<span class="st"> </span><span class="kw">upper.tri</span>( <span class="kw">diag</span>(p))</a>
+<a class="sourceLine" id="cb10-7" title="7"></a>
+<a class="sourceLine" id="cb10-8" title="8">  <span class="co"># fit models</span></a>
+<a class="sourceLine" id="cb10-9" title="9">  fit1 &lt;-<span class="st">  </span>BGGM<span class="op">::</span><span class="kw">estimate</span>(Yg1, <span class="dt">analytic =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb10-10" title="10">  fit2 &lt;-<span class="st">  </span>BGGM<span class="op">::</span><span class="kw">estimate</span>(Yg2, <span class="dt">analytic =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb10-11" title="11">  </a>
+<a class="sourceLine" id="cb10-12" title="12">  <span class="co"># select graphs</span></a>
+<a class="sourceLine" id="cb10-13" title="13">  sel1 &lt;-<span class="st"> </span>BGGM<span class="op">::</span><span class="kw">select</span>(fit1)</a>
+<a class="sourceLine" id="cb10-14" title="14">  sel2 &lt;-<span class="st"> </span>BGGM<span class="op">::</span><span class="kw">select</span>(fit2)</a>
+<a class="sourceLine" id="cb10-15" title="15">  </a>
+<a class="sourceLine" id="cb10-16" title="16">  <span class="co"># hamming distance</span></a>
+<a class="sourceLine" id="cb10-17" title="17">  <span class="kw">sum</span>((sel1<span class="op">$</span>adj[indices] <span class="op">-</span><span class="st"> </span>sel2<span class="op">$</span>adj[indices]) <span class="op">^</span><span class="st"> </span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb10-18" title="18">}</a></code></pre></div>
+</div>
+<div id="step-2-compute-the-observed-score-1" class="section level3">
+<h3>Step 2: Compute the Observed Score</h3>
+<p>The next step is to compute the observed test-statistic, that is, the Hamming distance between adjacency matrices</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">obs &lt;-<span class="st"> </span><span class="kw">f</span>(Yg1, Yg2)</a>
+<a class="sourceLine" id="cb11-2" title="2"></a>
+<a class="sourceLine" id="cb11-3" title="3"><span class="co"># observed</span></a>
+<a class="sourceLine" id="cb11-4" title="4">obs</a></code></pre></div>
+<pre><code>## [1] 60</code></pre>
+</div>
+<div id="step-3-predictive-check-1" class="section level3">
+<h3>Step 3: Predictive Check</h3>
+<p>With the function, <code>f</code>, and the observed scores, <code>obs</code>, in hand, what is left is the predictive check</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1">ppc &lt;-<span class="st"> </span>BGGM<span class="op">::</span><span class="kw">ggm_compare_ppc</span>(Yg1, Yg2, </a>
+<a class="sourceLine" id="cb13-2" title="2">                       <span class="dt">FUN =</span> f, </a>
+<a class="sourceLine" id="cb13-3" title="3">                       <span class="dt">custom_obs =</span> obs, </a>
+<a class="sourceLine" id="cb13-4" title="4">                       <span class="dt">iter =</span> <span class="dv">1000</span>)</a></code></pre></div>
+<p>The results can then be printed</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">ppc</a></code></pre></div>
+<pre><code>## BGGM: Bayesian Gaussian Graphical Models 
+## --- 
+## Test: Global Predictive Check 
+## Posterior Samples: 1000 
+##   Group 1: 926 
+##   Group 2: 956 
+## Nodes:  16 
+## Relations: 120 
+## --- 
+## Call: 
+## BGGM::ggm_compare_ppc(Yg1, Yg2, iter = 1000, FUN = f, custom_obs = obs)
+## --- 
+## Custom: 
+##  
+##    contrast custom.obs p.value
+##  Yg1 vs Yg2         60       0
+## ---</code></pre>
+<p>And then plot the results</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="kw">plot</span>(ppc)</a></code></pre></div>
+<pre><code>## $plot_custom</code></pre>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>This result is intriguing. Whereas the correlation looked at the relation between partial correlation, here there seems to be evidence that the adjacency matrices are different (perhaps suggesting that the conditional independence structure is different).</p>
+</div>
+</div>
+<div id="partial-correlation-matrix-distance" class="section level2">
+<h2>Partial Correlation Matrix Distance</h2>
+<p>There might also be interest in the so-called correlation matrix distance <span class="citation">(Herdin et al. 2005)</span>. This is also easily tested, in this case for the partial correlation matrix.</p>
+<div id="step-1-define-custom-function-2" class="section level3">
+<h3>Step 1: Define Custom Function</h3>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1">f &lt;-<span class="st"> </span><span class="cf">function</span>(Yg1, Yg2){</a>
+<a class="sourceLine" id="cb18-2" title="2">  <span class="co"># nodes</span></a>
+<a class="sourceLine" id="cb18-3" title="3">  p &lt;-<span class="st"> </span><span class="kw">ncol</span>(Yg1)</a>
+<a class="sourceLine" id="cb18-4" title="4">  </a>
+<a class="sourceLine" id="cb18-5" title="5">  <span class="co"># index of off-diagonal</span></a>
+<a class="sourceLine" id="cb18-6" title="6">  indices &lt;-<span class="st"> </span><span class="kw">upper.tri</span>( <span class="kw">diag</span>(p))</a>
+<a class="sourceLine" id="cb18-7" title="7"></a>
+<a class="sourceLine" id="cb18-8" title="8">  <span class="co"># fit models</span></a>
+<a class="sourceLine" id="cb18-9" title="9">  fit1 &lt;-<span class="st">  </span>BGGM<span class="op">::</span><span class="kw">estimate</span>(Yg1, <span class="dt">analytic =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb18-10" title="10">  fit2 &lt;-<span class="st">  </span>BGGM<span class="op">::</span><span class="kw">estimate</span>(Yg2, <span class="dt">analytic =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb18-11" title="11">  </a>
+<a class="sourceLine" id="cb18-12" title="12">  pcor1 &lt;-<span class="st"> </span>BGGM<span class="op">::</span><span class="kw">pcor_mat</span>(fit1) </a>
+<a class="sourceLine" id="cb18-13" title="13">  pcor2 &lt;-<span class="st"> </span>BGGM<span class="op">::</span><span class="kw">pcor_mat</span>(fit2)</a>
+<a class="sourceLine" id="cb18-14" title="14">  </a>
+<a class="sourceLine" id="cb18-15" title="15">  <span class="co"># CDM for partial correlations</span></a>
+<a class="sourceLine" id="cb18-16" title="16">  <span class="co"># note: numerator is the trace; denominator is the Frobenius norm</span></a>
+<a class="sourceLine" id="cb18-17" title="17">  <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>(<span class="kw">sum</span>(<span class="kw">diag</span>(pcor1 <span class="op">%*%</span><span class="st"> </span>pcor2)) <span class="op">/</span><span class="st"> </span>(<span class="kw">norm</span>(pcor1, <span class="dt">type =</span> <span class="st">&quot;f&quot;</span>) <span class="op">*</span><span class="st"> </span><span class="kw">norm</span>(pcor2, <span class="dt">type =</span> <span class="st">&quot;f&quot;</span>)))</a>
+<a class="sourceLine" id="cb18-18" title="18">}</a></code></pre></div>
+</div>
+<div id="step-2-compute-the-observed-score-2" class="section level3">
+<h3>Step 2: Compute the Observed Score</h3>
+<p>The next step is to compute the observed test-statistic, that is, the Partial Correlation Matrix Distance</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1">obs &lt;-<span class="st"> </span><span class="kw">f</span>(Yg1, Yg2)</a>
+<a class="sourceLine" id="cb19-2" title="2"></a>
+<a class="sourceLine" id="cb19-3" title="3"><span class="co"># observed</span></a>
+<a class="sourceLine" id="cb19-4" title="4">obs</a></code></pre></div>
+<pre><code>## [1] 0.3430489</code></pre>
+</div>
+<div id="step-3-predictive-check-2" class="section level3">
+<h3>Step 3: Predictive Check</h3>
+<p>With the function, <code>f</code>, and the observed scores, <code>obs</code>, in hand, what is left is the predictive check</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1">ppc &lt;-<span class="st"> </span>BGGM<span class="op">::</span><span class="kw">ggm_compare_ppc</span>(Yg1, Yg2, </a>
+<a class="sourceLine" id="cb21-2" title="2">                       <span class="dt">FUN =</span> f, </a>
+<a class="sourceLine" id="cb21-3" title="3">                       <span class="dt">custom_obs =</span> obs, </a>
+<a class="sourceLine" id="cb21-4" title="4">                       <span class="dt">iter =</span> <span class="dv">1000</span>)</a></code></pre></div>
+<p>The results can then be printed</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1">ppc</a></code></pre></div>
+<pre><code>## BGGM: Bayesian Gaussian Graphical Models 
+## --- 
+## Test: Global Predictive Check 
+## Posterior Samples: 1000 
+##   Group 1: 926 
+##   Group 2: 956 
+## Nodes:  16 
+## Relations: 120 
+## --- 
+## Call: 
+## BGGM::ggm_compare_ppc(Yg1, Yg2, iter = 1000, FUN = f, custom_obs = obs)
+## --- 
+## Custom: 
+##  
+##    contrast custom.obs p.value
+##  Yg1 vs Yg2      0.343       0
+## ---</code></pre>
+<p>which again provides a p-value of zero.</p>
+<p>Note that the object <code>ppc</code> includes the predictive samples that allows for user defined plots (in the event something custom is desired).</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1"><span class="kw">hist</span>(ppc<span class="op">$</span>predictive_custom, </a>
+<a class="sourceLine" id="cb24-2" title="2">     <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, obs), </a>
+<a class="sourceLine" id="cb24-3" title="3">     <span class="dt">main =</span> <span class="st">&quot;Partial Correlation Matrix Distance&quot;</span>)</a>
+<a class="sourceLine" id="cb24-4" title="4"><span class="kw">abline</span>(<span class="dt">v =</span> obs)</a></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>Note that the line is the observed which again makes it clear that the distance is quite surprising, assuming the null model were true.</p>
+</div>
+</div>
+<div id="assortment" class="section level2">
+<h2>Assortment</h2>
+<p>This next example is assortment <span class="citation">(Newman 2003)</span>, which is a measure related to clustering in a network. Here the test is for a difference in assortment. This is computed by taking the difference (absolute value) for each draw from the predictive distribution.</p>
+<div id="step-1-define-custom-function-3" class="section level3">
+<h3>Step 1: Define Custom Function</h3>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1"><span class="co"># clusters based on DSM-5</span></a>
+<a class="sourceLine" id="cb25-2" title="2">comms &lt;-<span class="st"> </span><span class="kw">c</span>(</a>
+<a class="sourceLine" id="cb25-3" title="3">  <span class="kw">rep</span>(<span class="st">&quot;A&quot;</span>, <span class="dv">4</span>),</a>
+<a class="sourceLine" id="cb25-4" title="4">  <span class="kw">rep</span>(<span class="st">&quot;B&quot;</span>, <span class="dv">7</span>),</a>
+<a class="sourceLine" id="cb25-5" title="5">  <span class="kw">rep</span>(<span class="st">&quot;C&quot;</span>, <span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb25-6" title="6">)</a>
+<a class="sourceLine" id="cb25-7" title="7"></a>
+<a class="sourceLine" id="cb25-8" title="8">f &lt;-<span class="st"> </span><span class="cf">function</span>(Yg1, Yg2){</a>
+<a class="sourceLine" id="cb25-9" title="9"></a>
+<a class="sourceLine" id="cb25-10" title="10">  fit1 &lt;-<span class="st">  </span>BGGM<span class="op">::</span><span class="kw">estimate</span>(Yg1, <span class="dt">analytic =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb25-11" title="11">  fit2 &lt;-<span class="st">  </span>BGGM<span class="op">::</span><span class="kw">estimate</span>(Yg2, <span class="dt">analytic =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb25-12" title="12"></a>
+<a class="sourceLine" id="cb25-13" title="13">  pcor1 &lt;-<span class="st"> </span>BGGM<span class="op">::</span><span class="kw">pcor_mat</span>(fit1)</a>
+<a class="sourceLine" id="cb25-14" title="14">  pcor2 &lt;-<span class="st"> </span>BGGM<span class="op">::</span><span class="kw">pcor_mat</span>(fit2)</a>
+<a class="sourceLine" id="cb25-15" title="15"></a>
+<a class="sourceLine" id="cb25-16" title="16">  assort1 &lt;-<span class="st"> </span>assortnet<span class="op">::</span><span class="kw">assortment.discrete</span>(pcor1, <span class="dt">types =</span> comms,</a>
+<a class="sourceLine" id="cb25-17" title="17">                                         <span class="dt">weighted =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb25-18" title="18">                                         <span class="dt">SE =</span> <span class="ot">FALSE</span>, <span class="dt">M =</span> <span class="dv">1</span>)<span class="op">$</span>r</a>
+<a class="sourceLine" id="cb25-19" title="19"></a>
+<a class="sourceLine" id="cb25-20" title="20">  assort2 &lt;-<span class="st"> </span>assortnet<span class="op">::</span><span class="kw">assortment.discrete</span>(pcor2, <span class="dt">types =</span> comms,</a>
+<a class="sourceLine" id="cb25-21" title="21">                                          <span class="dt">weighted =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb25-22" title="22">                                          <span class="dt">SE =</span> <span class="ot">FALSE</span>, <span class="dt">M =</span> <span class="dv">1</span>)<span class="op">$</span>r</a>
+<a class="sourceLine" id="cb25-23" title="23">  (assort1 <span class="op">-</span><span class="st"> </span>assort2)</a>
+<a class="sourceLine" id="cb25-24" title="24">}</a></code></pre></div>
+</div>
+<div id="step-2-compute-the-observed-score-3" class="section level3">
+<h3>Step 2: Compute the Observed Score</h3>
+<p>The next step is to compute the observed test-statistic, that is, assortment for the two groups</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1">obs &lt;-<span class="st"> </span><span class="kw">f</span>(Yg1, Yg2)</a>
+<a class="sourceLine" id="cb26-2" title="2"></a>
+<a class="sourceLine" id="cb26-3" title="3"><span class="co"># observed</span></a>
+<a class="sourceLine" id="cb26-4" title="4">obs</a></code></pre></div>
+<pre><code>## [1] 0.1915766</code></pre>
+</div>
+<div id="step-3-predictive-check-3" class="section level3">
+<h3>Step 3: Predictive Check</h3>
+<p>With the function, <code>f</code>, and the observed score, <code>obs</code>, in hand, the next step is the predictive check</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1">ppc &lt;-<span class="st"> </span>BGGM<span class="op">::</span><span class="kw">ggm_compare_ppc</span>(Yg1, Yg2, </a>
+<a class="sourceLine" id="cb28-2" title="2">                       <span class="dt">FUN =</span> f, </a>
+<a class="sourceLine" id="cb28-3" title="3">                       <span class="dt">custom_obs =</span> obs, </a>
+<a class="sourceLine" id="cb28-4" title="4">                       <span class="dt">iter =</span> <span class="dv">1000</span>)</a></code></pre></div>
+<p>The results can then be printed</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1">ppc</a></code></pre></div>
+<pre><code>## BGGM: Bayesian Gaussian Graphical Models 
+## --- 
+## Test: Global Predictive Check 
+## Posterior Samples: 1000 
+##   Group 1: 926 
+##   Group 2: 956 
+## Nodes:  16 
+## Relations: 120 
+## --- 
+## Call: 
+## BGGM::ggm_compare_ppc(Yg1, Yg2, iter = 1000, FUN = f, custom_obs = obs)
+## --- 
+## Custom: 
+##  
+##    contrast custom.obs p.value
+##  Yg1 vs Yg2      0.192       0
+## ---</code></pre>
+<p>and plotted</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1"><span class="kw">plot</span>(ppc)</a></code></pre></div>
+<pre><code>## $plot_custom</code></pre>
+<pre><code>## Picking joint bandwidth of 0.00661</code></pre>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>which shows that the clustering in the data appears to be different (given the observed value exceeds the entire predictive distribution).</p>
+</div>
+</div>
+<div id="expected-influence" class="section level2">
+<h2>Expected Influence</h2>
+<p>This last example looks at the expected influence for the network <span class="citation">(Robinaugh, Millner, and McNally 2016)</span>. In this case, the sum of squared error is the test statistic. This is computed from the squared error for each draw from the predictive distribution.</p>
+<div id="step-1-define-custom-function-4" class="section level3">
+<h3>Step 1: Define Custom Function</h3>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" title="1">f &lt;-<span class="st"> </span><span class="cf">function</span>(Yg1, Yg2){</a>
+<a class="sourceLine" id="cb34-2" title="2"></a>
+<a class="sourceLine" id="cb34-3" title="3">  fit1 &lt;-<span class="st">  </span>BGGM<span class="op">::</span><span class="kw">estimate</span>(Yg1, <span class="dt">analytic =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb34-4" title="4">  fit2 &lt;-<span class="st">  </span>BGGM<span class="op">::</span><span class="kw">estimate</span>(Yg2, <span class="dt">analytic =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb34-5" title="5"></a>
+<a class="sourceLine" id="cb34-6" title="6">  pcor1 &lt;-<span class="st"> </span>BGGM<span class="op">::</span><span class="kw">pcor_mat</span>(fit1)</a>
+<a class="sourceLine" id="cb34-7" title="7">  pcor2 &lt;-<span class="st"> </span>BGGM<span class="op">::</span><span class="kw">pcor_mat</span>(fit2)</a>
+<a class="sourceLine" id="cb34-8" title="8"></a>
+<a class="sourceLine" id="cb34-9" title="9">  ei1 &lt;-<span class="st"> </span>networktools<span class="op">::</span><span class="kw">expectedInf</span>(pcor1)<span class="op">$</span>step1</a>
+<a class="sourceLine" id="cb34-10" title="10"> </a>
+<a class="sourceLine" id="cb34-11" title="11">  ei2 &lt;-<span class="st"> </span>networktools<span class="op">::</span><span class="kw">expectedInf</span>(pcor2)<span class="op">$</span>step1</a>
+<a class="sourceLine" id="cb34-12" title="12">   <span class="kw">sum</span>((ei1 <span class="op">-</span><span class="st"> </span>ei2)<span class="op">^</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb34-13" title="13">}</a></code></pre></div>
+</div>
+<div id="step-2-compute-the-observed-score-4" class="section level3">
+<h3>Step 2: Compute the Observed Score</h3>
+<p>The next step is to compute the observed test-statistic, that is, the sum of squared error for expected influence</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1">obs &lt;-<span class="st"> </span><span class="kw">f</span>(Yg1, Yg2)</a>
+<a class="sourceLine" id="cb35-2" title="2"></a>
+<a class="sourceLine" id="cb35-3" title="3"><span class="co"># observed</span></a>
+<a class="sourceLine" id="cb35-4" title="4">obs</a></code></pre></div>
+<pre><code>## [1] 0.518462</code></pre>
+</div>
+<div id="step-3-predictive-check-4" class="section level3">
+<h3>Step 3: Predictive Check</h3>
+<p>With the function, <code>f</code>, and the observed scores, <code>obs</code>, in hand, what is left is the predictive check</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1">ppc &lt;-<span class="st"> </span>BGGM<span class="op">:::</span><span class="kw">ggm_compare_ppc</span>(Yg1, Yg2, </a>
+<a class="sourceLine" id="cb37-2" title="2">                       <span class="dt">FUN =</span> f, </a>
+<a class="sourceLine" id="cb37-3" title="3">                       <span class="dt">custom_obs =</span> obs, </a>
+<a class="sourceLine" id="cb37-4" title="4">                       <span class="dt">iter =</span> <span class="dv">1000</span>)</a></code></pre></div>
+<p>The results can then be printed</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" title="1">ppc</a></code></pre></div>
+<pre><code>## BGGM: Bayesian Gaussian Graphical Models 
+## --- 
+## Test: Global Predictive Check 
+## Posterior Samples: 1000 
+##   Group 1: 926 
+##   Group 2: 956 
+## Nodes:  16 
+## Relations: 120 
+## --- 
+## Call: 
+## BGGM:::ggm_compare_ppc(Yg1, Yg2, iter = 1000, FUN = f, custom_obs = obs)
+## --- 
+## Custom: 
+##  
+##    contrast custom.obs p.value
+##  Yg1 vs Yg2      0.518       0
+## ---</code></pre>
+<p>and plotted</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" title="1"><span class="kw">hist</span>(ppc<span class="op">$</span>predictive_custom, </a>
+<a class="sourceLine" id="cb40-2" title="2">    <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, obs),</a>
+<a class="sourceLine" id="cb40-3" title="3">     <span class="dt">main =</span> <span class="st">&quot;Expected Influence</span><span class="ch">\n</span><span class="st"> Sum of Squared Error&quot;</span>)</a>
+<a class="sourceLine" id="cb40-4" title="4"><span class="kw">abline</span>(<span class="dt">v =</span> obs)</a></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --> which again shows the sum of squared error for expected influence far exceeds what would be expected, assuming the null model were true.</p>
+</div>
+</div>
+</div>
+<div id="two-notes-of-caution" class="section level1">
+<h1>Two Notes of Caution</h1>
+<ol style="list-style-type: decimal">
+<li><p>Note that only the default in <strong>BGGM</strong> have been shown to have nominal error rates. However, there is a proof that suggests the error rate cannot be larger than <span class="math inline">\(2\alpha\)</span> <span class="citation">(Meng and others 1994)</span>, and, further, a predictive check is typically below <span class="math inline">\(\alpha\)</span> <span class="citation">(i.e., a tendency to be conservative, Gelman and others 2013)</span>.</p></li>
+<li><p>Failing to reject the null model does not indicate the groups are the same! To test for equality see <code>ggm_compare_explore</code> and <code>ggm_compare_confirm</code>.</p></li>
+</ol>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p>These example certainly open the door for tailoring network comparison to answer specific research questions.</p>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1>References</h1>
+<div id="refs" class="references">
+<div id="ref-fried2018replicability">
+<p>Fried, Eiko I, Marloes B Eidhof, Sabina Palic, Giulio Costantini, Hilde M Huisman-van Dijk, Claudi LH Bockting, Iris Engelhard, Cherie Armour, Anni BS Nielsen, and Karen-Inge Karstoft. 2018. “Replicability and Generalizability of Posttraumatic Stress Disorder (Ptsd) Networks: A Cross-Cultural Multisite Study of Ptsd Symptoms in Four Trauma Patient Samples.” <em>Clinical Psychological Science</em> 6 (3): 335–51.</p>
+</div>
+<div id="ref-gelman2013two">
+<p>Gelman, Andrew, and others. 2013. “Two Simple Examples for Understanding Posterior P-Values Whose Distributions Are Far from Uniform.” <em>Electronic Journal of Statistics</em> 7: 2595–2602.</p>
+</div>
+<div id="ref-herdin2005correlation">
+<p>Herdin, Markus, Nicolai Czink, Hüseyin Ozcelik, and Ernst Bonek. 2005. “Correlation Matrix Distance, a Meaningful Measure for Evaluation of Non-Stationary Mimo Channels.” In <em>2005 Ieee 61st Vehicular Technology Conference</em>, 1:136–40. IEEE.</p>
+</div>
+<div id="ref-meng1994posterior">
+<p>Meng, Xiao-Li, and others. 1994. “Posterior Predictive <span class="math inline">\(p\)</span>-Values.” <em>The Annals of Statistics</em> 22 (3): 1142–60.</p>
+</div>
+<div id="ref-newman2003mixing">
+<p>Newman, Mark EJ. 2003. “Mixing Patterns in Networks.” <em>Physical Review E</em> 67 (2): 026126.</p>
+</div>
+<div id="ref-robinaugh2016identifying">
+<p>Robinaugh, Donald J, Alexander J Millner, and Richard J McNally. 2016. “Identifying Highly Influential Nodes in the Complicated Grief Network.” <em>Journal of Abnormal Psychology</em> 125 (6): 747.</p>
+</div>
+<div id="ref-williams2020comparing">
+<p>Williams, Donald R., Philippe Rast, Luis R Pericchi, and Joris Mulder. 2020. “Comparing Gaussian Graphical Models with the Posterior Predictive Distribution and Bayesian Model Selection.” <em>Psychological Methods</em>.</p>
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
