@@ -17,8 +17,7 @@ library(ggplot2)
 library(BGGM)
 ```
 
-# <i class="fas fa-headset"></i> Bayesian Gaussian Graphical Models 
-< img src="man/figures/logo.png" align="right" alt="" width="150" />
+# <i class="fas fa-headset"></i> Bayesian Gaussian Graphical Models <img src="man/figures/logo.png" align="right" alt="" width="150" />
 
 
 <!-- badges: start -->
@@ -35,7 +34,7 @@ testing. The key distinction is that the former focuses on either the posterior 
 predictive distribution [@Gelman1996a; see section 5 in @rubin1984bayesianly], whereas the 
 latter focuses on model comparison with the Bayes factor [@Jeffreys1961; @Kass1995].
 
-## Installation
+## <i class="fas fa-cog"></i> Installation
 
 To install the latest release version (1.0.0) from CRAN use
 ```{r gh-installation, eval = FALSE}	
@@ -57,7 +56,7 @@ support for all data types. The developmental version is essentially
 
 
 
-## <i class="fas fa-terminal"></i> Overview
+##  Overview
 The methods in **BGGM** build upon existing algorithms that are well-known in the literature.
 The central contribution of **BGGM** is to extend those approaches:
 
@@ -117,7 +116,7 @@ and there is support for missing values (see `bggm_missing`).
 ## Illustrative Examples
 There are several examples in the [Vignettes](https://donaldrwilliams.github.io/BGGM/articles/) section.
 
-## Basic Usage
+## <i class="far fa-play-circle"></i>  Basic Usage
 It is common to have some combination of continuous and discrete (e.g., ordinal, binary, etc.) variables. **BGGM** (as of version `2.0.0`) can readily be used for these kinds of data. In this example, a model is fitted for the `gss` data in **BGGM**. 
 
 ### Visualize

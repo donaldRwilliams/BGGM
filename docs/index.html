@@ -83,16 +83,16 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="-bayesian-gaussian-graphical-models" class="section level1">
+<div id="-bayesian-gaussian-graphical-models-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#-bayesian-gaussian-graphical-models" class="anchor"></a><i class="fas fa-headset"></i> Bayesian Gaussian Graphical Models</h1></div>
-<p>&lt; img src=“man/figures/logo.png” align=“right” alt="" width=“150” /&gt;</p>
+<a href="#-bayesian-gaussian-graphical-models-" class="anchor"></a><i class="fas fa-headset"></i> Bayesian Gaussian Graphical Models <img src="reference/figures/logo.png" align="right" alt="" width="150">
+</h1></div>
 <!-- badges: start -->
-<p><a href="https://cran.r-project.org/package=BGGM"><img src="http://www.r-pkg.org/badges/version/BGGM" alt="CRAN Version"></a> <a href="https://cran.r-project.org/package=BGGM"><img src="https://cranlogs.r-pkg.org/badges/BGGM" alt="Downloads"></a> <a href="https://travis-ci.org/donaldRwilliams/BGGM"><img src="https://travis-ci.org/donaldRwilliams/BGGM.svg?branch=master" alt="Build Status"></a> <!-- badges: end --></p>
+
 <p>The <code>R</code> package <strong>BGGM</strong> provides tools for making Bayesian inference in Gaussian graphical models (GGM, Donald R Williams and Mulder 2020). The methods are organized around two general approaches for Bayesian inference: (1) estimation and (2) hypothesis testing. The key distinction is that the former focuses on either the posterior or posterior predictive distribution (Gelman, Meng, and Stern 1996; see section 5 in Rubin 1984), whereas the latter focuses on model comparison with the Bayes factor (Jeffreys 1961; Kass and Raftery 1995).</p>
-<div id="installation" class="section level2">
+<div id="-installation" class="section level2">
 <h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<a href="#-installation" class="anchor"></a><i class="fas fa-cog"></i> Installation</h2>
 <p>To install the latest release version (1.0.0) from CRAN use</p>
 <div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"BGGM"</span>)</pre></div>
 <p>The current developmental version can be installed with</p>
@@ -102,9 +102,9 @@
 <span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"donaldRwilliams/BGGM"</span>)</pre></div>
 <p>Note that the developmental version is recommended, due to the algorithms being written in <code>c++</code> and support for all data types. The developmental version is essentially <strong>BGGM</strong> version 2.0.0.</p>
 </div>
-<div id="-overview" class="section level2">
+<div id="overview" class="section level2">
 <h2 class="hasAnchor">
-<a href="#-overview" class="anchor"></a><i class="fas fa-terminal"></i> Overview</h2>
+<a href="#overview" class="anchor"></a>Overview</h2>
 <p>The methods in <strong>BGGM</strong> build upon existing algorithms that are well-known in the literature. The central contribution of <strong>BGGM</strong> is to extend those approaches:</p>
 <ol>
 <li>
@@ -155,9 +155,9 @@
 <a href="#illustrative-examples" class="anchor"></a>Illustrative Examples</h2>
 <p>There are several examples in the <a href="https://donaldrwilliams.github.io/BGGM/articles/">Vignettes</a> section.</p>
 </div>
-<div id="basic-usage" class="section level2">
+<div id="-basic-usage" class="section level2">
 <h2 class="hasAnchor">
-<a href="#basic-usage" class="anchor"></a>Basic Usage</h2>
+<a href="#-basic-usage" class="anchor"></a><i class="far fa-play-circle"></i> Basic Usage</h2>
 <p>It is common to have some combination of continuous and discrete (e.g., ordinal, binary, etc.) variables. <strong>BGGM</strong> (as of version <code>2.0.0</code>) can readily be used for these kinds of data. In this example, a model is fitted for the <code>gss</code> data in <strong>BGGM</strong>.</p>
 <div id="visualize" class="section level3">
 <h3 class="hasAnchor">
@@ -340,7 +340,15 @@
 </ul>
 </div>
 
-  </div>
+  <div class="dev-status">
+<h2>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://cran.r-project.org/package=BGGM"><img src="http://www.r-pkg.org/badges/version/BGGM" alt="CRAN Version"></a></li>
+<li><a href="https://cran.r-project.org/package=BGGM"><img src="https://cranlogs.r-pkg.org/badges/BGGM" alt="Downloads"></a></li>
+<li><a href="https://travis-ci.org/donaldRwilliams/BGGM"><img src="https://travis-ci.org/donaldRwilliams/BGGM.svg?branch=master" alt="Build Status"></a></li>
+</ul>
+</div>
+</div>
 </div>
 
 

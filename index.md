@@ -1,7 +1,5 @@
 
-# <i class="fas fa-headset"></i> Bayesian Gaussian Graphical Models
-
-\< img src=“man/figures/logo.png” align=“right” alt="" width=“150” /\>
+# <i class="fas fa-headset"></i> Bayesian Gaussian Graphical Models <img src="man/figures/logo.png" align="right" alt="" width="150" />
 
 <!-- badges: start -->
 
@@ -21,7 +19,7 @@ posterior predictive distribution (Gelman, Meng, and Stern 1996; see
 section 5 in Rubin 1984), whereas the latter focuses on model comparison
 with the Bayes factor (Jeffreys 1961; Kass and Raftery 1995).
 
-## Installation
+## <i class="fas fa-cog"></i> Installation
 
 To install the latest release version (1.0.0) from CRAN use
 
@@ -42,7 +40,7 @@ Note that the developmental version is recommended, due to the
 algorithms being written in `c++` and support for all data types. The
 developmental version is essentially **BGGM** version 2.0.0.
 
-## <i class="fas fa-terminal"></i> Overview
+## Overview
 
 The methods in **BGGM** build upon existing algorithms that are
 well-known in the literature. The central contribution of **BGGM** is to
@@ -123,7 +121,7 @@ support for missing values (see `bggm_missing`).
 There are several examples in the
 [Vignettes](https://donaldrwilliams.github.io/BGGM/articles/) section.
 
-## Basic Usage
+## <i class="far fa-play-circle"></i> Basic Usage
 
 It is common to have some combination of continuous and discrete (e.g.,
 ordinal, binary, etc.) variables. **BGGM** (as of version `2.0.0`) can
