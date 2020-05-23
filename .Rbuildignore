@@ -3,7 +3,6 @@
 ^/\.gitattributes$
 ^\.travis\.yml$
 ^Meta$
-^joss_paper$
 ^data-raw$
 ^README\.Rmd$
 ^README\.md$
@@ -11,3 +10,7 @@
 ^paper\.md$
 ^LICENSE$
 ^readme_models$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^doc$

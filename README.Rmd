@@ -17,14 +17,14 @@ library(ggplot2)
 library(BGGM)
 ```
 
-<img src="joss_paper/hex.png" width = 250 />
+<img src="man/figures/hex.jpg" width = 250 />
 
 # BGGM: Bayesian Gaussian Graphical Models
 
 [![CRAN Version](http://www.r-pkg.org/badges/version/BGGM)](https://cran.r-project.org/package=BGGM)
 [![Downloads](https://cranlogs.r-pkg.org/badges/BGGM)](https://cran.r-project.org/package=BGGM)
 [![Build Status](https://travis-ci.org/donaldRwilliams/BGGM.svg?branch=master)](https://travis-ci.org/donaldRwilliams/BGGM)
-
+[![status](https://joss.theoj.org/papers/4ecb84c5b3b2a2b5da46be4e0700502f/status.svg)](https://joss.theoj.org/papers/4ecb84c5b3b2a2b5da46be4e0700502f)
 
 
 The `R` package **BGGM** provides tools for making Bayesian inference in 
@@ -49,7 +49,7 @@ if (!requireNamespace("remotes")) {
 remotes::install_github("donaldRwilliams/BGGM")
 ```
 
-Note that the developmental version is recommended, due to the algorithms being written in `c++` and 
+Note that the developmental version is recommended (and required to run the following examples), due to the algorithms being written in `c++` and 
 support for all data types. The developmental version is essentially
 **BGGM** version 2.0.0.
 
@@ -120,6 +120,9 @@ The following includes brief examples for *some* of the methods in **BGGM**.
 An ordinal GGM is estimated with
 
 ```{r, eval = FALSE}
+library(BGGM)
+library(ggplot2)
+
 # data
 Y <- ptsd[,1:5] + 1
 
@@ -220,8 +223,11 @@ The Bayes factor based methods allow for determining the conditional
 #### Exploratory
 
 ```{r, eval=FALSE}
+# now 10 nodes
+Y <- ptsd[,1:10]
+
 # exploratory hypothesis testing
-fit<- explore(Y, type = "ordinal")
+fit<- explore(Y)
 
 # select 
 E <- select(fit, alternative = "exhaustive")
@@ -279,7 +285,6 @@ hyp <- c("PHQ2--PHQ9 > PHQ1--PHQ9 > 0;
 
 There are two hypotheses separated by (`;`). The first expresses that the relation `PHQ2--PHQ9` ("feeling down, depressed, or hopeless" and "suicidal thoughts") is larger than `PHQ1--PHQ9` ("little interest or pleasure in doing things" and "suicidal thoughts"). In other words, that the partial correlation is larger for `PHQ2--PHQ9`. There is an additional constraint to positive values (`> 0`) for both relations. The second hypothesis is then a "null" model.
 
-=======
 
 ```{r, echo=FALSE, warning = FALSE}
 load(file = "readme_models/fit_hyp1.rda")
@@ -862,5 +867,14 @@ can be used by all researchers. However, there is currently *not* support for hi
 (i.e., more variables than observations) that are common place in, say, the genetics literature.
 These data are rare in the social-behavioral sciences. In the future, support for high-dimensional
 data may be added to **BGGM**.
+
+## Bug Reports, Feature Requests, and Contributing
+Bug reports and feature requests can be made by opening an issue on [Github](https://github.com/donaldRwilliams/BGGM/issues). To contribute towards
+the development of **BGGM**, you can start a branch with a pull request and we can 
+discuss the proposed changes there.
+
+## Comparison to Other Software
+**BGGM** is the only `R` package to implement all of these algorithms and methods. The `mixed` data approach 
+is also implemented in the package **sbgcop** [base `R`, @hoff2007extending]. The `R` package **BDgraph** implements a Gaussian copula graphical model in `c++` [@mohammadi2015bdgraph], but not the binary or ordinal approaches. Furthermore, **BGGM** is the only package for confirmatory testing and comparing graphical models with the methods described in @williams2020comparing.
 
 ## References

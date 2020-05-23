@@ -19,12 +19,11 @@
 #' @importFrom stats acf
 #'
 #' @examples
-#'
 #' \donttest{
 #' # note: iter = 250 for demonstrative purposes
 #'
 #' # data
-#' Y <- ptsd
+#' Y <- ptsd[,1:5]
 #'
 #' #########################
 #' ###### continuous #######
@@ -36,48 +35,12 @@
 #'
 #' # trace plots
 #' convergence(fit, type = "trace",
-#'             param = c("B1--B2", "B1--B3"))
+#'             param = c("B1--B2", "B1--B3"))[[1]]
 #'
 #' # acf plots
 #' convergence(fit, type = "acf",
-#'             param = c("B1--B2", "B1--B3"))
-#'
-#' #########################
-#' ######## mixed ##########
-#' #########################
-#' # copula
-#'
-#' fit <- estimate(Y, type = "mixed",
-#'                 iter = 250)
-#'
-#' # print names first
-#' convergence(fit, print_names = TRUE)
-#'
-#' # trace plots
-#' convergence(fit, type = "trace",
-#'             param = c("B1--B2", "B1--B3"))
-#'
-#' # acf plots
-#' convergence(fit, type = "acf",
-#'             param = c("B1--B2", "B1--B3"))
-#'
-#' #########################
-#' ######## ordinal ########
-#' #########################
-#' fit <- estimate(Y + 1, type = "ordinal",
-#'                 iter = 250)
-#'
-#' # print names first
-#' convergence(fit, print_names = TRUE)
-#'
-#' # trace plots
-#' convergence(fit, type = "trace",
-#'             param = c("B1--B2", "B1--B3"))
-#'
-#' # acf plots
-#' convergence(fit, type = "acf",
-#'             param = c("B1--B2", "B1--B3"))
-#' }
+#'             param = c("B1--B2", "B1--B3"))[[1]]
+#'}
 #' @export
 convergence <- function(object,
                         param = NULL,

@@ -1,0 +1,14 @@
+pandoc: 2.7.2
+pkgdown: 1.5.1
+pkgdown_sha: ~
+articles:
+  mcmc_diagnostics: mcmc_diagnostics.html
+  netplot: netplot.html
+  netstat_custom: netstat_custom.html
+  ppc_custom: ppc_custom.html
+  predictability: predictability.html
+last_built: 2020-05-23T14:03Z
+urls:
+  reference: https://donaldrwilliams.github.io/BGGM//reference
+  article: https://donaldrwilliams.github.io/BGGM//articles
+
