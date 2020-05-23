@@ -11,6 +11,8 @@
 #'
 #' @param iter Number of iterations (posterior samples; defaults to the number in the object).
 #'
+#' @param progress Logical. Should a progress bar be included (defaults to \code{TRUE}) ?
+#'
 #' @param ... Currently ignored.
 #'
 #' @references
@@ -77,7 +79,9 @@
 #'
 #'}
 #' @export
-coef.estimate <- function(object, iter = NULL,...) {
+coef.estimate <- function(object,
+                          iter = NULL,
+                          progress = TRUE,...) {
 
   # check for object class
   if(is(object, "estimate") | is(object, "explore")){
@@ -104,7 +108,9 @@ coef.estimate <- function(object, iter = NULL,...) {
 
     # betas
 
-    pb <- utils::txtProgressBar(min = 0, max = p, style = 3)
+    if(isTRUE(progress)){
+      pb <- utils::txtProgressBar(min = 0, max = p, style = 3)
+    }
 
     betas <- lapply(1:p, function(x) {
 
@@ -115,7 +121,9 @@ coef.estimate <- function(object, iter = NULL,...) {
                     iter = iter
                     )$coefs
 
-    utils::setTxtProgressBar(pb, x)
+    if(isTRUE(progress)){
+      utils::setTxtProgressBar(pb, x)
+      }
 
     beta_p
 
