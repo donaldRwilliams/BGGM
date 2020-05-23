@@ -1,5 +1,5 @@
 
-# <i class="fas fa-headset"></i> Bayesian Gaussian Graphical Models <img src="man/figures/logo.png" align="right" alt="" width="150" />
+# <i class="fas fa-headphones"></i> Bayesian Gaussian Graphical Models <img src="man/figures/logo.png" align="right" alt="" width="150" />
 
 <!-- badges: start -->
 
@@ -40,7 +40,7 @@ Note that the developmental version is recommended, due to the
 algorithms being written in `c++` and support for all data types. The
 developmental version is essentially **BGGM** version 2.0.0.
 
-## Overview
+## <i class="fas fa-clipboard-list"></i> Overview
 
 The methods in **BGGM** build upon existing algorithms that are
 well-known in the literature. The central contribution of **BGGM** is to
