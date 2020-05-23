@@ -29,7 +29,7 @@ Y <- ptsd
 
 fit <- explore(Y, iter = 250)
 
-summary(fit)
+summ <- summary(fit)
 
 }
 }

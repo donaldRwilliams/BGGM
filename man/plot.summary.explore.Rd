@@ -32,7 +32,7 @@ Y <- ptsd
 
 fit <- explore(Y, iter = 250)
 
-plot(summary(fit))
+plt <- plot(summary(fit))
 
 }
 }

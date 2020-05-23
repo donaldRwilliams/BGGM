@@ -1,0 +1,38 @@
+home:
+  title: BGGM
+  links:
+  - text: Ask a question about BGGM
+    href: mailto:drwwilliams@ucdavis.edu
+
+url: https://donaldrwilliams.github.io/BGGM/
+template:
+  params:
+    bootswatch: flatly
+  opengraph:
+    image:
+      src: man/figures/hex.jpg
+    twitter:
+      creator: "@wdonald_1985"
+      card: summary
+navbar:
+  title: "BGGM"
+  left:
+    - text: "Vignettes"
+      href: articles/index.html
+    - text: "Functions"
+      href: reference/index.html
+    - text: "News"
+      href: news/index.html
+
+articles:
+  - title: "Getting Started"
+    desc: >
+      These vignettes provide an introduction to the various methods in **BGGM**.
+    contents:
+      - mcmc_diagnostics
+      - netplot
+      - netstat_custom
+      - ppc_custom
+      - predictability
+
+
