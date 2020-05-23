@@ -135,13 +135,13 @@ roll_your_own <- function(object,
                           cred = 0.95,
                           ...){
 
-  if(! all( c("estimate", "default") %in% class(fit)) ){
+  if(! all( c("estimate", "default") %in% class(object)) ){
     stop("class must be 'estimate'")
   }
 
   if(!isFALSE(select)){
 
-    sel <- select(fit, cred = cred)
+    sel <- select(object, cred = cred)
     adj <- sel$adj
 
   } else {

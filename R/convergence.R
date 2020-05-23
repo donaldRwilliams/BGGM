@@ -19,7 +19,6 @@
 #' @importFrom stats acf
 #'
 #' @examples
-#'
 #' \donttest{
 #' # note: iter = 250 for demonstrative purposes
 #'
@@ -41,9 +40,7 @@
 #' # acf plots
 #' convergence(fit, type = "acf",
 #'             param = c("B1--B2", "B1--B3"))[[1]]
-#'
-#'
-#' }
+#'}
 #' @export
 convergence <- function(object,
                         param = NULL,

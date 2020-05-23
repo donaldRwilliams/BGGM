@@ -1,5 +1,5 @@
 
-<img src="joss_paper/hex.png" width = 250 />
+<img src="man/figures/hex.jpg" width = 250 />
 
 # BGGM: Bayesian Gaussian Graphical Models
 
@@ -8,6 +8,7 @@ Version](http://www.r-pkg.org/badges/version/BGGM)](https://cran.r-project.org/p
 [![Downloads](https://cranlogs.r-pkg.org/badges/BGGM)](https://cran.r-project.org/package=BGGM)
 [![Build
 Status](https://travis-ci.org/donaldRwilliams/BGGM.svg?branch=master)](https://travis-ci.org/donaldRwilliams/BGGM)
+[![status](https://joss.theoj.org/papers/4ecb84c5b3b2a2b5da46be4e0700502f/status.svg)](https://joss.theoj.org/papers/4ecb84c5b3b2a2b5da46be4e0700502f)
 
 The `R` package **BGGM** provides tools for making Bayesian inference in
 Gaussian graphical models (GGM). The methods are organized around two
@@ -35,9 +36,10 @@ if (!requireNamespace("remotes")) {
 remotes::install_github("donaldRwilliams/BGGM")
 ```
 
-Note that the developmental version is recommended, due to the
-algorithms being written in `c++` and support for all data types. The
-developmental version is essentially **BGGM** version 2.0.0.
+Note that the developmental version is recommended (and required to run
+the following examples), due to the algorithms being written in `c++`
+and support for all data types. The developmental version is essentially
+**BGGM** version 2.0.0.
 
 ## Overview
 
@@ -121,6 +123,9 @@ The following includes brief examples for *some* of the methods in
 An ordinal GGM is estimated with
 
 ``` r
+library(BGGM)
+library(ggplot2)
+
 # data
 Y <- ptsd[,1:5] + 1
 
@@ -237,8 +242,11 @@ The Bayes factor based methods allow for determining the conditional
 #### Exploratory
 
 ``` r
+# now 10 nodes
+Y <- ptsd[,1:10]
+
 # exploratory hypothesis testing
-fit<- explore(Y, type = "ordinal")
+fit<- explore(Y)
 
 # select 
 E <- select(fit, alternative = "exhaustive")
@@ -307,8 +315,6 @@ pleasure in doing things” and “suicidal thoughts”). In other words, that
 the partial correlation is larger for `PHQ2--PHQ9`. There is an
 additional constraint to positive values (`> 0`) for both relations. The
 second hypothesis is then a “null” model.
-
-\=======
 
 ``` r
 # (try to) confirm
@@ -961,6 +967,23 @@ than observations) that are common place in, say, the genetics
 literature. These data are rare in the social-behavioral sciences. In
 the future, support for high-dimensional data may be added to **BGGM**.
 
+## Bug Reports, Feature Requests, and Contributing
+
+Bug reports and feature requests can be made by opening an issue on
+[Github](https://github.com/donaldRwilliams/BGGM/issues). To contribute
+towards the development of **BGGM**, you can start a branch with a pull
+request and we can discuss the proposed changes there.
+
+## Comparison to Other Software
+
+**BGGM** is the only `R` package to implement all of these algorithms
+and methods. The `mixed` data approach is also implemented in the
+package **sbgcop** (base `R`, Hoff 2007). The `R` package **BDgraph**
+implements a Gaussian copula graphical model in `c++` (Mohammadi and Wit
+2015), but not the binary or ordinal approaches. Furthermore, **BGGM**
+is the only package for confirmatory testing and comparing graphical
+models with the methods described in Williams et al. (2020).
+
 ## References
 
 <div id="refs" class="references">
@@ -1061,6 +1084,14 @@ the American Statistical Association* 90 (430): 773–95.
 Lawrence, Earl, Derek Bingham, Chuanhai Liu, and Vijayan N Nair. 2008.
 “Bayesian Inference for Multivariate Ordinal Data Using Parameter
 Expansion.” *Technometrics* 50 (2): 182–91.
+
+</div>
+
+<div id="ref-mohammadi2015bdgraph">
+
+Mohammadi, Reza, and Ernst C Wit. 2015. “BDgraph: An R Package for
+Bayesian Structure Learning in Graphical Models.” *arXiv Preprint
+arXiv:1501.05108*.
 
 </div>
 

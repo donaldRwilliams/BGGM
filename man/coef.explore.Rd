@@ -32,7 +32,6 @@ There is a direct correspondence between the inverse covariance matrix and
 \examples{
 \donttest{
 # note: iter = 250 for demonstrative purposes
-
 # data
 Y <- ptsd[,1:4]
 

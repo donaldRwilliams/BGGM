@@ -1970,4 +1970,3 @@ arma::mat mvnrnd(int n, arma::vec mu, arma::mat Sigma){
   return Y;
 
 }
-
