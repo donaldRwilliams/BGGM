@@ -103,7 +103,7 @@
 }
 
 <span class="co"># install from github</span>
-<span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/remotes/man/install_github.html">install_github</a></span>(<span class="st">"donaldRwilliams/BGGM"</span>)
+<span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"donaldRwilliams/BGGM"</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">BGGM</span>)</pre></body></html></div>
 </div>
 <div id="data" class="section level3">
@@ -291,7 +291,7 @@ Y_females &lt;- subset(Y, gender == 2, select = -c(education, gender))[,1:5]</co
 <div id="test-hypothesis" class="section level2">
 <h2 class="hasAnchor">
 <a href="#test-hypothesis" class="anchor"></a>Test Hypothesis</h2>
-<p>This above hypothesis is readily tested</p>
+<p>The hypothesis is easily translated to <code>R</code> code</p>
 <div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">hyp</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"g1_A1--A2 + g1_A1--A3 &gt; g2_A1--A2 + g2_A1--A3; 
           g1_A1--A2 + g1_A1--A3 = g2_A1--A2 + g2_A1--A3"</span>)</pre></body></html></div>
 <p>Note the <code>g1</code> indicates the group and <code>;</code> separates the hypotheses.</p>

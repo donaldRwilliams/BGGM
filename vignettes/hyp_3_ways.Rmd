@@ -234,7 +234,7 @@ $$
 where $\mathcal{H}_3$ is the complement and can be understood as neither the first or second hypothesis.
 
 ## Test Hypothesis 
-This above hypothesis is readily tested
+The hypothesis is easily translated to `R` code
 ```r
 hyp <- c("g1_A1--A2 + g1_A1--A3 > g2_A1--A2 + g2_A1--A3; 
           g1_A1--A2 + g1_A1--A3 = g2_A1--A2 + g2_A1--A3")
