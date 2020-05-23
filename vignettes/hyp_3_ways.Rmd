@@ -231,7 +231,7 @@ $$
 \end{align}
 $$
 
-where $\mathcal{H}_3$ is the complement and can be understood as neither the fist or second hypothesis.
+where $\mathcal{H}_3$ is the complement and can be understood as neither the first or second hypothesis.
 
 ## Test Hypothesis 
 This above hypothesis is readily tested
