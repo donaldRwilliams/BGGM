@@ -125,12 +125,12 @@ support for missing values (see `bggm_missing`).
     Note that this can be used for *only* ordinal data (not restricted
     to “mixed” data).
 
-## <i class="fas fa-external-link-square-alt"></i> Illustrative Examples
+## <i class="fas fa-folder-open"></i> Illustrative Examples
 
 There are several examples in the
 [Vignettes](https://donaldrwilliams.github.io/BGGM/articles/) section.
 
-## <i class="far fa-play-circle"></i> Basic Usage
+## <i class="fas fa-play-circle"></i> Basic Usage
 
 It is common to have some combination of continuous and discrete (e.g.,
 ordinal, binary, etc.) variables. **BGGM** (as of version `2.0.0`) can
