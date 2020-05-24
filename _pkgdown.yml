@@ -39,3 +39,8 @@ articles:
       - predictability
       - hyp_3_ways
       - in_tandem
+
+reference:
+- title: Missing Data
+  decs: Handle Missing Values.
+- contents: bggm_missing
