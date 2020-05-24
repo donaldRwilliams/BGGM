@@ -23,6 +23,9 @@ navbar:
       href: reference/index.html
     - text: "News"
       href: news/index.html
+    - text: "Troubleshoot"
+      href: articles/installation.html
+
 
 articles:
   - title: "Getting Started"

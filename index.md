@@ -3,7 +3,8 @@
 
 <!-- badges: start -->
 
-[![CRAN Version](http://www.r-pkg.org/badges/version/BGGM)](https://cran.r-project.org/package=BGGM)
+[![CRAN
+Version](http://www.r-pkg.org/badges/version/BGGM)](https://cran.r-project.org/package=BGGM)
 [![Downloads](https://cranlogs.r-pkg.org/badges/BGGM)](https://cran.r-project.org/package=BGGM)
 [![Build
 Status](https://travis-ci.org/donaldRwilliams/BGGM.svg?branch=master)](https://travis-ci.org/donaldRwilliams/BGGM)
@@ -38,6 +39,15 @@ remotes::install_github("donaldRwilliams/BGGM")
 Note that the developmental version is recommended, due to the
 algorithms being written in `c++` and support for all data types. The
 developmental version is essentially **BGGM** version 2.0.0.
+
+### <i class="fas fa-skull-crossbones"></i> Dealing with Errors
+
+There are automatic checks for **BGGM**. This can be seen in the right
+panel “build”. That badge is linked to the build history for **BGGM**.
+However, that only checks for Linux and **BGGM** is built on Windows.
+The most common installation errors occur on osx (Mac). An evolving
+guide to address these issues is provided in the [Troubleshoot
+Section](https://donaldrwilliams.github.io/BGGM/articles/installation.html).
 
 ## <i class="fas fa-clipboard-list"></i> Overview
 
