@@ -92,12 +92,47 @@
 
     
     
-
+<div id="osx" class="section level1">
+<h1 class="hasAnchor">
+<a href="#osx" class="anchor"></a>OSX</h1>
+<div id="error-1-missing-a-fortran-compiler" class="section level2">
+<h2 class="hasAnchor">
+<a href="#error-1-missing-a-fortran-compiler" class="anchor"></a>Error 1: Missing a Fortran Compiler</h2>
+<p>The most common error seems to be (or similar).</p>
+<pre><code>E&gt; ld: warning: directory not found for option '-L/usr/local/gfortran/lib'
+E&gt; ld: library not found for -lgfortran
+E&gt; clang: error: linker command failed with exit code 1 (use -v to see invocation)</code></pre>
+<p>This indicates that the fortran compiler is missing. This can can be installed <a href="https://github.com/fxcoudert/gfortran-for-macOS/releases/tag/8.2?fbclid=IwAR2SyHWB2BzFcY7bpHYW8VzNvlDsy4Gw1QxUMueXB3H0fXicCWoMbE7Ypac">here</a> (the <code>.dmg</code> file).</p>
+</div>
+<div id="error-2-outdated-r-andor-r-studio" class="section level2">
+<h2 class="hasAnchor">
+<a href="#error-2-outdated-r-andor-r-studio" class="anchor"></a>Error 2: Outdated R and/or R-studio</h2>
+<p>Typically the above has solved the issue. If not, then an additional error could be</p>
+<pre><code>Error: (converted from warning) Setting LC_CTYPE failed, using "C"</code></pre>
+<p>This was solved by updating both R and R-studio. More information can be found <a href="https://stackoverflow.com/questions/9689104/installing-r-on-mac-warning-messages-setting-lc-ctype-failed-using-c?fbclid=IwAR0DSaPeWOvRyfIsCx4Tjvz9-jZUh2ySXQIHnzqwbqL2_idfPlFF3j6mOe8">here</a>.</p>
+</div>
+<div id="error-3-xcode-missing" class="section level2">
+<h2 class="hasAnchor">
+<a href="#error-3-xcode-missing" class="anchor"></a>Error 3: Xcode missing</h2>
+<p>If that does not work, then perhaps <code>Xcode</code> is missing. This can be installed at the “Mac App Store”.</p>
+</div>
+<div id="github-issues" class="section level2">
+<h2 class="hasAnchor">
+<a href="#github-issues" class="anchor"></a>GitHub Issues</h2>
+<p>The following are links to issues on github for troubleshooting installation of <strong>BGGM</strong> on OSX.</p>
+<ul>
+<li>
+<a href="https://github.com/donaldRwilliams/BGGM/issues/26">https://github.com/donaldRwilliams/BGGM/issues/26</a>(closed)</li>
+</ul>
+</div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 

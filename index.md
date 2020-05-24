@@ -42,11 +42,11 @@ developmental version is essentially **BGGM** version 2.0.0.
 
 ### <i class="fas fa-skull-crossbones"></i> Dealing with Errors
 
-There are automatic checks for **BGGM**. This can be seen in the right
-panel “build”. That badge is linked to the build history for **BGGM**.
+There are automatic checks for
+[**BGGM**](https://travis-ci.org/github/donaldRwilliams/BGGM/branches).
 However, that only checks for Linux and **BGGM** is built on Windows.
-The most common installation errors occur on osx (Mac). An evolving
-guide to address these issues is provided in the [Troubleshoot
+The most common installation errors occur on OSX. An evolving guide to
+address these issues is provided in the [Troubleshoot
 Section](https://donaldrwilliams.github.io/BGGM/articles/installation.html).
 
 ## <i class="fas fa-clipboard-list"></i> Overview
