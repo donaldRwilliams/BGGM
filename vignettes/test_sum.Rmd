@@ -1,0 +1,139 @@
+---
+title: "Testing Sums"
+author: "Donny Williams"
+date: "5/25/2020"
+bibliography: ../inst/REFERENCES.bib
+output:
+rmarkdown::html_vignette:
+  toc: yes
+vignette: >
+  %\VignetteIndexEntry{Testing Sums}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+This is a follow-up to the vignette ["Three Ways to Test the Same Hypothesis"](https://donaldrwilliams.github.io/BGGM/articles/hyp_3_ways.html). A
+new feature, `pcor_sum`, was added to **BGGM** that allows for testing partial correlation sums. 
+This differs from the Bayes factor approach ("Approach #3"), in that only the posterior 
+distribution is used to determine whether there is a difference in the sums. 
+
+### R package
+```{r, eval = FALSE, message=FALSE}
+# need the developmental version
+if (!requireNamespace("remotes")) { 
+  install.packages("remotes")   
+}   
+
+# install from github
+remotes::install_github("donaldRwilliams/BGGM")
+library(BGGM)
+```
+
+
+# One Group
+This first example looks at one group, where a sum is tested within the same ptsd network. I focus on the 
+relations between the re-experiencing and avoidance communities. In particular, the sum of relations between
+the "Intrusion" (5 nodes) and the "Avoidance" (2) (two nodes) is tested. 
+
+## Sum to String
+For the avoidance symptom "avoidance of thoughts", this can be written in `R` code with
+
+```
+# ptsd
+Y <- ptsd
+
+# paste together sums
+paste0(colnames(Y)[1:5],  "--C1", collapse = " + ")
+
+#> "B1--C1 + B2--C1 + B3--C1 + B4--C1 + B5--C1"
+```
+whereas, for the avoidance symptom "avoidance of reminders," this is written as
+
+```
+paste0(colnames(Y)[1:5],  "--C2", collapse = " + ")
+
+#> "B1--C2 + B2--C2 + B3--C2 + B4--C2 + B5--C2"
+```
+Note that typically this would have to be written out. `paste0` was used in this case to 
+avoid typing out all of the relations.
+
+## Fit Model
+
+Here an ordinal GGM is fitted
+
+```
+fit <- estimate(Y+1, type = "ordinal", iter = 1000)
+```
+where the `+1` changes the first category from 0 to 1 (required).
+
+## Test Sums
+The next step is to use the `pcor_sum` function. First, I combine the sums into one string separated with `;`.
+```
+# sum 1
+sum1 <- paste0(colnames(Y)[1:5],  "--C1", collapse = " + ")
+
+# sum 2
+sum2 <- paste0(colnames(Y)[1:5],  "--C2", collapse = " + ")
+
+# paste together
+sums <- paste(sum1, sum2, sep = ";")
+
+# print
+sums
+#> "B1--C1 + B2--C1 + B3--C1 + B4--C1 + B5--C1;B1--C2 + B2--C2 + B3--C2 + B4--C2 + B5--C2"
+```
+
+Next `pcor_sum` is used
+
+```
+test_sum <- pcor_sum(fit, relations = sums)
+
+# print
+test_sum
+
+# BGGM: Bayesian Gaussian Graphical Models 
+# --- 
+# Network Stats: Posterior Sum
+# Posterior Samples: 1000 
+# --- 
+# Estimates 
+# 
+# Sum: 
+#                                    Post.mean Post.sd Cred.lb Cred.ub
+# B1--C1+B2--C1+B3--C1+B4--C1+B5--C1     0.215   0.096   0.034   0.404
+# B1--C2+B2--C2+B3--C2+B4--C2+B5--C2     0.334   0.097   0.145   0.514
+# --- 
+# 
+# Difference:
+# B1--C1+B2--C1+B3--C1+B4--C1+B5--C1 - B1--C2+B2--C2+B3--C2+B4--C2+B5--C2 
+# 
+#  Post.mean Post.sd Cred.lb Cred.ub Prob.greater Prob.less
+#     -0.119   0.145  -0.409   0.173        0.205     0.795
+# --- 
+```
+
+`Prob.greater` is the posterior probability that the first sum is larger than the second sum.
+
+## Plot Results
+The object `test_sum` can then be plotted. Note this returns three plots, but only the difference is shown here
+
+```
+plot(test_sum)$diff
+```
+
+![](../man/figures/test_sum_hist.png)
+
+The histogram is not very smooth in this case because `iter = 1000`, but this of course can be changed.
+
+# Two Groups
+
+# Note
+Currently this function only supports sums, due to this being of interest for the psychological network
+literature in particular. This can be extended to accommodate multiplication, subtraction,
+testing values other than zero, etc. Please make a feature request at either
+[github](https://github.com/donaldRwilliams/BGGM/issues) or [BGGM-users group](https://groups.google.com/forum/#!forum/bggm-users).

@@ -32,12 +32,13 @@ articles:
     desc: >
       These vignettes provide an introduction to the various methods in **BGGM**.
     contents:
-      - mcmc_diagnostics
+      - test_sum
       - netplot
+      - mcmc_diagnostics
       - netstat_custom
       - ppc_custom
-      - predictability
       - hyp_3_ways
+      - predictability
       - in_tandem
 
 reference:

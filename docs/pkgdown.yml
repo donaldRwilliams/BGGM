@@ -10,7 +10,8 @@ articles:
   netstat_custom: netstat_custom.html
   ppc_custom: ppc_custom.html
   predictability: predictability.html
-last_built: 2020-05-25T20:23Z
+  test_sum: test_sum.html
+last_built: 2020-05-25T21:55Z
 urls:
   reference: https://donaldrwilliams.github.io/BGGM//reference
   article: https://donaldrwilliams.github.io/BGGM//articles
