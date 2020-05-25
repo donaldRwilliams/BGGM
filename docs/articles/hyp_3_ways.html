@@ -156,6 +156,7 @@ Y_females &lt;- subset(Y, gender == 2, select = -c(education, gender))[,1:5]</co
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">post_male</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/posterior_samples.html">posterior_samples</a></span>(<span class="no">fit_male</span>)[,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A1--A2"</span>, <span class="st">"A1--A3"</span>)]
 
 <span class="no">post_female</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/posterior_samples.html">posterior_samples</a></span>(<span class="no">fit_female</span>)[,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A1--A2"</span>, <span class="st">"A1--A3"</span>)]</pre></body></html></div>
+<p>Note that the column names reflect the upper-triangular elements of the partial correlation matrix. Hence, the first name (e.g.,<code>A1</code>) must be located before the second name (e.g., <code>A2</code>) in the data matrix. This can be understood in reference to the column numbers: <code>1--2</code> is correct whereas <code>2--1</code> will result in an error.</p>
 </div>
 <div id="sum-and-compute-difference" class="section level2">
 <h2 class="hasAnchor">
@@ -170,9 +171,16 @@ Y_females &lt;- subset(Y, gender == 2, select = -c(education, gender))[,1:5]</co
 <span class="co"># difference</span>
 <span class="no">diff</span> <span class="kw">&lt;-</span> <span class="no">sum_male</span> - <span class="no">sum_female</span></pre></body></html></div>
 <p>which can then be plotted</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(<span class="kw">mfrow</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">3</span>))
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="co"># three column</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(<span class="kw">mfrow</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">3</span>))
+
+<span class="co"># male sum</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span>(<span class="no">sum_male</span>)
+
+<span class="co"># female sum</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span>(<span class="no">sum_female</span>)
+
+<span class="co"># difference</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span>(<span class="no">diff</span>)</pre></body></html></div>
 <p><img src="../man/figures/hyp_3ways_hist.png"></p>
 </div>
