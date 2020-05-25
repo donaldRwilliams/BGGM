@@ -11,6 +11,8 @@
 #'
 #' @param iter Number of iterations (posterior samples; defaults to the number in the object).
 #'
+#' @param progress Logical. Should a progress bar be included (defaults to \code{TRUE}) ?
+#'
 #' @param ... Currently ignored.
 #'
 #' @references
@@ -43,7 +45,7 @@
 #'                 progress = FALSE)
 #'
 #' # summarize the partial correlations
-#' reg <- coef(fit)
+#' reg <- coef(fit, progress = FALSE)
 #'
 #' # summary
 #' summ <- summary(reg)
@@ -51,7 +53,9 @@
 #' summ
 #'}
 #' @export
-coef.estimate <- function(object, iter = NULL,...) {
+coef.estimate <- function(object,
+                          iter = NULL,
+                          progress = TRUE,...) {
 
   # check for object class
   if(is(object, "estimate") | is(object, "explore")){
@@ -78,7 +82,9 @@ coef.estimate <- function(object, iter = NULL,...) {
 
     # betas
 
-    pb <- utils::txtProgressBar(min = 0, max = p, style = 3)
+    if(isTRUE(progress)){
+      pb <- utils::txtProgressBar(min = 0, max = p, style = 3)
+    }
 
     betas <- lapply(1:p, function(x) {
 
@@ -89,7 +95,9 @@ coef.estimate <- function(object, iter = NULL,...) {
                     iter = iter
                     )$coefs
 
-    utils::setTxtProgressBar(pb, x)
+    if(isTRUE(progress)){
+      utils::setTxtProgressBar(pb, x)
+      }
 
     beta_p
 
@@ -124,6 +132,8 @@ coef.estimate <- function(object, iter = NULL,...) {
 #'
 #' @param iter Number of iterations (posterior samples; defaults to the number in the object).
 #'
+#' @param progress Logical. Should a progress bar be included (defaults to \code{TRUE}) ?
+#'
 #' @param ... Currently ignored.
 #'
 #' @references
@@ -157,7 +167,7 @@ coef.estimate <- function(object, iter = NULL,...) {
 #'                progress = FALSE)
 #'
 #' # summarize the partial correlations
-#' reg <- coef(fit)
+#' reg <- coef(fit, progress = FALSE)
 #'
 #' # summary
 #' summ <- summary(reg)
@@ -166,7 +176,8 @@ coef.estimate <- function(object, iter = NULL,...) {
 #'}
 #' @export
 coef.explore <- function(object,
-                         iter = NULL,...) {
+                         iter = NULL,
+                         progress = TRUE, ...) {
 
   # check for object class
   if(is(object, "estimate") | is(object, "explore")){
@@ -191,9 +202,9 @@ coef.explore <- function(object,
     # pcor to cor
     cors <- pcor_to_cor(object, iter = iter)$R
 
-    # betas
-
-    pb <- utils::txtProgressBar(min = 0, max = p, style = 3)
+    if(isTRUE(progress)){
+      pb <- utils::txtProgressBar(min = 0, max = p, style = 3)
+    }
 
     betas <- lapply(1:p, function(x) {
 
@@ -204,7 +215,9 @@ coef.explore <- function(object,
                       iter = iter
       )$coefs
 
-      utils::setTxtProgressBar(pb, x)
+      if(isTRUE(progress)){
+        utils::setTxtProgressBar(pb, x)
+        }
 
       beta_p
 

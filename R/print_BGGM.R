@@ -10,6 +10,10 @@
 print.BGGM <- function(x, ...) {
   # print estimate methods
 
+  if(is(x, "pcor_sum")){
+    print_pcor_sum(x, ...)
+    }
+
   if(is(x, "regression_summary")){
     print_regression_summary(x,...)
   }

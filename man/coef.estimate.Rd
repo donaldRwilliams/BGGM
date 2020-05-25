@@ -4,12 +4,14 @@
 \alias{coef.estimate}
 \title{Compute Regression Parameters for \code{estimate} Objects}
 \usage{
-\method{coef}{estimate}(object, iter = NULL, ...)
+\method{coef}{estimate}(object, iter = NULL, progress = TRUE, ...)
 }
 \arguments{
 \item{object}{An Object of class \code{estimate}}
 
 \item{iter}{Number of iterations (posterior samples; defaults to the number in the object).}
+
+\item{progress}{Logical. Should a progress bar be included (defaults to \code{TRUE}) ?}
 
 \item{...}{Currently ignored.}
 }
@@ -46,7 +48,8 @@ fit <- estimate(Y, type = "binary",
                 progress = FALSE)
 
 # summarize the partial correlations
-reg <- coef(fit)
+
+reg <- coef(fit, progress = FALSE)
 
 # summary
 summ <- summary(reg)
