@@ -285,7 +285,7 @@ print_pcor_sum <- function(x, cred = 0.95, row_names = TRUE){
 #' \strong{Examples}:
 #'
 #' @seealso posterior_sum
-plot.pcor_sum <- function(x, fill = "#CC79A7"){
+plot.pcor_sum <- function(x, fill = "#CC79A7", ...){
 
 
   if(is.null( x$post_diff)){

@@ -4,7 +4,7 @@
 \alias{plot.pcor_sum}
 \title{Plot \code{posterior_sum} Object}
 \usage{
-\method{plot}{pcor_sum}(x, fill = "#CC79A7")
+\method{plot}{pcor_sum}(x, fill = "#CC79A7", ...)
 }
 \arguments{
 \item{x}{An object of class \code{posterior_sum}}
