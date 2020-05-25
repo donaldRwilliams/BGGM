@@ -38,7 +38,7 @@ library(BGGM)
 # One Group
 This first example looks at one group, where a sum is tested within the same ptsd network. I focus on the 
 relations between the re-experiencing and avoidance communities. In particular, the sum of relations between
-the "Intrusion" (5 nodes) and the "Avoidance" (2) (two nodes) is tested. 
+the "Intrusion" (5 nodes) community and the "Avoidance" (two nodes) community is tested. 
 
 ## Sum to String
 For the avoidance symptom "avoidance of thoughts", this can be written in `R` code with
