@@ -268,9 +268,7 @@ print_pcor_sum <- function(x, cred = 0.95, row_names = TRUE){
   }
 }
 
-
-
-#' @title Plot \code{posterior_sum} Object
+#' @title Plot \code{pcor_sum} Object
 #'
 #' @name plot.pcor_sum
 #'

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Graph selection for <code>ggm_compare_explore</code> Objects — select.ggm_compare_explore • BGGM</title>
+<title>Partial Correlation Sum — pcor_sum • BGGM</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,10 +46,9 @@
 
 
 
-<meta property="og:title" content="Graph selection for <code>ggm_compare_explore</code> Objects — select.ggm_compare_explore" />
-<meta property="og:description" content="Provides the selected graph (of differences) based on the Bayes factor
-(Williams et al. 2020)
-." />
+<meta property="og:title" content="Partial Correlation Sum — pcor_sum" />
+<meta property="og:description" content="Compute and test partial correlation sums either within or between GGMs
+(e.g., different groups), resulting in a posterior distribution." />
 <meta property="og:image" content="https://donaldrwilliams.github.io/BGGM/reference/figures/hex.jpg" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="@wdonald_1985" />
@@ -124,79 +123,108 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Graph selection for <code>ggm_compare_explore</code> Objects</h1>
-    <small class="dont-index">Source: <a href='https://github.com/donaldRwilliams/BGGM/blob/master/R/select.ggm_compare_bf.R'><code>R/select.ggm_compare_bf.R</code></a></small>
-    <div class="hidden name"><code>select.ggm_compare_explore.Rd</code></div>
+    <h1>Partial Correlation Sum</h1>
+    <small class="dont-index">Source: <a href='https://github.com/donaldRwilliams/BGGM/blob/master/R/posterior_sum.R'><code>R/posterior_sum.R</code></a></small>
+    <div class="hidden name"><code>pcor_sum.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Provides the selected graph (of differences) based on the Bayes factor
-(Williams et al. 2020)
-.</p>
+    <p>Compute and test partial correlation sums either within or between GGMs
+(e.g., different groups), resulting in a posterior distribution.</p>
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for ggm_compare_explore</span>
-<span class='fu'><a href='select.html'>select</a></span>(<span class='no'>object</span>, <span class='kw'>BF_cut</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>pcor_sum</span>(<span class='no'>...</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>relations</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>object</th>
-      <td><p>An object of class <code>ggm_compare_explore</code>.</p></td>
-    </tr>
-    <tr>
-      <th>BF_cut</th>
-      <td><p>Numeric. Threshold for including an edge (defaults to 3).</p></td>
-    </tr>
-    <tr>
       <th>...</th>
-      <td><p>Currently ignored.</p></td>
+      <td><p>An object of class <code>estimate</code>. This can be either one or two fitted objects.</p></td>
+    </tr>
+    <tr>
+      <th>iter</th>
+      <td><p>Number of iterations (posterior samples; defaults to the number in the object).</p></td>
+    </tr>
+    <tr>
+      <th>relations</th>
+      <td><p>Character string. Which partial correlations should be summed?</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The returned object of class <code>select.ggm_compare_explore</code> contains
-a lot of information that is used for printing and plotting the results.
-For users of <strong>BGGM</strong>, the following are the useful objects:</p>
+    <p>An object of class <code>posterior_sum</code>, including the sum and possibly the difference for
+two sums.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
+    <p>Some care must be taken when writing the string for <code>partial_sum</code>. Below are several examples</p>
+<p><strong>Just a Sum</strong>:
+Perhaps a sum is of interest, and not necessarily the difference of two sums. This can be written as</p>
 <ul>
-<li><p><code>adj_10</code> Adjacency matrix for which there was evidence for a difference.</p></li>
-<li><p><code>adj_10</code> Adjacency matrix for which there was evidence for a null relation</p></li>
-<li><p><code>pcor_mat_10</code> Selected partial correlation matrix (weighted adjacency; only for two groups).</p></li>
+<li><p><code>partial_sum &lt;-  c("A1--A2 + A1--A3 + A1--A4")</code></p></li>
 </ul>
 
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+<p>which will sum those relations.</p>
+<p><strong>Comparing Sums</strong>:
+When comparing sums, each must be seperated by "<code>;</code>". For example,</p>
+<ul>
+<li><p><code>partial_sum &lt;-  c("A1--A2 + A1--A3; A1--A2 + A1--A4")</code></p></li>
+</ul>
 
-    <div class='dont-index'><p><code><a href='explore.html'>explore</a></code> and <code><a href='ggm_compare_explore.html'>ggm_compare_explore</a></code> for several examples.</p></div>
+<p>which will sum both and compute the difference. Note that there cannot be more than two sums, such
+that <code><a href='https://rdrr.io/r/base/c.html'>c("A1--A2 + A1--A3; A1--A2 + A1--A4; A1--A2 + A1--A5")</a></code> will result in an error.</p>
+<p><strong>Comparing Groups</strong>:</p>
+<p>When more than one fitted object is suppled to <code>object</code> it is assumed that the groups
+should be compared for the same sum. Hence, in this case, only the sum needs to be written.</p>
+<ul>
+<li><p><code>partial_sum &lt;-  c("A1--A2 + A1--A3 + A1--A4")</code></p></li>
+</ul>
+
+<p>The above results in that sum being computed for each group and then compared.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-
-<span class='co'>##################</span>
-<span class='co'>### example 1: ###</span>
-<span class='co'>##################</span>
 <span class='co'># data</span>
 <span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='no'>bfi</span>
 
-<span class='co'># males and females</span>
-<span class='no'>Ymale</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='no'>Y</span>, <span class='no'>gender</span> <span class='kw'>==</span> <span class='fl'>1</span>,
-                   <span class='kw'>select</span> <span class='kw'>=</span> -<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>gender</span>,
-                               <span class='no'>education</span>))[,<span class='fl'>1</span>:<span class='fl'>10</span>]
+<span class='co'># males</span>
+<span class='no'>Y_males</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='no'>Y</span>, <span class='no'>gender</span> <span class='kw'>==</span> <span class='fl'>1</span>, <span class='kw'>select</span> <span class='kw'>=</span> -<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>education</span>, <span class='no'>gender</span>))[,<span class='fl'>1</span>:<span class='fl'>5</span>]
 
-<span class='no'>Yfemale</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='no'>Y</span>, <span class='no'>gender</span> <span class='kw'>==</span> <span class='fl'>2</span>,
-                     <span class='kw'>select</span> <span class='kw'>=</span> -<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>gender</span>,
-                                 <span class='no'>education</span>))[,<span class='fl'>1</span>:<span class='fl'>10</span>]
+<span class='co'># females</span>
+<span class='no'>Y_females</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='no'>Y</span>, <span class='no'>gender</span> <span class='kw'>==</span> <span class='fl'>2</span>, <span class='kw'>select</span> <span class='kw'>=</span> -<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>education</span>, <span class='no'>gender</span>))[,<span class='fl'>1</span>:<span class='fl'>5</span>]
 
-<span class='co'># fit model</span>
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='ggm_compare_explore.html'>ggm_compare_explore</a></span>(<span class='no'>Ymale</span>, <span class='no'>Yfemale</span>,
-                           <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>,
-                           <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"continuous"</span>)</div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling (Group 1)</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Prior Sampling (Group 1)</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling (Group 2)</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Prior Sampling (Group 2)</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='input'>
+<span class='co'># males</span>
+<span class='no'>fit_males</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='estimate.html'>estimate</a></span>(<span class='no'>Y_males</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='input'>
+<span class='co'># fit females</span>
+<span class='no'>fit_females</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='estimate.html'>estimate</a></span>(<span class='no'>Y_females</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='input'>
 
-<span class='no'>E</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='select.html'>select</a></span>(<span class='no'>fit</span>, <span class='kw'>post_prob</span> <span class='kw'>=</span> <span class='fl'>0.50</span>)
-
-<span class='co'># }</span></div></pre>
+<span class='no'>sums</span> <span class='kw'>&lt;-</span> <span class='fu'>pcor_sum</span>(<span class='no'>fit_males</span>,
+                 <span class='no'>fit_females</span>,
+                 <span class='kw'>relations</span> <span class='kw'>=</span> <span class='st'>"A1--A2 + A1--A3"</span>)
+<span class='co'># print</span>
+<span class='no'>sums</span></div><div class='output co'>#&gt; BGGM: Bayesian Gaussian Graphical Models 
+#&gt; --- 
+#&gt; Network Stats: Posterior Sum
+#&gt; Posterior Samples: 5000 
+#&gt; --- 
+#&gt; Estimates 
+#&gt; 
+#&gt; Sum: 
+#&gt;                   Post.mean Post.sd Cred.lb Cred.ub
+#&gt; g1: A1--A2+A1--A3    -0.314   0.039  -0.390  -0.238
+#&gt; g2: A1--A2+A1--A3    -0.344   0.026  -0.394  -0.293
+#&gt; --- 
+#&gt; 
+#&gt; Difference:
+#&gt; g1: A1--A2+A1--A3 - g2: A1--A2+A1--A3 
+#&gt; 
+#&gt;  Post.mean Post.sd Cred.lb Cred.ub Prob.greater Prob.less
+#&gt;       0.03   0.048  -0.065   0.125        0.737     0.263
+#&gt; --- </div><div class='input'>
+<span class='co'># plot difference</span>
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>sums</span>)<span class='kw'>[[</span><span class='fl'>3</span>]]</div><div class='output co'>#&gt; <span class='message'>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></div><div class='img'><img src='pcor_sum-1.png' alt='' width='700' height='433' /></div><div class='input'># }
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

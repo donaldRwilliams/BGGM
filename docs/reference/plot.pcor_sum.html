@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Data: Post-Traumatic Stress Disorder — ptsd • BGGM</title>
+<title>Plot <code>pcor_sum</code> Object — plot.pcor_sum • BGGM</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,10 +46,8 @@
 
 
 
-<meta property="og:title" content="Data: Post-Traumatic Stress Disorder — ptsd" />
-<meta property="og:description" content="A dataset containing items that measure Post-traumatic stress disorder symptoms (Armour et al. 2017)
-.
-There are 20 variables (p) and  221 observations (n)." />
+<meta property="og:title" content="Plot <code>pcor_sum</code> Object — plot.pcor_sum" />
+<meta property="og:description" content="Plot pcor_sum Object" />
 <meta property="og:image" content="https://donaldrwilliams.github.io/BGGM/reference/figures/hex.jpg" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="@wdonald_1985" />
@@ -124,53 +122,45 @@ There are 20 variables (p) and  221 observations (n)." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Data: Post-Traumatic Stress Disorder</h1>
-    <small class="dont-index">Source: <a href='https://github.com/donaldRwilliams/BGGM/blob/master/R/datasets.R'><code>R/datasets.R</code></a></small>
-    <div class="hidden name"><code>ptsd.Rd</code></div>
+    <h1>Plot <code>pcor_sum</code> Object</h1>
+    <small class="dont-index">Source: <a href='https://github.com/donaldRwilliams/BGGM/blob/master/R/posterior_sum.R'><code>R/posterior_sum.R</code></a></small>
+    <div class="hidden name"><code>plot.pcor_sum.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A dataset containing items that measure Post-traumatic stress disorder symptoms (Armour et al. 2017)
-.
-There are 20 variables (<em>p</em>) and  221 observations (<em>n</em>).</p>
+    <p>Plot <code>pcor_sum</code> Object</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"ptsd"</span>)</pre>
+    <pre class="usage"><span class='co'># S3 method for pcor_sum</span>
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='st'>"#CC79A7"</span>, <span class='no'>...</span>)</pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>An object of class <code>posterior_sum</code></p></td>
+    </tr>
+    <tr>
+      <th>fill</th>
+      <td><p>Character string. What fill for the histogram
+(defaults to colorblind "pink")?</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Currently ignored.</p></td>
+    </tr>
+    </table>
 
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A dataframe with 221 rows and 20 variables</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <p>A list of <code>ggplot</code> objects</p>
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    
-<ul>
-<li><p>Intrusive Thoughts</p></li>
-<li><p>Nightmares</p></li>
-<li><p>Flashbacks</p></li>
-<li><p>Emotional cue reactivity</p></li>
-<li><p>Psychological cue reactivity</p></li>
-<li><p>Avoidance of thoughts</p></li>
-<li><p>Avoidance of reminders</p></li>
-<li><p>Trauma-related amnesia</p></li>
-<li><p>Negative beliefs</p></li>
-<li><p>Negative trauma-related emotions</p></li>
-<li><p>Loss of interest</p></li>
-<li><p>Detachment</p></li>
-<li><p>Restricted affect</p></li>
-<li><p>Irritability/anger</p></li>
-<li><p>Self-destructive/reckless behavior</p></li>
-<li><p>Hypervigilance</p></li>
-<li><p>Exaggerated startle response</p></li>
-<li><p>Difficulty concentrating</p></li>
-<li><p>Sleep disturbance</p></li>
-</ul>
+    <p><strong>Examples</strong>:</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
-    <p>Armour C, Fried EI, Deserno MK, Tsai J, Pietrzak RH (2017).
-&#8220;A network analysis of DSM-5 posttraumatic stress disorder symptoms and correlates in US military veterans.&#8221;
-<em>Journal of anxiety disorders</em>, <b>45</b>, 49--59.</p>
+    <div class='dont-index'><p>posterior_sum</p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

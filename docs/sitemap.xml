@@ -76,6 +76,9 @@
     <loc>https://donaldrwilliams.github.io/BGGM//reference/pcor_mat.html</loc>
   </url>
   <url>
+    <loc>https://donaldrwilliams.github.io/BGGM//reference/pcor_sum.html</loc>
+  </url>
+  <url>
     <loc>https://donaldrwilliams.github.io/BGGM//reference/pcor_to_cor.html</loc>
   </url>
   <url>
@@ -83,6 +86,9 @@
   </url>
   <url>
     <loc>https://donaldrwilliams.github.io/BGGM//reference/plot.ggm_compare_ppc.html</loc>
+  </url>
+  <url>
+    <loc>https://donaldrwilliams.github.io/BGGM//reference/plot.pcor_sum.html</loc>
   </url>
   <url>
     <loc>https://donaldrwilliams.github.io/BGGM//reference/plot.predictability.html</loc>

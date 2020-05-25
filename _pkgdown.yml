@@ -2,7 +2,7 @@ home:
   title: BGGM
   links:
   - text: Ask a question about BGGM
-    href: mailto:drwwilliams@ucdavis.edu
+    href: https://groups.google.com/forum/#!forum/bggm-users
 
 url: https://donaldrwilliams.github.io/BGGM/
 template:
@@ -60,8 +60,10 @@ reference:
     - coef.explore
     - predict.explore
     - plot.summary.explore
+    - plot.summary.select.explore
     - select.explore
     - summary.explore
+    - summary.select.explore
   - title: "Confirmatory Hypothesis Testing"
     contents:
     - confirm
@@ -108,6 +110,12 @@ reference:
     contents:
     - roll_your_own
     - plot.roll_your_own
+  - title: "Partial Correlation Sums"
+    desc: >
+      Compute the sum of partial correlations within (one group) or between (two groups) GGMs.
+    contents:
+    - pcor_sum
+    - plot.pcor_sum
   - title: "Network Plot"
     desc: >
      Network plot for the selected graphs. This works with all method for which there is
@@ -124,8 +132,9 @@ reference:
     - pcor_mat
     - plot_prior
     - posterior_samples
-    - regression_summary
     - map
+    - regression_summary
+    - summary.coef
     - weighted_adj_mat
     - zero_order_cors
   - title: "Data"
@@ -134,6 +143,7 @@ reference:
     contents:
     - asd_ocd
     - bfi
+    - csws
     - depression_anxiety_t1
     - depression_anxiety_t2
     - gss
