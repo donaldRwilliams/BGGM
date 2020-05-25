@@ -32,6 +32,9 @@
 #'
 #' @param seed An integer for the random seed.
 #'
+#' @references
+#' \insertAllCited{}
+#'
 #' @return The returned object of class \code{confirm} contains a lot of information that
 #'         is used for printing and plotting the results. For users of \strong{BGGM}, the following
 #'         are the useful objects:
@@ -206,7 +209,8 @@
 #' # test hyp
 #' test <- ggm_compare_confirm(Ymale,  Yfemale,
 #'                             hypothesis = hypothesis,
-#'                             iter = 250)
+#'                             iter = 250,
+#'                             progress = FALSE)
 #'
 #' # print (evidence not strong)
 #' test
@@ -221,7 +225,8 @@
 #'                             Yfemale,
 #'                             prior_sd = 0.1,
 #'                             hypothesis = hypothesis,
-#'                             iter = 250)
+#'                             iter = 250,
+#'                             progress = FALSE)
 #'
 #' # print
 #' test
@@ -231,7 +236,8 @@
 #'                             Yfemale,
 #'                             prior_sd = 0.5,
 #'                             hypothesis = hypothesis,
-#'                             iter = 250)
+#'                             iter = 250,
+#'                             progress = FALSE)
 #'
 #' # print
 #' test
@@ -249,7 +255,8 @@
 #'                             Yfemale,
 #'                             type = "mixed",
 #'                             hypothesis = hypothesis,
-#'                             iter = 250)
+#'                             iter = 250,
+#'                             progress = FALSE)
 #'
 #' # print
 #' test
@@ -275,7 +282,8 @@
 #'                              Yfemale,
 #'                              formula = ~ education,
 #'                              hypothesis = hypothesis,
-#'                              iter = 250)
+#'                              iter = 250,
+#'                              progress = FALSE)
 #' # print
 #' test
 #'
@@ -304,7 +312,8 @@
 #' test <- ggm_compare_confirm(Ymale,
 #'                             Yfemale,
 #'                              hypothesis = hypothesis,
-#'                              iter = 250)
+#'                              iter = 250,
+#'                              progress = FALSE)
 #'
 #' # print
 #' test

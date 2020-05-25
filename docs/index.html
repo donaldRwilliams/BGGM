@@ -63,6 +63,9 @@
 <li>
   <a href="news/index.html">News</a>
 </li>
+<li>
+  <a href="articles/installation.html">Troubleshoot</a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -101,6 +104,11 @@
 }
 <span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"donaldRwilliams/BGGM"</span>)</pre></div>
 <p>Note that the developmental version is recommended, due to the algorithms being written in <code>c++</code> and support for all data types. The developmental version is essentially <strong>BGGM</strong> version 2.0.0.</p>
+<div id="-dealing-with-errors" class="section level3">
+<h3 class="hasAnchor">
+<a href="#-dealing-with-errors" class="anchor"></a><i class="fas fa-skull-crossbones"></i> Dealing with Errors</h3>
+<p>There are automatic checks for <a href="https://travis-ci.org/github/donaldRwilliams/BGGM/branches"><strong>BGGM</strong></a>. However, that only checks for Linux and <strong>BGGM</strong> is built on Windows. The most common installation errors occur on OSX. An evolving guide to address these issues is provided in the <a href="https://donaldrwilliams.github.io/BGGM/articles/installation.html">Troubleshoot Section</a>.</p>
+</div>
 </div>
 <div id="-overview" class="section level2">
 <h2 class="hasAnchor">
@@ -152,12 +160,12 @@
 </div>
 <div id="-illustrative-examples" class="section level2">
 <h2 class="hasAnchor">
-<a href="#-illustrative-examples" class="anchor"></a><i class="fas fa-external-link-square-alt"></i> Illustrative Examples</h2>
+<a href="#-illustrative-examples" class="anchor"></a><i class="fas fa-folder-open"></i> Illustrative Examples</h2>
 <p>There are several examples in the <a href="https://donaldrwilliams.github.io/BGGM/articles/">Vignettes</a> section.</p>
 </div>
 <div id="-basic-usage" class="section level2">
 <h2 class="hasAnchor">
-<a href="#-basic-usage" class="anchor"></a><i class="far fa-play-circle"></i> Basic Usage</h2>
+<a href="#-basic-usage" class="anchor"></a><i class="fas fa-play-circle"></i> Basic Usage</h2>
 <p>It is common to have some combination of continuous and discrete (e.g., ordinal, binary, etc.) variables. <strong>BGGM</strong> (as of version <code>2.0.0</code>) can readily be used for these kinds of data. In this example, a model is fitted for the <code>gss</code> data in <strong>BGGM</strong>.</p>
 <div id="visualize" class="section level3">
 <h3 class="hasAnchor">

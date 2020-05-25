@@ -160,6 +160,9 @@
     <loc>https://donaldrwilliams.github.io/BGGM//reference/select.explore.html</loc>
   </url>
   <url>
+    <loc>https://donaldrwilliams.github.io/BGGM//reference/select.ggm_compare_estimate.html</loc>
+  </url>
+  <url>
     <loc>https://donaldrwilliams.github.io/BGGM//reference/select.ggm_compare_explore.html</loc>
   </url>
   <url>
@@ -197,6 +200,15 @@
   </url>
   <url>
     <loc>https://donaldrwilliams.github.io/BGGM//reference/zero_order_cors.html</loc>
+  </url>
+  <url>
+    <loc>https://donaldrwilliams.github.io/BGGM//articles/hyp_3_ways.html</loc>
+  </url>
+  <url>
+    <loc>https://donaldrwilliams.github.io/BGGM//articles/installation.html</loc>
+  </url>
+  <url>
+    <loc>https://donaldrwilliams.github.io/BGGM//articles/in_tandem.html</loc>
   </url>
   <url>
     <loc>https://donaldrwilliams.github.io/BGGM//articles/mcmc_diagnostics.html</loc>

@@ -315,8 +315,8 @@ Borkulo CD, Boschloo L, Kossakowski J, Tio P, Schoevers RA, Borsboom D, Waldorp 
 #&gt; note:
 #&gt; JSD is Jensen-Shannon divergence </div><div class='input'>
 <span class='co'># plot</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>global_test</span>)</div><div class='output co'>#&gt; $plot_sse</div><div class='output co'>#&gt; <span class='message'>Picking joint bandwidth of 0.0173</span></div><div class='img'><img src='ggm_compare_ppc-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; 
-#&gt; $plot_jsd</div><div class='output co'>#&gt; <span class='message'>Picking joint bandwidth of 0.00745</span></div><div class='img'><img src='ggm_compare_ppc-2.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; </div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>global_test</span>)</div><div class='output co'>#&gt; $plot_sse</div><div class='output co'>#&gt; <span class='message'>Picking joint bandwidth of 0.0155</span></div><div class='img'><img src='ggm_compare_ppc-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; 
+#&gt; $plot_jsd</div><div class='output co'>#&gt; <span class='message'>Picking joint bandwidth of 0.00747</span></div><div class='img'><img src='ggm_compare_ppc-2.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; </div><div class='input'>
 <span class='co'>#############################</span>
 <span class='co'>###### custom function ######</span>
 <span class='co'>#############################</span>
@@ -369,10 +369,10 @@ Borkulo CD, Boschloo L, Kossakowski J, Tio P, Schoevers RA, Borsboom D, Waldorp 
 #&gt; Custom: 
 #&gt;  
 #&gt;    contrast custom.obs p.value
-#&gt;  Yg1 vs Yg2       0.16   0.048
+#&gt;  Yg1 vs Yg2       0.16   0.068
 #&gt; --- </div><div class='input'>
 <span class='co'># plot</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>global_max</span>)</div><div class='output co'>#&gt; $plot_custom</div><div class='output co'>#&gt; <span class='message'>Picking joint bandwidth of 0.00471</span></div><div class='img'><img src='ggm_compare_ppc-3.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; </div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>global_max</span>)</div><div class='output co'>#&gt; $plot_custom</div><div class='output co'>#&gt; <span class='message'>Picking joint bandwidth of 0.00424</span></div><div class='img'><img src='ggm_compare_ppc-3.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; </div><div class='input'>
 <span class='co'># example 2</span>
 <span class='co'># Hamming distance (squared error for adjacency)</span>
 
@@ -420,10 +420,10 @@ Borkulo CD, Boschloo L, Kossakowski J, Tio P, Schoevers RA, Borsboom D, Waldorp 
 #&gt; Custom: 
 #&gt;  
 #&gt;    contrast custom.obs p.value
-#&gt;  Yg1 vs Yg2         75    0.52
+#&gt;  Yg1 vs Yg2         75   0.584
 #&gt; --- </div><div class='input'>
 <span class='co'># plot</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>global_hd</span>)</div><div class='output co'>#&gt; $plot_custom</div><div class='output co'>#&gt; <span class='message'>Picking joint bandwidth of 2.23</span></div><div class='img'><img src='ggm_compare_ppc-4.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; </div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>global_hd</span>)</div><div class='output co'>#&gt; $plot_custom</div><div class='output co'>#&gt; <span class='message'>Picking joint bandwidth of 2.1</span></div><div class='img'><img src='ggm_compare_ppc-4.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; </div><div class='input'>
 <span class='co'>#############################</span>
 <span class='co'>########  nodewise ##########</span>
 <span class='co'>#############################</span>
@@ -447,36 +447,36 @@ Borkulo CD, Boschloo L, Kossakowski J, Tio P, Schoevers RA, Borsboom D, Waldorp 
 #&gt; Yg1 vs Yg2 
 #&gt;  Node JSD.obs p_value
 #&gt;     1   0.001   0.624
-#&gt;     2   0.000   0.956
-#&gt;     3   0.006   0.092
-#&gt;     4   0.005   0.288
-#&gt;     5   0.006   0.080
-#&gt;     6   0.002   0.400
-#&gt;     7   0.000   0.736
-#&gt;     8   0.000   0.880
-#&gt;     9   0.000   0.908
-#&gt;    10   0.003   0.232
-#&gt;    11   0.020   0.012
+#&gt;     2   0.000   0.944
+#&gt;     3   0.006   0.076
+#&gt;     4   0.005   0.264
+#&gt;     5   0.006   0.068
+#&gt;     6   0.002   0.456
+#&gt;     7   0.000   0.784
+#&gt;     8   0.000   0.844
+#&gt;     9   0.000   0.868
+#&gt;    10   0.003   0.236
+#&gt;    11   0.020   0.020
 #&gt;    12   0.009   0.020
-#&gt;    13   0.003   0.248
-#&gt;    14   0.004   0.116
-#&gt;    15   0.011   0.028
-#&gt;    16   0.001   0.496
-#&gt;    17   0.000   0.636
-#&gt;    18   0.000   0.668
-#&gt;    19   0.000   0.740
-#&gt;    20   0.000   0.744
-#&gt;    21   0.000   0.904
-#&gt;    22   0.003   0.476
-#&gt;    23   0.002   0.360
-#&gt;    24   0.013   0.164
-#&gt;    25   0.018   0.056
+#&gt;    13   0.003   0.276
+#&gt;    14   0.004   0.100
+#&gt;    15   0.011   0.056
+#&gt;    16   0.001   0.464
+#&gt;    17   0.000   0.592
+#&gt;    18   0.000   0.584
+#&gt;    19   0.000   0.796
+#&gt;    20   0.000   0.724
+#&gt;    21   0.000   0.888
+#&gt;    22   0.003   0.460
+#&gt;    23   0.002   0.388
+#&gt;    24   0.013   0.196
+#&gt;    25   0.018   0.052
 #&gt; --- 
 #&gt; 
 #&gt; note:
 #&gt; JSD is Jensen-Shannon divergence </div><div class='input'>
 <span class='co'># plot</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>nodewise</span>)</div><div class='output co'>#&gt; [[1]]</div><div class='output co'>#&gt; <span class='message'>Picking joint bandwidth of 0.57</span></div><div class='img'><img src='ggm_compare_ppc-5.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; </div><div class='input'># }
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>nodewise</span>)</div><div class='output co'>#&gt; [[1]]</div><div class='output co'>#&gt; <span class='message'>Picking joint bandwidth of 0.558</span></div><div class='img'><img src='ggm_compare_ppc-5.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; </div><div class='input'># }
 
 </div></pre>
   </div>

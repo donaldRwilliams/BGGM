@@ -101,6 +101,9 @@
 <li>
   <a href="../news/index.html">News</a>
 </li>
+<li>
+  <a href="../articles/installation.html">Troubleshoot</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -176,21 +179,81 @@ posterior samples</p></li>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
 <span class='co'># note: iter = 250 for demonstrative purposes</span>
 
+<span class='co'>#########################</span>
+<span class='co'>### example 1: binary ###</span>
+<span class='co'>#########################</span>
 <span class='co'># data</span>
-<span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='no'>ptsd</span>
-<span class='co'>#########################################</span>
-<span class='co'>### example 1: continuous and ordinal ###</span>
-<span class='co'>#########################################</span>
+<span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='no'>women_math</span>[<span class='fl'>1</span>:<span class='fl'>500</span>, ]
 
 <span class='co'># fit model</span>
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='estimate.html'>estimate</a></span>(<span class='no'>Y</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"continuous"</span>,
-               <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>)</div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='input'>
-<span class='co'># regression</span>
-<span class='no'>reg</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/coef.html'>coef</a></span>(<span class='no'>fit</span>)</div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |====                                                                  |   5%  |                                                                              |=======                                                               |  10%  |                                                                              |==========                                                            |  15%  |                                                                              |==============                                                        |  20%  |                                                                              |==================                                                    |  25%  |                                                                              |=====================                                                 |  30%  |                                                                              |========================                                              |  35%  |                                                                              |============================                                          |  40%  |                                                                              |================================                                      |  45%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================                                |  55%  |                                                                              |==========================================                            |  60%  |                                                                              |==============================================                        |  65%  |                                                                              |=================================================                     |  70%  |                                                                              |====================================================                  |  75%  |                                                                              |========================================================              |  80%  |                                                                              |============================================================          |  85%  |                                                                              |===============================================================       |  90%  |                                                                              |==================================================================    |  95%  |                                                                              |======================================================================| 100%</div><div class='input'>
+<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='estimate.html'>estimate</a></span>(<span class='no'>Y</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"binary"</span>,
+                <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>,
+                <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
+<span class='co'># summarize the partial correlations</span>
+<span class='no'>reg</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/coef.html'>coef</a></span>(<span class='no'>fit</span>)</div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |============                                                          |  17%  |                                                                              |=======================                                               |  33%  |                                                                              |===================================                                   |  50%  |                                                                              |===============================================                       |  67%  |                                                                              |==========================================================            |  83%  |                                                                              |======================================================================| 100%</div><div class='input'>
 <span class='co'># summary</span>
 <span class='no'>summ</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>reg</span>)
 
-<span class='co'># }</span></div></pre>
+<span class='no'>summ</span></div><div class='output co'>#&gt; BGGM: Bayesian Gaussian Graphical Models 
+#&gt; --- 
+#&gt; Type: binary 
+#&gt; Formula: ~ 1 
+#&gt; --- 
+#&gt; Call: 
+#&gt; estimate(Y = Y, type = "binary", iter = 250, progress = FALSE)
+#&gt; --- 
+#&gt; Coefficients: 
+#&gt;  
+#&gt; 1: 
+#&gt;  Node Post.mean Post.sd Cred.lb Cred.ub
+#&gt;     2     0.161   0.112  -0.052   0.363
+#&gt;     3     0.726   0.159   0.398   0.996
+#&gt;     4    -0.048   0.077  -0.204   0.084
+#&gt;     5     0.077   0.084  -0.071   0.241
+#&gt;     6    -0.135   0.111  -0.354   0.086
+#&gt; 
+#&gt; 2: 
+#&gt;  Node Post.mean Post.sd Cred.lb Cred.ub
+#&gt;     1     0.148   0.106  -0.051   0.330
+#&gt;     3    -0.755   0.124  -0.984  -0.480
+#&gt;     4     0.084   0.086  -0.081   0.257
+#&gt;     5    -0.330   0.084  -0.521  -0.191
+#&gt;     6     0.047   0.076  -0.102   0.181
+#&gt; 
+#&gt; 3: 
+#&gt;  Node Post.mean Post.sd Cred.lb Cred.ub
+#&gt;     1     0.383   0.094   0.202   0.541
+#&gt;     2    -0.435   0.087  -0.603  -0.254
+#&gt;     4     0.136   0.072   0.009   0.288
+#&gt;     5    -0.241   0.079  -0.449  -0.097
+#&gt;     6     0.211   0.092   0.011   0.364
+#&gt; 
+#&gt; 4: 
+#&gt;  Node Post.mean Post.sd Cred.lb Cred.ub
+#&gt;     1    -0.063   0.103  -0.297   0.112
+#&gt;     2     0.112   0.115  -0.111   0.344
+#&gt;     3     0.319   0.161   0.020   0.640
+#&gt;     5    -0.258   0.098  -0.412  -0.047
+#&gt;     6     0.004   0.074  -0.139   0.134
+#&gt; 
+#&gt; 5: 
+#&gt;  Node Post.mean Post.sd Cred.lb Cred.ub
+#&gt;     1     0.087   0.095  -0.073   0.289
+#&gt;     2    -0.384   0.099  -0.625  -0.221
+#&gt;     3    -0.489   0.151  -0.781  -0.185
+#&gt;     4    -0.223   0.086  -0.360  -0.040
+#&gt;     6    -0.057   0.077  -0.195   0.080
+#&gt; 
+#&gt; 6: 
+#&gt;  Node Post.mean Post.sd Cred.lb Cred.ub
+#&gt;     1    -0.171   0.139  -0.433   0.104
+#&gt;     2     0.062   0.103  -0.166   0.251
+#&gt;     3     0.496   0.217   0.025   0.833
+#&gt;     4     0.006   0.075  -0.136   0.154
+#&gt;     5    -0.068   0.096  -0.279   0.090
+#&gt; </div><div class='input'># }
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

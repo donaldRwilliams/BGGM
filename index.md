@@ -3,7 +3,8 @@
 
 <!-- badges: start -->
 
-[![CRAN Version](http://www.r-pkg.org/badges/version/BGGM)](https://cran.r-project.org/package=BGGM)
+[![CRAN
+Version](http://www.r-pkg.org/badges/version/BGGM)](https://cran.r-project.org/package=BGGM)
 [![Downloads](https://cranlogs.r-pkg.org/badges/BGGM)](https://cran.r-project.org/package=BGGM)
 [![Build
 Status](https://travis-ci.org/donaldRwilliams/BGGM.svg?branch=master)](https://travis-ci.org/donaldRwilliams/BGGM)
@@ -38,6 +39,15 @@ remotes::install_github("donaldRwilliams/BGGM")
 Note that the developmental version is recommended, due to the
 algorithms being written in `c++` and support for all data types. The
 developmental version is essentially **BGGM** version 2.0.0.
+
+### <i class="fas fa-skull-crossbones"></i> Dealing with Errors
+
+There are automatic checks for
+[**BGGM**](https://travis-ci.org/github/donaldRwilliams/BGGM/branches).
+However, that only checks for Linux and **BGGM** is built on Windows.
+The most common installation errors occur on OSX. An evolving guide to
+address these issues is provided in the [Troubleshoot
+Section](https://donaldrwilliams.github.io/BGGM/articles/installation.html).
 
 ## <i class="fas fa-clipboard-list"></i> Overview
 
@@ -115,12 +125,12 @@ support for missing values (see `bggm_missing`).
     Note that this can be used for *only* ordinal data (not restricted
     to “mixed” data).
 
-## <i class="fas fa-external-link-square-alt"></i> Illustrative Examples
+## <i class="fas fa-folder-open"></i> Illustrative Examples
 
 There are several examples in the
 [Vignettes](https://donaldrwilliams.github.io/BGGM/articles/) section.
 
-## <i class="far fa-play-circle"></i> Basic Usage
+## <i class="fas fa-play-circle"></i> Basic Usage
 
 It is common to have some combination of continuous and discrete (e.g.,
 ordinal, binary, etc.) variables. **BGGM** (as of version `2.0.0`) can

@@ -4,7 +4,7 @@
 #' the partial correlations that did not contain zero
 #' \insertCite{Williams2019}{BGGM}.
 #'
-#' @name select.estimate
+#' @name select.ggm_compare_estimate
 #'
 #' @param object An object of class \code{estimate.default}.
 #'
