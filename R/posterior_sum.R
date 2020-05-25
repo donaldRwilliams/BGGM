@@ -275,17 +275,23 @@ print_pcor_sum <- function(x, cred = 0.95, row_names = TRUE){
 #' @name plot.pcor_sum
 #'
 #' @param x An object of class \code{posterior_sum}
+#'
 #' @param fill Character string. What fill for the histogram
 #'        (defaults to colorblind "pink")?
 #'
+#' @param ... Currently ignored.
+#'
 #' @return A list of \code{ggplot} objects
+#'
 #' @export
 #'
 #' @note
 #' \strong{Examples}:
 #'
 #' @seealso posterior_sum
-plot.pcor_sum <- function(x, fill = "#CC79A7", ...){
+plot.pcor_sum <- function(x,
+                          fill = "#CC79A7",
+                          ...){
 
 
   if(is.null( x$post_diff)){

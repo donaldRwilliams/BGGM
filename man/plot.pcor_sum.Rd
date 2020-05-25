@@ -11,6 +11,8 @@
 
 \item{fill}{Character string. What fill for the histogram
 (defaults to colorblind "pink")?}
+
+\item{...}{Currently ignored.}
 }
 \value{
 A list of \code{ggplot} objects

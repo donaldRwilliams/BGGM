@@ -158,7 +158,8 @@ plot.select <- function(x,
                      edge.color = "edge_color",
                      node.color = "group",
                      node.size = 1,
-                     mode = layout, .__C__.environment) +
+                     mode = layout,
+                     ...) +
         geom_point(aes(color = groups),
                    size = node_size + 2,
                    alpha = 0.2) +
