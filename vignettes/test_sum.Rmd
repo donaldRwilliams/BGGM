@@ -131,7 +131,7 @@ plot(test_sum)$diff
 The histogram is not very smooth in this case because `iter = 1000`, but this of course can be changed.
 
 # Two Groups
-This next example is for two groups. The data are called `bfi` and they are in the **BGGM** package. I compare a sum of relations two relations for questions measuring agreeableness in males and females. The relations tested are as follows
+This next example is for two groups. The data are called `bfi` and they are in the **BGGM** package. I compare a sum of two relations for questions measuring agreeableness in males and females. The relations tested are as follows
 
 
 ## Sum to String
