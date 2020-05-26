@@ -14,10 +14,11 @@
 #' @examples
 #' \donttest{
 #' # note: iter = 250 for demonstrative purposes
-#' Y <- bfi
+#' Y <- bfi[,1:5]
 #'
 #' # estimate
-#' fit <- estimate(Y, iter = 250)
+#' fit <- estimate(Y, iter = 250,
+#'                 progress = FALSE)
 #'
 #' # select graph
 #' E <- select(fit)

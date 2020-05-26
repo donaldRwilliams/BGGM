@@ -195,9 +195,13 @@ should be compared for the same sum. Hence, in this case, only the sum needs to 
 <span class='no'>Y_females</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='no'>Y</span>, <span class='no'>gender</span> <span class='kw'>==</span> <span class='fl'>2</span>, <span class='kw'>select</span> <span class='kw'>=</span> -<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>education</span>, <span class='no'>gender</span>))[,<span class='fl'>1</span>:<span class='fl'>5</span>]
 
 <span class='co'># males</span>
-<span class='no'>fit_males</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='estimate.html'>estimate</a></span>(<span class='no'>Y_males</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='input'>
+<span class='no'>fit_males</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='estimate.html'>estimate</a></span>(<span class='no'>Y_males</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+                      <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
 <span class='co'># fit females</span>
-<span class='no'>fit_females</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='estimate.html'>estimate</a></span>(<span class='no'>Y_females</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='input'>
+<span class='no'>fit_females</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='estimate.html'>estimate</a></span>(<span class='no'>Y_females</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>2</span>,
+                        <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
 
 <span class='no'>sums</span> <span class='kw'>&lt;-</span> <span class='fu'>pcor_sum</span>(<span class='no'>fit_males</span>,
                  <span class='no'>fit_females</span>,

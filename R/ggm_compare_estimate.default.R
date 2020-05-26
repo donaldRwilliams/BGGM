@@ -149,81 +149,33 @@
 #'                      select = -c(gender,
 #'                                  education))[,1:10]
 #'
-#' #############################
-#' ### example 1: continuous ###
-#' #############################
-#'
-#' # fit model
-#' fit <- ggm_compare_estimate(Ymale, Yfemale,
-#'                            iter = 250,
-#'                            type = "continuous")
-#'
-#' # summary
-#' summary(fit)
-#'
-#' # plot summary
-#' plot(summary(fit))
-#'
-#' # select graph
-#' select(fit)
-#'
-#' # plot graph
-#' plot(select(fit))
-#'
-#' ##########################
-#' ### example 2: ordinal ###
-#' ##########################
-#'
 #' # fit model
 #' fit <- ggm_compare_estimate(Ymale,  Yfemale,
 #'                            type = "ordinal",
 #'                            iter = 250,
-#'                            prior_sd = 0.25)
-#'
-#' # summary
-#' summary(fit)
-#'
-#' # plot summary
-#' plot(summary(fit))
-#'
-#' # select graph
-#' select(fit)
-#'
-#'
-#' #########################
-#' ### example 3: mixed  ###
-#' #########################
-#'
-#' # fit model
-#' fit <- ggm_compare_explore(Ymale, Yfemale,
-#'                            type = "mixed",
-#'                            iter = 250)
-#'
-#' # summary
-#' summary(fit)
-#'
-#' # plot summary
-#' plot(summary(fit))
+#'                            prior_sd = 0.25,
+#'                            progress = FALSE)
 #'
 #' ###########################
-#' ### example 4: analytic ###
+#' ### example 2: analytic ###
 #' ###########################
+#' # only continuous
 #'
 #' # fit model
 #' fit <- ggm_compare_estimate(Ymale, Yfemale,
 #'                             analytic = TRUE)
 #'
 #' # summary
-#' summary(fit)
+#' summ <- summary(fit)
 #'
 #' # plot summary
-#' plot(summary(fit))
+#' plt_summ <- plot(summary(fit))
 #'
 #' # select
-#' select(fit)
+#' E <- select(fit)
 #'
 #' # plot select
-#' plot(select(fit))
+#' plt_E <- plot(select(fit))
 #'
 #' }
 #'
@@ -405,6 +357,30 @@ ggm_compare_estimate <- function(...,
 #'
 #' @return A list containing the summarized posterior distributions.
 #'
+#' @examples
+#' \donttest{
+#' # note: iter = 250 for demonstrative purposes
+#' # data
+#' Y <- bfi
+#'
+#' # males and females
+#' Ymale <- subset(Y, gender == 1,
+#'                 select = -c(gender,
+#'                             education))[,1:5]
+#'
+#' Yfemale <- subset(Y, gender == 2,
+#'                   select = -c(gender,
+#'                               education))[,1:5]
+#'
+#' # fit model
+#' fit <- ggm_compare_estimate(Ymale,  Yfemale,
+#'                             type = "ordinal",
+#'                             iter = 250,
+#'                             prior_sd = 0.25,
+#'                             progress = FALSE)
+#'
+#' summary(fit)
+#' }
 #' @export
 summary.ggm_compare_estimate <- function(object,
                                          col_names = TRUE,
@@ -515,7 +491,7 @@ print_ggm_compare <- function(x, ...){
   cat("--- \n")
   cat("Type:",  x$type, "\n")
   cat("Analytic:", x$analytic, "\n")
-  cat("Formula:", paste(as.character(fit$formula), collapse = " "), "\n")
+  cat("Formula:", paste(as.character(x$formula), collapse = " "), "\n")
   # number of iterations
   cat("Posterior Samples:", x$iter, "\n")
   # number of observations
@@ -542,7 +518,7 @@ print_summary_ggm_estimate_compare <- function(x,...){
   cat("--- \n")
   cat("Type:",  x$object$type, "\n")
   cat("Analytic:", x$object$analytic, "\n")
-  cat("Formula:", paste(as.character(fit$formula), collapse = " "), "\n")
+  cat("Formula:", paste(as.character(x$object$formula), collapse = " "), "\n")
  # number of iterations
   cat("Posterior Samples:", x$object$iter, "\n")
   # number of observations
@@ -591,6 +567,31 @@ print_summary_ggm_estimate_compare <- function(x,...){
 #' @return An object of class \code{ggplot}
 #'
 #' @seealso \code{\link{ggm_compare_estimate}}
+#'
+#' @examples
+#' \donttest{
+#' # note: iter = 250 for demonstrative purposes
+#' # data
+#' Y <- bfi
+#'
+#' # males and females
+#' Ymale <- subset(Y, gender == 1,
+#'                 select = -c(gender,
+#'                             education))[,1:5]
+#'
+#' Yfemale <- subset(Y, gender == 2,
+#'                   select = -c(gender,
+#'                               education))[,1:5]
+#'
+#' # fit model
+#' fit <- ggm_compare_estimate(Ymale,  Yfemale,
+#'                             type = "ordinal",
+#'                             iter = 250,
+#'                             prior_sd = 0.25,
+#'                             progress = FALSE)
+#'
+#' plot(summary(fit))
+#' }
 #'
 #' @export
 plot.summary.ggm_compare_estimate <- function(x, color = "black",

@@ -359,8 +359,26 @@ Borkulo CD, Boschloo L, Kossakowski J, Tio P, Schoevers RA, Borsboom D, Waldorp 
                               <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>,
                               <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='no'>f</span>,
                               <span class='kw'>custom_obs</span> <span class='kw'>=</span> <span class='no'>obs</span>,
-                              <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in ggm_compare_ppc(Ym, Yf, iter = 250, FUN = f, custom_obs = obs,     progress = FALSE): only two groups allowed for custom functions</span></div><div class='input'>
-<span class='no'>global_max</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'global_max' not found</span></div><div class='input'>
+                              <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
+<span class='no'>global_max</span></div><div class='output co'>#&gt; BGGM: Bayesian Gaussian Graphical Models 
+#&gt; --- 
+#&gt; Test: Global Predictive Check 
+#&gt; Posterior Samples: 250 
+#&gt;   Group 1: 805 
+#&gt;   Group 2: 1631 
+#&gt; Nodes:  25 
+#&gt; Relations: 300 
+#&gt; --- 
+#&gt; Call: 
+#&gt; ggm_compare_ppc(Ym, Yf, iter = 250, FUN = f, custom_obs = obs, 
+#&gt;     progress = FALSE)
+#&gt; --- 
+#&gt; Custom: 
+#&gt;  
+#&gt;    contrast custom.obs p.value
+#&gt;  Yg1 vs Yg2       0.16   0.068
+#&gt; --- </div><div class='input'>
 
 <span class='co'># example 2</span>
 <span class='co'># Hamming distance (squared error for adjacency)</span>
@@ -394,8 +412,26 @@ Borkulo CD, Boschloo L, Kossakowski J, Tio P, Schoevers RA, Borsboom D, Waldorp 
                             <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>,
                             <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='no'>f</span>,
                             <span class='kw'>custom_obs</span>  <span class='kw'>=</span> <span class='no'>obs</span>,
-                            <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in ggm_compare_ppc(Ym, Yf, iter = 250, FUN = f, custom_obs = obs,     progress = FALSE): only two groups allowed for custom functions</span></div><div class='input'>
-<span class='no'>global_hd</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'global_hd' not found</span></div><div class='input'>
+                            <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
+<span class='no'>global_hd</span></div><div class='output co'>#&gt; BGGM: Bayesian Gaussian Graphical Models 
+#&gt; --- 
+#&gt; Test: Global Predictive Check 
+#&gt; Posterior Samples: 250 
+#&gt;   Group 1: 805 
+#&gt;   Group 2: 1631 
+#&gt; Nodes:  25 
+#&gt; Relations: 300 
+#&gt; --- 
+#&gt; Call: 
+#&gt; ggm_compare_ppc(Ym, Yf, iter = 250, FUN = f, custom_obs = obs, 
+#&gt;     progress = FALSE)
+#&gt; --- 
+#&gt; Custom: 
+#&gt;  
+#&gt;    contrast custom.obs p.value
+#&gt;  Yg1 vs Yg2         75   0.584
+#&gt; --- </div><div class='input'>
 
 <span class='co'>#############################</span>
 <span class='co'>########  nodewise ##########</span>
@@ -421,29 +457,29 @@ Borkulo CD, Boschloo L, Kossakowski J, Tio P, Schoevers RA, Borsboom D, Waldorp 
 #&gt;  Node JSD.obs p_value
 #&gt;     1   0.001   0.624
 #&gt;     2   0.000   0.944
-#&gt;     3   0.006   0.088
-#&gt;     4   0.005   0.268
-#&gt;     5   0.006   0.116
-#&gt;     6   0.002   0.464
+#&gt;     3   0.006   0.076
+#&gt;     4   0.005   0.264
+#&gt;     5   0.006   0.068
+#&gt;     6   0.002   0.456
 #&gt;     7   0.000   0.784
-#&gt;     8   0.000   0.852
-#&gt;     9   0.000   0.920
-#&gt;    10   0.003   0.244
+#&gt;     8   0.000   0.844
+#&gt;     9   0.000   0.868
+#&gt;    10   0.003   0.236
 #&gt;    11   0.020   0.020
-#&gt;    12   0.009   0.032
-#&gt;    13   0.003   0.280
-#&gt;    14   0.004   0.148
-#&gt;    15   0.011   0.036
-#&gt;    16   0.001   0.416
-#&gt;    17   0.000   0.608
-#&gt;    18   0.000   0.600
-#&gt;    19   0.000   0.800
-#&gt;    20   0.000   0.708
-#&gt;    21   0.000   0.924
-#&gt;    22   0.003   0.484
-#&gt;    23   0.002   0.416
-#&gt;    24   0.013   0.212
-#&gt;    25   0.018   0.044
+#&gt;    12   0.009   0.020
+#&gt;    13   0.003   0.276
+#&gt;    14   0.004   0.100
+#&gt;    15   0.011   0.056
+#&gt;    16   0.001   0.464
+#&gt;    17   0.000   0.592
+#&gt;    18   0.000   0.584
+#&gt;    19   0.000   0.796
+#&gt;    20   0.000   0.724
+#&gt;    21   0.000   0.888
+#&gt;    22   0.003   0.460
+#&gt;    23   0.002   0.388
+#&gt;    24   0.013   0.196
+#&gt;    25   0.018   0.052
 #&gt; --- 
 #&gt; 
 #&gt; note:

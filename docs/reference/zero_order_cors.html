@@ -137,7 +137,13 @@ implementation in <code>R</code> that can estiamte Pearson's,  tetrachoric (bina
 (ordinal with more than two cateogries), and rank based correlation coefficients.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>zero_order_cors</span>(<span class='no'>Y</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"continuous"</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>5000</span>, <span class='kw'>mixed_type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>zero_order_cors</span>(
+  <span class='no'>Y</span>,
+  <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"continuous"</span>,
+  <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>5000</span>,
+  <span class='kw'>mixed_type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -160,6 +166,10 @@ implementation in <code>R</code> that can estiamte Pearson's,  tetrachoric (bina
       <td><p>Numeric vector. An indicator of length p for which varibles should be treated as ranks.
 (1 for rank and 0 to assume normality). The default is currently to treat all integer variables as ranks
 when <code>type = "mixed"</code> and <code>NULL</code> otherwise. See note for further details.</p></td>
+    </tr>
+    <tr>
+      <th>progress</th>
+      <td><p>Logical. Should a progress bar be included (defaults to <code>TRUE</code>) ?</p></td>
     </tr>
     </table>
 

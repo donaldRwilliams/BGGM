@@ -25,7 +25,8 @@
 #'
 #' fit_mv_ordinal <- estimate(Y, formula = ~ gender + as.factor(education),
 #'                            type = "ordinal",
-#'                            iter = 250)
+#'                            iter = 250,
+#'                            progress = FALSE)
 #'
 #' regression_summary(fit_mv_ordinal)
 #'}

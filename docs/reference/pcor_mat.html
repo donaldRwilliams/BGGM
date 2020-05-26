@@ -174,7 +174,9 @@ and ignored otherwise.</p></td>
 
 <span class='co'># ordinal</span>
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='estimate.html'>estimate</a></span>(<span class='no'>Y</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"ordinal"</span>,
-                <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>)</div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='input'>
+                <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>,
+                <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
 <span class='fu'>pcor_mat</span>(<span class='no'>fit</span>)</div><div class='output co'>#&gt;       B1     B2    B3     B4    B5
 #&gt; B1 0.000  0.258 0.028  0.356 0.131
 #&gt; B2 0.258  0.000 0.517 -0.076 0.127

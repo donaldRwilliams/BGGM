@@ -18,6 +18,7 @@
 #'
 #' @param iter Number of iterations (posterior samples; defaults to 5000).
 #'
+#' @param progress Logical. Should a progress bar be included (defaults to \code{TRUE}) ?
 #'
 #' @return
 #'
@@ -106,12 +107,14 @@
 #' @export
 zero_order_cors <- function(Y,  type = "continuous",
                             iter = 5000,
-                            mixed_type = NULL){
+                            mixed_type = NULL,
+                            progress = TRUE){
 
   fit <- estimate(Y,
                   type = type,
                   iter = iter,
-                  mixed_type = mixed_type)
+                  mixed_type = mixed_type,
+                  progres = progress)
 
   cors <- pcor_to_cor(fit)
 

@@ -37,11 +37,11 @@ the partial correlations that did not contain zero
 }
 \examples{
 \donttest{
-
+# note: iter = 250 for demonstrative purposes
 ##################
 ### example 1: ###
 ##################
-data
+# data
 Y <- bfi
 
 # males and females
@@ -55,7 +55,9 @@ Yfemale <- subset(Y, gender == 2,
 
 # fit model
 fit <- ggm_compare_estimate(Ymale, Yfemale,
-                           type = "continuous")
+                           type = "continuous",
+                           iter = 250,
+                           progress = FALSE)
 
 
 E <- select(fit)
