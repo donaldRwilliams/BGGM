@@ -186,6 +186,29 @@ many examples.</p>
 
     <div class='dont-index'><p><code><a href='ggm_compare_ppc.html'>ggm_compare_ppc</a></code></p></div>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+<span class='co'># data</span>
+<span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='no'>bfi</span>
+
+<span class='co'>#############################</span>
+<span class='co'>######### global ############</span>
+<span class='co'>#############################</span>
+<span class='co'># males</span>
+<span class='no'>Ym</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='no'>Y</span>, <span class='no'>gender</span> <span class='kw'>==</span> <span class='fl'>1</span>,
+             <span class='kw'>select</span> <span class='kw'>=</span> - <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>gender</span>, <span class='no'>education</span>))
+
+<span class='co'># females</span>
+
+<span class='no'>Yf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='no'>Y</span>, <span class='no'>gender</span> <span class='kw'>==</span> <span class='fl'>2</span>,
+             <span class='kw'>select</span> <span class='kw'>=</span> - <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>gender</span>, <span class='no'>education</span>))
+
+
+<span class='no'>global_test</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='ggm_compare_ppc.html'>ggm_compare_ppc</a></span>(<span class='no'>Ym</span>, <span class='no'>Yf</span>,
+                               <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>,
+                               <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>BGGM: Predictive Check (Contrast 1)</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Predictive Check (Contrast 2)</span></div><div class='output co'>#&gt; <span class='error'>Error in ggm_compare_ppc(Ym, Yf, iter = 250, progress = FALSE): Mat::init(): requested size is too large</span></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>global_test</span>)</div><div class='output co'>#&gt; <span class='error'>Error in plot(global_test): object 'global_test' not found</span></div><div class='input'># }
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

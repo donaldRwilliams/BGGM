@@ -10,7 +10,8 @@ ggm_compare_ppc(
   iter = 5000,
   FUN = NULL,
   custom_obs = NULL,
-  loss = TRUE
+  loss = TRUE,
+  progress = TRUE
 )
 }
 \arguments{
@@ -30,6 +31,8 @@ required if a function is provided in \code{FUN}. See \strong{Details}.}
 \item{loss}{Logical. If a function is provided, is the measure a "loss function"
 (i.e., a large score is bad thing). This determines how the \emph{p}-value
 is computed. See \strong{Details}.}
+
+\item{progress}{Logical. Should a progress bar be included (defaults to \code{TRUE}) ?}
 }
 \value{
 The returned object of class \code{ggm_compare_ppc} contains a lot of information that
@@ -152,13 +155,10 @@ global_test <- ggm_compare_ppc(Ym, Yf,
 
 global_test
 
-# plot
-plot(global_test)
 
 #############################
 ###### custom function ######
 #############################
-
 # example 1
 
 # maximum difference van Borkulo et al. (2017)
@@ -191,12 +191,11 @@ obs <- f(Ym, Yf)
 global_max <- ggm_compare_ppc(Ym, Yf,
                               iter = 250,
                               FUN = f,
-                              custom_obs = obs)
+                              custom_obs = obs,
+                              progress = FALSE)
 
 global_max
 
-# plot
-plot(global_max)
 
 # example 2
 # Hamming distance (squared error for adjacency)
@@ -229,12 +228,11 @@ obs <- f(Ym, Yf)
 global_hd <- ggm_compare_ppc(Ym, Yf,
                             iter = 250,
                             FUN = f,
-                            custom_obs  = obs)
+                            custom_obs  = obs,
+                            progress = FALSE)
 
 global_hd
 
-# plot
-plot(global_hd)
 
 #############################
 ########  nodewise ##########
@@ -245,8 +243,6 @@ nodewise <- ggm_compare_ppc(Ym, Yf, iter = 250,
 
 nodewise
 
-# plot
-plot(nodewise)
 }
 
 }

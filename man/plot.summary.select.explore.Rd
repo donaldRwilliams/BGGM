@@ -2,7 +2,7 @@
 % Please edit documentation in R/select.explore.R
 \name{plot.summary.select.explore}
 \alias{plot.summary.select.explore}
-\title{Plot new}
+\title{Plot \code{summary.select.explore} Objects}
 \usage{
 \method{plot}{summary.select.explore}(x, size = 2, color = "black", ...)
 }
@@ -20,4 +20,21 @@ A \code{ggplot} object
 }
 \description{
 Visualize the posterior hypothesis probabilities.
+}
+\examples{
+\donttest{
+#  data
+Y <- bfi[,1:10]
+
+# fit model
+fit <- explore(Y, iter = 250,
+               progress = FALSE)
+
+# edge set
+E <- select(fit,
+            alternative = "exhaustive")
+
+plot(summary(E))
+
+}
 }

@@ -143,6 +143,7 @@
   <span class='kw'>cred</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
   <span class='kw'>BF_cut</span> <span class='kw'>=</span> <span class='fl'>3</span>,
   <span class='kw'>iter</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='no'>...</span>
 )</pre>
 
@@ -168,6 +169,10 @@
     <tr>
       <th>iter</th>
       <td><p>interger. iterations (posterior samples) used for computing R2.</p></td>
+    </tr>
+    <tr>
+      <th>progress</th>
+      <td><p>Logical. Should a progress bar be included (defaults to <code>TRUE</code>) ?</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -210,10 +215,13 @@ doi: <a href='https://doi.org/10.31234/OSF.IO/X8DPR'>10.31234/OSF.IO/X8DPR</a>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
 
 <span class='co'># data</span>
-<span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='no'>ptsd</span>
+<span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='no'>ptsd</span>[,<span class='fl'>1</span>:<span class='fl'>5</span>]
 
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='estimate.html'>estimate</a></span>(<span class='no'>Y</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>)</div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='input'>
-<span class='no'>r2</span> <span class='kw'>&lt;-</span> <span class='fu'>predictability</span>(<span class='no'>fit</span>, <span class='kw'>select</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>)</div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |====                                                                  |   5%  |                                                                              |=======                                                               |  10%  |                                                                              |==========                                                            |  15%  |                                                                              |==============                                                        |  20%  |                                                                              |==================                                                    |  25%  |                                                                              |=====================                                                 |  30%  |                                                                              |========================                                              |  35%  |                                                                              |============================                                          |  40%  |                                                                              |================================                                      |  45%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================                                |  55%  |                                                                              |==========================================                            |  60%  |                                                                              |==============================================                        |  65%  |                                                                              |=================================================                     |  70%  |                                                                              |====================================================                  |  75%  |                                                                              |========================================================              |  80%  |                                                                              |============================================================          |  85%  |                                                                              |===============================================================       |  90%  |                                                                              |==================================================================    |  95%  |                                                                              |======================================================================| 100%</div><div class='input'>
+<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='estimate.html'>estimate</a></span>(<span class='no'>Y</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>, <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
+<span class='no'>r2</span> <span class='kw'>&lt;-</span> <span class='fu'>predictability</span>(<span class='no'>fit</span>, <span class='kw'>select</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+                     <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>, <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
 <span class='co'># summary</span>
 <span class='no'>r2</span></div><div class='output co'>#&gt; BGGM: Bayesian Gaussian Graphical Models 
 #&gt; --- 
@@ -223,26 +231,11 @@ doi: <a href='https://doi.org/10.31234/OSF.IO/X8DPR'>10.31234/OSF.IO/X8DPR</a>
 #&gt; Estimates:
 #&gt; 
 #&gt;  Node Post.mean Post.sd Cred.lb Cred.ub
-#&gt;    B1     0.481   0.052   0.389   0.586
-#&gt;    B2     0.525   0.052   0.430   0.624
-#&gt;    B3     0.523   0.051   0.429   0.624
-#&gt;    B4     0.512   0.048   0.433   0.606
-#&gt;    B5     0.516   0.048   0.427   0.610
-#&gt;    C1     0.197   0.045   0.107   0.276
-#&gt;    C2     0.321   0.054   0.214   0.438
-#&gt;    D1     0.000   0.000   0.000   0.000
-#&gt;    D2     0.358   0.047   0.271   0.445
-#&gt;    D3     0.393   0.044   0.308   0.475
-#&gt;    D4     0.592   0.050   0.507   0.701
-#&gt;    D5     0.430   0.053   0.334   0.542
-#&gt;    D6     0.486   0.051   0.396   0.589
-#&gt;    D7     0.435   0.048   0.356   0.534
-#&gt;    E1     0.380   0.052   0.279   0.481
-#&gt;    E2     0.240   0.047   0.147   0.327
-#&gt;    E3     0.486   0.053   0.391   0.569
-#&gt;    E4     0.399   0.048   0.301   0.504
-#&gt;    E5     0.429   0.049   0.337   0.524
-#&gt;    E6     0.278   0.046   0.181   0.363</div><div class='input'>
+#&gt;    B1     0.443   0.051   0.350   0.549
+#&gt;    B2     0.493   0.054   0.400   0.601
+#&gt;    B3     0.554   0.045   0.473   0.647
+#&gt;    B4     0.494   0.049   0.399   0.594
+#&gt;    B5     0.456   0.049   0.360   0.552</div><div class='input'>
 <span class='co'># plot</span>
 <span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>r2</span>)</div><div class='img'><img src='predictability-1.png' alt='' width='700' height='433' /></div><div class='input'>
 # }

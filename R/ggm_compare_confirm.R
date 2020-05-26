@@ -1001,10 +1001,9 @@ print_ggm_confirm <- function(x, ...){
 #'
 #' test <- ggm_compare_confirm(Ymale,
 #'                             Yfemale,
-#'                              hypothesis = hypothesis)
+#'                             hypothesis = hypothesis,
+#'                             iter = 250)
 #'
-#' # print
-#' test
 #'
 #' # plot
 #' plot(test)

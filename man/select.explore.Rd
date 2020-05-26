@@ -93,10 +93,10 @@ Care must be taken with the options \code{alternative = "less"} and
 #################
 
 #  data
-Y <- bfi[,1:25]
+Y <- bfi[,1:10]
 
 # fit model
-fit <- explore(Y)
+fit <- explore(Y, progress = FALSE)
 
 # edge set
 E <- select(fit,

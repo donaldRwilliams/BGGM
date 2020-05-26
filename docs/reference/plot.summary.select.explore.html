@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plot new — plot.summary.select.explore • BGGM</title>
+<title>Plot <code>summary.select.explore</code> Objects — plot.summary.select.explore • BGGM</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,7 @@
 
 
 
-<meta property="og:title" content="Plot new — plot.summary.select.explore" />
+<meta property="og:title" content="Plot <code>summary.select.explore</code> Objects — plot.summary.select.explore" />
 <meta property="og:description" content="Visualize the posterior hypothesis probabilities." />
 <meta property="og:image" content="https://donaldrwilliams.github.io/BGGM/reference/figures/hex.jpg" />
 <meta name="twitter:card" content="summary" />
@@ -122,7 +122,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Plot new</h1>
+    <h1>Plot <code>summary.select.explore</code> Objects</h1>
     <small class="dont-index">Source: <a href='https://github.com/donaldRwilliams/BGGM/blob/master/R/select.explore.R'><code>R/select.explore.R</code></a></small>
     <div class="hidden name"><code>plot.summary.select.explore.Rd</code></div>
     </div>
@@ -159,6 +159,22 @@
 
     <p>A <code>ggplot</code> object</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+<span class='co'>#  data</span>
+<span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='no'>bfi</span>[,<span class='fl'>1</span>:<span class='fl'>10</span>]
+
+<span class='co'># fit model</span>
+<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='explore.html'>explore</a></span>(<span class='no'>Y</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>,
+               <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
+<span class='co'># edge set</span>
+<span class='no'>E</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='select.html'>select</a></span>(<span class='no'>fit</span>,
+            <span class='kw'>alternative</span> <span class='kw'>=</span> <span class='st'>"exhaustive"</span>)
+
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>E</span>))</div><div class='img'><img src='plot.summary.select.explore-1.png' alt='' width='700' height='433' /></div><div class='input'>
+# }
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

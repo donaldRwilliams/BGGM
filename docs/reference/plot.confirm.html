@@ -180,43 +180,9 @@ each slice corresponding the probability of a given hypothesis.</p>
 
 <span class='no'>test</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='ggm_compare_confirm.html'>ggm_compare_confirm</a></span>(<span class='no'>Ymale</span>,
                             <span class='no'>Yfemale</span>,
-                             <span class='kw'>hypothesis</span> <span class='kw'>=</span> <span class='no'>hypothesis</span>)</div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling (Group 1)</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling (Group 2)</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Prior Sampling (Group 1)</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Prior Sampling (Group 2)</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='input'>
-<span class='co'># print</span>
-<span class='no'>test</span></div><div class='output co'>#&gt; BGGM: Bayesian Gaussian Graphical Models 
-#&gt; Type: continuous 
-#&gt; --- 
-#&gt; Posterior Samples: 25000 
-#&gt;   Group 1: 896 
-#&gt;   Group 2: 1813 
-#&gt; Variables (p): 5 
-#&gt; Relations: 10 
-#&gt; Delta: 15 
-#&gt; --- 
-#&gt; Call:
-#&gt; ggm_compare_confirm(Ymale, Yfemale, hypothesis = hypothesis)
-#&gt; --- 
-#&gt; Hypotheses: 
-#&gt; 
-#&gt; H1: g1_A1--A2&gt;g2_A1--A2&amp;g1_A1--A3=g2_A1--A3
-#&gt; H2: g1_A1--A2=g2_A1--A2&amp;g1_A1--A3=g2_A1--A3
-#&gt; H3: g1_A1--A2=g2_A1--A2=g1_A1--A3=g2_A1--A3
-#&gt; H4: complement
-#&gt; --- 
-#&gt; Posterior prob: 
-#&gt; 
-#&gt; p(H1|data) = 0.22
-#&gt; p(H2|data) = 0.765
-#&gt; p(H3|data) = 0.001
-#&gt; p(H4|data) = 0.014
-#&gt; --- 
-#&gt; Bayes factor matrix: 
-#&gt;       H1    H2      H3     H4
-#&gt; H1 1.000 0.287 274.985 15.920
-#&gt; H2 3.479 1.000 956.724 55.387
-#&gt; H3 0.004 0.001   1.000  0.058
-#&gt; H4 0.063 0.018  17.273  1.000
-#&gt; --- 
-#&gt; note: equal hypothesis prior probabilities</div><div class='input'>
+                            <span class='kw'>hypothesis</span> <span class='kw'>=</span> <span class='no'>hypothesis</span>,
+                            <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>)</div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling (Group 1)</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling (Group 2)</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Prior Sampling (Group 1)</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Prior Sampling (Group 2)</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='input'>
+
 <span class='co'># plot</span>
 <span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>test</span>)</div><div class='img'><img src='plot.confirm-1.png' alt='' width='700' height='433' /></div><div class='input'># }
 </div></pre>

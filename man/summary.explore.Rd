@@ -25,12 +25,14 @@ with the posterior mean and standard deviation.
 \donttest{
 # note: iter = 250 for demonstrative purposes
 
-Y <- ptsd
+Y <- ptsd[,1:5]
 
-fit <- explore(Y, iter = 250)
+fit <- explore(Y, iter = 250,
+               progress = FALSE)
 
 summ <- summary(fit)
 
+summ
 }
 }
 \seealso{

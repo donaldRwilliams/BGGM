@@ -199,13 +199,15 @@ pcor_mat(fit_male)["A3", "A4"] + pcor_mat(fit_male)["A4", "A5"]
 This matches the output.
 
 # Notes
+By default, the print function for `pcor_sum` provides 95 % credible intervals. This can be changed by
+directly using the print function, for example `print(test_sum, cred = 0.99)`, provides
+99 % credible intervals.
+
 It would be possible to test the sums for independent groups analytically, assuming there is a solution 
 available (which there is for Spearman, Pearson, etc. partial correlations). This would not work for 
 partial correlations *within* the same network, as the sum and difference must consider the covariance between relations. This is a nice aspect of Bayesian methods, in that the posterior samples encode the covariance
 
-
-
-Currently this function only supports sums, due to this being of interest for the psychological network
+Currently, this function only supports sums, due to this being of interest for the psychological network
 literature in particular. This can be extended to accommodate multiplication, subtraction,
 testing values other than zero, etc. Please make a feature request at either
 [github](https://github.com/donaldRwilliams/BGGM/issues) or [BGGM-users group](https://groups.google.com/forum/#!forum/bggm-users).
