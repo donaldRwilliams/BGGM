@@ -131,8 +131,82 @@ plot(test_sum)$diff
 The histogram is not very smooth in this case because `iter = 1000`, but this of course can be changed.
 
 # Two Groups
+This next example is for two groups. The data are called `bfi` and they are in the **BGGM** package. I compare a sum of relations two relations for questions measuring agreeableness in males and females. The relations tested are as follows
 
-# Note
+
+## Sum to String
+```r
+sums <- c("A3--A4 + A4--A5")
+```
+where `A1` is "know how to comfort others", `A4` is "love children", and `A5` is "make people feel at ease".
+
+## Fit Models
+The next step is to fit the models
+```r
+# data
+Y <- bfi
+
+# males
+Y_males <- subset(Y, gender == 1, select = -c(education, gender))[,1:5]
+
+# females
+Y_females <- subset(Y, gender == 2, select = -c(education, gender))[,1:5]
+
+
+fit_female <- estimate(Y_females, seed = 2)
+
+# fit males
+fit_male <- estimate(Y_males, seed = 1)
+```
+
+## Test Sums
+The test the sum
+
+```r
+test_sum <- pcor_sum(fit_female, fit_male, relations = sums)
+
+# print
+test_sum
+
+#> BGGM: Bayesian Gaussian Graphical Models 
+#> --- 
+#> Network Stats: Posterior Sum
+#> Posterior Samples: 5000 
+#> --- 
+#> Estimates 
+#> 
+#> Sum: 
+#>                   Post.mean Post.sd Cred.lb Cred.ub
+#> g1: A3--A4+A4--A5     0.292   0.026   0.241   0.342
+#> g2: A3--A4+A4--A5     0.305   0.036   0.234   0.375
+#> --- 
+#> 
+#> Difference:
+#> g1: A3--A4+A4--A5 - g2: A3--A4+A4--A5 
+#> 
+#>  Post.mean Post.sd Cred.lb Cred.ub Prob.greater Prob.less
+#>     -0.014   0.045    -0.1   0.074        0.386     0.614
+#> --- 
+```
+## Sanity Check
+For a kind of sanity check, here is the sum for the female group obtained from the point estimates
+for the partial correlations.
+
+```r
+pcor_mat(fit_male)["A3", "A4"] + pcor_mat(fit_male)["A4", "A5"] 
+
+#>  0.305
+```
+
+This matches the output.
+
+# Notes
+It would be possible to test the sums for independent groups analytically, assuming there is a solution 
+available (which there is for Spearman, Pearson, etc. partial correlations). This would not work for 
+partial correlations *within* the same network, as the sum and difference must consider the covariance between relations. This is a nice aspect of Bayesian methods, in that the posterior samples encode the covariance
+
+
+
 Currently this function only supports sums, due to this being of interest for the psychological network
 literature in particular. This can be extended to accommodate multiplication, subtraction,
 testing values other than zero, etc. Please make a feature request at either
