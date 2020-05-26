@@ -559,9 +559,10 @@ estimate  <- function(Y,
 #' @examples
 #' \donttest{
 #' # data
-#' Y <- ptsd
+#' Y <- ptsd[,1:5]
 #'
-#' fit <- estimate(Y, iter = 250)
+#' fit <- estimate(Y, iter = 250,
+#'                 progress = FALSE)
 #'
 #' summary(fit)
 #'
@@ -722,11 +723,11 @@ print_estimate <- function(x, ...){
 #' @examples
 #' \donttest{
 #' # data
-#' Y <- ptsd
+#' Y <- ptsd[,1:5]
 #'
-#' fit <- estimate(Y, iter = 250)
+#' fit <- estimate(Y, iter = 250,
+#'                 progress = FALSE)
 #'
-#' summary(fit)
 #'
 #' plot(summary(fit))
 #'

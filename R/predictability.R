@@ -16,6 +16,8 @@
 #'
 #' @param iter interger. iterations (posterior samples) used for computing R2.
 #'
+#' @param progress Logical. Should a progress bar be included (defaults to \code{TRUE}) ?
+#'
 #' @param ... currently ignored.
 #'
 #' @return object of classes \code{bayes_R2} and \code{metric}
@@ -47,11 +49,12 @@
 #' \donttest{
 #'
 #' # data
-#' Y <- ptsd
+#' Y <- ptsd[,1:5]
 #'
-#' fit <- estimate(Y, iter = 250)
+#' fit <- estimate(Y, iter = 250, progress = FALSE)
 #'
-#' r2 <- predictability(fit, select = TRUE, iter = 250)
+#' r2 <- predictability(fit, select = TRUE,
+#'                      iter = 250, progress = FALSE)
 #'
 #' # summary
 #' r2
@@ -67,6 +70,7 @@ predictability <- function(object,
                            cred = 0.95,
                            BF_cut = 3,
                            iter = NULL,
+                           progress = TRUE,
                            ...){
 
 
@@ -97,7 +101,9 @@ predictability <- function(object,
 
 
   if(is.null(iter)){
-    iter <- 1000
+
+    iter <- object$iter
+
     }
 
   # correlations
@@ -107,8 +113,10 @@ predictability <- function(object,
   if(isFALSE(select)){
 
     # progress bar
-    pb <- utils::txtProgressBar(min = 0, max = p, style = 3)
 
+    if(isTRUE(progress)){
+      pb <- utils::txtProgressBar(min = 0, max = p, style = 3)
+    }
 
     r2 <-  lapply(1:p,   function(x)  {
 
@@ -123,7 +131,9 @@ predictability <- function(object,
         iter = iter
       )$r2
 
-      utils::setTxtProgressBar(pb, x)
+      if(isTRUE(progress)){
+        utils::setTxtProgressBar(pb, x)
+        }
 
       r2_p
 
@@ -150,8 +160,9 @@ predictability <- function(object,
     }
 
     # progress bar
-    pb <- utils::txtProgressBar(min = 0, max = p, style = 3)
-
+    if(isTRUE(progress)){
+      pb <- utils::txtProgressBar(min = 0, max = p, style = 3)
+      }
     # R2
     r2 <- lapply(1:p, function(x)  {
 
@@ -192,7 +203,9 @@ predictability <- function(object,
         }
       }
 
-      utils::setTxtProgressBar(pb, x)
+      if(isTRUE(progress)){
+        utils::setTxtProgressBar(pb, x)
+        }
 
       r2_p
 
@@ -241,11 +254,13 @@ predictability <- function(object,
 #'
 #' @examples
 #' \donttest{
-#' Y <- ptsd
+#' Y <- ptsd[,1:5]
 #'
-#' fit <- explore(Y, iter = 250)
+#' fit <- explore(Y, iter = 250,
+#'                progress = FALSE)
 #'
-#' r2 <- predictability(fit, iter = 250)
+#' r2 <- predictability(fit, iter = 250,
+#'                      progress = FALSE)
 #'
 #' summary(r2)
 #'
@@ -363,11 +378,13 @@ print_summary_metric <- function(x, digits = 2,...){
 #'
 #' @examples
 #' \donttest{
-#' Y <- ptsd
+#' Y <- ptsd[,1:5]
 #'
-#' fit <- explore(Y, iter = 250)
+#' fit <- explore(Y, iter = 250,
+#'                progress = FALSE)
 #'
-#' r2 <- predictability(fit, iter = 250)
+#' r2 <- predictability(fit, iter = 250,
+#'                      progress = FALSE)
 #'
 #' plot(r2)
 #'}
