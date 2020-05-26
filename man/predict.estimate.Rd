@@ -4,7 +4,15 @@
 \alias{predict.estimate}
 \title{Model Predictions for \code{estimate} Objects}
 \usage{
-\method{predict}{estimate}(object, newdata = NULL, summary = TRUE, cred = 0.95, iter = NULL, ...)
+\method{predict}{estimate}(
+  object,
+  newdata = NULL,
+  summary = TRUE,
+  cred = 0.95,
+  iter = NULL,
+  progress = TRUE,
+  ...
+)
 }
 \arguments{
 \item{object}{object of class \code{estimate}}
@@ -16,6 +24,8 @@
 \item{cred}{credible interval used for summarizing}
 
 \item{iter}{number of posterior samples (defaults to all in the object).}
+
+\item{progress}{Logical. Should a progress bar be included (defaults to \code{TRUE}) ?}
 
 \item{...}{currently ignored}
 }
@@ -33,10 +43,11 @@ Model Predictions for \code{estimate} Objects
 # # data
 Y <- ptsd
 
-fit <- estimate(Y, iter = 250)
+fit <- estimate(Y, iter = 250,
+                progress = FALSE)
 
-pred <- predict(fit)
-
+pred <- predict(fit,
+                progress = FALSE)
 }
 
 }
