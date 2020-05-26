@@ -112,11 +112,11 @@
 <div id="one-group" class="section level1">
 <h1 class="hasAnchor">
 <a href="#one-group" class="anchor"></a>One Group</h1>
-<p>This first example looks at one group, where a sum is tested within the same ptsd network. I focus on the relations between the re-experiencing and avoidance communities. In particular, the sum of relations between the “Intrusion” (5 nodes) community and the “Avoidance” (two nodes) community is tested.</p>
+<p>This first example looks at one group, where a sum is tested within the same ptsd network. I focus on the relations between the re-experiencing (<code>B</code>) and avoidance (<code>C</code>) communities. In particular, the sum of relations between the “Intrusion” (5 nodes) community and the “Avoidance” (two nodes) community is tested.</p>
 <div id="sum-to-string" class="section level2">
 <h2 class="hasAnchor">
 <a href="#sum-to-string" class="anchor"></a>Sum to String</h2>
-<p>For the avoidance symptom “avoidance of thoughts”, this can be written in <code>R</code> code with</p>
+<p>For the avoidance symptom “avoidance of thoughts” <code>C1</code>, this can be written in <code>R</code> code with</p>
 <pre><code># ptsd
 Y &lt;- ptsd
 
@@ -124,7 +124,7 @@ Y &lt;- ptsd
 paste0(colnames(Y)[1:5],  "--C1", collapse = " + ")
 
 #&gt; "B1--C1 + B2--C1 + B3--C1 + B4--C1 + B5--C1"</code></pre>
-<p>whereas, for the avoidance symptom “avoidance of reminders,” this is written as</p>
+<p>whereas, for the avoidance symptom “avoidance of reminders” (<code>C2</code>), this is written as</p>
 <pre><code>paste0(colnames(Y)[1:5],  "--C2", collapse = " + ")
 
 #&gt; "B1--C2 + B2--C2 + B3--C2 + B4--C2 + B5--C2"</code></pre>
@@ -221,7 +221,7 @@ test_sum
 <div id="test-sums-1" class="section level2">
 <h2 class="hasAnchor">
 <a href="#test-sums-1" class="anchor"></a>Test Sums</h2>
-<p>The test the sum</p>
+<p>Then test the sum</p>
 <div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">test_sum</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/pcor_sum.html">pcor_sum</a></span>(<span class="no">fit_female</span>, <span class="no">fit_male</span>, <span class="kw">relations</span> <span class="kw">=</span> <span class="no">sums</span>)
 
 <span class="co"># print</span>
@@ -250,7 +250,7 @@ test_sum
 <div id="sanity-check" class="section level2">
 <h2 class="hasAnchor">
 <a href="#sanity-check" class="anchor"></a>Sanity Check</h2>
-<p>For a kind of sanity check, here is the sum for the female group obtained from the point estimates for the partial correlations.</p>
+<p>For a kind of sanity check, here is the sum for the male group obtained from the point estimates.</p>
 <div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu"><a href="../reference/pcor_mat.html">pcor_mat</a></span>(<span class="no">fit_male</span>)[<span class="st">"A3"</span>, <span class="st">"A4"</span>] + <span class="fu"><a href="../reference/pcor_mat.html">pcor_mat</a></span>(<span class="no">fit_male</span>)[<span class="st">"A4"</span>, <span class="st">"A5"</span>]
 
 <span class="co">#&gt;  0.305</span></pre></body></html></div>

@@ -37,11 +37,10 @@ library(BGGM)
 
 # One Group
 This first example looks at one group, where a sum is tested within the same ptsd network. I focus on the 
-relations between the re-experiencing and avoidance communities. In particular, the sum of relations between
-the "Intrusion" (5 nodes) community and the "Avoidance" (two nodes) community is tested. 
+relations between the re-experiencing (`B`) and avoidance (`C`) communities. In particular, the sum of relations between the "Intrusion" (5 nodes) community and the "Avoidance" (two nodes) community is tested. 
 
 ## Sum to String
-For the avoidance symptom "avoidance of thoughts", this can be written in `R` code with
+For the avoidance symptom "avoidance of thoughts" `C1`, this can be written in `R` code with
 
 ```
 # ptsd
@@ -52,7 +51,7 @@ paste0(colnames(Y)[1:5],  "--C1", collapse = " + ")
 
 #> "B1--C1 + B2--C1 + B3--C1 + B4--C1 + B5--C1"
 ```
-whereas, for the avoidance symptom "avoidance of reminders," this is written as
+whereas, for the avoidance symptom "avoidance of reminders" (`C2`), this is written as
 
 ```
 paste0(colnames(Y)[1:5],  "--C2", collapse = " + ")
@@ -160,7 +159,7 @@ fit_male <- estimate(Y_males, seed = 1)
 ```
 
 ## Test Sums
-The test the sum
+Then test the sum
 
 ```r
 test_sum <- pcor_sum(fit_female, fit_male, relations = sums)
@@ -189,8 +188,7 @@ test_sum
 #> --- 
 ```
 ## Sanity Check
-For a kind of sanity check, here is the sum for the female group obtained from the point estimates
-for the partial correlations.
+For a kind of sanity check, here is the sum for the male group obtained from the point estimates.
 
 ```r
 pcor_mat(fit_male)["A3", "A4"] + pcor_mat(fit_male)["A4", "A5"] 
