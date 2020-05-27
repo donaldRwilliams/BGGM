@@ -56,7 +56,8 @@ This model can then be fitted with
 fit <- explore(Y, formula = ~ as.factor(education))
 ```
 
-To show this is indeed a multivariate regression, here are the summarized regression coefficients
+To show this is indeed a multivariate regression, here are the summarized regression coefficients for the first
+outcome.
 
 ```
 summ_coef <- regression_summary(fit)
