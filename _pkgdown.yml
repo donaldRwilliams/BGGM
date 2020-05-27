@@ -35,6 +35,7 @@ articles:
       - test_sum
       - netplot
       - mcmc_diagnostics
+      - control
       - netstat_custom
       - ppc_custom
       - hyp_3_ways

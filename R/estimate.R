@@ -657,7 +657,7 @@ print_summary_estimate <- function(x, ...) {
     cat("--- \n")
     cat("Type:",  x$object$type, "\n")
     cat("Analytic:", x$object$analytic, "\n")
-    cat("Formula:", paste(as.character(x$formula), collapse = " "), "\n")
+    cat("Formula:", paste(as.character(x$object$formula), collapse = " "), "\n")
     # number of iterations
     cat("Posterior Samples:", x$object$iter, "\n")
     # number of observations
