@@ -180,7 +180,9 @@ means that the implied prior distribution will not be the same for the correlati
 <span class='co'>#########################</span>
 
 <span class='co'># estimate the model</span>
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='estimate.html'>estimate</a></span>(<span class='no'>Y</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>)</div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='input'>
+<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='estimate.html'>estimate</a></span>(<span class='no'>Y</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>,
+                <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
 <span class='co'># compute correlations</span>
 <span class='no'>cors</span> <span class='kw'>&lt;-</span> <span class='fu'>pcor_to_cor</span>(<span class='no'>fit</span>)
 
@@ -194,7 +196,9 @@ means that the implied prior distribution will not be the same for the correlati
 
 <span class='co'># estimate the model</span>
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='estimate.html'>estimate</a></span>(<span class='no'>Y</span>, <span class='kw'>type</span> <span class='kw'>=</span>  <span class='st'>"ordinal"</span>,
-                <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>)</div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='input'>
+                <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>,
+                <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
 <span class='co'># compute correlations</span>
 <span class='no'>cors</span> <span class='kw'>&lt;-</span> <span class='fu'>pcor_to_cor</span>(<span class='no'>fit</span>)
 
@@ -207,7 +211,9 @@ means that the implied prior distribution will not be the same for the correlati
 
 <span class='co'># estimate the model</span>
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='estimate.html'>estimate</a></span>(<span class='no'>Y</span>, <span class='kw'>type</span> <span class='kw'>=</span>  <span class='st'>"mixed"</span>,
-                <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>)</div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='input'>
+                <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>,
+                <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
 <span class='co'># compute correlations</span>
 <span class='no'>cors</span> <span class='kw'>&lt;-</span> <span class='fu'>pcor_to_cor</span>(<span class='no'>fit</span>)
 <span class='co'># }</span></div></pre>

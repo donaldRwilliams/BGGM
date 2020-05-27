@@ -194,6 +194,10 @@ This indicates groups of nodes that should be the same color
 
     <p>An object (or list of objects) of class <code>ggplot</code>
 that can then be further customized.</p>
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p>A more extensive example of a custom plot is
+provided <a href='https://donaldrwilliams.github.io/BGGM/articles/netplot.html'>here</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
@@ -205,7 +209,9 @@ that can then be further customized.</p>
 <span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='no'>bfi</span>[,<span class='fl'>1</span>:<span class='fl'>25</span>]
 
 <span class='co'># estimate</span>
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='estimate.html'>estimate</a></span>(<span class='no'>Y</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>)</div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='input'>
+<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='estimate.html'>estimate</a></span>(<span class='no'>Y</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>,
+                <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
 <span class='co'># "communities"</span>
 <span class='no'>comm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/substr.html'>substring</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>Y</span>), <span class='fl'>1</span>, <span class='fl'>1</span>)
 
@@ -233,7 +239,9 @@ that can then be further customized.</p>
               <span class='kw'>select</span> <span class='kw'>=</span> -<span class='no'>gender</span>)
 
 <span class='co'># estimate</span>
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='ggm_compare_estimate.html'>ggm_compare_estimate</a></span>(<span class='no'>Ym</span>, <span class='no'>Yf</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>)</div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling (Group 1)</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling (Group 2)</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='input'>
+<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='ggm_compare_estimate.html'>ggm_compare_estimate</a></span>(<span class='no'>Ym</span>, <span class='no'>Yf</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>,
+                            <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
 <span class='co'># "communities"</span>
 <span class='no'>comm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/substr.html'>substring</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>Ym</span>), <span class='fl'>1</span>, <span class='fl'>1</span>)
 

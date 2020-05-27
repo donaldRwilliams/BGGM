@@ -67,8 +67,6 @@
 #' # print
 #' net_stat
 #'
-#' # plot
-#' plot(net_stat)
 #'
 #' ############################################
 #' ###### example 2: expected influence #######
@@ -91,12 +89,6 @@
 #' net_stat <- roll_your_own(object = fit,
 #'                           FUN = f,
 #'                           progress = FALSE)
-#' # print
-#' net_stat
-#'
-#' # plot
-#' plot(net_stat)
-#'
 #'
 #' #######################################
 #' ### example 3: mixed data & bridge ####
@@ -125,11 +117,6 @@
 #'                           communities = communities,
 #'                           progress = FALSE)
 #'
-#' # print
-#' net_stat
-#'
-#' #plot
-#' plot(net_stat)
 #' }
 #'
 #' @export
@@ -253,7 +240,40 @@ print_roll_your_own <- function(x, cred = 0.95, ...) {
 #'
 #' @importFrom ggridges geom_density_ridges
 #'
-
+#' @examples
+#' \donttest{
+#' ####################################
+#' ###### example 1: assortment #######
+#' ####################################
+#' # assortment
+#' library(assortnet)
+#'
+#' Y <- BGGM::bfi[,1:10]
+#' membership <- c(rep("a", 5), rep("c", 5))
+#'
+#' # fit model
+#' fit <- estimate(Y = Y, iter = 250,
+#'                 progress = FALSE)
+#'
+#' # membership
+#' membership <- c(rep("a", 5), rep("c", 5))
+#'
+#' # define function
+#' f <- function(x,...){
+#'  assortment.discrete(x, ...)$r
+#'}
+#'
+#' net_stat <- roll_your_own(object = fit,
+#'                           FUN = f,
+#'                           types = membership,
+#'                           weighted = TRUE,
+#'                           SE = FALSE, M = 1,
+#'                           progress = FALSE)
+#'
+#' # plot
+#' plot(net_stat)
+#'
+#' }
 #' @export
 plot.roll_your_own <- function(x, fill = "#CC79A7", alpha = 0.5, ...){
 

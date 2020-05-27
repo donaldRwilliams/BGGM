@@ -221,21 +221,27 @@ when <code>type = "mixed"</code> and <code>NULL</code> otherwise. See note for f
 <span class='co'>#################################</span>
 
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'>zero_order_cors</span>(<span class='no'>Y</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"continuous"</span>,
-                       <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>)</div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='input'>
+                       <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>,
+                       <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
 
 <span class='co'>#################################</span>
 <span class='co'>###### example 2: polychoric ####</span>
 <span class='co'>#################################</span>
 
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'>zero_order_cors</span>(<span class='no'>Y</span>+<span class='fl'>1</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"ordinal"</span>,
-                       <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>)</div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='input'>
+                       <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>,
+                       <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
 
 <span class='co'>###########################</span>
 <span class='co'>##### example 3: rank #####</span>
 <span class='co'>###########################</span>
 
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'>zero_order_cors</span>(<span class='no'>Y</span>+<span class='fl'>1</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"mixed"</span>,
-                       <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>)</div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='input'>
+                       <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>,
+                       <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
 <span class='co'>############################</span>
 <span class='co'>## example 4: tetrachoric ##</span>
 <span class='co'>############################</span>
@@ -244,9 +250,10 @@ when <code>type = "mixed"</code> and <code>NULL</code> otherwise. See note for f
 <span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='no'>women_math</span>[,<span class='fl'>1</span>:<span class='fl'>3</span>]
 
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'>zero_order_cors</span>(<span class='no'>Y</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"binary"</span>,
-                       <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>)</div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='input'>
-# }
-</div></pre>
+                       <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>,
+                       <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
+<span class='co'># }</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

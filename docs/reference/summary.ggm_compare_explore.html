@@ -159,6 +159,103 @@ Setting to <code>FALSE</code> includes the column numbers (e.g., <code>1--2</cod
 
     <div class='dont-index'><p><code><a href='ggm_compare_explore.html'>ggm_compare_explore</a></code></p></div>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+<span class='co'># note: iter = 250 for demonstrative purposes</span>
+
+<span class='co'># data</span>
+<span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='no'>bfi</span>
+
+<span class='co'># males and females</span>
+<span class='no'>Ymale</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='no'>Y</span>, <span class='no'>gender</span> <span class='kw'>==</span> <span class='fl'>1</span>,
+                   <span class='kw'>select</span> <span class='kw'>=</span> -<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>gender</span>,
+                               <span class='no'>education</span>))[,<span class='fl'>1</span>:<span class='fl'>10</span>]
+
+<span class='no'>Yfemale</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='no'>Y</span>, <span class='no'>gender</span> <span class='kw'>==</span> <span class='fl'>2</span>,
+                     <span class='kw'>select</span> <span class='kw'>=</span> -<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>gender</span>,
+                                 <span class='no'>education</span>))[,<span class='fl'>1</span>:<span class='fl'>10</span>]
+
+<span class='co'>##########################</span>
+<span class='co'>### example 1: ordinal ###</span>
+<span class='co'>##########################</span>
+
+<span class='co'># fit model</span>
+<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='ggm_compare_explore.html'>ggm_compare_explore</a></span>(<span class='no'>Ymale</span>,  <span class='no'>Yfemale</span>,
+                           <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"ordinal"</span>,
+                           <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>,
+                           <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='co'># summary</span>
+<span class='no'>summ</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>fit</span>)
+
+<span class='no'>summ</span></div><div class='output co'>#&gt; BGGM: Bayesian Gaussian Graphical Models 
+#&gt; --- 
+#&gt; Type: ordinal 
+#&gt; Formula:  
+#&gt; Posterior Samples: 250 
+#&gt; Observations (n):
+#&gt;   Group 1: 867 
+#&gt;   Group 2: 1765 
+#&gt; Variables (p): 10 
+#&gt; Relations: 45 
+#&gt; Delta: 24 
+#&gt; --- 
+#&gt; Call: 
+#&gt; ggm_compare_explore(Ymale, Yfemale, type = "ordinal", iter = 250, 
+#&gt;     progress = FALSE)
+#&gt; --- 
+#&gt; Hypotheses:
+#&gt; H0: rho_g1 = rho_g2 
+#&gt; H1: rho_g1 - rho_g2  = 0
+#&gt; --- 
+#&gt; 
+#&gt;  Relation Post.mean Post.sd Pr.H0 Pr.H1
+#&gt;  A1--A2    0.049    0.045   0.788 0.212
+#&gt;  A1--A3   -0.016    0.051   0.859 0.141
+#&gt;  A2--A3   -0.079    0.046   0.603 0.397
+#&gt;  A1--A4    0.015    0.050   0.862 0.138
+#&gt;  A2--A4   -0.033    0.048   0.838 0.162
+#&gt;  A3--A4    0.072    0.043   0.652 0.348
+#&gt;  A1--A5    0.026    0.050   0.850 0.150
+#&gt;  A2--A5    0.096    0.046   0.437 0.563
+#&gt;  A3--A5    0.096    0.039   0.250 0.750
+#&gt;  A4--A5   -0.037    0.045   0.837 0.163
+#&gt;  A1--C1   -0.031    0.048   0.848 0.152
+#&gt;  A2--C1   -0.045    0.046   0.812 0.188
+#&gt;  A3--C1    0.057    0.047   0.763 0.237
+#&gt;  A4--C1    0.032    0.048   0.844 0.156
+#&gt;  A5--C1   -0.005    0.046   0.874 0.126
+#&gt;  A1--C2   -0.073    0.046   0.659 0.341
+#&gt;  A2--C2   -0.002    0.047   0.873 0.127
+#&gt;  A3--C2   -0.020    0.047   0.863 0.137
+#&gt;  A4--C2    0.044    0.045   0.811 0.189
+#&gt;  A5--C2    0.024    0.047   0.859 0.141
+#&gt;  C1--C2    0.035    0.040   0.832 0.168
+#&gt;  A1--C3    0.038    0.042   0.837 0.163
+#&gt;  A2--C3    0.017    0.046   0.866 0.134
+#&gt;  A3--C3   -0.047    0.044   0.807 0.193
+#&gt;  A4--C3    0.059    0.044   0.755 0.245
+#&gt;  A5--C3   -0.004    0.048   0.871 0.129
+#&gt;  C1--C3    0.037    0.049   0.829 0.171
+#&gt;  C2--C3   -0.006    0.042   0.880 0.120
+#&gt;  A1--C4    0.004    0.044   0.875 0.125
+#&gt;  A2--C4    0.038    0.047   0.831 0.169
+#&gt;  A3--C4    0.108    0.047   0.323 0.677
+#&gt;  A4--C4   -0.071    0.044   0.669 0.331
+#&gt;  A5--C4   -0.047    0.049   0.808 0.192
+#&gt;  C1--C4    0.078    0.047   0.623 0.377
+#&gt;  C2--C4    0.012    0.047   0.866 0.134
+#&gt;  C3--C4   -0.012    0.041   0.878 0.122
+#&gt;  A1--C5   -0.043    0.048   0.817 0.183
+#&gt;  A2--C5   -0.054    0.048   0.783 0.217
+#&gt;  A3--C5    0.053    0.044   0.784 0.216
+#&gt;  A4--C5    0.061    0.046   0.748 0.252
+#&gt;  A5--C5   -0.001    0.046   0.875 0.125
+#&gt;  C1--C5   -0.074    0.047   0.671 0.329
+#&gt;  C2--C5    0.057    0.048   0.770 0.230
+#&gt;  C3--C5    0.067    0.044   0.701 0.299
+#&gt;  C4--C5    0.034    0.038   0.823 0.177
+#&gt; --- </div><div class='input'># }
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

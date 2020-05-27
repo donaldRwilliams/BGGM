@@ -156,17 +156,8 @@
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
 <span class='co'># note: iter = 250 for demonstrative purposes</span>
 
-<span class='co'>#################################</span>
-<span class='co'>####### example 1: estimate  ####</span>
-<span class='co'>#################################</span>
-<span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='no'>ptsd</span>[,<span class='fl'>1</span>:<span class='fl'>5</span>]
-
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='estimate.html'>estimate</a></span>(<span class='no'>Y</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"continuous"</span>,
-                <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>)</div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='input'>
-<span class='no'>samps</span> <span class='kw'>&lt;-</span> <span class='fu'>posterior_samples</span>(<span class='no'>fit</span>)
-
 <span class='co'>########################################</span>
-<span class='co'>### example 2: control  with formula ###</span>
+<span class='co'>### example 1: control  with formula ###</span>
 <span class='co'>########################################</span>
 <span class='co'># (the following works with all data types)</span>
 
@@ -183,7 +174,9 @@
 <span class='co'># note regression coefficients</span>
 <span class='no'>samps</span> <span class='kw'>&lt;-</span> <span class='fu'>posterior_samples</span>(<span class='no'>fit</span>)
 
-<span class='co'># }</span></div></pre>
+<span class='fu'><a href='https://rdrr.io/r/graphics/hist.html'>hist</a></span>(<span class='no'>samps</span>[,<span class='fl'>1</span>])</div><div class='img'><img src='posterior_samples-1.png' alt='' width='700' height='433' /></div><div class='input'># }
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

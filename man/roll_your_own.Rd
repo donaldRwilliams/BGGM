@@ -83,8 +83,6 @@ net_stat <- roll_your_own(object = fit,
 # print
 net_stat
 
-# plot
-plot(net_stat)
 
 ############################################
 ###### example 2: expected influence #######
@@ -107,12 +105,6 @@ f <- function(x,...){
 net_stat <- roll_your_own(object = fit,
                           FUN = f,
                           progress = FALSE)
-# print
-net_stat
-
-# plot
-plot(net_stat)
-
 
 #######################################
 ### example 3: mixed data & bridge ####
@@ -141,11 +133,6 @@ net_stat <- roll_your_own(fit,
                           communities = communities,
                           progress = FALSE)
 
-# print
-net_stat
-
-#plot
-plot(net_stat)
 }
 
 }
