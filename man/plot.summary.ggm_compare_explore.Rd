@@ -22,6 +22,37 @@ A \code{ggplot} object
 \description{
 Visualize the posterior hypothesis probabilities.
 }
+\examples{
+\donttest{
+# note: iter = 250 for demonstrative purposes
+
+# data
+Y <- bfi
+
+# males and females
+Ymale <- subset(Y, gender == 1,
+                   select = -c(gender,
+                               education))[,1:10]
+
+Yfemale <- subset(Y, gender == 2,
+                     select = -c(gender,
+                                 education))[,1:10]
+
+##########################
+### example 1: ordinal ###
+##########################
+
+# fit model
+fit <- ggm_compare_explore(Ymale,  Yfemale,
+                           type = "ordinal",
+                           iter = 250,
+                           progress = FALSE)
+# summary
+summ <- summary(fit)
+
+plot(summ)
+}
+}
 \seealso{
 \code{\link{ggm_compare_explore}}
 }

@@ -15,6 +15,8 @@
 #'
 #' @param cred Numeric. Credible interval between 0 and 1  (default is 0.95) that is used for selecting the graph.
 #'
+#' @param progress Logical. Should a progress bar be included (defaults to \code{TRUE}) ?
+#'
 #' @param ... Arguments passed to the function.
 #'
 #' @return An object defined by \code{FUN}.
@@ -43,7 +45,8 @@
 #' membership <- c(rep("a", 5), rep("c", 5))
 #'
 #' # fit model
-#' fit <- estimate(Y = Y, iter = 1000)
+#' fit <- estimate(Y = Y, iter = 250,
+#'                 progress = FALSE)
 #'
 #' # membership
 #' membership <- c(rep("a", 5), rep("c", 5))
@@ -58,7 +61,8 @@
 #'                           FUN = f,
 #'                           types = membership,
 #'                           weighted = TRUE,
-#'                           SE = FALSE, M = 1)
+#'                           SE = FALSE, M = 1,
+#'                           progress = FALSE)
 #'
 #' # print
 #' net_stat
@@ -76,7 +80,7 @@
 #' Y <- depression
 #'
 #' # fit model
-#' fit <- estimate(Y = Y, iter = 5000)
+#' fit <- estimate(Y = Y, iter = 250)
 #'
 #' # define function
 #' f <- function(x,...){
@@ -86,7 +90,7 @@
 #' # compute
 #' net_stat <- roll_your_own(object = fit,
 #'                           FUN = f,
-#'                           iter = 1000)
+#'                           progress = FALSE)
 #' # print
 #' net_stat
 #'
@@ -101,11 +105,11 @@
 #' library(networktools)
 #'
 #' # data
-#' Y <- ptsd
+#' Y <- ptsd[,1:7]
 #'
 #' fit <- estimate(Y,
 #'                 type = "mixed",
-#'                 iter = 1000)
+#'                 iter = 250)
 #'
 #' # clusters
 #' communities <- substring(colnames(Y), 1, 1)
@@ -118,7 +122,8 @@
 #' net_stat <- roll_your_own(fit,
 #'                           FUN = f,
 #'                           select = TRUE,
-#'                           communities = communities)
+#'                           communities = communities,
+#'                           progress = FALSE)
 #'
 #' # print
 #' net_stat
@@ -133,6 +138,7 @@ roll_your_own <- function(object,
                           iter = NULL,
                           select = FALSE,
                           cred = 0.95,
+                          progress = TRUE,
                           ...){
 
   if(! all( c("estimate", "default") %in% class(object)) ){
@@ -159,7 +165,9 @@ roll_your_own <- function(object,
 
   pcors <- object$post_samp$pcors[, , 51:(iter + 50)]
 
-  pb <- utils::txtProgressBar(min = 0, max = iter, style = 3)
+  if(isTRUE(progress)){
+    pb <- utils::txtProgressBar(min = 0, max = iter, style = 3)
+    }
 
   results <- sapply(1:iter, function(x) {
 
@@ -167,10 +175,15 @@ roll_your_own <- function(object,
 
     est <- FUN(pcors_s, ...)
 
-    utils::setTxtProgressBar(pb, x)
+    if(isTRUE(progress)){
+
+      utils::setTxtProgressBar(pb, x)
+
+      }
 
     est
-  })
+
+    })
 
   returned_object <- list(results = results, iter = iter)
 

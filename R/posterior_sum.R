@@ -288,7 +288,7 @@ print_pcor_sum <- function(x, cred = 0.95, row_names = TRUE){
 #' @note
 #' \strong{Examples}:
 #'
-#' @seealso posterior_sum
+#' @seealso pcor_sum
 plot.pcor_sum <- function(x,
                           fill = "#CC79A7",
                           ...){

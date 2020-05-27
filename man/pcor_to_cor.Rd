@@ -44,7 +44,8 @@ Y <- BGGM::ptsd
 #########################
 
 # estimate the model
-fit <- estimate(Y, iter = 250)
+fit <- estimate(Y, iter = 250,
+                progress = FALSE)
 
 # compute correlations
 cors <- pcor_to_cor(fit)
@@ -59,7 +60,8 @@ Y <- Y + 1
 
 # estimate the model
 fit <- estimate(Y, type =  "ordinal",
-                iter = 250)
+                iter = 250,
+                progress = FALSE)
 
 # compute correlations
 cors <- pcor_to_cor(fit)
@@ -73,7 +75,8 @@ cors <- pcor_to_cor(fit)
 
 # estimate the model
 fit <- estimate(Y, type =  "mixed",
-                iter = 250)
+                iter = 250,
+                progress = FALSE)
 
 # compute correlations
 cors <- pcor_to_cor(fit)

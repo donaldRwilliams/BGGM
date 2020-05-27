@@ -3,7 +3,7 @@
 #' @description Provides the selected graph (of differences) based on the Bayes factor
 #' \insertCite{williams2020comparing}{BGGM}.
 #'
-#'@param object An object of class \code{ggm_compare_explore}.
+#' @param object An object of class \code{ggm_compare_explore}.
 #'
 #' @param BF_cut Numeric. Threshold for including an edge (defaults to 3).
 #'
@@ -47,7 +47,8 @@
 #' # fit model
 #' fit <- ggm_compare_explore(Ymale, Yfemale,
 #'                            iter = 250,
-#'                            type = "continuous")
+#'                            type = "continuous",
+#'                            progress = FALSE)
 #'
 #'
 #' E <- select(fit, post_prob = 0.50)

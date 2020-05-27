@@ -85,7 +85,8 @@ Y <- ptsd[,1:3]
 #################################
 
 fit <- zero_order_cors(Y, type = "continuous",
-                       iter = 250)
+                       iter = 250,
+                       progress = FALSE)
 
 
 #################################
@@ -93,7 +94,8 @@ fit <- zero_order_cors(Y, type = "continuous",
 #################################
 
 fit <- zero_order_cors(Y+1, type = "ordinal",
-                       iter = 250)
+                       iter = 250,
+                       progress = FALSE)
 
 
 ###########################
@@ -101,7 +103,8 @@ fit <- zero_order_cors(Y+1, type = "ordinal",
 ###########################
 
 fit <- zero_order_cors(Y+1, type = "mixed",
-                       iter = 250)
+                       iter = 250,
+                       progress = FALSE)
 
 ############################
 ## example 4: tetrachoric ##
@@ -111,7 +114,8 @@ fit <- zero_order_cors(Y+1, type = "mixed",
 Y <- women_math[,1:3]
 
 fit <- zero_order_cors(Y, type = "binary",
-                       iter = 250)
+                       iter = 250,
+                       progress = FALSE)
 
 }
 }

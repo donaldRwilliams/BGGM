@@ -58,6 +58,6 @@ r2 <- predictability(fit, iter = 250,
                      progress = FALSE)
 
 plot(r2)
-}
 
+}
 }

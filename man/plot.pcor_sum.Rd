@@ -24,5 +24,5 @@ Plot \code{pcor_sum} Object
 \strong{Examples}:
 }
 \seealso{
-posterior_sum
+pcor_sum
 }

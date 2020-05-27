@@ -67,12 +67,7 @@ r2 <- predictability(fit, select = TRUE,
 
 # summary
 r2
-
-# plot
-plot(r2)
-
 }
-
 }
 \references{
 \insertAllCited{}

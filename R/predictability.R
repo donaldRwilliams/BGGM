@@ -58,12 +58,7 @@
 #'
 #' # summary
 #' r2
-#'
-#' # plot
-#' plot(r2)
-#'
 #' }
-#'
 #' @export
 predictability <- function(object,
                            select = FALSE,
@@ -387,8 +382,8 @@ print_summary_metric <- function(x, digits = 2,...){
 #'                      progress = FALSE)
 #'
 #' plot(r2)
-#'}
 #'
+#'}
 #' @export
 plot.predictability <- function(x, type = "error_bar",
                         cred = 0.95,

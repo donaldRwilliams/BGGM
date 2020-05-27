@@ -34,6 +34,9 @@
 #' @return An object (or list of objects) of class \code{ggplot}
 #' that can then be further customized.
 #'
+#' @note
+#' A more extensive example of a custom plot is
+#' provided \href{https://donaldrwilliams.github.io/BGGM/articles/netplot.html}{here}
 #'
 #' @examples
 #' \donttest{
@@ -45,7 +48,8 @@
 #' Y <- bfi[,1:25]
 #'
 #' # estimate
-#' fit <- estimate(Y, iter = 250)
+#' fit <- estimate(Y, iter = 250,
+#'                 progress = FALSE)
 #'
 #' # "communities"
 #' comm <- substring(colnames(Y), 1, 1)
@@ -74,7 +78,8 @@
 #'               select = -gender)
 #'
 #' # estimate
-#' fit <- ggm_compare_estimate(Ym, Yf, iter = 250)
+#' fit <- ggm_compare_estimate(Ym, Yf, iter = 250,
+#'                             progress = FALSE)
 #'
 #' # "communities"
 #' comm <- substring(colnames(Ym), 1, 1)
