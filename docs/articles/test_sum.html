@@ -261,7 +261,6 @@ test_sum
 <h1 class="hasAnchor">
 <a href="#notes" class="anchor"></a>Notes</h1>
 <p>By default, the print function for <code>pcor_sum</code> provides 95 % credible intervals. This can be changed by directly using the print function, for example <code><a href="https://rdrr.io/r/base/print.html">print(test_sum, cred = 0.99)</a></code>, provides 99 % credible intervals.</p>
-<p>It would be possible to test the sums for independent groups analytically, assuming there is a solution available (which there is for Spearman, Pearson, etc. partial correlations). This would not work for partial correlations <em>within</em> the same network, as the sum and difference must consider the covariance between relations. This is a nice aspect of Bayesian methods, in that the posterior samples encode the covariance</p>
 <p>Currently, this function only supports sums, due to this being of interest for the psychological network literature in particular. This can be extended to accommodate multiplication, subtraction, testing values other than zero, etc. Please make a feature request at either <a href="https://github.com/donaldRwilliams/BGGM/issues">github</a> or <a href="https://groups.google.com/forum/#!forum/bggm-users">BGGM-users group</a>.</p>
 </div>
   </div>
