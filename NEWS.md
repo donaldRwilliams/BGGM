@@ -30,9 +30,11 @@ correlation matrix
 * Five additional data sets were added.
 
 ## Extensions
-* `ggm_compare_ppc`: added option for custom comparison
+* `ggm_compare_ppc`: added option for custom network statistics
 
-* A progress bar was added
+* Added option to control for variables with `formula`
+
+* A progress bar was added to many functions
 
 
 # BGGM 1.0.0
