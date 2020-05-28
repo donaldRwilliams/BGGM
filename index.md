@@ -19,17 +19,6 @@ distribution (Gelman, Meng, and Stern 1996; see section 5 in Rubin
 1984), whereas the latter focuses on model comparison with the Bayes
 factor (Jeffreys 1961; Kass and Raftery 1995).
 
-## <i class="fas fa-question-circle"></i> What is a Gaussian Graphical Model ?
-
-> A Gaussian graphical model comprises of a set of items or variables,
-> depicted by circles, and a set of lines that visualize relationships
-> between the items or variables…The thickness of these lines represents
-> the strength of the relationships between items or variables…Notably,
-> in the Gaussian graphical model, these lines capture partial
-> correlations, that is, the correlation between two items or variables
-> when controlling for all other items or variables included in the data
-> set (Bhushan et al. 2019).
-
 ## <i class="fas fa-cog"></i> Installation
 
 To install the latest release version (1.0.0) from CRAN use
@@ -258,15 +247,6 @@ The Bayes factor testing approach is readily implemented by changing
 Albert, James H, and Siddhartha Chib. 1993. “Bayesian Analysis of Binary
 and Polychotomous Response Data.” *Journal of the American Statistical
 Association* 88 (422): 669–79.
-
-</div>
-
-<div id="ref-bhushan2019using">
-
-Bhushan, Nitin, Florian Mohnert, Lise Jans, Daniel Sloot, Casper Albers,
-and Linda Steg. 2019. “Using a Gaussian Graphical Model to Explore
-Relationships Between Items and Variables in Environmental Psychology
-Research.” *Frontiers in Psychology* 10: 1050.
 
 </div>
 
