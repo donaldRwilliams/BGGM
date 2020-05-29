@@ -118,7 +118,7 @@ zero_order_cors <- function(Y,  type = "continuous",
                   type = type,
                   iter = iter,
                   mixed_type = mixed_type,
-                  progres = progress)
+                  progress = progress)
 
   cors <- pcor_to_cor(fit)
 
