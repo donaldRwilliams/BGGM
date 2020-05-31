@@ -1,5 +1,5 @@
 
-<img src="man/figures/hex.jpg" width = 250 />
+<img src="readme_models/hex.jpg" width = 250 />
 
 # BGGM: Bayesian Gaussian Graphical Models
 
@@ -1163,15 +1163,15 @@ Models: Structure Learning, Predictability, and Network Comparisons.”
 
 <div id="ref-Williams2019_bf">
 
-Williams, Donald R., and Joris Mulder. 2019. “Bayesian Hypothesis
-Testing for Gaussian Graphical Models: Conditional Independence and
-Order Constraints.” *PsyArXiv*. <https://doi.org/10.31234/osf.io/ypxd8>.
+Williams, Donald R, and Joris Mulder. 2019. “Bayesian Hypothesis Testing
+for Gaussian Graphical Models: Conditional Independence and Order
+Constraints.” *PsyArXiv*. <https://doi.org/10.31234/osf.io/ypxd8>.
 
 </div>
 
 <div id="ref-williams2020comparing">
 
-Williams, Donald R., Philippe Rast, Luis R Pericchi, and Joris Mulder.
+Williams, Donald R, Philippe Rast, Luis R Pericchi, and Joris Mulder.
 2020. “Comparing Gaussian Graphical Models with the Posterior Predictive
 Distribution and Bayesian Model Selection.” *Psychological Methods*.
 

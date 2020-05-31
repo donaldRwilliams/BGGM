@@ -17,7 +17,7 @@ library(ggplot2)
 library(BGGM)
 ```
 
-<img src="man/figures/hex.jpg" width = 250 />
+<img src="readme_models/hex.jpg" width = 250 />
 
 # BGGM: Bayesian Gaussian Graphical Models
 

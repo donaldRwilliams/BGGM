@@ -11,8 +11,8 @@
 ^LICENSE$
 ^readme_models$
 ^_pkgdown\.yml$
-^docs$
 ^pkgdown$
-^doc$
 ^index\.md$
 ^index\.Rmd$
+^doc$
+^docs$
