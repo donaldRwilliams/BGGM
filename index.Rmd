@@ -35,7 +35,7 @@ predictive distribution [@Gelman1996a; see section 5 in @rubin1984bayesianly], w
 latter focuses on model comparison with the Bayes factor [@Jeffreys1961; @Kass1995].
 
 ## <i class="fas fa-cog"></i> Installation
-To install the latest release version (1.0.0) from CRAN use
+To install the latest release version (`2.0.0`) from CRAN use
 ```{r gh-installation, eval = FALSE}	
 install.packages("BGGM")	
 ```
@@ -49,9 +49,6 @@ if (!requireNamespace("remotes")) {
 remotes::install_github("donaldRwilliams/BGGM")
 ```
 
-Note that the developmental version is recommended, due to the algorithms being written in `c++` and 
-support for all data types. The developmental version is essentially
-**BGGM** version 2.0.0.
 
 ### <i class="fas fa-skull-crossbones"></i> Dealing with Errors
 There are automatic checks for [**BGGM**](https://travis-ci.org/github/donaldRwilliams/BGGM/branches). However, that only checks for Linux and **BGGM** is built on Windows. 

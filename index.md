@@ -21,7 +21,7 @@ factor (Jeffreys 1961; Kass and Raftery 1995).
 
 ## <i class="fas fa-cog"></i> Installation
 
-To install the latest release version (1.0.0) from CRAN use
+To install the latest release version (`2.0.0`) from CRAN use
 
 ``` r
 install.packages("BGGM")    
@@ -35,10 +35,6 @@ if (!requireNamespace("remotes")) {
 }   
 remotes::install_github("donaldRwilliams/BGGM")
 ```
-
-Note that the developmental version is recommended, due to the
-algorithms being written in `c++` and support for all data types. The
-developmental version is essentially **BGGM** version 2.0.0.
 
 ### <i class="fas fa-skull-crossbones"></i> Dealing with Errors
 
