@@ -18,6 +18,9 @@ var_estimate <- function(Y, rho_sd = 0.50,
   # number of nodes
   p <- ncol(Y)
 
+  # number of obs
+  n <- nrow(Y)
+
   # Y lagged: add NA
   Y_lag <-   rbind(NA, Y)
 
@@ -57,11 +60,34 @@ var_estimate <- function(Y, rho_sd = 0.50,
   returned_object <- list(fit = fit,
                           iter = iter,
                           p = p,
+                          n = n,
                           Y = Y,
-                          X = X)
+                          X = X,
+                          call = match.call())
 
   class(returned_object) <- c("BGGM",
                               "VAR",
-                              "var_estimate")
+                              "var_estimate",
+                              "default")
   return(returned_object)
+}
+
+
+print_var_estimate <- function(x, ...){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Vector Autoregressive Model (VAR) \n")
+  cat("--- \n")
+  # number of iterations
+  cat("Posterior Samples:", x$iter, "\n")
+  # number of observations
+  cat("Observations (n):", x$n,"\n")
+  # number of variables
+  cat("Nodes (p):", x$p, "\n")
+  # number of edges
+  cat("--- \n")
+  cat("Call: \n")
+  print(x$call)
+  cat("--- \n")
+  cat("Date:", date(), "\n")
 }

@@ -6,9 +6,19 @@
 #'
 #' @importFrom methods is
 #' @export
-
 print.BGGM <- function(x, ...) {
   # print estimate methods
+
+
+  if(is(x, "var_estimate")){
+
+   if(is(x, "default")){
+
+     print_var_estimate(x, ...)
+
+    }
+
+  }
 
   if(is(x, "pcor_sum")){
     print_pcor_sum(x, ...)

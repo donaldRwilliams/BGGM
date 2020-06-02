@@ -2,7 +2,7 @@
 % Please edit documentation in R/select.var_estimate.R
 \name{select.var_estimate}
 \alias{select.var_estimate}
-\title{Graph Selection for \code{VAR.estimate} Object}
+\title{Graph Selection for \code{var.estimate} Object}
 \usage{
 \method{select}{var_estimate}(object, cred = 0.95, alternative = "two.sided")
 }
@@ -20,5 +20,5 @@ See note for futher details.}
 An object of class \code{select.VAR_estimate}
 }
 \description{
-Graph Selection for \code{VAR.estimate} Object
+Graph Selection for \code{var.estimate} Object
 }

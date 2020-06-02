@@ -1,4 +1,4 @@
-#' Graph Selection for \code{VAR.estimate} Object
+#' Graph Selection for \code{var.estimate} Object
 #'
 #' @param object An object of class \code{VAR.estimate}.
 #'
@@ -22,20 +22,22 @@ select.var_estimate <- function(object,
   pcor_mat <- apply(pcors, 1:2, mean)
 
   beta <- object$fit$beta[,,51:(object$iter +50)]
+
   beta_mat <- apply(beta, 1:2, mean)
 
 
   if(alternative == "two.sided"){
 
     lb <- (1 - cred) / 2
+
     ub <- 1 - lb
 
     pcor_adj <- ifelse(apply(pcors, 1:2, quantile, lb) < 0 &
-                         apply(pcors, 1:2, quantile, ub) > 0, 0, 1)
+                       apply(pcors, 1:2, quantile, ub) > 0, 0, 1)
 
 
     beta_adj <- ifelse(apply(beta, 1:2, quantile, lb) < 0 &
-                         apply(beta, 1:2, quantile, ub) > 0, 0, 1)
+                       apply(beta, 1:2, quantile, ub) > 0, 0, 1)
 
   } else if(alternative == "greater") {
 
@@ -65,6 +67,8 @@ select.var_estimate <- function(object,
     beta_adj = beta_adj,
     beta_weighted_adj =  beta_weighted_adj,
     pcor_weighted_adj =  pcor_weighted_adj,
+    beta_mu = beta_mat,
+    pcor_mu = pcor_mat,
     alternative = alternative,
     cred = cred,
     object = object
