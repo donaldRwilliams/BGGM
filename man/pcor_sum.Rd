@@ -66,10 +66,12 @@ Y_males <- subset(Y, gender == 1, select = -c(education, gender))[,1:5]
 Y_females <- subset(Y, gender == 2, select = -c(education, gender))[,1:5]
 
 # males
-fit_males <- estimate(Y_males, seed = 1)
+fit_males <- estimate(Y_males, seed = 1,
+                      progress = FALSE)
 
 # fit females
-fit_females <- estimate(Y_females, seed = 2)
+fit_females <- estimate(Y_females, seed = 2,
+                        progress = FALSE)
 
 
 sums <- pcor_sum(fit_males,

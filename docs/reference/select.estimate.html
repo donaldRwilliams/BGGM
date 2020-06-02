@@ -196,11 +196,15 @@ doi: <a href='https://doi.org/10.31234/OSF.IO/X8DPR'>10.31234/OSF.IO/X8DPR</a>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+<span class='co'># note: iter = 250 for demonstrative purposes</span>
+
 <span class='co'># data</span>
-<span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='no'>bfi</span>[,<span class='fl'>1</span>:<span class='fl'>25</span>]
+<span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='no'>bfi</span>[,<span class='fl'>1</span>:<span class='fl'>10</span>]
 
 <span class='co'># estimate</span>
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='estimate.html'>estimate</a></span>(<span class='no'>Y</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>)</div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='input'>
+<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='estimate.html'>estimate</a></span>(<span class='no'>Y</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>,
+                <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
 
 <span class='co'># select edge set</span>
 <span class='no'>E</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='select.html'>select</a></span>(<span class='no'>fit</span>)

@@ -54,7 +54,8 @@ Yfemale <- subset(Y, gender == 2,
 # fit model
 fit <- ggm_compare_explore(Ymale, Yfemale,
                            iter = 250,
-                           type = "continuous")
+                           type = "continuous",
+                           progress = FALSE)
 
 
 E <- select(fit, post_prob = 0.50)

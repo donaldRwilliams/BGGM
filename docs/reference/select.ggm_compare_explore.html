@@ -100,6 +100,9 @@
 <li>
   <a href="../news/index.html">News</a>
 </li>
+<li>
+  <a href="../articles/installation.html">Troubleshoot</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -189,7 +192,9 @@ For users of <strong>BGGM</strong>, the following are the useful objects:</p>
 <span class='co'># fit model</span>
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='ggm_compare_explore.html'>ggm_compare_explore</a></span>(<span class='no'>Ymale</span>, <span class='no'>Yfemale</span>,
                            <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>,
-                           <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"continuous"</span>)</div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling (Group 1)</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Prior Sampling (Group 1)</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling (Group 2)</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Prior Sampling (Group 2)</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='input'>
+                           <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"continuous"</span>,
+                           <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
 
 <span class='no'>E</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='select.html'>select</a></span>(<span class='no'>fit</span>, <span class='kw'>post_prob</span> <span class='kw'>=</span> <span class='fl'>0.50</span>)
 

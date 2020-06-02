@@ -41,6 +41,31 @@ See
 \href{https://CRAN.R-project.org/package=ggridges/vignettes/introduction.html}{ggridges} for
 many examples.
 }
+\examples{
+\donttest{
+# data
+Y <- bfi
+
+#############################
+######### global ############
+#############################
+# males
+Ym <- subset(Y, gender == 1,
+             select = - c(gender, education))
+
+# females
+
+Yf <- subset(Y, gender == 2,
+             select = - c(gender, education))
+
+
+global_test <- ggm_compare_ppc(Ym, Yf,
+                               iter = 250,
+                               progress = FALSE)
+
+plot(global_test)
+}
+}
 \seealso{
 \code{\link{ggm_compare_ppc}}
 }

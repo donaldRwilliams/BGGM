@@ -20,3 +20,20 @@ and posterior hypothesis probabilities for each relation.
 \description{
 Summary Method for \code{select.explore} Objects
 }
+\examples{
+\donttest{
+#  data
+Y <- bfi[,1:10]
+
+# fit model
+fit <- explore(Y, iter = 250,
+               progress = FALSE)
+
+# edge set
+E <- select(fit,
+            alternative = "exhaustive")
+
+summary(E)
+
+}
+}

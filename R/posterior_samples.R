@@ -14,18 +14,8 @@
 #' \donttest{
 #' # note: iter = 250 for demonstrative purposes
 #'
-#' #################################
-#' ####### example 1: estimate  ####
-#' #################################
-#' Y <- ptsd[,1:5]
-#'
-#' fit <- estimate(Y, type = "continuous",
-#'                 iter = 250)
-#'
-#' samps <- posterior_samples(fit)
-#'
 #' ########################################
-#' ### example 2: control  with formula ###
+#' ### example 1: control  with formula ###
 #' ########################################
 #' # (the following works with all data types)
 #'
@@ -43,6 +33,7 @@
 #' # note regression coefficients
 #' samps <- posterior_samples(fit)
 #'
+#' hist(samps[,1])
 #' }
 #'
 #' @export

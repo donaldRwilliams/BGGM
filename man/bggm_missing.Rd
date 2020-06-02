@@ -4,10 +4,12 @@
 \alias{bggm_missing}
 \title{GGM: Missing Data}
 \usage{
-bggm_missing(x, method = "estimate", ...)
+bggm_missing(x, iter = 2000, method = "estimate", ...)
 }
 \arguments{
 \item{x}{An object of class \code{mid} \code{\link[mice]{mice}}.}
+
+\item{iter}{Number of iterations for each imputed dataset (posterior samples; defaults to 2000).}
 
 \item{method}{Character string. Which method should be used (default set to \code{estimate})? The current
 options are \code{"estimate"} and \code{"explore"}.}
@@ -32,11 +34,15 @@ Currently, \strong{BGGM} is compatible with the package \code{\link[mice]{mice}}
       the \code{\link{estimate}} or \code{\link{explore}} functions, such that \code{bggm_missing} will
       always support missing data with \code{\link[mice]{mice}}.
 
+
 \strong{Support}:
 
  There is limited support for missing data. As of version \code{2.0.0}, it is possible to
  determine the graphical structure with either  \code{\link{estimate}} or \code{\link{explore}}, in addition
  to plotting the graph with \code{\link{plot.select}}. All data types \emph{are} currently supported.
+
+\strong{Memory Warning}:
+ A model is fitted for each imputed dataset. This results in a potentially large object.
 }
 \examples{
 \donttest{

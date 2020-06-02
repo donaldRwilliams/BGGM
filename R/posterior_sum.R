@@ -61,10 +61,12 @@
 #' Y_females <- subset(Y, gender == 2, select = -c(education, gender))[,1:5]
 #'
 #' # males
-#' fit_males <- estimate(Y_males, seed = 1)
+#' fit_males <- estimate(Y_males, seed = 1,
+#'                       progress = FALSE)
 #'
 #' # fit females
-#' fit_females <- estimate(Y_females, seed = 2)
+#' fit_females <- estimate(Y_females, seed = 2,
+#'                         progress = FALSE)
 #'
 #'
 #' sums <- pcor_sum(fit_males,
@@ -268,24 +270,28 @@ print_pcor_sum <- function(x, cred = 0.95, row_names = TRUE){
   }
 }
 
-
-
-#' @title Plot \code{posterior_sum} Object
+#' @title Plot \code{pcor_sum} Object
 #'
 #' @name plot.pcor_sum
 #'
 #' @param x An object of class \code{posterior_sum}
+#'
 #' @param fill Character string. What fill for the histogram
 #'        (defaults to colorblind "pink")?
 #'
+#' @param ... Currently ignored.
+#'
 #' @return A list of \code{ggplot} objects
+#'
 #' @export
 #'
 #' @note
 #' \strong{Examples}:
 #'
-#' @seealso posterior_sum
-plot.pcor_sum <- function(x, fill = "#CC79A7"){
+#' @seealso pcor_sum
+plot.pcor_sum <- function(x,
+                          fill = "#CC79A7",
+                          ...){
 
 
   if(is.null( x$post_diff)){

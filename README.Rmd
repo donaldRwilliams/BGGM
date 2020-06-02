@@ -9,7 +9,7 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.path = "man/figures/README-",
   dev = "png",
-  dpi = 500,
+  dpi = 200,
   fig.align = "center",
   knitr::opts_chunk$set(comment = NA)
   )
@@ -17,7 +17,7 @@ library(ggplot2)
 library(BGGM)
 ```
 
-<img src="man/figures/hex.jpg" width = 250 />
+<img src="readme_models/hex.jpg" width = 250 />
 
 # BGGM: Bayesian Gaussian Graphical Models
 
@@ -31,11 +31,11 @@ The `R` package **BGGM** provides tools for making Bayesian inference in
 Gaussian graphical models (GGM). The methods are organized around two general 
 approaches for Bayesian inference: (1) estimation and (2) hypothesis 
 testing. The key distinction is that the former focuses on either 
-the posterior or posterior predictive distribution [@Gelman1996a; see section 5 in @rubin1984bayesianly] , whereas the latter focuses on model comparison with the Bayes factor [@Jeffreys1961; @Kass1995].
+the posterior or posterior predictive distribution [@Gelman1996a; see section 5 in @rubin1984bayesianly], whereas the latter focuses on model comparison with the Bayes factor [@Jeffreys1961; @Kass1995].
 
 ## Installation
 
-To install the latest release version (1.0.0) from CRAN use
+To install the latest release version (`2.0.0`) from CRAN use
 ```{r gh-installation, eval = FALSE}	
 install.packages("BGGM")	
 ```
@@ -48,12 +48,6 @@ if (!requireNamespace("remotes")) {
 }	
 remotes::install_github("donaldRwilliams/BGGM")
 ```
-
-Note that the developmental version is recommended (and required to run the following examples), due to the algorithms being written in `c++` and 
-support for all data types. The developmental version is essentially
-**BGGM** version 2.0.0.
-
-
 
 ## Overview
 The methods in **BGGM** build upon existing algorithms that are well-known in the literature.

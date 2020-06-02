@@ -4,7 +4,15 @@
 \alias{roll_your_own}
 \title{Compute Custom Network Statistics}
 \usage{
-roll_your_own(object, FUN, iter = NULL, select = FALSE, cred = 0.95, ...)
+roll_your_own(
+  object,
+  FUN,
+  iter = NULL,
+  select = FALSE,
+  cred = 0.95,
+  progress = TRUE,
+  ...
+)
 }
 \arguments{
 \item{object}{An object of class \code{estimate}.}
@@ -17,6 +25,8 @@ a partial correlation matrix.}
 \item{select}{Logical. Should the graph be selected ? The default is currently \code{FALSE}.}
 
 \item{cred}{Numeric. Credible interval between 0 and 1  (default is 0.95) that is used for selecting the graph.}
+
+\item{progress}{Logical. Should a progress bar be included (defaults to \code{TRUE}) ?}
 
 \item{...}{Arguments passed to the function.}
 }
@@ -51,7 +61,8 @@ Y <- BGGM::bfi[,1:10]
 membership <- c(rep("a", 5), rep("c", 5))
 
 # fit model
-fit <- estimate(Y = Y, iter = 1000)
+fit <- estimate(Y = Y, iter = 250,
+                progress = FALSE)
 
 # membership
 membership <- c(rep("a", 5), rep("c", 5))
@@ -66,13 +77,12 @@ net_stat <- roll_your_own(object = fit,
                           FUN = f,
                           types = membership,
                           weighted = TRUE,
-                          SE = FALSE, M = 1)
+                          SE = FALSE, M = 1,
+                          progress = FALSE)
 
 # print
 net_stat
 
-# plot
-plot(net_stat)
 
 ############################################
 ###### example 2: expected influence #######
@@ -84,7 +94,7 @@ library(networktools)
 Y <- depression
 
 # fit model
-fit <- estimate(Y = Y, iter = 5000)
+fit <- estimate(Y = Y, iter = 250)
 
 # define function
 f <- function(x,...){
@@ -94,13 +104,7 @@ f <- function(x,...){
 # compute
 net_stat <- roll_your_own(object = fit,
                           FUN = f,
-                          iter = 1000)
-# print
-net_stat
-
-# plot
-plot(net_stat)
-
+                          progress = FALSE)
 
 #######################################
 ### example 3: mixed data & bridge ####
@@ -109,11 +113,11 @@ plot(net_stat)
 library(networktools)
 
 # data
-Y <- ptsd
+Y <- ptsd[,1:7]
 
 fit <- estimate(Y,
                 type = "mixed",
-                iter = 1000)
+                iter = 250)
 
 # clusters
 communities <- substring(colnames(Y), 1, 1)
@@ -126,13 +130,9 @@ f <- function(x, ...){
 net_stat <- roll_your_own(fit,
                           FUN = f,
                           select = TRUE,
-                          communities = communities)
+                          communities = communities,
+                          progress = FALSE)
 
-# print
-net_stat
-
-#plot
-plot(net_stat)
 }
 
 }

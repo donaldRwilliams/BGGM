@@ -28,12 +28,14 @@ Visualize the posterior distributions for each partial correlation.
 \donttest{
 # note: iter = 250 for demonstrative purposes
 
-Y <- ptsd
+Y <- ptsd[,1:5]
 
-fit <- explore(Y, iter = 250)
+fit <- explore(Y, iter = 250,
+               progress = FALSE)
 
 plt <- plot(summary(fit))
 
+plt
 }
 }
 \seealso{

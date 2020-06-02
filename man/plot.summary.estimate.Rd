@@ -27,11 +27,11 @@ Visualize the posterior distributions for each partial correlation.
 \examples{
 \donttest{
 # data
-Y <- ptsd
+Y <- ptsd[,1:5]
 
-fit <- estimate(Y, iter = 250)
+fit <- estimate(Y, iter = 250,
+                progress = FALSE)
 
-summary(fit)
 
 plot(summary(fit))
 

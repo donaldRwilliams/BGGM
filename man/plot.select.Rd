@@ -47,6 +47,10 @@ that can then be further customized.
 \description{
 Visualize the conditional (in)dependence structure.
 }
+\note{
+A more extensive example of a custom plot is
+provided \href{https://donaldrwilliams.github.io/BGGM/articles/netplot.html}{here}
+}
 \examples{
 \donttest{
 #########################
@@ -57,7 +61,8 @@ Visualize the conditional (in)dependence structure.
 Y <- bfi[,1:25]
 
 # estimate
-fit <- estimate(Y, iter = 250)
+fit <- estimate(Y, iter = 250,
+                progress = FALSE)
 
 # "communities"
 comm <- substring(colnames(Y), 1, 1)
@@ -86,7 +91,8 @@ Yf <- subset(Y, gender == 2,
               select = -gender)
 
 # estimate
-fit <- ggm_compare_estimate(Ym, Yf, iter = 250)
+fit <- ggm_compare_estimate(Ym, Yf, iter = 250,
+                            progress = FALSE)
 
 # "communities"
 comm <- substring(colnames(Ym), 1, 1)

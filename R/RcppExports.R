@@ -105,3 +105,7 @@ mvnrnd <- function(n, mu, Sigma) {
     .Call(`_BGGM_mvnrnd`, n, mu, Sigma)
 }
 
+var <- function(Y, X, delta, epsilon, beta_prior, iter, start, progress) {
+    .Call(`_BGGM_var`, Y, X, delta, epsilon, beta_prior, iter, start, progress)
+}
+

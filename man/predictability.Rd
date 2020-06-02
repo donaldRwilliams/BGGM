@@ -10,6 +10,7 @@ predictability(
   cred = 0.95,
   BF_cut = 3,
   iter = NULL,
+  progress = TRUE,
   ...
 )
 }
@@ -23,6 +24,8 @@ predictability(
 \item{BF_cut}{numeric. evidentiary threshold (default is 3).}
 
 \item{iter}{interger. iterations (posterior samples) used for computing R2.}
+
+\item{progress}{Logical. Should a progress bar be included (defaults to \code{TRUE}) ?}
 
 \item{...}{currently ignored.}
 }
@@ -55,20 +58,16 @@ of relations.
 \donttest{
 
 # data
-Y <- ptsd
+Y <- ptsd[,1:5]
 
-fit <- estimate(Y, iter = 250)
+fit <- estimate(Y, iter = 250, progress = FALSE)
 
-r2 <- predictability(fit, select = TRUE, iter = 250)
+r2 <- predictability(fit, select = TRUE,
+                     iter = 250, progress = FALSE)
 
 # summary
 r2
-
-# plot
-plot(r2)
-
 }
-
 }
 \references{
 \insertAllCited{}

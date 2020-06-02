@@ -98,6 +98,9 @@
 <li>
   <a href="../news/index.html">News</a>
 </li>
+<li>
+  <a href="../articles/installation.html">Troubleshoot</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -153,6 +156,81 @@
     <p>a data frame including the posterior mean, standard deviation,
 and posterior hypothesis probabilities for each relation.</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+<span class='co'>#  data</span>
+<span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='no'>bfi</span>[,<span class='fl'>1</span>:<span class='fl'>10</span>]
+
+<span class='co'># fit model</span>
+<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='explore.html'>explore</a></span>(<span class='no'>Y</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>,
+               <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
+<span class='co'># edge set</span>
+<span class='no'>E</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='select.html'>select</a></span>(<span class='no'>fit</span>,
+            <span class='kw'>alternative</span> <span class='kw'>=</span> <span class='st'>"exhaustive"</span>)
+
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>E</span>)</div><div class='output co'>#&gt; BGGM: Bayesian Gaussian Graphical Models 
+#&gt; --- 
+#&gt; Type: continuous 
+#&gt; Alternative: exhaustive 
+#&gt; --- 
+#&gt; Call:
+#&gt; select.explore(object = fit, alternative = "exhaustive")
+#&gt; --- 
+#&gt; Hypotheses: 
+#&gt; H0: rho = 0
+#&gt; H1: rho &gt; 0
+#&gt; H2: rho &lt; 0 
+#&gt; --- 
+#&gt; 
+#&gt;  Relation Post.mean Post.sd Pr.H0 Pr.H1 Pr.H2
+#&gt;  A1--A2   -0.245    0.020   0.000 0.000 1.000
+#&gt;  A1--A3   -0.104    0.021   0.000 0.000 1.000
+#&gt;  A2--A3    0.286    0.018   0.000 1.000 0.000
+#&gt;  A1--A4   -0.015    0.019   0.966 0.007 0.027
+#&gt;  A2--A4    0.159    0.021   0.000 1.000 0.000
+#&gt;  A3--A4    0.161    0.019   0.000 1.000 0.000
+#&gt;  A1--A5   -0.017    0.017   0.959 0.006 0.034
+#&gt;  A2--A5    0.143    0.020   0.000 1.000 0.000
+#&gt;  A3--A5    0.353    0.020   0.000 1.000 0.000
+#&gt;  A4--A5    0.115    0.020   0.000 1.000 0.000
+#&gt;  A1--C1    0.052    0.019   0.026 0.971 0.003
+#&gt;  A2--C1    0.004    0.022   0.975 0.014 0.011
+#&gt;  A3--C1    0.010    0.019   0.975 0.017 0.008
+#&gt;  A4--C1   -0.047    0.021   0.234 0.010 0.756
+#&gt;  A5--C1    0.061    0.020   0.004 0.995 0.001
+#&gt;  A1--C2    0.074    0.020   0.000 1.000 0.000
+#&gt;  A2--C2    0.009    0.020   0.975 0.017 0.008
+#&gt;  A3--C2    0.031    0.019   0.798 0.192 0.011
+#&gt;  A4--C2    0.151    0.019   0.000 1.000 0.000
+#&gt;  A5--C2   -0.028    0.020   0.875 0.010 0.114
+#&gt;  C1--C2    0.300    0.020   0.000 1.000 0.000
+#&gt;  A1--C3    0.040    0.018   0.344 0.646 0.010
+#&gt;  A2--C3    0.125    0.020   0.000 1.000 0.000
+#&gt;  A3--C3   -0.015    0.020   0.966 0.008 0.026
+#&gt;  A4--C3   -0.032    0.020   0.780 0.012 0.208
+#&gt;  A5--C3    0.021    0.020   0.942 0.049 0.009
+#&gt;  C1--C3    0.124    0.019   0.000 1.000 0.000
+#&gt;  C2--C3    0.183    0.021   0.000 1.000 0.000
+#&gt;  A1--C4    0.124    0.021   0.000 1.000 0.000
+#&gt;  A2--C4   -0.016    0.020   0.963 0.008 0.029
+#&gt;  A3--C4    0.010    0.018   0.977 0.016 0.007
+#&gt;  A4--C4    0.018    0.019   0.958 0.035 0.008
+#&gt;  A5--C4    0.005    0.020   0.979 0.013 0.008
+#&gt;  C1--C4   -0.157    0.020   0.000 0.000 1.000
+#&gt;  C2--C4   -0.187    0.018   0.000 0.000 1.000
+#&gt;  C3--C4   -0.125    0.019   0.000 0.000 1.000
+#&gt;  A1--C5   -0.022    0.020   0.935 0.009 0.056
+#&gt;  A2--C5    0.043    0.018   0.206 0.786 0.008
+#&gt;  A3--C5   -0.021    0.020   0.943 0.009 0.048
+#&gt;  A4--C5   -0.152    0.020   0.000 0.000 1.000
+#&gt;  A5--C5   -0.053    0.021   0.060 0.005 0.935
+#&gt;  C1--C5   -0.040    0.019   0.350 0.010 0.639
+#&gt;  C2--C5   -0.044    0.018   0.112 0.006 0.883
+#&gt;  C3--C5   -0.176    0.020   0.000 0.000 1.000
+#&gt;  C4--C5    0.357    0.020   0.000 1.000 0.000</div><div class='input'>
+# }
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

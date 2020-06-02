@@ -132,60 +132,20 @@
 #'                      select = -c(gender,
 #'                                  education))[,1:10]
 #'
-#' #############################
-#' ### example 1: continuous ###
-#' #############################
-#'
-#' # fit model
-#' fit <- ggm_compare_explore(Ymale, Yfemale,
-#'                            iter = 250,
-#'                            type = "continuous")
-#'
-#' # summary
-#' summary(fit)
-#'
-#' # plot summary
-#' plot(summary(fit))
-#'
-#' # select graph
-#' select(fit)
-#'
-#' # plot graph
-#' # plot(select(fit))
-#'
 #' ##########################
-#' ### example 2: ordinal ###
+#' ### example 1: ordinal ###
 #' ##########################
 #'
 #' # fit model
 #' fit <- ggm_compare_explore(Ymale,  Yfemale,
 #'                            type = "ordinal",
-#'                            iter = 250)
-#'
+#'                            iter = 250,
+#'                            progress = FALSE)
 #' # summary
-#' summary(fit)
+#' summ <- summary(fit)
 #'
-#' # plot summary
-#' plot(summary(fit))
-#'
-#' # select graph
-#' select(fit)
-#'
-#'
-#' #########################
-#' ### example 3: mixed  ###
-#' #########################
-#'
-#' # fit model
-#' fit <- ggm_compare_explore(Ymale, Yfemale,
-#'                            type = "mixed",
-#'                            iter = 250)
-#'
-#' # summary
-#' summary(fit)
-#'
-#' # plot summary
-#' plot(summary(fit))
+#' # edge set
+#' E <- select(fit)
 #' }
 #'
 #' @export
@@ -427,6 +387,36 @@ print_ggm_compare_bf <- function(x, ...){
 #'
 #' @seealso \code{\link{ggm_compare_explore}}
 #'
+#' @examples
+#' \donttest{
+#' # note: iter = 250 for demonstrative purposes
+#'
+#' # data
+#' Y <- bfi
+#'
+#' # males and females
+#' Ymale <- subset(Y, gender == 1,
+#'                    select = -c(gender,
+#'                                education))[,1:10]
+#'
+#' Yfemale <- subset(Y, gender == 2,
+#'                      select = -c(gender,
+#'                                  education))[,1:10]
+#'
+#' ##########################
+#' ### example 1: ordinal ###
+#' ##########################
+#'
+#' # fit model
+#' fit <- ggm_compare_explore(Ymale,  Yfemale,
+#'                            type = "ordinal",
+#'                            iter = 250,
+#'                            progress = FALSE)
+#' # summary
+#' summ <- summary(fit)
+#'
+#' summ
+#' }
 #' @export
 summary.ggm_compare_explore <- function(object,
                                         col_names = TRUE,
@@ -510,6 +500,36 @@ summary.ggm_compare_explore <- function(object,
 #'
 #' @seealso \code{\link{ggm_compare_explore}}
 #'
+#' @examples
+#' \donttest{
+#' # note: iter = 250 for demonstrative purposes
+#'
+#' # data
+#' Y <- bfi
+#'
+#' # males and females
+#' Ymale <- subset(Y, gender == 1,
+#'                    select = -c(gender,
+#'                                education))[,1:10]
+#'
+#' Yfemale <- subset(Y, gender == 2,
+#'                      select = -c(gender,
+#'                                  education))[,1:10]
+#'
+#' ##########################
+#' ### example 1: ordinal ###
+#' ##########################
+#'
+#' # fit model
+#' fit <- ggm_compare_explore(Ymale,  Yfemale,
+#'                            type = "ordinal",
+#'                            iter = 250,
+#'                            progress = FALSE)
+#' # summary
+#' summ <- summary(fit)
+#'
+#' plot(summ)
+#' }
 #' @export
 plot.summary.ggm_compare_explore <- function(x,
                                              size = 2,

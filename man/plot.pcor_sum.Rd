@@ -2,25 +2,27 @@
 % Please edit documentation in R/posterior_sum.R
 \name{plot.pcor_sum}
 \alias{plot.pcor_sum}
-\title{Plot \code{posterior_sum} Object}
+\title{Plot \code{pcor_sum} Object}
 \usage{
-\method{plot}{pcor_sum}(x, fill = "#CC79A7")
+\method{plot}{pcor_sum}(x, fill = "#CC79A7", ...)
 }
 \arguments{
 \item{x}{An object of class \code{posterior_sum}}
 
 \item{fill}{Character string. What fill for the histogram
 (defaults to colorblind "pink")?}
+
+\item{...}{Currently ignored.}
 }
 \value{
 A list of \code{ggplot} objects
 }
 \description{
-Plot \code{posterior_sum} Object
+Plot \code{pcor_sum} Object
 }
 \note{
 \strong{Examples}:
 }
 \seealso{
-posterior_sum
+pcor_sum
 }

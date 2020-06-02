@@ -559,9 +559,10 @@ estimate  <- function(Y,
 #' @examples
 #' \donttest{
 #' # data
-#' Y <- ptsd
+#' Y <- ptsd[,1:5]
 #'
-#' fit <- estimate(Y, iter = 250)
+#' fit <- estimate(Y, iter = 250,
+#'                 progress = FALSE)
 #'
 #' summary(fit)
 #'
@@ -656,7 +657,7 @@ print_summary_estimate <- function(x, ...) {
     cat("--- \n")
     cat("Type:",  x$object$type, "\n")
     cat("Analytic:", x$object$analytic, "\n")
-    cat("Formula:", paste(as.character(x$formula), collapse = " "), "\n")
+    cat("Formula:", paste(as.character(x$object$formula), collapse = " "), "\n")
     # number of iterations
     cat("Posterior Samples:", x$object$iter, "\n")
     # number of observations
@@ -722,11 +723,11 @@ print_estimate <- function(x, ...){
 #' @examples
 #' \donttest{
 #' # data
-#' Y <- ptsd
+#' Y <- ptsd[,1:5]
 #'
-#' fit <- estimate(Y, iter = 250)
+#' fit <- estimate(Y, iter = 250,
+#'                 progress = FALSE)
 #'
-#' summary(fit)
 #'
 #' plot(summary(fit))
 #'

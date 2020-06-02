@@ -387,6 +387,24 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// var
+Rcpp::List var(arma::mat Y, arma::mat X, float delta, float epsilon, arma::mat beta_prior, int iter, arma::mat start, bool progress);
+RcppExport SEXP _BGGM_var(SEXP YSEXP, SEXP XSEXP, SEXP deltaSEXP, SEXP epsilonSEXP, SEXP beta_priorSEXP, SEXP iterSEXP, SEXP startSEXP, SEXP progressSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type X(XSEXP);
+    Rcpp::traits::input_parameter< float >::type delta(deltaSEXP);
+    Rcpp::traits::input_parameter< float >::type epsilon(epsilonSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type beta_prior(beta_priorSEXP);
+    Rcpp::traits::input_parameter< int >::type iter(iterSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type start(startSEXP);
+    Rcpp::traits::input_parameter< bool >::type progress(progressSEXP);
+    rcpp_result_gen = Rcpp::wrap(var(Y, X, delta, epsilon, beta_prior, iter, start, progress));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_BGGM_Sigma_i_not_i", (DL_FUNC) &_BGGM_Sigma_i_not_i, 2},
@@ -415,6 +433,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_BGGM_correlation", (DL_FUNC) &_BGGM_correlation, 2},
     {"_BGGM_ppc_helper_fast", (DL_FUNC) &_BGGM_ppc_helper_fast, 9},
     {"_BGGM_mvnrnd", (DL_FUNC) &_BGGM_mvnrnd, 3},
+    {"_BGGM_var", (DL_FUNC) &_BGGM_var, 8},
     {NULL, NULL, 0}
 };
 

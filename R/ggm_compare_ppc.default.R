@@ -29,7 +29,10 @@
 #'             (i.e., a large score is bad thing). This determines how the \emph{p}-value
 #'             is computed. See \strong{Details}.
 #'
+#' @param progress Logical. Should a progress bar be included (defaults to \code{TRUE}) ?
+#'
 #' @references
+#'
 #' \insertAllCited{}
 #'
 #' @details
@@ -148,13 +151,10 @@
 #'
 #' global_test
 #'
-#' # plot
-#' plot(global_test)
 #'
 #' #############################
 #' ###### custom function ######
 #' #############################
-#'
 #' # example 1
 #'
 #' # maximum difference van Borkulo et al. (2017)
@@ -187,12 +187,11 @@
 #' global_max <- ggm_compare_ppc(Ym, Yf,
 #'                               iter = 250,
 #'                               FUN = f,
-#'                               custom_obs = obs)
+#'                               custom_obs = obs,
+#'                               progress = FALSE)
 #'
 #' global_max
 #'
-#' # plot
-#' plot(global_max)
 #'
 #' # example 2
 #' # Hamming distance (squared error for adjacency)
@@ -225,12 +224,11 @@
 #' global_hd <- ggm_compare_ppc(Ym, Yf,
 #'                             iter = 250,
 #'                             FUN = f,
-#'                             custom_obs  = obs)
+#'                             custom_obs  = obs,
+#'                             progress = FALSE)
 #'
 #' global_hd
 #'
-#' # plot
-#' plot(global_hd)
 #'
 #' #############################
 #' ########  nodewise ##########
@@ -241,8 +239,6 @@
 #'
 #' nodewise
 #'
-#' # plot
-#' plot(nodewise)
 #' }
 #'
 #' @export
@@ -251,7 +247,8 @@ ggm_compare_ppc <- function(...,
                             iter = 5000,
                             FUN = NULL,
                             custom_obs = NULL,
-                            loss = TRUE
+                            loss = TRUE,
+                            progress = TRUE
                             ){
 
   # data information
@@ -484,8 +481,9 @@ ggm_compare_ppc <- function(...,
         n2 <- info$dat_info$n[2]
 
         # progress bar
-        pb <- utils::txtProgressBar(min = 0, max = iter, style = 3)
-
+        if(isTRUE(progress)){
+          pb <- utils::txtProgressBar(min = 0, max = iter, style = 3)
+        }
         # predictive check
         pp_check <- sapply(1:iter, function(x){
 
@@ -502,10 +500,13 @@ ggm_compare_ppc <- function(...,
           ppc <- FUN(Yrep1, Yrep2)
 
           # update progress bar
-          utils::setTxtProgressBar(pb, x)
+          if(isTRUE(progress)){
+            utils::setTxtProgressBar(pb, x)
+            }
 
           ppc
-        })
+
+          })
 
 
      if(isTRUE(loss)){
@@ -667,6 +668,30 @@ print_ggm_compare_ppc <- function(x, ...){
 #'
 #' @seealso \code{\link{ggm_compare_ppc}}
 #'
+#' @examples
+#' \donttest{
+#' # data
+#' Y <- bfi
+#'
+#' #############################
+#' ######### global ############
+#' #############################
+#' # males
+#' Ym <- subset(Y, gender == 1,
+#'              select = - c(gender, education))
+#'
+#' # females
+#'
+#' Yf <- subset(Y, gender == 2,
+#'              select = - c(gender, education))
+#'
+#'
+#' global_test <- ggm_compare_ppc(Ym, Yf,
+#'                                iter = 250,
+#'                                progress = FALSE)
+#'
+#' plot(global_test)
+#' }
 #' @export
 plot.ggm_compare_ppc <- function(x,
                                  critical = 0.05,

@@ -12,6 +12,8 @@
 #'
 #' @param summary summarize the posterior samples (defaults to \code{TRUE}).
 #'
+#' @param progress Logical. Should a progress bar be included (defaults to \code{TRUE}) ?
+#'
 #' @param ... currently ignored
 #'
 #' @return \code{summary = TRUE}: 3D array of dimensions n (observations),
@@ -25,10 +27,11 @@
 #' # # data
 #' Y <- ptsd
 #'
-#' fit <- estimate(Y, iter = 250)
+#' fit <- estimate(Y, iter = 250,
+#'                 progress = FALSE)
 #'
-#' pred <- predict(fit)
-#'
+#' pred <- predict(fit,
+#'                 progress = FALSE)
 #' }
 #'
 #' @export
@@ -37,6 +40,7 @@ predict.estimate <- function(object,
                            summary = TRUE,
                            cred = 0.95,
                            iter = NULL,
+                           progress =  TRUE,
                            ...){
 
   # lower bound
@@ -92,8 +96,9 @@ predict.estimate <- function(object,
 
   }
 
-  # progress bar
-  pb <- utils::txtProgressBar(min = 0, max = p, style = 3)
+  if(isTRUE(progress)){
+    pb <- utils::txtProgressBar(min = 0, max = p, style = 3)
+  }
 
   # yhats
   yhats <- lapply(1:p, function(x) {
@@ -107,7 +112,10 @@ predict.estimate <- function(object,
                     iter = iter
     )
 
-    utils::setTxtProgressBar(pb, x)
+    if(isTRUE(progress)){
+      utils::setTxtProgressBar(pb, x)
+    }
+
     yhat_p
 
   })
@@ -174,6 +182,8 @@ predict.estimate <- function(object,
 #'
 #' @param summary summarize the posterior samples (defaults to \code{TRUE}).
 #'
+#' @param progress Logical. Should a progress bar be included (defaults to \code{TRUE}) ?
+#'
 #' @param ... currently ignored
 #'
 #' @return \code{summary = TRUE}: 3D array of dimensions n (observations),
@@ -187,10 +197,12 @@ predict.estimate <- function(object,
 #' Y <- ptsd
 #'
 #' # fit model
-#' fit <- explore(Y, iter = 250)
+#' fit <- explore(Y, iter = 250,
+#'                progress = FALSE)
 #'
 #' # predict
-#' pred <- predict(fit)
+#' pred <- predict(fit,
+#'                 progress = FALSE)
 #'
 #' }
 #' @export
@@ -199,6 +211,7 @@ predict.explore <- function(object,
                              summary = TRUE,
                              cred = 0.95,
                              iter = NULL,
+                             progress = TRUE,
                              ...){
 
   # lower bound
@@ -257,8 +270,9 @@ predict.explore <- function(object,
 
   }
 
-  # progress bar
-  pb <- utils::txtProgressBar(min = 0, max = p, style = 3)
+  if(isTRUE(progress)){
+    pb <- utils::txtProgressBar(min = 0, max = p, style = 3)
+  }
 
   # yhats
   yhats <- lapply(1:p, function(x) {
@@ -272,7 +286,10 @@ predict.explore <- function(object,
                     iter = iter
     )
 
-    utils::setTxtProgressBar(pb, x)
+    if(isTRUE(progress)){
+      utils::setTxtProgressBar(pb, x)
+    }
+
     yhat_p
 
   })
