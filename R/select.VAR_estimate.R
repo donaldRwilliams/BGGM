@@ -15,4 +15,65 @@
 select.VAR_estimate <- function(object,
                                 cred = 0.95,
                                 alternative = "two.sided"){
-}
+
+
+  pcors <- object$fit$pcors[,,51:(object$iter +50)]
+
+  pcor_mat <- apply(pcors, 1:2, mean)
+
+  beta <- object$fit$beta[,,51:(object$iter +50)]
+  beta_mat <- apply(beta, 1:2, mean)
+
+
+  if(alternative == "two.sided"){
+
+    lb <- (1 - cred) / 2
+    ub <- 1 - lb
+
+    pcor_adj <- ifelse(apply(pcors, 1:2, quantile, lb) < 0 &
+                       apply(pcors, 1:2, quantile, ub) > 0, 0, 1)
+
+
+    beta_adj <- ifelse(apply(beta, 1:2, quantile, lb) < 0 &
+                      apply(beta, 1:2, quantile, ub) > 0, 0, 1)
+
+  } else if(alternative == "greater") {
+
+    lb <- (1 - cred)
+
+    pcor_adj <- ifelse(apply(pcors, 1:2, quantile, lb) > 0, 1, 0)
+
+    beta_adj <- ifelse(apply(beta, 1:2, quantile, lb) > 0, 1, 0)
+
+
+  } else {
+
+    ub <- cred
+
+    pcor_adj <- ifelse(apply(pcors, 1:2, quantile, ub) < 0, 1, 0)
+
+    beta_adj <- ifelse(apply(beta, 1:2, quantile, ub) < 0, 1, 0)
+
+  }
+
+  beta_weighted_adj <-  beta_adj * beta_mat
+  pcor_weighted_adj <- pcor_adj * pcor_mat
+
+
+  returned_object <- list(
+    pcor_adj = pcor_adj,
+    beta_adj = beta_adj,
+    beta_weighted_adj =  beta_weighted_adj,
+    pcor_weighted_adj =  pcor_weighted_adj,
+    alternative = alternative,
+    cred = cred,
+    object = object
+  )
+
+  class(returned_object) <- c("BGGM",
+                              "select.VAR_estimate",
+                              "VAR_estimate",
+                              "select")
+  return(returned_object)
+
+  }

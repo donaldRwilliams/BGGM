@@ -39,6 +39,8 @@ VAR_estimate <- function(Y, rho_sd = 0.50,
   # prior variance
   beta_var <- beta_sd^2
 
+  message(paste0("BGGM: Posterior Sampling "))
+
   fit <-.Call(
       "_BGGM_var",
       Y =  as.matrix(Y),
@@ -50,8 +52,14 @@ VAR_estimate <- function(Y, rho_sd = 0.50,
       start = solve(cor(Y)),
       progress = TRUE
     )
+  message("BGGM: Finished")
 
-  returned_object <- fit
+  returned_object <- list(fit = fit,
+                          iter = iter,
+                          p = p,
+                          Y = Y,
+                          X = X)
+
   class(returned_object) <- c("BGGM",
                               "VAR",
                               "VAR_estimate")
