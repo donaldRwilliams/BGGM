@@ -1970,3 +1970,133 @@ arma::mat mvnrnd(int n, arma::vec mu, arma::mat Sigma){
   return Y;
 
 }
+
+
+// [[Rcpp::export]]
+Rcpp::List var(arma::mat Y,
+                         arma::mat X,
+                         float delta,
+                         float epsilon,
+                         arma::mat beta_prior,
+                         int iter,
+                         arma::mat start,
+                         bool progress){
+
+
+  // progress
+  Progress  pr(iter, progress);
+
+  // number of rows
+  int n = Y.n_rows;
+
+  // number of dependent variables
+  int k = Y.n_cols;
+
+  // number of predictors
+  int p = X.n_cols;
+
+  int nu = 1/ epsilon;
+
+  // #nu in Mulder & Pericchi (2018) formula (30) line 1.
+  int nuMP = delta + k - 1;
+
+  // #delta in Mulder & Pericchi (2018) formula (30) line 1.
+  int deltaMP = nu - k + 1 ;
+
+  // k * k identity mat
+  arma::mat  I_k(k, k, arma::fill::eye);
+
+  // p * p identity mat
+  arma::mat  I_p(p, p, arma::fill::eye);
+
+  // scatter matrix X' * X
+  arma::mat S_X(X.t() * X + beta_prior);
+
+  // inv S_X
+  arma::mat Sinv_X(inv(S_X));
+
+  // Psi update
+  arma::cube Psi(k, k, 1, arma::fill::zeros);
+
+  // scatter matrix dependent variables
+  arma::mat S_Y(k, k, arma::fill::zeros);
+  arma::mat B(epsilon*I_k);
+  arma::mat BMP(inv(B));
+  arma::mat BMPinv(inv(BMP));
+
+  // precison matrix
+  arma::cube Theta(k, k, 1, arma::fill::zeros);
+  arma::cube Theta_mcmc(k, k, iter, arma::fill::zeros);
+
+  // partial correlations
+  arma::mat pcors(k,k);
+  arma::cube pcors_mcmc(k, k, iter, arma::fill::zeros);
+
+  // correlations
+  arma::mat  cors(k,k);
+  arma::cube cors_mcmc(k, k, iter, arma::fill::zeros);
+
+  // covariance matrix
+  arma::cube Sigma(k, k, 1, arma::fill::zeros);
+  arma::cube Sigma_mcmc(k, k, iter, arma::fill::zeros);
+
+  // coefficients
+  arma::mat beta(p, k, arma::fill::zeros);
+  arma::cube beta_mcmc(p, k, iter,  arma::fill::zeros);
+
+  // starting value
+  Sigma.slice(0) = inv(start);
+  Psi.slice(0).fill(arma::fill::eye);
+  Theta.slice(0) = start;
+
+  for(int s = 0; s < iter; ++s){
+
+    pr.increment();
+
+    if (s % 250 == 0){
+      Rcpp::checkUserInterrupt();
+    }
+
+    // draw coefficients
+    beta = reshape(mvnrnd(reshape(Sinv_X * X.t() * Y, k*p , 1),
+                          kron(Sigma.slice(0), Sinv_X)),
+                          p, k);
+
+    // scatter matrix
+    S_Y = Y.t() * Y + I_k - beta.t() * S_X * beta;
+
+    // sample Psi
+    Psi.slice(0) = wishrnd(inv(BMPinv + Theta.slice(0)), nuMP + deltaMP + k - 1);
+
+    // sample Theta
+    Theta.slice(0) =   wishrnd(inv(Psi.slice(0) + S_Y),  (deltaMP + k - 1) + (n - 1));
+
+    // Sigma
+    Sigma.slice(0) = inv(Theta.slice(0));
+
+    // correlation
+    cors =  diagmat(1 / sqrt(Sigma.slice(0).diag())) *
+      Sigma.slice(0) *
+      diagmat(1 / sqrt(Sigma.slice(0).diag()));
+
+    // partial correlations
+    pcors = diagmat(1 / sqrt(Theta.slice(0).diag())) *
+      Theta.slice(0) *
+      diagmat(1 / sqrt(Theta.slice(0).diag()));
+
+
+    beta_mcmc.slice(s) = beta;
+    pcors_mcmc.slice(s) =  -(pcors - I_k);
+  }
+
+  arma::cube fisher_z = atanh(pcors_mcmc);
+
+  arma::mat  pcor_mat = mean(pcors_mcmc.tail_slices(iter - 50), 2);
+
+  Rcpp::List ret;
+  ret["pcors"] = pcors_mcmc;
+  ret["pcor_mat"] =  pcor_mat;
+  ret["beta"] = beta_mcmc;
+  ret["fisher_z"] = fisher_z;
+  return ret;
+}

@@ -18,6 +18,7 @@
 #'
 #' @param iter Number of iterations (posterior samples; defaults to 5000).
 #'
+#' @param progress Logical. Should a progress bar be included (defaults to \code{TRUE}) ?
 #'
 #' @return
 #'
@@ -74,7 +75,8 @@
 #' #################################
 #'
 #' fit <- zero_order_cors(Y, type = "continuous",
-#'                        iter = 250)
+#'                        iter = 250,
+#'                        progress = FALSE)
 #'
 #'
 #' #################################
@@ -82,7 +84,8 @@
 #' #################################
 #'
 #' fit <- zero_order_cors(Y+1, type = "ordinal",
-#'                        iter = 250)
+#'                        iter = 250,
+#'                        progress = FALSE)
 #'
 #'
 #' ###########################
@@ -90,7 +93,8 @@
 #' ###########################
 #'
 #' fit <- zero_order_cors(Y+1, type = "mixed",
-#'                        iter = 250)
+#'                        iter = 250,
+#'                        progress = FALSE)
 #'
 #' ############################
 #' ## example 4: tetrachoric ##
@@ -100,18 +104,21 @@
 #' Y <- women_math[,1:3]
 #'
 #' fit <- zero_order_cors(Y, type = "binary",
-#'                        iter = 250)
+#'                        iter = 250,
+#'                        progress = FALSE)
 #'
 #' }
 #' @export
 zero_order_cors <- function(Y,  type = "continuous",
                             iter = 5000,
-                            mixed_type = NULL){
+                            mixed_type = NULL,
+                            progress = TRUE){
 
   fit <- estimate(Y,
                   type = type,
                   iter = iter,
-                  mixed_type = mixed_type)
+                  mixed_type = mixed_type,
+                  progress = progress)
 
   cors <- pcor_to_cor(fit)
 

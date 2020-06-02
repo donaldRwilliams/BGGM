@@ -4,7 +4,15 @@
 \alias{predict.explore}
 \title{Model Predictions for \code{explore} Objects}
 \usage{
-\method{predict}{explore}(object, newdata = NULL, summary = TRUE, cred = 0.95, iter = NULL, ...)
+\method{predict}{explore}(
+  object,
+  newdata = NULL,
+  summary = TRUE,
+  cred = 0.95,
+  iter = NULL,
+  progress = TRUE,
+  ...
+)
 }
 \arguments{
 \item{object}{object of class \code{explore}}
@@ -16,6 +24,8 @@
 \item{cred}{credible interval used for summarizing}
 
 \item{iter}{number of posterior samples (defaults to all in the object).}
+
+\item{progress}{Logical. Should a progress bar be included (defaults to \code{TRUE}) ?}
 
 \item{...}{currently ignored}
 }
@@ -34,10 +44,12 @@ Model Predictions for \code{explore} Objects
 Y <- ptsd
 
 # fit model
-fit <- explore(Y, iter = 250)
+fit <- explore(Y, iter = 250,
+               progress = FALSE)
 
 # predict
-pred <- predict(fit)
+pred <- predict(fit,
+                progress = FALSE)
 
 }
 }

@@ -173,7 +173,9 @@ can be used to first determine the parameter names to specify in <code>type</cod
 <span class='co'>#########################</span>
 <span class='co'>###### continuous #######</span>
 <span class='co'>#########################</span>
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='estimate.html'>estimate</a></span>(<span class='no'>Y</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>)</div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='input'>
+<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='estimate.html'>estimate</a></span>(<span class='no'>Y</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>,
+                <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
 <span class='co'># print names first</span>
 <span class='fu'>convergence</span>(<span class='no'>fit</span>, <span class='kw'>print_names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;  [1] "B1--B2" "B1--B3" "B2--B3" "B1--B4" "B2--B4" "B3--B4" "B1--B5" "B2--B5"
 #&gt;  [9] "B3--B5" "B4--B5"</div><div class='input'>

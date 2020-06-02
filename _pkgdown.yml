@@ -2,7 +2,7 @@ home:
   title: BGGM
   links:
   - text: Ask a question about BGGM
-    href: mailto:drwwilliams@ucdavis.edu
+    href: https://groups.google.com/forum/#!forum/bggm-users
 
 url: https://donaldrwilliams.github.io/BGGM/
 template:
@@ -32,12 +32,14 @@ articles:
     desc: >
       These vignettes provide an introduction to the various methods in **BGGM**.
     contents:
-      - mcmc_diagnostics
+      - test_sum
       - netplot
+      - mcmc_diagnostics
+      - control
       - netstat_custom
       - ppc_custom
-      - predictability
       - hyp_3_ways
+      - predictability
       - in_tandem
 
 reference:
@@ -47,6 +49,10 @@ reference:
     contents:
     - bggm_missing
   - title: "Estimation Based Methods"
+    desc: >
+      'Estimation' indicates that the methods to not employ Bayes factor testing. Rather,
+      the graph is determined with the posterior distribution. The prior distribtuion has a
+      minimal influence.
     contents:
     - estimate
     - coef.estimate
@@ -55,18 +61,27 @@ reference:
     - select.estimate
     - summary.estimate
   - title: "Exploratory Hypothesis Testing"
+    desc: >
+      Bayes factor testing to determine the graph. 'Exploratory' reflects that there
+      is not a specific hypothesis being test.
     contents:
     - explore
     - coef.explore
     - predict.explore
     - plot.summary.explore
+    - plot.summary.select.explore
     - select.explore
     - summary.explore
+    - summary.select.explore
   - title: "Confirmatory Hypothesis Testing"
+    desc: >
+     Test (in)equality constrained hypotheses with the Bayes factor.
     contents:
     - confirm
     - plot.confirm
   - title: "Compare Gaussian Graphical Models"
+    desc: >
+      A variety of methods for comparing GGMs.
   - subtitle: "Posterior Predictive Check"
     desc: >
      Compare groups with a posterior predictive check, where the null model
@@ -95,19 +110,31 @@ reference:
     - summary.ggm_compare_explore
   - subtitle: "Confirmatory Hypothesis Testing"
     desc: >
-      Confirmatory hypothesis testing for groups.
+       Test (in)equality constrained hypotheses with the Bayes factor.
     contents:
     - ggm_compare_confirm
     - plot.confirm
   - title: "Predictability"
+    desc: >
+      Bayesian variance explained for each node in the model.
     contents:
     - predictability
     - plot.predictability
     - summary.predictability
   - title: "Network Statistics"
+    desc: >
+     Compute network statistics from a partial correlation matrix or a
+     weighted adjacency matrix.
     contents:
     - roll_your_own
     - plot.roll_your_own
+  - title: "Partial Correlation Sums"
+    desc: >
+      Compute the sum of partial correlations within (one group) or between (two groups) GGMs. This
+      can be used to compare sums.
+    contents:
+    - pcor_sum
+    - plot.pcor_sum
   - title: "Network Plot"
     desc: >
      Network plot for the selected graphs. This works with all method for which there is
@@ -124,16 +151,18 @@ reference:
     - pcor_mat
     - plot_prior
     - posterior_samples
-    - regression_summary
     - map
+    - regression_summary
+    - summary.coef
     - weighted_adj_mat
     - zero_order_cors
   - title: "Data"
     desc: >
-     Example dataests and correlation matrices.
+     Example datasets and correlation matrices.
     contents:
     - asd_ocd
     - bfi
+    - csws
     - depression_anxiety_t1
     - depression_anxiety_t2
     - gss

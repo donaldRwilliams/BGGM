@@ -19,11 +19,13 @@ Summary Method for \code{predictability} Objects
 }
 \examples{
 \donttest{
-Y <- ptsd
+Y <- ptsd[,1:5]
 
-fit <- explore(Y, iter = 250)
+fit <- explore(Y, iter = 250,
+               progress = FALSE)
 
-r2 <- predictability(fit, iter = 250)
+r2 <- predictability(fit, iter = 250,
+                     progress = FALSE)
 
 summary(r2)
 

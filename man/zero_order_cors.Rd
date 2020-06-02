@@ -4,7 +4,13 @@
 \alias{zero_order_cors}
 \title{Zero-Order Correlations}
 \usage{
-zero_order_cors(Y, type = "continuous", iter = 5000, mixed_type = NULL)
+zero_order_cors(
+  Y,
+  type = "continuous",
+  iter = 5000,
+  mixed_type = NULL,
+  progress = TRUE
+)
 }
 \arguments{
 \item{Y}{Matrix (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).}
@@ -17,6 +23,8 @@ zero_order_cors(Y, type = "continuous", iter = 5000, mixed_type = NULL)
 \item{mixed_type}{Numeric vector. An indicator of length p for which varibles should be treated as ranks.
 (1 for rank and 0 to assume normality). The default is currently to treat all integer variables as ranks
 when \code{type = "mixed"} and \code{NULL} otherwise. See note for further details.}
+
+\item{progress}{Logical. Should a progress bar be included (defaults to \code{TRUE}) ?}
 }
 \value{
 \itemize{
@@ -77,7 +85,8 @@ Y <- ptsd[,1:3]
 #################################
 
 fit <- zero_order_cors(Y, type = "continuous",
-                       iter = 250)
+                       iter = 250,
+                       progress = FALSE)
 
 
 #################################
@@ -85,7 +94,8 @@ fit <- zero_order_cors(Y, type = "continuous",
 #################################
 
 fit <- zero_order_cors(Y+1, type = "ordinal",
-                       iter = 250)
+                       iter = 250,
+                       progress = FALSE)
 
 
 ###########################
@@ -93,7 +103,8 @@ fit <- zero_order_cors(Y+1, type = "ordinal",
 ###########################
 
 fit <- zero_order_cors(Y+1, type = "mixed",
-                       iter = 250)
+                       iter = 250,
+                       progress = FALSE)
 
 ############################
 ## example 4: tetrachoric ##
@@ -103,7 +114,8 @@ fit <- zero_order_cors(Y+1, type = "mixed",
 Y <- women_math[,1:3]
 
 fit <- zero_order_cors(Y, type = "binary",
-                       iter = 250)
+                       iter = 250,
+                       progress = FALSE)
 
 }
 }

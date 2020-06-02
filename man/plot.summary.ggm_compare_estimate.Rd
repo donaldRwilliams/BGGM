@@ -24,6 +24,32 @@ An object of class \code{ggplot}
 \description{
 Visualize the posterior distribution differences.
 }
+\examples{
+\donttest{
+# note: iter = 250 for demonstrative purposes
+# data
+Y <- bfi
+
+# males and females
+Ymale <- subset(Y, gender == 1,
+                select = -c(gender,
+                            education))[,1:5]
+
+Yfemale <- subset(Y, gender == 2,
+                  select = -c(gender,
+                              education))[,1:5]
+
+# fit model
+fit <- ggm_compare_estimate(Ymale,  Yfemale,
+                            type = "ordinal",
+                            iter = 250,
+                            prior_sd = 0.25,
+                            progress = FALSE)
+
+plot(summary(fit))
+}
+
+}
 \seealso{
 \code{\link{ggm_compare_estimate}}
 }

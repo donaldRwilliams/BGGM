@@ -131,7 +131,7 @@
     <p>Estimation and exploratory hypothesis testing with missing data.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>bggm_missing</span>(<span class='no'>x</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"estimate"</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>bggm_missing</span>(<span class='no'>x</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>2000</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"estimate"</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -139,6 +139,10 @@
     <tr>
       <th>x</th>
       <td><p>An object of class <code>mid</code> <code><a href='http://stefvanbuuren.github.io/mice/reference/mice.html'>mice</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>iter</th>
+      <td><p>Number of iterations for each imputed dataset (posterior samples; defaults to 2000).</p></td>
     </tr>
     <tr>
       <th>method</th>
@@ -165,10 +169,13 @@ options are <code>"estimate"</code> and <code>"explore"</code>.</p></td>
       imputing the missing values during model fitting. This option will be incorporated directly into
       the <code><a href='estimate.html'>estimate</a></code> or <code><a href='explore.html'>explore</a></code> functions, such that <code>bggm_missing</code> will
       always support missing data with <code><a href='http://stefvanbuuren.github.io/mice/reference/mice.html'>mice</a></code>.</p>
+
 <p><strong>Support</strong>:</p>
 <p>There is limited support for missing data. As of version <code>2.0.0</code>, it is possible to
  determine the graphical structure with either  <code><a href='estimate.html'>estimate</a></code> or <code><a href='explore.html'>explore</a></code>, in addition
  to plotting the graph with <code><a href='plot.select.html'>plot.select</a></code>. All data types <em>are</em> currently supported.</p>
+<p><strong>Memory Warning</strong>:
+ A model is fitted for each imputed dataset. This results in a potentially large object.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>

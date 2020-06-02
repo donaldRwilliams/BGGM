@@ -76,6 +76,9 @@
     <loc>https://donaldrwilliams.github.io/BGGM//reference/pcor_mat.html</loc>
   </url>
   <url>
+    <loc>https://donaldrwilliams.github.io/BGGM//reference/pcor_sum.html</loc>
+  </url>
+  <url>
     <loc>https://donaldrwilliams.github.io/BGGM//reference/pcor_to_cor.html</loc>
   </url>
   <url>
@@ -83,6 +86,9 @@
   </url>
   <url>
     <loc>https://donaldrwilliams.github.io/BGGM//reference/plot.ggm_compare_ppc.html</loc>
+  </url>
+  <url>
+    <loc>https://donaldrwilliams.github.io/BGGM//reference/plot.pcor_sum.html</loc>
   </url>
   <url>
     <loc>https://donaldrwilliams.github.io/BGGM//reference/plot.predictability.html</loc>
@@ -202,6 +208,9 @@
     <loc>https://donaldrwilliams.github.io/BGGM//reference/zero_order_cors.html</loc>
   </url>
   <url>
+    <loc>https://donaldrwilliams.github.io/BGGM//articles/control.html</loc>
+  </url>
+  <url>
     <loc>https://donaldrwilliams.github.io/BGGM//articles/hyp_3_ways.html</loc>
   </url>
   <url>
@@ -224,5 +233,8 @@
   </url>
   <url>
     <loc>https://donaldrwilliams.github.io/BGGM//articles/predictability.html</loc>
+  </url>
+  <url>
+    <loc>https://donaldrwilliams.github.io/BGGM//articles/test_sum.html</loc>
   </url>
 </urlset>

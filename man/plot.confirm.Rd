@@ -45,10 +45,10 @@ Yfemale <- subset(Y, gender == 2,
 
 test <- ggm_compare_confirm(Ymale,
                             Yfemale,
-                             hypothesis = hypothesis)
+                            hypothesis = hypothesis,
+                            iter = 250,
+                            progress = FALSE)
 
-# print
-test
 
 # plot
 plot(test)

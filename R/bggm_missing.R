@@ -7,6 +7,8 @@
 #' @param method Character string. Which method should be used (default set to \code{estimate})? The current
 #'               options are \code{"estimate"} and \code{"explore"}.
 #'
+#' @param iter  Number of iterations for each imputed dataset (posterior samples; defaults to 2000).
+#'
 #' @param ... Additional arguments passed to either
 #'            \code{\link{estimate}} or \code{\link{explore}}.
 #'
@@ -23,12 +25,16 @@
 #'       the \code{\link{estimate}} or \code{\link{explore}} functions, such that \code{bggm_missing} will
 #'       always support missing data with \code{\link[mice]{mice}}.
 #'
+#'
 #' \strong{Support}:
 #'
 #'  There is limited support for missing data. As of version \code{2.0.0}, it is possible to
 #'  determine the graphical structure with either  \code{\link{estimate}} or \code{\link{explore}}, in addition
 #'  to plotting the graph with \code{\link{plot.select}}. All data types \emph{are} currently supported.
-
+#'
+#' \strong{Memory Warning}:
+#'  A model is fitted for each imputed dataset. This results in a potentially large object.
+#'
 #' @examples
 #' \donttest{
 #' # note: iter = 250 for demonstrative purposes
@@ -71,7 +77,8 @@
 #'
 #' plt_E
 #'}
-bggm_missing <- function(x, method = "estimate", ...){
+bggm_missing <- function(x, iter = 2000,
+                         method = "estimate", ...){
 
   # check for mice
   if(!requireNamespace("mice", quietly = TRUE)) {
@@ -94,20 +101,23 @@ bggm_missing <- function(x, method = "estimate", ...){
   if(method == "explore"){
 
     # fit the models
-    fits <- lapply(1:n_data_sets, function(x) explore(subset(Y, .imp == x)[,-1], ...))
+    fits <- lapply(1:n_data_sets, function(x) explore(subset(Y, .imp == x)[,-1],
+                                                      iter = iter))
 
     # iterations
     iter <- fits[[1]]$iter
 
     # partial correlations
-    post_start_pcors <-  fits[[1]]$post_samp$pcors[,,]
+    post_start_pcors <-  fits[[1]]$post_samp$pcors
 
     # fisher z
     post_start_fisher <- fits[[1]]$post_samp$fisher_z
 
+    # prior fisher z
+    prior_start_fisher <- fits[[1]]$prior_samp$fisher_z
+
     # regression (for multivariate)
     if(!is.null( fits[[1]]$formula)){
-
       post_start_beta <- fits[[1]]$post_samp$beta
     }
 
@@ -119,6 +129,9 @@ bggm_missing <- function(x, method = "estimate", ...){
 
       post_start_fisher <-  abind::abind(post_start_fisher,
                                          fits[[i]]$post_samp$fisher_z[,,])
+
+      prior_start_fisher <-  abind::abind(prior_start_fisher,
+                                         fits[[i]]$prior_samp$fisher_z[,,])
 
       # multivarate
      if(!is.null(fits[[1]]$formula)){
@@ -132,24 +145,26 @@ bggm_missing <- function(x, method = "estimate", ...){
    dims <- dim(post_start_pcors)
 
    # replace samples
-   fits[[1]]$post_samp$pcors <- post_start_pcors[,,sample(1:dims[3], iter + 50)]
-   fits[[1]]$post_samp$fisher_z <- post_start_fisher[,,sample(1:dims[3], iter + 50)]
+   fits[[1]]$post_samp$pcors <- post_start_pcors[,,]
+   fits[[1]]$post_samp$fisher_z <- post_start_fisher[,,]
+   fits[[1]]$prior_samp$fisher_z <- prior_start_fisher[,,]
 
    if(!is.null( fits[[1]]$formula)){
-
-      fits[[1]]$post_samp$beta <- post_start_beta
-     }
-
+     fits[[1]]$post_samp$beta <- post_start_beta
+   }
   }
 
   # estimate models
   if(method == "estimate"){
 
     # fit the models
-    fits <- lapply(1:n_data_sets, function(x) estimate(subset(Y, .imp == x)[,-1], ...))
+    fits <- lapply(1:n_data_sets, function(x) estimate(subset(Y, .imp == x)[,-1],
+                                                       iter = iter, ...))
+
     iter <- fits[[1]]$iter
+
     post_start_pcors <-  fits[[1]]$post_samp$pcors[,,]
-    post_start_fisher <- fits[[1]]$post_samp$fisher_z
+    post_start_fisher <- fits[[1]]$post_samp$fisher_z[,,]
 
     if(!is.null( fits[[1]]$formula)){
 
@@ -173,7 +188,7 @@ bggm_missing <- function(x, method = "estimate", ...){
 
     dims <- dim(post_start_pcors)
 
-    fits[[1]]$post_samp$pcors <- post_start_pcors[,,sample(1:dims[3], iter + 50)]
+    fits[[1]]$post_samp$pcors <- post_start_pcors
     fits[[1]]$post_samp$fisher_z <- post_start_fisher
 
     if(!is.null( fits[[1]]$formula)){
@@ -182,5 +197,10 @@ bggm_missing <- function(x, method = "estimate", ...){
   }
 
   fit <- fits[[1]]
+
+  # total iterations + warmup
+  fit$iter <- (iter * n_data_sets) + 50
+
+  # model
   fit
-}
+  }

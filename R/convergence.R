@@ -28,7 +28,8 @@
 #' #########################
 #' ###### continuous #######
 #' #########################
-#' fit <- estimate(Y, iter = 250)
+#' fit <- estimate(Y, iter = 250,
+#'                 progress = FALSE)
 #'
 #' # print names first
 #' convergence(fit, print_names = TRUE)

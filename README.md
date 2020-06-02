@@ -1,5 +1,5 @@
 
-<img src="man/figures/hex.jpg" width = 250 />
+<img src="readme_models/hex.jpg" width = 250 />
 
 # BGGM: Bayesian Gaussian Graphical Models
 
@@ -15,13 +15,13 @@ Gaussian graphical models (GGM). The methods are organized around two
 general approaches for Bayesian inference: (1) estimation and (2)
 hypothesis testing. The key distinction is that the former focuses on
 either the posterior or posterior predictive distribution (Gelman, Meng,
-and Stern 1996; see section 5 in Rubin 1984) , whereas the latter
-focuses on model comparison with the Bayes factor (Jeffreys 1961; Kass
-and Raftery 1995).
+and Stern 1996; see section 5 in Rubin 1984), whereas the latter focuses
+on model comparison with the Bayes factor (Jeffreys 1961; Kass and
+Raftery 1995).
 
 ## Installation
 
-To install the latest release version (1.0.0) from CRAN use
+To install the latest release version (`2.0.0`) from CRAN use
 
 ``` r
 install.packages("BGGM")    
@@ -35,11 +35,6 @@ if (!requireNamespace("remotes")) {
 }   
 remotes::install_github("donaldRwilliams/BGGM")
 ```
-
-Note that the developmental version is recommended (and required to run
-the following examples), due to the algorithms being written in `c++`
-and support for all data types. The developmental version is essentially
-**BGGM** version 2.0.0.
 
 ## Overview
 
@@ -1163,15 +1158,15 @@ Models: Structure Learning, Predictability, and Network Comparisons.”
 
 <div id="ref-Williams2019_bf">
 
-Williams, Donald R., and Joris Mulder. 2019. “Bayesian Hypothesis
-Testing for Gaussian Graphical Models: Conditional Independence and
-Order Constraints.” *PsyArXiv*. <https://doi.org/10.31234/osf.io/ypxd8>.
+Williams, Donald R, and Joris Mulder. 2019. “Bayesian Hypothesis Testing
+for Gaussian Graphical Models: Conditional Independence and Order
+Constraints.” *PsyArXiv*. <https://doi.org/10.31234/osf.io/ypxd8>.
 
 </div>
 
 <div id="ref-williams2020comparing">
 
-Williams, Donald R., Philippe Rast, Luis R Pericchi, and Joris Mulder.
+Williams, Donald R, Philippe Rast, Luis R Pericchi, and Joris Mulder.
 2020. “Comparing Gaussian Graphical Models with the Posterior Predictive
 Distribution and Bayesian Model Selection.” *Psychological Methods*.
 

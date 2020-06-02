@@ -24,6 +24,31 @@ A list containing the summarized posterior distributions.
 Summarize the posterior distribution of each partial correlation
 difference with the posterior mean and standard deviation.
 }
+\examples{
+\donttest{
+# note: iter = 250 for demonstrative purposes
+# data
+Y <- bfi
+
+# males and females
+Ymale <- subset(Y, gender == 1,
+                select = -c(gender,
+                            education))[,1:5]
+
+Yfemale <- subset(Y, gender == 2,
+                  select = -c(gender,
+                              education))[,1:5]
+
+# fit model
+fit <- ggm_compare_estimate(Ymale,  Yfemale,
+                            type = "ordinal",
+                            iter = 250,
+                            prior_sd = 0.25,
+                            progress = FALSE)
+
+summary(fit)
+}
+}
 \seealso{
 \code{\link{ggm_compare_estimate}}
 }

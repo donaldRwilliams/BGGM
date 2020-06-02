@@ -27,9 +27,10 @@ with the posterior mean and standard deviation.
 \examples{
 \donttest{
 # data
-Y <- ptsd
+Y <- ptsd[,1:5]
 
-fit <- estimate(Y, iter = 250)
+fit <- estimate(Y, iter = 250,
+                progress = FALSE)
 
 summary(fit)
 

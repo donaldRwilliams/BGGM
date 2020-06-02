@@ -98,6 +98,9 @@
 <li>
   <a href="../news/index.html">News</a>
 </li>
+<li>
+  <a href="../articles/installation.html">Troubleshoot</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -129,7 +132,15 @@
     </div>
 
     <pre class="usage"><span class='co'># S3 method for estimate</span>
-<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>object</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>summary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>cred</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(
+  <span class='no'>object</span>,
+  <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>summary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>cred</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
+  <span class='kw'>iter</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -155,6 +166,10 @@
       <td><p>number of posterior samples (defaults to all in the object).</p></td>
     </tr>
     <tr>
+      <th>progress</th>
+      <td><p>Logical. Should a progress bar be included (defaults to <code>TRUE</code>) ?</p></td>
+    </tr>
+    <tr>
       <th>...</th>
       <td><p>currently ignored</p></td>
     </tr>
@@ -172,11 +187,12 @@
 <span class='co'># # data</span>
 <span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='no'>ptsd</span>
 
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='estimate.html'>estimate</a></span>(<span class='no'>Y</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>)</div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='input'>
-<span class='no'>pred</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>fit</span>)</div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |====                                                                  |   5%  |                                                                              |=======                                                               |  10%  |                                                                              |==========                                                            |  15%  |                                                                              |==============                                                        |  20%  |                                                                              |==================                                                    |  25%  |                                                                              |=====================                                                 |  30%  |                                                                              |========================                                              |  35%  |                                                                              |============================                                          |  40%  |                                                                              |================================                                      |  45%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================                                |  55%  |                                                                              |==========================================                            |  60%  |                                                                              |==============================================                        |  65%  |                                                                              |=================================================                     |  70%  |                                                                              |====================================================                  |  75%  |                                                                              |========================================================              |  80%  |                                                                              |============================================================          |  85%  |                                                                              |===============================================================       |  90%  |                                                                              |==================================================================    |  95%  |                                                                              |======================================================================| 100%</div><div class='input'>
-# }
+<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='estimate.html'>estimate</a></span>(<span class='no'>Y</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>,
+                <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-</div></pre>
+<span class='no'>pred</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>fit</span>,
+                <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='co'># }</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

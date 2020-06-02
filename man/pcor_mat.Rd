@@ -35,7 +35,8 @@ Y <- ptsd[,1:5] + 1
 
 # ordinal
 fit <- estimate(Y, type = "ordinal",
-                iter = 250)
+                iter = 250,
+                progress = FALSE)
 
 pcor_mat(fit)
 }

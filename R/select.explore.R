@@ -89,10 +89,10 @@
 #' #################
 #'
 #' #  data
-#' Y <- bfi[,1:25]
+#' Y <- bfi[,1:10]
 #'
 #' # fit model
-#' fit <- explore(Y)
+#' fit <- explore(Y, progress = FALSE)
 #'
 #' # edge set
 #' E <- select(fit,
@@ -451,6 +451,22 @@ print_select_explore <- function(x,
 #'
 #' @param ... Currently ignored.
 #'
+#' @examples
+#' \donttest{
+#' #  data
+#' Y <- bfi[,1:10]
+#'
+#' # fit model
+#' fit <- explore(Y, iter = 250,
+#'                progress = FALSE)
+#'
+#' # edge set
+#' E <- select(fit,
+#'             alternative = "exhaustive")
+#'
+#' summary(E)
+#'
+#' }
 #' @return a data frame including the posterior mean, standard deviation,
 #' and posterior hypothesis probabilities for each relation.
 #' @export
@@ -594,7 +610,7 @@ print_summary_select_explore <- function(x,...){
 }
 
 
-#' @title Plot new
+#' @title Plot \code{summary.select.explore} Objects
 #'
 #' @name plot.summary.select.explore
 #'
@@ -609,6 +625,23 @@ print_summary_select_explore <- function(x,...){
 #' @param ... Currently ignored
 #'
 #' @return A \code{ggplot} object
+#'
+#' @examples
+#' \donttest{
+#' #  data
+#' Y <- bfi[,1:10]
+#'
+#' # fit model
+#' fit <- explore(Y, iter = 250,
+#'                progress = FALSE)
+#'
+#' # edge set
+#' E <- select(fit,
+#'             alternative = "exhaustive")
+#'
+#' plot(summary(E))
+#'
+#' }
 #' @export
 plot.summary.select.explore <- function(x,
                                         size = 2,

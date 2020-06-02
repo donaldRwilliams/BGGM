@@ -11,17 +11,17 @@ Status](https://travis-ci.org/donaldRwilliams/BGGM.svg?branch=master)](https://t
 <!-- badges: end -->
 
 The `R` package **BGGM** provides tools for making Bayesian inference in
-Gaussian graphical models (GGM, Donald R Williams and Mulder 2020). The
-methods are organized around two general approaches for Bayesian
-inference: (1) estimation and (2) hypothesis testing. The key
-distinction is that the former focuses on either the posterior or
-posterior predictive distribution (Gelman, Meng, and Stern 1996; see
-section 5 in Rubin 1984), whereas the latter focuses on model comparison
-with the Bayes factor (Jeffreys 1961; Kass and Raftery 1995).
+Gaussian graphical models (GGM, Williams and Mulder 2020). The methods
+are organized around two general approaches for Bayesian inference: (1)
+estimation and (2) hypothesis testing. The key distinction is that the
+former focuses on either the posterior or posterior predictive
+distribution (Gelman, Meng, and Stern 1996; see section 5 in Rubin
+1984), whereas the latter focuses on model comparison with the Bayes
+factor (Jeffreys 1961; Kass and Raftery 1995).
 
 ## <i class="fas fa-cog"></i> Installation
 
-To install the latest release version (1.0.0) from CRAN use
+To install the latest release version (`2.0.0`) from CRAN use
 
 ``` r
 install.packages("BGGM")    
@@ -35,10 +35,6 @@ if (!requireNamespace("remotes")) {
 }   
 remotes::install_github("donaldRwilliams/BGGM")
 ```
-
-Note that the developmental version is recommended, due to the
-algorithms being written in `c++` and support for all data types. The
-developmental version is essentially **BGGM** version 2.0.0.
 
 ### <i class="fas fa-skull-crossbones"></i> Dealing with Errors
 
@@ -69,8 +65,8 @@ extend those approaches:
       - [Confirmatory hypothesis
         testing](https://github.com/donaldRwilliams/BGGM#confirmatory)
 
-3.  Comparing Gaussian graphical models (Williams 2018; Donald R.
-    Williams et al. 2020)
+3.  Comparing Gaussian graphical models (Williams 2018; Williams et al.
+    2020)
     
       - [Partial correlation
         differences](https://github.com/donaldRwilliams/BGGM#partial-correlation-differences)
@@ -361,24 +357,23 @@ Models: Structure Learning, Predictability, and Network Comparisons.”
 
 </div>
 
-<div id="ref-williams2020bggm">
+<div id="ref-Williams2019_bf">
 
-Williams, Donald R, and Joris Mulder. 2020. “BGGM: Bayesian Gaussian
-Graphical Models in R.” *PsyArXiv*.
+Williams, Donald R, and Joris Mulder. 2019. “Bayesian Hypothesis Testing
+for Gaussian Graphical Models: Conditional Independence and Order
+Constraints.” *PsyArXiv*. <https://doi.org/10.31234/osf.io/ypxd8>.
 
 </div>
 
-<div id="ref-Williams2019_bf">
+<div id="ref-williams2020bggm">
 
-Williams, Donald R., and Joris Mulder. 2019. “Bayesian Hypothesis
-Testing for Gaussian Graphical Models: Conditional Independence and
-Order Constraints.” *PsyArXiv*. <https://doi.org/10.31234/osf.io/ypxd8>.
+———. 2020. “BGGM: Bayesian Gaussian Graphical Models in R.” *PsyArXiv*.
 
 </div>
 
 <div id="ref-williams2020comparing">
 
-Williams, Donald R., Philippe Rast, Luis R Pericchi, and Joris Mulder.
+Williams, Donald R, Philippe Rast, Luis R Pericchi, and Joris Mulder.
 2020. “Comparing Gaussian Graphical Models with the Posterior Predictive
 Distribution and Bayesian Model Selection.” *Psychological Methods*.
 

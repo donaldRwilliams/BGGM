@@ -137,58 +137,15 @@ See \code{\link{BGGM-package}} for details about interpreting GGMs based on late
 \donttest{
 # note: iter = 250 for demonstrative purposes
 
-#########################################
-### example 1: continuous and ordinal ###
-#########################################
-# data
-Y <- ptsd
-
-# continuous
-
-# fit model
-fit <- explore(Y, type = "continuous",
-                iter = 250)
-
-# summarize the partial correlations
-summ <- summary(fit)
-
-# plot the summary
-plt_summ <- plot(summary(fit))
-
-# select the graph
-E <- select(fit)
-
-# plot the selected graph
-plt_E <- plot(select(fit))
-
-
-# ordinal
-
-# fit model (note + 1, due to zeros)
-fit <- explore(Y + 1, type = "ordinal",
-                iter = 250)
-
-# summarize the partial correlations
-summ <- summary(fit)
-
-# plot the summary
-plt_summ <- plot(summary(fit))
-
-# select the graph
-E <- select(fit)
-
-# plot the selected graph
-plt_E <- plot(select(fit))
-
-#########################
-### example 2: binary ###
-#########################
-# data
-Y <- women_math
+###########################
+### example 1:  binary ####
+###########################
+Y <- women_math[1:500,]
 
 # fit model
 fit <- explore(Y, type = "binary",
-                iter = 250)
+                iter = 250,
+                progress = FALSE)
 
 # summarize the partial correlations
 summ <- summary(fit)
@@ -200,9 +157,9 @@ plt_summ <- plot(summary(fit))
 E <- select(fit)
 
 # plot the selected graph
-plt_E <- plot(select(fit))
+plt_E <- plot(E)
 
-
+plt_E$plt_alt
 }
 }
 \references{

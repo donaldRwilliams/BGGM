@@ -46,11 +46,14 @@ details can be found at the blog "Dealing with Negative (Red) Edges in Psycholog
 }
 \examples{
 \donttest{
+# note: iter = 250 for demonstrative purposes
+
 # data
-Y <- bfi[,1:25]
+Y <- bfi[,1:10]
 
 # estimate
-fit <- estimate(Y, iter = 250)
+fit <- estimate(Y, iter = 250,
+                progress = FALSE)
 
 
 # select edge set

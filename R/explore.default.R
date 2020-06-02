@@ -125,58 +125,15 @@
 #' \donttest{
 #' # note: iter = 250 for demonstrative purposes
 #'
-#' #########################################
-#' ### example 1: continuous and ordinal ###
-#' #########################################
-#' # data
-#' Y <- ptsd
-#'
-#' # continuous
-#'
-#' # fit model
-#' fit <- explore(Y, type = "continuous",
-#'                 iter = 250)
-#'
-#' # summarize the partial correlations
-#' summ <- summary(fit)
-#'
-#' # plot the summary
-#' plt_summ <- plot(summary(fit))
-#'
-#' # select the graph
-#' E <- select(fit)
-#'
-#' # plot the selected graph
-#' plt_E <- plot(select(fit))
-#'
-#'
-#' # ordinal
-#'
-#' # fit model (note + 1, due to zeros)
-#' fit <- explore(Y + 1, type = "ordinal",
-#'                 iter = 250)
-#'
-#' # summarize the partial correlations
-#' summ <- summary(fit)
-#'
-#' # plot the summary
-#' plt_summ <- plot(summary(fit))
-#'
-#' # select the graph
-#' E <- select(fit)
-#'
-#' # plot the selected graph
-#' plt_E <- plot(select(fit))
-#'
-#' #########################
-#' ### example 2: binary ###
-#' #########################
-#' # data
-#' Y <- women_math
+#' ###########################
+#' ### example 1:  binary ####
+#' ###########################
+#' Y <- women_math[1:500,]
 #'
 #' # fit model
 #' fit <- explore(Y, type = "binary",
-#'                 iter = 250)
+#'                 iter = 250,
+#'                 progress = FALSE)
 #'
 #' # summarize the partial correlations
 #' summ <- summary(fit)
@@ -188,9 +145,9 @@
 #' E <- select(fit)
 #'
 #' # plot the selected graph
-#' plt_E <- plot(select(fit))
+#' plt_E <- plot(E)
 #'
-#'
+#' plt_E$plt_alt
 #'}
 #' @export
 explore <- function(Y,
@@ -210,15 +167,7 @@ explore <- function(Y,
 
   dot_dot_dot <- list(...)
 
-  # # check for groups
-  # if(length(dot_dot_dot) == 0){
-  #
-    eps <- 0.01
-  #
-  # } else {
-  #
-  #   eps <- 0.1
-  # }
+  eps <- 0.01
 
   # delta parameter
   delta <- delta_solve(prior_sd)
@@ -504,7 +453,7 @@ explore <- function(Y,
     prior_samp <- .Call('_BGGM_sample_prior',
                       PACKAGE = 'BGGM',
                       Y = Y_dummy,
-                      iter = iter,
+                      iter = iter + 50,
                       delta = delta,
                       epsilon = eps,
                       prior_only = 1,
@@ -581,12 +530,14 @@ explore <- function(Y,
 #' \donttest{
 #' # note: iter = 250 for demonstrative purposes
 #'
-#' Y <- ptsd
+#' Y <- ptsd[,1:5]
 #'
-#' fit <- explore(Y, iter = 250)
+#' fit <- explore(Y, iter = 250,
+#'                progress = FALSE)
 #'
 #' summ <- summary(fit)
 #'
+#' summ
 #' }
 #' @export
 summary.explore <- function(object,
@@ -705,12 +656,14 @@ print_explore <- function(x,...){
 #' \donttest{
 #' # note: iter = 250 for demonstrative purposes
 #'
-#' Y <- ptsd
+#' Y <- ptsd[,1:5]
 #'
-#' fit <- explore(Y, iter = 250)
+#' fit <- explore(Y, iter = 250,
+#'                progress = FALSE)
 #'
 #' plt <- plot(summary(fit))
 #'
+#' plt
 #' }
 #' @export
 plot.summary.explore <- function(x,
