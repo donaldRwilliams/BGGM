@@ -11,7 +11,7 @@
 #'
 #' @return An object of class \code{VAR_estimate}
 #' @export
-VAR_estimate <- function(Y, rho_sd = 0.50,
+var_estimate <- function(Y, rho_sd = 0.50,
                          beta_sd = 1,
                          iter = 5000) {
 
@@ -62,6 +62,6 @@ VAR_estimate <- function(Y, rho_sd = 0.50,
 
   class(returned_object) <- c("BGGM",
                               "VAR",
-                              "VAR_estimate")
+                              "var_estimate")
   return(returned_object)
 }

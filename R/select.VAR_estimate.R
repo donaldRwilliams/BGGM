@@ -12,7 +12,7 @@
 #' @return An object of class \code{select.VAR_estimate}
 #'
 #' @export
-select.VAR_estimate <- function(object,
+select.var_estimate <- function(object,
                                 cred = 0.95,
                                 alternative = "two.sided"){
 
@@ -31,11 +31,11 @@ select.VAR_estimate <- function(object,
     ub <- 1 - lb
 
     pcor_adj <- ifelse(apply(pcors, 1:2, quantile, lb) < 0 &
-                       apply(pcors, 1:2, quantile, ub) > 0, 0, 1)
+                         apply(pcors, 1:2, quantile, ub) > 0, 0, 1)
 
 
     beta_adj <- ifelse(apply(beta, 1:2, quantile, lb) < 0 &
-                      apply(beta, 1:2, quantile, ub) > 0, 0, 1)
+                         apply(beta, 1:2, quantile, ub) > 0, 0, 1)
 
   } else if(alternative == "greater") {
 
@@ -71,9 +71,9 @@ select.VAR_estimate <- function(object,
   )
 
   class(returned_object) <- c("BGGM",
-                              "select.VAR_estimate",
+                              "select.var_estimate",
                               "VAR_estimate",
                               "select")
   return(returned_object)
 
-  }
+}
