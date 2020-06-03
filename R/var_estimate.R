@@ -66,7 +66,6 @@ var_estimate <- function(Y, rho_sd = 0.50,
                           call = match.call())
 
   class(returned_object) <- c("BGGM",
-                              "VAR",
                               "var_estimate",
                               "default")
   return(returned_object)
@@ -91,3 +90,133 @@ print_var_estimate <- function(x, ...){
   cat("--- \n")
   cat("Date:", date(), "\n")
 }
+
+
+#' @title Summary Method for \code{var_estimate} Objects
+#'
+#' @name summary.var_estimate
+#'
+#' @description Summarize the posterior distribution of each partial correlation
+#' and regression coefficient with the posterior mean, standard deviation, and
+#' credible intervals.
+#'
+#' @param object An object of class \code{var_estimate}
+#'
+#' @param cred Numeric. The credible interval width for summarizing the posterior
+#' distributions (defaults to 0.95; must be between 0 and 1).
+#'
+#' @param ... Currently ignored.
+#'
+#' @seealso \code{\link{var_estimate}}
+#'
+#' @return A dataframe containing the summarized posterior distributions,
+#' including both the partial correlations and the regression coefficients.
+#' @export
+summary.var_estimate <- function(object,
+                                 cred = 0.95,
+                                 ...){
+
+  # nodes
+  p <- object$p
+
+  # identity matrix
+  I_p <- diag(p)
+
+  # lower bound
+  lb <- (1 - cred) / 2
+
+  # upper bound
+  ub <- 1 - lb
+
+  # column names
+  cn <-  colnames(object$Y)
+
+  if(is.null(cn)){
+
+    mat_names <- sapply(1:p , function(x) paste(1:p, x, sep = "--"))[upper.tri(I_p)]
+
+  } else {
+
+    mat_names <-  sapply(cn , function(x) paste(cn, x, sep = "--"))[upper.tri(I_p)]
+
+  }
+
+  pcor_mean <- round(
+    apply(object$fit$pcors[, , 51:(object$iter + 50)], 1:2, mean),
+    3)[upper.tri(I_p)]
+
+  pcor_sd  <- round(
+    apply(object$fit$pcors[,, 51:(object$iter + 50) ], 1:2, sd),
+    digits = 3)[upper.tri(I_p)]
+
+  pcor_lb <- round(
+    apply( object$fit$pcors[,, 51:(object$iter + 50) ], 1:2, quantile, lb),
+    digits = 3)[upper.tri(I_p)]
+
+  pcor_ub <- round(
+    apply(object$fit$pcors[,, 51:(object$iter + 50) ], 1:2, quantile, ub),
+    digits =  3)[upper.tri(I_p)]
+
+  beta_mean <- round(
+    apply(object$fit$beta[,, 51:(object$iter + 50) ], 1:2, mean),
+    digits = 3)
+
+  beta_sd  <- round(
+    apply(object$fit$beta[,, 51:(object$iter + 50) ], 1:2, sd),
+    digits = 3)
+
+  beta_lb <- round(
+    apply( object$fit$beta[,, 51:(object$iter + 50) ], 1:2, quantile, lb),
+    digits =  3)
+
+  beta_ub <- round(
+    apply(object$fit$beta[,, 51:(object$iter + 50) ], 1:2, quantile, ub),
+    digits = 3)
+
+  pcor_results <-
+    data.frame(
+      relation = mat_names,
+      post_mean =  pcor_mean,
+      post_sd = pcor_sd,
+      post_lb = pcor_lb,
+      post_ub = pcor_ub
+    )
+
+  colnames(pcor_results) <- c(
+    "Relation",
+    "Post.mean",
+    "Post.sd",
+    "Cred.lb",
+    "Cred.ub")
+
+  beta_results <-
+    lapply(1:p, function (x) {
+      res_p <- data.frame(
+        relation = colnames(object$X),
+        post_mean =  beta_mean[, x],
+        post_sd = beta_sd[, x],
+        post_lb = beta_lb[, x],
+        post_ub = beta_ub[, x]
+      )
+
+      colnames(res_p) <- c("Relation",
+                           "Post.mean",
+                           "Post.sd",
+                           "Cred.lb",
+                           "Cred.ub")
+      res_p
+    })
+
+  names(beta_results) <- colnames(object$Y)
+
+  returned_object <- list(pcor_results = pcor_results,
+                          beta_results = beta_results)
+
+  class(returned_object) <- c("BGGM",
+                              "var_estimate",
+                              "summary.var_estimate")
+  return(returned_object)
+
+
+}
+
