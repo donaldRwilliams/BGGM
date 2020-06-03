@@ -9,16 +9,17 @@
 print.BGGM <- function(x, ...) {
   # print estimate methods
 
-
   if(is(x, "var_estimate")){
 
    if(is(x, "default")){
-
      print_var_estimate(x, ...)
+     }
 
+    if(is(x, "summary.var_estimate")){
+      print_summary_var_estimate(x, ...)
     }
 
-  }
+  } # end var_estimate
 
   if(is(x, "pcor_sum")){
     print_pcor_sum(x, ...)

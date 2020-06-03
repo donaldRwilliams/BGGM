@@ -220,3 +220,31 @@ summary.var_estimate <- function(object,
 
 }
 
+print_summary_var_estimate <- function(x, param = "all", ...){
+  p <- nrow(x$beta_results[[1]])
+  cn <- gsub("\\..*","" , x$beta_results[[1]]$Relation)
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Vector Autoregressive Model (VAR) \n")
+  cat("--- \n")
+  if(param == "all" | param == "pcor"){
+    cat("Partial Correlations: \n\n")
+    print(x$pcor_results, row.names = FALSE)
+    cat("--- \n\n")
+  }
+  if(param == "all" | param == "beta") {
+    cat("Coefficients: \n\n")
+    for (i in seq_len(p)) {
+      # print outcome
+      cat(paste0(cn[i], " \n\n"))
+      # coefs for node i
+      coef_i <- x$beta_results[[i]]
+      # predictor names
+      # colnames(coef_i) <- cn[-i]
+      # print coefs
+      print(coef_i, row.names = FALSE)
+      cat("---\n")
+    }
+  }
+}
+
