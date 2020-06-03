@@ -269,3 +269,119 @@ print_summary_var_estimate <- function(x, param = "all", ...){
   }
 }
 
+
+
+
+#' Plot \code{summary.var_estimate} Objects
+#'
+#' @description Visualize the posterior distributions of each partial correlation and
+#' regression coefficient.
+#'
+#' @param x An object of class \code{summary.var_estimate}
+#'
+#' @param color Character string. The color for the error bars.
+#' (defaults to \code{"black"}).
+#'
+#' @param size  Numeric. The size for the points (defaults to \code{2}).
+#'
+#' @param width Numeric. The width of error bar ends (defaults to \code{0}).
+#'
+#' @param param Character string. Which parameters should be plotted ? The options
+#' are \code{pcor}, \code{beta}, or \code{all} (default).
+#'
+#' @param order Logical. Should the relations be ordered by size (defaults to \code{TRUE}) ?
+#'
+#' @param ... Currently ignored
+#'
+#' @return A list of \code{ggplot} objects.
+#'
+#' @export
+plot.summary.var_estimate <- function(x,
+                                      color = "black",
+                                      size = 2,
+                                      width = 0,
+                                      param = "all",
+                                      order = TRUE,
+                                      ...){
+  if(param == "all" |
+     param == "pcor"){
+
+    dat_temp <- x$pcor_results
+
+    if(isTRUE(order)){
+      dat_temp <-  dat_temp[order(dat_temp$Post.mean,
+                                  decreasing = FALSE), ]
+    }
+
+    dat_temp$Relation <-
+      factor(dat_temp$Relation,
+             levels = dat_temp$Relation,
+             labels = dat_temp$Relation)
+
+    pcor_plt <- ggplot(dat_temp,
+                       aes(x = Relation,
+                           y = Post.mean)) +
+      geom_errorbar(aes(ymax = dat_temp[, 4],
+                        ymin = dat_temp[, 5]),
+                    width = width,
+                    color = color) +
+      geom_point(size = size) +
+      xlab("Index") +
+      theme(axis.text.x = element_text(
+        angle = 90,
+        vjust = 0.5,
+        hjust = 1
+      )) +
+      ggtitle("Partial Correlations")
+
+    if(param == "pcor"){
+      beta_plt <- NULL
+    }
+
+  }
+  if (param == "all" | param == "beta") {
+
+    cn <-  names(x$beta_results)
+    p <- nrow(x$beta_results[[1]])
+
+    beta_plt <- lapply(1:p, function(i) {
+
+      dat_temp <- x$beta_results[[i]]
+
+      if(isTRUE(order)){
+        dat_temp <-  dat_temp[order(dat_temp$Post.mean,
+                                    decreasing = FALSE),]
+      }
+
+      dat_temp$Relation <-
+        factor(dat_temp$Relation,
+               levels = dat_temp$Relation,
+               labels = dat_temp$Relation)
+
+      ggplot(dat_temp,
+             aes(x = Relation,
+                 y = Post.mean)) +
+        geom_errorbar(aes(ymax = dat_temp[, 4],
+                          ymin = dat_temp[, 5]),
+                      width = width,
+                      color = color) +
+        geom_point(size = size) +
+        xlab("Index") +
+        theme(axis.text.x = element_text(
+          angle = 90,
+          vjust = 0.5,
+          hjust = 1
+        )) +
+        ggtitle(paste0("Coefficients: ", cn[i]))
+
+    })
+
+    names(beta_plt) <- cn
+
+    if (param == "beta") {
+      pcor_plt <- NULL
+    }
+  }
+
+  list(pcor_plt = pcor_plt, beta_plt = beta_plt)
+}

@@ -76,8 +76,36 @@ select.var_estimate <- function(object,
 
   class(returned_object) <- c("BGGM",
                               "select.var_estimate",
-                              "VAR_estimate",
+                              "var_estimate",
                               "select")
   return(returned_object)
 
 }
+
+print_select_var_estimate <- function(x, ...){
+  object <- x
+  p <- ncol(object$pcor_adj)
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Vector Autoregressive Model (VAR) \n")
+  cat("--- \n")
+  cat("Posterior Samples:", object$object$iter, "\n")
+  cat("Credible Interval:",
+      gsub("*0.","", formatC( round(object$cred, 4), format='f', digits=2)),
+      "% \n")
+  cat("--- \n")
+  cat("Call: \n")
+  print(object$object$call)
+  cat("--- \n")
+  cat("Partial Correlations: \n\n")
+  colnames(object$pcor_weighted_adj) <- colnames(object$object$Y)
+  row.names(object$pcor_weighted_adj) <- colnames(object$object$Y)
+  print(round(object$pcor_weighted_adj, 3))
+  cat("--- \n")
+  cat("Coefficients: \n\n")
+  colnames(object$beta_weighted_adj) <- colnames(object$object$Y)
+  row.names(object$beta_weighted_adj) <- colnames(object$object$X)
+  print(round(object$beta_weighted_adj, 3))
+  cat("--- \n")
+}
+

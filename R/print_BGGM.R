@@ -19,6 +19,9 @@ print.BGGM <- function(x, ...) {
       print_summary_var_estimate(x, ...)
     }
 
+    if(is(x, "select.var_estimate")){
+      print_select_var_estimate(x, ...)
+    }
   } # end var_estimate
 
   if(is(x, "pcor_sum")){

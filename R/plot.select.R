@@ -1129,5 +1129,10 @@ plot.select <- function(x,
 
   } # end select.ggm_compare.explore
 
+ else {
+
+   stop("object class not currently supported")
+ }
+
 }
 
