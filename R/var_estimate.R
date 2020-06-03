@@ -57,8 +57,23 @@ var_estimate <- function(Y, rho_sd = 0.50,
     )
   message("BGGM: Finished")
 
+  pcor_mu <- round(
+    apply(fit$pcors[,,51:(iter + 50)], 1:2, mean),
+    digits = 3)
+
+  beta_mu <- round(
+    apply(fit$beta[,,51:(iter + 50)], 1:2, mean),
+    digits = 3)
+
+  colnames(pcor_mu) <- colnames(Y)
+  rownames(pcor_mu) <- colnames(Y)
+  colnames(beta_mu) <- colnames(Y)
+  row.names(beta_mu) <- colnames(X)
+
   returned_object <- list(fit = fit,
                           iter = iter,
+                          beta_mu = beta_mu,
+                          pcor_mu = pcor_mu,
                           p = p,
                           n = n,
                           Y = Y,
@@ -87,6 +102,12 @@ print_var_estimate <- function(x, ...){
   cat("--- \n")
   cat("Call: \n")
   print(x$call)
+  cat("--- \n")
+  cat("Partial Correlations: \n\n")
+  print(x$pcor_mu)
+  cat("--- \n")
+  cat("Coefficients: \n\n")
+  print(x$beta_mu)
   cat("--- \n")
   cat("Date:", date(), "\n")
 }
