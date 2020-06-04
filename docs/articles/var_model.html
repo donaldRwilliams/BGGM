@@ -95,7 +95,7 @@
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
-<p>This vignette describes the implement ion for a “graphical VAR” in <code>BGGM</code>. In <code>BGGM</code>, this is fitted as a multivariate regression. The key innovation is a novel prior distribution for the residual covariance matrix. There are a variety of much cooler names than a <em>mere</em> “multivariate regression”, including “VAR” (vector autoregressive models) and “TSCGM” (time series chain graphical model).</p>
+<p>This vignette describes the implemention for a “graphical VAR” in <code>BGGM</code>. In <code>BGGM</code>, this is fitted as a multivariate regression. The key innovation is a novel prior distribution for the residual covariance matrix. There are a variety of much cooler names than a <em>mere</em> “multivariate regression”, including “VAR” (vector autoregressive models) and “TSCGM” (time series chain graphical model).</p>
 <div id="r-package" class="section level2">
 <h2 class="hasAnchor">
 <a href="#r-package" class="anchor"></a>R package</h2>
@@ -143,42 +143,45 @@ head(Y, n = 3)
 <p>With the data in hand, the model is fitted as follows</p>
 <pre><code># fit model
 fit &lt;- var_estimate(Y, beta_sd = 1)</code></pre>
-<p>Note that <code>beta_sd</code> is the prior distribution for the regression coefficients. A smaller value, say, <code>beta_sd = 0.25</code>, results in a Bayesian ridge regression. Note also this model, including 5000 draws from the posterior,</p>
+<p>Note that <code>beta_sd</code> is the prior distribution for the regression coefficients. A smaller value, say, <code>beta_sd = 0.25</code>, results in a Bayesian ridge regression. Note also this model, including 5000 draws from the posterior, was estimated in less than 1 second.</p>
 <p>The results can then be printed</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r">#&gt; BGGM: Bayesian Gaussian Graphical Models 
-#&gt; --- 
-#&gt; Vector Autoregressive Model (VAR) 
-#&gt; --- 
-#&gt; Posterior Samples: 5000 
-#&gt; Observations (n): 94 
-#&gt; Nodes (p): 7 
-#&gt; --- 
-#&gt; Call: 
-#&gt; var_estimate(Y = Y, beta_sd = 10)
-#&gt; --- 
-#&gt; Partial Correlations: 
-#&gt; 
-#&gt;               interested disinterested excited  upset strong stressed  steps
-#&gt; interested         0.000        -0.170   0.388 -0.217  0.313    0.268  0.089
-#&gt; disinterested     -0.170         0.000  -0.172 -0.029  0.094    0.160 -0.078
-#&gt; excited            0.388        -0.172   0.000 -0.126  0.500   -0.161 -0.016
-#&gt; upset             -0.217        -0.029  -0.126  0.000  0.118    0.350 -0.039
-#&gt; strong             0.313         0.094   0.500  0.118  0.000   -0.010  0.176
-#&gt; stressed           0.268         0.160  -0.161  0.350 -0.010    0.000 -0.038
-#&gt; steps              0.089        -0.078  -0.016 -0.039  0.176   -0.038  0.000
-#&gt; --- 
-#&gt; Coefficients: 
-#&gt; 
-#&gt;                  interested disinterested excited  upset strong stressed  steps
-#&gt; interested.l1         0.230        -0.009   0.182 -0.102  0.178    0.018  0.113
-#&gt; disinterested.l1     -0.051        -0.007   0.056 -0.019  0.049    0.091 -0.023
-#&gt; excited.l1           -0.088        -0.196   0.003  0.057 -0.093    0.092  0.106
-#&gt; upset.l1             -0.155         0.262  -0.097  0.435  0.057    0.324 -0.091
-#&gt; strong.l1             0.026         0.182   0.026  0.048  0.189   -0.073 -0.196
-#&gt; stressed.l1          -0.021        -0.014  -0.033 -0.048 -0.079    0.152  0.133
-#&gt; steps.l1             -0.157         0.180  -0.211  0.155 -0.092    0.209  0.042
-#&gt; --- 
-#&gt; Date: Thu Jun 04 08:54:04 2020 </pre></body></html></div>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="co"># print </span>
+<span class="no">fit</span>
+
+<span class="co">#&gt; BGGM: Bayesian Gaussian Graphical Models </span>
+<span class="co">#&gt; --- </span>
+<span class="co">#&gt; Vector Autoregressive Model (VAR) </span>
+<span class="co">#&gt; --- </span>
+<span class="co">#&gt; Posterior Samples: 5000 </span>
+<span class="co">#&gt; Observations (n): 94 </span>
+<span class="co">#&gt; Nodes (p): 7 </span>
+<span class="co">#&gt; --- </span>
+<span class="co">#&gt; Call: </span>
+<span class="co">#&gt; var_estimate(Y = Y, beta_sd = 10)</span>
+<span class="co">#&gt; --- </span>
+<span class="co">#&gt; Partial Correlations: </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;               interested disinterested excited  upset strong stressed  steps</span>
+<span class="co">#&gt; interested         0.000        -0.170   0.388 -0.217  0.313    0.268  0.089</span>
+<span class="co">#&gt; disinterested     -0.170         0.000  -0.172 -0.029  0.094    0.160 -0.078</span>
+<span class="co">#&gt; excited            0.388        -0.172   0.000 -0.126  0.500   -0.161 -0.016</span>
+<span class="co">#&gt; upset             -0.217        -0.029  -0.126  0.000  0.118    0.350 -0.039</span>
+<span class="co">#&gt; strong             0.313         0.094   0.500  0.118  0.000   -0.010  0.176</span>
+<span class="co">#&gt; stressed           0.268         0.160  -0.161  0.350 -0.010    0.000 -0.038</span>
+<span class="co">#&gt; steps              0.089        -0.078  -0.016 -0.039  0.176   -0.038  0.000</span>
+<span class="co">#&gt; --- </span>
+<span class="co">#&gt; Coefficients: </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;                  interested disinterested excited  upset strong stressed  steps</span>
+<span class="co">#&gt; interested.l1         0.230        -0.009   0.182 -0.102  0.178    0.018  0.113</span>
+<span class="co">#&gt; disinterested.l1     -0.051        -0.007   0.056 -0.019  0.049    0.091 -0.023</span>
+<span class="co">#&gt; excited.l1           -0.088        -0.196   0.003  0.057 -0.093    0.092  0.106</span>
+<span class="co">#&gt; upset.l1             -0.155         0.262  -0.097  0.435  0.057    0.324 -0.091</span>
+<span class="co">#&gt; strong.l1             0.026         0.182   0.026  0.048  0.189   -0.073 -0.196</span>
+<span class="co">#&gt; stressed.l1          -0.021        -0.014  -0.033 -0.048 -0.079    0.152  0.133</span>
+<span class="co">#&gt; steps.l1             -0.157         0.180  -0.211  0.155 -0.092    0.209  0.042</span>
+<span class="co">#&gt; --- </span>
+<span class="co">#&gt; Date: Thu Jun 04 08:54:04 2020 </span></pre></body></html></div>
 <p>Note that the coefficients are comparable, given each variable has been standardized (e.g., the predictors and the outcome are standardized). <code>BGGM</code> does not compute the partial directed correlation (PDC) by default (as in <strong>graphicalVAR</strong>). This is because the standardized effects can readily be tested with the Bayes factor, both across and within each model, whereas this does not seem straightforward for the PDC (which requires a transformation).</p>
 <div id="compare-to-classical" class="section level3">
 <h3 class="hasAnchor">
@@ -204,7 +207,7 @@ fit &lt;- var_estimate(Y, beta_sd = 1)</code></pre>
 <div id="summarize-model" class="section level2">
 <h2 class="hasAnchor">
 <a href="#summarize-model" class="anchor"></a>Summarize Model</h2>
-<p>The models can the be summarized with</p>
+<p>The model can also be summarized with</p>
 <div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(
   <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">fit</span>,  <span class="kw">cred</span> <span class="kw">=</span> <span class="fl">0.95</span>),
   <span class="kw">param</span> <span class="kw">=</span> <span class="st">"pcor"</span>
@@ -247,14 +250,17 @@ fit &lt;- var_estimate(Y, beta_sd = 1)</code></pre>
   <span class="kw pkg">cowplot</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/cowplot/man/plot_grid.html">plot_grid</a></span>(
                    <span class="no">plts</span>$<span class="no">beta_plt</span>$<span class="no">interested</span>,
                    <span class="no">plts</span>$<span class="no">beta_plt</span>$<span class="no">disinterested</span>,
-                   <span class="no">plts</span>$<span class="no">beta_plt</span>$<span class="no">excited</span>, <span class="kw">nrow</span> <span class="kw">=</span> <span class="fl">1</span>),
+                   <span class="no">plts</span>$<span class="no">beta_plt</span>$<span class="no">excited</span>,
+                   <span class="kw">nrow</span> <span class="kw">=</span> <span class="fl">1</span>),
 <span class="kw pkg">cowplot</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/cowplot/man/plot_grid.html">plot_grid</a></span>(
                    <span class="no">plts</span>$<span class="no">beta_plt</span>$<span class="no">upset</span>,
                    <span class="no">plts</span>$<span class="no">beta_plt</span>$<span class="no">strong</span>,
-                   <span class="no">plts</span>$<span class="no">beta_plt</span>$<span class="no">stressed</span>,<span class="kw">nrow</span> <span class="kw">=</span> <span class="fl">1</span>
-                  ), <span class="kw">nrow</span> <span class="kw">=</span> <span class="fl">2</span>)</pre></body></html></div>
+                   <span class="no">plts</span>$<span class="no">beta_plt</span>$<span class="no">stressed</span>,
+                   <span class="kw">nrow</span> <span class="kw">=</span> <span class="fl">1</span>
+                  ),
+                  <span class="kw">nrow</span> <span class="kw">=</span> <span class="fl">2</span>)</pre></body></html></div>
 <p><img src="../man/figures/var_coef.png"></p>
-<p>There is also a plot for the partial correlations.</p>
+<p>There is a plot for the partial correlations in the object <code>plts</code>.</p>
 </div>
 <div id="select-graph" class="section level2">
 <h2 class="hasAnchor">
@@ -308,10 +314,29 @@ fit &lt;- var_estimate(Y, beta_sd = 1)</code></pre>
 <div id="predictability" class="section level1">
 <h1 class="hasAnchor">
 <a href="#predictability" class="anchor"></a>Predictability</h1>
-<p>Finally, it is also possible to compute and plot predictability, in this case Bayesian <span class="math inline">\(R^2\)</span></p>
-<pre><code>r2 &lt;- predictability(fit)
+<p>Finally, it is also possible to compute predictability, in this case Bayesian <span class="math inline">\(R^2\)</span></p>
+<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">r2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/predictability.html">predictability</a></span>(<span class="no">fit</span>)
 
-plot(r2, type = "ridgeline")</code></pre>
+<span class="co"># print</span>
+<span class="no">r2</span>
+
+<span class="co">#&gt; BGGM: Bayesian Gaussian Graphical Models </span>
+<span class="co">#&gt; --- </span>
+<span class="co">#&gt; Metric: Bayes R2</span>
+<span class="co">#&gt; Type: continuous </span>
+<span class="co">#&gt; --- </span>
+<span class="co">#&gt; Estimates:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;           Node Post.mean Post.sd Cred.lb Cred.ub</span>
+<span class="co">#&gt;     interested     0.144   0.057   0.050   0.271</span>
+<span class="co">#&gt;  disinterested     0.166   0.061   0.060   0.302</span>
+<span class="co">#&gt;        excited     0.127   0.054   0.039   0.250</span>
+<span class="co">#&gt;          upset     0.220   0.070   0.093   0.368</span>
+<span class="co">#&gt;         strong     0.116   0.051   0.035   0.232</span>
+<span class="co">#&gt;       stressed     0.227   0.069   0.102   0.373</span>
+<span class="co">#&gt;          steps     0.105   0.047   0.032   0.210</span></pre></body></html></div>
+<p>The object <code>r2</code> can also be plotted</p>
+<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">r2</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"ridgeline"</span>)</pre></body></html></div>
 <p><img src="../man/figures/var_ridgeline.png"></p>
 </div>
 <div id="explore" class="section level1">

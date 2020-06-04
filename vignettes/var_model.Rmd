@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Introduction
-This vignette describes the implement ion for a "graphical VAR" in `BGGM`. In `BGGM`, this is fitted as a multivariate regression. The  key innovation is a novel prior distribution for the residual covariance matrix. There are a variety of much cooler names than a *mere* "multivariate regression", including "VAR" (vector autoregressive models) and "TSCGM" (time series chain graphical model).
+This vignette describes the implemention for a "graphical VAR" in `BGGM`. In `BGGM`, this is fitted as a multivariate regression. The  key innovation is a novel prior distribution for the residual covariance matrix. There are a variety of much cooler names than a *mere* "multivariate regression", including "VAR" (vector autoregressive models) and "TSCGM" (time series chain graphical model).
 
 ## R package
 ```
@@ -69,10 +69,13 @@ With the data in hand, the model is fitted as follows
 # fit model
 fit <- var_estimate(Y, beta_sd = 1)
 ```
-Note that `beta_sd` is the prior distribution for the regression coefficients. A smaller value, say, `beta_sd = 0.25`, results in a Bayesian ridge regression. Note also this model, including 5000 draws from the posterior,
+Note that `beta_sd` is the prior distribution for the regression coefficients. A smaller value, say, `beta_sd = 0.25`, results in a Bayesian ridge regression. Note also this model, including 5000 draws from the posterior, was estimated in less than 1 second.
 
 The results can then be printed
 ```r
+# print 
+fit
+
 #> BGGM: Bayesian Gaussian Graphical Models 
 #> --- 
 #> Vector Autoregressive Model (VAR) 
@@ -137,7 +140,7 @@ intervals. Hence for those researchers unfamiliar with Bayesian methods the "est
 a nice place to start.
 
 ## Summarize Model
-The models can the be summarized with
+The model can also be summarized with
 
 ```r
 print(
@@ -186,17 +189,20 @@ cowplot::plot_grid(
   cowplot::plot_grid(
                    plts$beta_plt$interested, 
                    plts$beta_plt$disinterested, 
-                   plts$beta_plt$excited, nrow = 1),
+                   plts$beta_plt$excited, 
+                   nrow = 1),
 cowplot::plot_grid(  
                    plts$beta_plt$upset,
                    plts$beta_plt$strong,
-                   plts$beta_plt$stressed,nrow = 1
-                  ), nrow = 2)
+                   plts$beta_plt$stressed, 
+                   nrow = 1
+                  ), 
+                  nrow = 2)
 ```
 ![](../man/figures/var_coef.png)
 
 
-There is also a plot for the partial correlations.
+There is a plot for the partial correlations in the object `plts`.
 
 ## Select Graph
 The graphs are selected with 
@@ -251,13 +257,39 @@ qgraph::qgraph(sel$beta_weighted_adj, title = "Coefficients")
 ![](../man/figures/est_net.png)
 
 # Predictability
-Finally, it is also possible to compute and plot predictability, in this case Bayesian $R^2$
+Finally, it is also possible to compute predictability, in this case Bayesian $R^2$
 
-```
+```r
 r2 <- predictability(fit)
 
+# print
+r2
+
+#> BGGM: Bayesian Gaussian Graphical Models 
+#> --- 
+#> Metric: Bayes R2
+#> Type: continuous 
+#> --- 
+#> Estimates:
+#> 
+#>           Node Post.mean Post.sd Cred.lb Cred.ub
+#>     interested     0.144   0.057   0.050   0.271
+#>  disinterested     0.166   0.061   0.060   0.302
+#>        excited     0.127   0.054   0.039   0.250
+#>          upset     0.220   0.070   0.093   0.368
+#>         strong     0.116   0.051   0.035   0.232
+#>       stressed     0.227   0.069   0.102   0.373
+#>          steps     0.105   0.047   0.032   0.210
+
+
+```
+
+The object `r2` can also be plotted
+
+```r
 plot(r2, type = "ridgeline")
 ```
+
 ![](../man/figures/var_ridgeline.png)
 
 
