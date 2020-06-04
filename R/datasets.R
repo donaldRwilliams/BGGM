@@ -863,3 +863,41 @@ NULL
 #' @examples
 #' data("gss")
 NULL
+
+
+
+
+#' @title Data: ifit Intensive Longitudinal Data
+#'
+#' @description  A data frame containing 8 variables and nearly 200 observations. There are
+#' two subjects, each of which provided data every data for over 90 days. Six variables are from
+#' the PANAS scale (positive and negative affect), the daily number of steps, and the subject id.
+#'
+#'\itemize{
+#'   \item \code{id} Subject id
+#'   \item \code{interested}
+#'   \item \code{disinterested}
+#'   \item \code{excited}
+#'   \item \code{upset}
+#'   \item \code{strong}
+#'   \item \code{stressed}
+#'   \item \code{steps} steps recorded by a fit bit
+#'}
+#'
+#' @references
+#' \insertAllCited{}
+#'
+#' @docType data
+#'
+#' @keywords datasets
+#' @name ifit
+#'
+#' @usage data("ifit")
+#'
+#' @format A data frame containing 197 observations and 8 variables. The data have been used in
+#' \insertCite{o2020use}{BGGM} and  \insertCite{williams2019bayesian}{BGGM}
+#'
+#' @examples
+#' data("ifit")
+NULL
+

@@ -15,6 +15,8 @@ var_estimate <- function(Y, rho_sd = 0.50,
                          beta_sd = 1,
                          iter = 5000) {
 
+
+  Y <- scale(na.omit(Y))
   # number of nodes
   p <- ncol(Y)
 
@@ -31,10 +33,10 @@ var_estimate <- function(Y, rho_sd = 0.50,
   Y_all <- na.omit(cbind.data.frame(rbind(Y, NA), Y_lag))
 
   # nodes in GGM
-  Y <- scale(as.matrix(Y_all[,1:p]), scale = TRUE)
+  Y <- as.matrix(Y_all[,1:p])
 
   # predictors (lagged effects)
-  X <- scale(as.matrix(Y_all[,(p+1):(p*2)]), scale = TRUE)
+  X <- as.matrix(Y_all[,(p+1):(p*2)])
 
   # delta: rho ~ beta(delta/2, delta/2)
   delta <- BGGM:::delta_solve(rho_sd)

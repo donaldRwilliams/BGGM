@@ -69,6 +69,66 @@ predictability <- function(object,
                            ...){
 
 
+
+  if(is(object, "var_estimate")){
+
+    if(isTRUE(select)){
+      warning("'select' not implemented for 'var_estimate' objects.")
+    }
+
+    object$type <- "continuous"
+
+    Y <- object$Y
+
+    X <- object$X
+
+    p <- ncol(Y)
+
+    n <- nrow(Y)
+
+    if(is.null(iter)){
+      iter <- object$iter
+
+    }
+
+    post_names <- sapply(1:p, function(x) paste0(
+      colnames(object$Y)[x], "_",  colnames(object$X))
+    )
+
+    post_samps <- posterior_samples(object)
+   # r2 <- 1
+    # nrow(post_samps)
+
+    if(isTRUE(progress)){
+      pb <- utils::txtProgressBar(min = 0, max = p, style = 3)
+    }
+
+    r2 <- lapply(1:p, function(z) {
+
+      yhat_p <- post_samps[, post_names[,z]] %*% t(X)
+
+      res_sd <- apply(sweep(yhat_p, MARGIN = 2, STATS = Y[,z]), 1, sd)
+
+      yhat_var <- apply(yhat_p, 1, sd)^2
+
+      r2_p <- sapply(1:iter,  function(s) {
+
+        yhat_var[s] / sd(rnorm(n, as.numeric(yhat_p[s,]), res_sd[s]))^2
+
+        })
+
+      if(isTRUE(progress)){
+        utils::setTxtProgressBar(pb, z)
+      }
+
+       r2_p
+
+    })
+
+
+  } else {
+
+
   if(object$type == "continuous"){
 
     Y <- as.matrix(scale(object$Y))
@@ -134,15 +194,14 @@ predictability <- function(object,
 
     })
 
-
-
-  } else {
+    } else {
 
 
     if(is(object, "estimate") & is(object, "default")){
 
       # select model
       sel <- select(object, cred = cred)
+
       # adjacency
       adj <- sel$adj
 
@@ -154,11 +213,12 @@ predictability <- function(object,
 
     }
 
-    # progress bar
-    if(isTRUE(progress)){
-      pb <- utils::txtProgressBar(min = 0, max = p, style = 3)
+      # progress bar
+      if (isTRUE(progress)) {
+        pb <- utils::txtProgressBar(min = 0, max = p, style = 3)
       }
-    # R2
+
+      # R2
     r2 <- lapply(1:p, function(x)  {
 
       # non selected return zero
@@ -180,7 +240,6 @@ predictability <- function(object,
           r2_p <- cors[x, selected,]
 
           r2_p
-
 
           # more than one relation: call c++
         } else {
@@ -206,7 +265,7 @@ predictability <- function(object,
 
     })
   }
-
+}
   # R2
   scores <- lapply(1:p, function(x) {
 
@@ -275,6 +334,7 @@ summary.predictability <- function(object, cred = 0.95, ...){
 
   # column names
   cn <-  colnames(object$Y)
+
   if(is.null(cn)){
     mat_names <- 1:p
   } else {
