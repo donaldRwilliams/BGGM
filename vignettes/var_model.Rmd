@@ -295,7 +295,9 @@ plot(r2, type = "ridgeline")
 
 # Explore
 Bayesian (exploratory) testing to come...
+
 # Confirm
 
 Bayesian (confirmatory) testing to come...
+
 # Note
