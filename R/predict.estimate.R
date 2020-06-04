@@ -338,3 +338,114 @@ predict.explore <- function(object,
   return(fitted_array)
 
 }
+
+
+#' Model Predictions for \code{var_estimate} Objects
+#'
+#' @name predict.var_estimate
+#'
+#' @param object object of class \code{var_estimate}
+#'
+#' @param summary summarize the posterior samples (defaults to \code{TRUE}).
+#'
+#' @param cred credible interval used for summarizing
+#'
+#' @param iter number of posterior samples (defaults to all in the object).
+#'
+#' @param ... Currently ignored
+#'
+#' @return
+#' @export
+predict.var_estimate <- function(object,
+                                 summary = TRUE,
+                                 cred = 0.95,
+                                 iter = NULL,
+                                 progress = TRUE,
+                                 ...){
+
+
+  # lower bound
+  lb <- (1 - cred) / 2
+
+  # uppder bound
+  ub <- 1 - lb
+
+
+    # data matrix
+    X <- object$X
+    n <- nrow(X)
+
+
+  if(is.null(iter)){
+
+    iter <- object$iter
+
+  }
+
+  p <- object$p
+
+  post_names <- sapply(1:p, function(x) paste0(
+    colnames(object$Y)[x], "_",  colnames(object$X))
+  )
+
+  post_samps <- posterior_samples(object)
+
+  if(isTRUE(progress)){
+    pb <- utils::txtProgressBar(min = 0, max = p, style = 3)
+  }
+
+  yhats <- lapply(1:p, function(x){
+
+    yhat_p <- post_samps[, post_names[,x]] %*% t(X)
+
+
+    if(isTRUE(progress)){
+      utils::setTxtProgressBar(pb, x)
+    }
+
+    yhat_p
+
+  })
+
+  if(isTRUE(summary)){
+
+
+
+    fitted_array <- array(0, dim = c(n, 4, p))
+
+    dimnames(fitted_array)[[2]] <- c("Post.mean",
+                                     "Post.sd",
+                                     "Cred.lb",
+                                     "Cred.ub")
+
+    dimnames(fitted_array)[[3]] <- colnames(object$Y)
+
+
+    for(i in 1:p){
+
+      fitted_array[,,i] <- cbind(colMeans(yhats[[i]]),
+                                 apply(yhats[[i]], 2, sd),
+                                 apply(yhats[[i]], 2, quantile, lb),
+                                 apply(yhats[[i]], 2, quantile, ub)
+      )
+    }
+
+
+  } else {
+
+    fitted_array <- array(0, dim = c(iter, n, p))
+
+    dimnames(fitted_array)[[3]] <- colnames(object$Y)
+
+    for(i in 1:p){
+
+      fitted_array[,,i] <- t(as.matrix(yhats[[i]]))
+
+    }
+
+  }
+
+  return(fitted_array)
+
+}
+

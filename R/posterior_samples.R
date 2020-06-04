@@ -39,30 +39,33 @@
 #' @export
 posterior_samples <- function(object, ...){
 
-  if(isFALSE(is(object, "estimate") |
-             is(object, "explore") &
-             is(object, "default"))){
 
-    stop("class not supported. must be an 'explore' or 'estimate' object.")
-  }
+  if(is(object, "estimate") | is(object, "explore")) {
 
-  # nodes
-  p <- object$p
+    if(!is(object, "default")){
+      stop("object most be from 'estimate' or 'explore'")
+    }
 
-  # total partials
-  pcors_total <- p * (p - 1) * 0.5
+    # nodes
+    p <- object$p
 
-  # identity matrix
-  I_p <- diag(p)
+    # total partials
+    pcors_total <- p * (p - 1) * 0.5
 
-  # iterations
-  iter <- object$iter
+    # identity matrix
+    I_p <- diag(p)
 
-  # pcor samples
-  pcor_samples <- matrix(object$post_samp$pcors[,, 51:(iter+50)][upper.tri(I_p)],
-                         nrow =  iter,
-                         ncol = pcors_total,
-                         byrow = TRUE)
+    # iterations
+    iter <- object$iter
+
+    # pcor samples
+    pcor_samples <-
+      matrix(
+        object$post_samp$pcors[, , 51:(iter + 50)][upper.tri(I_p)],
+        nrow =  iter,
+        ncol = pcors_total,
+        byrow = TRUE
+      )
 
   # column names
   cn <- colnames(object$Y)
@@ -135,6 +138,80 @@ posterior_samples <- function(object, ...){
     posterior_samples <-  cbind(posterior_samples, beta_start)
 
   }
+} else if (is(object, "var_estimate")) {
+
+  if(!is(object, "default")){
+    stop("object most be from 'var_estimate'")
+  }
+  # nodes
+  p <- object$p
+
+  # total partials
+  pcors_total <- p * (p - 1) * 0.5
+
+  # identity matrix
+  I_p <- diag(p)
+
+  # iterations
+  iter <- object$iter
+
+  # pcor samples
+  pcor_samples <-
+    matrix(
+      object$fit$pcors[, , 51:(iter + 50)][upper.tri(I_p)],
+      nrow =  iter,
+      ncol = pcors_total,
+      byrow = TRUE
+    )
+
+
+  # column names
+  cn <- colnames(object$Y)
+
+  if(is.null(cn)){
+
+    col_names <- sapply(1:p, function(x)  paste(1:p, x, sep = "--"))[upper.tri(I_p)]
+
+  } else {
+
+    col_names <- sapply(cn, function(x)  paste(cn, x, sep = "--"))[upper.tri(I_p)]
+  }
+  colnames(pcor_samples) <- col_names
+  posterior_samples <- pcor_samples
+
+  n_beta_terms <- nrow(object$beta_mu)
+  beta_samples <- object$fit$beta
+
+  col_names <- colnames(object$Y)
+  beta_terms <- colnames(object$X)
+
+  beta_start <- matrix(beta_samples[1:n_beta_terms,1, 51:(iter+50)],
+                       nrow = iter, n_beta_terms, byrow = TRUE)
+
+
+ colnames(beta_start) <- paste0(col_names[1], "_",  beta_terms)
+
+  for(i in 2:p){
+
+    # beta next
+    beta_i <- matrix(beta_samples[1:n_beta_terms, i, 51:(iter+50)],
+                     nrow = iter,
+                     n_beta_terms,
+                     byrow = TRUE)
+
+    # colnames
+    colnames(beta_i) <- paste0(col_names[i], "_",  beta_terms)
+
+    # beta combine
+    beta_start <- cbind(beta_start, beta_i)
+
+  }
+
+ posterior_samples <-  cbind(posterior_samples, beta_start)
+
+} else {
+  stop("object class not currently supported")
+}
 
   return(posterior_samples)
 

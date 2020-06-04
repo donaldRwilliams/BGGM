@@ -697,8 +697,6 @@ print_estimate <- function(x, ...){
   cat("Date:", date(), "\n")
 }
 
-
-
 #' @title Plot \code{summary.estimate} Objects
 #'
 #' @description Visualize the posterior distributions for each partial correlation.
