@@ -35,6 +35,7 @@ articles:
       - test_sum
       - netplot
       - mcmc_diagnostics
+      - var_model
       - control
       - netstat_custom
       - ppc_custom
