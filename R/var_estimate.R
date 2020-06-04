@@ -1,15 +1,17 @@
 #' VAR: Estimation
 #'
 #' @param Y Matrix (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).
+#'
 #' @param rho_sd Numeric. Scale of the prior distribution for the partial correlations,
 #' approximately the standard deviation of a beta distribution
 #' (defaults to 0.50).
+#'
 #' @param beta_sd Numeric. Standard deviation of the prior distribution for the regression coefficients
 #'        (defaults to 1).
 #'
 #' @param iter Number of iterations (posterior samples; defaults to 5000).
 #'
-#' @return An object of class \code{VAR_estimate}
+#' @return An object of class \code{var_estimate}
 #' @export
 var_estimate <- function(Y, rho_sd = 0.50,
                          beta_sd = 1,
