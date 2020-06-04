@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Introduction
-This vignette describes the implement ion for a "graphical VAR" in `BGGM`. In `BGGM`, this is fitted as multivariate regression. The  key innovation is a novel prior distribution for the residual covariance matrix. There are a variety of much cooler names than a *mere* "multivariate regression", including "VAR" (vector autoregressive models) and "TSCGM" (yime series chain graphical model).
+This vignette describes the implement ion for a "graphical VAR" in `BGGM`. In `BGGM`, this is fitted as a multivariate regression. The  key innovation is a novel prior distribution for the residual covariance matrix. There are a variety of much cooler names than a *mere* "multivariate regression", including "VAR" (vector autoregressive models) and "TSCGM" (time series chain graphical model).
 
 ## R package
 ```
