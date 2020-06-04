@@ -59,8 +59,9 @@ head(Y, n = 3)
 
 
 # Estimation 
-The methods in **BGGM** are organized around Bayesian "estimation" and "hypothesis testing". This is to reach
-a broader audience, as former is more similar to classical methods (those more familiar to researchers).
+The methods in **BGGM** are organized around Bayesian "estimation" and "hypothesis testing". 
+This is to reach a broader audience, as former is more similar to classical 
+methods (those more familiar to researchers).
 
 ## Fit Model
 With the data in hand, the model is fitted as follows
@@ -135,7 +136,7 @@ t(round(
 #> steps.l1             -0.157         0.183  -0.210  0.153 -0.093    0.207  0.041
 ```
 
-Recall that the "estimation" methods are similar to, in this case, ordinal least squares. The graphical structure in `BGGM` is determined with credible intervals, which will be quite similar to using confidence
+Recall that the "estimation" methods are similar to, in this case, ordinary least squares. The graphical structure in `BGGM` is determined with credible intervals, which will be quite similar to using confidence
 intervals. Hence for those researchers unfamiliar with Bayesian methods the "estimation" methods are perhaps
 a nice place to start.
 
