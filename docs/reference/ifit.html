@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Changelog • BGGM</title>
+<title>Data: ifit Intensive Longitudinal Data — ifit • BGGM</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,21 @@
 
 
 
-<meta property="og:title" content="Changelog" />
+<meta property="og:title" content="Data: ifit Intensive Longitudinal Data — ifit" />
+<meta property="og:description" content="A data frame containing 8 variables and nearly 200 observations. There are
+two subjects, each of which provided data every data for over 90 days. Six variables are from
+the PANAS scale (positive and negative affect), the daily number of steps, and the subject id.
+
+id Subject id
+interested
+disinterested
+excited
+upset
+strong
+stressed
+steps steps recorded by a fit bit
+
+" />
 <meta property="og:image" content="https://donaldrwilliams.github.io/BGGM/reference/figures/hex.jpg" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="@wdonald_1985" />
@@ -69,7 +83,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-news">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -121,56 +135,52 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1 data-toc-skip>Changelog <small></small></h1>
-      <small>Source: <a href='https://github.com/donaldRwilliams/BGGM/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
+    <h1>Data: ifit Intensive Longitudinal Data</h1>
+    <small class="dont-index">Source: <a href='https://github.com/donaldRwilliams/BGGM/blob/master/R/datasets.R'><code>R/datasets.R</code></a></small>
+    <div class="hidden name"><code>ifit.Rd</code></div>
     </div>
 
-    <div id="bggm-200" class="section level1">
-<h1 class="page-header" data-toc-text="2.0.0">
-<a href="#bggm-200" class="anchor"></a>BGGM 2.0.0<small> 2020-05-31 </small>
-</h1>
-<p><strong>BGGM</strong> was almost completely rewritten for version <code>2.0.0</code>. This was due to adding support for binary, ordinal, and mixed data, which required that the methods be written in <code>c ++</code>. Unfortunately, as a result, lots of code from version <code>1.0.0</code> is broken.</p>
-<div id="added-features" class="section level2">
-<h2 class="hasAnchor">
-<a href="#added-features" class="anchor"></a>Added features</h2>
+    <div class="ref-description">
+    <p>A data frame containing 8 variables and nearly 200 observations. There are
+two subjects, each of which provided data every data for over 90 days. Six variables are from
+the PANAS scale (positive and negative affect), the daily number of steps, and the subject id.</p>
 <ul>
-<li><p>Full support for binary, ordinal, and mixed data. This is implemented with the argument <code>type</code></p></li>
-<li><p><code>roll_your_own</code>: compute custom network statistics from a weighted adjacency matrix or a partial correlation matrix</p></li>
-<li><p><code>pcor_to_cor</code>: convert the sampled partial correlation matrices into correlation matrices.</p></li>
-<li><p><code>zero_order_cors</code>: compute zero order correlations</p></li>
-<li><p><code>convergence</code>: acf and trace plots</p></li>
-<li><p><code>posterior_samples</code>: extract posterior samples</p></li>
-<li><p><code>regression_summary</code>: summarize multivariate regression</p></li>
-<li><p><code>pcor_sum</code>: Compute and compare partial correlation sums</p></li>
-<li><p><code>weighted_adj_mat</code>: Extract the Weighted Adjacency Matrix</p></li>
-<li><p><code>pcor_mat</code>: Extract the Partial Correlation Matrix</p></li>
-<li><p>Five additional data sets were added.</p></li>
+<li><p><code>id</code> Subject id</p></li>
+<li><p><code>interested</code></p></li>
+<li><p><code>disinterested</code></p></li>
+<li><p><code>excited</code></p></li>
+<li><p><code>upset</code></p></li>
+<li><p><code>strong</code></p></li>
+<li><p><code>stressed</code></p></li>
+<li><p><code>steps</code> steps recorded by a fit bit</p></li>
 </ul>
-</div>
-<div id="extensions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#extensions" class="anchor"></a>Extensions</h2>
-<ul>
-<li><p><code>ggm_compare_ppc</code>: added option for custom network statistics</p></li>
-<li><p>Added option to control for variables with <code>formula</code></p></li>
-<li><p>A progress bar was added to many functions</p></li>
-</ul>
-</div>
-</div>
-    <div id="bggm-100" class="section level1">
-<h1 class="page-header" data-toc-text="1.0.0">
-<a href="#bggm-100" class="anchor"></a>BGGM 1.0.0<small> 2020-02-06 </small>
-</h1>
-<p>Initial CRAN release</p>
-</div>
-  </div>
 
+    </div>
+
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"ifit"</span>)</pre>
+
+
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+
+    <p>A data frame containing 197 observations and 8 variables. The data have been used in
+(O'Laughlin et al. 2020)
+ and  (Williams et al. 2019)</p>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>O'Laughlin KD, Liu S, Ferrer E (2020).
+&#8220;Use of Composites in Analysis of Individual Time Series: Implications for Person-Specific Dynamic Parameters.&#8221;
+<em>Multivariate Behavioral Research</em>, 1--18.<br /><br /> Williams DR, Liu S, Martin SR, Rast P (2019).
+&#8220;Bayesian Multivariate Mixed-Effects Location Scale Modeling of Longitudinal Relations among Affective Traits, States, and Physical Activity.&#8221;
+<em>PsyArXiv</em>.</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"ifit"</span>)</div></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
     </nav>
   </div>
-
 </div>
 
 

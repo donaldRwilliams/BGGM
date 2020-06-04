@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Changelog • BGGM</title>
+<title>Summary Method for <code>var_estimate</code> Objects — summary.var_estimate • BGGM</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,10 @@
 
 
 
-<meta property="og:title" content="Changelog" />
+<meta property="og:title" content="Summary Method for <code>var_estimate</code> Objects — summary.var_estimate" />
+<meta property="og:description" content="Summarize the posterior distribution of each partial correlation
+and regression coefficient with the posterior mean, standard deviation, and
+credible intervals." />
 <meta property="og:image" content="https://donaldrwilliams.github.io/BGGM/reference/figures/hex.jpg" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="@wdonald_1985" />
@@ -69,7 +72,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-news">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -121,56 +124,52 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1 data-toc-skip>Changelog <small></small></h1>
-      <small>Source: <a href='https://github.com/donaldRwilliams/BGGM/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
+    <h1>Summary Method for <code>var_estimate</code> Objects</h1>
+    <small class="dont-index">Source: <a href='https://github.com/donaldRwilliams/BGGM/blob/master/R/var_estimate.R'><code>R/var_estimate.R</code></a></small>
+    <div class="hidden name"><code>summary.var_estimate.Rd</code></div>
     </div>
 
-    <div id="bggm-200" class="section level1">
-<h1 class="page-header" data-toc-text="2.0.0">
-<a href="#bggm-200" class="anchor"></a>BGGM 2.0.0<small> 2020-05-31 </small>
-</h1>
-<p><strong>BGGM</strong> was almost completely rewritten for version <code>2.0.0</code>. This was due to adding support for binary, ordinal, and mixed data, which required that the methods be written in <code>c ++</code>. Unfortunately, as a result, lots of code from version <code>1.0.0</code> is broken.</p>
-<div id="added-features" class="section level2">
-<h2 class="hasAnchor">
-<a href="#added-features" class="anchor"></a>Added features</h2>
-<ul>
-<li><p>Full support for binary, ordinal, and mixed data. This is implemented with the argument <code>type</code></p></li>
-<li><p><code>roll_your_own</code>: compute custom network statistics from a weighted adjacency matrix or a partial correlation matrix</p></li>
-<li><p><code>pcor_to_cor</code>: convert the sampled partial correlation matrices into correlation matrices.</p></li>
-<li><p><code>zero_order_cors</code>: compute zero order correlations</p></li>
-<li><p><code>convergence</code>: acf and trace plots</p></li>
-<li><p><code>posterior_samples</code>: extract posterior samples</p></li>
-<li><p><code>regression_summary</code>: summarize multivariate regression</p></li>
-<li><p><code>pcor_sum</code>: Compute and compare partial correlation sums</p></li>
-<li><p><code>weighted_adj_mat</code>: Extract the Weighted Adjacency Matrix</p></li>
-<li><p><code>pcor_mat</code>: Extract the Partial Correlation Matrix</p></li>
-<li><p>Five additional data sets were added.</p></li>
-</ul>
-</div>
-<div id="extensions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#extensions" class="anchor"></a>Extensions</h2>
-<ul>
-<li><p><code>ggm_compare_ppc</code>: added option for custom network statistics</p></li>
-<li><p>Added option to control for variables with <code>formula</code></p></li>
-<li><p>A progress bar was added to many functions</p></li>
-</ul>
-</div>
-</div>
-    <div id="bggm-100" class="section level1">
-<h1 class="page-header" data-toc-text="1.0.0">
-<a href="#bggm-100" class="anchor"></a>BGGM 1.0.0<small> 2020-02-06 </small>
-</h1>
-<p>Initial CRAN release</p>
-</div>
-  </div>
+    <div class="ref-description">
+    <p>Summarize the posterior distribution of each partial correlation
+and regression coefficient with the posterior mean, standard deviation, and
+credible intervals.</p>
+    </div>
 
+    <pre class="usage"><span class='co'># S3 method for var_estimate</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>object</span>, <span class='kw'>cred</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='no'>...</span>)</pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>object</th>
+      <td><p>An object of class <code>var_estimate</code></p></td>
+    </tr>
+    <tr>
+      <th>cred</th>
+      <td><p>Numeric. The credible interval width for summarizing the posterior
+distributions (defaults to 0.95; must be between 0 and 1).</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Currently ignored.</p></td>
+    </tr>
+    </table>
+
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A dataframe containing the summarized posterior distributions,
+including both the partial correlations and the regression coefficients.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='VAR_estimate.html'>var_estimate</a></code></p></div>
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
     </nav>
   </div>
-
 </div>
 
 
