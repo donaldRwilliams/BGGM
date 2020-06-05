@@ -19,6 +19,19 @@ and Stern 1996; see section 5 in Rubin 1984), whereas the latter focuses
 on model comparison with the Bayes factor (Jeffreys 1961; Kass and
 Raftery 1995).
 
+## What is a Gaussian Graphical Model ?
+
+A Gaussian graphical model captures conditional (in)dependencies among a
+set of variables. These are pairwise relations (partial correlations)
+controlling for the effects of all other variables in the model.
+
+### Applications
+
+The Gaussian graphical model is used across the sciences, including (but
+not limited to) economics (Millington and Niranjan 2020), climate
+science (Zerenner et al. 2014), genetics (Chu et al. 2009), and
+psychology (Rodriguez et al. 2020).
+
 ## Installation
 
 To install the latest release version (`2.0.0`) from CRAN use
@@ -998,6 +1011,15 @@ Butts, Carter T. 2019. *Sna: Tools for Social Network Analysis*.
 
 </div>
 
+<div id="ref-chu2009graphical">
+
+Chu, Jen-hwa, Scott T Weiss, Vincent J Carey, and Benjamin A Raby. 2009.
+“A Graphical Model Approach for Inferring Large-Scale Networks
+Integrating Gene Expression and Genetic Polymorphism.” *BMC Systems
+Biology* 3 (1): 55.
+
+</div>
+
 <div id="ref-cowles1996accelerating">
 
 Cowles, Mary Kathryn. 1996. “Accelerating Monte Carlo Markov Chain
@@ -1079,6 +1101,13 @@ the American Statistical Association* 90 (430): 773–95.
 Lawrence, Earl, Derek Bingham, Chuanhai Liu, and Vijayan N Nair. 2008.
 “Bayesian Inference for Multivariate Ordinal Data Using Parameter
 Expansion.” *Technometrics* 50 (2): 182–91.
+
+</div>
+
+<div id="ref-millington2020partial">
+
+Millington, Tristan, and Mahesan Niranjan. 2020. “Partial Correlation
+Financial Networks.” *Applied Network Science* 5 (1): 11.
 
 </div>
 
@@ -1169,6 +1198,14 @@ Constraints.” *PsyArXiv*. <https://doi.org/10.31234/osf.io/ypxd8>.
 Williams, Donald R, Philippe Rast, Luis R Pericchi, and Joris Mulder.
 2020. “Comparing Gaussian Graphical Models with the Posterior Predictive
 Distribution and Bayesian Model Selection.” *Psychological Methods*.
+
+</div>
+
+<div id="ref-zerenner2014gaussian">
+
+Zerenner, Tanja, Petra Friederichs, Klaus Lehnertz, and Andreas Hense.
+2014. “A Gaussian Graphical Model Approach to Climate Networks.” *Chaos:
+An Interdisciplinary Journal of Nonlinear Science* 24 (2): 023103.
 
 </div>
 
