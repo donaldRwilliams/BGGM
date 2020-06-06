@@ -18,8 +18,24 @@
 \item{...}{Currently ignored}
 }
 \value{
-
+The predicted values for each regression model.
 }
 \description{
 Model Predictions for \code{var_estimate} Objects
+}
+\examples{
+\donttest{
+# data
+Y <- subset(ifit, id == 1)[,-1]
+
+# fit model with alias (var_estimate also works)
+fit <- tscgm_estimate(Y, progress = FALSE)
+
+# fitted values
+pred <- predict(fit, progress = FALSE)
+
+# predicted values (1st outcome)
+pred[,,1]
+
+}
 }

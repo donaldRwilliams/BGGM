@@ -1,5 +1,15 @@
 #' VAR: Estimation
 #'
+#' @description Estimate VAR(1) models by efficiently sampling from the posterior distribution. This
+#' provides two graphical structures: (1) a network of undirected relations (the GGM, controlling for the
+#' lagged predictors) and (2) a network of directed relations (the lagged coefficients). Note that
+#' in the graphical modeling literature, this model is also known as a time series chain graphical model
+#' \insertCite{abegaz2013sparse}{BGGM}.
+#'
+#' @name var_estimate
+#'
+#' @aliases tscgm_estimate
+#'
 #' @param Y Matrix (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).
 #'
 #' @param rho_sd Numeric. Scale of the prior distribution for the partial correlations,
@@ -7,16 +17,66 @@
 #' (defaults to 0.50).
 #'
 #' @param beta_sd Numeric. Standard deviation of the prior distribution for the regression coefficients
-#'        (defaults to 1).
+#'        (defaults to 1). The prior is by default centered at zero and follows a normal distribution
+#'        \insertCite{@Equation 9, @sinay2014bayesian}{BGGM}
 #'
 #' @param iter Number of iterations (posterior samples; defaults to 5000).
 #'
-#' @return An object of class \code{var_estimate}
+#' @param progress Logical. Should a progress bar be included (defaults to \code{TRUE}) ?
+#'
+#' @param seed An integer for the random seed (defaults to 1).
+#'
+#' @param ... Currently ignored.
+#'
+#' @details Each time series in \code{Y} is standardized (mean  = 0; standard deviation = 1).
+#'
+#' @note
+#' \strong{Regularization}:
+#'
+#' A Bayesian ridge regression can be fitted by decreasing \code{beta_sd}
+#' (e.g., \code{beta_sd = 0.25}). This could be advantageous for forecasting
+#' (out-of-sample prediction) in particular.
+#'
+#'
+#' @references
+#' \insertAllCited{}
+#'
+#' @return An object of class \code{var_estimate} containing a lot of information that is
+#' used for printing and plotting the results. For users of \strong{BGGM}, the following are the
+#' useful objects:
+#'
+#' \itemize{
+#'
+#' \item \code{beta_mu} A matrix including the regression coefficients (posterior mean).
+#'
+#' \item \code{pcor_mu} Partial correlation matrix (posterior mean).
+#'
+#' \item \code{fit} A list including the posterior samples.
+#'
+#' }
+#'
+#' @examples
+#' \donttest{
+#' # data
+#' Y <- subset(ifit, id == 1)[,-1]
+#'
+#' # use alias (var_estimate also works)
+#' fit <- tscgm_estimate(Y, progress = FALSE)
+#'
+#' fit
+#'
+#' }
 #' @export
 var_estimate <- function(Y, rho_sd = 0.50,
                          beta_sd = 1,
-                         iter = 5000) {
+                         iter = 5000,
+                         progress = TRUE,
+                         seed = 1,
+                         ...) {
 
+  old <- .Random.seed
+
+  set.seed(seed)
 
   Y <- scale(na.omit(Y))
   # number of nodes
@@ -41,12 +101,14 @@ var_estimate <- function(Y, rho_sd = 0.50,
   X <- as.matrix(Y_all[,(p+1):(p*2)])
 
   # delta: rho ~ beta(delta/2, delta/2)
-  delta <- BGGM:::delta_solve(rho_sd)
+  delta <- delta_solve(rho_sd)
 
   # prior variance
   beta_var <- beta_sd^2
 
-  message(paste0("BGGM: Posterior Sampling "))
+  if(isTRUE(progress)){
+    message(paste0("BGGM: Posterior Sampling "))
+    }
 
   fit <-.Call(
       "_BGGM_var",
@@ -57,9 +119,12 @@ var_estimate <- function(Y, rho_sd = 0.50,
       beta_prior = diag(p) * (1 / beta_var),
       iter = iter + 50,
       start = solve(cor(Y)),
-      progress = TRUE
+      progress = progress
     )
-  message("BGGM: Finished")
+
+  if(isTRUE(progress)){
+    message("BGGM: Finished")
+    }
 
   pcor_mu <- round(
     apply(fit$pcors[,,51:(iter + 50)], 1:2, mean),
@@ -84,12 +149,19 @@ var_estimate <- function(Y, rho_sd = 0.50,
                           X = X,
                           call = match.call())
 
+
+  .Random.seed <<- old
+
   class(returned_object) <- c("BGGM",
                               "var_estimate",
                               "default")
   return(returned_object)
 }
 
+
+#' @rdname var_estimate
+#' @export
+tscgm_estimate <- var_estimate
 
 print_var_estimate <- function(x, ...){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
@@ -136,6 +208,37 @@ print_var_estimate <- function(x, ...){
 #'
 #' @return A dataframe containing the summarized posterior distributions,
 #' including both the partial correlations and the regression coefficients.
+#'
+#' \itemize{
+#'
+#' \item \code{pcor_results} A data frame including the summarized partial correlations
+#'
+#' \item \code{beta_results} A list containing the summarized regression coefficients (one
+#' data frame for each outcome)
+#' }
+#'
+#' @examples
+#' \donttest{
+#' # data
+#' Y <- subset(ifit, id == 1)[,-1]
+#'
+#' # fit model with alias (var_estimate also works)
+#' fit <- tscgm_estimate(Y, progress = FALSE)
+#'
+#' # summary ('pcor')
+#' print(
+#' summary(fit, cred = 0.95),
+#' param = "pcor",
+#' )
+#'
+#'
+#' # summary ('beta')
+#' print(
+#' summary(fit, cred = 0.95),
+#' param = "beta",
+#' )
+#'
+#' }
 #' @export
 summary.var_estimate <- function(object,
                                  cred = 0.95,
@@ -298,6 +401,19 @@ print_summary_var_estimate <- function(x, param = "all", ...){
 #' @param ... Currently ignored
 #'
 #' @return A list of \code{ggplot} objects.
+#'
+#' @examples
+#' \donttest{
+#'
+#' # data
+#' Y <- subset(ifit, id == 1)[,-1]
+#'
+#' # fit model with alias (var_estimate also works)
+#' fit <- tscgm_estimate(Y, progress = FALSE)
+#'
+#' plts <- plot(summary(fit))
+#' plts$pcor_plt
+#' }
 #'
 #' @export
 plot.summary.var_estimate <- function(x,

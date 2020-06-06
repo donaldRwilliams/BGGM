@@ -123,8 +123,8 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Graph Selection for <code>var.estimate</code> Object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/donaldRwilliams/BGGM/blob/master/R/select.var_estimate.R'><code>R/select.var_estimate.R</code></a></small>
-    <div class="hidden name"><code>select.VAR_estimate.Rd</code></div>
+    <small class="dont-index">Source: <a href='https://github.com/donaldRwilliams/BGGM/blob/master/R/select.VAR_estimate.R'><code>R/select.VAR_estimate.R</code></a></small>
+    <div class="hidden name"><code>select.var_estimate.Rd</code></div>
     </div>
 
     <div class="ref-description">
@@ -156,8 +156,60 @@ See note for futher details.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object of class <code>select.VAR_estimate</code></p>
+    <p>An object of class <code>select.var_estimate</code>, including</p>
+<ul>
+<li><p>pcor_adj Adjacency matrix for the partial correlations.</p></li>
+<li><p>beta_adj Adjacency matrix for the regression coefficients.</p></li>
+<li><p>pcor_weighted_adj Weighted adjacency matrix for the partial correlations.</p></li>
+<li><p>beta_weighted_adj Weighted adjacency matrix for the regression coefficients.</p></li>
+<li><p><code>pcor_mu</code> Partial correlation matrix (posterior mean).</p></li>
+<li><p><code>beta_mu</code> A matrix including the regression coefficients (posterior mean).</p></li>
+</ul>
 
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+<span class='co'># data</span>
+<span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='no'>ifit</span>, <span class='no'>id</span> <span class='kw'>==</span> <span class='fl'>1</span>)[,-<span class='fl'>1</span>]
+
+<span class='co'># fit model with alias (var_estimate also works)</span>
+<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='var_estimate.html'>tscgm_estimate</a></span>(<span class='no'>Y</span>, <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
+<span class='co'># select graphs</span>
+<span class='fu'><a href='select.html'>select</a></span>(<span class='no'>fit</span>, <span class='kw'>cred</span> <span class='kw'>=</span> <span class='fl'>0.95</span>)</div><div class='output co'>#&gt; BGGM: Bayesian Gaussian Graphical Models 
+#&gt; --- 
+#&gt; Vector Autoregressive Model (VAR) 
+#&gt; --- 
+#&gt; Posterior Samples: 5000 
+#&gt; Credible Interval: 95 % 
+#&gt; --- 
+#&gt; Call: 
+#&gt; tscgm_estimate(Y = Y, progress = FALSE)
+#&gt; --- 
+#&gt; Partial Correlations: 
+#&gt; 
+#&gt;               interested disinterested excited upset strong stressed steps
+#&gt; interested         0.000             0   0.378 0.000  0.328    0.275     0
+#&gt; disinterested      0.000             0   0.000 0.000  0.000    0.000     0
+#&gt; excited            0.378             0   0.000 0.000  0.493    0.000     0
+#&gt; upset              0.000             0   0.000 0.000  0.000    0.344     0
+#&gt; strong             0.328             0   0.493 0.000  0.000    0.000     0
+#&gt; stressed           0.275             0   0.000 0.344  0.000    0.000     0
+#&gt; steps              0.000             0   0.000 0.000  0.000    0.000     0
+#&gt; --- 
+#&gt; Coefficients: 
+#&gt; 
+#&gt;                  interested disinterested excited upset strong stressed steps
+#&gt; interested.l1             0         0.000       0 0.000      0    0.000     0
+#&gt; disinterested.l1          0         0.000       0 0.000      0    0.000     0
+#&gt; excited.l1                0         0.000       0 0.000      0    0.000     0
+#&gt; upset.l1                  0         0.256       0 0.432      0    0.317     0
+#&gt; strong.l1                 0         0.000       0 0.000      0    0.000     0
+#&gt; stressed.l1               0         0.000       0 0.000      0    0.000     0
+#&gt; steps.l1                  0         0.000       0 0.000      0    0.000     0
+#&gt; --- </div><div class='input'>
+# }
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

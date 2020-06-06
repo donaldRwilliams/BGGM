@@ -9,8 +9,37 @@
 #'                    must be one of "two.sided" (default), "greater"  or "less".
 #'                    See note for futher details.
 #'
-#' @return An object of class \code{select.VAR_estimate}
+#' @return An object of class \code{select.var_estimate}, including
 #'
+#' \itemize{
+#'
+#' \item {pcor_adj} Adjacency matrix for the partial correlations.
+#'
+#' \item {beta_adj} Adjacency matrix for the regression coefficients.
+#'
+#' \item {pcor_weighted_adj} Weighted adjacency matrix for the partial correlations.
+#'
+#' \item {beta_weighted_adj} Weighted adjacency matrix for the regression coefficients.
+#'
+#' \item \code{pcor_mu} Partial correlation matrix (posterior mean).
+#'
+#' \item \code{beta_mu} A matrix including the regression coefficients (posterior mean).
+#'
+#' }
+#'
+#'
+#' @examples
+#' \donttest{
+#' # data
+#' Y <- subset(ifit, id == 1)[,-1]
+#'
+#' # fit model with alias (var_estimate also works)
+#' fit <- tscgm_estimate(Y, progress = FALSE)
+#'
+#' # select graphs
+#' select(fit, cred = 0.95)
+#'
+#' }
 #' @export
 select.var_estimate <- function(object,
                                 cred = 0.95,

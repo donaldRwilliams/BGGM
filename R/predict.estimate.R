@@ -354,7 +354,23 @@ predict.explore <- function(object,
 #'
 #' @param ... Currently ignored
 #'
-#' @return
+#' @return The predicted values for each regression model.
+#'
+#' @examples
+#' \donttest{
+#' # data
+#' Y <- subset(ifit, id == 1)[,-1]
+#'
+#' # fit model with alias (var_estimate also works)
+#' fit <- tscgm_estimate(Y, progress = FALSE)
+#'
+#' # fitted values
+#' pred <- predict(fit, progress = FALSE)
+#'
+#' # predicted values (1st outcome)
+#' pred[,,1]
+#'
+#' }
 #' @export
 predict.var_estimate <- function(object,
                                  summary = TRUE,
