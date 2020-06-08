@@ -61,7 +61,7 @@
 #' Y <- subset(ifit, id == 1)[,-1]
 #'
 #' # use alias (var_estimate also works)
-#' fit <- tscgm_estimate(Y, progress = FALSE)
+#' fit <- var_estimate(Y, progress = FALSE)
 #'
 #' fit
 #'
@@ -158,11 +158,6 @@ var_estimate <- function(Y, rho_sd = 0.50,
   return(returned_object)
 }
 
-
-#' @rdname var_estimate
-#' @export
-tscgm_estimate <- var_estimate
-
 print_var_estimate <- function(x, ...){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
@@ -223,7 +218,7 @@ print_var_estimate <- function(x, ...){
 #' Y <- subset(ifit, id == 1)[,-1]
 #'
 #' # fit model with alias (var_estimate also works)
-#' fit <- tscgm_estimate(Y, progress = FALSE)
+#' fit <- var_estimate(Y, progress = FALSE)
 #'
 #' # summary ('pcor')
 #' print(
@@ -409,7 +404,7 @@ print_summary_var_estimate <- function(x, param = "all", ...){
 #' Y <- subset(ifit, id == 1)[,-1]
 #'
 #' # fit model with alias (var_estimate also works)
-#' fit <- tscgm_estimate(Y, progress = FALSE)
+#' fit <- var_estimate(Y, progress = FALSE)
 #'
 #' plts <- plot(summary(fit))
 #' plts$pcor_plt

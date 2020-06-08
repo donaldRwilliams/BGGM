@@ -443,14 +443,14 @@ estimate  <- function(Y,
           p <- ncol(Y)
 
           # rank following hoff (2008)
-          rank_vars <- rank_helper(Y)
+          rank_vars <- BGGM:::rank_helper(Y)
 
       post_samp <- .Call(
         "_BGGM_copula",
         z0_start = rank_vars$z0_start,
         levels = rank_vars$levels,
         K = rank_vars$K,
-        Sigma_start = rank_vars$Sigma_start,
+        Sigma_start = cov(Y),
         iter = iter + 50,
         delta = delta,
         epsilon = 0.1,

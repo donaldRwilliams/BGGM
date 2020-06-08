@@ -14,16 +14,6 @@ var_estimate(
   seed = 1,
   ...
 )
-
-tscgm_estimate(
-  Y,
-  rho_sd = 0.5,
-  beta_sd = 1,
-  iter = 5000,
-  progress = TRUE,
-  seed = 1,
-  ...
-)
 }
 \arguments{
 \item{Y}{Matrix (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).}
@@ -82,7 +72,7 @@ A Bayesian ridge regression can be fitted by decreasing \code{beta_sd}
 Y <- subset(ifit, id == 1)[,-1]
 
 # use alias (var_estimate also works)
-fit <- tscgm_estimate(Y, progress = FALSE)
+fit <- var_estimate(Y, progress = FALSE)
 
 fit
 

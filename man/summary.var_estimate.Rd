@@ -37,7 +37,7 @@ credible intervals.
 Y <- subset(ifit, id == 1)[,-1]
 
 # fit model with alias (var_estimate also works)
-fit <- tscgm_estimate(Y, progress = FALSE)
+fit <- var_estimate(Y, progress = FALSE)
 
 # summary ('pcor')
 print(
