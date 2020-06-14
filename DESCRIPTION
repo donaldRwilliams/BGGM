@@ -1,0 +1,53 @@
+Package: BGGM
+Type: Package
+Title: Bayesian Gaussian Graphical Models
+Version: 2.0.0
+Date: 2020-05-07
+Authors@R: c(person("Donald", "Williams", email = "drwwilliams@ucdavis.edu", role = c("aut", "cre")),
+             person("Joris", "Mulder", email = "J.Mulder3@uvt.nl", role = "aut"))
+Description: Fit Bayesian Gaussian graphical models. The methods are separated into 
+    two Bayesian approaches for inference: hypothesis testing and estimation. There are 
+    extensions for confirmatory hypothesis testing, comparing Gaussian graphical models, 
+    and node wise predictability. These methods were recently introduced in the Gaussian 
+    graphical model literature, including 
+    Williams (2019) <doi:10.31234/osf.io/x8dpr>, 
+    Williams and Mulder (2019) <doi:10.31234/osf.io/ypxd8>,
+    Williams, Rast, Pericchi, and Mulder (2019) <doi:10.31234/osf.io/yt386>.
+Depends: R (>= 3.5.0)
+License: GPL-2
+Imports:
+    BFpack (>= 0.2.1),
+    GGally (>= 1.4.0),
+    ggplot2 (>= 3.2.1),
+    ggridges (>= 0.5.1),
+    grDevices,
+    MASS (>= 7.3-51.5),
+    methods,
+    mvnfast (>= 0.2.5),
+    network (>= 1.15),
+    reshape (>= 0.8.8),
+    Rcpp (>= 1.0.4.6),
+    RcppProgress (>= 0.1),
+    Rdpack (>= 0.11-1),
+    sna (>= 2.5),
+    stats,
+    utils,
+Suggests: 
+    abind (>= 1.4-5),
+    assortnet (>= 0.12),
+    networktools (>= 1.2.3),
+    mice (>= 3.8.0),
+    psych,
+    knitr,
+    rmarkdown
+Encoding: UTF-8
+LazyData: true
+VignetteBuilder: 
+    knitr
+RoxygenNote: 7.1.0
+LinkingTo: Rcpp, 
+           RcppArmadillo, 
+           RcppDist, 
+           RcppProgress
+RdMacros: Rdpack
+BugReports: https://github.com/donaldRwilliams/BGGM/issues

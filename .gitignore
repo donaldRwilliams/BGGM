@@ -1,0 +1,14 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+^/\.gitattributes$
+.travis.yml
+.joss_paper/
+.data-raw/
+src/*.o
+src/*.so
+src/*.dll
+doc
+Meta
+custom.css

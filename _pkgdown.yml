@@ -1,0 +1,198 @@
+home:
+  title: BGGM
+  links:
+  - text: Ask a question about BGGM
+    href: https://groups.google.com/forum/#!forum/bggm-users
+
+url: https://donaldrwilliams.github.io/BGGM/
+template:
+  params:
+    bootswatch: flatly
+  opengraph:
+    image:
+      src: man/figures/hex.jpg
+    twitter:
+      creator: "@wdonald_1985"
+      card: summary
+navbar:
+  title: "BGGM"
+  left:
+    - text: "Vignettes"
+      href: articles/index.html
+    - text: "Functions"
+      href: reference/index.html
+    - text: "News"
+      href: news/index.html
+    - text: "Troubleshoot"
+      href: articles/installation.html
+
+
+articles:
+  - title: "Getting Started"
+    desc: >
+      These vignettes provide an introduction to the various methods in **BGGM**.
+    contents:
+      - test_sum
+      - netplot
+      - mcmc_diagnostics
+      - var_model
+      - control
+      - netstat_custom
+      - ppc_custom
+      - hyp_3_ways
+      - predictability
+      - in_tandem
+
+reference:
+  - title: "Missing Data"
+    desc: >
+     Handle Missing Values.
+    contents:
+    - bggm_missing
+    - mvn_imputation
+  - title: "Estimation Based Methods"
+    desc: >
+      'Estimation' indicates that the methods to not employ Bayes factor testing. Rather,
+      the graph is determined with the posterior distribution. The prior distribtuion has a
+      minimal influence.
+    contents:
+    - estimate
+    - coef.estimate
+    - predict.estimate
+    - plot.summary.estimate
+    - select.estimate
+    - summary.estimate
+  - title: "Exploratory Hypothesis Testing"
+    desc: >
+      Bayes factor testing to determine the graph. 'Exploratory' reflects that there
+      is not a specific hypothesis being test.
+    contents:
+    - explore
+    - coef.explore
+    - predict.explore
+    - plot.summary.explore
+    - plot.summary.select.explore
+    - select.explore
+    - summary.explore
+    - summary.select.explore
+  - title: "Confirmatory Hypothesis Testing"
+    desc: >
+     Test (in)equality constrained hypotheses with the Bayes factor.
+    contents:
+    - confirm
+    - plot.confirm
+  - title: "Compare Gaussian Graphical Models"
+    desc: >
+      A variety of methods for comparing GGMs.
+  - subtitle: "Posterior Predictive Check"
+    desc: >
+     Compare groups with a posterior predictive check, where the null model
+     is that the groups are equal. This works with any number of groups. There
+     is also an option to compare the groups with a user defined test-statistic.
+    contents:
+    - ggm_compare_ppc
+    - plot.ggm_compare_ppc
+  - subtitle: "Partial Correlation Differences"
+    desc: >
+     Pairwise comparisons for each partial correlation in the respective models.
+     This can be used for any number of groups. There is also an analytical solution.
+    contents:
+    - ggm_compare_estimate
+    - plot.summary.ggm_compare_estimate
+    - select.ggm_compare_estimate
+    - summary.ggm_compare_estimate
+  - subtitle: "Exploratory Hypothesis Testing"
+    desc: >
+      Pairwise comparisions with exploratory hypothesis testing. This method can be used to
+      compare several groups simultaneously.
+    contents:
+    - ggm_compare_explore
+    - plot.summary.ggm_compare_explore
+    - select.ggm_compare_explore
+    - summary.ggm_compare_explore
+  - subtitle: "Confirmatory Hypothesis Testing"
+    desc: >
+       Test (in)equality constrained hypotheses with the Bayes factor.
+    contents:
+    - ggm_compare_confirm
+    - plot.confirm
+  - title: "Predictability"
+    desc: >
+      Bayesian variance explained for each node in the model.
+    contents:
+    - predictability
+    - plot.predictability
+    - summary.predictability
+  - title: "Network Statistics"
+    desc: >
+     Compute network statistics from a partial correlation matrix or a
+     weighted adjacency matrix.
+    contents:
+    - roll_your_own
+    - plot.roll_your_own
+  - title: "Partial Correlation Sums"
+    desc: >
+      Compute the sum of partial correlations within (one group) or between (two groups) GGMs. This
+      can be used to compare sums.
+    contents:
+    - pcor_sum
+    - plot.pcor_sum
+  - title: "Network Plot"
+    desc: >
+     Network plot for the selected graphs. This works with all method for which there is
+     a selected graph.
+    contents:
+    - plot.select
+
+  - title: "Graphical VAR (vector autoregression)"
+    desc: >
+      A variety of methods for time series data. These particular models are VAR(1) models which
+      are also known as time series chain graphical models.
+  - subtitle: "Estimation"
+    desc: >
+      'Estimation' indicates that the methods to not employ Bayes factor testing. Rather,
+      the graph is determined with the posterior distribution. The prior distribtuion has a
+      minimal influence.
+    contents:
+    - var_estimate
+    - select.var_estimate
+    - summary.var_estimate
+    - plot.summary.var_estimate
+    - predict.var_estimate
+  - title: Miscellaneous
+    contents:
+    - convergence
+    - fisher_z_to_r
+    - fisher_r_to_z
+    - gen_ordinal
+    - pcor_to_cor
+    - pcor_mat
+    - plot_prior
+    - posterior_samples
+    - map
+    - regression_summary
+    - summary.coef
+    - weighted_adj_mat
+    - zero_order_cors
+  - title: "Data"
+    desc: >
+     Example datasets and correlation matrices.
+    contents:
+    - asd_ocd
+    - bfi
+    - csws
+    - depression_anxiety_t1
+    - depression_anxiety_t2
+    - gss
+    - ifit
+    - iri
+    - ptsd
+    - ptsd_cor1
+    - ptsd_cor2
+    - ptsd_cor3
+    - ptsd_cor4
+    - rsa
+    - Sachs
+    - tas
+    - women_math
+
