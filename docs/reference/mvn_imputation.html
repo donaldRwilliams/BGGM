@@ -150,11 +150,7 @@ ordinal variables. See the note for further details.</p></td>
     </tr>
     <tr>
       <th>iter</th>
-<<<<<<< HEAD
       <td><p>Number of iterations (posterior samples; defaults to 1000).</p></td>
-=======
-      <td><p>Number of iterations (posterior samples; defaults to 5000).</p></td>
->>>>>>> a434656778343b5195318d2e942bfbbd2cd80e34
     </tr>
     <tr>
       <th>progress</th>
@@ -177,38 +173,24 @@ ordinal variables. See the note for further details.</p></td>
 <span class='no'>Ymain</span> <span class='kw'>&lt;-</span> <span class='no'>Y</span>
 
 <span class='no'>indices</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>( <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>0</span>, <span class='fl'>5000</span>, <span class='fl'>7</span>) <span class='kw'>==</span> <span class='fl'>0</span>, <span class='kw'>arr.ind</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<<<<<<< HEAD
 <span class='no'>na_indices</span> <span class='kw'>&lt;-</span> <span class='no'>indices</span>[<span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fl'>5</span>:<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>indices</span>), <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>),]
-=======
-<span class='no'>na_indices</span> <span class='kw'>&lt;-</span> <span class='no'>indices</span>[<span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fl'>5</span>:<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>indices</span>), <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='no'>F</span>),]
 <span class='no'>na_indices</span> <span class='kw'>&lt;-</span> <span class='no'>na_indices</span>[<span class='no'>na_indices</span>[,<span class='fl'>1</span>] <span class='kw'>&gt;</span> <span class='fl'>1</span>,]
->>>>>>> a434656778343b5195318d2e942bfbbd2cd80e34
 
 <span class='no'>Y</span>[<span class='no'>na_indices</span>] <span class='kw'>&lt;-</span> <span class='fl'>NA</span>
 <span class='no'>Y_miss</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='no'>Y</span>), <span class='fl'>1</span>, <span class='fl'>0</span>)
 
 <span class='co'># true values</span>
-<<<<<<< HEAD
 <span class='no'>true</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/unlist.html'>unlist</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span>(<span class='fl'>1</span>:<span class='fl'>7</span>, <span class='kw'>function</span>(<span class='no'>x</span>)  <span class='no'>Ymain</span>[<span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='no'>Y_miss</span>[,<span class='no'>x</span>] <span class='kw'>==</span> <span class='fl'>1</span>),<span class='no'>x</span>] ))
-=======
-<span class='no'>true</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/unlist.html'>unlist</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span>(<span class='fl'>1</span>:<span class='fl'>7</span>, <span class='kw'>function</span>(<span class='no'>x</span>)  <span class='no'>Ymain</span>[ <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='no'>Y_miss</span>[,<span class='no'>x</span>] <span class='kw'>==</span> <span class='fl'>1</span>),<span class='no'>x</span>] ))
->>>>>>> a434656778343b5195318d2e942bfbbd2cd80e34
 
 <span class='co'># impute</span>
 <span class='no'>fit_missing</span> <span class='kw'>&lt;-</span> <span class='fu'>mvn_imputation</span>(<span class='no'>Y</span>, <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<<<<<<< HEAD
 <span class='co'># plot</span>
 <span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='kw'>x</span> <span class='kw'>=</span>  <span class='no'>true</span>,
      <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/colSums.html'>colMeans</a></span>(<span class='no'>fit_missing</span>$<span class='no'>ppc_missing</span>),
      <span class='kw'>main</span> <span class='kw'>=</span> <span class='st'>"BGGM: Imputation"</span>,
      <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>"Actual"</span>,
      <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>"Posterior Mean"</span>)</div><div class='img'><img src='mvn_imputation-1.png' alt='' width='700' height='433' /></div><div class='input'># }
-=======
-<span class='co'># correlation</span>
-<span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span>( <span class='no'>true</span>, <span class='fu'><a href='https://rdrr.io/r/base/colSums.html'>colMeans</a></span>(<span class='no'>fit_missing</span>$<span class='no'>ppc_missing</span>))</div><div class='output co'>#&gt; [1] 0.6565878</div><div class='input'>
-# }
->>>>>>> a434656778343b5195318d2e942bfbbd2cd80e34
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
