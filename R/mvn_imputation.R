@@ -17,26 +17,42 @@
 #'
 #' @examples
 #' \donttest{
+#' # obs
+#' n <- 5000
 #'
-#' d <- scale(na.omit(subset(ifit, id ==1)[,-1]))[,1:7]
+#' # n missing
+#' n_missing <- 1000
 #'
-#' Y <- MASS::mvrnorm(5000, rep(0, 7), cor(d))
+#' # variables
+#' p <- 16
+#'
+#' # data
+#' Y <- MASS::mvrnorm(n, rep(0, p), ptsd_cor1)
 #'
 #' # for checking
 #' Ymain <- Y
 #'
-#' indices <- which( matrix(0, 5000, 7) == 0, arr.ind = TRUE)
-#' na_indices <- indices[sample(5:nrow(indices), size = 1000, replace = FALSE),]
-#' na_indices <- na_indices[na_indices[,1] > 1,]
+#' # all possible indices
+#' indices <- which(matrix(0, n, p) == 0,
+#'                  arr.ind = TRUE)
 #'
+#' # random sample of 1000 missing values
+#' na_indices <- indices[sample(5:nrow(indices),
+#'                              size = n_missing,
+#'                              replace = FALSE),]
+#'
+#' # fill with NA
 #' Y[na_indices] <- NA
+#'
+#' # missing = 1
 #' Y_miss <- ifelse(is.na(Y), 1, 0)
 #'
-#' # true values
-#' true <- unlist(sapply(1:7, function(x)  Ymain[which(Y_miss[,x] == 1),x] ))
+#' # true values (to check)
+#' true <- unlist(sapply(1:p, function(x)
+#'   Ymain[which(Y_miss[,x] == 1),x] ))
 #'
 #' # impute
-#' fit_missing <- mvn_imputation(Y, progress = FALSE)
+#' fit_missing <- mvn_imputation(Y, progress = FALSE, iter = 250)
 #'
 #' # plot
 #' plot(x =  true,

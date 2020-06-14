@@ -164,26 +164,42 @@ ordinal variables. See the note for further details.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+<span class='co'># obs</span>
+<span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>5000</span>
 
-<span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/na.fail.html'>na.omit</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='no'>ifit</span>, <span class='no'>id</span> <span class='kw'>==</span><span class='fl'>1</span>)[,-<span class='fl'>1</span>]))[,<span class='fl'>1</span>:<span class='fl'>7</span>]
+<span class='co'># n missing</span>
+<span class='no'>n_missing</span> <span class='kw'>&lt;-</span> <span class='fl'>1000</span>
 
-<span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>MASS</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/MASS/man/mvrnorm.html'>mvrnorm</a></span>(<span class='fl'>5000</span>, <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>0</span>, <span class='fl'>7</span>), <span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span>(<span class='no'>d</span>))
+<span class='co'># variables</span>
+<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fl'>16</span>
+
+<span class='co'># data</span>
+<span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>MASS</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/MASS/man/mvrnorm.html'>mvrnorm</a></span>(<span class='no'>n</span>, <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>0</span>, <span class='no'>p</span>), <span class='no'>ptsd_cor1</span>)
 
 <span class='co'># for checking</span>
 <span class='no'>Ymain</span> <span class='kw'>&lt;-</span> <span class='no'>Y</span>
 
-<span class='no'>indices</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>( <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>0</span>, <span class='fl'>5000</span>, <span class='fl'>7</span>) <span class='kw'>==</span> <span class='fl'>0</span>, <span class='kw'>arr.ind</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='no'>na_indices</span> <span class='kw'>&lt;-</span> <span class='no'>indices</span>[<span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fl'>5</span>:<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>indices</span>), <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>),]
-<span class='no'>na_indices</span> <span class='kw'>&lt;-</span> <span class='no'>na_indices</span>[<span class='no'>na_indices</span>[,<span class='fl'>1</span>] <span class='kw'>&gt;</span> <span class='fl'>1</span>,]
+<span class='co'># all possible indices</span>
+<span class='no'>indices</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>0</span>, <span class='no'>n</span>, <span class='no'>p</span>) <span class='kw'>==</span> <span class='fl'>0</span>,
+                 <span class='kw'>arr.ind</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
+<span class='co'># random sample of 1000 missing values</span>
+<span class='no'>na_indices</span> <span class='kw'>&lt;-</span> <span class='no'>indices</span>[<span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fl'>5</span>:<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>indices</span>),
+                             <span class='kw'>size</span> <span class='kw'>=</span> <span class='no'>n_missing</span>,
+                             <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>),]
+
+<span class='co'># fill with NA</span>
 <span class='no'>Y</span>[<span class='no'>na_indices</span>] <span class='kw'>&lt;-</span> <span class='fl'>NA</span>
+
+<span class='co'># missing = 1</span>
 <span class='no'>Y_miss</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='no'>Y</span>), <span class='fl'>1</span>, <span class='fl'>0</span>)
 
-<span class='co'># true values</span>
-<span class='no'>true</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/unlist.html'>unlist</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span>(<span class='fl'>1</span>:<span class='fl'>7</span>, <span class='kw'>function</span>(<span class='no'>x</span>)  <span class='no'>Ymain</span>[<span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='no'>Y_miss</span>[,<span class='no'>x</span>] <span class='kw'>==</span> <span class='fl'>1</span>),<span class='no'>x</span>] ))
+<span class='co'># true values (to check)</span>
+<span class='no'>true</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/unlist.html'>unlist</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span>(<span class='fl'>1</span>:<span class='no'>p</span>, <span class='kw'>function</span>(<span class='no'>x</span>)
+  <span class='no'>Ymain</span>[<span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='no'>Y_miss</span>[,<span class='no'>x</span>] <span class='kw'>==</span> <span class='fl'>1</span>),<span class='no'>x</span>] ))
 
 <span class='co'># impute</span>
-<span class='no'>fit_missing</span> <span class='kw'>&lt;-</span> <span class='fu'>mvn_imputation</span>(<span class='no'>Y</span>, <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='no'>fit_missing</span> <span class='kw'>&lt;-</span> <span class='fu'>mvn_imputation</span>(<span class='no'>Y</span>, <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>)
 
 <span class='co'># plot</span>
 <span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='kw'>x</span> <span class='kw'>=</span>  <span class='no'>true</span>,

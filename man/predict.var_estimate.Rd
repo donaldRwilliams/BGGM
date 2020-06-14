@@ -15,6 +15,8 @@
 
 \item{iter}{number of posterior samples (defaults to all in the object).}
 
+\item{progress}{Logical. Should a progress bar be included (defaults to \code{TRUE}) ?}
+
 \item{...}{Currently ignored}
 }
 \value{

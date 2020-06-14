@@ -352,6 +352,8 @@ predict.explore <- function(object,
 #'
 #' @param iter number of posterior samples (defaults to all in the object).
 #'
+#' @param progress Logical. Should a progress bar be included (defaults to \code{TRUE}) ?
+#'
 #' @param ... Currently ignored
 #'
 #' @return The predicted values for each regression model.
