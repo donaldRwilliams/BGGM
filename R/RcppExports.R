@@ -109,3 +109,7 @@ var <- function(Y, X, delta, epsilon, beta_prior, iter, start, progress) {
     .Call(`_BGGM_var`, Y, X, delta, epsilon, beta_prior, iter, start, progress)
 }
 
+missing_gaussian <- function(Y, Y_missing, Sigma, iter_missing, progress) {
+    .Call(`_BGGM_missing_gaussian`, Y, Y_missing, Sigma, iter_missing, progress)
+}
+

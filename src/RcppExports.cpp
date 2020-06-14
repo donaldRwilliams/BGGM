@@ -405,6 +405,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// missing_gaussian
+Rcpp::List missing_gaussian(arma::mat Y, arma::mat Y_missing, arma::mat Sigma, int iter_missing, bool progress);
+RcppExport SEXP _BGGM_missing_gaussian(SEXP YSEXP, SEXP Y_missingSEXP, SEXP SigmaSEXP, SEXP iter_missingSEXP, SEXP progressSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Y_missing(Y_missingSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Sigma(SigmaSEXP);
+    Rcpp::traits::input_parameter< int >::type iter_missing(iter_missingSEXP);
+    Rcpp::traits::input_parameter< bool >::type progress(progressSEXP);
+    rcpp_result_gen = Rcpp::wrap(missing_gaussian(Y, Y_missing, Sigma, iter_missing, progress));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_BGGM_Sigma_i_not_i", (DL_FUNC) &_BGGM_Sigma_i_not_i, 2},
@@ -434,6 +449,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_BGGM_ppc_helper_fast", (DL_FUNC) &_BGGM_ppc_helper_fast, 9},
     {"_BGGM_mvnrnd", (DL_FUNC) &_BGGM_mvnrnd, 3},
     {"_BGGM_var", (DL_FUNC) &_BGGM_var, 8},
+    {"_BGGM_missing_gaussian", (DL_FUNC) &_BGGM_missing_gaussian, 5},
     {NULL, NULL, 0}
 };
 
