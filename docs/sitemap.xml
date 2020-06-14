@@ -76,6 +76,9 @@
     <loc>https://donaldrwilliams.github.io/BGGM//reference/map.html</loc>
   </url>
   <url>
+    <loc>https://donaldrwilliams.github.io/BGGM//reference/mvn_imputation.html</loc>
+  </url>
+  <url>
     <loc>https://donaldrwilliams.github.io/BGGM//reference/pcor_mat.html</loc>
   </url>
   <url>
@@ -184,9 +187,6 @@
     <loc>https://donaldrwilliams.github.io/BGGM//reference/select.html</loc>
   </url>
   <url>
-    <loc>https://donaldrwilliams.github.io/BGGM//reference/select.var_estimate.html</loc>
-  </url>
-  <url>
     <loc>https://donaldrwilliams.github.io/BGGM//reference/summary.coef.html</loc>
   </url>
   <url>
@@ -212,9 +212,6 @@
   </url>
   <url>
     <loc>https://donaldrwilliams.github.io/BGGM//reference/tas.html</loc>
-  </url>
-  <url>
-    <loc>https://donaldrwilliams.github.io/BGGM//reference/var_estimate.html</loc>
   </url>
   <url>
     <loc>https://donaldrwilliams.github.io/BGGM//reference/weighted_adj_mat.html</loc>

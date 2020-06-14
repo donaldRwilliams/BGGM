@@ -35,7 +35,7 @@ Y <- MASS::mvrnorm(5000, rep(0, 7), cor(d))
 Ymain <- Y
 
 indices <- which( matrix(0, 5000, 7) == 0, arr.ind = TRUE)
-na_indices <- indices[sample(5:nrow(indices), size = 1000, replace = FALSE),]
+na_indices <- indices[sample(5:nrow(indices), size = 1000, replace = F),]
 na_indices <- na_indices[na_indices[,1] > 1,]
 
 Y[na_indices] <- NA
