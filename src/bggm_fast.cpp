@@ -2100,3 +2100,79 @@ Rcpp::List var(arma::mat Y,
   ret["fisher_z"] = fisher_z;
   return ret;
 }
+
+
+// [[Rcpp::export]]
+Rcpp::List missing_gaussian(arma::mat Y,
+                            arma::mat Y_missing,
+                            arma::mat Sigma,
+                            int iter_missing,
+                            bool progress) {
+
+
+  // progress
+  Progress  pr(iter_missing, progress);
+
+  int p = Y.n_cols;
+  int n = Y.n_rows;
+
+  arma::uvec index = find(Y_missing == 1);
+
+  int n_na = index.n_elem;
+
+  arma::mat ppc_missing(iter_missing, n_na, arma::fill::zeros);
+
+  for(int s = 0; s < iter_missing; ++s){
+
+    pr.increment();
+
+    if (s % 250 == 0){
+      Rcpp::checkUserInterrupt();
+    }
+
+    for(int j = 0; j < p; ++j){
+
+      arma::vec Y_j = Y_missing.col(j);
+
+      double check_na = sum(Y_j);
+
+      if(check_na == 0){
+        continue;
+      }
+
+      arma::uvec  index_j = find(Y_missing.col(j) == 1);
+
+      int n_missing = index_j.n_elem;
+
+      arma::mat beta_j = Sigma_i_not_i(Sigma, j) * inv(remove_row(remove_col(Sigma, j), j));
+
+      arma::mat  sd_j = sqrt(select_row(Sigma, j).col(j) - Sigma_i_not_i(Sigma, j) *
+        inv(remove_row(remove_col(Sigma, j), j)) * Sigma_i_not_i(Sigma, j).t());
+
+      arma::vec pred = remove_col(Y,j) * beta_j.t();
+
+      arma::vec pred_miss = pred(index_j);
+
+      for(int i = 0; i < n_missing; ++i){
+
+        arma::vec ppc_i = Rcpp::rnorm(1,  pred(index_j[i]),
+                                      arma::conv_to<double>::from(sd_j));
+
+        Y.col(j).row(index_j[i]) = arma::conv_to<double>::from(ppc_i);
+
+      }
+
+    }
+
+    arma::mat S_Y = Y.t() * Y;
+    arma::mat Theta = wishrnd(inv(S_Y), (n - 1));
+    Sigma = inv(Theta);
+    ppc_missing.row(s) = Y.elem(index).t();
+
+  }
+
+  Rcpp::List ret;
+  ret["Y"] = Y;
+  ret["ppc_missing"] = ppc_missing;
+  return  ret;
+}
