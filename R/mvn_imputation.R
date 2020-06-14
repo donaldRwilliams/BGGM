@@ -9,7 +9,7 @@
 #' \code{binary}, \code{ordinal}, or \code{mixed}. Note that mixed can be used for data with only
 #' ordinal variables. See the note for further details.
 #'
-#' @param iter Number of iterations (posterior samples; defaults to 5000).
+#' @param iter Number of iterations (posterior samples; defaults to 1000).
 #'
 #' @param progress Logical. Should a progress bar be included (defaults to \code{TRUE}) ?
 #'
@@ -26,7 +26,7 @@
 #' Ymain <- Y
 #'
 #' indices <- which( matrix(0, 5000, 7) == 0, arr.ind = TRUE)
-#' na_indices <- indices[sample(5:nrow(indices), size = 1000, replace = F),]
+#' na_indices <- indices[sample(5:nrow(indices), size = 1000, replace = FALSE),]
 #' na_indices <- na_indices[na_indices[,1] > 1,]
 #'
 #' Y[na_indices] <- NA
