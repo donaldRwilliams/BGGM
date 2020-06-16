@@ -1,12 +1,12 @@
 // -*- mode: C++; c-indent-level: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
 // we only include RcppArmadillo.h which pulls Rcpp.h in for us
-
 #include "RcppArmadillo.h"
 #include <progress.hpp>
 #include <progress_bar.hpp>
 #include <truncnorm.h>
-
 // [[Rcpp::depends(RcppArmadillo, RcppDist, RcppProgress)]]
+
+// helpers are first (avoids separate files)
 
 
 // [[Rcpp::export]]
@@ -15,7 +15,6 @@ arma::mat Sigma_i_not_i(arma::mat x, int index) {
   sub_x.shed_col(index);
   return(sub_x);
 }
-
 
 // [[Rcpp::export]]
 arma::vec select_col(arma::mat x, int index){
@@ -42,6 +41,171 @@ arma::mat remove_col(arma::mat x, int index){
 }
 
 
+// Hoff, P. D. (2009). A first course in Bayesian statistical
+// methods (Vol. 580). New York: Springer.
+// pp 105-123
+
+// note: `internal` is a simplified version of missing_gaussian
+// that seemed to be faster when used within the Gibbs sampler
+
+// [[Rcpp::export]]
+Rcpp::List internal_missing_gaussian(arma::mat Y,
+                            arma::mat Y_missing,
+                            arma::mat Sigma,
+                            int iter_missing) {
+  int p = Y.n_cols;
+  int n = Y.n_rows;
+
+  arma::uvec index = find(Y_missing == 1);
+
+  int n_na = index.n_elem;
+
+  arma::mat ppc_missing(iter_missing, n_na, arma::fill::zeros);
+
+  for(int s = 0; s < iter_missing; ++s){
+
+    for(int j = 0; j < p; ++j){
+
+      arma::vec Y_j = Y_missing.col(j);
+
+      double check_na = sum(Y_j);
+
+      if(check_na == 0){
+        continue;
+      }
+
+      arma::uvec  index_j = find(Y_missing.col(j) == 1);
+      int  n_missing = index_j.n_elem;
+
+      arma::mat beta_j = Sigma_i_not_i(Sigma, j) * inv(remove_row(remove_col(Sigma, j), j));
+      arma::mat  sd_j = sqrt(select_row(Sigma, j).col(j) - Sigma_i_not_i(Sigma, j) *
+
+      inv(remove_row(remove_col(Sigma, j), j)) * Sigma_i_not_i(Sigma, j).t());
+      arma::vec pred = remove_col(Y,j) * beta_j.t();
+      arma::vec pred_miss = pred(index_j);
+
+      for(int i = 0; i < n_missing; ++i){
+        arma::vec ppc_i = Rcpp::rnorm(1,  pred(index_j[i]), arma::conv_to<double>::from(sd_j));
+        Y.col(j).row(index_j[i]) = arma::conv_to<double>::from(ppc_i);
+      }
+    }
+
+    arma::mat S_Y = Y.t() * Y;
+    arma::mat Theta = wishrnd(inv(S_Y),   (n - 1));
+    Sigma = inv(Theta);
+    ppc_missing.row(s) = Y.elem(index).t();
+  }
+  Rcpp::List ret;
+  ret["Y"] = Y;
+  ret["ppc_missing"] = ppc_missing;
+  return  ret;
+}
+
+
+
+// Hoff, P. D. (2009). A first course in Bayesian statistical
+// methods (Vol. 580). New York: Springer.
+// pp 105-123
+
+// [[Rcpp::export]]
+Rcpp::List missing_gaussian(arma::mat Y,
+                            arma::mat Y_missing,
+                            arma::mat Sigma,
+                            int iter_missing,
+                            bool progress_impute,
+                            bool store_all) {
+
+
+  // progress
+  Progress  pr(iter_missing, progress_impute);
+
+  int p = Y.n_cols;
+  int n = Y.n_rows;
+
+  arma::uvec index = find(Y_missing == 1);
+
+  int n_na = index.n_elem;
+
+  // store posterior predictive distribution for missing values
+  arma::mat ppd_missing(iter_missing, n_na, arma::fill::zeros);
+
+  // store all imputed data sets
+  arma::cube Y_all(n, p, iter_missing, arma::fill::zeros);
+
+  for(int s = 0; s < iter_missing; ++s){
+
+    pr.increment();
+
+    if (s % 250 == 0){
+      Rcpp::checkUserInterrupt();
+    }
+
+    for(int j = 0; j < p; ++j){
+
+      arma::vec Y_j = Y_missing.col(j);
+
+      double check_na = sum(Y_j);
+
+      if(check_na == 0){
+        continue;
+      }
+
+      arma::uvec  index_j = find(Y_missing.col(j) == 1);
+
+      int n_missing = index_j.n_elem;
+
+      arma::mat beta_j = Sigma_i_not_i(Sigma, j) * inv(remove_row(remove_col(Sigma, j), j));
+
+      arma::mat  sd_j = sqrt(select_row(Sigma, j).col(j) - Sigma_i_not_i(Sigma, j) *
+        inv(remove_row(remove_col(Sigma, j), j)) * Sigma_i_not_i(Sigma, j).t());
+
+      arma::vec pred = remove_col(Y,j) * beta_j.t();
+
+      arma::vec pred_miss = pred(index_j);
+
+      for(int i = 0; i < n_missing; ++i){
+
+        arma::vec ppd_i = Rcpp::rnorm(1,  pred(index_j[i]),
+                                      arma::conv_to<double>::from(sd_j));
+
+        Y.col(j).row(index_j[i]) = arma::conv_to<double>::from(ppd_i);
+
+      }
+
+    }
+
+    arma::mat S_Y = Y.t() * Y;
+    arma::mat Theta = wishrnd(inv(S_Y), (n - 1));
+    Sigma = inv(Theta);
+    ppd_missing.row(s) = Y.elem(index).t();
+
+    if(store_all){
+      Y_all.slice(s) = Y;
+    }
+  }
+
+  arma::vec lb = {0.025};
+  arma::vec ub = {0.975};
+
+  arma::mat  ppd_mean = mean(ppd_missing, 0).t();
+  arma::mat  ppd_sd = stddev(ppd_missing, 0, 0).t();
+  arma::mat  ppd_lb = quantile(ppd_missing, lb).t();
+  arma::mat  ppd_ub = quantile(ppd_missing, ub).t();
+
+  arma::mat  ppd_summary = join_rows(ppd_mean, ppd_sd, ppd_lb, ppd_ub);
+
+  Rcpp::List ret;
+  ret["Y"] = Y;
+  ret["Y_all"] = Y_all;
+  ret["ppd_missing"] = ppd_missing;
+  ret["ppd_mean"] = ppd_mean;
+  ret["ppd_summary"] = ppd_summary;
+  return ret;
+}
+
+
+
+
 // matrix F continous sampler
 // Williams, D. R., & Mulder, J. (2019). Bayesian hypothesis testing for Gaussian
 // graphical models:  Conditional independence and order constraints.
@@ -54,7 +218,9 @@ Rcpp::List Theta_continuous(arma::mat Y,
                             int prior_only,
                             int explore,
                             arma::mat start,
-                            bool progress) {
+                            bool progress,
+                            bool impute,
+                            arma::mat Y_missing) {
 
 
 
@@ -74,18 +240,17 @@ Rcpp::List Theta_continuous(arma::mat Y,
 
       k = 3;
 
-    } else {
+      } else {
 
       k = Y.n_cols;
+        }
 
-    }
-
-  } else {
+      } else {
 
     // number of columns
     k = Y.n_cols;
 
-  }
+        }
 
   // k by k identity mat
   arma::mat  I_k(k, k, arma::fill::eye);
@@ -116,9 +281,18 @@ Rcpp::List Theta_continuous(arma::mat Y,
 
   // starting value
   Psi.slice(0).fill(arma::fill::eye);
+
   Theta.slice(0) = start;
 
   arma::mat S_Y(Y.t() * Y);
+
+  arma::uvec index = find(Y_missing == 1);
+
+  int n_na = index.n_elem;
+
+  arma::mat ppd_missing(iter, n_na, arma::fill::zeros);
+
+  float iter_missing = 1;
 
   for(int  s = 0; s < iter; ++s){
 
@@ -156,16 +330,35 @@ Rcpp::List Theta_continuous(arma::mat Y,
     // store posterior samples
     pcors_mcmc.slice(s) =  -(pcors - I_k);
 
+
+    if(impute){
+
+      Rcpp::List ppd_impute = internal_missing_gaussian(Y, Y_missing,
+                                               inv(Theta.slice(0)),
+                                               iter_missing = iter_missing);
+      // imputed Y
+      arma::mat Y = ppd_impute["Y"];
+
+      // scatter matrix
+      S_Y = Y.t() * Y;
+
+      // store missing values
+      ppd_missing.row(s) = Y.elem(index).t();
     }
+
+  }
 
   arma::cube fisher_z = atanh(pcors_mcmc);
 
   arma::mat  pcor_mat = mean(pcors_mcmc.tail_slices(iter - 50), 2);
 
+  arma::mat  ppd_mean = mean(ppd_missing, 0).t();
+
   Rcpp::List ret;
   ret["pcors"] = pcors_mcmc;
   ret["pcor_mat"] =  pcor_mat;
   ret["fisher_z"] = fisher_z;
+  ret["ppd_mean"] = ppd_mean;
   return ret;
 }
 
@@ -283,11 +476,6 @@ Rcpp::List sample_prior(arma::mat Y,
 
     }
 
-    // // correlation
-    // cors =  diagmat(1 / sqrt(Sigma.slice(0).diag())) *
-    //   Sigma.slice(0) *
-    //   diagmat(1 / sqrt(Sigma.slice(0).diag()));
-
     // partial correlations
     pcors = diagmat(1 / sqrt(Theta.slice(0).diag())) *
       Theta.slice(0) *
@@ -295,9 +483,6 @@ Rcpp::List sample_prior(arma::mat Y,
 
     // store posterior samples
     pcors_mcmc.slice(s) =  -(pcors - I_k);
-    // cors_mcmc.slice(s) =  cors;
-    // Sigma_mcmc.slice(s) = Sigma.slice(0);
-    // Theta_mcmc.slice(s) = Theta.slice(0);
 
     }
 
@@ -305,9 +490,6 @@ Rcpp::List sample_prior(arma::mat Y,
 
   Rcpp::List ret;
   ret["pcors"] = pcors_mcmc;
-  // ret["cors"] =  cors_mcmc;
-  // ret["Theta"] = Theta_mcmc;
-  // ret["Sigma"] = Sigma_mcmc;
   ret["fisher_z"] = fisher_z;
   return ret;
 }
@@ -2101,78 +2283,3 @@ Rcpp::List var(arma::mat Y,
   return ret;
 }
 
-
-// [[Rcpp::export]]
-Rcpp::List missing_gaussian(arma::mat Y,
-                            arma::mat Y_missing,
-                            arma::mat Sigma,
-                            int iter_missing,
-                            bool progress) {
-
-
-  // progress
-  Progress  pr(iter_missing, progress);
-
-  int p = Y.n_cols;
-  int n = Y.n_rows;
-
-  arma::uvec index = find(Y_missing == 1);
-
-  int n_na = index.n_elem;
-
-  arma::mat ppc_missing(iter_missing, n_na, arma::fill::zeros);
-
-  for(int s = 0; s < iter_missing; ++s){
-
-    pr.increment();
-
-    if (s % 250 == 0){
-      Rcpp::checkUserInterrupt();
-    }
-
-    for(int j = 0; j < p; ++j){
-
-      arma::vec Y_j = Y_missing.col(j);
-
-      double check_na = sum(Y_j);
-
-      if(check_na == 0){
-        continue;
-      }
-
-      arma::uvec  index_j = find(Y_missing.col(j) == 1);
-
-      int n_missing = index_j.n_elem;
-
-      arma::mat beta_j = Sigma_i_not_i(Sigma, j) * inv(remove_row(remove_col(Sigma, j), j));
-
-      arma::mat  sd_j = sqrt(select_row(Sigma, j).col(j) - Sigma_i_not_i(Sigma, j) *
-        inv(remove_row(remove_col(Sigma, j), j)) * Sigma_i_not_i(Sigma, j).t());
-
-      arma::vec pred = remove_col(Y,j) * beta_j.t();
-
-      arma::vec pred_miss = pred(index_j);
-
-      for(int i = 0; i < n_missing; ++i){
-
-        arma::vec ppc_i = Rcpp::rnorm(1,  pred(index_j[i]),
-                                      arma::conv_to<double>::from(sd_j));
-
-        Y.col(j).row(index_j[i]) = arma::conv_to<double>::from(ppc_i);
-
-      }
-
-    }
-
-    arma::mat S_Y = Y.t() * Y;
-    arma::mat Theta = wishrnd(inv(S_Y), (n - 1));
-    Sigma = inv(Theta);
-    ppc_missing.row(s) = Y.elem(index).t();
-
-  }
-
-  Rcpp::List ret;
-  ret["Y"] = Y;
-  ret["ppc_missing"] = ppc_missing;
-  return  ret;
-}

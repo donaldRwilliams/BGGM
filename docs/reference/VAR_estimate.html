@@ -222,8 +222,42 @@ useful objects:</p>
 <span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='no'>ifit</span>, <span class='no'>id</span> <span class='kw'>==</span> <span class='fl'>1</span>)[,-<span class='fl'>1</span>]
 
 <span class='co'># use alias (var_estimate also works)</span>
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'>var_estimate</span>(<span class='no'>Y</span>, <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in var_estimate(Y, progress = FALSE): unused argument (progress = FALSE)</span></div><div class='input'>
-<span class='no'>fit</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'fit' not found</span></div><div class='input'>
+<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'>var_estimate</span>(<span class='no'>Y</span>, <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
+<span class='no'>fit</span></div><div class='output co'>#&gt; BGGM: Bayesian Gaussian Graphical Models 
+#&gt; --- 
+#&gt; Vector Autoregressive Model (VAR) 
+#&gt; --- 
+#&gt; Posterior Samples: 5000 
+#&gt; Observations (n): 94 
+#&gt; Nodes (p): 7 
+#&gt; --- 
+#&gt; Call: 
+#&gt; var_estimate(Y = Y, progress = FALSE)
+#&gt; --- 
+#&gt; Partial Correlations: 
+#&gt; 
+#&gt;               interested disinterested excited  upset strong stressed  steps
+#&gt; interested         0.000        -0.186   0.378 -0.196  0.328    0.275  0.074
+#&gt; disinterested     -0.186         0.000  -0.169 -0.024  0.102    0.162 -0.079
+#&gt; excited            0.378        -0.169   0.000 -0.134  0.493   -0.175 -0.008
+#&gt; upset             -0.196        -0.024  -0.134  0.000  0.113    0.344 -0.038
+#&gt; strong             0.328         0.102   0.493  0.113  0.000   -0.013  0.184
+#&gt; stressed           0.275         0.162  -0.175  0.344 -0.013    0.000 -0.011
+#&gt; steps              0.074        -0.079  -0.008 -0.038  0.184   -0.011  0.000
+#&gt; --- 
+#&gt; Coefficients: 
+#&gt; 
+#&gt;                  interested disinterested excited  upset strong stressed  steps
+#&gt; interested.l1         0.220        -0.013   0.176 -0.096  0.171    0.015  0.106
+#&gt; disinterested.l1     -0.050        -0.004   0.056 -0.018  0.049    0.089 -0.023
+#&gt; excited.l1           -0.084        -0.184  -0.001  0.055 -0.085    0.085  0.099
+#&gt; upset.l1             -0.153         0.256  -0.099  0.432  0.054    0.317 -0.095
+#&gt; strong.l1             0.029         0.173   0.030  0.046  0.185   -0.065 -0.182
+#&gt; stressed.l1          -0.020        -0.009  -0.029 -0.044 -0.073    0.150  0.133
+#&gt; steps.l1             -0.153         0.181  -0.205  0.150 -0.089    0.205  0.039
+#&gt; --- 
+#&gt; Date: Mon Jun 15 08:09:18 2020 </div><div class='input'>
 # }
 </div></pre>
   </div>

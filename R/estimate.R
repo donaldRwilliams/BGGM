@@ -19,12 +19,15 @@
 #' (1 for rank and 0 to assume normality). The default is currently to treat all integer variables as ranks
 #' when \code{type = "mixed"} and \code{NULL} otherwise. See note for further details.
 #'
-#' @param iter Number of iterations (posterior samples; defaults to 5000).
+#' @param analytic Logical. Should the analytic solution be computed (default is \code{FALSE})?
 #'
 #' @param prior_sd Scale of the prior distribution, approximately the standard deviation of a beta distribution
 #' (defaults to 0.50).
 #'
-#' @param analytic Logical. Should the analytic solution be computed (default is \code{FALSE})?
+#' @param iter Number of iterations (posterior samples; defaults to 5000).
+#'
+#' @param impute Logicial. Should the missing values (\code{NA})
+#'               be imputed during model fitting (defaults to \code{TRUE}) ?
 #'
 #' @param progress Logical. Should a progress bar be included (defaults to \code{TRUE}) ?
 #'
@@ -96,6 +99,15 @@
 #'        the first category must be one. This is addressed by adding one (e.g., \code{Y + 1}) to the data matrix.
 #'
 #' }
+#'
+#' \strong{Imputing Missing Values}:
+#'
+#' Missing values are imputed with the approach described in \insertCite{hoff2009first;textual}{BGGM}.
+#' The basic idea is to impute the missing values with the respective posterior pedictive distribution,
+#' given the observed data, as the model is being estimated. Note that the default is \code{TRUE},
+#' but this ignored when there are no missing values. If set to \code{FALSE}, and there are missing
+#' values, list-wise deletion is performed with \code{na.omit}.
+#'
 #'
 #' @note
 #'
@@ -193,9 +205,16 @@ estimate  <- function(Y,
                       analytic = FALSE,
                       prior_sd = 0.25,
                       iter = 5000,
+                      impute = TRUE,
                       progress = TRUE,
                       seed = 1,
                       ...){
+
+  # temporary warning until missing data is fully implemented
+  if(type != "continuous"){
+    warning(paste0("imputation during model fitting is\n",
+                   "currently only implemented for 'continuous' data."))
+  }
 
   old <- .Random.seed
 
@@ -218,8 +237,30 @@ estimate  <- function(Y,
       # no control
       if(is.null(formula)){
 
-        # na omit
-        Y <- as.matrix(na.omit(Y))
+        if(!impute){
+
+          # na omit
+          Y <- as.matrix(na.omit(Y))
+
+          Y_miss <- Y
+
+        } else {
+
+          Y_miss <- ifelse(is.na(Y), 1, 0)
+
+          if(sum(Y_miss) == 0){
+            impute <- FALSE
+            }
+
+          # nodes
+          p <- ncol(Y)
+
+          # impute means
+          for(i in 1:p){
+            Y[which(is.na(Y[,i])),i] <- mean(na.omit(Y[,i]))
+          }
+
+        }
 
         # scale Y
         Y <- scale(Y, scale = F)
@@ -227,12 +268,10 @@ estimate  <- function(Y,
         # design matrix
         X <- NULL
 
-        # nodes
-        p <- ncol(Y)
-
         # number of variables
         n <- nrow(Y)
 
+        # starting values
         start <- solve(cov(Y))
 
         # posterior sample
@@ -246,7 +285,9 @@ estimate  <- function(Y,
           prior_only = 0,
           explore = 1,
           start = start,
-          progress =  progress
+          progress =  progress,
+          impute = impute,
+          Y_miss = Y_miss
           )
 
         # control for variables
@@ -481,7 +522,8 @@ estimate  <- function(Y,
       X = X,
       call = match.call(),
       p = p,
-      n = n
+      n = n,
+      ppd_mean = post_samp$ppd_mean
     )
 
     #  analytic

@@ -216,15 +216,15 @@ should be compared for the same sum. Hence, in this case, only the sum needs to 
 #&gt; 
 #&gt; Sum: 
 #&gt;                   Post.mean Post.sd Cred.lb Cred.ub
-#&gt; g1: A1--A2+A1--A3    -0.314   0.039  -0.390  -0.238
-#&gt; g2: A1--A2+A1--A3    -0.344   0.026  -0.394  -0.293
+#&gt; g1: A1--A2+A1--A3    -0.310   0.039  -0.386  -0.233
+#&gt; g2: A1--A2+A1--A3    -0.344   0.027  -0.394  -0.293
 #&gt; --- 
 #&gt; 
 #&gt; Difference:
 #&gt; g1: A1--A2+A1--A3 - g2: A1--A2+A1--A3 
 #&gt; 
 #&gt;  Post.mean Post.sd Cred.lb Cred.ub Prob.greater Prob.less
-#&gt;       0.03   0.048  -0.065   0.125        0.737     0.263
+#&gt;      0.035   0.048   -0.06   0.126        0.768     0.232
 #&gt; --- </div><div class='input'>
 <span class='co'># plot difference</span>
 <span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>sums</span>)<span class='kw'>[[</span><span class='fl'>3</span>]]</div><div class='output co'>#&gt; <span class='message'>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></div><div class='img'><img src='pcor_sum-1.png' alt='' width='700' height='433' /></div><div class='input'># }

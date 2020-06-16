@@ -182,8 +182,10 @@ are <code>pcor</code>, <code>beta</code>, or <code>all</code> (default).</p></td
 <span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='no'>ifit</span>, <span class='no'>id</span> <span class='kw'>==</span> <span class='fl'>1</span>)[,-<span class='fl'>1</span>]
 
 <span class='co'># fit model with alias (var_estimate also works)</span>
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='var_estimate.html'>var_estimate</a></span>(<span class='no'>Y</span>, <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in var_estimate(Y, progress = FALSE): unused argument (progress = FALSE)</span></div><div class='input'>
-<span class='no'>plts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>fit</span>))</div><div class='output co'>#&gt; <span class='error'>Error in summary(fit): object 'fit' not found</span></div><div class='input'><span class='no'>plts</span>$<span class='no'>pcor_plt</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'plts' not found</span></div><div class='input'># }
+<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='var_estimate.html'>var_estimate</a></span>(<span class='no'>Y</span>, <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
+<span class='no'>plts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>fit</span>))
+<span class='no'>plts</span>$<span class='no'>pcor_plt</span></div><div class='img'><img src='plot.summary.var_estimate-1.png' alt='' width='700' height='433' /></div><div class='input'># }
 
 </div></pre>
   </div>

@@ -168,36 +168,9 @@ Setting to <code>FALSE</code> includes the column numbers (e.g., <code>1--2</cod
 <span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='no'>ptsd</span>[,<span class='fl'>1</span>:<span class='fl'>5</span>]
 
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='explore.html'>explore</a></span>(<span class='no'>Y</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>,
-               <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-
-<span class='no'>summ</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>fit</span>)
-
-<span class='no'>summ</span></div><div class='output co'>#&gt; BGGM: Bayesian Gaussian Graphical Models 
-#&gt; --- 
-#&gt; Type: continuous 
-#&gt; Analytic: FALSE 
-#&gt; Formula:  
-#&gt; Posterior Samples: 250 
-#&gt; Observations (n):
-#&gt; Nodes (p): 5 
-#&gt; Relations: 10 
-#&gt; --- 
-#&gt; Call: 
-#&gt; explore(Y = Y, iter = 250, progress = FALSE)
-#&gt; --- 
-#&gt; Estimates:
-#&gt;  Relation Post.mean Post.sd
-#&gt;    B1--B2     0.235   0.063
-#&gt;    B1--B3     0.051   0.068
-#&gt;    B2--B3     0.500   0.052
-#&gt;    B1--B4     0.327   0.067
-#&gt;    B2--B4    -0.040   0.070
-#&gt;    B3--B4     0.226   0.063
-#&gt;    B1--B5     0.162   0.067
-#&gt;    B2--B5     0.107   0.070
-#&gt;    B3--B5     0.189   0.074
-#&gt;    B4--B5     0.325   0.062
-#&gt; --- </div><div class='input'># }
+               <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in .Call("_BGGM_Theta_continuous", PACKAGE = "BGGM", Y = Y, iter = iter +     50, delta = delta, epsilon = eps, prior_only = 0, explore = 1,     start = start, progress = progress): Incorrect number of arguments (8), expecting 10 for '_BGGM_Theta_continuous'</span></div><div class='input'>
+<span class='no'>summ</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>fit</span>)</div><div class='output co'>#&gt; <span class='error'>Error in summary(fit): object 'fit' not found</span></div><div class='input'>
+<span class='no'>summ</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'summ' not found</span></div><div class='input'># }
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

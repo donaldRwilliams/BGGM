@@ -4,7 +4,13 @@
 \alias{mvn_imputation}
 \title{Multivariate Normal Imputation}
 \usage{
-mvn_imputation(Y, type = "continuous", iter = 1000, progress = TRUE)
+mvn_imputation(
+  Y,
+  type = "continuous",
+  iter = 1000,
+  progress = TRUE,
+  save_all = FALSE
+)
 }
 \arguments{
 \item{Y}{Matrix (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).}
@@ -16,13 +22,38 @@ ordinal variables. See the note for further details.}
 \item{iter}{Number of iterations (posterior samples; defaults to 1000).}
 
 \item{progress}{Logical. Should a progress bar be included (defaults to \code{TRUE}) ?}
+
+\item{save_all}{Logical. Should each imputed dataset be stored
+(defaults to \code{FALSE} which saves the imputed missing values) ?}
 }
 \value{
-An object of class \code{mvn_imputation}
+An object of class \code{mvn_imputation}:
+
+\itemize{
+
+\item \code{Y} The last imputed dataset.
+
+\item \code{ppd_missing} A matrix of dimensions \code{iter} by the number of missing values.
+
+\item \code{ppd_mean} A vector including the means of the posterior predictive distribution for
+the missing values.
+
+\item \code{Y_all} An 3D array with \code{iter} matrices of dimensions \emph{n} by \emph{p}
+(\code{NULL} when \code{save_all = FALSE}).
+
+}
 }
 \description{
-Impute values, assuming a multivariate normal distribution, with the posterior
-predictive distribution.
+Impute values, assuming a  multivariate normal distribution, with the posterior
+predictive distribution. For binary, ordinal, and mixed (a combination of discrete and continuous)
+data, the values are first imputed for the latent data and then converted to the original scale.
+}
+\details{
+Missing values are imputed with the approach described in \insertCite{hoff2009first;textual}{BGGM}.
+The basic idea is to impute the missing values with the respective posterior pedictive distribution,
+given the observed data, as the model is being estimated. Note that the default is \code{TRUE},
+but this ignored when there are no missing values. If set to \code{FALSE}, and there are missing
+values, list-wise deletion is performed with \code{na.omit}.
 }
 \examples{
 \donttest{
@@ -58,16 +89,22 @@ Y_miss <- ifelse(is.na(Y), 1, 0)
 
 # true values (to check)
 true <- unlist(sapply(1:p, function(x)
-  Ymain[which(Y_miss[,x] == 1),x] ))
+        Ymain[which(Y_miss[,x] == 1),x] ))
 
 # impute
 fit_missing <- mvn_imputation(Y, progress = FALSE, iter = 250)
 
+print(fit_missing, n_rows = 20)
+
+
 # plot
 plot(x =  true,
-     y = colMeans(fit_missing$ppc_missing),
+     y = fit_missing$ppd_mean,
      main = "BGGM: Imputation",
      xlab = "Actual",
      ylab = "Posterior Mean")
 }
+}
+\references{
+\insertAllCited{}
 }

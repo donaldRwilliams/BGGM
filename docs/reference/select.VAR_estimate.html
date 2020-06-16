@@ -173,9 +173,41 @@ See note for futher details.</p></td>
 <span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='no'>ifit</span>, <span class='no'>id</span> <span class='kw'>==</span> <span class='fl'>1</span>)[,-<span class='fl'>1</span>]
 
 <span class='co'># fit model with alias (var_estimate also works)</span>
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='var_estimate.html'>var_estimate</a></span>(<span class='no'>Y</span>, <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in var_estimate(Y, progress = FALSE): unused argument (progress = FALSE)</span></div><div class='input'>
+<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='var_estimate.html'>var_estimate</a></span>(<span class='no'>Y</span>, <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
 <span class='co'># select graphs</span>
-<span class='fu'><a href='select.html'>select</a></span>(<span class='no'>fit</span>, <span class='kw'>cred</span> <span class='kw'>=</span> <span class='fl'>0.95</span>)</div><div class='output co'>#&gt; <span class='error'>Error in select(fit, cred = 0.95): object 'fit' not found</span></div><div class='input'>
+<span class='fu'><a href='select.html'>select</a></span>(<span class='no'>fit</span>, <span class='kw'>cred</span> <span class='kw'>=</span> <span class='fl'>0.95</span>)</div><div class='output co'>#&gt; BGGM: Bayesian Gaussian Graphical Models 
+#&gt; --- 
+#&gt; Vector Autoregressive Model (VAR) 
+#&gt; --- 
+#&gt; Posterior Samples: 5000 
+#&gt; Credible Interval: 95 % 
+#&gt; --- 
+#&gt; Call: 
+#&gt; var_estimate(Y = Y, progress = FALSE)
+#&gt; --- 
+#&gt; Partial Correlations: 
+#&gt; 
+#&gt;               interested disinterested excited upset strong stressed steps
+#&gt; interested         0.000             0   0.378 0.000  0.328    0.275     0
+#&gt; disinterested      0.000             0   0.000 0.000  0.000    0.000     0
+#&gt; excited            0.378             0   0.000 0.000  0.493    0.000     0
+#&gt; upset              0.000             0   0.000 0.000  0.000    0.344     0
+#&gt; strong             0.328             0   0.493 0.000  0.000    0.000     0
+#&gt; stressed           0.275             0   0.000 0.344  0.000    0.000     0
+#&gt; steps              0.000             0   0.000 0.000  0.000    0.000     0
+#&gt; --- 
+#&gt; Coefficients: 
+#&gt; 
+#&gt;                  interested disinterested excited upset strong stressed steps
+#&gt; interested.l1             0         0.000       0 0.000      0    0.000     0
+#&gt; disinterested.l1          0         0.000       0 0.000      0    0.000     0
+#&gt; excited.l1                0         0.000       0 0.000      0    0.000     0
+#&gt; upset.l1                  0         0.256       0 0.432      0    0.317     0
+#&gt; strong.l1                 0         0.000       0 0.000      0    0.000     0
+#&gt; stressed.l1               0         0.000       0 0.000      0    0.000     0
+#&gt; steps.l1                  0         0.000       0 0.000      0    0.000     0
+#&gt; --- </div><div class='input'>
 # }
 </div></pre>
   </div>

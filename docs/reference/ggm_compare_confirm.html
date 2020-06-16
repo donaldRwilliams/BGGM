@@ -359,42 +359,9 @@ doi: <a href='https://doi.org/10.31234/osf.io/ypxd8'>10.31234/osf.io/ypxd8</a>
 <span class='no'>test</span> <span class='kw'>&lt;-</span> <span class='fu'>ggm_compare_confirm</span>(<span class='no'>Ymale</span>,  <span class='no'>Yfemale</span>,
                             <span class='kw'>hypothesis</span> <span class='kw'>=</span> <span class='no'>hypothesis</span>,
                             <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>,
-                            <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-
+                            <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in .Call("_BGGM_Theta_continuous", PACKAGE = "BGGM", Y = Y, iter = iter +     50, delta = delta, epsilon = 0.01, prior_only = 0, explore = 1,     start = start, progress = progress): Incorrect number of arguments (8), expecting 10 for '_BGGM_Theta_continuous'</span></div><div class='input'>
 <span class='co'># print (evidence not strong)</span>
-<span class='no'>test</span></div><div class='output co'>#&gt; BGGM: Bayesian Gaussian Graphical Models 
-#&gt; Type: continuous 
-#&gt; --- 
-#&gt; Posterior Samples: 250 
-#&gt;   Group 1: 896 
-#&gt;   Group 2: 1813 
-#&gt; Variables (p): 5 
-#&gt; Relations: 10 
-#&gt; Delta: 15 
-#&gt; --- 
-#&gt; Call:
-#&gt; ggm_compare_confirm(Ymale, Yfemale, hypothesis = hypothesis, 
-#&gt;     iter = 250, progress = FALSE)
-#&gt; --- 
-#&gt; Hypotheses: 
-#&gt; 
-#&gt; H1: g1_A1--A2&gt;g2_A1--A2
-#&gt; H2: g1_A1--A2&lt;g2_A1--A2
-#&gt; H3: g1_A1--A2=g2_A1--A2
-#&gt; --- 
-#&gt; Posterior prob: 
-#&gt; 
-#&gt; p(H1|data) = 0.236
-#&gt; p(H2|data) = 0.03
-#&gt; p(H3|data) = 0.734
-#&gt; --- 
-#&gt; Bayes factor matrix: 
-#&gt;       H1     H2    H3
-#&gt; H1 1.000  7.947 0.321
-#&gt; H2 0.126  1.000 0.040
-#&gt; H3 3.113 24.738 1.000
-#&gt; --- 
-#&gt; note: equal hypothesis prior probabilities</div><div class='input'>
+<span class='no'>test</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'test' not found</span></div><div class='input'>
 <span class='co'>#########################################</span>
 <span class='co'>#### example 2: sensitivity to prior ####</span>
 <span class='co'>#########################################</span>
@@ -406,84 +373,18 @@ doi: <a href='https://doi.org/10.31234/osf.io/ypxd8'>10.31234/osf.io/ypxd8</a>
                             <span class='kw'>prior_sd</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
                             <span class='kw'>hypothesis</span> <span class='kw'>=</span> <span class='no'>hypothesis</span>,
                             <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>,
-                            <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-
+                            <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in .Call("_BGGM_Theta_continuous", PACKAGE = "BGGM", Y = Y, iter = iter +     50, delta = delta, epsilon = 0.01, prior_only = 0, explore = 1,     start = start, progress = progress): Incorrect number of arguments (8), expecting 10 for '_BGGM_Theta_continuous'</span></div><div class='input'>
 <span class='co'># print</span>
-<span class='no'>test</span></div><div class='output co'>#&gt; BGGM: Bayesian Gaussian Graphical Models 
-#&gt; Type: continuous 
-#&gt; --- 
-#&gt; Posterior Samples: 250 
-#&gt;   Group 1: 896 
-#&gt;   Group 2: 1813 
-#&gt; Variables (p): 5 
-#&gt; Relations: 10 
-#&gt; Delta: 99 
-#&gt; --- 
-#&gt; Call:
-#&gt; ggm_compare_confirm(Ymale, Yfemale, hypothesis = hypothesis, 
-#&gt;     prior_sd = 0.1, iter = 250, progress = FALSE)
-#&gt; --- 
-#&gt; Hypotheses: 
-#&gt; 
-#&gt; H1: g1_A1--A2&gt;g2_A1--A2
-#&gt; H2: g1_A1--A2&lt;g2_A1--A2
-#&gt; H3: g1_A1--A2=g2_A1--A2
-#&gt; --- 
-#&gt; Posterior prob: 
-#&gt; 
-#&gt; p(H1|data) = 0.387
-#&gt; p(H2|data) = 0.047
-#&gt; p(H3|data) = 0.565
-#&gt; --- 
-#&gt; Bayes factor matrix: 
-#&gt;       H1     H2    H3
-#&gt; H1 1.000  8.177 0.685
-#&gt; H2 0.122  1.000 0.084
-#&gt; H3 1.460 11.935 1.000
-#&gt; --- 
-#&gt; note: equal hypothesis prior probabilities</div><div class='input'>
+<span class='no'>test</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'test' not found</span></div><div class='input'>
 <span class='co'># indecrease prior SD</span>
 <span class='no'>test</span> <span class='kw'>&lt;-</span> <span class='fu'>ggm_compare_confirm</span>(<span class='no'>Ymale</span>,
                             <span class='no'>Yfemale</span>,
                             <span class='kw'>prior_sd</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,
                             <span class='kw'>hypothesis</span> <span class='kw'>=</span> <span class='no'>hypothesis</span>,
                             <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>,
-                            <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-
+                            <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in .Call("_BGGM_Theta_continuous", PACKAGE = "BGGM", Y = Y, iter = iter +     50, delta = delta, epsilon = 0.01, prior_only = 0, explore = 1,     start = start, progress = progress): Incorrect number of arguments (8), expecting 10 for '_BGGM_Theta_continuous'</span></div><div class='input'>
 <span class='co'># print</span>
-<span class='no'>test</span></div><div class='output co'>#&gt; BGGM: Bayesian Gaussian Graphical Models 
-#&gt; Type: continuous 
-#&gt; --- 
-#&gt; Posterior Samples: 250 
-#&gt;   Group 1: 896 
-#&gt;   Group 2: 1813 
-#&gt; Variables (p): 5 
-#&gt; Relations: 10 
-#&gt; Delta: 3 
-#&gt; --- 
-#&gt; Call:
-#&gt; ggm_compare_confirm(Ymale, Yfemale, hypothesis = hypothesis, 
-#&gt;     prior_sd = 0.5, iter = 250, progress = FALSE)
-#&gt; --- 
-#&gt; Hypotheses: 
-#&gt; 
-#&gt; H1: g1_A1--A2&gt;g2_A1--A2
-#&gt; H2: g1_A1--A2&lt;g2_A1--A2
-#&gt; H3: g1_A1--A2=g2_A1--A2
-#&gt; --- 
-#&gt; Posterior prob: 
-#&gt; 
-#&gt; p(H1|data) = 0.118
-#&gt; p(H2|data) = 0.015
-#&gt; p(H3|data) = 0.867
-#&gt; --- 
-#&gt; Bayes factor matrix: 
-#&gt;       H1     H2    H3
-#&gt; H1 1.000  7.824 0.136
-#&gt; H2 0.128  1.000 0.017
-#&gt; H3 7.363 57.611 1.000
-#&gt; --- 
-#&gt; note: equal hypothesis prior probabilities</div><div class='input'>
+<span class='no'>test</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'test' not found</span></div><div class='input'>
 <span class='co'>################################</span>
 <span class='co'>#### example 3: mixed data #####</span>
 <span class='co'>################################</span>
@@ -617,43 +518,39 @@ doi: <a href='https://doi.org/10.31234/osf.io/ypxd8'>10.31234/osf.io/ypxd8</a>
                             <span class='no'>Yfemale</span>,
                              <span class='kw'>hypothesis</span> <span class='kw'>=</span> <span class='no'>hypothesis</span>,
                              <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>,
-                             <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-
+                             <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in .Call("_BGGM_Theta_continuous", PACKAGE = "BGGM", Y = Y, iter = iter +     50, delta = delta, epsilon = 0.01, prior_only = 0, explore = 1,     start = start, progress = progress): Incorrect number of arguments (8), expecting 10 for '_BGGM_Theta_continuous'</span></div><div class='input'>
 <span class='co'># print</span>
 <span class='no'>test</span></div><div class='output co'>#&gt; BGGM: Bayesian Gaussian Graphical Models 
 #&gt; Type: continuous 
 #&gt; --- 
 #&gt; Posterior Samples: 250 
-#&gt;   Group 1: 896 
-#&gt;   Group 2: 1813 
+#&gt;   Group 1: 817 
+#&gt;   Group 2: 1676 
 #&gt; Variables (p): 5 
 #&gt; Relations: 10 
 #&gt; Delta: 15 
 #&gt; --- 
 #&gt; Call:
 #&gt; ggm_compare_confirm(Ymale, Yfemale, hypothesis = hypothesis, 
-#&gt;     iter = 250, progress = FALSE)
+#&gt;     formula = ~education, iter = 250, progress = FALSE)
 #&gt; --- 
 #&gt; Hypotheses: 
 #&gt; 
-#&gt; H1: g1_A1--A2&gt;g2_A1--A2&amp;g1_A1--A3=g2_A1--A3
-#&gt; H2: g1_A1--A2=g2_A1--A2&amp;g1_A1--A3=g2_A1--A3
-#&gt; H3: g1_A1--A2=g2_A1--A2=g1_A1--A3=g2_A1--A3
-#&gt; H4: complement
+#&gt; H1: g1_A1--A2&gt;g2_A1--A2
+#&gt; H2: g1_A1--A2&lt;g2_A1--A2
+#&gt; H3: g1_A1--A2=g2_A1--A2
 #&gt; --- 
 #&gt; Posterior prob: 
 #&gt; 
-#&gt; p(H1|data) = 0.221
-#&gt; p(H2|data) = 0.764
-#&gt; p(H3|data) = 0.002
-#&gt; p(H4|data) = 0.013
+#&gt; p(H1|data) = 0.062
+#&gt; p(H2|data) = 0.128
+#&gt; p(H3|data) = 0.809
 #&gt; --- 
 #&gt; Bayes factor matrix: 
-#&gt;       H1    H2      H3     H4
-#&gt; H1 1.000 0.290 129.189 17.308
-#&gt; H2 3.449 1.000 445.611 59.699
-#&gt; H3 0.008 0.002   1.000  0.134
-#&gt; H4 0.058 0.017   7.464  1.000
+#&gt;        H1    H2    H3
+#&gt; H1  1.000 0.484 0.077
+#&gt; H2  2.067 1.000 0.159
+#&gt; H3 13.020 6.299 1.000
 #&gt; --- 
 #&gt; note: equal hypothesis prior probabilities</div><div class='input'># }
 </div></pre>

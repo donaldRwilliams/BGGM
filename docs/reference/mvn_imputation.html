@@ -47,8 +47,9 @@
 
 
 <meta property="og:title" content="Multivariate Normal Imputation — mvn_imputation" />
-<meta property="og:description" content="Impute values, assuming a multivariate normal distribution, with the posterior
-predictive distribution." />
+<meta property="og:description" content="Impute values, assuming a  multivariate normal distribution, with the posterior
+predictive distribution. For binary, ordinal, and mixed (a combination of discrete and continuous)
+data, the values are first imputed for the latent data and then converted to the original scale." />
 <meta property="og:image" content="https://donaldrwilliams.github.io/BGGM/reference/figures/hex.jpg" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="@wdonald_1985" />
@@ -129,11 +130,18 @@ predictive distribution." />
     </div>
 
     <div class="ref-description">
-    <p>Impute values, assuming a multivariate normal distribution, with the posterior
-predictive distribution.</p>
+    <p>Impute values, assuming a  multivariate normal distribution, with the posterior
+predictive distribution. For binary, ordinal, and mixed (a combination of discrete and continuous)
+data, the values are first imputed for the latent data and then converted to the original scale.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>mvn_imputation</span>(<span class='no'>Y</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"continuous"</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>mvn_imputation</span>(
+  <span class='no'>Y</span>,
+  <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"continuous"</span>,
+  <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>1000</span>,
+  <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>save_all</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -156,11 +164,38 @@ ordinal variables. See the note for further details.</p></td>
       <th>progress</th>
       <td><p>Logical. Should a progress bar be included (defaults to <code>TRUE</code>) ?</p></td>
     </tr>
+    <tr>
+      <th>save_all</th>
+      <td><p>Logical. Should each imputed dataset be stored
+(defaults to <code>FALSE</code> which saves the imputed missing values) ?</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object of class <code>mvn_imputation</code></p>
+    <p>An object of class <code>mvn_imputation</code>:</p>
+<ul>
+<li><p><code>Y</code> The last imputed dataset.</p></li>
+<li><p><code>ppd_missing</code> A matrix of dimensions <code>iter</code> by the number of missing values.</p></li>
+<li><p><code>ppd_mean</code> A vector including the means of the posterior predictive distribution for
+the missing values.</p></li>
+<li><p><code>Y_all</code> An 3D array with <code>iter</code> matrices of dimensions <em>n</em> by <em>p</em>
+(<code>NULL</code> when <code>save_all = FALSE</code>).</p></li>
+</ul>
+
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Missing values are imputed with the approach described in Hoff (2009)
+.
+The basic idea is to impute the missing values with the respective posterior pedictive distribution,
+given the observed data, as the model is being estimated. Note that the default is <code>TRUE</code>,
+but this ignored when there are no missing values. If set to <code>FALSE</code>, and there are missing
+values, list-wise deletion is performed with <code>na.omit</code>.</p>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Hoff PD (2009).
+<em>A first course in Bayesian statistical methods</em>, volume 580.
+Springer.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
@@ -196,14 +231,42 @@ ordinal variables. See the note for further details.</p></td>
 
 <span class='co'># true values (to check)</span>
 <span class='no'>true</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/unlist.html'>unlist</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span>(<span class='fl'>1</span>:<span class='no'>p</span>, <span class='kw'>function</span>(<span class='no'>x</span>)
-  <span class='no'>Ymain</span>[<span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='no'>Y_miss</span>[,<span class='no'>x</span>] <span class='kw'>==</span> <span class='fl'>1</span>),<span class='no'>x</span>] ))
+        <span class='no'>Ymain</span>[<span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='no'>Y_miss</span>[,<span class='no'>x</span>] <span class='kw'>==</span> <span class='fl'>1</span>),<span class='no'>x</span>] ))
 
 <span class='co'># impute</span>
 <span class='no'>fit_missing</span> <span class='kw'>&lt;-</span> <span class='fu'>mvn_imputation</span>(<span class='no'>Y</span>, <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>)
 
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>fit_missing</span>, <span class='kw'>n_rows</span> <span class='kw'>=</span> <span class='fl'>20</span>)</div><div class='output co'>#&gt; BGGM: Bayesian Gaussian Graphical Models 
+#&gt; --- 
+#&gt; Multivariate Normal Imputation
+#&gt; --- 
+#&gt; Estimates:
+#&gt; 
+#&gt;    Value Post.mean Post.sd Cred.lb Cred.ub
+#&gt;    57--1     1.937   0.493   0.849   2.878
+#&gt;   244--1    -0.401   0.501  -1.390   0.581
+#&gt;   273--1    -0.437   0.502  -1.388   0.538
+#&gt;   317--1    -0.014   0.515  -0.983   0.965
+#&gt;   403--1     0.939   0.509  -0.002   1.913
+#&gt;   449--1    -1.502   0.507  -2.377  -0.455
+#&gt;   461--1    -0.144   0.525  -1.146   0.914
+#&gt;   556--1     0.709   0.508  -0.293   1.591
+#&gt;   558--1    -0.525   0.513  -1.647   0.470
+#&gt;   686--1    -2.127   0.489  -3.044  -1.172
+#&gt;   777--1     0.707   0.514  -0.298   1.655
+#&gt;   824--1    -0.273   0.480  -1.191   0.565
+#&gt;   872--1    -0.707   0.557  -1.806   0.354
+#&gt;   908--1    -1.073   0.550  -2.259  -0.067
+#&gt;   948--1    -0.187   0.510  -1.107   0.871
+#&gt;   958--1     0.448   0.539  -0.546   1.492
+#&gt;  1026--1    -1.336   0.576  -2.443  -0.211
+#&gt;  1074--1     0.063   0.542  -1.019   1.062
+#&gt;  1116--1     0.222   0.536  -0.757   1.265
+#&gt;  1139--1    -1.627   0.483  -2.570  -0.668</div><div class='input'>
+
 <span class='co'># plot</span>
 <span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='kw'>x</span> <span class='kw'>=</span>  <span class='no'>true</span>,
-     <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/colSums.html'>colMeans</a></span>(<span class='no'>fit_missing</span>$<span class='no'>ppc_missing</span>),
+     <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>fit_missing</span>$<span class='no'>ppd_mean</span>,
      <span class='kw'>main</span> <span class='kw'>=</span> <span class='st'>"BGGM: Imputation"</span>,
      <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>"Actual"</span>,
      <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>"Posterior Mean"</span>)</div><div class='img'><img src='mvn_imputation-1.png' alt='' width='700' height='433' /></div><div class='input'># }
