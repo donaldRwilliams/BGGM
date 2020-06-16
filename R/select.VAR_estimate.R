@@ -43,7 +43,8 @@
 #' @export
 select.var_estimate <- function(object,
                                 cred = 0.95,
-                                alternative = "two.sided"){
+                                alternative = "two.sided"
+                                ,...){
 
 
   pcors <- object$fit$pcors[,,51:(object$iter +50)]
