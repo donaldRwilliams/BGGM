@@ -4,7 +4,7 @@
 \alias{select.var_estimate}
 \title{Graph Selection for \code{var.estimate} Object}
 \usage{
-\method{select}{var_estimate}(object, cred = 0.95, alternative = "two.sided")
+\method{select}{var_estimate}(object, cred = 0.95, alternative = "two.sided", ...)
 }
 \arguments{
 \item{object}{An object of class \code{VAR.estimate}.}
