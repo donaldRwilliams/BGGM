@@ -181,7 +181,7 @@ Rcpp::List missing_gaussian(arma::mat Y,
 
     if(store_all){
       Y_all.slice(s) = Y;
-    }
+    }drrr
   }
 
   arma::vec lb = {0.025};

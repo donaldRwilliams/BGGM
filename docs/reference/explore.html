@@ -150,6 +150,7 @@ then plotted with <code><a href='plot.select.html'>plot.select</a></code>.</p>
   <span class='kw'>prior_sd</span> <span class='kw'>=</span> <span class='fl'>0.25</span>,
   <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>5000</span>,
   <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>impute</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>1</span>,
   <span class='no'>...</span>
 )</pre>
@@ -194,6 +195,11 @@ of a beta distribution (defaults to 0.25).</p></td>
     <tr>
       <th>progress</th>
       <td><p>Logical. Should a progress bar be included (defaults to <code>TRUE</code>) ?</p></td>
+    </tr>
+    <tr>
+      <th>impute</th>
+      <td><p>Logicial. Should the missing values (<code>NA</code>)
+be imputed during model fitting (defaults to <code>TRUE</code>) ?</p></td>
     </tr>
     <tr>
       <th>seed</th>
@@ -247,6 +253,14 @@ should be included in the GGM. An example is provided below.</p>
        the first category must be one. This is addressed by adding one (e.g., <code>Y + 1</code>) to the data matrix.</p></li>
 </ul>
 
+
+<p><strong>Imputing Missing Values</strong>:</p>
+<p>Missing values are imputed with the approach described in Hoff (2009)
+.
+The basic idea is to impute the missing values with the respective posterior pedictive distribution,
+given the observed data, as the model is being estimated. Note that the default is <code>TRUE</code>,
+but this ignored when there are no missing values. If set to <code>FALSE</code>, and there are missing
+values, list-wise deletion is performed with <code>na.omit</code>.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p><strong>Posterior Uncertainty</strong>:</p>
@@ -277,7 +291,9 @@ the posterior standard deviation is plotted for <code>explore</code> objects.</p
 
     <p>Dablander F, Bergh Dvd, Ly A, Wagenmakers E (2020).
 &#8220;Default Bayes Factors for Testing the (In) equality of Several Population Variances.&#8221;
-<em>arXiv preprint arXiv:2003.06278</em>.<br /><br /> Kass RE, Raftery AE (1995).
+<em>arXiv preprint arXiv:2003.06278</em>.<br /><br /> Hoff PD (2009).
+<em>A first course in Bayesian statistical methods</em>, volume 580.
+Springer.<br /><br /> Kass RE, Raftery AE (1995).
 &#8220;Bayes Factors.&#8221;
 <em>Journal of the American Statistical Association</em>, <b>90</b>(430), 773--795.<br /><br /> Mulder J, Pericchi L (2018).
 &#8220;The Matrix-F Prior for Estimating and Testing Covariance Matrices.&#8221;
