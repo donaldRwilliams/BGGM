@@ -79,7 +79,6 @@ Rcpp::List internal_missing_gaussian(arma::mat Y,
 
       arma::mat beta_j = Sigma_i_not_i(Sigma, j) * inv(remove_row(remove_col(Sigma, j), j));
       arma::mat  sd_j = sqrt(select_row(Sigma, j).col(j) - Sigma_i_not_i(Sigma, j) *
-
       inv(remove_row(remove_col(Sigma, j), j)) * Sigma_i_not_i(Sigma, j).t());
       arma::vec pred = remove_col(Y,j) * beta_j.t();
       arma::vec pred_miss = pred(index_j);
@@ -1489,7 +1488,7 @@ Rcpp::List mv_ordinal_albert(arma::mat Y,
     Psi.slice(0) = wishrnd(inv(BMPinv + Theta.slice(0)), nuMP + deltaMP + k - 1);
 
     // sample Theta
-    Theta.slice(0) =   wishrnd(inv(  S_Y),  (deltaMP + k - 1) + (n - 1));
+    Theta.slice(0) =   wishrnd(inv(S_Y + Psi.slice(0)),  (deltaMP + k - 1) + (n - 1));
 
     // sigma
     Sigma.slice(0) = inv(Theta.slice(0));
