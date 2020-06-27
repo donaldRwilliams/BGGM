@@ -231,13 +231,12 @@ doi: <a href='https://doi.org/10.31234/osf.io/ypxd8'>10.31234/osf.io/ypxd8</a>
 <span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='no'>bfi</span>[,<span class='fl'>1</span>:<span class='fl'>10</span>]
 
 <span class='co'># fit model</span>
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='explore.html'>explore</a></span>(<span class='no'>Y</span>, <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-
+<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='explore.html'>explore</a></span>(<span class='no'>Y</span>, <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in .Call("_BGGM_Theta_continuous", PACKAGE = "BGGM", Y = Y, iter = iter +     50, delta = delta, epsilon = eps, prior_only = 0, explore = 1,     start = start, progress = progress): Incorrect number of arguments (8), expecting 10 for '_BGGM_Theta_continuous'</span></div><div class='input'>
 <span class='co'># edge set</span>
 <span class='no'>E</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='select.html'>select</a></span>(<span class='no'>fit</span>,
-            <span class='kw'>alternative</span> <span class='kw'>=</span> <span class='st'>"exhaustive"</span>)
-
-<span class='co'># }</span></div></pre>
+            <span class='kw'>alternative</span> <span class='kw'>=</span> <span class='st'>"exhaustive"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in select(fit, alternative = "exhaustive"): object 'fit' not found</span></div><div class='input'>
+# }
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

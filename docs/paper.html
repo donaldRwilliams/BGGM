@@ -148,6 +148,16 @@
 <h1 class="hasAnchor">
 <a href="#bggm-bayesian-gaussian-graphical-models" class="anchor"></a>BGGM: Bayesian Gaussian Graphical Models</h1>
 <p>The <code>R</code> package <strong>BGGM</strong> provides tools for making Bayesian inference in Gaussian graphical models (GGM). The methods are organized around two general approaches for Bayesian inference: (1) estimation and (2) hypothesis testing. The key distinction is that the former focuses on either the posterior or posterior predictive distribution [@Gelman1996a; see section 5 in @rubin1984bayesianly] , whereas the latter focuses on model comparison with the Bayes factor [@Jeffreys1961; @Kass1995].</p>
+<div id="what-is-a-gaussian-graphical-model-" class="section level2">
+<h2 class="hasAnchor">
+<a href="#what-is-a-gaussian-graphical-model-" class="anchor"></a>What is a Gaussian Graphical Model ?</h2>
+<p>A Gaussian graphical model captures conditional (in)dependencies among a set of variables. These are pairwise relations (partial correlations) controlling for the effects of all other variables in the model.</p>
+<div id="applications" class="section level3">
+<h3 class="hasAnchor">
+<a href="#applications" class="anchor"></a>Applications</h3>
+<p>The Gaussian graphical model is used across the sciences, including (but not limited to) economics [@millington2020partial], climate science [@zerenner2014gaussian], genetics [@chu2009graphical], and psychology [@rodriguez2020formalizing].</p>
+</div>
+</div>
 </div>
 <div id="overview" class="section level1">
 <h1 class="hasAnchor">
@@ -190,7 +200,7 @@
 <h2 class="hasAnchor">
 <a href="#supported-data-types" class="anchor"></a>Supported Data Types</h2>
 <ul>
-<li><p><strong>Continuous</strong>: The continuous method was described in @Williams2019. Note that this is based on the customary<a href="https://en.wikipedia.org/wiki/Wishart_distribution">Wishartdistribution</a>.</p></li>
+<li><p><strong>Continuous</strong>: The continuous method was described in @Williams2019. Note that this is based on the customary <a href="https://en.wikipedia.org/wiki/Wishart_distribution">Wishartdistribution</a>.</p></li>
 <li><p><strong>Binary</strong>: The binary method builds directly upon @talhouk2012efficient that, in turn, built upon the approaches of @lawrence2008bayesian and @webb2008bayesian (to name a few).</p></li>
 <li><p><strong>Ordinal</strong>: The ordinal methods require sampling thresholds. There are two approach included in <strong>BGGM</strong>. The customary approach described in @albert1993bayesian (the default) and the ‘Cowles’ algorithm described in @cowles1996accelerating.</p></li>
 <li><p><strong>Mixed</strong>: The mixed data (a combination of discrete and continuous) method was introduced in @hoff2007extending. This is a semi-parametric copula model (i.e., a copula GGM) based on the ranked likelihood. Note that this can be used for <em>only</em> ordinal data (not restricted to “mixed” data).</p></li>

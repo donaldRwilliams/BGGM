@@ -145,6 +145,7 @@ The graph is selected with <code><a href='select.estimate.html'>select.estimate<
   <span class='kw'>analytic</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>prior_sd</span> <span class='kw'>=</span> <span class='fl'>0.25</span>,
   <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>5000</span>,
+  <span class='kw'>impute</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>1</span>,
   <span class='no'>...</span>
@@ -186,6 +187,11 @@ when <code>type = "mixed"</code> and <code>NULL</code> otherwise. See note for f
     <tr>
       <th>iter</th>
       <td><p>Number of iterations (posterior samples; defaults to 5000).</p></td>
+    </tr>
+    <tr>
+      <th>impute</th>
+      <td><p>Logicial. Should the missing values (<code>NA</code>)
+be imputed during model fitting (defaults to <code>TRUE</code>) ?</p></td>
     </tr>
     <tr>
       <th>progress</th>
@@ -250,6 +256,13 @@ should be included in the GGM. An example is provided below.</p>
        the first category must be one. This is addressed by adding one (e.g., <code>Y + 1</code>) to the data matrix.</p></li>
 </ul>
 
+<p><strong>Imputing Missing Values</strong>:</p>
+<p>Missing values are imputed with the approach described in Hoff (2009)
+.
+The basic idea is to impute the missing values with the respective posterior pedictive distribution,
+given the observed data, as the model is being estimated. Note that the default is <code>TRUE</code>,
+but this ignored when there are no missing values. If set to <code>FALSE</code>, and there are missing
+values, list-wise deletion is performed with <code>na.omit</code>.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p><strong>Posterior Uncertainty</strong>:</p>
@@ -270,7 +283,9 @@ with all data types and is accomplished by plotting the summary of the <code>est
 ISSN 15372731, doi: <a href='https://doi.org/10.1080/00031305.2018.1549100'>10.1080/00031305.2018.1549100</a>
 .<br /><br /> Hoff PD (2007).
 &#8220;Extending the rank likelihood for semiparametric copula estimation.&#8221;
-<em>The Annals of Applied Statistics</em>, <b>1</b>(1), 265--283.<br /><br /> Williams DR (2018).
+<em>The Annals of Applied Statistics</em>, <b>1</b>(1), 265--283.<br /><br /> Hoff PD (2009).
+<em>A first course in Bayesian statistical methods</em>, volume 580.
+Springer.<br /><br /> Williams DR (2018).
 &#8220;Bayesian Estimation for Gaussian Graphical Models: Structure Learning, Predictability, and Network Comparisons.&#8221;
 <em>arXiv</em>.
 doi: <a href='https://doi.org/10.31234/OSF.IO/X8DPR'>10.31234/OSF.IO/X8DPR</a>
@@ -308,7 +323,8 @@ doi: <a href='https://doi.org/10.31234/OSF.IO/X8DPR'>10.31234/OSF.IO/X8DPR</a>
 
 <span class='co'># fit model (note + 1, due to zeros)</span>
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'>estimate</span>(<span class='no'>Y</span> + <span class='fl'>1</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"ordinal"</span>,
-                <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>)</div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='input'>
+                <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: imputation during model fitting is</span>
+#&gt; <span class='warning'>currently only implemented for 'continuous' data.</span></div><div class='output co'>#&gt; <span class='message'>BGGM: Posterior Sampling </span></div><div class='output co'>#&gt; <span class='message'>BGGM: Finished</span></div><div class='input'>
 <span class='co'># summarize the partial correlations</span>
 <span class='no'>summ</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>fit</span>)
 

@@ -18,7 +18,7 @@ This vignette describes how to control for variables. This is a new feature to *
 # Example 1: Multivariate Regression
 When controlling for variables, a multivariate regression is fitted in **BGGM**. In fact, a GGM can be understood as a multivariate regression with intercepts only models for the predictors.
 
-## Notes about Implemention
+## Notes about Implementation
 **BGGM** does not use the typical approach for multivariate regression in `R`. This avoids having to 
 write out each outcome variable, of which there are typically many in a GGM. In **BGGM**, it is assumed
 that the data matrix includes only the variables to be included in the GGM and the control variables.

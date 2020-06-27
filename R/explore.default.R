@@ -27,6 +27,9 @@
 #'
 #' @param iter Number of iterations (posterior samples; defaults to 5000).
 #'
+#' @param impute Logicial. Should the missing values (\code{NA})
+#'               be imputed during model fitting (defaults to \code{TRUE}) ?
+#'
 #' @param progress Logical. Should a progress bar be included (defaults to \code{TRUE}) ?
 #'
 #' @param seed An integer for the random seed.
@@ -89,6 +92,15 @@
 #'        the first category must be one. This is addressed by adding one (e.g., \code{Y + 1}) to the data matrix.
 #'
 #' }
+#'
+#'
+#' \strong{Imputing Missing Values}:
+#'
+#' Missing values are imputed with the approach described in \insertCite{hoff2009first;textual}{BGGM}.
+#' The basic idea is to impute the missing values with the respective posterior pedictive distribution,
+#' given the observed data, as the model is being estimated. Note that the default is \code{TRUE},
+#' but this ignored when there are no missing values. If set to \code{FALSE}, and there are missing
+#' values, list-wise deletion is performed with \code{na.omit}.
 #'
 #' @note
 #'
@@ -158,8 +170,14 @@ explore <- function(Y,
                     prior_sd = 0.25,
                     iter = 5000,
                     progress = TRUE,
+                    impute = TRUE,
                     seed = 1, ...){
 
+  # temporary warning until missing data is fully implemented
+  if(type != "continuous"){
+    warning(paste0("imputation during model fitting is\n",
+                   "currently only implemented for 'continuous' data."))
+  }
 
   old <- .Random.seed
 
@@ -186,17 +204,36 @@ explore <- function(Y,
       # no control
       if (is.null(formula)) {
 
-        # na omit
-        Y <- as.matrix(na.omit(Y))
+        # nodes
+        p <- ncol(Y)
+
+        if(!impute){
+
+          # na omit
+          Y <- as.matrix(na.omit(Y))
+
+          Y_miss <- Y
+
+        } else {
+
+          Y_miss <- ifelse(is.na(Y), 1, 0)
+
+          if(sum(Y_miss) == 0){
+            impute <- FALSE
+          }
+
+          # impute means
+          for(i in 1:p){
+            Y[which(is.na(Y[,i])),i] <- mean(na.omit(Y[,i]))
+          }
+
+        }
 
         # scale Y
         Y <- scale(Y, scale = F)
 
         # NULL design matrix
         X <- NULL
-
-        # nodes
-        p <- ncol(Y)
 
         # observations
         n <- nrow(Y)
@@ -215,7 +252,9 @@ explore <- function(Y,
           prior_only = 0,
           explore = 1,
           start = start,
-          progress = progress
+          progress = progress,
+          impute = impute,
+          Y_miss = Y_miss
         )
 
         # control for variables
@@ -468,27 +507,23 @@ explore <- function(Y,
 
     # # compute post.mean
     pcor_mat <- post_samp$pcor_mat
-      # round(apply(post_samp$pcors[,,51:(iter + 50)], 1:2, mean), 3)
-    #
-    # # compute post.sd
-    # pcor_sd <- round(apply(post_samp$pcors[,,51:(iter + 50)], 1:2, sd), 3)
 
-
-  returned_object <- list(
-    pcor_mat = pcor_mat,
-    analytic = analytic,
-    formula = formula,
-    post_samp = post_samp,
-    prior_samp = prior_samp,
-    type = type,
-    iter = iter,
-    Y = Y,
-    call = match.call(),
-    p = p,
-    n = n,
-    X = X,
-    eps = eps
-  )
+    returned_object <- list(
+      pcor_mat = pcor_mat,
+      analytic = analytic,
+      formula = formula,
+      post_samp = post_samp,
+      prior_samp = prior_samp,
+      type = type,
+      iter = iter,
+      Y = Y,
+      call = match.call(),
+      p = p,
+      n = n,
+      X = X,
+      eps = eps,
+      ppd_mean = post_samp$ppd_mean
+    )
 
   }else {
 

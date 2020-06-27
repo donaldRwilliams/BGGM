@@ -15,11 +15,29 @@
 
 \item{iter}{number of posterior samples (defaults to all in the object).}
 
+\item{progress}{Logical. Should a progress bar be included (defaults to \code{TRUE}) ?}
+
 \item{...}{Currently ignored}
 }
 \value{
-
+The predicted values for each regression model.
 }
 \description{
 Model Predictions for \code{var_estimate} Objects
+}
+\examples{
+\donttest{
+# data
+Y <- subset(ifit, id == 1)[,-1]
+
+# fit model with alias (var_estimate also works)
+fit <- var_estimate(Y, progress = FALSE)
+
+# fitted values
+pred <- predict(fit, progress = FALSE)
+
+# predicted values (1st outcome)
+pred[,,1]
+
+}
 }

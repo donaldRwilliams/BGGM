@@ -13,6 +13,7 @@ confirm(
   mixed_type = NULL,
   iter = 25000,
   progress = TRUE,
+  impute = TRUE,
   seed = 1,
   ...
 )
@@ -38,6 +39,9 @@ as ranks when \code{type = "mixed"} and \code{NULL} otherwise. See note for furt
 \item{iter}{Number of iterations (posterior samples; defaults to 25,000).}
 
 \item{progress}{Logical. Should a progress bar be included (defaults to \code{TRUE}) ?}
+
+\item{impute}{Logicial. Should the missing values (\code{NA})
+be imputed during model fitting (defaults to \code{TRUE}) ?}
 
 \item{seed}{An integer for the random seed.}
 

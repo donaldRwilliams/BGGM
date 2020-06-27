@@ -193,12 +193,12 @@ For users of <strong>BGGM</strong>, the following are the useful objects:</p>
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='ggm_compare_explore.html'>ggm_compare_explore</a></span>(<span class='no'>Ymale</span>, <span class='no'>Yfemale</span>,
                            <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>,
                            <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"continuous"</span>,
-                           <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+                           <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in .Call("_BGGM_Theta_continuous", PACKAGE = "BGGM", Y = Y, iter = iter +     50, delta = delta, epsilon = eps, prior_only = 0, explore = 1,     start = start, progress = progress): Incorrect number of arguments (8), expecting 10 for '_BGGM_Theta_continuous'</span></div><div class='input'>
 
+<span class='no'>E</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='select.html'>select</a></span>(<span class='no'>fit</span>, <span class='kw'>post_prob</span> <span class='kw'>=</span> <span class='fl'>0.50</span>)</div><div class='output co'>#&gt; <span class='error'>Error in select(fit, post_prob = 0.5): object 'fit' not found</span></div><div class='input'>
+# }
 
-<span class='no'>E</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='select.html'>select</a></span>(<span class='no'>fit</span>, <span class='kw'>post_prob</span> <span class='kw'>=</span> <span class='fl'>0.50</span>)
-
-<span class='co'># }</span></div></pre>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

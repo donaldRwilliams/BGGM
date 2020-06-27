@@ -12,6 +12,7 @@ ggm_compare_estimate(
   analytic = FALSE,
   prior_sd = 0.5,
   iter = 5000,
+  impute = TRUE,
   progress = TRUE,
   seed = 1
 )
@@ -39,6 +40,9 @@ automatically be treated as continuous.}
 See note for further details.}
 
 \item{iter}{Number of iterations (posterior samples; defaults to 5000).}
+
+\item{impute}{Logicial. Should the missing values (\code{NA})
+be imputed during model fitting (defaults to \code{TRUE}) ?}
 
 \item{progress}{Logical. Should a progress bar be included (defaults to \code{TRUE}) ?}
 
@@ -109,9 +113,17 @@ An error is most likely to arise when \code{type = "ordinal"}. The are two commo
        the first category must be one. This is addressed by adding one (e.g., \code{Y + 1}) to the data matrix.
 
 }
+
+\strong{Imputing Missing Values}:
+
+Missing values are imputed with the approach described in \insertCite{hoff2009first;textual}{BGGM}.
+The basic idea is to impute the missing values with the respective posterior pedictive distribution,
+given the observed data, as the model is being estimated. Note that the default is \code{TRUE},
+but this ignored when there are no missing values. If set to \code{FALSE}, and there are missing
+values, list-wise deletion is performed with \code{na.omit}.
 }
 \note{
-\strong{Mixed Data:}
+\strong{Mixed Data}:
 
 The mixed data approach was introduced  \insertCite{@in @hoff2007extending;textual}{BGGM}
 (our paper describing an extension to Bayesian hypothesis testing if forthcoming).

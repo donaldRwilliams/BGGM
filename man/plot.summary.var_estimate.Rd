@@ -30,3 +30,17 @@ A list of \code{ggplot} objects.
 Visualize the posterior distributions of each partial correlation and
 regression coefficient.
 }
+\examples{
+\donttest{
+
+# data
+Y <- subset(ifit, id == 1)[,-1]
+
+# fit model with alias (var_estimate also works)
+fit <- var_estimate(Y, progress = FALSE)
+
+plts <- plot(summary(fit))
+plts$pcor_plt
+}
+
+}

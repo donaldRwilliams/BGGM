@@ -150,6 +150,7 @@ Williams and Mulder (2019)
   <span class='kw'>mixed_type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>25000</span>,
   <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>impute</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>1</span>,
   <span class='no'>...</span>
 )</pre>
@@ -193,6 +194,11 @@ as ranks when <code>type = "mixed"</code> and <code>NULL</code> otherwise. See n
     <tr>
       <th>progress</th>
       <td><p>Logical. Should a progress bar be included (defaults to <code>TRUE</code>) ?</p></td>
+    </tr>
+    <tr>
+      <th>impute</th>
+      <td><p>Logicial. Should the missing values (<code>NA</code>)
+be imputed during model fitting (defaults to <code>TRUE</code>) ?</p></td>
     </tr>
     <tr>
       <th>seed</th>

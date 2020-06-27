@@ -20,7 +20,15 @@
 #'
 #' @param ... currently ignored.
 #'
-#' @return object of classes \code{bayes_R2} and \code{metric}
+#' @return An object of classes \code{bayes_R2} and \code{metric}, including
+#'
+#' \itemize{
+#'
+#' \item \code{scores} A list containing the posterior samples of R2. The is one element
+#'
+#' for each node.
+#'
+#' }
 #'
 #' @note
 #'

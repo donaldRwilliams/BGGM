@@ -101,9 +101,9 @@
 <h1 class="hasAnchor">
 <a href="#example-1-multivariate-regression" class="anchor"></a>Example 1: Multivariate Regression</h1>
 <p>When controlling for variables, a multivariate regression is fitted in <strong>BGGM</strong>. In fact, a GGM can be understood as a multivariate regression with intercepts only models for the predictors.</p>
-<div id="notes-about-implemention" class="section level2">
+<div id="notes-about-implementation" class="section level2">
 <h2 class="hasAnchor">
-<a href="#notes-about-implemention" class="anchor"></a>Notes about Implemention</h2>
+<a href="#notes-about-implementation" class="anchor"></a>Notes about Implementation</h2>
 <p><strong>BGGM</strong> does not use the typical approach for multivariate regression in <code>R</code>. This avoids having to write out each outcome variable, of which there are typically many in a GGM. In <strong>BGGM</strong>, it is assumed that the data matrix includes only the variables to be included in the GGM and the control variables.</p>
 <div id="correct" class="section level3">
 <h3 class="hasAnchor">

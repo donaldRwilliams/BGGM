@@ -67,10 +67,16 @@
     <loc>https://donaldrwilliams.github.io/BGGM//reference/gss.html</loc>
   </url>
   <url>
+    <loc>https://donaldrwilliams.github.io/BGGM//reference/ifit.html</loc>
+  </url>
+  <url>
     <loc>https://donaldrwilliams.github.io/BGGM//reference/iri.html</loc>
   </url>
   <url>
     <loc>https://donaldrwilliams.github.io/BGGM//reference/map.html</loc>
+  </url>
+  <url>
+    <loc>https://donaldrwilliams.github.io/BGGM//reference/mvn_imputation.html</loc>
   </url>
   <url>
     <loc>https://donaldrwilliams.github.io/BGGM//reference/pcor_mat.html</loc>
@@ -115,6 +121,9 @@
     <loc>https://donaldrwilliams.github.io/BGGM//reference/plot.summary.select.explore.html</loc>
   </url>
   <url>
+    <loc>https://donaldrwilliams.github.io/BGGM//reference/plot.summary.var_estimate.html</loc>
+  </url>
+  <url>
     <loc>https://donaldrwilliams.github.io/BGGM//reference/plot_prior.html</loc>
   </url>
   <url>
@@ -125,6 +134,9 @@
   </url>
   <url>
     <loc>https://donaldrwilliams.github.io/BGGM//reference/predict.explore.html</loc>
+  </url>
+  <url>
+    <loc>https://donaldrwilliams.github.io/BGGM//reference/predict.var_estimate.html</loc>
   </url>
   <url>
     <loc>https://donaldrwilliams.github.io/BGGM//reference/predictability.html</loc>
@@ -175,6 +187,9 @@
     <loc>https://donaldrwilliams.github.io/BGGM//reference/select.html</loc>
   </url>
   <url>
+    <loc>https://donaldrwilliams.github.io/BGGM//reference/select.var_estimate.html</loc>
+  </url>
+  <url>
     <loc>https://donaldrwilliams.github.io/BGGM//reference/summary.coef.html</loc>
   </url>
   <url>
@@ -196,7 +211,13 @@
     <loc>https://donaldrwilliams.github.io/BGGM//reference/summary.select.explore.html</loc>
   </url>
   <url>
+    <loc>https://donaldrwilliams.github.io/BGGM//reference/summary.var_estimate.html</loc>
+  </url>
+  <url>
     <loc>https://donaldrwilliams.github.io/BGGM//reference/tas.html</loc>
+  </url>
+  <url>
+    <loc>https://donaldrwilliams.github.io/BGGM//reference/var_estimate.html</loc>
   </url>
   <url>
     <loc>https://donaldrwilliams.github.io/BGGM//reference/weighted_adj_mat.html</loc>
@@ -236,5 +257,8 @@
   </url>
   <url>
     <loc>https://donaldrwilliams.github.io/BGGM//articles/test_sum.html</loc>
+  </url>
+  <url>
+    <loc>https://donaldrwilliams.github.io/BGGM//articles/var_model.html</loc>
   </url>
 </urlset>

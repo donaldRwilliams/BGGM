@@ -35,6 +35,7 @@ articles:
       - test_sum
       - netplot
       - mcmc_diagnostics
+      - var_model
       - control
       - netstat_custom
       - ppc_custom
@@ -48,6 +49,7 @@ reference:
      Handle Missing Values.
     contents:
     - bggm_missing
+    - mvn_imputation
   - title: "Estimation Based Methods"
     desc: >
       'Estimation' indicates that the methods to not employ Bayes factor testing. Rather,
@@ -141,6 +143,22 @@ reference:
      a selected graph.
     contents:
     - plot.select
+
+  - title: "Graphical VAR (vector autoregression)"
+    desc: >
+      A variety of methods for time series data. These particular models are VAR(1) models which
+      are also known as time series chain graphical models.
+  - subtitle: "Estimation"
+    desc: >
+      'Estimation' indicates that the methods to not employ Bayes factor testing. Rather,
+      the graph is determined with the posterior distribution. The prior distribtuion has a
+      minimal influence.
+    contents:
+    - var_estimate
+    - select.var_estimate
+    - summary.var_estimate
+    - plot.summary.var_estimate
+    - predict.var_estimate
   - title: Miscellaneous
     contents:
     - convergence
@@ -166,6 +184,7 @@ reference:
     - depression_anxiety_t1
     - depression_anxiety_t2
     - gss
+    - ifit
     - iri
     - ptsd
     - ptsd_cor1

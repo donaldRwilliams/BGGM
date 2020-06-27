@@ -33,6 +33,17 @@ approaches for Bayesian inference: (1) estimation and (2) hypothesis
 testing. The key distinction is that the former focuses on either 
 the posterior or posterior predictive distribution [@Gelman1996a; see section 5 in @rubin1984bayesianly], whereas the latter focuses on model comparison with the Bayes factor [@Jeffreys1961; @Kass1995].
 
+## What is a Gaussian Graphical Model ?
+A Gaussian graphical model captures conditional (in)dependencies among a set 
+of variables. These are pairwise relations (partial correlations) controlling for 
+the effects of all other variables in the model.
+
+### Applications
+The Gaussian graphical model is used across the sciences, including 
+(but not limited to) economics [@millington2020partial], climate science 
+[@zerenner2014gaussian], genetics [@chu2009graphical], and psychology [@rodriguez2020formalizing]. 
+
+
 ## Installation
 
 To install the latest release version (`2.0.0`) from CRAN use

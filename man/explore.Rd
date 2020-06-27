@@ -13,6 +13,7 @@ explore(
   prior_sd = 0.25,
   iter = 5000,
   progress = TRUE,
+  impute = TRUE,
   seed = 1,
   ...
 )
@@ -39,6 +40,9 @@ of a beta distribution (defaults to 0.25).}
 \item{iter}{Number of iterations (posterior samples; defaults to 5000).}
 
 \item{progress}{Logical. Should a progress bar be included (defaults to \code{TRUE}) ?}
+
+\item{impute}{Logicial. Should the missing values (\code{NA})
+be imputed during model fitting (defaults to \code{TRUE}) ?}
 
 \item{seed}{An integer for the random seed.}
 
@@ -103,6 +107,15 @@ An error is most likely to arise when \code{type = "ordinal"}. The are two commo
        the first category must be one. This is addressed by adding one (e.g., \code{Y + 1}) to the data matrix.
 
 }
+
+
+\strong{Imputing Missing Values}:
+
+Missing values are imputed with the approach described in \insertCite{hoff2009first;textual}{BGGM}.
+The basic idea is to impute the missing values with the respective posterior pedictive distribution,
+given the observed data, as the model is being estimated. Note that the default is \code{TRUE},
+but this ignored when there are no missing values. If set to \code{FALSE}, and there are missing
+values, list-wise deletion is performed with \code{na.omit}.
 }
 \note{
 \strong{Posterior Uncertainty}:

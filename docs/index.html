@@ -96,14 +96,13 @@
 <div id="-installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#-installation" class="anchor"></a><i class="fas fa-cog"></i> Installation</h2>
-<p>To install the latest release version (1.0.0) from CRAN use</p>
+<p>To install the latest release version (<code>2.0.0</code>) from CRAN use</p>
 <div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"BGGM"</span>)</pre></div>
 <p>The current developmental version can be installed with</p>
 <div class="sourceCode" id="cb2"><pre class="r"><span class="kw">if</span> (!<span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span>(<span class="st">"remotes"</span>)) {
   <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"remotes"</span>)
 }
 <span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"donaldRwilliams/BGGM"</span>)</pre></div>
-<p>Note that the developmental version is recommended, due to the algorithms being written in <code>c++</code> and support for all data types. The developmental version is essentially <strong>BGGM</strong> version 2.0.0.</p>
 <div id="-dealing-with-errors" class="section level3">
 <h3 class="hasAnchor">
 <a href="#-dealing-with-errors" class="anchor"></a><i class="fas fa-skull-crossbones"></i> Dealing with Errors</h3>

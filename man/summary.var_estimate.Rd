@@ -17,11 +17,42 @@ distributions (defaults to 0.95; must be between 0 and 1).}
 \value{
 A dataframe containing the summarized posterior distributions,
 including both the partial correlations and the regression coefficients.
+
+\itemize{
+
+\item \code{pcor_results} A data frame including the summarized partial correlations
+
+\item \code{beta_results} A list containing the summarized regression coefficients (one
+data frame for each outcome)
+}
 }
 \description{
 Summarize the posterior distribution of each partial correlation
 and regression coefficient with the posterior mean, standard deviation, and
 credible intervals.
+}
+\examples{
+\donttest{
+# data
+Y <- subset(ifit, id == 1)[,-1]
+
+# fit model with alias (var_estimate also works)
+fit <- var_estimate(Y, progress = FALSE)
+
+# summary ('pcor')
+print(
+summary(fit, cred = 0.95),
+param = "pcor",
+)
+
+
+# summary ('beta')
+print(
+summary(fit, cred = 0.95),
+param = "beta",
+)
+
+}
 }
 \seealso{
 \code{\link{var_estimate}}

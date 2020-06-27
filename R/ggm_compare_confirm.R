@@ -28,6 +28,9 @@
 #'
 #' @param iter  Number of iterations (posterior samples; defaults to 25,000).
 #'
+#' @param impute Logicial. Should the missing values (\code{NA})
+#'               be imputed during model fitting (defaults to \code{TRUE}) ?
+#'
 #' @param progress Logical. Should a progress bar be included (defaults to \code{TRUE}) ?
 #'
 #' @param seed An integer for the random seed.
@@ -156,6 +159,15 @@
 #'        the first category must be one. This is addressed by adding one (e.g., \code{Y + 1}) to the data matrix.
 #'
 #' }
+#'
+#'
+#' \strong{Imputing Missing Values}:
+#'
+#' Missing values are imputed with the approach described in \insertCite{hoff2009first;textual}{BGGM}.
+#' The basic idea is to impute the missing values with the respective posterior pedictive distribution,
+#' given the observed data, as the model is being estimated. Note that the default is \code{TRUE},
+#' but this ignored when there are no missing values. If set to \code{FALSE}, and there are missing
+#' values, list-wise deletion is performed with \code{na.omit}.
 #'
 #' @note
 #'
@@ -326,10 +338,17 @@ ggm_compare_confirm <- function(...,
                                 mixed_type = NULL,
                                 prior_sd = 0.25,
                                 iter = 25000,
+                                impute = TRUE,
                                 progress = TRUE,
                                 seed = 1){
 
 
+
+  # temporary warning until missing data is fully implemented
+  if(type != "continuous"){
+    warning(paste0("imputation during model fitting is\n",
+                   "currently only implemented for 'continuous' data."))
+  }
 
   old <- .Random.seed
 
@@ -365,7 +384,31 @@ ggm_compare_confirm <- function(...,
         # data
         Y <- as.matrix(scale(dat_list[[x]], scale = F))
 
-        Y <- na.omit(Y)
+        # nodes
+        p <- ncol(Y)
+
+        if(!impute){
+
+          # na omit
+          Y <- as.matrix(na.omit(Y))
+
+          Y_miss <- Y
+
+        } else {
+
+          Y_miss <- ifelse(is.na(Y), 1, 0)
+
+          if(sum(Y_miss) == 0){
+            impute <- FALSE
+          }
+
+          # impute means
+          for(i in 1:p){
+            Y[which(is.na(Y[,i])),i] <- mean(na.omit(Y[,i]))
+          }
+
+        }
+
 
         start <- solve(cov(Y))
 
@@ -379,7 +422,9 @@ ggm_compare_confirm <- function(...,
           prior_only = 0,
           explore = 1,
           start = start,
-          progress = progress
+          progress = progress,
+          impute = impute,
+          Y_miss = Y_miss
         )
       })
 

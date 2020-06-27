@@ -31,6 +31,17 @@ testing. The key distinction is that the former focuses on either
 the posterior or posterior predictive distribution [@Gelman1996a; see section 
 5 in @rubin1984bayesianly] , whereas the latter focuses on model comparison with the Bayes factor [@Jeffreys1961; @Kass1995].
 
+
+## What is a Gaussian Graphical Model ?
+A Gaussian graphical model captures conditional (in)dependencies among a set 
+of variables. These are pairwise relations (partial correlations) controlling for 
+the effects of all other variables in the model.
+
+### Applications
+The Gaussian graphical model is used across the sciences, including 
+(but not limited to) economics [@millington2020partial], climate science 
+[@zerenner2014gaussian], genetics [@chu2009graphical], and psychology [@rodriguez2020formalizing]. 
+
 # Overview
 The methods in **BGGM** build upon existing algorithms that are well-known in the literature.
 The central contribution of **BGGM** is to extend those approaches:
@@ -68,7 +79,7 @@ The central contribution of **BGGM** is to extend those approaches:
 ## Supported Data Types
 
 * **Continuous**: The continuous method was described in  @Williams2019. Note that 
-                  this is based on the customary[Wishartdistribution](https://en.wikipedia.org/wiki/Wishart_distribution).
+                  this is based on the customary [Wishartdistribution](https://en.wikipedia.org/wiki/Wishart_distribution).
 
 * **Binary**: The binary method builds directly upon @talhouk2012efficient
   that, in turn, built upon the approaches of @lawrence2008bayesian and

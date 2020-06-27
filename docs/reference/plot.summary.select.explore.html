@@ -166,13 +166,11 @@
 
 <span class='co'># fit model</span>
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='explore.html'>explore</a></span>(<span class='no'>Y</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>250</span>,
-               <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-
+               <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in .Call("_BGGM_Theta_continuous", PACKAGE = "BGGM", Y = Y, iter = iter +     50, delta = delta, epsilon = eps, prior_only = 0, explore = 1,     start = start, progress = progress): Incorrect number of arguments (8), expecting 10 for '_BGGM_Theta_continuous'</span></div><div class='input'>
 <span class='co'># edge set</span>
 <span class='no'>E</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='select.html'>select</a></span>(<span class='no'>fit</span>,
-            <span class='kw'>alternative</span> <span class='kw'>=</span> <span class='st'>"exhaustive"</span>)
-
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>E</span>))</div><div class='img'><img src='plot.summary.select.explore-1.png' alt='' width='700' height='433' /></div><div class='input'>
+            <span class='kw'>alternative</span> <span class='kw'>=</span> <span class='st'>"exhaustive"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in select(fit, alternative = "exhaustive"): object 'fit' not found</span></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>E</span>))</div><div class='output co'>#&gt; <span class='error'>Error in summary(E): object 'E' not found</span></div><div class='input'>
 # }
 </div></pre>
   </div>

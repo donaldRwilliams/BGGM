@@ -30,7 +30,15 @@ predictability(
 \item{...}{currently ignored.}
 }
 \value{
-object of classes \code{bayes_R2} and \code{metric}
+An object of classes \code{bayes_R2} and \code{metric}, including
+
+\itemize{
+
+\item \code{scores} A list containing the posterior samples of R2. The is one element
+
+for each node.
+
+}
 }
 \description{
 Compute nodewise predictability or  Bayesian variance explained \insertCite{@R2 @gelman_r2_2019}{BGGM}.

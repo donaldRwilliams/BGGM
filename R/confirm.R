@@ -25,6 +25,9 @@
 #'
 #' @param iter  Number of iterations (posterior samples; defaults to 25,000).
 #'
+#' @param impute Logicial. Should the missing values (\code{NA})
+#'               be imputed during model fitting (defaults to \code{TRUE}) ?
+#'
 #' @param progress Logical. Should a progress bar be included (defaults to \code{TRUE}) ?
 #'
 #' @param seed An integer for the random seed.
@@ -216,8 +219,15 @@ confirm <- function(Y, hypothesis,
                     mixed_type = NULL,
                     iter = 25000,
                     progress = TRUE,
+                    impute = TRUE,
                     seed = 1, ...){
 
+
+  # temporary warning until missing data is fully implemented
+  if(type != "continuous"){
+    warning(paste0("imputation during model fitting is\n",
+                   "currently only implemented for 'continuous' data."))
+  }
 
   old <- .Random.seed
 
@@ -246,14 +256,33 @@ confirm <- function(Y, hypothesis,
     # no control
     if(is.null(formula)){
 
-      # na omit
-      Y <- as.matrix(na.omit(Y))
+      # nodes
+      p <- ncol(Y)
+
+      if(!impute){
+
+        # na omit
+        Y <- as.matrix(na.omit(Y))
+
+        Y_miss <- Y
+
+      } else {
+
+        Y_miss <- ifelse(is.na(Y), 1, 0)
+
+        if(sum(Y_miss) == 0){
+          impute <- FALSE
+        }
+
+        # impute means
+        for(i in 1:p){
+          Y[which(is.na(Y[,i])),i] <- mean(na.omit(Y[,i]))
+        }
+
+      }
 
       # scale Y
       Y <- scale(Y, scale = F)
-
-      # nodes
-      p <- ncol(Y)
 
       n <- nrow(Y)
 
@@ -266,11 +295,13 @@ confirm <- function(Y, hypothesis,
         Y = Y,
         iter = iter + 50,
         delta = delta,
-        epsilon = 0.1,
+        epsilon = 0.01,
         prior_only = 0,
         explore = 1,
         start = start,
-        progress = progress
+        progress = progress,
+        impute = impute,
+        Y_miss = Y_miss
       )
 
       # control for variables
@@ -473,7 +504,7 @@ confirm <- function(Y, hypothesis,
       z0_start = rank_vars$z0_start,
       levels = rank_vars$levels,
       K = rank_vars$K,
-      Sigma_start = rank_vars$Sigma_start,
+      Sigma_start = cov(Y),
       iter = iter + 50,
       delta = delta,
       epsilon = 0.01,
@@ -590,7 +621,8 @@ confirm <- function(Y, hypothesis,
                           call = match.call(),
                           hypothesis = hypothesis,
                           iter = iter, p = p,
-                          delta = delta)
+                          delta = delta,
+                          ppd_mean = post_samp$ppd_mean)
 
   class(returned_object) <- c("BGGM", "confirm")
   returned_object

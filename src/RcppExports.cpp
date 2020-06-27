@@ -66,9 +66,39 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// internal_missing_gaussian
+Rcpp::List internal_missing_gaussian(arma::mat Y, arma::mat Y_missing, arma::mat Sigma, int iter_missing);
+RcppExport SEXP _BGGM_internal_missing_gaussian(SEXP YSEXP, SEXP Y_missingSEXP, SEXP SigmaSEXP, SEXP iter_missingSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Y_missing(Y_missingSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Sigma(SigmaSEXP);
+    Rcpp::traits::input_parameter< int >::type iter_missing(iter_missingSEXP);
+    rcpp_result_gen = Rcpp::wrap(internal_missing_gaussian(Y, Y_missing, Sigma, iter_missing));
+    return rcpp_result_gen;
+END_RCPP
+}
+// missing_gaussian
+Rcpp::List missing_gaussian(arma::mat Y, arma::mat Y_missing, arma::mat Sigma, int iter_missing, bool progress_impute, bool store_all);
+RcppExport SEXP _BGGM_missing_gaussian(SEXP YSEXP, SEXP Y_missingSEXP, SEXP SigmaSEXP, SEXP iter_missingSEXP, SEXP progress_imputeSEXP, SEXP store_allSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Y_missing(Y_missingSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Sigma(SigmaSEXP);
+    Rcpp::traits::input_parameter< int >::type iter_missing(iter_missingSEXP);
+    Rcpp::traits::input_parameter< bool >::type progress_impute(progress_imputeSEXP);
+    Rcpp::traits::input_parameter< bool >::type store_all(store_allSEXP);
+    rcpp_result_gen = Rcpp::wrap(missing_gaussian(Y, Y_missing, Sigma, iter_missing, progress_impute, store_all));
+    return rcpp_result_gen;
+END_RCPP
+}
 // Theta_continuous
-Rcpp::List Theta_continuous(arma::mat Y, int iter, float delta, float epsilon, int prior_only, int explore, arma::mat start, bool progress);
-RcppExport SEXP _BGGM_Theta_continuous(SEXP YSEXP, SEXP iterSEXP, SEXP deltaSEXP, SEXP epsilonSEXP, SEXP prior_onlySEXP, SEXP exploreSEXP, SEXP startSEXP, SEXP progressSEXP) {
+Rcpp::List Theta_continuous(arma::mat Y, int iter, float delta, float epsilon, int prior_only, int explore, arma::mat start, bool progress, bool impute, arma::mat Y_missing);
+RcppExport SEXP _BGGM_Theta_continuous(SEXP YSEXP, SEXP iterSEXP, SEXP deltaSEXP, SEXP epsilonSEXP, SEXP prior_onlySEXP, SEXP exploreSEXP, SEXP startSEXP, SEXP progressSEXP, SEXP imputeSEXP, SEXP Y_missingSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -80,7 +110,9 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type explore(exploreSEXP);
     Rcpp::traits::input_parameter< arma::mat >::type start(startSEXP);
     Rcpp::traits::input_parameter< bool >::type progress(progressSEXP);
-    rcpp_result_gen = Rcpp::wrap(Theta_continuous(Y, iter, delta, epsilon, prior_only, explore, start, progress));
+    Rcpp::traits::input_parameter< bool >::type impute(imputeSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Y_missing(Y_missingSEXP);
+    rcpp_result_gen = Rcpp::wrap(Theta_continuous(Y, iter, delta, epsilon, prior_only, explore, start, progress, impute, Y_missing));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -412,7 +444,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_BGGM_select_row", (DL_FUNC) &_BGGM_select_row, 2},
     {"_BGGM_remove_row", (DL_FUNC) &_BGGM_remove_row, 2},
     {"_BGGM_remove_col", (DL_FUNC) &_BGGM_remove_col, 2},
-    {"_BGGM_Theta_continuous", (DL_FUNC) &_BGGM_Theta_continuous, 8},
+    {"_BGGM_internal_missing_gaussian", (DL_FUNC) &_BGGM_internal_missing_gaussian, 4},
+    {"_BGGM_missing_gaussian", (DL_FUNC) &_BGGM_missing_gaussian, 6},
+    {"_BGGM_Theta_continuous", (DL_FUNC) &_BGGM_Theta_continuous, 10},
     {"_BGGM_sample_prior", (DL_FUNC) &_BGGM_sample_prior, 7},
     {"_BGGM_mv_continuous", (DL_FUNC) &_BGGM_mv_continuous, 7},
     {"_BGGM_trunc_mvn", (DL_FUNC) &_BGGM_trunc_mvn, 5},

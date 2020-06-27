@@ -21,8 +21,16 @@ remove_col <- function(x, index) {
     .Call(`_BGGM_remove_col`, x, index)
 }
 
-Theta_continuous <- function(Y, iter, delta, epsilon, prior_only, explore, start, progress) {
-    .Call(`_BGGM_Theta_continuous`, Y, iter, delta, epsilon, prior_only, explore, start, progress)
+internal_missing_gaussian <- function(Y, Y_missing, Sigma, iter_missing) {
+    .Call(`_BGGM_internal_missing_gaussian`, Y, Y_missing, Sigma, iter_missing)
+}
+
+missing_gaussian <- function(Y, Y_missing, Sigma, iter_missing, progress_impute, store_all) {
+    .Call(`_BGGM_missing_gaussian`, Y, Y_missing, Sigma, iter_missing, progress_impute, store_all)
+}
+
+Theta_continuous <- function(Y, iter, delta, epsilon, prior_only, explore, start, progress, impute, Y_missing) {
+    .Call(`_BGGM_Theta_continuous`, Y, iter, delta, epsilon, prior_only, explore, start, progress, impute, Y_missing)
 }
 
 sample_prior <- function(Y, iter, delta, epsilon, prior_only, explore, progress) {
