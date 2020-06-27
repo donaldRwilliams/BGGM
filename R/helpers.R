@@ -9,6 +9,11 @@
 #' @importFrom stats model.matrix terms cor
 
 
+
+count_na_rows <- function(Y){
+  sum(rowSums(is.na(Y)) > 0)
+}
+
 hyp_converter <- function (x) {
 
   hyp_converted <- x

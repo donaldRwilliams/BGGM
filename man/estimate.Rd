@@ -12,14 +12,15 @@ estimate(
   analytic = FALSE,
   prior_sd = 0.25,
   iter = 5000,
-  impute = TRUE,
+  impute = FALSE,
   progress = TRUE,
   seed = 1,
   ...
 )
 }
 \arguments{
-\item{Y}{Matrix (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).}
+\item{Y}{Matrix (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).
+NAs are allowed and imputed by specifying \code{impute = TRUE}.}
 
 \item{formula}{An object of class \code{\link[stats]{formula}}. This allows for including
 control variables in the model (i.e., \code{~ gender}). See the note for further details.}
@@ -40,7 +41,7 @@ when \code{type = "mixed"} and \code{NULL} otherwise. See note for further detai
 \item{iter}{Number of iterations (posterior samples; defaults to 5000).}
 
 \item{impute}{Logicial. Should the missing values (\code{NA})
-be imputed during model fitting (defaults to \code{TRUE}) ?}
+be imputed during model fitting (defaults to \code{FALSE}) ?}
 
 \item{progress}{Logical. Should a progress bar be included (defaults to \code{TRUE}) ?}
 
