@@ -249,6 +249,8 @@ estimate  <- function(Y,
 
           Y_miss <- Y
 
+          p <- ncol(Y)
+
         } else {
 
           Y_miss <- ifelse(is.na(Y), 1, 0)
