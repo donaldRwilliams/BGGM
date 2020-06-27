@@ -81,7 +81,7 @@
 #'
 #' # impute
 #' fit_missing <- mvn_imputation(Y, progress = FALSE, iter = 250)
-#'d
+#'
 #' print(fit_missing, n_rows = 20)
 #'
 #'
