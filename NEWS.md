@@ -1,3 +1,8 @@
+# BGGM 2.0.1
+This version of BGGM included changes based on the JOSS reviews: see [here](https://github.com/openjournals/joss-reviews/issues/2111) for 
+the overview and [here](https://github.com/donaldRwilliams/BGGM/issues?q=is%3Aissue+is%3Aclosed) for specific issues.
+
+
 # BGGM 2.0.0
 
 **BGGM** was almost completely rewritten for version `2.0.0`. This was due to adding support 
