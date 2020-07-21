@@ -9,6 +9,7 @@ Version](http://www.r-pkg.org/badges/version/BGGM)](https://cran.r-project.org/p
 [![Build
 Status](https://travis-ci.org/donaldRwilliams/BGGM.svg?branch=master)](https://travis-ci.org/donaldRwilliams/BGGM)
 [![status](https://joss.theoj.org/papers/4ecb84c5b3b2a2b5da46be4e0700502f/status.svg)](https://joss.theoj.org/papers/4ecb84c5b3b2a2b5da46be4e0700502f)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.02111/status.svg)](https://doi.org/10.21105/joss.02111)
 
 The `R` package **BGGM** provides tools for making Bayesian inference in
 Gaussian graphical models (GGM). The methods are organized around two
@@ -188,7 +189,7 @@ pcor_mat(fit)
 ```
 
 |    |    B1 |      B2 |    B3 |      B4 |    B5 |
-| -- | ----: | ------: | ----: | ------: | ----: |
+| :- | ----: | ------: | ----: | ------: | ----: |
 | B1 | 0.000 |   0.258 | 0.028 |   0.356 | 0.131 |
 | B2 | 0.258 |   0.000 | 0.517 | \-0.076 | 0.127 |
 | B3 | 0.028 |   0.517 | 0.000 |   0.246 | 0.202 |
@@ -876,7 +877,7 @@ cors$R
 ```
 
 |   |       1 |       2 |       3 |       4 |       5 |       6 |
-| - | ------: | ------: | ------: | ------: | ------: | ------: |
+| :- | ------: | ------: | ------: | ------: | ------: | ------: |
 | 1 |   1.000 | \-0.198 |   0.506 |   0.122 | \-0.140 |   0.098 |
 | 2 | \-0.198 |   1.000 | \-0.482 | \-0.013 | \-0.146 | \-0.146 |
 | 3 |   0.506 | \-0.482 |   1.000 |   0.310 | \-0.343 |   0.351 |
@@ -1001,6 +1002,7 @@ models with the methods described in Williams et al. (2020).
 Albert, James H, and Siddhartha Chib. 1993. “Bayesian Analysis of Binary
 and Polychotomous Response Data.” *Journal of the American Statistical
 Association* 88 (422): 669–79.
+<https://doi.org/10.1080/01621459.1993.10476321>.
 
 </div>
 
@@ -1016,7 +1018,7 @@ Butts, Carter T. 2019. *Sna: Tools for Social Network Analysis*.
 Chu, Jen-hwa, Scott T Weiss, Vincent J Carey, and Benjamin A Raby. 2009.
 “A Graphical Model Approach for Inferring Large-Scale Networks
 Integrating Gene Expression and Genetic Polymorphism.” *BMC Systems
-Biology* 3 (1): 55.
+Biology* 3 (1): 55. <https://doi.org/10.1186/1752-0509-3-55>.
 
 </div>
 
@@ -1024,7 +1026,7 @@ Biology* 3 (1): 55.
 
 Cowles, Mary Kathryn. 1996. “Accelerating Monte Carlo Markov Chain
 Convergence for Cumulative-Link Generalized Linear Models.” *Statistics
-and Computing* 6 (2): 101–11.
+and Computing* 6 (2): 101–11. <https://doi.org/10.1007/bf00162520>.
 
 </div>
 
@@ -1046,9 +1048,9 @@ Gelman, Andrew, Ben Goodrich, Jonah Gabry, and Aki Vehtari. 2019.
 
 <div id="ref-Gelman1996a">
 
-Gelman, Andrew, Xiao-Li Meng, and Hal Stern. 1996. “Posterior predictive
-assessment of model fitness via realized discrepancies. Vol.6, No.4.”
-*Statistica Sinica* 6 (4): 733–807. <https://doi.org/10.1.1.142.9951>.
+Gelman, Andrew, Xiao-Li Meng, and Hal Stern. 1996. “Posterior Predictive
+Assessment of Model Fitness via Realized Discrepancies.” *Statistica
+Sinica* 6 (4): 733–807.
 
 </div>
 
@@ -1057,6 +1059,7 @@ assessment of model fitness via realized discrepancies. Vol.6, No.4.”
 Haslbeck, Jonas MB, and Lourens J Waldorp. 2018. “How Well Do Network
 Models Predict Observations? On the Importance of Predictability in
 Network Models.” *Behavior Research Methods* 50 (2): 853–61.
+<https://doi.org/10.3758/s13428-017-0910-x>.
 
 </div>
 
@@ -1064,6 +1067,7 @@ Network Models.” *Behavior Research Methods* 50 (2): 853–61.
 
 Hoff, Peter D. 2007. “Extending the Rank Likelihood for Semiparametric
 Copula Estimation.” *The Annals of Applied Statistics* 1 (1): 265–83.
+<https://doi.org/10.1214/07-AOAS107>.
 
 </div>
 
@@ -1086,6 +1090,7 @@ University Press.
 Jones, Payton J, Ruofan Ma, and Richard J McNally. 2019. “Bridge
 Centrality: A Network Approach to Understanding Comorbidity.”
 *Multivariate Behavioral Research*, 1–15.
+<https://doi.org/10.1080/00273171.2019.1614898>.
 
 </div>
 
@@ -1101,6 +1106,7 @@ the American Statistical Association* 90 (430): 773–95.
 Lawrence, Earl, Derek Bingham, Chuanhai Liu, and Vijayan N Nair. 2008.
 “Bayesian Inference for Multivariate Ordinal Data Using Parameter
 Expansion.” *Technometrics* 50 (2): 182–91.
+<https://doi.org/10.1198/004017008000000064>.
 
 </div>
 
@@ -1108,14 +1114,15 @@ Expansion.” *Technometrics* 50 (2): 182–91.
 
 Millington, Tristan, and Mahesan Niranjan. 2020. “Partial Correlation
 Financial Networks.” *Applied Network Science* 5 (1): 11.
+<https://doi.org/10.1007/s41109-020-0251-z>.
 
 </div>
 
 <div id="ref-mohammadi2015bdgraph">
 
 Mohammadi, Reza, and Ernst C Wit. 2015. “BDgraph: An R Package for
-Bayesian Structure Learning in Graphical Models.” *arXiv Preprint
-arXiv:1501.05108*.
+Bayesian Structure Learning in Graphical Models.” *Journal of
+Statistical Software* 89 (3). <https://doi.org/10.18637/jss.v089.i03>.
 
 </div>
 
@@ -1141,6 +1148,7 @@ Estimating and Testing Covariance Matrices.” *Bayesian Analysis*, no. 4:
 Rodriguez, Josue E, Donald R Williams, Philippe Rast, and Joris Mulder.
 2020. “On Formalizing Theoretical Expectations: Bayesian Testing of
 Central Structures in Psychological Networks.” *PsyArXiv*.
+<https://doi.org/10.31234/osf.io/zw7pf>.
 
 </div>
 
@@ -1148,7 +1156,7 @@ Central Structures in Psychological Networks.” *PsyArXiv*.
 
 Rubin, Donald B. 1984. “Bayesianly Justifiable and Relevant Frequency
 Calculations for the Applied Statistician.” *The Annals of Statistics*,
-1151–72.
+1151–72. <https://doi.org/10.1214/aos/1176346785>.
 
 </div>
 
@@ -1156,7 +1164,7 @@ Calculations for the Applied Statistician.” *The Annals of Statistics*,
 
 Sanderson, Conrad, and Ryan Curtin. 2016. “Armadillo: A Template-Based
 C++ Library for Linear Algebra.” *Journal of Open Source Software* 1
-(2): 26.
+(2): 26. <https://doi.org/10.21105/joss.00026>.
 
 </div>
 
@@ -1166,6 +1174,7 @@ Talhouk, Aline, Arnaud Doucet, and Kevin Murphy. 2012. “Efficient
 Bayesian Inference for Multivariate Probit Models with Sparse Inverse
 Correlation Matrices.” *Journal of Computational and Graphical
 Statistics* 21 (3): 739–57.
+<https://doi.org/10.1080/10618600.2012.679239>.
 
 </div>
 
@@ -1174,6 +1183,7 @@ Statistics* 21 (3): 739–57.
 Webb, Emily L, and Jonathan J Forster. 2008. “Bayesian Model
 Determination for Multivariate Ordinal and Binary Data.” *Computational
 Statistics & Data Analysis* 52 (5): 2632–49.
+<https://doi.org/10.1016/j.csda.2007.09.008>.
 
 </div>
 
@@ -1198,6 +1208,7 @@ Constraints.” *PsyArXiv*. <https://doi.org/10.31234/osf.io/ypxd8>.
 Williams, Donald R, Philippe Rast, Luis R Pericchi, and Joris Mulder.
 2020. “Comparing Gaussian Graphical Models with the Posterior Predictive
 Distribution and Bayesian Model Selection.” *Psychological Methods*.
+<https://doi.org/10.1037/met0000254>.
 
 </div>
 
@@ -1206,6 +1217,7 @@ Distribution and Bayesian Model Selection.” *Psychological Methods*.
 Zerenner, Tanja, Petra Friederichs, Klaus Lehnertz, and Andreas Hense.
 2014. “A Gaussian Graphical Model Approach to Climate Networks.” *Chaos:
 An Interdisciplinary Journal of Nonlinear Science* 24 (2): 023103.
+<https://doi.org/10.1063/1.4870402>.
 
 </div>
 
