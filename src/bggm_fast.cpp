@@ -334,7 +334,7 @@ Rcpp::List Theta_continuous(arma::mat Y,
 
       Rcpp::List ppd_impute = internal_missing_gaussian(Y, Y_missing,
                                                inv(Theta.slice(0)),
-                                               iter_missing = iter_missing);
+                                               iter_missing);
       // imputed Y
       arma::mat Y = ppd_impute["Y"];
 
