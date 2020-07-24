@@ -27,7 +27,6 @@ Imports:
     network (>= 1.15),
     reshape (>= 0.8.8),
     Rcpp (>= 1.0.4.6),
-    RcppProgress (>= 0.1),
     Rdpack (>= 0.11-1),
     sna (>= 2.5),
     stats,
