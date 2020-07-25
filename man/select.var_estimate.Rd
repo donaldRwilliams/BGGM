@@ -15,6 +15,8 @@
 \item{alternative}{A character string specifying the alternative hypothesis. It
 must be one of "two.sided" (default), "greater"  or "less".
 See note for futher details.}
+
+\item{...}{Currently ignored.}
 }
 \value{
 An object of class \code{select.var_estimate}, including

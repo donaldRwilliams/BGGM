@@ -8,8 +8,6 @@
 #'
 #' @name var_estimate
 #'
-#' @aliases tscgm_estimate
-#'
 #' @param Y Matrix (or data frame) of dimensions \emph{n} (observations) by  \emph{p} (variables).
 #'
 #' @param rho_sd Numeric. Scale of the prior distribution for the partial correlations,

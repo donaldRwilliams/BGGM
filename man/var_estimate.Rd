@@ -2,7 +2,6 @@
 % Please edit documentation in R/var_estimate.R
 \name{var_estimate}
 \alias{var_estimate}
-\alias{tscgm_estimate}
 \title{VAR: Estimation}
 \usage{
 var_estimate(

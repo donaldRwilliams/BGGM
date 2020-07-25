@@ -9,6 +9,8 @@
 #'                    must be one of "two.sided" (default), "greater"  or "less".
 #'                    See note for futher details.
 #'
+#' @param ... Currently ignored.
+#'
 #' @return An object of class \code{select.var_estimate}, including
 #'
 #' \itemize{
