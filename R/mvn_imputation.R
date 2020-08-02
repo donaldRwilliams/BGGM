@@ -172,3 +172,136 @@ print_mvn_impute <- function(x, n_rows = NULL, ...) {
     print(dat[1:n_rows, ], row.names = FALSE)
   }
 }
+
+
+
+
+#' Plot \code{mvn_imputation} Objects
+#'
+#' @param x An object of class \code{mvn_imputation}
+#'
+#' @param index Character string. Which missing value should be plotted (defaults to the first). Note
+#' that the format is in referece to the row and column (e.g., \code{10--1}).
+#' is the 10th row in the 1st column.
+#'
+#' @param cred Numeric. The credible interval width for summarizing the posterior
+#' distributions (defaults to 0.95; must be between 0 and 1).
+#'
+#' @param alpha Numeric. Transparancey of the ridges (defaults to 0.50).
+#'
+#' @param scale Numeric. This controls the overlap of densities (defaults to 1).
+#'
+#' @param color Character string. What color for tail region (\code{type = "ridgeline"} ) ?
+#' Defaults to \code{"blue"}.
+#'
+#' @param ... Currently ignored.
+#'
+#' @return An object of class \code{ggplot}.
+#'
+#' @importFrom reshape melt
+#'
+#' @importFrom ggridges stat_density_ridges
+#'
+#' @examples
+#' \donttest{
+#' # obs
+#' n <- 5000
+#'
+#' # n missing
+#' n_missing <- 1000
+#'
+#' # variables
+#' p <- 16
+#'
+#' # data
+#' Y <- MASS::mvrnorm(n, rep(0, p), ptsd_cor1)
+#'
+#' # for checking
+#' Ymain <- Y
+#'
+#' # all possible indices
+#' indices <- which(matrix(0, n, p) == 0,
+#'                  arr.ind = TRUE)
+#'
+#' # random sample of 1000 missing values
+#' na_indices <- indices[sample(5:nrow(indices),
+#'                              size = n_missing,
+#'                              replace = FALSE),]
+#'
+#' # fill with NA
+#' Y[na_indices] <- NA
+#'
+#' # missing = 1
+#' Y_miss <- ifelse(is.na(Y), 1, 0)
+#'
+#' # true values (to check)
+#' true <- unlist(sapply(1:p, function(x)
+#'         Ymain[which(Y_miss[,x] == 1),x] ))
+#'
+#' # impute
+#' fit_missing <- mvn_imputation(Y, progress = FALSE, iter = 250)
+#'
+#' index <- paste0(na_indices[1:10,1], "--", na_indices[1:10,2])
+#'
+#' plot(fit_missing, index = index)
+#' }
+#' @export
+plot.mvn_imputation <- function(x, index = NULL,
+                                cred = 0.95,
+                                alpha = 0.5,
+                                scale = 1,
+                                color = "blue", ...){
+  dat <- x$ppd_summary
+
+  samples <- x$ppd_missing
+
+  colnames(samples) <- dat$Value
+
+  # intervals
+  lb <- (1 - cred) / 2
+
+  ub <- 1 - lb
+
+  if(is.null(index)){
+
+    plt_dat <- reshape::melt( samples[,dat[1,]$Value])
+
+  } else {
+
+
+    if(!all(index %in% colnames(samples))){
+      stop("values not found. Must be row followed by column (e.g., 200--1)")
+    }
+
+    plt_dat <- reshape::melt( samples[,index])
+
+
+  }
+
+
+  color <- grDevices::adjustcolor(color,
+                                  alpha.f = alpha)
+
+  plt_dat$X2 <- as.factor(plt_dat$X2)
+  ggplot(plt_dat, aes(x = value, y = X2, fill = factor(stat(quantile)))  ) +
+    geom_density_ridges(rel_min_height = 0.01)
+
+
+
+  plt <- ggplot(plt_dat, aes(x = value,
+                             y = X2,
+                             fill=factor(stat(quantile)))) +
+    stat_density_ridges(rel_min_height = 0.01,
+                        geom = "density_ridges_gradient",
+                        calc_ecdf = TRUE,
+                        quantiles = c(lb, ub),
+                        scale = scale) +
+    scale_fill_manual(name = "Probability",
+                      values = c(color,
+                                 "#A6A6A680",
+                                 color)) +
+    ylab("index") +
+    theme(legend.position = "none")
+
+  plt
+}

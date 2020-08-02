@@ -4,10 +4,51 @@
 #include <progress.hpp>
 #include <progress_bar.hpp>
 #include <truncnorm.h>
+#include <RcppArmadilloExtensions/sample.h>
 // [[Rcpp::depends(RcppArmadillo, RcppDist, RcppProgress)]]
 
 // helpers are first (avoids separate files)
 
+// type 1 quantile from base R
+// [[Rcpp::export]]
+double quantile_type_1(arma::vec x, double prob){
+
+  arma::mat sort_x = sort(x.elem(find_finite(x)));
+
+  int n = sort_x.n_rows;
+
+  float nppm =  n * prob;
+
+  float j = floor(nppm);
+
+  // float h = 0;
+
+  float qs = 0;
+
+  arma::mat x_1(2, 1);
+  arma::mat x_n(2, 1);
+
+  x_1.col(0).row(0) = sort_x(0);
+  x_1.col(0).row(1) = sort_x(0);
+
+  x_n.col(0).row(0) = sort_x(n - 1);
+  x_n.col(0).row(1) = sort_x(n - 1);
+
+  arma::mat join_x = join_vert(x_1, sort_x, x_n);
+
+  if(nppm > j){
+
+    qs = join_x(j + 3);
+
+  } else {
+
+    qs = join_x(j + 2);
+
+  }
+
+  return qs;
+
+}
 
 // [[Rcpp::export]]
 arma::mat Sigma_i_not_i(arma::mat x, int index) {
@@ -757,11 +798,8 @@ Rcpp::List mv_binary(arma::mat Y,
   // number of predictors
   int p = X.n_cols;
 
-  // arma::rowvec ct = cutpoints;
-
-  // int epsilon1 = epsilon;
-
   int nu = 1 / epsilon;
+
   // #nu in Mulder & Pericchi (2018) formula (30) line 1.
   int nuMP = delta + k - 1 ;
 
@@ -886,16 +924,9 @@ Rcpp::List mv_binary(arma::mat Y,
 
           z0.slice(0).col(i).row(j) =   temp_j;
 
+          }
         }
-
-
-
       }
-
-
-    }
-
-
 
     // D matrix
     for(int i = 0; i < k; ++i){
@@ -943,22 +974,6 @@ Rcpp::List mv_binary(arma::mat Y,
     Rinv.slice(0)   = inv(cors);
 
     R.slice(0) = cors;
-
-
-    // // latent data
-    // for(int i = 0; i < n; ++i){
-    //
-    //   Rcpp::List z_samples = trunc_mvn(Xbhat.slice(0).row(i).t(),
-    //                                    Rinv.slice(0),
-    //                                    z0.slice(0).row(i).t(),
-    //                                    Y.row(i).t(),
-    //                                    cutpoints);
-    //
-    //   arma::mat z_i = z_samples[0];
-    //
-    //   z0.slice(0).row(i) = z_i.t();
-    //
-    // }
 
     beta_mcmc.slice(s) =reshape(beta, p,k);
     pcors_mcmc.slice(s) =  -(pcors - I_k);
@@ -1267,8 +1282,9 @@ Rcpp::List mv_ordinal_albert(arma::mat Y,
                           float epsilon,
                           int K,
                           arma::mat start,
-                          bool progress
-                          ){
+                          bool progress,
+                          arma::mat Y_missing,
+                          bool impute){
 
 
   Progress  pr(iter, progress);
@@ -1363,15 +1379,21 @@ Rcpp::List mv_ordinal_albert(arma::mat Y,
   // ordinal levels
   arma::vec n_levels = unique(Y.col(0));
 
+  arma::uvec index = find(Y_missing == 1);
+
+  int n_na = index.n_elem;
+
+  arma::mat ppd_missing(iter, n_na, arma::fill::zeros);
+
   Rinv.slice(0).fill(arma::fill::eye);
   R.slice(0).fill(arma::fill::eye);
   Dinv.slice(0).fill(arma::fill::eye);
   Psi.slice(0).fill(arma::fill::eye);
   Sigma.slice(0) = inv(start);
   Theta.slice(0) = start;
+
   // draw coefs conditional on w
   arma::mat gamma(p, k, arma::fill::zeros);
-
   arma::cube thresh(iter, K+1, k, arma::fill::zeros);
 
   for(int i = 0; i < k; ++i){
@@ -1412,6 +1434,7 @@ Rcpp::List mv_ordinal_albert(arma::mat Y,
         Sigma_i_not_i(R.slice(0), i).t();
 
       if(s == 1){
+
         // generate latent data
         for(int j = 0; j < n; ++j){
 
@@ -1430,7 +1453,7 @@ Rcpp::List mv_ordinal_albert(arma::mat Y,
       } else{
 
 
-        for(int i = 0; i < k; ++i){
+        // for(int i = 0; i < k; ++i){
 
           for(int j = 2; j < (K); ++j){
             arma::vec lb = {select_col(z0.slice(0), i).elem(find(Y.col(i) == j)).max(), thresh.slice(i)(s-1, j-1) };
@@ -1438,7 +1461,7 @@ Rcpp::List mv_ordinal_albert(arma::mat Y,
             arma::vec v = Rcpp::runif(1,  lb.max(), ub.min());
             thresh.slice(i).row(s).col(j) =  arma::conv_to<double>::from(v);
 
-          }
+          // }
         }
 
         // generate latent data
@@ -1453,13 +1476,44 @@ Rcpp::List mv_ordinal_albert(arma::mat Y,
 
             // location and scale
             mm(j), sqrt(ss(0)), TRUE, FALSE);
+          }
         }
+
+      // imputation step
+      if(impute){
+
+        arma::vec Y_j = Y_missing.col(i);
+
+        double check_na = sum(Y_j);
+
+      if(check_na > 0){
+
+        arma::uvec  index_j = find(Y_missing.col(i) == 1);
+
+        int  n_missing = index_j.n_elem;
+
+        for(int m = 0; m < n_missing; ++m){
+
+          arma::vec ppd_i = Rcpp::rnorm(1,  mm(index_j[m]), sqrt(ss(0)));
+
+          z0.slice(0).col(i).row(index_j[m]) = ppd_i(0);
+
+          for(int l = 0; l < K; ++l){
+            arma::vec temp1 = thresh.slice(i).row(s).col(l);
+            arma::vec temp2 = thresh.slice(i).row(s).col(l+1);
+
+            if(ppd_i(0) >=  temp1(0) &&  ppd_i(0) <= temp2(0)){
+              Y.col(i).row(index_j[m]) = l + 1;
+            }
+          }
         }
       }
+    }
+  }
 
     for(int i = 0; i < k; ++i){
       D.row(i).col(i) = sqrt(1 / R::rgamma((delta + k - 1) / 2,
-                   2 / arma::conv_to<double>::from(Rinv.slice(0).row(i).col(i))));
+                        2 / arma::conv_to<double>::from(Rinv.slice(0).row(i).col(i))));
     }
 
     // expand latent data
@@ -1479,10 +1533,8 @@ Rcpp::List mv_ordinal_albert(arma::mat Y,
     // update Yhat
     Xbhat.slice(0) = X * beta;
 
-    // error scatter matrix
-    S_Y =   w.t() * w + I_k - M.t() * S_X * M;
-
-    // } while (det(S_Y) < 0);
+    // scatter matrix
+    S_Y = w.t() * w + I_k - M.t() * S_X * M;
 
     // sample Psi
     Psi.slice(0) = wishrnd(inv(BMPinv + Theta.slice(0)), nuMP + deltaMP + k - 1);
@@ -1514,11 +1566,10 @@ Rcpp::List mv_ordinal_albert(arma::mat Y,
 
     beta_mcmc.slice(s) =reshape(beta, p,k);
     pcors_mcmc.slice(s) =  -(pcors - I_k);
-    // cors_mcmc.slice(s) =  cors;
-    // Sigma_mcmc.slice(s) = Sigma.slice(0);
-    // Theta_mcmc.slice(s) = Theta.slice(0);
-    // thresh.row(s) = thresh.slice(0).row(s);
 
+    if(impute){
+    ppd_missing.row(s) = Y.elem(index).t();
+    }
   }
 
   arma::cube fisher_z = atanh(pcors_mcmc);
@@ -1531,6 +1582,7 @@ Rcpp::List mv_ordinal_albert(arma::mat Y,
   ret["beta"] = beta_mcmc;
   ret["thresh"]  = thresh;
   ret["fisher_z"] = fisher_z;
+  ret["ppd_mean"] = ppd_missing;
   return  ret;
 
 
@@ -1547,8 +1599,11 @@ Rcpp::List  copula(arma::mat z0_start,
                    float delta,
                    float epsilon,
                    arma::vec idx,
-                   bool progress
-                   ) {
+                   bool progress,
+                   arma::mat Y_missing,
+                   bool impute,
+                   arma::mat Y
+                   ){
 
   // adapted from hoff 2008 for Bayesian hypothesis testing
   // with the matrix-F prior distribution for Theta
@@ -1558,6 +1613,8 @@ Rcpp::List  copula(arma::mat z0_start,
   // K: levels in each columns
 
   Progress  pr(iter, progress);
+
+  arma::mat Y_impute = Y;
 
   // number of rows
   float n = z0_start.n_rows;
@@ -1569,9 +1626,10 @@ Rcpp::List  copula(arma::mat z0_start,
   arma::mat  I_k(k, k, arma::fill::eye);
 
   int nu = 1/ epsilon;
+
   // // #nu in Mulder & Pericchi (2018) formula (30) line 1.
   int nuMP = delta + k - 1;
-  //
+
   // // #delta in Mulder & Pericchi (2018) formula (30) line 1.
   int deltaMP = nu - k + 1;
 
@@ -1607,16 +1665,18 @@ Rcpp::List  copula(arma::mat z0_start,
   // correlations
   arma::mat  cors(k,k);
   arma::cube cors_mcmc(k, k, iter, arma::fill::zeros);
-//
-  // covariance matrix
-  // Sigma.slice(0) = Sigma_start;
-  // arma::cube Sigma_mcmc(k, k, iter, arma::fill::zeros);
 
   arma::vec lb(1);
   arma::vec ub(1);
 
   arma::mat mm(n,1);
   arma::mat ss(1,1);
+
+  arma::uvec index = find(Y_missing == 1);
+
+  int n_na = index.n_elem;
+
+  arma::mat ppd_missing(iter, n_na, arma::fill::zeros);
 
   for(int  s = 1; s < iter; ++s){
 
@@ -1673,6 +1733,33 @@ Rcpp::List  copula(arma::mat z0_start,
           }
         }
       }
+
+      // imputation step
+      if(impute){
+
+       arma::vec Y_j = Y_missing.col(i);
+
+       double check_na = sum(Y_j);
+
+       if(check_na > 0){
+
+         arma::uvec  index_j = find(Y_missing.col(i) == 1);
+
+         int  n_missing = index_j.n_elem;
+
+         for(int m = 0; m < n_missing; ++m){
+
+           arma::vec ppd_i = Rcpp::rnorm(1,  mm(index_j[m]), sqrt(ss(0)));
+
+           // double p_i = R::pnorm(ppd_i(0), 0, sqrt(ss(0)), TRUE, FALSE);
+
+           Y_impute.col(i).row(index_j[m]) =  quantile_type_1(Y.col(i), R::pnorm(ppd_i(0), 0, sqrt(ss(0)), TRUE, FALSE));
+
+           z0.slice(0).col(i).row(index_j[m]) = ppd_i(0);
+
+          }
+        }
+      }
     }
 
     // novel matrix-F prior distribution
@@ -1687,21 +1774,17 @@ Rcpp::List  copula(arma::mat z0_start,
     // sigma
     Sigma.slice(0) = inv(Theta.slice(0));
 
-    // // correlation
-    // cors =  diagmat(1 / sqrt(Sigma.slice(0).diag())) *
-    //   Sigma.slice(0) *
-    //   diagmat(1 / sqrt(Sigma.slice(0).diag()));
-
     // partial correlations
     pcors = diagmat(1 / sqrt(Theta.slice(0).diag())) *
       Theta.slice(0) *
       diagmat(1 / sqrt(Theta.slice(0).diag()));
 
     pcors_mcmc.slice(s) =  -(pcors - I_k);
-    // cors_mcmc.slice(s) =  cors;
-    // Sigma_mcmc.slice(s) = Sigma.slice(0);
-    // Theta_mcmc.slice(s) = Theta.slice(0);
-  }
+
+    if(impute){
+      ppd_missing.row(s) = Y_impute.elem(index).t();
+      }
+    }
 
   arma::cube fisher_z = atanh(pcors_mcmc);
   arma::mat  pcor_mat = mean(pcors_mcmc.tail_slices(iter - 50), 2);
@@ -1710,6 +1793,7 @@ Rcpp::List  copula(arma::mat z0_start,
   ret["pcors"] = pcors_mcmc;
   ret["pcor_mat"] = pcor_mat;
   ret["fisher_z"] = fisher_z;
+  ret["ppd_mean"] = ppd_missing;
   return ret;
 }
 
@@ -2282,3 +2366,195 @@ Rcpp::List var(arma::mat Y,
   return ret;
 }
 
+// [[Rcpp::export]]
+Rcpp::List hft_algorithm(arma::mat Sigma, arma::mat adj, double tol, double max_iter) {
+
+  arma::mat S = Sigma;
+  arma::mat W = S;
+
+  arma::uvec upper_indices = trimatu_ind( size(S) );
+  arma::mat W_previous = S;
+  double p = S.n_cols;
+  arma::mat iter(1,1, arma::fill::zeros);
+  double max_diff = 100;
+  arma::mat w_12(1, p-1);
+
+  while(max_diff > tol){
+
+    for(int i = 0; i < p; ++i){
+
+      arma::mat beta(1,p-1, arma::fill::zeros);
+      arma::uvec pad_index =  find(Sigma_i_not_i(adj, i) == 1);
+
+      if(pad_index.n_elem == 0 ){
+        w_12 = beta;
+      } else {
+
+        arma::mat W_11 = remove_row(remove_col(W , i), i);
+        arma::mat s_12 = Sigma_i_not_i(S,i);
+
+        arma::mat W_11_star = W_11.submat(pad_index, pad_index);
+        arma::mat s_12_star = s_12(pad_index);
+
+        beta(pad_index) = inv(W_11_star) * s_12_star;
+        arma::mat w_12 = W_11 * beta.t();
+        arma::mat temp = W.col(i).row(i);
+        w_12.insert_rows(i, temp);
+
+        for(int k = 0; k < p; ++k){
+          W.row(i).col(k) = w_12(k);
+          W.row(k).col(i) = w_12(k);
+        }
+
+        max_diff = max(W.elem(upper_indices) -  W_previous.elem(upper_indices));
+        W_previous = W;
+      }
+    }
+
+    iter(0,0) = iter(0,0) + 1;
+
+    if(iter(0,0) == max_iter){
+      break;
+    }
+
+  }
+
+  arma::mat Theta = inv(W) % adj;
+  arma::mat W_return = inv(Theta);
+
+  Rcpp::List ret;
+  ret["Theta"] = Theta;
+  ret["Sigma"] = W_return;
+  ret["iter"]  =  iter;
+  return ret;
+}
+
+
+// [[Rcpp::export]]
+double bic_fast(arma::mat Theta,
+                arma::mat S,
+                double n,
+                float prior_prob){
+
+  // int p = Theta.n_cols;
+  arma::mat UU = trimatu(Theta,  1);
+
+  arma::vec nonzero = nonzeros(UU);
+  double neg_ll =  -2 * ((n*0.5) * (log(det(Theta)) - trace(S * Theta)));
+
+  double bic = neg_ll + (nonzero.n_elem * log(n) - (nonzero.n_elem * log(prior_prob / (1 - prior_prob))));
+  // (4 * nonzero.n_elem * gamma * log(p));
+  return bic;
+}
+
+// [[Rcpp::export]]
+Rcpp::List find_ids(arma::mat x){
+  arma::mat UU = trimatu(x,  1);
+  arma::uvec alt_lower_indices = trimatl_ind( size(x),  -1);
+  UU.elem(alt_lower_indices).fill(10);
+  UU.diag().fill(10);
+  arma::uvec zero = find(UU == 0);
+  arma::uvec nonzero = find(UU == 1);
+
+  Rcpp::List ret;
+  ret["nonzero"] = nonzero;
+  ret["zero"] = zero;
+  return ret;
+
+
+}
+
+// [[Rcpp::export]]
+Rcpp::List search(arma::mat S, float iter,
+                  double old_bic,
+                  arma::mat start_adj,
+                  float n,
+                  float gamma,
+                  int stop_early,
+                  bool progress){
+
+
+  // progress
+  Progress  pr(iter, progress);
+
+  int p = S.n_cols;
+
+  arma::cube adj(p, p, iter);
+
+  arma::mat adj_s = start_adj;
+
+  Rcpp::List start =  find_ids(start_adj);
+
+  arma::uvec zeros = start["zero"];
+  arma::uvec nonzeros = start["nonzero"];
+
+  arma::mat adj_mat(p,p);
+
+  arma::mat mat_old = adj_mat;
+
+  arma::vec bics(iter, arma::fill::zeros);
+
+  arma::vec acc(1, arma::fill::zeros);
+
+  arma::vec repeats(1, arma::fill::zeros);
+
+  for(int s = 0; s < iter; ++s){
+
+    pr.increment();
+
+    // if (s % 250 == 0){
+    //   Rcpp::checkUserInterrupt();
+    // }
+
+    adj_s = mat_old;
+
+    if (s % 2 == 0){
+      arma::vec id_add = Rcpp::RcppArmadillo::sample(arma::conv_to<arma::vec>::from(zeros), 1, false);
+      adj_s.elem(arma::conv_to<arma::uvec>::from(id_add)).fill(1);
+      adj_mat = symmatu(adj_s);
+      adj_mat.diag().fill(1);
+      } else {
+      arma::vec id_add = Rcpp::RcppArmadillo::sample(arma::conv_to<arma::vec>::from(nonzeros), 1, false);
+      adj_s.elem(arma::conv_to<arma::uvec>::from(id_add)).fill(0);
+      adj_mat = symmatu(adj_s);
+      adj_mat.diag().fill(1);
+    }
+
+    Rcpp::List fit = hft_algorithm(S, adj_mat, 0.00001, 10);
+    arma::mat Theta = fit["Theta"];
+
+    double new_bic = bic_fast(Theta, S, n, gamma);
+
+    if(exp(-0.5 * (new_bic - old_bic)) > 1){
+      mat_old = adj_mat;
+      adj.slice(s) = adj_mat;
+      old_bic = new_bic;
+      acc(0) = acc(0) + 1;
+      Rcpp::List start =  find_ids(start_adj);
+      arma::uvec zeros = start["zero"];
+      arma::uvec nonzeros = start["nonzero"];
+
+      repeats(0) = 0;
+
+    } else {
+
+      adj.slice(s) = adj_s;
+      repeats(0) = repeats(0) + 1;
+
+    }
+
+    bics(s) = old_bic;
+
+    if(repeats(0) > stop_early){
+      break;
+    }
+  }
+
+  Rcpp::List ret;
+  ret["p"] = p;
+  ret["adj_mat"] = adj_mat;
+  ret["bics"] = bics;
+  ret["adj"]= adj;
+  ret["acc"] = acc;
+  return ret;
+}

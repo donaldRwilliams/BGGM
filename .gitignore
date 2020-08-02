@@ -11,3 +11,4 @@ src/*.dll
 doc
 Meta
 custom.css
+^NEWS\.md$
