@@ -13,7 +13,7 @@ precision(object, progress = TRUE)
 }
 \value{
 A 3d array of dimensions \code{p} by \code{p} by \code{iter} including
-**unconstrained** (i.e., from th full graph) precision matrices.
+\strong{unconstrained} (i.e., from th full graph) precision matrices.
 }
 \description{
 Transform the sampled correlation matrices to

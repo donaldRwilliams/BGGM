@@ -163,7 +163,8 @@ ggm_search <- function(x, n = NULL,
 
     # BFs vs mpm
     delta <- approx_marg_ll - min(approx_marg_ll)
-    probs <- exp(-0.5 * delta) / sum( exp(-0.5 * delta))
+
+    probs <- exp(-0.5 * delta) / sum( exp(-0.5 * delta) )
 
     Theta_map <- BGGM:::hft_algorithm(Sigma = S,
                                adj = adj,
@@ -173,7 +174,6 @@ ggm_search <- function(x, n = NULL,
       pcor_adj <- -cov2cor(Theta_map$Theta) + diag(2, p)
 
   }
-
 
   if(bma_mean & acc > 0){
 
@@ -218,7 +218,8 @@ ggm_search <- function(x, n = NULL,
 
   rm(.Random.seed, envir=.GlobalEnv)
 
-  class(returned_object) <- c("BGGM", "ggm_search")
+  class(returned_object) <- c("BGGM",
+                              "ggm_search")
 
   return( returned_object )
 }
