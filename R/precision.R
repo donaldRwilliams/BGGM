@@ -28,13 +28,13 @@
 #'
 precision <- function(object, progress = TRUE){
 
-  if(is(x,"estimate") & is(x,"default")){
+  if(is(object,"estimate") & is(object,"default")){
 
-    iter <- x$iter
+    iter <- object$iter
 
-    p <- x$p
+    p <- object$p
 
-    cors <- pcor_to_cor(x)$R
+    cors <- pcor_to_cor(object)$R
 
     if(isTRUE(progress)){
       pb <- utils::txtProgressBar(min = 0, max = iter, style = 3)
