@@ -137,8 +137,6 @@ print.BGGM <- function(x, ...) {
 
     }
 
-
-
     if (is(x, "select.ggm_compare_bf")) {
       print_select_ggm_compare_bf(x, ...)
     }
@@ -184,6 +182,9 @@ if(is(x, "roll_your_own")){
   print_roll_your_own(x, ...)
  }
 
+  if(is(x, "ggm_search")){
 
+    print_ggm_search(x,..)
+    }
 
 }

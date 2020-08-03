@@ -63,8 +63,8 @@ A list of class \code{ggm_search}. For users of \strong{BGGM}, the following
 }
 }
 \description{
-Search the data for promising graphs. In the case of model uncertainty, a
-the Bayesian model averaged weighted adjacency matrix is provided.
+Search the data for promising graphs. In the case of model uncertainty,
+Bayesian model averaging is employed.
 }
 \details{
 The algorithm does not scale particularly well with \code{p} (the number of nodes).

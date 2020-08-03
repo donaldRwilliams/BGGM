@@ -1,7 +1,7 @@
 #' @title Search Algorithm
 #'
-#' @description Search the data for promising graphs. In the case of model uncertainty, a
-#' the Bayesian model averaged weighted adjacency matrix is provided.
+#' @description Search the data for promising graphs. In the case of model uncertainty,
+#' Bayesian model averaging is employed.
 #'
 #'
 #' @param x Either a \code{n} by \code{p} data matrix or a \code{p} by \code{p} correlation matrix.
@@ -214,9 +214,51 @@ ggm_search <- function(x, n = NULL,
                           selected = selected,
                           BF_start = BF_10,
                           adj_path = adj_path,
-                          acc = acc)
+                          acc = acc, S = S)
 
   rm(.Random.seed, envir=.GlobalEnv)
 
+  class(returned_object) <- c("BGGM", "ggm_search")
+
   return( returned_object )
+}
+
+
+print_ggm_search <- function(x, ...){
+
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+
+  if(x$acc == 0){
+    mat <- x$pcor_adj
+    p <- ncol(mat)
+
+    if(is.null( colnames(x$S))){
+      colnames(mat) <- 1:p
+      row.names(mat) <- 1:p
+
+    } else {
+      colnames(mat) <- colnames(x$S)
+      row.names(mat) <- colnames(x$S)
+    }
+
+    cat("Most Probable Graph:\n\n")
+    print(round(mat, 3))
+
+  } else {
+    mat <- x$pcor_bma
+    p <- ncol(mat)
+
+    if(is.null( colnames(x$S))){
+      colnames(mat) <- 1:p
+      row.names(mat) <- 1:p
+
+    } else {
+      colnames(mat) <- colnames(x$S)
+      row.names(mat) <- colnames(x$S)
+    }
+    cat("Bayesian Model Averaged Graph:\n\n")
+    print(round(mat, 3))
+
+  }
 }
