@@ -104,8 +104,7 @@ predictability <- function(object,
     )
 
     post_samps <- posterior_samples(object)
-   # r2 <- 1
-    # nrow(post_samps)
+
 
     if(isTRUE(progress)){
       pb <- utils::txtProgressBar(min = 0, max = p, style = 3)
