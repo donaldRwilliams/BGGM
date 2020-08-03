@@ -1,5 +1,9 @@
 #' @title Search Algorithm
 #'
+#' @description Search the data for promising graphs. In the case of model uncertainty, a
+#' the Bayesian model averaged weighted adjacency matrix is provided.
+#'
+#'
 #' @param x Either a \code{n} by \code{p} data matrix or a \code{p} by \code{p} correlation matrix.
 #'
 #' @param n Numeric. Sample size. This is required if \code{x} is a correlation matrix.
@@ -75,7 +79,7 @@ ggm_search <- function(x, n = NULL,
                        progress = TRUE, ...){
 
   set.seed(seed)
-
+  x <- Y
   if (base::isSymmetric(as.matrix(x))) {
     S <- x
   } else {
@@ -112,7 +116,7 @@ ggm_search <- function(x, n = NULL,
                         prior_prob = prior_prob)
 
     if(isTRUE(progress)){
-      message(paste0("BGGM: Sampling Graphs", ...))
+      message(paste0("BGGM: Sampling Graphs"))
     }
 
     fit <- .Call('_BGGM_search',
@@ -152,7 +156,7 @@ ggm_search <- function(x, n = NULL,
     selected <- which.min(approx_marg_ll)
 
     if(acc == 0){
-      adj <- fit$adj
+      adj <- fit$adj[,,1]
     } else {
       adj <-  fit$adj[,,selected]
     }
@@ -161,17 +165,17 @@ ggm_search <- function(x, n = NULL,
     delta <- approx_marg_ll - min(approx_marg_ll)
     probs <- exp(-0.5 * delta) / sum( exp(-0.5 * delta))
 
-    Theta_map <- hft_algorithm(Sigma = S,
+    Theta_map <- BGGM:::hft_algorithm(Sigma = S,
                                adj = adj,
                                tol = 1e-10,
                                max_iter = 100)
 
-    pcor_adj <- -cov2cor(Theta_map$Theta) + diag(2, p)
+      pcor_adj <- -cov2cor(Theta_map$Theta) + diag(2, p)
 
   }
 
 
-  if(bma_mean){
+  if(bma_mean & acc > 0){
 
     graph_ids <- which(duplicated(approx_marg_ll) == 0)[-1]
 
@@ -181,13 +185,13 @@ ggm_search <- function(x, n = NULL,
 
     graphs <- adj_path[,,graph_ids]
 
-    Theta_bma <- lapply(1:length(probs), function(x)
+    Theta_bma <- lapply(1:length(probs), function(x){
 
-      hft_algorithm(Sigma = S,
+     BGGM:::hft_algorithm(Sigma = S,
                     adj = graphs[,,x],
                     tol =1e-10,
                     max_iter = 1000)$Theta * probs[x]
-    )
+      })
 
     Theta_bma <- Reduce("+", Theta_bma)
     pcor_bma <- -cov2cor(Theta_bma) + diag(2, p)
@@ -198,8 +202,6 @@ ggm_search <- function(x, n = NULL,
     pcor_bma <- NULL
 
   }
-
-
 
   returned_object <- list(pcor_adj = pcor_adj,
                           Theta_map = Theta_map,
