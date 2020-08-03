@@ -96,7 +96,7 @@ ggm_search <- function(x, n = NULL,
     pcors <- -cov2cor( solve(S) ) + diag(2, p)
 
     # test full vs missing one edge
-    BF_01 <- exp(-0.5 *  (BGGM:::tstat(r = pcors, n = n, p - 2)^2 - log(n)))
+    BF_01 <- exp(-0.5 *  (tstat(r = pcors, n = n, p - 2)^2 - log(n)))
     BF_10 <- 1/BF_01
 
     adj_start <- ifelse(BF_10 > 1, 1, 0)
@@ -115,12 +115,14 @@ ggm_search <- function(x, n = NULL,
       message(paste0("BGGM: Sampling Graphs", ...))
     }
 
-    fit <- search(S = S,
+    fit <- .Call('_BGGM_search',
+                 PACKAGE = 'BGGM',
+                  S = S,
                   iter = iter,
                   old_bic = bic_old,
                   start_adj = adj_start,
-                  gamma = prior_prob,
                   n = n,
+                  gamma = prior_prob,
                   stop_early = stop_early,
                   progress = progress)
 

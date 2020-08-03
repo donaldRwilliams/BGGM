@@ -2340,30 +2340,20 @@ Rcpp::List hft_algorithm(arma::mat Sigma, arma::mat adj, double tol, double max_
   }
 
   arma::mat Theta = inv(W) % adj;
-  arma::mat W_return = inv(Theta);
-
   Rcpp::List ret;
   ret["Theta"] = Theta;
-  ret["Sigma"] = W_return;
-  ret["iter"]  =  iter;
   return ret;
 }
 
-
 // [[Rcpp::export]]
-double bic_fast(arma::mat Theta,
-                arma::mat S,
-                double n,
-                float prior_prob){
+double bic_fast(arma::mat Theta, arma::mat S, double n, float prior_prob){
 
-  // int p = Theta.n_cols;
   arma::mat UU = trimatu(Theta,  1);
 
   arma::vec nonzero = nonzeros(UU);
   double neg_ll =  -2 * ((n*0.5) * (log(det(Theta)) - trace(S * Theta)));
 
   double bic = neg_ll + (nonzero.n_elem * log(n) - (nonzero.n_elem * log(prior_prob / (1 - prior_prob))));
-  // (4 * nonzero.n_elem * gamma * log(p));
   return bic;
 }
 
@@ -2385,7 +2375,8 @@ Rcpp::List find_ids(arma::mat x){
 }
 
 // [[Rcpp::export]]
-Rcpp::List search(arma::mat S, float iter,
+Rcpp::List search(arma::mat S,
+                  float iter,
                   double old_bic,
                   arma::mat start_adj,
                   float n,
@@ -2394,7 +2385,6 @@ Rcpp::List search(arma::mat S, float iter,
                   bool progress){
 
 
-  // progress
   Progress  pr(iter, progress);
 
   int p = S.n_cols;
@@ -2433,6 +2423,7 @@ Rcpp::List search(arma::mat S, float iter,
       adj_s.elem(arma::conv_to<arma::uvec>::from(id_add)).fill(1);
       adj_mat = symmatu(adj_s);
       adj_mat.diag().fill(1);
+
     } else {
       arma::vec id_add = Rcpp::RcppArmadillo::sample(arma::conv_to<arma::vec>::from(nonzeros), 1, false);
       adj_s.elem(arma::conv_to<arma::uvec>::from(id_add)).fill(0);
@@ -2440,9 +2431,8 @@ Rcpp::List search(arma::mat S, float iter,
       adj_mat.diag().fill(1);
     }
 
-    Rcpp::List fit = hft_algorithm(S, adj_mat, 0.00001, 10);
-    arma::mat Theta = fit["Theta"];
-
+    Rcpp::List fit1 = hft_algorithm(S, adj_mat, 0.00001, 10);
+    arma::mat  Theta = fit1["Theta"];
     double new_bic = bic_fast(Theta, S, n, gamma);
 
     if(exp(-0.5 * (new_bic - old_bic)) > 1){
@@ -2476,5 +2466,7 @@ Rcpp::List search(arma::mat S, float iter,
   ret["bics"] = bics;
   ret["adj"]= adj;
   ret["acc"] = acc;
+
   return ret;
 }
+
