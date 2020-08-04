@@ -117,3 +117,19 @@ var <- function(Y, X, delta, epsilon, beta_prior, iter, start, progress) {
     .Call(`_BGGM_var`, Y, X, delta, epsilon, beta_prior, iter, start, progress)
 }
 
+hft_algorithm <- function(Sigma, adj, tol, max_iter) {
+    .Call(`_BGGM_hft_algorithm`, Sigma, adj, tol, max_iter)
+}
+
+bic_fast <- function(Theta, S, n, prior_prob) {
+    .Call(`_BGGM_bic_fast`, Theta, S, n, prior_prob)
+}
+
+find_ids <- function(x) {
+    .Call(`_BGGM_find_ids`, x)
+}
+
+search <- function(S, iter, old_bic, start_adj, n, gamma, stop_early, progress) {
+    .Call(`_BGGM_search`, S, iter, old_bic, start_adj, n, gamma, stop_early, progress)
+}
+

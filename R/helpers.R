@@ -9,6 +9,10 @@
 #' @importFrom stats model.matrix terms cor
 
 
+tstat <- function(r, n, k){
+  r * sqrt(((n - 2 - k) / (1-r^2)))
+}
+
 hyp_converter <- function (x) {
 
   hyp_converted <- x

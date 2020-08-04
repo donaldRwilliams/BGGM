@@ -137,8 +137,6 @@ print.BGGM <- function(x, ...) {
 
     }
 
-
-
     if (is(x, "select.ggm_compare_bf")) {
       print_select_ggm_compare_bf(x, ...)
     }
@@ -166,24 +164,27 @@ print.BGGM <- function(x, ...) {
   }  # end confirm
 
   # coefficients
-  if(is(x, "coef")){
+  if( is(x, "coef") ){
 
-    if(is(x, "summary.coef")){
+    if( is(x, "summary.coef") ){
 
       print_summary_coef(x, ...)
 
       } else {
 
         print_coef(x,...)
-
       }
+    }
+
+  if (is(x, "roll_your_own")) {
+    print_roll_your_own(x, ...)
   }
 
-if(is(x, "roll_your_own")){
+  if (is(x, "ggm_search")) {
+    print_ggm_search(x, ..)
+  }
 
-  print_roll_your_own(x, ...)
- }
-
-
-
+  if(is(x, "precision")){
+    print_precision(x, ...)
+    }
 }

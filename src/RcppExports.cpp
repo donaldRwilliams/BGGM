@@ -437,6 +437,63 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// hft_algorithm
+Rcpp::List hft_algorithm(arma::mat Sigma, arma::mat adj, double tol, double max_iter);
+RcppExport SEXP _BGGM_hft_algorithm(SEXP SigmaSEXP, SEXP adjSEXP, SEXP tolSEXP, SEXP max_iterSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type Sigma(SigmaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type adj(adjSEXP);
+    Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
+    Rcpp::traits::input_parameter< double >::type max_iter(max_iterSEXP);
+    rcpp_result_gen = Rcpp::wrap(hft_algorithm(Sigma, adj, tol, max_iter));
+    return rcpp_result_gen;
+END_RCPP
+}
+// bic_fast
+double bic_fast(arma::mat Theta, arma::mat S, double n, float prior_prob);
+RcppExport SEXP _BGGM_bic_fast(SEXP ThetaSEXP, SEXP SSEXP, SEXP nSEXP, SEXP prior_probSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type Theta(ThetaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
+    Rcpp::traits::input_parameter< double >::type n(nSEXP);
+    Rcpp::traits::input_parameter< float >::type prior_prob(prior_probSEXP);
+    rcpp_result_gen = Rcpp::wrap(bic_fast(Theta, S, n, prior_prob));
+    return rcpp_result_gen;
+END_RCPP
+}
+// find_ids
+Rcpp::List find_ids(arma::mat x);
+RcppExport SEXP _BGGM_find_ids(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(find_ids(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// search
+Rcpp::List search(arma::mat S, float iter, double old_bic, arma::mat start_adj, float n, float gamma, int stop_early, bool progress);
+RcppExport SEXP _BGGM_search(SEXP SSEXP, SEXP iterSEXP, SEXP old_bicSEXP, SEXP start_adjSEXP, SEXP nSEXP, SEXP gammaSEXP, SEXP stop_earlySEXP, SEXP progressSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
+    Rcpp::traits::input_parameter< float >::type iter(iterSEXP);
+    Rcpp::traits::input_parameter< double >::type old_bic(old_bicSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type start_adj(start_adjSEXP);
+    Rcpp::traits::input_parameter< float >::type n(nSEXP);
+    Rcpp::traits::input_parameter< float >::type gamma(gammaSEXP);
+    Rcpp::traits::input_parameter< int >::type stop_early(stop_earlySEXP);
+    Rcpp::traits::input_parameter< bool >::type progress(progressSEXP);
+    rcpp_result_gen = Rcpp::wrap(search(S, iter, old_bic, start_adj, n, gamma, stop_early, progress));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_BGGM_Sigma_i_not_i", (DL_FUNC) &_BGGM_Sigma_i_not_i, 2},
@@ -468,6 +525,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_BGGM_ppc_helper_fast", (DL_FUNC) &_BGGM_ppc_helper_fast, 9},
     {"_BGGM_mvnrnd", (DL_FUNC) &_BGGM_mvnrnd, 3},
     {"_BGGM_var", (DL_FUNC) &_BGGM_var, 8},
+    {"_BGGM_hft_algorithm", (DL_FUNC) &_BGGM_hft_algorithm, 4},
+    {"_BGGM_bic_fast", (DL_FUNC) &_BGGM_bic_fast, 4},
+    {"_BGGM_find_ids", (DL_FUNC) &_BGGM_find_ids, 1},
+    {"_BGGM_search", (DL_FUNC) &_BGGM_search, 8},
     {NULL, NULL, 0}
 };
 
