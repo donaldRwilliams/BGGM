@@ -7,12 +7,20 @@
 #'
 #' @param progress Logical. Should a progress bar be included (defaults to \code{TRUE}) ?
 #'
-#' @return A 3d array of dimensions \code{p} by \code{p} by \code{iter} including
-#' \strong{unconstrained} (i.e., from th full graph) precision matrices.
+#' @note The estimated precision matrix is the inverse of the \strong{correlation} matrix.
+#'
+#' @return
+#'
+#' \itemize{
+#'
+#' \item \code{precision_mean} The mean of the precision matrix (\code{p} by \code{p} matrix).
+#'
+#' \item \code{precision} 3d array of dimensions \code{p} by \code{p} by \code{iter}
+#' including \strong{unconstrained} (i.e., from th full graph)
+#' precision matrices.
 #'
 #'
-#' @export
-#'
+#' }
 #' @examples
 #' \donttest{
 #' # data
@@ -21,12 +29,14 @@
 #' # fit model
 #' fit <- estimate(Y)
 #'
-#' # precisio matrix
+#' # precision matrix
 #' Theta <- precision(fit)
 #'
 #' }
 #'
-precision <- function(object, progress = TRUE){
+#' @export
+precision <- function(object,
+                      progress = TRUE){
 
   if(is(object,"estimate") & is(object,"default")){
 
@@ -58,7 +68,26 @@ precision <- function(object, progress = TRUE){
 
     }
 
+  precision_mean = apply(precision, 1:2, mean)
 
-  return(precision)
+  returned_object <- list(precision_mean = precision_mean,
+                          precision = precision)
+
+  class(returned_object) <- c("BGGM",
+                              "precision")
+
+  return(returned_object)
 
 }
+
+
+print_precision <- function(x,...) {
+  mat <- x$precision_mean
+  p <- ncol(mat)
+  colnames(mat) <- 1:p
+  row.names(mat) <- 1:p
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("--- \n")
+  cat("Estimate:\n\n")
+  print(round(mat, 3))
+  }

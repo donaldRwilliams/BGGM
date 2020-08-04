@@ -12,12 +12,23 @@ precision(object, progress = TRUE)
 \item{progress}{Logical. Should a progress bar be included (defaults to \code{TRUE}) ?}
 }
 \value{
-A 3d array of dimensions \code{p} by \code{p} by \code{iter} including
-\strong{unconstrained} (i.e., from th full graph) precision matrices.
+\itemize{
+
+\item \code{precision_mean} The mean of the precision matrix (\code{p} by \code{p} matrix).
+
+\item \code{precision} 3d array of dimensions \code{p} by \code{p} by \code{iter}
+including \strong{unconstrained} (i.e., from th full graph)
+precision matrices.
+
+
+}
 }
 \description{
 Transform the sampled correlation matrices to
 precision matrices (i.e., inverse covariance matrices).
+}
+\note{
+The estimated precision matrix is the inverse of the \strong{correlation} matrix.
 }
 \examples{
 \donttest{
@@ -27,7 +38,7 @@ Y <- ptsd
 # fit model
 fit <- estimate(Y)
 
-# precisio matrix
+# precision matrix
 Theta <- precision(fit)
 
 }

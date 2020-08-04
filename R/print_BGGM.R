@@ -164,27 +164,27 @@ print.BGGM <- function(x, ...) {
   }  # end confirm
 
   # coefficients
-  if(is(x, "coef")){
+  if( is(x, "coef") ){
 
-    if(is(x, "summary.coef")){
+    if( is(x, "summary.coef") ){
 
       print_summary_coef(x, ...)
 
       } else {
 
         print_coef(x,...)
-
       }
-  }
-
-if(is(x, "roll_your_own")){
-
-  print_roll_your_own(x, ...)
- }
-
-  if(is(x, "ggm_search")){
-
-    print_ggm_search(x,..)
     }
 
+  if (is(x, "roll_your_own")) {
+    print_roll_your_own(x, ...)
+  }
+
+  if (is(x, "ggm_search")) {
+    print_ggm_search(x, ..)
+  }
+
+  if(is(x, "precision")){
+    print_precision(x, ...)
+    }
 }

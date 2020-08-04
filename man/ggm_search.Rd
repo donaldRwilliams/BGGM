@@ -49,6 +49,7 @@ A list of class \code{ggm_search}. For users of \strong{BGGM}, the following
         are the useful objects:
 
 \itemize{
+
 \item \code{pcor_adj} Selected partial correlation matrix (weighted adjacency). This corresponds
                       to the most probable model.
 
@@ -58,7 +59,6 @@ A list of class \code{ggm_search}. For users of \strong{BGGM}, the following
 \item \code{Theta_bma} Bayesian model averaged precision matrix
 
 \item \code{pcor_bma} Bayesian model averaged partial correlation matrix.
-
 
 }
 }
