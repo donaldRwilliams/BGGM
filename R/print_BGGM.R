@@ -186,5 +186,9 @@ print.BGGM <- function(x, ...) {
 
   if(is(x, "precision")){
     print_precision(x, ...)
-    }
+  }
+
+  if(is(x, "bma_posterior")){
+    print_bma(x,...)
+  }
 }

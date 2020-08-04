@@ -214,7 +214,9 @@ ggm_search <- function(x, n = NULL,
                           selected = selected,
                           BF_start = BF_10,
                           adj_path = adj_path,
-                          acc = acc, S = S)
+                          acc = acc,
+                          S = S,
+                          n = n)
 
   rm(.Random.seed, envir=.GlobalEnv)
 
