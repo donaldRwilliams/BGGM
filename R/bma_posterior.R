@@ -37,6 +37,8 @@
 #' bma <- bma_posterior(fit, iter = 100)
 #'
 #' }
+#'
+#' @export
 bma_posterior <- function(object,
                           param = "pcor",
                           iter = 5000,
@@ -73,10 +75,10 @@ bma_posterior <- function(object,
 
     Sigma <- solve(rWishart(1, n + p - 1, solve(scatter + I_p * p))[,,1])
 
-    Theta <- BGGM:::hft_algorithm(Sigma =  Sigma,
-                                  graphs[,,graph_s],
-                                  tol = 0.0001,
-                                  max_iter = 10)$Theta
+    Theta <- hft_algorithm(Sigma =  Sigma,
+                           graphs[, , graph_s],
+                           tol = 0.0001,
+                           max_iter = 10)$Theta
 
     if(isTRUE(progress)){
       utils::setTxtProgressBar(pb, s)

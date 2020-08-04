@@ -44,4 +44,5 @@ fit <- ggm_search(Y)
 bma <- bma_posterior(fit, iter = 100)
 
 }
+
 }
