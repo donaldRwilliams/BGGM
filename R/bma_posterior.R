@@ -64,6 +64,8 @@ bma_posterior <- function(object,
 
   graphs_n <- dim(graphs)[3]
 
+  probs <- object$probs
+
   if(isTRUE(progress)){
     pb <- utils::txtProgressBar(min = 0, max = iter, style = 3)
   }
