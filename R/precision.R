@@ -19,8 +19,8 @@
 #' including \strong{unconstrained} (i.e., from th full graph)
 #' precision matrices.
 #'
-#'
 #' }
+#'
 #' @examples
 #' \donttest{
 #' # data

@@ -20,7 +20,6 @@ precision(object, progress = TRUE)
 including \strong{unconstrained} (i.e., from th full graph)
 precision matrices.
 
-
 }
 }
 \description{
