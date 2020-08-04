@@ -1302,7 +1302,8 @@ globalVariables(c('Y1','Y2',
                   'print_summary_metric',
                   'print_summary_select_explore',
                   '..', 'ppc', 'rope', 'y',
-                  'Relation', 'Pr.H1'))
+                  'Relation', 'Pr.H1',
+                  'Y'))
 
 
 gen_pcors <- function (p = 20, edge_prob = 0.3, lb = 0.05, ub = 0.3) {
