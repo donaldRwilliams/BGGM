@@ -166,10 +166,12 @@ ggm_search <- function(x, n = NULL,
 
     probs <- exp(-0.5 * delta) / sum( exp(-0.5 * delta) )
 
-    Theta_map <- BGGM:::hft_algorithm(Sigma = S,
-                               adj = adj,
-                               tol = 1e-10,
-                               max_iter = 100)
+    Theta_map <- hft_algorithm(
+      Sigma = S,
+      adj = adj,
+      tol = 1e-10,
+      max_iter = 100
+    )
 
       pcor_adj <- -cov2cor(Theta_map$Theta) + diag(2, p)
 
@@ -187,7 +189,7 @@ ggm_search <- function(x, n = NULL,
 
     Theta_bma <- lapply(1:length(probs), function(x){
 
-     BGGM:::hft_algorithm(Sigma = S,
+      hft_algorithm(Sigma = S,
                     adj = graphs[,,x],
                     tol =1e-10,
                     max_iter = 1000)$Theta * probs[x]
@@ -214,7 +216,9 @@ ggm_search <- function(x, n = NULL,
                           selected = selected,
                           BF_start = BF_10,
                           adj_path = adj_path,
-                          acc = acc, S = S)
+                          acc = acc,
+                          S = S,
+                          n = n)
 
   rm(.Random.seed, envir=.GlobalEnv)
 

@@ -28,7 +28,7 @@ control variables in the model (i.e., \code{~ gender}). See the note for further
 \code{binary}, \code{ordinal}, or \code{mixed}. Note that mixed can be used for data with only
 ordinal variables. See the note for further details.}
 
-\item{mixed_type}{Numeric vector. An indicator of length \emph{p} for which varibles should be treated as ranks.
+\item{mixed_type}{Numeric vector. An indicator of length \emph{p} for which variables should be treated as ranks.
 (1 for rank and 0 to assume normality). The default is currently to treat all integer variables as ranks
 when \code{type = "mixed"} and \code{NULL} otherwise. See note for further details.}
 
@@ -39,7 +39,7 @@ when \code{type = "mixed"} and \code{NULL} otherwise. See note for further detai
 
 \item{iter}{Number of iterations (posterior samples; defaults to 5000).}
 
-\item{impute}{Logicial. Should the missing values (\code{NA})
+\item{impute}{Logical. Should the missing values (\code{NA})
 be imputed during model fitting (defaults to \code{TRUE}) ?}
 
 \item{progress}{Logical. Should a progress bar be included (defaults to \code{TRUE}) ?}
