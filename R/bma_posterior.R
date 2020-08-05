@@ -13,6 +13,9 @@
 #'
 #' @param progress Logical. Should a progress bar be included (defaults to \code{TRUE}) ?
 #'
+#' @references
+#' \insertAllCited{}
+#'
 #' @details
 #' This approach is based on the "direct sampler" described in
 #' \insertCite{@page 122, section 2.4,  @lenkoski2013direct;textual}{BGGM}. In this case,
