@@ -191,4 +191,8 @@ print.BGGM <- function(x, ...) {
   if(is(x, "bma_posterior")){
     print_bma(x,...)
   }
+
+  if(is(x, "constrained")){
+    print_constrained(x, ...)
+  }
 }

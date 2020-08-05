@@ -52,3 +52,6 @@ bma <- bma_posterior(fit, iter = 100)
 }
 
 }
+\references{
+\insertAllCited{}
+}
