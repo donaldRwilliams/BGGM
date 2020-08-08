@@ -59,7 +59,7 @@ precision <- function(object,
     }
     Theta
 
-    }, FUN.VALUE = matrix(0, 20, 20))
+    }, FUN.VALUE = matrix(0, p, p))
 
 
   } else {

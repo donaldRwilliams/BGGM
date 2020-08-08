@@ -4,17 +4,32 @@
 \alias{constrained_posterior}
 \title{Constrained Posterior Distribution}
 \usage{
-constrained_posterior(object, adj, iter = 1000, progress = TRUE)
+constrained_posterior(
+  object,
+  adj,
+  method = "direct",
+  iter = 5000,
+  progress = TRUE,
+  ...
+)
 }
 \arguments{
 \item{object}{An object of class \code{estimate} or \code{explore}}
 
 \item{adj}{A \code{p} by \code{p} adjacency matrix. The zero entries denote the
-elements that should be contrained to zero.}
+elements that should be constrained to zero.}
+
+\item{method}{Character string. Which method should be used ? Defaults to
+the "direct sampler" (i.e., \code{method = "direct"}) described in
+\insertCite{@page 122, section 2.4,  @lenkoski2013direct;textual}{BGGM}. The other
+option is a Metropolis-Hastings algorithm (\code{MH}).
+See details.}
 
 \item{iter}{Number of iterations (posterior samples; defaults to 5000).}
 
 \item{progress}{Logical. Should a progress bar be included (defaults to \code{TRUE}) ?}
+
+\item{...}{Currently ignored.}
 }
 \value{
 An object of class \code{contrained}, including
@@ -37,12 +52,6 @@ Compute the posterior distribution
              with off-diagonal elements of the precision matrix constrained
              to zero.
 }
-\note{
-The \code{object} includes posterior samples from the full graph. This function
-then corrects those samples to reflect the estimated structure of zeros. Note
-that this should be used with caution, as this is essentially treating the graph
-as known (but it is not).
-}
 \examples{
 \donttest{
 
@@ -62,4 +71,7 @@ post <- constrained_posterior(object = fit,
                               progress = FALSE)
 
 }
+}
+\references{
+\insertAllCited{}
 }

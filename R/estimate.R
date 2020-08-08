@@ -521,6 +521,7 @@ estimate  <- function(Y,
       Y = Y,
       X = X,
       call = match.call(),
+      prior_sd = prior_sd,
       p = p,
       n = n,
       ppd_mean = post_samp$ppd_mean
@@ -560,6 +561,7 @@ estimate  <- function(Y,
                     iter = iter,
                     Y = Y,
                     call = match.call(),
+                    prior_sd = prior_sd,
                     p = p,
                     n = n)
 
