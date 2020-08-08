@@ -6,6 +6,17 @@
 
 using namespace Rcpp;
 
+// mean_array
+arma::mat mean_array(arma::cube x);
+RcppExport SEXP _BGGM_mean_array(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::cube >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(mean_array(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 // Sigma_i_not_i
 arma::mat Sigma_i_not_i(arma::mat x, int index);
 RcppExport SEXP _BGGM_Sigma_i_not_i(SEXP xSEXP, SEXP indexSEXP) {
@@ -494,8 +505,43 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// fast_g_matrix_F
+Rcpp::List fast_g_matrix_F(arma::mat Y, arma::mat adj, arma::vec mu_samples, arma::mat cov_samples, int iter, int p, float N, float prior_sd, float kappa1, bool progress);
+RcppExport SEXP _BGGM_fast_g_matrix_F(SEXP YSEXP, SEXP adjSEXP, SEXP mu_samplesSEXP, SEXP cov_samplesSEXP, SEXP iterSEXP, SEXP pSEXP, SEXP NSEXP, SEXP prior_sdSEXP, SEXP kappa1SEXP, SEXP progressSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type adj(adjSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type mu_samples(mu_samplesSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type cov_samples(cov_samplesSEXP);
+    Rcpp::traits::input_parameter< int >::type iter(iterSEXP);
+    Rcpp::traits::input_parameter< int >::type p(pSEXP);
+    Rcpp::traits::input_parameter< float >::type N(NSEXP);
+    Rcpp::traits::input_parameter< float >::type prior_sd(prior_sdSEXP);
+    Rcpp::traits::input_parameter< float >::type kappa1(kappa1SEXP);
+    Rcpp::traits::input_parameter< bool >::type progress(progressSEXP);
+    rcpp_result_gen = Rcpp::wrap(fast_g_matrix_F(Y, adj, mu_samples, cov_samples, iter, p, N, prior_sd, kappa1, progress));
+    return rcpp_result_gen;
+END_RCPP
+}
+// contrained_helper
+arma::cube contrained_helper(arma::cube cors, arma::mat adj, int iter, bool progress);
+RcppExport SEXP _BGGM_contrained_helper(SEXP corsSEXP, SEXP adjSEXP, SEXP iterSEXP, SEXP progressSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::cube >::type cors(corsSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type adj(adjSEXP);
+    Rcpp::traits::input_parameter< int >::type iter(iterSEXP);
+    Rcpp::traits::input_parameter< bool >::type progress(progressSEXP);
+    rcpp_result_gen = Rcpp::wrap(contrained_helper(cors, adj, iter, progress));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_BGGM_mean_array", (DL_FUNC) &_BGGM_mean_array, 1},
     {"_BGGM_Sigma_i_not_i", (DL_FUNC) &_BGGM_Sigma_i_not_i, 2},
     {"_BGGM_select_col", (DL_FUNC) &_BGGM_select_col, 2},
     {"_BGGM_select_row", (DL_FUNC) &_BGGM_select_row, 2},
@@ -529,6 +575,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_BGGM_bic_fast", (DL_FUNC) &_BGGM_bic_fast, 4},
     {"_BGGM_find_ids", (DL_FUNC) &_BGGM_find_ids, 1},
     {"_BGGM_search", (DL_FUNC) &_BGGM_search, 8},
+    {"_BGGM_fast_g_matrix_F", (DL_FUNC) &_BGGM_fast_g_matrix_F, 10},
+    {"_BGGM_contrained_helper", (DL_FUNC) &_BGGM_contrained_helper, 4},
     {NULL, NULL, 0}
 };
 

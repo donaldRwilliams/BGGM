@@ -11,6 +11,15 @@
 
 // helpers are first (avoids separate files)
 
+// mean of 3d array
+// [[Rcpp::export]]
+arma::mat mean_array(arma::cube x){
+
+  return mean(x, 2);
+
+}
+
+
 
 // [[Rcpp::export]]
 arma::mat Sigma_i_not_i(arma::mat x, int index) {
@@ -2468,5 +2477,172 @@ Rcpp::List search(arma::mat S,
   ret["acc"] = acc;
 
   return ret;
+}
+
+
+// random walk sampler for known graph using matrix-F
+
+// [[Rcpp::export]]
+Rcpp::List fast_g_matrix_F(arma::mat Y,
+                           arma::mat adj,
+                           arma::vec mu_samples,
+                           arma::mat cov_samples,
+                           int iter,
+                           int p,
+                           float N,
+                           float prior_sd,
+                           float kappa1,
+                           bool progress){
+
+
+  Progress  pr(iter, progress);
+
+  arma::cube Theta_G(p, p, iter, arma::fill::zeros);
+
+  arma::vec uniform(1, 1);
+
+  arma::vec acc(1, arma::fill::zeros);
+
+  arma::mat UU = trimatl(adj,  1);
+
+  arma::uvec alt_lower_indices = trimatu_ind(size(adj),  1);
+
+  UU.elem(alt_lower_indices).fill(10);
+
+  UU.diag().fill(1);
+
+  arma::uvec nonzero = find(UU == 1);
+
+  arma::vec kappa_store(iter, arma::fill::zeros);
+
+  arma::mat Theta_can1(p, p, arma::fill::zeros);
+
+  arma::mat Theta_s1(p,p,arma::fill::zeros);
+
+  Theta_s1.elem(nonzero) = mu_samples;
+
+  arma::mat Theta_s = symmatl(Theta_s1);
+
+  arma::mat SSY = Y.t() * Y;
+
+  float log_det_s = log(det(Theta_s));
+
+  arma::mat Binv(p, p, arma::fill::zeros);
+
+  Binv.diag().fill(10000);
+
+  arma::vec acc_prob(1, 1, arma::fill::zeros);
+
+  arma::mat I_p(p, p, arma::fill::eye);
+
+  float deltaF   = 1/(prior_sd * prior_sd) - 1;
+
+  double logpriorF_s = (10000 - p - 1) / 2 *
+                       log_det_s - (deltaF + 10000 + p - 1)/2 *
+                       log(det(I_p + Theta_s * Binv));
+
+  double log_lik_s = (N/2) * log_det_s - 0.5 * trace(SSY * Theta_s);
+
+  double log_post_s = logpriorF_s + log_lik_s;
+
+  for(int s = 0; s < iter; ++s){
+
+    pr.increment();
+
+    if (s % 250 == 0){
+      Rcpp::checkUserInterrupt();
+    }
+
+
+    arma::vec theta_can =  mvnrnd(mu_samples, kappa1 * cov_samples);
+
+    Theta_can1.elem(nonzero) = theta_can.t();
+
+    arma::mat Theta_can = symmatl(Theta_can1);
+
+    if(Theta_can.is_sympd()) {
+
+      float log_det_can =  log(det(Theta_can));
+
+      double logpriorF_can = (10000 - p - 1) / 2 *
+                             log_det_can - (deltaF + 10000 + p - 1) / 2 *
+                             log(det(I_p + Theta_can * Binv));
+
+      double log_lik_can = (N/2) * log_det_can - 0.5 * trace(SSY * Theta_can);
+
+      double log_post_can = logpriorF_can + log_lik_can;
+
+      arma::vec uniform(1, 1, arma::fill::randu);
+
+      double test = exp(log_post_can -  log_post_s);
+
+      if(test >  uniform(0) ){
+
+        acc(0) = acc(0) + 1;
+
+        Theta_s = Theta_can;
+
+        mu_samples = theta_can;
+
+        log_post_s = log_post_can;
+
+      }
+
+      acc_prob(0) = acc(0) / s;
+
+      if(acc_prob(0) < 0.30){
+        kappa1 = kappa1 * 0.9;
+      }
+
+      if(acc_prob(0) > 0.50){
+        kappa1 = kappa1 * 1.1;
+      }
+    }
+
+    kappa_store(s) = kappa1;
+
+    Theta_G.slice(s) = Theta_s;
+
+  }
+
+  Rcpp::List ret;
+  ret["acc"] = acc;
+  ret["Theta_G"] = Theta_G;
+  ret["acc_prob"] = acc_prob;
+  ret["kappa"] = kappa_store;
+  return ret;
+}
+
+
+// [[Rcpp::export]]
+arma::cube contrained_helper(arma::cube cors,
+                             arma::mat adj,
+                             int iter,
+                             bool progress){
+
+
+  Progress  pr(iter, progress);
+
+  int p = cors.slice(0).n_cols;
+
+  arma::cube Theta(p, p, iter, arma::fill::zeros);
+
+  for(int s = 0; s < iter; ++s){
+
+    pr.increment();
+
+    if (s % 250 == 0){
+      Rcpp::checkUserInterrupt();
+    }
+
+    Rcpp::List fit1 = hft_algorithm(cors.slice(s), adj, 0.00001, 10);
+
+    arma::mat  Theta_s = fit1["Theta"];
+
+    Theta.slice(s) = Theta_s;
+
+    }
+
+  return Theta;
 }
 
