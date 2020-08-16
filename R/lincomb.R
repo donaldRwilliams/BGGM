@@ -4,7 +4,7 @@
 #'
 #' @param object An object of class \code{BGGM}
 #'
-#' @param credl Numeric. The credible interval width
+#' @param cred Numeric. The credible interval width
 #'                  (defaults to 0.95; must be between 0 and 1).
 #'
 #' @param rope Specify a region of practical equivalence (i.e., ROPE). This is Optional.
@@ -12,6 +12,7 @@
 #' @return An object of class \code{lin_comb}
 #'
 #' @examples
+#' \donttest{
 #' # data
 #' Y <- BGGM::ptsd
 #'
@@ -23,11 +24,12 @@
 #'
 #' # test
 #' bggm_comb <- lincomb("a--c + a--d > b--c + b--d",
-#'                        obj = est,
-#'                        cri_level = 0.90)
+#'                        object = est,
+#'                        cred = 0.90)
 #'
 #' # print
 #' bggm_comb
+#' }
 #' @export
 lincomb <- function(lin_comb, object, cred = 0.95, rope = NULL){
 

@@ -11,10 +11,10 @@ lincomb(lin_comb, object, cred = 0.95, rope = NULL)
 
 \item{object}{An object of class \code{BGGM}}
 
-\item{rope}{Specify a region of practical equivalence (i.e., ROPE). This is Optional.}
-
-\item{credl}{Numeric. The credible interval width
+\item{cred}{Numeric. The credible interval width
 (defaults to 0.95; must be between 0 and 1).}
+
+\item{rope}{Specify a region of practical equivalence (i.e., ROPE). This is Optional.}
 }
 \value{
 An object of class \code{lin_comb}
@@ -23,6 +23,7 @@ An object of class \code{lin_comb}
 Test a linear combination of posterior samples
 }
 \examples{
+\donttest{
 # data
 Y <- BGGM::ptsd
 
@@ -34,9 +35,10 @@ est <- BGGM::estimate(Y)
 
 # test
 bggm_comb <- lincomb("a--c + a--d > b--c + b--d",
-                       obj = est,
-                       cri_level = 0.90)
+                       object = est,
+                       cred = 0.90)
 
 # print
 bggm_comb
+}
 }
