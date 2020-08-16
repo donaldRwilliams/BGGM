@@ -193,6 +193,16 @@ print.BGGM <- function(x, ...) {
   }
 
   if(is(x, "constrained")){
+
     print_constrained(x, ...)
   }
+
+  if(is(x, "bayeslincom")){
+
+    print_lincomb(x, ...)
+    # bayeslincom::print.bayeslincom(x)
+
+  }
+
+
 }

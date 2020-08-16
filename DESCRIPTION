@@ -21,6 +21,7 @@ Imports:
     ggplot2 (>= 3.2.1),
     ggridges (>= 0.5.1),
     grDevices,
+    bayeslincom (>= 1.0.0),
     MASS (>= 7.3-51.5),
     methods,
     mvnfast (>= 0.2.5),
