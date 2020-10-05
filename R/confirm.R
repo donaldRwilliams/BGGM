@@ -567,6 +567,8 @@ confirm <- function(Y, hypothesis,
 
   post_cov <- cov(posterior_samples)
 
+
+  # gsub to remove spaces (issue 55)
   BFprior <- BF(prior_mu,
                 Sigma = prior_cov,
                 hypothesis =
