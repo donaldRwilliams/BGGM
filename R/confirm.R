@@ -544,7 +544,7 @@ confirm <- function(Y, hypothesis,
 
   col_names <- numbers2words(1:p)
 
-  mat_name <- sapply(col_names, function(x) paste(col_names,x, sep = ""))[upper.tri(I_p)]
+  mat_name <- gsub(" ", "", sapply(col_names, function(x) paste(col_names,x, sep = ""))[upper.tri(I_p)])
 
   posterior_samples <- matrix(post_samp$fisher_z[, , 51:(iter+50)][upper.tri(I_p)],
                               iter, pcors,
@@ -569,12 +569,16 @@ confirm <- function(Y, hypothesis,
 
   BFprior <- BF(prior_mu,
                 Sigma = prior_cov,
-                hypothesis = convert_hyps(hypothesis, Y = Y),
+                hypothesis =
+                  gsub(" ", "",
+                  convert_hyps(hypothesis, Y = Y)),
                 n = 1)
 
   BFpost <- BF(post_mu,
                Sigma = post_cov,
-               hypothesis = convert_hyps(hypothesis, Y = Y),
+               hypothesis =
+                 gsub(" ", "",
+                 convert_hyps(hypothesis, Y = Y)),
                n = 1)
 
 
