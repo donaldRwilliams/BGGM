@@ -211,10 +211,11 @@ estimate  <- function(Y,
                       ...){
 
   # temporary warning until missing data is fully implemented
-  # if(type != "continuous"){
-  #   warning(paste0("imputation during model fitting is\n",
-  #                  "currently only implemented for 'continuous' data."))
-  # }
+  if(type != "continuous"){
+
+    warning(paste0("imputation during model fitting is\n",
+                   "currently only implemented for 'continuous' data."))
+    }
 
   old <- .Random.seed
 
