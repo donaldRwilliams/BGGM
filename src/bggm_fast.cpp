@@ -4,9 +4,21 @@
 #include <progress.hpp>
 #include <progress_bar.hpp>
 #include <truncnorm.h>
+#include <RcppArmadilloExtensions/sample.h>
+
+
 // [[Rcpp::depends(RcppArmadillo, RcppDist, RcppProgress)]]
 
 // helpers are first (avoids separate files)
+
+// mean of 3d array
+// [[Rcpp::export]]
+arma::mat mean_array(arma::cube x){
+
+  return mean(x, 2);
+
+}
+
 
 
 // [[Rcpp::export]]
@@ -2280,5 +2292,357 @@ Rcpp::List var(arma::mat Y,
   ret["beta"] = beta_mcmc;
   ret["fisher_z"] = fisher_z;
   return ret;
+}
+
+
+// [[Rcpp::export]]
+Rcpp::List hft_algorithm(arma::mat Sigma, arma::mat adj, double tol, double max_iter) {
+
+  arma::mat S = Sigma;
+  arma::mat W = S;
+
+  arma::uvec upper_indices = trimatu_ind( size(S) );
+  arma::mat W_previous = S;
+  double p = S.n_cols;
+  arma::mat iter(1,1, arma::fill::zeros);
+  double max_diff = 100;
+  arma::mat w_12(1, p-1);
+
+  while(max_diff > tol){
+
+    for(int i = 0; i < p; ++i){
+
+      arma::mat beta(1,p-1, arma::fill::zeros);
+      arma::uvec pad_index =  find(Sigma_i_not_i(adj, i) == 1);
+
+      if(pad_index.n_elem == 0 ){
+        w_12 = beta;
+      } else {
+
+        arma::mat W_11 = remove_row(remove_col(W , i), i);
+        arma::mat s_12 = Sigma_i_not_i(S,i);
+
+        arma::mat W_11_star = W_11.submat(pad_index, pad_index);
+        arma::mat s_12_star = s_12(pad_index);
+
+        beta(pad_index) = inv(W_11_star) * s_12_star;
+        arma::mat w_12 = W_11 * beta.t();
+        arma::mat temp = W.col(i).row(i);
+        w_12.insert_rows(i, temp);
+
+        for(int k = 0; k < p; ++k){
+          W.row(i).col(k) = w_12(k);
+          W.row(k).col(i) = w_12(k);
+        }
+
+        max_diff = max(W.elem(upper_indices) -  W_previous.elem(upper_indices));
+        W_previous = W;
+      }
+    }
+
+    iter(0,0) = iter(0,0) + 1;
+
+    if(iter(0,0) == max_iter){
+      break;
+    }
+
+  }
+
+  arma::mat Theta = inv(W) % adj;
+  Rcpp::List ret;
+  ret["Theta"] = Theta;
+  return ret;
+}
+
+// [[Rcpp::export]]
+double bic_fast(arma::mat Theta, arma::mat S, double n, float prior_prob){
+
+  arma::mat UU = trimatu(Theta,  1);
+
+  arma::vec nonzero = nonzeros(UU);
+  double neg_ll =  -2 * ((n*0.5) * (log(det(Theta)) - trace(S * Theta)));
+
+  double bic = neg_ll + (nonzero.n_elem * log(n) - (nonzero.n_elem * log(prior_prob / (1 - prior_prob))));
+  return bic;
+}
+
+// [[Rcpp::export]]
+Rcpp::List find_ids(arma::mat x){
+  arma::mat UU = trimatu(x,  1);
+  arma::uvec alt_lower_indices = trimatl_ind( size(x),  -1);
+  UU.elem(alt_lower_indices).fill(10);
+  UU.diag().fill(10);
+  arma::uvec zero = find(UU == 0);
+  arma::uvec nonzero = find(UU == 1);
+
+  Rcpp::List ret;
+  ret["nonzero"] = nonzero;
+  ret["zero"] = zero;
+  return ret;
+
+
+}
+
+// [[Rcpp::export]]
+Rcpp::List search(arma::mat S,
+                  float iter,
+                  double old_bic,
+                  arma::mat start_adj,
+                  float n,
+                  float gamma,
+                  int stop_early,
+                  bool progress){
+
+
+  Progress  pr(iter, progress);
+
+  int p = S.n_cols;
+
+  arma::cube adj(p, p, iter);
+
+  arma::mat adj_s = start_adj;
+
+  Rcpp::List start =  find_ids(start_adj);
+
+  arma::uvec zeros = start["zero"];
+  arma::uvec nonzeros = start["nonzero"];
+
+  arma::mat adj_mat(p,p);
+
+  arma::mat mat_old = adj_mat;
+
+  arma::vec bics(iter, arma::fill::zeros);
+
+  arma::vec acc(1, arma::fill::zeros);
+
+  arma::vec repeats(1, arma::fill::zeros);
+
+  for(int s = 0; s < iter; ++s){
+
+    pr.increment();
+
+    if (s % 250 == 0){
+      Rcpp::checkUserInterrupt();
+    }
+
+    adj_s = mat_old;
+
+    if (s % 2 == 0){
+      arma::vec id_add = Rcpp::RcppArmadillo::sample(arma::conv_to<arma::vec>::from(zeros), 1, false);
+      adj_s.elem(arma::conv_to<arma::uvec>::from(id_add)).fill(1);
+      adj_mat = symmatu(adj_s);
+      adj_mat.diag().fill(1);
+
+    } else {
+      arma::vec id_add = Rcpp::RcppArmadillo::sample(arma::conv_to<arma::vec>::from(nonzeros), 1, false);
+      adj_s.elem(arma::conv_to<arma::uvec>::from(id_add)).fill(0);
+      adj_mat = symmatu(adj_s);
+      adj_mat.diag().fill(1);
+    }
+
+    Rcpp::List fit1 = hft_algorithm(S, adj_mat, 0.00001, 10);
+    arma::mat  Theta = fit1["Theta"];
+    double new_bic = bic_fast(Theta, S, n, gamma);
+
+    if(exp(-0.5 * (new_bic - old_bic)) > 1){
+      mat_old = adj_mat;
+      adj.slice(s) = adj_mat;
+      old_bic = new_bic;
+      acc(0) = acc(0) + 1;
+      Rcpp::List start =  find_ids(start_adj);
+      arma::uvec zeros = start["zero"];
+      arma::uvec nonzeros = start["nonzero"];
+
+      repeats(0) = 0;
+
+    } else {
+
+      adj.slice(s) = adj_s;
+      repeats(0) = repeats(0) + 1;
+
+    }
+
+    bics(s) = old_bic;
+
+    if(repeats(0) > stop_early){
+      break;
+    }
+  }
+
+  Rcpp::List ret;
+  ret["p"] = p;
+  ret["adj_mat"] = adj_mat;
+  ret["bics"] = bics;
+  ret["adj"]= adj;
+  ret["acc"] = acc;
+
+  return ret;
+}
+
+
+// random walk sampler for known graph using matrix-F
+
+// [[Rcpp::export]]
+Rcpp::List fast_g_matrix_F(arma::mat Y,
+                           arma::mat adj,
+                           arma::vec mu_samples,
+                           arma::mat cov_samples,
+                           int iter,
+                           int p,
+                           float N,
+                           float prior_sd,
+                           float kappa1,
+                           bool progress){
+
+
+  Progress  pr(iter, progress);
+
+  arma::cube Theta_G(p, p, iter, arma::fill::zeros);
+
+  arma::vec uniform(1, 1);
+
+  arma::vec acc(1, arma::fill::zeros);
+
+  arma::mat UU = trimatl(adj,  1);
+
+  arma::uvec alt_lower_indices = trimatu_ind(size(adj),  1);
+
+  UU.elem(alt_lower_indices).fill(10);
+
+  UU.diag().fill(1);
+
+  arma::uvec nonzero = find(UU == 1);
+
+  arma::vec kappa_store(iter, arma::fill::zeros);
+
+  arma::mat Theta_can1(p, p, arma::fill::zeros);
+
+  arma::mat Theta_s1(p,p,arma::fill::zeros);
+
+  Theta_s1.elem(nonzero) = mu_samples;
+
+  arma::mat Theta_s = symmatl(Theta_s1);
+
+  arma::mat SSY = Y.t() * Y;
+
+  float log_det_s = log(det(Theta_s));
+
+  arma::mat Binv(p, p, arma::fill::zeros);
+
+  Binv.diag().fill(10000);
+
+  arma::vec acc_prob(1, 1, arma::fill::zeros);
+
+  arma::mat I_p(p, p, arma::fill::eye);
+
+  float deltaF   = 1/(prior_sd * prior_sd) - 1;
+
+  double logpriorF_s = (10000 - p - 1) / 2 *
+                       log_det_s - (deltaF + 10000 + p - 1)/2 *
+                       log(det(I_p + Theta_s * Binv));
+
+  double log_lik_s = (N/2) * log_det_s - 0.5 * trace(SSY * Theta_s);
+
+  double log_post_s = logpriorF_s + log_lik_s;
+
+  for(int s = 0; s < iter; ++s){
+
+    pr.increment();
+
+    if (s % 250 == 0){
+      Rcpp::checkUserInterrupt();
+    }
+
+
+    arma::vec theta_can =  mvnrnd(mu_samples, kappa1 * cov_samples);
+
+    Theta_can1.elem(nonzero) = theta_can.t();
+
+    arma::mat Theta_can = symmatl(Theta_can1);
+
+    if(Theta_can.is_sympd()) {
+
+      float log_det_can =  log(det(Theta_can));
+
+      double logpriorF_can = (10000 - p - 1) / 2 *
+                             log_det_can - (deltaF + 10000 + p - 1) / 2 *
+                             log(det(I_p + Theta_can * Binv));
+
+      double log_lik_can = (N/2) * log_det_can - 0.5 * trace(SSY * Theta_can);
+
+      double log_post_can = logpriorF_can + log_lik_can;
+
+      arma::vec uniform(1, 1, arma::fill::randu);
+
+      double test = exp(log_post_can -  log_post_s);
+
+      if(test >  uniform(0) ){
+
+        acc(0) = acc(0) + 1;
+
+        Theta_s = Theta_can;
+
+        mu_samples = theta_can;
+
+        log_post_s = log_post_can;
+
+      }
+
+      acc_prob(0) = acc(0) / s;
+
+      if(acc_prob(0) < 0.30){
+        kappa1 = kappa1 * 0.9;
+      }
+
+      if(acc_prob(0) > 0.50){
+        kappa1 = kappa1 * 1.1;
+      }
+    }
+
+    kappa_store(s) = kappa1;
+
+    Theta_G.slice(s) = Theta_s;
+
+  }
+
+  Rcpp::List ret;
+  ret["acc"] = acc;
+  ret["Theta_G"] = Theta_G;
+  ret["acc_prob"] = acc_prob;
+  ret["kappa"] = kappa_store;
+  return ret;
+}
+
+
+// [[Rcpp::export]]
+arma::cube contrained_helper(arma::cube cors,
+                             arma::mat adj,
+                             int iter,
+                             bool progress){
+
+
+  Progress  pr(iter, progress);
+
+  int p = cors.slice(0).n_cols;
+
+  arma::cube Theta(p, p, iter, arma::fill::zeros);
+
+  for(int s = 0; s < iter; ++s){
+
+    pr.increment();
+
+    if (s % 250 == 0){
+      Rcpp::checkUserInterrupt();
+    }
+
+    Rcpp::List fit1 = hft_algorithm(cors.slice(s), adj, 0.00001, 10);
+
+    arma::mat  Theta_s = fit1["Theta"];
+
+    Theta.slice(s) = Theta_s;
+
+    }
+
+  return Theta;
 }
 

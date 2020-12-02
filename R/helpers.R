@@ -9,6 +9,10 @@
 #' @importFrom stats model.matrix terms cor
 
 
+tstat <- function(r, n, k){
+  r * sqrt(((n - 2 - k) / (1-r^2)))
+}
+
 hyp_converter <- function (x) {
 
   hyp_converted <- x
@@ -1298,7 +1302,8 @@ globalVariables(c('Y1','Y2',
                   'print_summary_metric',
                   'print_summary_select_explore',
                   '..', 'ppc', 'rope', 'y',
-                  'Relation', 'Pr.H1'))
+                  'Relation', 'Pr.H1',
+                  'Y'))
 
 
 gen_pcors <- function (p = 20, edge_prob = 0.3, lb = 0.05, ub = 0.3) {
@@ -1329,3 +1334,5 @@ gen_pcors <- function (p = 20, edge_prob = 0.3, lb = 0.05, ub = 0.3) {
                           pcs = pcs, adj = adj)
   returned_object
 }
+
+
