@@ -5,6 +5,10 @@ mean_array <- function(x) {
     .Call(`_BGGM_mean_array`, x)
 }
 
+quantile_type_1 <- function(x, prob) {
+    .Call(`_BGGM_quantile_type_1`, x, prob)
+}
+
 Sigma_i_not_i <- function(x, index) {
     .Call(`_BGGM_Sigma_i_not_i`, x, index)
 }
@@ -143,5 +147,9 @@ fast_g_matrix_F <- function(Y, adj, mu_samples, cov_samples, iter, p, N, prior_s
 
 contrained_helper <- function(cors, adj, iter, progress) {
     .Call(`_BGGM_contrained_helper`, cors, adj, iter, progress)
+}
+
+missing_copula <- function(Y, Y_missing, z0_start, Sigma_start, levels, iter_missing, progress_impute, K, idx, epsilon, delta) {
+    .Call(`_BGGM_missing_copula`, Y, Y_missing, z0_start, Sigma_start, levels, iter_missing, progress_impute, K, idx, epsilon, delta)
 }
 

@@ -12,7 +12,7 @@ estimate(
   analytic = FALSE,
   prior_sd = 0.25,
   iter = 5000,
-  impute = TRUE,
+  impute = FALSE,
   progress = TRUE,
   seed = 1,
   ...
