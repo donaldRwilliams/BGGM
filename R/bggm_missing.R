@@ -101,8 +101,8 @@ bggm_missing <- function(x, iter = 2000,
   if(method == "explore"){
 
     # fit the models
-    fits <- lapply(1:n_data_sets, function(x) explore(subset(Y, .imp == x)[,-1],
-                                                      iter = iter))
+    fits <- lapply(1:n_data_sets, function(x) explore(as.matrix(subset(Y, .imp == x)[,-1]),
+                                                      iter = iter, ...))
 
     # iterations
     iter <- fits[[1]]$iter
@@ -158,7 +158,7 @@ bggm_missing <- function(x, iter = 2000,
   if(method == "estimate"){
 
     # fit the models
-    fits <- lapply(1:n_data_sets, function(x) estimate(subset(Y, .imp == x)[,-1],
+    fits <- lapply(1:n_data_sets, function(x) estimate(as.matrix(subset(Y, .imp == x)[,-1]),
                                                        iter = iter, ...))
 
     iter <- fits[[1]]$iter
