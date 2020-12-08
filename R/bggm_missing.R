@@ -12,7 +12,7 @@
 #' @param ... Additional arguments passed to either
 #'            \code{\link{estimate}} or \code{\link{explore}}.
 #'
-#' @return An object of class \code{estimate} or \code{explore}
+#' @return An object of class \code{estimate} or \code{explore}.
 #' @export
 #'
 #' @note Currently, \strong{BGGM} is compatible with the package \code{\link[mice]{mice}} for handling
@@ -102,7 +102,8 @@ bggm_missing <- function(x, iter = 2000,
 
     # fit the models
     fits <- lapply(1:n_data_sets, function(x) explore(as.matrix(subset(Y, .imp == x)[,-1]),
-                                                      iter = iter, ...))
+                                                      iter = iter,
+                                                      impute = FALSE, ...))
 
     # iterations
     iter <- fits[[1]]$iter
@@ -159,7 +160,8 @@ bggm_missing <- function(x, iter = 2000,
 
     # fit the models
     fits <- lapply(1:n_data_sets, function(x) estimate(as.matrix(subset(Y, .imp == x)[,-1]),
-                                                       iter = iter, ...))
+                                                       iter = iter,
+                                                       impute = FALSE, ...))
 
     iter <- fits[[1]]$iter
 
