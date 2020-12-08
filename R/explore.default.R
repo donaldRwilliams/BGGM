@@ -174,10 +174,13 @@ explore <- function(Y,
                     seed = 1, ...){
 
   # temporary warning until missing data is fully implemented
-  if(type != "continuous"){
+  if(!type %in% c("continuous", "mixed")){
+
     warning(paste0("imputation during model fitting is\n",
-                   "currently only implemented for 'continuous' data."))
+                   "currently only implemented for 'continuous'
+                   and 'mixed' data."))
   }
+
 
   old <- .Random.seed
 
@@ -415,7 +418,7 @@ explore <- function(Y,
     )
 
   } else if(type == "mixed"){
-
+    X <- NULL
     # no control variables allowed
     if(!is.null(formula)){
 
@@ -428,15 +431,9 @@ explore <- function(Y,
 
       formula <- NULL
 
-      X <- NULL
 
-    } else {
 
-      Y <- na.omit(Y)
-
-      X = NULL
-
-      }
+    }
 
     # observations
     n <- nrow(Y)
@@ -447,8 +444,10 @@ explore <- function(Y,
     # default for ranks
     if(is.null(mixed_type)) {
 
-      idx = colMeans(round(Y) == Y)
-      idx = ifelse(idx == 1, 1, 0)
+      # idx = rep(1, ncol(Y))
+      # idx = ifelse(idx == 1, 1, 0)
+
+      idx = rep(1, ncol(Y))
 
       # user defined
     } else {
@@ -458,6 +457,29 @@ explore <- function(Y,
 
     # rank following hoff (2008)
     rank_vars <- rank_helper(Y)
+
+    if(impute){
+
+      Y_missing <- ifelse(is.na(Y), 1, 0)
+
+      rank_vars$z0_start[is.na(rank_vars$z0_start)] <- rnorm(sum(Y_missing))
+
+      post_samp <- .Call(
+        "_BGGM_missing_copula",
+        Y = Y,
+        Y_missing = Y_missing,
+        z0_start = rank_vars$z0_start,
+        Sigma_start = cov(rank_vars$z0_start),
+        levels = rank_vars$levels,
+        iter_missing = iter + 50,
+        progress_impute = TRUE,
+        K = rank_vars$K,
+        idx = idx,
+        epsilon = 0.01,
+        delta = delta
+      )
+
+    } else {
 
     post_samp <- .Call(
       "_BGGM_copula",
@@ -472,6 +494,7 @@ explore <- function(Y,
       progress = progress
     )
 
+    }
   } else {
 
     stop("'type' not supported: must be continuous, binary, ordinal, or mixed.")
