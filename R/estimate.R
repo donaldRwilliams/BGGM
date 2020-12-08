@@ -225,6 +225,9 @@ estimate  <- function(Y,
   # delta rho ~ beta(delta/2, delta/2)
   delta <- delta_solve(prior_sd)
 
+  # nodes
+  p <- ncol(Y)
+
   # sample posterior
   if(!analytic){
 
@@ -254,8 +257,7 @@ estimate  <- function(Y,
             impute <- FALSE
             }
 
-          # nodes
-          p <- ncol(Y)
+
 
           # impute means
           for(i in 1:p){
