@@ -33,8 +33,8 @@ internal_missing_gaussian <- function(Y, Y_missing, Sigma, iter_missing) {
     .Call(`_BGGM_internal_missing_gaussian`, Y, Y_missing, Sigma, iter_missing)
 }
 
-missing_gaussian <- function(Y, Y_missing, Sigma, iter_missing, progress_impute, store_all) {
-    .Call(`_BGGM_missing_gaussian`, Y, Y_missing, Sigma, iter_missing, progress_impute, store_all)
+missing_gaussian <- function(Y, Y_missing, Sigma, iter_missing, progress_impute, store_all, lambda) {
+    .Call(`_BGGM_missing_gaussian`, Y, Y_missing, Sigma, iter_missing, progress_impute, store_all, lambda)
 }
 
 Theta_continuous <- function(Y, iter, delta, epsilon, prior_only, explore, start, progress, impute, Y_missing) {
@@ -151,5 +151,9 @@ contrained_helper <- function(cors, adj, iter, progress) {
 
 missing_copula <- function(Y, Y_missing, z0_start, Sigma_start, levels, iter_missing, progress_impute, K, idx, epsilon, delta) {
     .Call(`_BGGM_missing_copula`, Y, Y_missing, z0_start, Sigma_start, levels, iter_missing, progress_impute, K, idx, epsilon, delta)
+}
+
+missing_copula_data <- function(Y, Y_missing, z0_start, Sigma_start, levels, iter_missing, progress_impute, K, idx, lambda) {
+    .Call(`_BGGM_missing_copula_data`, Y, Y_missing, z0_start, Sigma_start, levels, iter_missing, progress_impute, K, idx, lambda)
 }
 

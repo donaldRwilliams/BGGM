@@ -9,7 +9,6 @@
 
 // [[Rcpp::depends(RcppArmadillo, RcppDist, RcppProgress)]]
 
-// helpers are first (avoids separate files)
 
 // mean of 3d array
 // [[Rcpp::export]]
@@ -17,7 +16,7 @@ arma::mat mean_array(arma::cube x){
   return mean(x, 2);
 }
 
-
+// R quantile type = 1
 // [[Rcpp::export]]
 double quantile_type_1(arma::vec x, double prob){
 
@@ -29,7 +28,7 @@ double quantile_type_1(arma::vec x, double prob){
 
   float j = floor(nppm);
 
-  float h = 0;
+  //float h = 0;
 
   float qs = 0;
 
@@ -54,7 +53,7 @@ double quantile_type_1(arma::vec x, double prob){
 
   arma::mat join_x = join_vert(x_1, sort_x, x_n);
 
-  if(h == 1){
+  if(nppm > j){
 
     qs = join_x(j + 3);
 
@@ -172,7 +171,8 @@ Rcpp::List missing_gaussian(arma::mat Y,
                             arma::mat Sigma,
                             int iter_missing,
                             bool progress_impute,
-                            bool store_all) {
+                            bool store_all,
+                            float lambda) {
 
 
   // progress
@@ -184,6 +184,8 @@ Rcpp::List missing_gaussian(arma::mat Y,
   arma::uvec index = find(Y_missing == 1);
 
   int n_na = index.n_elem;
+
+  arma::mat I_p(p, p, arma::fill::eye);
 
   // store posterior predictive distribution for missing values
   arma::mat ppd_missing(iter_missing, n_na, arma::fill::zeros);
@@ -234,31 +236,16 @@ Rcpp::List missing_gaussian(arma::mat Y,
     }
 
     arma::mat S_Y = Y.t() * Y;
-    arma::mat Theta = wishrnd(inv(S_Y), (n - 1));
+    arma::mat Theta = wishrnd(inv(S_Y + I_p * lambda), n + lambda);
     Sigma = inv(Theta);
-    ppd_missing.row(s) = Y.elem(index).t();
 
     if(store_all){
       Y_all.slice(s) = Y;
     }
   }
 
-  arma::vec lb = {0.025};
-  arma::vec ub = {0.975};
-
-  arma::mat  ppd_mean = mean(ppd_missing, 0).t();
-  arma::mat  ppd_sd = stddev(ppd_missing, 0, 0).t();
-  arma::mat  ppd_lb = quantile(ppd_missing, lb).t();
-  arma::mat  ppd_ub = quantile(ppd_missing, ub).t();
-
-  arma::mat  ppd_summary = join_rows(ppd_mean, ppd_sd, ppd_lb, ppd_ub);
-
   Rcpp::List ret;
-  ret["Y"] = Y;
   ret["Y_all"] = Y_all;
-  ret["ppd_missing"] = ppd_missing;
-  ret["ppd_mean"] = ppd_mean;
-  ret["ppd_summary"] = ppd_summary;
   return ret;
 }
 
@@ -947,15 +934,8 @@ Rcpp::List mv_binary(arma::mat Y,
           z0.slice(0).col(i).row(j) =   temp_j;
 
         }
-
-
-
       }
-
-
     }
-
-
 
     // D matrix
     for(int i = 0; i < k; ++i){
@@ -1003,22 +983,6 @@ Rcpp::List mv_binary(arma::mat Y,
     Rinv.slice(0)   = inv(cors);
 
     R.slice(0) = cors;
-
-
-    // // latent data
-    // for(int i = 0; i < n; ++i){
-    //
-    //   Rcpp::List z_samples = trunc_mvn(Xbhat.slice(0).row(i).t(),
-    //                                    Rinv.slice(0),
-    //                                    z0.slice(0).row(i).t(),
-    //                                    Y.row(i).t(),
-    //                                    cutpoints);
-    //
-    //   arma::mat z_i = z_samples[0];
-    //
-    //   z0.slice(0).row(i) = z_i.t();
-    //
-    // }
 
     beta_mcmc.slice(s) =reshape(beta, p,k);
     pcors_mcmc.slice(s) =  -(pcors - I_k);
@@ -1223,7 +1187,7 @@ Rcpp::List mv_ordinal_cowles(arma::mat Y,
           R::pnorm5(c_thresh_mat(i , Y.col(i)[j]-1 , 0) - mm(j), 0, 1, TRUE, FALSE));
 
         R_denom(j, i) = (R::pnorm5(thresh_mat(i , Y.col(i)[j], 0) - mm(j), 0, 1, TRUE, FALSE) -
-          R::pnorm5(thresh_mat(i , Y.col(i)[j] -1, 0) - mm(j), 0, 1, TRUE, FALSE));
+          R::pnorm5(thresh_mat(i , Y.col(i)[j]-1, 0) - mm(j), 0, 1, TRUE, FALSE));
       }
     }
 
@@ -1318,7 +1282,7 @@ Rcpp::List mv_ordinal_cowles(arma::mat Y,
   return  ret;
 }
 
-// ordinal sampler
+// ordinal sampler customary
 // [[Rcpp::export]]
 Rcpp::List mv_ordinal_albert(arma::mat Y,
                           arma::mat X,
@@ -1514,8 +1478,8 @@ Rcpp::List mv_ordinal_albert(arma::mat Y,
             // location and scale
             mm(j), sqrt(ss(0)), TRUE, FALSE);
         }
-        }
       }
+    }
 
     for(int i = 0; i < k; ++i){
       D.row(i).col(i) = sqrt(1 / R::rgamma((delta + k - 1) / 2,
@@ -1747,20 +1711,12 @@ Rcpp::List  copula(arma::mat z0_start,
     // sigma
     Sigma.slice(0) = inv(Theta.slice(0));
 
-    // // correlation
-    // cors =  diagmat(1 / sqrt(Sigma.slice(0).diag())) *
-    //   Sigma.slice(0) *
-    //   diagmat(1 / sqrt(Sigma.slice(0).diag()));
-
     // partial correlations
     pcors = diagmat(1 / sqrt(Theta.slice(0).diag())) *
       Theta.slice(0) *
       diagmat(1 / sqrt(Theta.slice(0).diag()));
 
     pcors_mcmc.slice(s) =  -(pcors - I_k);
-    // cors_mcmc.slice(s) =  cors;
-    // Sigma_mcmc.slice(s) = Sigma.slice(0);
-    // Theta_mcmc.slice(s) = Theta.slice(0);
   }
 
   arma::cube fisher_z = atanh(pcors_mcmc);
@@ -2870,3 +2826,163 @@ Rcpp::List missing_copula(arma::mat Y,
   return  ret;
 }
 
+
+
+// [[Rcpp::export]]
+Rcpp::List missing_copula_data(arma::mat Y,
+                   arma::mat Y_missing,
+                   arma::mat z0_start,
+                   arma::mat Sigma_start,
+                   arma::mat levels,
+                   int iter_missing,
+                   bool progress_impute,
+                   arma::vec K,
+                   arma::vec idx,
+                   float lambda) {
+  // progress
+  Progress  pr(iter_missing, progress_impute);
+
+  int p = Y.n_cols;
+
+  int n = Y.n_rows;
+
+  arma::mat Y_impute = Y;
+
+  arma::cube Y_collect(n, p,
+                       iter_missing,
+                       arma::fill::zeros);
+
+  arma::mat I_p(p, p, arma::fill::eye);
+
+  arma::cube z0(n, p, 1,  arma::fill::zeros);
+
+  z0.slice(0) = z0_start;
+
+  arma::vec lb(1);
+  arma::vec ub(1);
+
+  arma::cube Sigma(p, p, 1, arma::fill::zeros);
+  Sigma.slice(0) = Sigma_start;
+
+  arma::mat mm(n,1);
+  arma::mat ss(1,1);
+
+  for(int  s = 0; s < iter_missing; ++s){
+
+    pr.increment();
+
+    if (s % 250 == 0){
+      Rcpp::checkUserInterrupt();
+    }
+
+    for(int i = 0; i < p; ++i){
+
+      mm = Sigma_i_not_i(Sigma.slice(0), i) *
+        inv(remove_row(remove_col(Sigma.slice(0), i), i)) *
+        remove_col(z0.slice(0), i).t();
+
+      ss = select_row(Sigma.slice(0), i).col(i) -
+        Sigma_i_not_i(Sigma.slice(0), i) *
+        inv(remove_row(remove_col(Sigma.slice(0), i), i)) *
+        Sigma_i_not_i(Sigma.slice(0), i).t();
+
+      if(idx(i) == 1){
+
+        for(int r = 1; r  < K[i] + 1; ++r){
+
+          arma::uvec where = find(levels.col(i) == r);
+
+          arma::mat temp1 = arma::conv_to<arma::mat>::from(where);
+
+          int r_levels = temp1.n_elem;
+
+          arma::vec lb_check =  {select_col(z0.slice(0), i).elem(find(levels.col(i) == (r - 1)))};
+          arma::vec ub_check =  {select_col(z0.slice(0), i).elem(find(levels.col(i) == (r + 1)))};
+
+          if(lb_check.n_elem == 0){
+
+            lb.fill(-arma::datum::inf);
+
+          } else {
+
+            lb.fill(lb_check.max());
+
+          }
+
+          if(ub_check.n_elem == 0){
+
+            ub.fill(arma::datum::inf);
+
+          } else {
+
+            ub.fill(ub_check.min());
+
+          }
+
+          for(int l = 0; l < r_levels; ++l){
+
+            z0.slice(0).col(i).row(temp1(l)) = R::qnorm(R::runif(
+              R::pnorm(arma::conv_to<double>::from(lb),  mm(temp1(l)), sqrt(ss(0)), TRUE, FALSE),
+              R::pnorm(arma::conv_to<double>::from(ub),  mm(temp1(l)), sqrt(ss(0)), TRUE, FALSE)),
+              mm(temp1(l)), sqrt(ss(0)), TRUE, FALSE);
+          }
+        }
+      }
+
+      arma::vec Y_j = Y_missing.col(i);
+
+      double check_na = sum(Y_j);
+
+
+      if(check_na > 0){
+
+        arma::uvec  index_j = find(Y_missing.col(i) == 1);
+
+        int  n_missing = index_j.n_elem;
+
+        for(int m = 0; m < n_missing; ++m){
+
+          arma::vec ppd_i = Rcpp::rnorm(1,  mm(index_j[m]), sqrt(ss(0)));
+
+          z0.slice(0).col(i).row(index_j[m]) = ppd_i(0);
+
+        }
+      }
+    }
+
+    arma::mat S_Y = z0.slice(0).t() * z0.slice(0);
+
+    Sigma.slice(0) =  inv(wishrnd(inv(S_Y + I_p * lambda), n + lambda));
+
+    for(int i = 0; i < p; ++i){
+
+      arma::mat  zz = z0.slice(0).col(i);
+
+      ss = Sigma.slice(0).col(i).row(i);
+
+      arma::vec Y_jnew = Y_missing.col(i);
+
+      double check_nanew = sum(Y_jnew);
+
+      if(check_nanew > 0){
+
+        arma::uvec  index_j = find(Y_missing.col(i) == 1);
+
+        int  n_missing = index_j.n_elem;
+
+        for(int m = 0; m < n_missing; ++m){
+
+          Y_impute.col(i).row(index_j[m]) =  quantile_type_1(Y.col(i),
+                       R::pnorm(zz(index_j[m]), 0, sqrt(ss(0)), TRUE, FALSE));
+          }
+      }
+    }
+
+    Y_collect.slice(s) = Y_impute;
+
+  }
+
+  Rcpp::List ret;
+  ret["Y_collect"] = Y_collect;
+  return  ret;
+}

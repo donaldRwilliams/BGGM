@@ -18,7 +18,7 @@ options are \code{"estimate"} and \code{"explore"}.}
 \code{\link{estimate}} or \code{\link{explore}}.}
 }
 \value{
-An object of class \code{estimate} or \code{explore}
+An object of class \code{estimate} or \code{explore}.
 }
 \description{
 Estimation and exploratory hypothesis testing with missing data.
