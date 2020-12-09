@@ -1,6 +1,6 @@
-#' @title Multivariate Normal Imputation
+#' @title Obtain Imputed Datasets
 #'
-#' @description Impute values, assuming a  multivariate normal distribution, with the posterior
+#' @description Impute missing values, assuming a  multivariate normal distribution, with the posterior
 #' predictive distribution. For binary, ordinal, and mixed (a combination of discrete and continuous)
 #' data, the values are first imputed for the latent data and then converted to the original scale.
 #'
@@ -10,12 +10,18 @@
 #' \code{binary}, \code{ordinal}, or \code{mixed}. Note that mixed can be used for data with only
 #' ordinal variables. See the note for further details.
 #'
+#' @param lambda Numeric. A regularization parameter, which defaults to p + 2. A larger value results
+#'               in more shrinkage.
+#'
+#' @param mixed_type Numeric vector. An indicator of length \emph{p} for which variables should be treated as ranks.
+#' (1 for rank and 0 to assume the observed marginal distribution).
+#' The default is currently to treat all integer variables as ranks when
+#' \code{type = "mixed"} and \code{NULL} otherwise. See note for further details.
+#'
 #' @param iter Number of iterations (posterior samples; defaults to 1000).
 #'
 #' @param progress Logical. Should a progress bar be included (defaults to \code{TRUE}) ?
 #'
-#' @param save_all Logical. Should each imputed dataset be stored
-#' (defaults to \code{FALSE} which saves the imputed missing values) ?
 #'
 #' @references
 #' \insertAllCited{}
@@ -24,15 +30,7 @@
 #'
 #'\itemize{
 #'
-#'\item \code{Y} The last imputed dataset.
-#'
-#'\item \code{ppd_missing} A matrix of dimensions \code{iter} by the number of missing values.
-#'
-#'\item \code{ppd_mean} A vector including the means of the posterior predictive distribution for
-#' the missing values.
-#'
-#'\item \code{Y_all} An 3D array with \code{iter} matrices of dimensions \emph{n} by \emph{p}
-#'(\code{NULL} when \code{save_all = FALSE}).
+#'\item \code{imputed_datasets} An array including the imputed datasets.
 #'
 #'}
 #'
@@ -80,25 +78,41 @@
 #'         Ymain[which(Y_miss[,x] == 1),x] ))
 #'
 #' # impute
-#' fit_missing <- mvn_imputation(Y, progress = FALSE, iter = 250)
+#' fit_missing <- impute_data(Y, progress = FALSE, iter = 250)
 #'
-#' print(fit_missing, n_rows = 20)
-#'
+#' impute
+#' fit_missing <- impute_data(Y,
+#'                            progress = TRUE,
+#'                            iter = 250)
 #'
 #' # plot
-#' plot(x =  true,
-#'      y = fit_missing$ppd_mean,
-#'      main = "BGGM: Imputation",
-#'      xlab = "Actual",
-#'      ylab = "Posterior Mean")
+#' plot(BGGM:::mean_array( fit_missing$imputed_datasets)[na_indices], Ymain[na_indices])
+#'
 #' }
 #' @export
-mvn_imputation <- function(Y, type = "continuous",
-                           iter = 1000,
-                           progress = TRUE,
-                           save_all = FALSE){
+impute_data <- function(Y,
+                        type = "continuous",
+                        lambda = NULL,
+                        mixed_type = NULL,
+                        iter = 1000,
+                        progress = TRUE){
+
+  if(!type %in% c("continuous", "mixed")){
+
+    stop(paste0("currently only 'continuous' and 'mixed' data are supported."))
+  }
+
   p <- ncol(Y)
 
+  if(is.null(lambda)){
+    lambda <- p + 2
+  }
+
+  if(is.null(mixed_type)){
+    idx <- rep(1, p)
+  } else {
+    idx <- mixed_type
+  }
   Y_miss <- ifelse(is.na(Y), 1, 0)
 
   if(sum(Y_miss) == 0){
@@ -118,9 +132,6 @@ mvn_imputation <- function(Y, type = "continuous",
       Y[which(is.na(Y[,i])) ,i] <- mean(na.omit(Y[,i]))
       }
 
-    # scale data
-    Y <- scale(Y)
-
     fit <-.Call(
       "_BGGM_missing_gaussian",
       Y =  as.matrix(Y),
@@ -128,30 +139,39 @@ mvn_imputation <- function(Y, type = "continuous",
       Sigma = cov(Y),
       iter_missing = iter,
       progress = progress,
-      store_all = save_all
+      store_all = TRUE,
+      lambda = lambda
       )
-    }
+
+    names(fit) <- "imputed_datasets"
+
+    } else if(type == "mixed"){
+
+      rank_help <- BGGM:::rank_helper(Y)
+      rank_help$levels[na_indices] <- NA
+      rank_help$z0_start[is.na(rank_help$z0_start)] <- rnorm(sum(Y_missing))
+
+     fit <- .Call(
+        "_BGGM_missing_copula_data",
+        Y = Y,
+        Y_missing = Y_miss,
+        z0_start = rank_help$z0_start,
+        Sigma_start = cov(rank_help$z0_start),
+        levels = rank_help$levels,
+        iter_missing = iter,
+        progress_impute = TRUE,
+        K = rank_help$K,
+        idx = idx,
+        lambda = lambda
+      )
+
+     names(fit) <- "imputed_datasets"
+
+  }
 
   if(isTRUE(progress)){
     message("BGGM: Finished")
   }
-
-  if(!save_all){
-    fit$Y_all <- NULL
-  }
-
-  if(any(rowSums(Y_miss) == p)){
-    warning("entire row missing. imputed values based on posterior predicted means")
-  }
-
-  fit$ppd_summary <- cbind(missing_location,
-                           as.data.frame(round( fit$ppd_summary, 3)))
-
-  colnames(fit$ppd_summary) <- c("Value",
-                                 "Post.mean",
-                                 "Post.sd",
-                                 "Cred.lb",
-                                 "Cred.ub")
 
   returned_object <- fit
   class(returned_object) <- c("BGGM", "mvn_imputation")
@@ -159,16 +179,10 @@ mvn_imputation <- function(Y, type = "continuous",
 }
 
 
-print_mvn_impute <- function(x, n_rows = NULL, ...) {
+print_mvn_impute <- function(x, ...) {
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
   cat("Multivariate Normal Imputation\n")
   cat("--- \n")
-  cat("Estimates:\n\n")
-  dat <- x$ppd_summary
-  if(is.null(n_rows)) {
-    print(dat, row.names = FALSE)
-  } else{
-    print(dat[1:n_rows, ], row.names = FALSE)
-  }
+  cat(date())
 }
