@@ -9,7 +9,6 @@
 
 // [[Rcpp::depends(RcppArmadillo, RcppDist, RcppProgress)]]
 
-// helpers are first (avoids separate files)
 
 // mean of 3d array
 // [[Rcpp::export]]
@@ -17,7 +16,7 @@ arma::mat mean_array(arma::cube x){
   return mean(x, 2);
 }
 
-
+// R quantile type = 1
 // [[Rcpp::export]]
 double quantile_type_1(arma::vec x, double prob){
 
@@ -29,7 +28,7 @@ double quantile_type_1(arma::vec x, double prob){
 
   float j = floor(nppm);
 
-  float h = 0;
+  //float h = 0;
 
   float qs = 0;
 
@@ -935,15 +934,8 @@ Rcpp::List mv_binary(arma::mat Y,
           z0.slice(0).col(i).row(j) =   temp_j;
 
         }
-
-
-
       }
-
-
     }
-
-
 
     // D matrix
     for(int i = 0; i < k; ++i){
@@ -991,22 +983,6 @@ Rcpp::List mv_binary(arma::mat Y,
     Rinv.slice(0)   = inv(cors);
 
     R.slice(0) = cors;
-
-
-    // // latent data
-    // for(int i = 0; i < n; ++i){
-    //
-    //   Rcpp::List z_samples = trunc_mvn(Xbhat.slice(0).row(i).t(),
-    //                                    Rinv.slice(0),
-    //                                    z0.slice(0).row(i).t(),
-    //                                    Y.row(i).t(),
-    //                                    cutpoints);
-    //
-    //   arma::mat z_i = z_samples[0];
-    //
-    //   z0.slice(0).row(i) = z_i.t();
-    //
-    // }
 
     beta_mcmc.slice(s) =reshape(beta, p,k);
     pcors_mcmc.slice(s) =  -(pcors - I_k);
@@ -1211,7 +1187,7 @@ Rcpp::List mv_ordinal_cowles(arma::mat Y,
           R::pnorm5(c_thresh_mat(i , Y.col(i)[j]-1 , 0) - mm(j), 0, 1, TRUE, FALSE));
 
         R_denom(j, i) = (R::pnorm5(thresh_mat(i , Y.col(i)[j], 0) - mm(j), 0, 1, TRUE, FALSE) -
-          R::pnorm5(thresh_mat(i , Y.col(i)[j] -1, 0) - mm(j), 0, 1, TRUE, FALSE));
+          R::pnorm5(thresh_mat(i , Y.col(i)[j]-1, 0) - mm(j), 0, 1, TRUE, FALSE));
       }
     }
 
@@ -1306,7 +1282,7 @@ Rcpp::List mv_ordinal_cowles(arma::mat Y,
   return  ret;
 }
 
-// ordinal sampler
+// ordinal sampler customary
 // [[Rcpp::export]]
 Rcpp::List mv_ordinal_albert(arma::mat Y,
                           arma::mat X,
@@ -1502,8 +1478,8 @@ Rcpp::List mv_ordinal_albert(arma::mat Y,
             // location and scale
             mm(j), sqrt(ss(0)), TRUE, FALSE);
         }
-        }
       }
+    }
 
     for(int i = 0; i < k; ++i){
       D.row(i).col(i) = sqrt(1 / R::rgamma((delta + k - 1) / 2,
@@ -1735,20 +1711,12 @@ Rcpp::List  copula(arma::mat z0_start,
     // sigma
     Sigma.slice(0) = inv(Theta.slice(0));
 
-    // // correlation
-    // cors =  diagmat(1 / sqrt(Sigma.slice(0).diag())) *
-    //   Sigma.slice(0) *
-    //   diagmat(1 / sqrt(Sigma.slice(0).diag()));
-
     // partial correlations
     pcors = diagmat(1 / sqrt(Theta.slice(0).diag())) *
       Theta.slice(0) *
       diagmat(1 / sqrt(Theta.slice(0).diag()));
 
     pcors_mcmc.slice(s) =  -(pcors - I_k);
-    // cors_mcmc.slice(s) =  cors;
-    // Sigma_mcmc.slice(s) = Sigma.slice(0);
-    // Theta_mcmc.slice(s) = Theta.slice(0);
   }
 
   arma::cube fisher_z = atanh(pcors_mcmc);

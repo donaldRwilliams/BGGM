@@ -80,7 +80,7 @@
 #' # impute
 #' fit_missing <- impute_data(Y, progress = FALSE, iter = 250)
 #'
-#' impute
+#' # impute
 #' fit_missing <- impute_data(Y,
 #'                            progress = TRUE,
 #'                            iter = 250)
