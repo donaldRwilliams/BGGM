@@ -123,12 +123,13 @@ select.explore <- function(object,
 
     # posterior
     post_sd <- apply(post_samp$fisher_z[,,(51:x$iter)], 1:2, sd)
-    post_mean  <- x$pcor_mat
-    post_dens <- dnorm(0, post_mean, post_sd )
+    post_mean  <- apply(post_samp$fisher_z[,,(51:x$iter)], 1:2, mean)
+    # x$pcor_mat
+    post_dens <- dnorm(0, post_mean, post_sd)
 
     # prior
     prior_sd <- apply(prior_samp$fisher_z[,,(51:x$iter)], 1:2, sd)
-    prior_dens <- dnorm(0, 0, mean(prior_sd))
+    prior_dens <- dnorm(0, 0, mean(prior_sd[upper.tri(diag(3))]))
 
     # BF
     BF_10_mat <- prior_dens / post_dens
@@ -166,12 +167,13 @@ select.explore <- function(object,
 
       # posterior
       post_sd <- apply(post_samp$fisher_z[,,(51:x$iter)], 1:2, sd)
-      post_mean  <- x$pcor_mat
+      post_mean  <- apply(post_samp$fisher_z[,,(51:x$iter)], 1:2, mean)
+        #x$pcor_mat
       post_dens <- dnorm(0, post_mean, post_sd )
 
       # prior
       prior_sd <- apply(prior_samp$fisher_z[,,(51:x$iter)], 1:2, sd)
-      prior_dens <- dnorm(0, 0, mean(prior_sd))
+      prior_dens <- dnorm(0, 0, mean(prior_sd[upper.tri(diag(3))]))
 
       # BF (two sided)
       BF_10_mat <- prior_dens / post_dens
