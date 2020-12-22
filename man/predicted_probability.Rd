@@ -32,7 +32,7 @@ There are no checks that the conditional probability exists, i.e., suppose
       which B3 is 2 AND B4 is 1. This will result in an uninformative error.
 }
 \examples{
-\dontest{
+\donttest{
 Y <- ptsd
 fit <- estimate(as.matrix(Y), iter = 150, type = "mixed")
 

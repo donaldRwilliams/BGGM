@@ -25,7 +25,7 @@
 #' @export
 #'
 #' @examples
-#' \dontest{
+#' \donttest{
 #' Y <- ptsd
 #' fit <- estimate(as.matrix(Y), iter = 150, type = "mixed")
 #'
