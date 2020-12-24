@@ -16,15 +16,16 @@ This must include the column names.}
 
 \item{...}{Compute conditional probabilities by specifying a column name in \code{Y}
 (besides the \code{outcome}) and a fixed value. This can include
-any number of nodes. See example below..}
+any number of nodes. See example below. Leave this blank to compute
+unconditional probabilities for \code{outcome}.}
 }
 \value{
 A list containing a matrix with the computed probabilities
        (a row for each predictive sample and a column for each category).
 }
 \description{
-Compute predicted probabilities for discrete data, with the possibility
-of conditional probabilities (i.e., at fixed values of other nodes)
+Compute the predicted probabilities for discrete data, with the possibility
+of conditional predictive probabilities (i.e., at fixed values of other nodes)
 }
 \note{
 There are no checks that the conditional probability exists, i.e., suppose

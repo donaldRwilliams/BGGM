@@ -2,7 +2,7 @@
 % Please edit documentation in R/posterior_predict.R
 \name{posterior_predict}
 \alias{posterior_predict}
-\title{Draw Samples from the Posterior Predictive Distribution}
+\title{Posterior Predictive Distribution}
 \usage{
 posterior_predict(object, iter = 1000, progress = TRUE)
 }
@@ -17,7 +17,7 @@ posterior_predict(object, iter = 1000, progress = TRUE)
 A 3D array containing the predicted datasets
 }
 \description{
-Draw Samples from the Posterior Predictive Distribution
+Draw samples from the posterior predictive distribution.
 }
 \note{
 Currently only implemented for \code{type = "mixed"}. Note the term mixed is confusing, in that

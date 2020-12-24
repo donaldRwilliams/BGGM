@@ -1,4 +1,6 @@
-#' Draw Samples from the Posterior Predictive Distribution
+#' Posterior Predictive Distribution
+#'
+#' @description Draw samples from the posterior predictive distribution.
 #'
 #' @param object An object of class \code{estimate} or \code{explore}
 #'

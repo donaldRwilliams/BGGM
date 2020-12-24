@@ -1,7 +1,7 @@
 #' Predicted Probabilities
 #'
-#' Compute predicted probabilities for discrete data, with the possibility
-#' of conditional probabilities (i.e., at fixed values of other nodes)
+#' Compute the predicted probabilities for discrete data, with the possibility
+#' of conditional predictive probabilities (i.e., at fixed values of other nodes)
 #'
 #' @param object An object of class \code{posterior_predict}
 #'
@@ -12,7 +12,8 @@
 #'
 #' @param ... Compute conditional probabilities by specifying a column name in \code{Y}
 #'            (besides the \code{outcome}) and a fixed value. This can include
-#'            any number of nodes. See example below..
+#'            any number of nodes. See example below. Leave this blank to compute
+#'            unconditional probabilities for \code{outcome}.
 #'
 #' @return A list containing a matrix with the computed probabilities
 #'        (a row for each predictive sample and a column for each category).
