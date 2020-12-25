@@ -20,10 +20,9 @@ A 3D array containing the predicted datasets
 Draw samples from the posterior predictive distribution.
 }
 \note{
-Currently only implemented for \code{type = "mixed"}. Note the term mixed is confusing, in that
-it can be used with only, say, ordinal data. In this case, re-estimate the model with
-\code{type = "mixed"}
-until all data types are supported.
+Currently only implemented for \code{type = "mixed"} and \code{type = "binary"}.
+      Note the term mixed is confusing, in that it can be used with only, say, ordinal data. In this case,
+      reestimate the model with \code{type = "mixed"} until all data types are supported.
 }
 \examples{
 \donttest{

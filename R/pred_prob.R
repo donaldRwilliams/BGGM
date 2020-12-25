@@ -85,7 +85,7 @@ predicted_probability <- function(object,  outcome, Y, ...){
   }
   collect <- t(apply(collect, 1,function(x){x / sum(x)}))
   colnames(collect) <-  unique_values
-  returned_object <- list(collect = collect, sub_sets = test, dots = dots)
+  returned_object <- list(collect = collect, sub_sets = test)
   return(returned_object)
 
 }

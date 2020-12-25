@@ -10,10 +10,9 @@
 #'
 #' @return A 3D array containing the predicted datasets
 #'
-#' @note Currently only implemented for \code{type = "mixed"}. Note the term mixed is confusing, in that
-#' it can be used with only, say, ordinal data. In this case, re-estimate the model with
-#' \code{type = "mixed"}
-#' until all data types are supported.
+#' @note Currently only implemented for \code{type = "mixed"} and \code{type = "binary"}.
+#'       Note the term mixed is confusing, in that it can be used with only, say, ordinal data. In this case,
+#'       reestimate the model with \code{type = "mixed"} until all data types are supported.
 #'
 #' @export
 #'
@@ -35,12 +34,13 @@ posterior_predict <- function(object,
   if(!any(class(object) %in% c("estimate", "explore"))) {
     stop("object must be of class 'estimate' or 'explore'.")
   }
-  if(object$type != "mixed"){
-    stop("type must be 'mixed'.")
+  if(!fitb$type %in% c("binary", "mixed")){
+    stop("type must be 'mixed' or 'binary'")
   }
+
   Y <- object$Y
-  cors <- pcor_to_cor(object, iter = iter + 1)
-  cors <- cors$R[,,-1]
+  cors <- pcor_to_cor(object, iter = iter)
+  cors <- cors$R
 
   n <- object$n
   p <- object$p
@@ -52,9 +52,12 @@ posterior_predict <- function(object,
     pb <- utils::txtProgressBar(min = 0, max = iter, style = 3)
   }
 
-  for(s in 1:iter){
+
+  if(object$type == "mixed"){
+
+    for(s in 1:iter){
     cors_s <- cors[,,s]
-    ypred_s <- mvnrnd(object$n, rep(0, p), cors_s)
+    ypred_s <- mvnrnd(n, rep(0, p), cors_s)
 
     predicted[,,s] <- sapply(1:p, function(j) {
       quantile(na.omit(Y[, j]), pnorm(ypred_s[, j], 0,
@@ -64,11 +67,26 @@ posterior_predict <- function(object,
 
     )
 
-
     if(isTRUE(progress)){
       utils::setTxtProgressBar(pb, s)
     }
   }
+
+  } else if(object$type == "binary"){
+
+    betas <- t(object$post_samp$beta[,,-c(1:50)])
+
+    for(s in 1:iter){
+      cors_s <- cors[,,s]
+      yrep_s <- mvnrnd(n = n, betas[s,], cors_s)
+      predicted[,,s] <- apply(yrep_s, 2, function(x) {ifelse(x > 0, 1, 0) })
+
+      if(isTRUE(progress)){
+        utils::setTxtProgressBar(pb, s)
+      }
+    }
+  }
+
   dimnames(predicted)[[2]]  <- colnames(Y)
   class(predicted) <- c("array", "posterior_predict")
   return(predicted)
