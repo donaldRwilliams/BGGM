@@ -34,7 +34,7 @@ posterior_predict <- function(object,
   if(!any(class(object) %in% c("estimate", "explore"))) {
     stop("object must be of class 'estimate' or 'explore'.")
   }
-  if(!fitb$type %in% c("binary", "mixed")){
+  if(!object$type %in% c("binary", "mixed")){
     stop("type must be 'mixed' or 'binary'")
   }
 
