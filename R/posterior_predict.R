@@ -34,7 +34,7 @@ posterior_predict <- function(object,
   if(!any(class(object) %in% c("estimate", "explore"))) {
     stop("object must be of class 'estimate' or 'explore'.")
   }
-  if(!object$type %in% c("binary", "mixed")){
+  if(!object$type %in% c("binary", "mixed", "ordinal")){
     stop("type must be 'mixed' or 'binary'")
   }
 
@@ -85,7 +85,33 @@ posterior_predict <- function(object,
         utils::setTxtProgressBar(pb, s)
       }
     }
-  }
+  } else if(object$type == "ordinal"){
+    betas <- t(object$post_samp$beta[,,-c(1:50)])
+    thresh <- object$post_samp$thresh[-c(1:50),,]
+    K <- ncol(thresh) - 1
+    temp <- matrix(0, n, p)
+    # nasty loop
+    # todo: write in c++
+    for(s in 1:iter){
+      cors_s <- cors[,,s]
+      yrep_s <- mvnrnd(n = n, betas[s,], cors_s)
+      for(j in 1:p){
+        for(n in 1:n){
+          for(i in 1:K){
+            if(yrep_s[n,j] > thresh[s,i,j] & yrep_s[n,j] < thresh[s,i+1, j]){
+              temp[n, j] <- i
+            }
+          }
+        }
+      }
+      predicted[,,s] <- temp
+
+      if(isTRUE(progress)){
+        utils::setTxtProgressBar(pb, s)
+      }
+    }
+
+}
 
   dimnames(predicted)[[2]]  <- colnames(Y)
   class(predicted) <- c("array", "posterior_predict")
