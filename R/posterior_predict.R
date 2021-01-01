@@ -90,6 +90,7 @@ posterior_predict <- function(object,
     thresh <- object$post_samp$thresh[-c(1:50),,]
     K <- ncol(thresh) - 1
     temp <- matrix(0, n, p)
+
     # nasty loop
     # todo: write in c++
     for(s in 1:iter){
