@@ -83,7 +83,7 @@ pcor_to_cor <- function(object, iter = NULL){
 
   if(!is(object, "default")){
 
-    stop("Class not supported. Must but an 'estimate' or 'explore' object.")
+    stop("class not supported. Must but an 'estimate' or 'explore' object.")
 
   }
 
@@ -108,14 +108,15 @@ pcor_to_cor <- function(object, iter = NULL){
 
   p <- dims[1]
 
-  object <- post_samps[,,-c(1:50)]
-
-  object <- post_samps[,,1:iter]
+  object <- post_samps[, , -c(1:50)]
 
   # call c ++ for speed
-  returned_object <- .Call("_BGGM_pcor_to_cor_internal",
-                           PACKAGE = "BGGM",
-                           x = object, p = p)
+  returned_object <- .Call(
+    "_BGGM_pcor_to_cor_internal",
+    PACKAGE = "BGGM",
+    x = object,
+    p = p
+  )
 
   returned_object
 
