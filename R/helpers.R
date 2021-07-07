@@ -1303,6 +1303,8 @@ globalVariables(c('Y1','Y2',
                   'print_summary_select_explore',
                   '..', 'ppc', 'rope', 'y',
                   'Relation', 'Pr.H1',
+                  "Y_missing",
+                  "na_indices",
                   'Y'))
 
 

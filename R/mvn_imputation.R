@@ -147,7 +147,7 @@ impute_data <- function(Y,
 
     } else if(type == "mixed"){
 
-      rank_help <- BGGM:::rank_helper(Y)
+      rank_help <- rank_helper(Y)
       rank_help$levels[na_indices] <- NA
       rank_help$z0_start[is.na(rank_help$z0_start)] <- rnorm(sum(Y_missing))
 

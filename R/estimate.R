@@ -478,7 +478,7 @@ estimate  <- function(Y,
           p <- ncol(Y)
 
           # rank following hoff (2008)
-          rank_vars <- BGGM:::rank_helper(Y)
+          rank_vars <- rank_helper(Y)
 
           if(impute){
 
