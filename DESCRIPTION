@@ -2,7 +2,7 @@ Package: BGGM
 Type: Package
 Title: Bayesian Gaussian Graphical Models
 Version: 2.0.4
-Date: 2020-12-02
+Date: 2021-08-06
 Authors@R: c(person("Donald", "Williams", email = "drwwilliams@ucdavis.edu", role = c("aut", "cre")),
              person("Joris", "Mulder", email = "J.Mulder3@uvt.nl", role = "aut"))
 Description: Fit Bayesian Gaussian graphical models. The methods are separated into 
