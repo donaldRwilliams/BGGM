@@ -59,7 +59,7 @@ E <- select(fit,
 
 `alternative` can be changed to, say, `"greater"` which would then perform a one-sided hypothesis
 test for postive relations. This is ideal for many applications in psychology, because often 
-**all** relations are expected to be positive. See this [blog](https://donaldrwilliams.github.io/2020/03/29/dealing-with-negative-red-edges-in-psychological-networks-frequentist-edition/) for more about this topic.
+**all** relations are expected to be positive.
 
 
 ## Plot Graph

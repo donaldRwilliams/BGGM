@@ -39,10 +39,8 @@ the partial correlations that did not contain zero
 \details{
 This package was built for the social-behavioral sciences in particular. In these applications, there is
 strong theory that expects \emph{all} effects to be positive. This is known as a "positive manifold" and
-this notion has a rich tradition in psychometrics. Hence, this can be incorportated into the graph with
-\code{alternative = "greater"}. This results in the estimted structure including only positive edges. Further
-details can be found at the blog "Dealing with Negative (Red) Edges in Psychological Networks: Frequentist Edition"
-(\href{https://donaldrwilliams.github.io/2020/03/29/dealing-with-negative-red-edges-in-psychological-networks-frequentist-edition/}{link})
+this notion has a rich tradition in psychometrics. Hence, this can be incorporated into the graph with
+\code{alternative = "greater"}. This results in the estimated structure including only positive edges.
 }
 \examples{
 \donttest{

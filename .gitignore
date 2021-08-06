@@ -11,3 +11,5 @@ src/*.dll
 doc
 Meta
 custom.css
+/doc/
+/Meta/
