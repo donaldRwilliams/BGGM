@@ -71,8 +71,6 @@ Structured style: items 23, 28, 30
 \examples{
 data("rsa")
 
-# labels
-rsa_labels <- BGGM:::rsa_labels
 }
 \references{
 Briganti, G., & Linkowski, P. (2019). Item and domain network structures of the Resilience

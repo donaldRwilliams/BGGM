@@ -229,7 +229,8 @@ confirm <- function(Y, hypothesis,
                    "currently only implemented for 'continuous' data."))
   }
 
-  old <- .Random.seed
+  # removed per CRAN (8/12/21)
+  # old <- .Random.seed
 
   set.seed(seed)
 
@@ -611,7 +612,8 @@ confirm <- function(Y, hypothesis,
     message("BGGM: Finished")
   }
 
-  .Random.seed <<- old
+  # removed per CRAN (8/12/21)
+  #.Random.seed <<- old
 
   returned_object <- list(BF_matrix = BF_matrix,
                           out_hyp_prob = out_hyp_prob,

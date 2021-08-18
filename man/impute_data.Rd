@@ -97,9 +97,6 @@ fit_missing <- impute_data(Y,
                            progress = TRUE,
                            iter = 250)
 
-# plot
-plot(BGGM:::mean_array( fit_missing$imputed_datasets)[na_indices], Ymain[na_indices])
-
 }
 }
 \references{

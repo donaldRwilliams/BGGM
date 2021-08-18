@@ -67,8 +67,6 @@ Personal distress: items 6, 10, 13, 17, 19, 24, 27,
 \examples{
 data("iri")
 
-# labels
-iri_labels <- BGGM:::iri_labels
 }
 \references{
 Briganti, G., Kempenaers, C., Braun, S., Fried, E. I., & Linkowski, P. (2018). Network analysis of

@@ -52,8 +52,6 @@ Externally oriented thinking: items 10, 15, 16, 18, 19
 \examples{
 data("tas")
 
-# labels
-tas_labels <- BGGM:::tas_labels
 }
 \references{
 Briganti, G., & Linkowski, P. (2019). Network approach to items and domains from

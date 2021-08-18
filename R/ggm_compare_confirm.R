@@ -350,7 +350,8 @@ ggm_compare_confirm <- function(...,
                    "currently only implemented for 'continuous' data."))
   }
 
-  old <- .Random.seed
+  # removed per CRAN (8/12/21)
+  # old <- .Random.seed
 
   set.seed(seed)
 
@@ -838,7 +839,7 @@ ggm_compare_confirm <- function(...,
 
   # prior start group (one)
   prior_group <-  matrix(prior_samp[[1]][ , ,][upper.tri(I_p)],
-                         nrow = iter,
+                         nrow = 25000,
                          ncol = pcors,
                          byrow = TRUE)
 
@@ -851,7 +852,7 @@ ggm_compare_confirm <- function(...,
                               byrow = TRUE))
 
     prior_group <-  cbind(prior_group,
-                        matrix(prior_samp[[j]][ , ,][upper.tri(I_p)], iter, pcors, byrow = TRUE))
+                        matrix(prior_samp[[j]][ , ,][upper.tri(I_p)], 25000, pcors, byrow = TRUE))
   }
 
   posterior_samples <- post_group
@@ -933,8 +934,8 @@ ggm_compare_confirm <- function(...,
     post_samp = post_samp
 
   )
-
-  .Random.seed <<- old
+  # removed per CRAN (8/12/21)
+  #.Random.seed <<- old
 
   class(returned_object) <- c("BGGM",
                             "confirm",

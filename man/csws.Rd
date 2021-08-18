@@ -75,8 +75,6 @@ APPROVAL FROM OTHERS: items: 6, 9, 15, 23, and 35.
 \examples{
 data("csws")
 
-# labels
-csws_lables <- BGGM:::csws_labels
 
 }
 \references{

@@ -181,8 +181,8 @@ explore <- function(Y,
                    and 'mixed' data."))
   }
 
-
-  old <- .Random.seed
+  # removed per CRAN (8/12/21)
+  #old <- .Random.seed
 
   set.seed(seed)
 
@@ -548,13 +548,14 @@ explore <- function(Y,
       ppd_mean = post_samp$ppd_mean
     )
 
-  }else {
+  } else {
 
     stop("analytic solution not currently available")
 
     }
 
-  .Random.seed <<- old
+  # removed per CRAN (8/12/21)
+  #.Random.seed <<- old
 
   returned_object
 

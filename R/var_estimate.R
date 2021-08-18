@@ -72,7 +72,8 @@ var_estimate <- function(Y, rho_sd = 0.50,
                          seed = 1,
                          ...) {
 
-  old <- .Random.seed
+  # removed per CRAN (8/12/21)
+  #old <- .Random.seed
 
   set.seed(seed)
 
@@ -147,8 +148,8 @@ var_estimate <- function(Y, rho_sd = 0.50,
                           X = X,
                           call = match.call())
 
-
-  .Random.seed <<- old
+  # removed per CRAN (8/12/21)
+  #.Random.seed <<- old
 
   class(returned_object) <- c("BGGM",
                               "var_estimate",

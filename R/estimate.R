@@ -218,7 +218,8 @@ estimate  <- function(Y,
                    and 'mixed' data."))
     }
 
-  old <- .Random.seed
+  # removed per CRAN (8/12/21)
+  #old <- .Random.seed
 
   set.seed(seed)
 
@@ -590,7 +591,8 @@ estimate  <- function(Y,
 
     } # end analytic
 
-  .Random.seed <<- old
+  # removed per CRAN (8/12/21)
+  #.Random.seed <<- old
 
   returned_object <- results
 

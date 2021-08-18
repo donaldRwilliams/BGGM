@@ -341,8 +341,6 @@ NULL
 #' @examples
 #' data("csws")
 #'
-#' # labels
-#' csws_lables <- BGGM:::csws_labels
 #'
 #' @references
 #' Briganti, G., Fried, E. I., & Linkowski, P. (2019). Network analysis of Contingencies of Self-Worth
@@ -398,8 +396,6 @@ NULL
 #' @examples
 #' data("tas")
 #'
-#' # labels
-#' tas_labels <- BGGM:::tas_labels
 #' @references
 #' Briganti, G., & Linkowski, P. (2019). Network approach to items and domains from
 #' the Toronto Alexithymia Scale. Psychological reports.
@@ -470,8 +466,6 @@ NULL
 #' @examples
 #' data("iri")
 #'
-#' # labels
-#' iri_labels <- BGGM:::iri_labels
 #' @references
 #'Briganti, G., Kempenaers, C., Braun, S., Fried, E. I., & Linkowski, P. (2018). Network analysis of
 #'empathy items from the interpersonal reactivity index in 1973
@@ -549,8 +543,6 @@ NULL
 #' @examples
 #' data("rsa")
 #'
-#' # labels
-#' rsa_labels <- BGGM:::rsa_labels
 #' @references
 #' Briganti, G., & Linkowski, P. (2019). Item and domain network structures of the Resilience
 #' Scale for Adults in 675 university students. Epidemiology and psychiatric sciences, 1-9.
