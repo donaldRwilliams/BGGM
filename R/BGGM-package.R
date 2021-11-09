@@ -100,35 +100,35 @@
 #'  \enumerate{
 #'
 #'  \item Bivariate correlations for binary (tetrachoric), ordinal (polychoric), mixed (rank based),
-#'        and continous (Pearson's) data \code{\link{zero_order_cors}}.
+#'        and continuous (Pearson's) data \code{\link{zero_order_cors}}.
 #'
 #'  \item Multivariate regression for binary (probit), ordinal (probit),
 #'        mixed (rank likelihood), and continous data (\code{\link{estimate}}).
 #'
 #'  \item Multiple regression for binary (probit), ordinal (probit),
-#'        mixed (rank likelihood), and continous data (e.g., \code{\link{coef.estimate}}).
+#'        mixed (rank likelihood), and continuous data (e.g., \code{\link{coef.estimate}}).
 #'  }
 #'
 #' \strong{Note on Conditional (In)dependence Models for Latent Data}:
 #'
-#' All of the data types (besides continuous) model latent data. That is, unoboserved data that is
-#' assumed to be Gaussian distributed. For example, a  tetrachoric correlation (binary data) is a
-#' special case of a polychoric correlation (ordinal data). Both relations are between "theorized
-#' normally distributed continuous \strong{latent} variables"
-#' (\href{https://en.wikipedia.org/wiki/Polychoric_correlation}{Wikipedia}). In both instances,
-#' the correpsonding partial correlation between observed variables is conditioned
-#' on the remaining variables in the \emph{latent} space. This implies that interpration
+#' All of the data types (besides continuous) model latent data. That is, unobserved
+#' (latent) data is assumed to be Gaussian. For example, a tetrachoric correlation
+#' (binary data) is a special case of a polychoric correlation (ordinal data).
+#' Both capture relations between "theorized normally distributed continuous
+#' \strong{latent} variables" (\href{https://en.wikipedia.org/wiki/Polychoric_correlation}{Wikipedia}).
+#' In both instances, the corresponding partial correlation between observed variables is conditioned
+#' on the remaining variables in the \emph{latent} space. This implies that interpretation
 #' is similar to continuous data, but with respect to latent variables. We refer interested users
 #' to \insertCite{@page 2364, section 2.2, in  @webb2008bayesian;textual}{BGGM}.
 #'
 #'
 #' \strong{High Dimensional Data?}
 #'
-#' \strong{BGGM} was builit specificially for social-behvarioal scientists. Of course, the methods
-#' can be used by all researchers. However, there is \emph{not} support for high-dimensonal data
-#' (i.e., more variables than observations) that are common place in the genetics literature.
-#' These data are rare in the social-behavioral sciences. In the future, support for high-dimensional
-#' data may be added to \strong{BGGM}.
+#' \strong{BGGM} was built specifically for social-behavioral scientists. Of course,
+#' the methods can be used by all researchers. However, there is currently \emph{not} support
+#' for high-dimensional data (i.e., more variables than observations) that are common
+#' place in the genetics literature. These data are rare in the social-behavioral sciences.
+#' In the future, support for high-dimensional data may be added to \strong{BGGM}.
 #'
 #' @references
 #' \insertAllCited{}

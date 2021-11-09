@@ -2,7 +2,7 @@ Package: BGGM
 Type: Package
 Title: Bayesian Gaussian Graphical Models
 Version: 2.0.4
-Date: 2021-08-12
+Date: 2021-08-18
 Authors@R: c(person("Donald", "Williams", email = "drwwilliams@ucdavis.edu", role = c("aut", "cre")),
              person("Joris", "Mulder", email = "J.Mulder3@uvt.nl", role = "aut"))
 Description: Fit Bayesian Gaussian graphical models. The methods are separated into 
@@ -43,7 +43,7 @@ Encoding: UTF-8
 LazyData: true
 VignetteBuilder: 
     knitr
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 LinkingTo: Rcpp, 
            RcppArmadillo, 
            RcppDist, 
