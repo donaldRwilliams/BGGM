@@ -170,15 +170,18 @@ explore <- function(Y,
                     prior_sd = 0.25,
                     iter = 5000,
                     progress = TRUE,
-                    impute = TRUE,
+                    impute = FALSE,
                     seed = 1, ...){
 
   # temporary warning until missing data is fully implemented
   if(!type %in% c("continuous", "mixed")){
 
-    warning(paste0("imputation during model fitting is\n",
+    if(impute){
+
+      warning(paste0("imputation during model fitting is\n",
                    "currently only implemented for 'continuous'
                    and 'mixed' data."))
+    }
   }
 
   # removed per CRAN (8/12/21)
@@ -430,8 +433,6 @@ explore <- function(Y,
       Y <-  as.matrix(control_info$Y_groups[[1]])
 
       formula <- NULL
-
-
 
     }
 

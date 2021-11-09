@@ -213,10 +213,12 @@ estimate  <- function(Y,
   # temporary warning until missing data is fully implemented
   if(!type %in% c("continuous", "mixed")){
 
+    if(impute){
     warning(paste0("imputation during model fitting is\n",
                    "currently only implemented for 'continuous'
-                   and 'mixed' data."))
+                    and 'mixed' data."))
     }
+  }
 
   # removed per CRAN (8/12/21)
   #old <- .Random.seed
