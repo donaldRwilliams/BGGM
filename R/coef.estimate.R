@@ -2,7 +2,7 @@
 #'
 #'  There is a direct correspondence between the inverse covariance matrix and
 #'  multiple regression \insertCite{kwan2014regression,Stephens1998}{BGGM}. This readily allows
-#'  for converting the GGM paramters to regression coefficients. All data types are supported.
+#'  for converting the GGM parameters to regression coefficients. All data types are supported.
 #'
 #'
 #' @name coef.estimate
@@ -124,7 +124,7 @@ coef.estimate <- function(object,
 #'
 #'  There is a direct correspondence between the inverse covariance matrix and
 #'  multiple regression \insertCite{kwan2014regression,Stephens1998}{BGGM}. This readily allows
-#'  for converting the GGM paramters to regression coefficients. All data types are supported.
+#'  for converting the GGM parameters to regression coefficients. All data types are supported.
 #'
 #' @name coef.explore
 #'
@@ -245,13 +245,15 @@ coef.explore <- function(object,
 print_coef <- function(x,...){
   # nodes
   p <- length(x$betas)
+
   # column names
   cn <- colnames(x$object$Y)
 
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
   cat("Type:", x$object$type, "\n")
-  cat("Formula:", paste(as.character(x$object$formula), collapse = " "), "\n")
+  cat("Formula:", paste(as.character(x$object$formula),
+                        collapse = " "), "\n")
   cat("--- \n")
   cat("Call: \n")
   print(x$object$call)
@@ -264,6 +266,7 @@ print_coef <- function(x,...){
   }
 
   for (i in seq_len(p)) {
+
     # print outcome
     cat(paste0(cn[i], ": \n"))
 
@@ -359,7 +362,8 @@ print_summary_coef <- function(x,...){
   cat("BGGM: Bayesian Gaussian Graphical Models \n")
   cat("--- \n")
   cat("Type:", x$object$object$type, "\n")
-  cat("Formula:", paste(as.character(x$object$object$formula), collapse = " "), "\n")
+  cat("Formula:", paste(as.character(x$object$object$formula),
+                        collapse = " "), "\n")
   cat("--- \n")
   cat("Call: \n")
   print(x$object$object$call)

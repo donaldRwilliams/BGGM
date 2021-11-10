@@ -29,7 +29,7 @@ posterior samples
 \description{
 There is a direct correspondence between the inverse covariance matrix and
  multiple regression \insertCite{kwan2014regression,Stephens1998}{BGGM}. This readily allows
- for converting the GGM paramters to regression coefficients. All data types are supported.
+ for converting the GGM parameters to regression coefficients. All data types are supported.
 }
 \examples{
 \donttest{

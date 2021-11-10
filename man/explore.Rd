@@ -13,7 +13,7 @@ explore(
   prior_sd = 0.25,
   iter = 5000,
   progress = TRUE,
-  impute = TRUE,
+  impute = FALSE,
   seed = 1,
   ...
 )
