@@ -37,11 +37,11 @@ the prior odds that each relation should be included in the graph.
 }
 \details{
 Technically, the prior odds is not for including an edge in the graph,
-but p(H1)/p(H0), where H1 captures the hypothesized edge size and H0 is the
+but for (H1)/p(H0), where H1 captures the hypothesized edge size and H0 is the
 null model  \insertCite{@see Williams2019_bf}{BGGM}. Accordingly, setting an
 entry in \code{prior_ggm} to, say, 10, encodes a prior belief that H1 is 10 times
-more likely than H0. Further, setting an entry in \code{prior_ggm} to 1 is equal prior odds
-(the default in \code{\link{select.explore}}).
+more likely than H0. Further, setting an entry in \code{prior_ggm} to 1 results
+in equal prior odds (the default in \code{\link{select.explore}}).
 }
 \examples{
 \donttest{
@@ -60,15 +60,15 @@ y <- MASS::mvrnorm(n = 200,
 
 # prior est
 prior_est <- prior_belief_ggm(Y = y,
-                              prior_ggm = prior_ggm)
+                              prior_ggm = prior_ggm,
+                              progress = FALSE)
 
 # check scores
 BGGM:::performance(Estimate = prior_est$adj,
                    True = main$adj)
 
-
 # default in BGGM
-default_est <- select(explore(y))
+default_est <- select(explore(y, progress = FALSE))
 
 # check scores
 BGGM:::performance(Estimate = default_est$Adj_10,
