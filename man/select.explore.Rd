@@ -13,7 +13,7 @@
 
 \item{alternative}{A character string specifying the alternative hypothesis. It
 must be one of "two.sided" (default), "greater", "less",
-or "exhuastive". See note for futher details.}
+or "exhaustive". See note for further details.}
 
 \item{...}{Currently ignored.}
 }
