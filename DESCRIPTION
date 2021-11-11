@@ -34,7 +34,7 @@ Imports:
 Suggests: 
     abind (>= 1.4-5),
     assortnet (>= 0.12),
-    networktools (>= 1.2.3),
+    networktools (>= 1.3.0),
     mice (>= 3.8.0),
     psych,
     knitr,
