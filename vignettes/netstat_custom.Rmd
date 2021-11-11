@@ -43,7 +43,6 @@ remotes::install_github("donaldRwilliams/BGGM")
 In all examples, a subset of `ptsd` data is used. The subset includes two of the "communities" of 
 symptoms [details for these data can be found in @armour2017network]. The data are ordinal (5-level Likert).
 ```{r, warning =FALSE, message=FALSE}
-install.packages("networktools")
 # need these packages
 library(BGGM)
 library(ggplot2)

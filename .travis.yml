@@ -4,7 +4,8 @@ cache: packages
 
 warnings_are_errors: false
 
-r_check_args: "--no-build-vignettes --ignore-vignettes"
+r_build_args: --no-build-vignettes --no-manual --no-resave-data
+r_check_args: --no-build-vignettes --no-manual
 
 os:
   - linux
