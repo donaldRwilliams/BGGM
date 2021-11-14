@@ -75,5 +75,4 @@ BGGM:::performance(Estimate = default_est$Adj_10,
                    True = main$adj)
 
 }
-
 }
