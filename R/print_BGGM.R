@@ -1,14 +1,25 @@
 #' @name print.BGGM
 #' @title  Print method for \code{BGGM} objects
 #'
+#' @description Mainly used to avoid a plethora of different print
+#' functions that overcrowded the documentation in previous versions
+#' of \strong{BGGM}.
+#'
 #' @param x An object of class \code{BGGM}
 #' @param ... currently ignored
 #'
 #' @importFrom methods is
 #' @export
 print.BGGM <- function(x, ...) {
-  # print estimate methods
 
+  if(is(x, "prior_var")){
+    print_prior_var(x, ...)
+  }
+
+  if(is(x, "prior_ggm")){
+    print_prior_ggm(x, ...)
+  }
+  # print estimate methods
   if(is(x,  "mvn_imputation")){
     print_mvn_impute(x, ...)
   }

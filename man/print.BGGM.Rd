@@ -12,5 +12,7 @@
 \item{...}{currently ignored}
 }
 \description{
-Print method for \code{BGGM} objects
+Mainly used to avoid a plethora of different print
+functions that overcrowded the documentation in previous versions
+of \strong{BGGM}.
 }

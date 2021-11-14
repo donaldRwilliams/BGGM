@@ -67,7 +67,6 @@
 #'                    True = main$adj)
 #'
 #' }
-#'
 #' @export
 prior_belief_ggm <- function(Y,
                              prior_ggm,
@@ -103,5 +102,14 @@ prior_belief_ggm <- function(Y,
   returned_object <- list(adj = adj,
                           post_prob = post_prob)
 
+  class(returned_object) <- c("BGGM", "prior_ggm")
+
   return(returned_object)
+}
+
+print_prior_ggm <- function(x, ...){
+  cat("BGGM: Bayesian Gaussian Graphical Models \n")
+  cat("Prior Belief Gaussian Graphical Model\n")
+  cat("--- \n")
+  cat("Date:", date(), "\n")
 }
