@@ -33,6 +33,15 @@
 #' \code{prior_var} to 1 results in equal prior odds
 #' (the default in \code{\link{select.explore}}).
 #'
+#' @note
+#' The returned matrices are formatted with the rows indicating
+#' the outcome and the columns the predictor. Hence, adj_temporal[1,4] is the temporal
+#' relation of node 4 predicting node 1. This follows the convention of the
+#' \strong{vars} package (i.e., \code{Acoef}).
+#'
+#' Further, in order to compute the Bayes factor the data is
+#' standardized (mean = 0 and standard deviation = 1).
+#'
 #' @return An object including (\code{est_ggm = FALSE}):
 #'
 #' \itemize{
@@ -83,7 +92,7 @@
 #'}
 prior_belief_var <- function(Y,
                              prior_temporal = NULL,
-                             post_odds_cut,
+                             post_odds_cut = 3,
                              est_ggm = TRUE,
                              prior_ggm = NULL,
                              progress = TRUE, ...){
@@ -109,6 +118,8 @@ prior_belief_var <- function(Y,
   BF_mat <- matrix(data = 0,
                    nrow = p,
                    ncol = p)
+
+  coef_mat <- BF_mat
 
   if(est_ggm) {
     resid_mat <- matrix(data = 0,
@@ -144,6 +155,8 @@ prior_belief_var <- function(Y,
 
     fit_i <- lm(y_t[, i] ~ 0 + y_t_1)
 
+    coef_mat[i,] <- coef(fit_i)
+
     if(est_ggm){
       resid_mat[,i] <- residuals(fit_i)
     }
@@ -153,7 +166,7 @@ prior_belief_var <- function(Y,
         1 / BF(fit_i, hypothesis = paste0(x, "=0"))$BFmatrix_confirmatory[1, 2]
       })
 
-    BF_mat[, i] <- unlist(BF_10)
+    BF_mat[i, ] <- unlist(BF_10)
 
     if(progress){
       utils::setTxtProgressBar(pb, i)
@@ -170,7 +183,7 @@ prior_belief_var <- function(Y,
                                 ...)
   }
 
-  post_odds <- t(BF_mat) * prior_var
+  post_odds <- BF_mat * prior_var
 
   adj <- ifelse(post_odds > post_odds_cut, 1, 0)
 
@@ -181,11 +194,13 @@ prior_belief_var <- function(Y,
       adj_temporal = adj,
       post_prob_temporal = post_prob,
       adj_ggm = fit_ggm$adj,
-      post_prob_ggm = fit_ggm$post_prob
+      post_prob_ggm = fit_ggm$post_prob,
+      coef_mat = coef_mat
     )
   } else {
     returned_object <- list(adj = adj,
-                            post_prob = post_prob)
+                            post_prob = post_prob,
+                            coef_mat = coef_mat)
   }
 
   class(returned_object) <- c("BGGM", "prior_var")

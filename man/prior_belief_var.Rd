@@ -7,7 +7,7 @@
 prior_belief_var(
   Y,
   prior_temporal = NULL,
-  post_odds_cut,
+  post_odds_cut = 3,
   est_ggm = TRUE,
   prior_ggm = NULL,
   progress = TRUE,
@@ -78,6 +78,15 @@ entry in \code{prior_ggm} to, say, 10, encodes a prior belief that H1 is 10 time
 more likely than H0. Further, setting an entry in \code{prior_ggm} or
 \code{prior_var} to 1 results in equal prior odds
 (the default in \code{\link{select.explore}}).
+}
+\note{
+The returned matrices are formatted with the rows indicating
+the outcome and the columns the predictor. Hence, adj_temporal[1,4] is the temporal
+relation of node 4 predicting node 1. This follows the convention of the
+\strong{vars} package (i.e., \code{Acoef}).
+
+Further, in order to compute the Bayes factor the data is
+standardized (mean = 0 and standard deviation = 1).
 }
 \examples{
 \donttest{
