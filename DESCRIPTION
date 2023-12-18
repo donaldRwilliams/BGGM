@@ -38,15 +38,17 @@ Suggests:
     mice (>= 3.8.0),
     psych,
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat (>= 3.0.0)
 Encoding: UTF-8
 LazyData: true
 VignetteBuilder: 
     knitr
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.2
 LinkingTo: Rcpp, 
            RcppArmadillo, 
            RcppDist, 
            RcppProgress
 RdMacros: Rdpack
 BugReports: https://github.com/donaldRwilliams/BGGM/issues
+Config/testthat/edition: 3

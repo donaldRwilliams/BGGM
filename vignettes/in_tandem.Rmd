@@ -7,7 +7,7 @@ output:
   rmarkdown::html_vignette:
     toc: yes
 vignette: >
-  %\VignetteIndexEntry{Confirmatory and Exploratory Testing}
+  %\VignetteIndexEntry{In Tandem: Confirmatory and Exploratory Testing}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
