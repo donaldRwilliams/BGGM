@@ -16,3 +16,4 @@
 ^index\.Rmd$
 ^doc$
 ^docs$
+^config.status$
