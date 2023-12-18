@@ -9,7 +9,7 @@ bibentry(bibtype = "Article",
          year = "2019",
          journal = "PsyArXiv",
          note = note,
-         url = "https://psyarxiv.com/t2cn7/")
+         url = "https://osf.io/preprints/psyarxiv/t2cn7")
 
 
 bibentry(bibtype = "Article",
@@ -18,7 +18,7 @@ bibentry(bibtype = "Article",
          author = c(person(c("Donald", "R."), "Williams")),
          year = "2018",
          journal = "PsyArXiv",
-         url = "https://psyarxiv.com/x8dpr/",
+         url = "https://osf.io/preprints/psyarxiv/x8dpr/",
          doi = "10.31234/osf.io/x8dpr")
 
 
@@ -29,7 +29,7 @@ bibentry(bibtype = "Article",
                     person("Joris", "Mulder")),
          year = "2019",
          journal = "PsyArXiv",
-         url = "https://psyarxiv.com/ypxd8/",
+         url = "https://osf.io/preprints/psyarxiv/ypxd8/",
          doi = "10.31234/osf.io/ypxd8")
 
 bibentry(bibtype = "Article",

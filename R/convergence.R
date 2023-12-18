@@ -14,7 +14,7 @@
 #'
 #' @return A list of \code{ggplot} objects.
 #'
-#' @note An overview of MCMC diagnostics can be found \href{http://sbfnk.github.io/mfiidd/mcmc_diagnostics.html}{here}.
+#' @note An overview of MCMC diagnostics can be found \href{https://sbfnk.github.io/mfiidd/mcmc_diagnostics.html}{here}.
 #'
 #' @importFrom stats acf
 #'
