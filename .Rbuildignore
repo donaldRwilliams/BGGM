@@ -17,3 +17,4 @@
 ^doc$
 ^docs$
 ^config.status$
+^tests$

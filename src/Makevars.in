@@ -8,6 +8,7 @@
 ##
 ## And with R 3.4.0, and RcppArmadillo 0.7.960.*, we turn C++11 on as OpenMP
 ## support within Armadillo prefers / requires it
-CXX_STD = CXX11
+## Move to C++17 for R >= 4.3.0
+CXX_STD = CXX17
 PKG_CXXFLAGS = @OPENMP_FLAG@ -I../inst/include
 PKG_LIBS= @OPENMP_FLAG@ $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
