@@ -1,9 +1,9 @@
 Package: BGGM
 Type: Package
 Title: Bayesian Gaussian Graphical Models
-Version: 2.1.0
-Date: 2021-08-18
-Authors@R: c(person("Donald", "Williams", email = "drwwilliams@ucdavis.edu", role = c("aut", "cre")),
+Version: 2.1.0.9000
+Date: 2023-12-18
+Authors@R: c(person("Donald", "Williams", email = "rast.ph@gmail.com", role = c("aut", "cre")),
              person("Joris", "Mulder", email = "J.Mulder3@uvt.nl", role = "aut"))
 Description: Fit Bayesian Gaussian graphical models. The methods are separated into 
     two Bayesian approaches for inference: hypothesis testing and estimation. There are 
@@ -13,7 +13,7 @@ Description: Fit Bayesian Gaussian graphical models. The methods are separated i
     Williams (2019) <doi:10.31234/osf.io/x8dpr>, 
     Williams and Mulder (2019) <doi:10.31234/osf.io/ypxd8>,
     Williams, Rast, Pericchi, and Mulder (2019) <doi:10.31234/osf.io/yt386>.
-Depends: R (>= 3.5.0)
+Depends: R (>= 4.3.0)
 License: GPL-2
 Imports:
     BFpack (>= 0.2.1),
