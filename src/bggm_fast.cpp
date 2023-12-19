@@ -2684,7 +2684,7 @@ Rcpp::List missing_copula(arma::mat Y,
 
   arma::uvec index = find(Y_missing == 1);
 
-  int n_na = index.n_elem;
+  //No more use:  int n_na = index.n_elem;
 
   int nu = 1/ epsilon;
 
