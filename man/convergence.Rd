@@ -24,7 +24,7 @@ A list of \code{ggplot} objects.
 Monitor convergence of the MCMC algorithms.
 }
 \note{
-An overview of MCMC diagnostics can be found \href{http://sbfnk.github.io/mfiidd/mcmc_diagnostics.html}{here}.
+An overview of MCMC diagnostics can be found \href{https://sbfnk.github.io/mfiidd/mcmc_diagnostics.html}{here}.
 }
 \examples{
 \donttest{
