@@ -3,8 +3,9 @@ Type: Package
 Title: Bayesian Gaussian Graphical Models
 Version: 2.1.0.9000
 Date: 2023-12-18
-Authors@R: c(person("Donald", "Williams", email = "rast.ph@gmail.com", role = c("aut", "cre")),
-             person("Joris", "Mulder", email = "J.Mulder3@uvt.nl", role = "aut"))
+Authors@R: c(person("Donald", "Williams", email = "drwwilliams@ucdavis.edu", role = "aut"),
+             person("Joris", "Mulder", email = "J.Mulder3@uvt.nl", role = "aut"),
+	     person("Philippe", "Rast", email = "rast.ph@gmail.com", role = c("aut", "cre")))
 Description: Fit Bayesian Gaussian graphical models. The methods are separated into 
     two Bayesian approaches for inference: hypothesis testing and estimation. There are 
     extensions for confirmatory hypothesis testing, comparing Gaussian graphical models, 

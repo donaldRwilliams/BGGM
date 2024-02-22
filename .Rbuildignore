@@ -18,3 +18,4 @@
 ^docs$
 ^config.status$
 ^tests$
+^cran-comments\.md$

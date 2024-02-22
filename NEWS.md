@@ -1,3 +1,6 @@
+# BGGM 2.1.1
+BFpack dependency error fixed. 
+
 # BGGM 2.0.1
 This version of BGGM included changes based on the JOSS reviews: see [here](https://github.com/openjournals/joss-reviews/issues/2111) for 
 the overview and [here](https://github.com/donaldRwilliams/BGGM/issues?q=is%3Aissue+is%3Aclosed) for specific issues.
