@@ -134,7 +134,8 @@
 #' \insertAllCited{}
 #'
 #'
-#' @docType package
+#' @keywords internal
+#' @aliases _PACKAGE
 #'
 #' @name BGGM-package
 #'
