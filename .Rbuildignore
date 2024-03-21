@@ -19,3 +19,4 @@
 ^config.status$
 ^tests$
 ^cran-comments\.md$
+^CRAN-SUBMISSION$
