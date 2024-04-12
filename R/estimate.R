@@ -207,7 +207,7 @@ estimate  <- function(Y,
                       iter = 5000,
                       impute = FALSE,
                       progress = TRUE,
-                      seed = 1,
+                      seed = NULL,
                       ...){
 
   # temporary warning until missing data is fully implemented
@@ -220,10 +220,10 @@ estimate  <- function(Y,
     }
   }
 
-  # removed per CRAN (8/12/21)
-  #old <- .Random.seed
-
-  set.seed(seed)
+  ## Random seed unless user provided
+  if(!is.null(seed) ) {
+    set.seed(seed)
+  }
 
   # delta rho ~ beta(delta/2, delta/2)
   delta <- delta_solve(prior_sd)
@@ -506,11 +506,17 @@ estimate  <- function(Y,
 
         } else {
 
-          ## If z0_Start has missing, fill with rnorm
-          Y_missing <- ifelse(is.na(Y), 1, 0)
-          rank_vars$z0_start[is.na(rank_vars$z0_start)] <- rnorm(sum(Y_missing))
-          
-          Y <- na.omit(Y)
+          ## check if Y contains NA
+          contains_na <- any(is.na(Y))
+          if( contains_na ) {
+            Y <- na.omit(Y)
+            ## Reassign values when NA are present
+            temp_helper <- rank_helper(Y)
+            rank_vars$z0_start <- temp_helper$z0_start
+            rank_vars$levels <- temp_helper$levels
+            warning("Observed variables contain missings:\n  No imputation, cases are deleted listwise." )
+          }
+
 
           post_samp <- .Call(
             "_BGGM_copula",

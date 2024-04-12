@@ -14,7 +14,7 @@ estimate(
   iter = 5000,
   impute = FALSE,
   progress = TRUE,
-  seed = 1,
+  seed = NULL,
   ...
 )
 }
