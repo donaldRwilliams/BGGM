@@ -506,9 +506,11 @@ estimate  <- function(Y,
 
         } else {
 
+          ## If z0_Start has missing, fill with rnorm
+          Y_missing <- ifelse(is.na(Y), 1, 0)
+          rank_vars$z0_start[is.na(rank_vars$z0_start)] <- rnorm(sum(Y_missing))
+          
           Y <- na.omit(Y)
-
-
 
           post_samp <- .Call(
             "_BGGM_copula",
