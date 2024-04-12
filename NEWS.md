@@ -1,5 +1,5 @@
 # BGGM (development version)
-- Resolved non positive definite initialization matrix in wishrnd() in copula models when NA's are present in observed variables (fixes #89).
+- Resolved non positive definite initialization matrix in wishrnd() in copula models when NA's are present in observed variables (fixes #89). See changes [here](https://github.com/donaldRwilliams/BGGM/commit/d57a5ebabd665907622a1c635ca32b5c6c913184)
 
 # BGGM 2.1.1
 BFpack dependency error fixed. 
