@@ -149,7 +149,7 @@ plot.select <- function(x,
         geom_point(color = "black",
                    size = node_size+1) +
         geom_point(size = node_size, color = "white")  +
-        guides(color = FALSE) +
+        guides(color = "none") +
         geom_text(label = cn)
 
 
@@ -260,7 +260,7 @@ plot.select <- function(x,
           geom_point(color = "black",
                      size = node_size + 1) +
           geom_point(size = node_size, color = "white")  +
-          guides(color = FALSE) +
+          guides(color = "none") +
           geom_text(label = cn)
 
 
@@ -270,7 +270,7 @@ plot.select <- function(x,
           geom_point(color = "black",
                      size = node_size + 1) +
           geom_point(size = node_size, color = "white")  +
-          guides(color = FALSE) +
+          guides(color = "none") +
           geom_text(label = cn)
 
 
@@ -281,7 +281,7 @@ plot.select <- function(x,
           geom_point(color = "black",
                      size = node_size + 1) +
           geom_point(size = node_size, color = "white")  +
-          guides(color = FALSE) +
+          guides(color = "none") +
           geom_text(label = cn)
 
         list(plt_alt = plt_alt,
@@ -422,7 +422,7 @@ plot.select <- function(x,
           geom_point(color = "black",
                      size = node_size + 1) +
           geom_point(size = node_size, color = "white")  +
-          guides(color = FALSE) +
+          guides(color = "none") +
           geom_text(label = cn)
 
 
@@ -437,7 +437,7 @@ plot.select <- function(x,
           geom_point(color = "black",
                      size = node_size + 1) +
           geom_point(size = node_size, color = "white")  +
-          guides(color = FALSE) +
+          guides(color = "none") +
           geom_text(label = cn)
 
 
@@ -448,7 +448,7 @@ plot.select <- function(x,
           geom_point(color = "black",
                      size = node_size + 1) +
           geom_point(size = node_size, color = "white")  +
-          guides(color = FALSE) +
+          guides(color = "none") +
           geom_text(label = cn)
 
         plt_ambiguous <- ggnet2(net_ambigous,
@@ -457,7 +457,7 @@ plot.select <- function(x,
           geom_point(color = "black",
                      size = node_size + 1) +
           geom_point(size = node_size, color = "white")  +
-          guides(color = FALSE) +
+          guides(color = "none") +
           geom_text(label = cn)
 
         list(plt_pos = plt_pos,
@@ -607,7 +607,7 @@ plot.select <- function(x,
                 geom_point(color = "black",
                            size = node_size+1) +
                 geom_point(size = node_size, color = "white")  +
-                guides(color = FALSE) +
+                guides(color = "none") +
                 geom_text(label = cn) +
                 ggtitle(names(x$object$diff)[z])
 
@@ -692,7 +692,7 @@ plot.select <- function(x,
             geom_point(color = "black",
                        size = node_size + 1) +
             geom_point(size = node_size, color = "white")  +
-            guides(color = FALSE) +
+            guides(color = "none") +
             geom_text(label = cn)
 
           plt_null <- ggnet2(net_null,
@@ -701,7 +701,7 @@ plot.select <- function(x,
             geom_point(color = "black",
                        size = node_size + 1) +
             geom_point(size = node_size, color = "white")  +
-            guides(color = FALSE) +
+            guides(color = "none") +
             geom_text(label = cn)
 
 
@@ -747,7 +747,7 @@ plot.select <- function(x,
             geom_point(color = "black",
                        size = node_size + 1) +
             geom_point(size = node_size, color = "white")  +
-            guides(color = FALSE) +
+            guides(color = "none") +
             geom_text(label = cn) +
             geom_point(aes(color = groups),
                        size = node_size + 2,
@@ -780,7 +780,7 @@ plot.select <- function(x,
             geom_point(color = "black",
                        size = node_size + 1) +
             geom_point(size = node_size, color = "white")  +
-            guides(color = FALSE) +
+            guides(color = "none") +
             geom_text(label = cn)
 
             plt_null <- ggnet2(net_null,
@@ -789,7 +789,7 @@ plot.select <- function(x,
             geom_point(color = "black",
                        size = node_size + 1) +
             geom_point(size = node_size, color = "white")  +
-            guides(color = FALSE) +
+            guides(color = "none") +
             geom_text(label = cn)
 
 
@@ -812,7 +812,7 @@ plot.select <- function(x,
               geom_point(color = "black",
                          size = node_size + 1) +
               geom_point(size = node_size, color = "white")  +
-              guides(color = FALSE) +
+              guides(color = "none") +
               geom_text(label = cn) +
               geom_point(aes(color = groups),
                          size = node_size + 2,
@@ -834,7 +834,7 @@ plot.select <- function(x,
               geom_point(color = "black",
                          size = node_size + 1) +
               geom_point(size = node_size, color = "white")  +
-              guides(color = FALSE) +
+              guides(color = "none") +
               geom_text(label = cn) +
               geom_point(aes(color = groups),
                          size = node_size + 2,
@@ -914,7 +914,7 @@ plot.select <- function(x,
           geom_point(color = "black",
                      size = node_size + 1) +
           geom_point(size = node_size, color = "white")  +
-          guides(color = FALSE) +
+          guides(color = "none") +
           geom_text(label = cn)
 
 
@@ -924,7 +924,7 @@ plot.select <- function(x,
           geom_point(color = "black",
                      size = node_size + 1) +
           geom_point(size = node_size, color = "white")  +
-          guides(color = FALSE) +
+          guides(color = "none") +
           geom_text(label = cn)
 
 
@@ -935,7 +935,7 @@ plot.select <- function(x,
           geom_point(color = "black",
                      size = node_size + 1) +
           geom_point(size = node_size, color = "white")  +
-          guides(color = FALSE) +
+          guides(color = "none") +
           geom_text(label = cn)
 
         list(plt_alt = plt_alt,
@@ -1030,7 +1030,7 @@ plot.select <- function(x,
           geom_point(color = "black",
                      size = node_size + 1) +
           geom_point(size = node_size, color = "white")  +
-          guides(color = FALSE) +
+          guides(color = "none") +
           geom_text(label = cn)
 
 
@@ -1040,7 +1040,7 @@ plot.select <- function(x,
           geom_point(color = "black",
                      size = node_size + 1) +
           geom_point(size = node_size, color = "white")  +
-          guides(color = FALSE) +
+          guides(color = "none") +
           geom_text(label = cn)
 
         plt_ambiguous <-  ggnet2(net_ambigous,
@@ -1049,7 +1049,7 @@ plot.select <- function(x,
           geom_point(color = "black",
                      size = node_size + 1) +
           geom_point(size = node_size, color = "white")  +
-          guides(color = FALSE) +
+          guides(color = "none") +
           geom_text(label = cn)
 
 
