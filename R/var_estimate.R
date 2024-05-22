@@ -69,13 +69,14 @@ var_estimate <- function(Y, rho_sd = 0.50,
                          beta_sd = 1,
                          iter = 5000,
                          progress = TRUE,
-                         seed = 1,
+                         seed = NULL,
                          ...) {
 
-  # removed per CRAN (8/12/21)
-  #old <- .Random.seed
-
   set.seed(seed)
+  ## Random seed unless user provided
+  if(!is.null(seed) ) {
+    set.seed(seed)
+  }
 
   Y <- scale(na.omit(Y))
   # number of nodes
