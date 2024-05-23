@@ -124,9 +124,10 @@ impute_data <- function(Y,
 
   if(type == "continuous"){
 
-    # impute means
+    ## impute means for wishrnd (in bggm_fast.cpp line 151) to not throw error when taking inverse.
+    ## Missings patter is passed along with Y_miss
     for(i in 1:p){
-      Y[which(is.na(Y[,i])) ,i] <- mean(na.omit(Y[,i]))
+      Y[which(is.na(Y[,i])) ,i] <- mean(na.omit(as.data.frame(Y)[,i]))
       }
 
     fit <-.Call(
