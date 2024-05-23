@@ -14,7 +14,7 @@ explore(
   iter = 5000,
   progress = TRUE,
   impute = FALSE,
-  seed = 1,
+  seed = NULL,
   ...
 )
 }

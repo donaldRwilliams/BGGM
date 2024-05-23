@@ -4,10 +4,14 @@ ggm_search <- function(x, n = NULL,
                        iter = 5000,
                        stop_early = 1000,
                        bma_mean = TRUE,
-                       seed = 1,
+                       seed = NULL,
                        progress = TRUE, ...){
 
   set.seed(seed)
+  ## Random seed unless user provided
+  if(!is.null(seed) ) {
+    set.seed(seed)
+  }
 
   x <- Y
 

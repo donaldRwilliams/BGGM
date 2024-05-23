@@ -220,7 +220,7 @@ confirm <- function(Y, hypothesis,
                     iter = 25000,
                     progress = TRUE,
                     impute = TRUE,
-                    seed = 1, ...){
+                    seed = NULL, ...){
 
 
   # temporary warning until missing data is fully implemented
@@ -229,10 +229,12 @@ confirm <- function(Y, hypothesis,
                    "currently only implemented for 'continuous' data."))
   }
 
-  # removed per CRAN (8/12/21)
-  # old <- .Random.seed
 
   set.seed(seed)
+  ## Random seed unless user provided
+  if(!is.null(seed) ) {
+    set.seed(seed)
+  }
 
   priorprob <- 1
 

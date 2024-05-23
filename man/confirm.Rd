@@ -14,7 +14,7 @@ confirm(
   iter = 25000,
   progress = TRUE,
   impute = TRUE,
-  seed = 1,
+  seed = NULL,
   ...
 )
 }

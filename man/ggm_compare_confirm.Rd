@@ -14,7 +14,7 @@ ggm_compare_confirm(
   iter = 25000,
   impute = TRUE,
   progress = TRUE,
-  seed = 1
+  seed = NULL
 )
 }
 \arguments{

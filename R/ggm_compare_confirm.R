@@ -340,7 +340,7 @@ ggm_compare_confirm <- function(...,
                                 iter = 25000,
                                 impute = TRUE,
                                 progress = TRUE,
-                                seed = 1){
+                                seed = NULL){
 
 
 
@@ -350,10 +350,11 @@ ggm_compare_confirm <- function(...,
                    "currently only implemented for 'continuous' data."))
   }
 
-  # removed per CRAN (8/12/21)
-  # old <- .Random.seed
-
   set.seed(seed)
+  ## Random seed unless user provided
+  if(!is.null(seed) ) {
+    set.seed(seed)
+  }
 
   # prior prob
   priorprob <- 1

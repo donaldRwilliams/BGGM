@@ -171,7 +171,7 @@ explore <- function(Y,
                     iter = 5000,
                     progress = TRUE,
                     impute = FALSE,
-                    seed = 1, ...){
+                    seed = NULL, ...){
 
   # temporary warning until missing data is fully implemented
   if(!type %in% c("continuous", "mixed")){
@@ -184,11 +184,13 @@ explore <- function(Y,
     }
   }
 
-  # removed per CRAN (8/12/21)
-  #old <- .Random.seed
-
   set.seed(seed)
+  ## Random seed unless user provided
+  if(!is.null(seed) ) {
+    set.seed(seed)
+  }
 
+  
   dot_dot_dot <- list(...)
 
   eps <- 0.01
