@@ -78,6 +78,15 @@ var_estimate <- function(Y, rho_sd = 0.50,
     set.seed(seed)
   }
 
+  ## Check for constant values in variables:
+  if( sum(apply(Y, 2, FUN = function(x) sd(x)) == 0) > 0 ) {
+    pos <- which(apply(Y, 2, FUN = function(x) sd(x)) == 0)
+    insult <- names(Y)[pos]
+    stop(
+      cat("\nThe variable(s):",insult, "contain(s) only constant values. Please remove and re-run.\n\n")
+    )
+  }
+  
   Y <- scale(na.omit(Y))
   # number of nodes
   p <- ncol(Y)

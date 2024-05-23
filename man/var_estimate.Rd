@@ -10,7 +10,7 @@ var_estimate(
   beta_sd = 1,
   iter = 5000,
   progress = TRUE,
-  seed = 1,
+  seed = NULL,
   ...
 )
 }
