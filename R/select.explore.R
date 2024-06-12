@@ -104,17 +104,17 @@ select.explore <- function(object,
                            BF_cut = 3,
                            alternative = "two.sided",
                            ...){
-  # rename
+  ## rename
   x <- object
 
-  # hyp probability
+  ## hyp probability
   hyp_prob <- BF_cut / (BF_cut + 1)
 
-  # posterior samples
-    post_samp <- x$post_samp
+  ## posterior samples
+  post_samp <- x$post_samp
 
-    # prior samples
-    prior_samp <- x$prior_samp
+  ## prior samples
+  prior_samp <- x$prior_samp
 
 
 
@@ -129,7 +129,7 @@ select.explore <- function(object,
 
     # prior
     prior_sd <- apply(prior_samp$fisher_z[,,(51:x$iter)], 1:2, sd)
-    prior_dens <- dnorm(0, 0, mean(prior_sd[upper.tri(diag(3))]))
+    prior_dens <- dnorm(0, 0, mean(prior_sd[upper.tri(diag(nrow(prior_sd)))]))
 
     # BF
     BF_10_mat <- prior_dens / post_dens
@@ -146,9 +146,9 @@ select.explore <- function(object,
     diag(Adj_10) <- 0
 
     # returned object
-    returned_object = list(pcor_mat_zero = post_mean * Adj_10,
-                           pcor_mat = round(post_mean, 3),
-                           pcor_sd = round(post_sd, 3),
+    returned_object = list(pcor_mat_zero = tanh(post_mean) * Adj_10,
+                           pcor_mat = round(tanh(post_mean), 3),
+                           pcor_sd_fisher = round(post_sd, 3),
                            Adj_10 = Adj_10,
                            Adj_01 = Adj_01,
                            BF_10 = BF_10_mat,
@@ -168,7 +168,7 @@ select.explore <- function(object,
       # posterior
       post_sd <- apply(post_samp$fisher_z[,,(51:x$iter)], 1:2, sd)
       post_mean  <- apply(post_samp$fisher_z[,,(51:x$iter)], 1:2, mean)
-        #x$pcor_mat
+      #x$pcor_mat
       post_dens <- dnorm(0, post_mean, post_sd )
 
       # prior
@@ -196,9 +196,9 @@ select.explore <- function(object,
 
       # returned object
       returned_object = list(
-        pcor_mat_zero = post_mean * Adj_20,
-        pcor_mat = round(post_mean, 3),
-        pcor_sd = round(post_sd, 3),
+        pcor_mat_zero = tanh(post_mean) * Adj_20,
+        pcor_mat = round(tanh(post_mean), 3),
+        pcor_sd_fisher = round(post_sd, 3),
         Adj_20 = Adj_20,
         Adj_02 = Adj_02,
         BF_20 = BF_20_mat,
@@ -217,7 +217,7 @@ select.explore <- function(object,
 
       # posterior
       post_sd <- apply(post_samp$fisher_z[,,(51:x$iter)], 1:2, sd)
-      post_mean  <- x$pcor_mat
+      post_mean  <- apply(post_samp$fisher_z[,,(51:x$iter)], 1:2, mean)
       post_dens <- dnorm(0, post_mean, post_sd )
 
       # prior
@@ -245,9 +245,9 @@ select.explore <- function(object,
 
       # returned object
       returned_object = list(
-        pcor_mat_zero = post_mean * Adj_20,
-        pcor_mat = round(post_mean, 3),
-        pcor_sd = round(post_sd, 3),
+        pcor_mat_zero = tanh(post_mean) * Adj_20,
+        pcor_mat = round(tanh(post_mean), 3),
+        pcor_sd_fisher = round(post_sd, 3),
         Adj_20 = Adj_20,
         Adj_02 = Adj_02,
         BF_20 = BF_20_mat,
@@ -291,7 +291,7 @@ select.explore <- function(object,
 
           # posterior
           post_sd <- apply(post_samp$fisher_z[,,(51:x$iter)], 1:2, sd)
-          post_mean  <- x$pcor_mat
+          post_mean  <- apply(post_samp$fisher_z[,,(51:x$iter)], 1:2, mean)
           post_dens <- dnorm(0, post_mean, post_sd)
 
           # prior
@@ -339,8 +339,8 @@ select.explore <- function(object,
             pos_mat = pos_mat,
             null_mat = null_mat,
             alternative = alternative,
-            pcor_mat = round(post_mean, 3),
-            pcor_sd = round(post_sd, 3),
+            pcor_mat = round(tanh(post_mean), 3),
+            pcor_sd_fisher = round(post_sd, 3),
             call = match.call(),
             prob = hyp_prob,
             type = x$type,
@@ -502,13 +502,13 @@ summary.select.explore <- function(object,
   if(x$alternative == "two.sided"){
 
     post_mean <- x$pcor_mat[upper.tri(x$pcor_mat)]
-    post_sd <-  x$pcor_sd[upper.tri(x$pcor_sd)]
+    post_sd <-  x$pcor_sd_fisher[upper.tri(x$pcor_sd_fisher)]
     prob_H1 <- x$BF_10[upper.tri(x$BF_10)] / (x$BF_10[upper.tri(x$BF_10)] + 1)
     prob_H0 <- 1 - prob_H1
     summ <-  data.frame(
       Relation = mat_names,
       Post.mean = post_mean,
-      Post.sd = post_sd,
+      Post.sd.fisher = post_sd,
       Pr.H0 = round(prob_H0, 3),
       Pr.H1 = round(prob_H1, 3)
     )
@@ -516,13 +516,13 @@ summary.select.explore <- function(object,
   } else if (x$alternative == "greater"){
 
     post_mean <- x$pcor_mat[upper.tri(x$pcor_mat)]
-    post_sd <-  x$pcor_sd[upper.tri(x$pcor_sd)]
+    post_sd <-  x$pcor_sd_fisher[upper.tri(x$pcor_sd_fisher)]
     prob_H1 <- x$BF_20[upper.tri(x$BF_20)] / (x$BF_20[upper.tri(x$BF_20)] + 1)
     prob_H0 <- 1 - prob_H1
     summ <-  data.frame(
       Relation = mat_names,
       Post.mean = post_mean,
-      Post.sd = post_sd,
+      Post.sd.fisher = post_sd,
       Pr.H0 = round(prob_H0, 3),
       Pr.H1 = round(prob_H1, 3)
     )
@@ -532,13 +532,13 @@ summary.select.explore <- function(object,
   } else if (x$alternative == "less" | x$alternative == "greater"){
 
     post_mean <- x$pcor_mat[upper.tri(x$pcor_mat)]
-    post_sd <-  x$pcor_sd[upper.tri(x$pcor_sd)]
+    post_sd <-  x$pcor_sd_fisher[upper.tri(x$pcor_sd_fisher)]
     prob_H1 <- x$BF_20[upper.tri(x$BF_20)] / (x$BF_20[upper.tri(x$BF_20)] + 1)
     prob_H0 <- 1 - prob_H1
     summ <-  data.frame(
       Relation = mat_names[upper.tri(mat_names)],
       Post.mean = post_mean,
-      Post.sd = post_sd,
+      Post.sd.fisher = post_sd,
       Pr.H0 = round(prob_H0, 3),
       Pr.H1 = round(prob_H1, 3)
     )
@@ -549,12 +549,12 @@ summary.select.explore <- function(object,
 
     summ <- cbind.data.frame( x$post_prob[,1],
                               x$pcor_mat[upper.tri(x$pcor_mat)],
-                              x$pcor_sd[upper.tri(x$pcor_sd)],
+                              x$pcor_sd_fisher[upper.tri(x$pcor_sd_fisher)],
                               round(x$post_prob[,2:4], 3))
 
     colnames(summ) <- c("Relation",
                         "Post.mean",
-                        "Post.sd",
+                        "Post.sd.fisher",
                         "Pr.H0",
                         "Pr.H1",
                         "Pr.H2")
