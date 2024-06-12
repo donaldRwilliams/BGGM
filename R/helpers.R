@@ -342,7 +342,10 @@ compare_predict_helper <- function(x, ci_width){
 ##          With SD greater than 0.5, d is negative
 ## Solution: Add 2.75 to the function and limit x to a range of 0-1.
 ##           This ensures that delta ranges from +inf for x=0 to delta=2 for x=1
+## Ensure x is [0,1]
+
 delta_solve = function(x){
+  if(x <= 0 || x>1 ) stop("Error: prior_sd must between 0 and 1, inclusive.")
   (1/(2*x))^2 - 1 + 2.75
 }
 
