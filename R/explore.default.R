@@ -504,9 +504,17 @@ explore <- function(Y,
 
     }
 
-   # matrix dimensions for prior
-    Y_dummy <- matrix(rnorm( 10 * 3 ),
-                    nrow = 10, ncol = 3)
+    ## matrix dimensions for prior
+    ## Old:
+    ## Y_dummy <- matrix(rnorm( 10 * 3 ),
+    ##                  nrow = 10, ncol = 3)
+
+    ## Replaced with:
+    ## 10 times as many rows as columns
+    n_row = ncol(Y) * 10
+    Y_dummy <- matrix(rnorm( n_row * ncol(Y) ),
+                      nrow = n_row, ncol = ncol(Y))
+    ## Probably not necessary to scale up Y dim as k=3 was good enough approx.
 
     if(isTRUE(progress)){
 
@@ -522,7 +530,7 @@ explore <- function(Y,
                       delta = delta,
                       epsilon = eps,
                       prior_only = 1,
-                      explore = 1,
+                      explore = 0,  ## with explore = 0,  k takes number of Y columns instead of k = 3 
                       progress = progress)
 
     if(isTRUE(progress)){
