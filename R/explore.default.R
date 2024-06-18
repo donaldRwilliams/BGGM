@@ -23,7 +23,7 @@
 #'                 (currently not implemented)
 #'
 #' @param prior_sd Scale of the prior distribution, approximately the standard deviation
-#'                 of a beta distribution (defaults to 0.25).
+#'                 of a beta distribution (defaults to sqrt(1/12)).
 #'
 #' @param iter Number of iterations (posterior samples; defaults to 5000).
 #'
@@ -167,7 +167,7 @@ explore <- function(Y,
                     type = "continuous",
                     mixed_type = NULL,
                     analytic = FALSE,
-                    prior_sd = 0.25,
+                    prior_sd = sqrt(1/12),
                     iter = 5000,
                     progress = TRUE,
                     impute = FALSE,

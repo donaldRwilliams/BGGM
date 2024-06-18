@@ -15,7 +15,7 @@
 #'
 #'
 #' @param prior_sd The scale of the prior distribution (centered at zero), in reference to a beta distribtuion
-#'                 (defaults to 0.50).
+#'                 (defaults to sqrt(1/12)).
 #'                 See note for further details.
 #'
 #' @param type Character string. Which type of data for \strong{Y} ? The options include \code{continuous},
@@ -195,7 +195,7 @@ ggm_compare_estimate <- function(...,
                                  type = "continuous",
                                  mixed_type = NULL,
                                  analytic = FALSE,
-                                 prior_sd = 0.50,
+                                 prior_sd = sqrt(1/12),
                                  iter = 5000,
                                  impute = TRUE,
                                  progress = TRUE,

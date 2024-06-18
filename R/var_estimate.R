@@ -12,7 +12,7 @@
 #'
 #' @param rho_sd Numeric. Scale of the prior distribution for the partial correlations,
 #' approximately the standard deviation of a beta distribution
-#' (defaults to 0.50).
+#' (defaults to sqrt(1/12) as this results to delta=2, and a uniform distribution across the partial correlations).
 #'
 #' @param beta_sd Numeric. Standard deviation of the prior distribution for the regression coefficients
 #'        (defaults to 1). The prior is by default centered at zero and follows a normal distribution
@@ -65,7 +65,8 @@
 #'
 #' }
 #' @export
-var_estimate <- function(Y, rho_sd = 0.50,
+var_estimate <- function(Y,
+                         rho_sd = sqrt(1/12),
                          beta_sd = 1,
                          iter = 5000,
                          progress = TRUE,
