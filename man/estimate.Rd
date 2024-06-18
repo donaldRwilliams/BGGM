@@ -10,7 +10,7 @@ estimate(
   type = "continuous",
   mixed_type = NULL,
   analytic = FALSE,
-  prior_sd = 0.25,
+  prior_sd = sqrt(1/12),
   iter = 5000,
   impute = FALSE,
   progress = TRUE,
@@ -35,7 +35,7 @@ when \code{type = "mixed"} and \code{NULL} otherwise. See note for further detai
 \item{analytic}{Logical. Should the analytic solution be computed (default is \code{FALSE})?}
 
 \item{prior_sd}{Scale of the prior distribution, approximately the standard deviation of a beta distribution
-(defaults to 0.50).}
+(defaults to sqrt(1/12)).}
 
 \item{iter}{Number of iterations (posterior samples; defaults to 5000).}
 

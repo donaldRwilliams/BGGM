@@ -7,7 +7,7 @@
 confirm(
   Y,
   hypothesis,
-  prior_sd = 0.25,
+  prior_sd = sqrt(1/12),
   formula = NULL,
   type = "continuous",
   mixed_type = NULL,
@@ -24,7 +24,7 @@ confirm(
 \item{hypothesis}{Character string. The hypothesis (or hypotheses) to be tested. See details.}
 
 \item{prior_sd}{Numeric. Scale of the prior distribution, approximately the standard deviation
-of a beta distribution (defaults to 0.25).}
+of a beta distribution (defaults to sqrt(1/12)).}
 
 \item{formula}{An object of class \code{\link[stats]{formula}}. This allows for including
 control variables in the model (e.g.,, \code{~ gender * education}).}

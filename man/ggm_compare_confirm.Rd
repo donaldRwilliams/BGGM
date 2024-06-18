@@ -10,7 +10,7 @@ ggm_compare_confirm(
   formula = NULL,
   type = "continuous",
   mixed_type = NULL,
-  prior_sd = 0.25,
+  prior_sd = sqrt(1/12),
   iter = 25000,
   impute = TRUE,
   progress = TRUE,
@@ -34,7 +34,7 @@ ordinal variables. See the note for further details.}
 as ranks when \code{type = "mixed"} and \code{NULL} otherwise. See note for further details.}
 
 \item{prior_sd}{Numeric. The scale of the prior distribution (centered at zero),
-in reference to a beta distribtuion (defaults to 0.25).}
+in reference to a beta distribtuion (defaults to sqrt(1/12) ensuring a flat prior).}
 
 \item{iter}{Number of iterations (posterior samples; defaults to 25,000).}
 
@@ -259,7 +259,7 @@ test
 # indecrease prior SD
 test <- ggm_compare_confirm(Ymale,
                             Yfemale,
-                            prior_sd = 0.5,
+                            prior_sd = 0.28,
                             hypothesis = hypothesis,
                             iter = 250,
                             progress = FALSE)
