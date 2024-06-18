@@ -1,3 +1,5 @@
+<!-- knit with rmarkdown::render("README.Rmd", output_format = "md_document") -->
+
 <img src="readme_models/hex.jpg" width = 250 />
 
 BGGM: Bayesian Gaussian Graphical Models
@@ -6,8 +8,7 @@ BGGM: Bayesian Gaussian Graphical Models
 [![CRAN
 Version](http://www.r-pkg.org/badges/version/BGGM)](https://cran.r-project.org/package=BGGM)
 [![Downloads](https://cranlogs.r-pkg.org/badges/BGGM)](https://cran.r-project.org/package=BGGM)
-[![Build
-Status](https://travis-ci.com/donaldRwilliams/BGGM.svg?branch=master)](https://travis-ci.com/donaldRwilliams/BGGM)
+[![build](https://github.com/donaldRwilliams/BGGM/actions/workflows/build.yml/badge.svg)](https://github.com/donaldRwilliams/BGGM/actions/workflows/build.yml)
 [![status](https://joss.theoj.org/papers/4ecb84c5b3b2a2b5da46be4e0700502f/status.svg)](https://joss.theoj.org/papers/4ecb84c5b3b2a2b5da46be4e0700502f)
 
 The `R` package **BGGM** provides tools for making Bayesian inference in

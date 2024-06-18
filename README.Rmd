@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 library(ggplot2)
 library(BGGM)
 ```
+<!-- knit with rmarkdown::render("README.Rmd", output_format = "md_document") -->
 
 <img src="readme_models/hex.jpg" width = 250 />
 
