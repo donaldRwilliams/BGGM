@@ -1,4 +1,6 @@
 # BGGM (development version)
+- The prior_sd (or rho_sd in var_estimate() ) is limited to ranges between 0 and sqrt(1/8). These values ensure that delta does not go below 1.
+- *Critical*: select() did not return partial correlations, but Fisher-z values in summary(). Fisher values are transformed back to correlation metric. This fixes #90, see [changes](https://github.com/donaldRwilliams/BGGM/commit/a264c440006069e5f171494d9618bae57f4d6566).
 - Upgraded deprecated ggplot guides() argument
 - Resolved non positive definite initialization matrix in wishrnd() in copula models when NA's are present in observed variables (fixes #89). See changes [here](https://github.com/donaldRwilliams/BGGM/commit/d57a5ebabd665907622a1c635ca32b5c6c913184)
 
