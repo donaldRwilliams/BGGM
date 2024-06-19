@@ -40,12 +40,12 @@ There is a direct correspondence between the inverse covariance matrix and
 ### example 1: binary ###
 #########################
 # data
-Y <- women_math[1:500, ]
+Y = matrix( rbinom(100, 1, .5), ncol=4)
 
 # fit model
 fit <- estimate(Y, type = "binary",
                 iter = 250,
-                progress = FALSE)
+                progress = TRUE)
 
 # summarize the partial correlations
 reg <- coef(fit, progress = FALSE)

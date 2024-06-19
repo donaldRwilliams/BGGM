@@ -28,16 +28,16 @@ Visualize the posterior distribution differences.
 \donttest{
 # note: iter = 250 for demonstrative purposes
 # data
-Y <- bfi
+Y <- bfi[complete.cases(bfi),]
 
 # males and females
 Ymale <- subset(Y, gender == 1,
                 select = -c(gender,
-                            education))[,1:5]
+                            education))[,1:10]
 
 Yfemale <- subset(Y, gender == 2,
                   select = -c(gender,
-                              education))[,1:5]
+                              education))[,1:10]
 
 # fit model
 fit <- ggm_compare_estimate(Ymale,  Yfemale,

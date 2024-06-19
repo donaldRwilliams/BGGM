@@ -41,9 +41,8 @@ Yfemale <- subset(Y, gender == 2,
 
 # fit model
 fit <- ggm_compare_estimate(Ymale,  Yfemale,
-                            type = "ordinal",
+                            type = "continuous",
                             iter = 250,
-                            prior_sd = 0.25,
                             progress = FALSE)
 
 summary(fit)

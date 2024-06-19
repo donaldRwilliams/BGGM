@@ -121,7 +121,7 @@
 #' # note: iter = 250 for demonstrative purposes
 #'
 #' # data
-#' Y <- bfi
+#' Y <- bfi[complete.cases(bfi),]
 #'
 #' # males and females
 #' Ymale <- subset(Y, gender == 1,
@@ -392,7 +392,7 @@ print_ggm_compare_bf <- function(x, ...){
 #' # note: iter = 250 for demonstrative purposes
 #'
 #' # data
-#' Y <- bfi
+#' Y <- bfi[complete.cases(bfi),]
 #'
 #' # males and females
 #' Ymale <- subset(Y, gender == 1,
@@ -505,7 +505,7 @@ summary.ggm_compare_explore <- function(object,
 #' # note: iter = 250 for demonstrative purposes
 #'
 #' # data
-#' Y <- bfi
+#' Y <- bfi[complete.cases(bfi),]
 #'
 #' # males and females
 #' Ymale <- subset(Y, gender == 1,

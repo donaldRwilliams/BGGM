@@ -80,7 +80,7 @@ var_estimate <- function(Y,
   }
 
   ## Check for constant values in variables:
-  if( sum(apply(Y, 2, FUN = function(x) sd(x)) == 0) > 0 ) {
+  if( sum(apply(Y, 2, FUN = function(x) sd(x, na.rm = TRUE)) == 0) > 0 ) {
     pos <- which(apply(Y, 2, FUN = function(x) sd(x)) == 0)
     insult <- names(Y)[pos]
     stop(

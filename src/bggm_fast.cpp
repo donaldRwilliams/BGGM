@@ -778,14 +778,14 @@ Rcpp::List trunc_mvn(arma::mat mu,
 // binary sampler
 // [[Rcpp::export]]
 Rcpp::List mv_binary(arma::mat Y,
-                      arma::mat X,
-                      float delta,
-                      float epsilon,
-                      int iter,
-                      float beta_prior,
-                      arma::rowvec cutpoints,
-                      arma::mat start,
-                      bool progress){
+		     arma::mat X,
+		     float delta,
+		     float epsilon,
+		     int iter,
+		     float beta_prior,
+		     arma::rowvec cutpoints,
+		     arma::mat start,
+		     bool progress){
 
   // Y: data matrix (n * k)
   // X: predictors (n * p) (blank for "network")
@@ -946,7 +946,7 @@ Rcpp::List mv_binary(arma::mat Y,
     }
 
     w = z0.slice(0) * D;
-
+    
     M  = Sinv_X * X.t() * w;
 
     gamma = reshape(mvnrnd(reshape(M, k * p , 1),
@@ -960,9 +960,37 @@ Rcpp::List mv_binary(arma::mat Y,
     S_Y =   w.t() * w + I_k - M.t() * S_X * M;
 
     // sample Psi
+    // Debugging:
+    // Declare the bmpinv variable
+    // arma::mat bmpinv;
+    // bmpinv = inv(BMPinv + Theta.slice(0));
+    // if (!bmpinv.is_sympd()) {
+    //   // Print the bmpinv matrix for debugging
+    //   bmpinv.print("bmpinv matrix:");
+    //   Rcpp::stop("bmpinv matrix is not symmetric positive definite.");
+    // }
+    // END Debug
+
     Psi.slice(0) = wishrnd(inv(BMPinv + Theta.slice(0)), nuMP + deltaMP + k - 1);
 
     // sample Theta
+    // Debugging:
+    // Declare the psisl variable
+    // arma::mat psisl;
+    // psisl = inv(Psi.slice(0) + S_Y);
+    // if (!psisl.is_sympd()) {
+    //   // Print the matrix for debugging
+    //   Psi.slice(0).print("Psi.slice(0):" );
+    //   S_Y.print("S_Y:");
+    //   w.print("w:" );
+    //   I_k.print("I_k:");
+    //   M.print("M:");
+    //   S_X.print("S_X:");
+    //   psisl.print("psisl matrix:");
+    //   Rcpp::stop("psisl matrix is not symmetric positive definite.");
+    // }
+    // END Debug
+
     Theta.slice(0) =   wishrnd(inv(Psi.slice(0) + S_Y),  (deltaMP + k - 1) + (n - 1));
 
     // Sigma

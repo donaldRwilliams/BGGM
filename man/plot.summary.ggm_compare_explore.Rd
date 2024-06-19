@@ -27,7 +27,7 @@ Visualize the posterior hypothesis probabilities.
 # note: iter = 250 for demonstrative purposes
 
 # data
-Y <- bfi
+Y <- bfi[complete.cases(bfi),]
 
 # males and females
 Ymale <- subset(Y, gender == 1,

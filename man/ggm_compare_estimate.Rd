@@ -158,8 +158,8 @@ test for comparing each variable in the network \insertCite{Williams2019;textual
 \donttest{
 # note: iter = 250 for demonstrative purposes
 
-# data
-Y <- bfi
+# data: Remove missings for "ordinal"
+Y <- bfi[complete.cases(bfi),]
 
 # males and females
 Ymale <- subset(Y, gender == 1,
@@ -174,7 +174,6 @@ Yfemale <- subset(Y, gender == 2,
 fit <- ggm_compare_estimate(Ymale,  Yfemale,
                            type = "ordinal",
                            iter = 250,
-                           prior_sd = 0.25,
                            progress = FALSE)
 
 ###########################

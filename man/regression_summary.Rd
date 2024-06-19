@@ -28,14 +28,13 @@ Summarary Method for Multivariate or Univarate Regression
 # data
 Y <- bfi
 
-Y <- subset(Y, select = c("E5", "N5",
+Y <- subset(Y, select = c("A1", "A2", 
                           "gender", "education"))
 
-
 fit_mv_ordinal <- estimate(Y, formula = ~ gender + as.factor(education),
-                           type = "ordinal",
+                           type = "continuous",
                            iter = 250,
-                           progress = FALSE)
+                           progress = TRUE)
 
 regression_summary(fit_mv_ordinal)
 }

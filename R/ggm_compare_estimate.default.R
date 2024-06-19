@@ -147,23 +147,22 @@
 #' \donttest{
 #' # note: iter = 250 for demonstrative purposes
 #'
-#' # data
-#' Y <- bfi
+#' # data: Remove missings for "ordinal"
+#' Y <- bfi[complete.cases(bfi),]
 #'
 #' # males and females
 #' Ymale <- subset(Y, gender == 1,
 #'                    select = -c(gender,
 #'                                education))[,1:10]
-#'
+#' 
 #' Yfemale <- subset(Y, gender == 2,
 #'                      select = -c(gender,
 #'                                  education))[,1:10]
-#'
+#' 
 #' # fit model
 #' fit <- ggm_compare_estimate(Ymale,  Yfemale,
 #'                            type = "ordinal",
 #'                            iter = 250,
-#'                            prior_sd = 0.25,
 #'                            progress = FALSE)
 #'
 #' ###########################
@@ -393,9 +392,8 @@ ggm_compare_estimate <- function(...,
 #'
 #' # fit model
 #' fit <- ggm_compare_estimate(Ymale,  Yfemale,
-#'                             type = "ordinal",
+#'                             type = "continuous",
 #'                             iter = 250,
-#'                             prior_sd = 0.25,
 #'                             progress = FALSE)
 #'
 #' summary(fit)
@@ -591,16 +589,16 @@ print_summary_ggm_estimate_compare <- function(x,...){
 #' \donttest{
 #' # note: iter = 250 for demonstrative purposes
 #' # data
-#' Y <- bfi
+#' Y <- bfi[complete.cases(bfi),]
 #'
 #' # males and females
 #' Ymale <- subset(Y, gender == 1,
 #'                 select = -c(gender,
-#'                             education))[,1:5]
+#'                             education))[,1:10]
 #'
 #' Yfemale <- subset(Y, gender == 2,
 #'                   select = -c(gender,
-#'                               education))[,1:5]
+#'                               education))[,1:10]
 #'
 #' # fit model
 #' fit <- ggm_compare_estimate(Ymale,  Yfemale,
