@@ -343,7 +343,7 @@ compare_predict_helper <- function(x, ci_width){
 ## Solution: limit user input to [0,0.5]
 
 delta_solve = function(x){
-  if(x <= 0 || x >= sqrt(1/8) ) stop("Error: \nPrior_sd must be between 0 and sqrt(1/8) approx. 0.353, to ensure that delta is not less than 1.\nFor delta = 1, set prior_sd to sqrt(1/8)\nFor delta = 2, set prior_sd to sqrt(1/12).")
+  if(x <= 0 || x > sqrt(1/8) ) stop("Error: \nPrior_sd must be between 0 and sqrt(1/8) approx. 0.353, to ensure that delta is not less than 1.\nFor delta = 1, set prior_sd to sqrt(1/8)\nFor delta = 2, set prior_sd to sqrt(1/12).")
   (1/(2*x))^2 - 1
 }
 
