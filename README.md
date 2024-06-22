@@ -35,7 +35,7 @@ psychology (Rodriguez et al. 2020).
 
 ## Installation
 
-To install the latest release version (`2.1.1`) from CRAN use
+To install the latest release version (`2.1.2`) from CRAN use
 
 ``` r
 install.packages("BGGM")    
