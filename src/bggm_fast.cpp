@@ -711,9 +711,9 @@ Rcpp::List trunc_mvn(arma::mat mu,
 
   for(int i = 0; i < T; ++i){
 
-    a2.row(i) = a.col(arma::conv_to<int>::from(y.row(i)));
+    a2.row(i) = a.col(arma::as_scalar(y.row(i)));
 
-    b2.row(i) = b.col(arma::conv_to<int>::from(y.row(i)));
+    b2.row(i) = b.col(arma::as_scalar(y.row(i)));
 
   }
 
@@ -1951,8 +1951,8 @@ Rcpp::List ppc_helper_nodewise_fast(arma::cube Theta,
       arma::mat var_1 = var(pred_1);
       arma::mat var_2 = var(pred_2);
 
-      kl(s, j) = (KL_univariate(arma::conv_to<float>::from(var_1), arma::conv_to<float>::from(var_2)) +
-        KL_univariate(arma::conv_to<float>::from(var_2), arma::conv_to<float>::from(var_1)))  * 0.5;
+      kl(s, j) = (KL_univariate(arma::as_scalar(var_1), arma::as_scalar(var_2)) +
+        KL_univariate(arma::as_scalar(var_2), arma::as_scalar(var_1)))  * 0.5;
 
     }
   }
@@ -2081,7 +2081,7 @@ float correlation(arma::mat Rinv_1,
 
   arma::mat cor_nets = cor(r_1, r_2);
 
-  float cors = arma::conv_to<float>::from(cor_nets);
+  float cors = arma::as_scalar(cor_nets);
 
   return cors;
 
