@@ -1,5 +1,5 @@
 # BGGM 2.1.3
-- `prior_sd`: Default value for estimation: sqrt(1/3) resulting in delta = 2. For model testing default is more tight, at `sigma_sd` = 0.5, resulting in delta = 3. 
+- `prior_sd`: Adjusted computation of delta. Also, changed default value for estimation: sqrt(1/3) resulting in delta = 2. For model testing default is more tight, at `sigma_sd` = 0.5, resulting in delta = 3. 
 - `prior_sd` is now limited to range 0 -- sqrt(1/2)
 
 # BGGM 2.1.2
