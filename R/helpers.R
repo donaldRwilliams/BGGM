@@ -333,18 +333,20 @@ compare_predict_helper <- function(x, ci_width){
 }
 
 ## delta_solve takes prior_sd
-## prior_sd is in refernce to a the sd of the beta distribution with Beta(delta/2, delta/2)
-## Its SD = sqrt((d/2)*(d/2) / (((d/2)+(d/2))^2*((d/2)+(d/2)+1)));
-##     SD = 1/(2*sqrt(d+1))
+## prior_sd is in refernce to the stretched sd of the beta distribution with Beta(delta/2, delta/2) * 2-1
+## Its SD = sqrt((d/2)*(d/2) / (((d/2)+(d/2))^2*((d/2)+(d/2)+1))) * 2-1;
+##     SD = 1/sqrt( d+1 ) - 1
 ## Solving for d (delta):
-##      d = (1/(2*SD))^2 -1
-## Problem: with SD greater than sqrt(1/8) approx 0.35, d goes below 1 and beta density accumulates at the margins
-##          With SD greater than 0.5, d is negative
-## Solution: limit user input to [0,0.5]
+##      d = 1/SD^2 -1
+## Problem: with SD greater than sqrt(1/2) approx 0.71, d goes below 1 and beta density accumulates at the margins
+##          With SD greater than 1, d is negative
+##          With SD = sqrt(1/3), d = 2, seems ok as default for model estimation
+##          With SD = sqrt(1/4) = .5, d = 3, seems more reasonable for hypothesis testing
+## Solution: limit user input to [0,sqrt(1/2)]
 
 delta_solve = function(x){
-  if(x <= 0 || x > sqrt(1/8) ) stop("Error: \nPrior_sd must be between 0 and sqrt(1/8) approx. 0.353, to ensure that delta is not less than 1.\nFor delta = 1, set prior_sd to sqrt(1/8)\nFor delta = 2, set prior_sd to sqrt(1/12).")
-  (1/(2*x))^2 - 1
+  if(x <= 0 || x > sqrt(1/2) ) stop("Error: \nPrior_sd must be between 0 and sqrt(1/2) approx. 0.7, to ensure that delta is not less than 1.\nFor delta = 1, set prior_sd to sqrt(1/2)\nFor delta = 2, set prior_sd to sqrt(1/3).")
+  1/x^2 - 1
 }
 
 # fisher z to r

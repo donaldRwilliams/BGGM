@@ -16,7 +16,7 @@
 #' control variables in the model (i.e., \code{~ gender}).
 #'
 #' @param prior_sd Numeric. The scale of the prior distribution (centered at zero),
-#'                 in reference to a beta distribtuion (defaults to sqrt(1/12) ensuring a flat prior).
+#'                 in reference to a beta distribtuion (defaults to 0.5).
 #'
 #' @param type Character string. Which type of data for \code{Y} ? The options include \code{continuous},
 #' \code{binary}, \code{ordinal}, or \code{mixed}. Note that mixed can be used for data with only
@@ -336,7 +336,7 @@ ggm_compare_confirm <- function(...,
                                 formula = NULL,
                                 type = "continuous",
                                 mixed_type = NULL,
-                                prior_sd = sqrt(1/12),
+                                prior_sd = 0.5,
                                 iter = 25000,
                                 impute = TRUE,
                                 progress = TRUE,

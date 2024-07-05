@@ -15,7 +15,7 @@
 #' control variables in the model (i.e., \code{~ gender}).
 #'
 #' @param prior_sd Numeric. The scale of the prior distribution (centered at zero), in reference to a beta distribtuion.
-#' The `default` is sqrt(1/12) for a flat prior. See note for further details.
+#' The `default` is sqrt(1/3) for a flat prior. See note for further details.
 #'
 #' @param type Character string. Which type of data for \code{Y} ? The options include \code{continuous},
 #' \code{binary}, or \code{ordinal}. See the note for further details.
@@ -82,7 +82,7 @@
 #'
 #' \item The first is due to sampling the thresholds, especially when the data is heavily skewed.
 #'       This can result in an ill-defined matrix. If this occurs, we recommend to first try
-#'       decreasing \code{prior_sd} below sqrt(1/12) (i.e., a more informative prior). If that does not work, then
+#'       decreasing \code{prior_sd} below sqrt(1/3) (i.e., a more informative prior). If that does not work, then
 #'       change the data type to \code{type = mixed} which then estimates a copula GGM
 #'       (this method can be used for data containing \strong{only} ordinal variable). This should
 #'       work without a problem.
@@ -154,7 +154,7 @@ ggm_compare_explore <- function(...,
                            type = "continuous",
                            mixed_type = NULL,
                            analytic = FALSE,
-                           prior_sd = sqrt(1/12),
+                           prior_sd = sqrt(1/3),
                            iter = 5000,
                            progress = TRUE,
                            seed = 1){

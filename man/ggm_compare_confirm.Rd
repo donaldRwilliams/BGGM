@@ -10,7 +10,7 @@ ggm_compare_confirm(
   formula = NULL,
   type = "continuous",
   mixed_type = NULL,
-  prior_sd = sqrt(1/12),
+  prior_sd = 0.5,
   iter = 25000,
   impute = TRUE,
   progress = TRUE,
@@ -34,7 +34,7 @@ ordinal variables. See the note for further details.}
 as ranks when \code{type = "mixed"} and \code{NULL} otherwise. See note for further details.}
 
 \item{prior_sd}{Numeric. The scale of the prior distribution (centered at zero),
-in reference to a beta distribtuion (defaults to sqrt(1/12) ensuring a flat prior).}
+in reference to a beta distribtuion (defaults to 0.5).}
 
 \item{iter}{Number of iterations (posterior samples; defaults to 25,000).}
 

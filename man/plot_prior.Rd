@@ -4,11 +4,11 @@
 \alias{plot_prior}
 \title{Plot: Prior Distribution}
 \usage{
-plot_prior(prior_sd = sqrt(1/12), iter = 5000)
+plot_prior(prior_sd = 0.5, iter = 5000)
 }
 \arguments{
 \item{prior_sd}{Scale of the prior distribution, approximately the standard deviation
-of a beta distribution (defaults to sqrt(1/12)).}
+of a beta distribution (defaults to 0.5).}
 
 \item{iter}{Number of iterations (prior samples; defaults to 5000).}
 }

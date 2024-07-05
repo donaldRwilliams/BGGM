@@ -14,9 +14,7 @@
 #' control variables in the model (i.e., \code{~ gender}). See the note for further details.
 #'
 #'
-#' @param prior_sd The scale of the prior distribution (centered at zero), in reference to a beta distribtuion
-#'                 (defaults to sqrt(1/12)).
-#'                 See note for further details.
+#' @param prior_sd The scale of the prior distribution (centered at zero), in reference to a beta distribtuion (defaults to sqrt(1/3)). See note for further details.
 #'
 #' @param type Character string. Which type of data for \strong{Y} ? The options include \code{continuous},
 #' \code{binary}, \code{ordinal}, or \code{continuous}. See the note for further details.
@@ -194,7 +192,7 @@ ggm_compare_estimate <- function(...,
                                  type = "continuous",
                                  mixed_type = NULL,
                                  analytic = FALSE,
-                                 prior_sd = sqrt(1/12),
+                                 prior_sd = sqrt(1/3),
                                  iter = 5000,
                                  impute = TRUE,
                                  progress = TRUE,

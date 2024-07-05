@@ -22,7 +22,7 @@
 #' @param analytic Logical. Should the analytic solution be computed (default is \code{FALSE})?
 #'
 #' @param prior_sd Scale of the prior distribution, approximately the standard deviation of a beta distribution
-#' (defaults to sqrt(1/12)).
+#' (defaults to sqrt(1/3)).
 #'
 #' @param iter Number of iterations (posterior samples; defaults to 5000).
 #'
@@ -203,7 +203,7 @@ estimate  <- function(Y,
                       type = "continuous",
                       mixed_type = NULL,
                       analytic = FALSE,
-                      prior_sd = sqrt(1/12),
+                      prior_sd = sqrt(1/3),
                       iter = 5000,
                       impute = FALSE,
                       progress = TRUE,
