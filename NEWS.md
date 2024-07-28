@@ -1,3 +1,5 @@
+# BGGM (development version)
+
 # BGGM 2.1.3
 - Replaced dprecated armadillo function `conv_to<>::from` with `as_scalar`
 - `prior_sd`: Adjusted computation of delta. Also, changed default value for estimation: sqrt(1/3) resulting in delta = 2. For model testing default is more tight, at `sigma_sd` = 0.5, resulting in delta = 3. 
