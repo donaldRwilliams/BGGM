@@ -14,7 +14,7 @@ Description: Fit Bayesian Gaussian graphical models. The methods are separated i
     Williams (2019) <doi:10.31234/osf.io/x8dpr>, 
     Williams and Mulder (2019) <doi:10.31234/osf.io/ypxd8>,
     Williams, Rast, Pericchi, and Mulder (2019) <doi:10.31234/osf.io/yt386>.
-Depends: R (>= 4.3.0)
+Depends: R (>= 4.0.0)
 License: GPL-2
 Imports:
     BFpack (>= 1.2.3),
@@ -45,7 +45,7 @@ Encoding: UTF-8
 LazyData: true
 VignetteBuilder: 
     knitr
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 LinkingTo: Rcpp, 
            RcppArmadillo, 
            RcppDist, 
