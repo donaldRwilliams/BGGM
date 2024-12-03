@@ -16,3 +16,4 @@ custom.css
 /src/Makevars
 /config.log
 config.status
+/inst/auto/
