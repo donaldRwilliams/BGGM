@@ -6,8 +6,8 @@ home:
 
 url: https://donaldrwilliams.github.io/BGGM/
 template:
-  params:
-    bootswatch: flatly
+  bootstrap: 5
+  bootswatch: flatly
   opengraph:
     image:
       src: man/figures/hex.jpg
@@ -23,9 +23,6 @@ navbar:
       href: reference/index.html
     - text: "News"
       href: news/index.html
-    - text: "Troubleshoot"
-      href: articles/installation.html
-
 
 articles:
   - title: "Getting Started"
@@ -49,7 +46,7 @@ reference:
      Handle Missing Values.
     contents:
     - bggm_missing
-    - mvn_imputation
+    - impute_data
   - title: "Estimation Based Methods"
     desc: >
       'Estimation' indicates that the methods to not employ Bayes factor testing. Rather,
@@ -195,4 +192,18 @@ reference:
     - Sachs
     - tas
     - women_math
+# These are functions that could be added to some of the topics above
+# Currently parked here to allow pkgdown::build_site() to compile
+  - title: internal
+    contents:
+      - constrained_posterior
+      - gen_net
+      - impute_data
+      - posterior_predict
+      - precision
+      - predicted_probability
+      - print.BGGM
+      - prior_belief_ggm
+      - prior_belief_var
+      - select
 
