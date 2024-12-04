@@ -23,3 +23,4 @@
 ^CRAN-SUBMISSION$
 ^\.github$
 ^inst/auto$
+^revdep$

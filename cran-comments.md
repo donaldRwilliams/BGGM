@@ -1,4 +1,25 @@
-# Version 2.1.2
+# Version 2.1.4
+## R CMD check results
+
+❯ checking installed package size ... NOTE
+    installed size is 12.2Mb
+    sub-directories of 1Mb or more:
+      doc    3.3Mb
+      help   1.1Mb
+      libs   7.0Mb
+
+❯ checking compilation flags used ... NOTE
+  Compilation used the following non-portable flag(s):
+    ‘-Werror=format-security’ ‘-Wformat’ ‘-Wp,-D_FORTIFY_SOURCE=3’
+    ‘-Wp,-D_GLIBCXX_ASSERTIONS’ ‘-march=x86-64’
+    ‘-mno-omit-leaf-frame-pointer’
+
+0 errors ✔ | 0 warnings ✔ | 2 notes ✖
+
+## revdepcheck results
+Checked 1 rev dep: zero problems.
+
+# Version 2.1.3
 ## R CMD check results
 
 ❯ checking installed package size ... NOTE
