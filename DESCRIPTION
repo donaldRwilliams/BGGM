@@ -2,7 +2,7 @@ Package: BGGM
 Type: Package
 Title: Bayesian Gaussian Graphical Models
 Version: 2.1.4
-Date: 2024-07-05
+Date: 2024-12-04
 Authors@R: c(person("Donald", "Williams", email = "drwwilliams@ucdavis.edu", role = "aut"),
              person("Joris", "Mulder", email = "J.Mulder3@uvt.nl", role = "aut"),
 	     person("Philippe", "Rast", email = "rast.ph@gmail.com", role = c("aut", "cre")))
@@ -53,4 +53,4 @@ LinkingTo: Rcpp,
 RdMacros: Rdpack
 BugReports: https://github.com/donaldRwilliams/BGGM/issues
 Config/testthat/edition: 3
-URL: https://donaldrwilliams.github.io/BGGM
+URL: https://donaldrwilliams.github.io/BGGM/

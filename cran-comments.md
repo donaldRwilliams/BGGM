@@ -1,4 +1,9 @@
 # Version 2.1.4
+## Addressing CRAN submission errors
+- CRAN server running example in bggm_missing returned `Error: inv(): matrix is singular`
+  Error can not be locally reproduced using R CMD check --as-cran or rhub. 
+  Temporary workaround is to remove offending example
+
 ## R CMD check results
 
 ❯ checking installed package size ... NOTE

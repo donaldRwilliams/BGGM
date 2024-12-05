@@ -60,8 +60,8 @@ mat <- matrix(0, nrow = 221, ncol = 5)
 # indices
 indices <- which(mat == 0, arr.ind = TRUE)
 
-# 50 NAs
-Y[indices[sample(1:nrow(indices), 50),]] <- NA
+# Introduce NAs
+Y[indices[sample(1:nrow(indices), 10),]] <- NA
 
 # impute
 x <- mice(Y, m = 5, print = FALSE)
