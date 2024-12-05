@@ -51,8 +51,8 @@
 #' # indices
 #' indices <- which(mat == 0, arr.ind = TRUE)
 #'
-#' # Introduce NAs
-#' Y[indices[sample(1:nrow(indices), 10),]] <- NA
+#' # Introduce 50 NAs
+#' Y[indices[sample(1:nrow(indices), 50),]] <- NA
 #'
 #' # impute
 #' x <- mice(Y, m = 5, print = FALSE)
@@ -63,19 +63,19 @@
 #' # rank based parital correlations
 #'
 #' # estimate the model (following code commented due to CRAN checks) 
-#' # fit_est <-  bggm_missing(x,
-#' #                         method = "estimate",
-#' #                         type =  "mixed",
-#' #                         iter = 250,
-#' #                         progress = FALSE)
+#' fit_est <-  bggm_missing(x,
+#'                          method = "estimate",
+#'                          type =  "mixed",
+#'                          iter = 250,
+#'                          progress = FALSE)
 #'
 #' # select edge set
-#' # E <- select(fit_est)
+#' E <- select(fit_est)
 #'
 #' # plot E
-#' # plt_E <- plot(E)$plt
+#' plt_E <- plot(E)$plt
 #'
-#' # plt_E
+#' plt_E
 #'}
 bggm_missing <- function(x, iter = 2000,
                          method = "estimate", ...){
