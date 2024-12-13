@@ -1,5 +1,5 @@
 pandoc: '3.5'
-pkgdown: 2.1.1
+pkgdown: 2.1.0
 pkgdown_sha: ~
 articles:
   control: control.html
@@ -12,7 +12,7 @@ articles:
   predictability: predictability.html
   test_sum: test_sum.html
   var_model: var_model.html
-last_built: 2024-12-03T23:38Z
+last_built: 2024-12-13T19:51Z
 urls:
   reference: https://donaldrwilliams.github.io/BGGM/reference
   article: https://donaldrwilliams.github.io/BGGM/articles

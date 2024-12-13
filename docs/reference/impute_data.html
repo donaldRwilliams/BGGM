@@ -3,7 +3,7 @@
 predictive distribution. For binary, ordinal, and mixed (a combination of discrete and continuous)
 data, the values are first imputed for the latent data and then converted to the original scale."><meta property="og:description" content="Impute missing values, assuming a  multivariate normal distribution, with the posterior
 predictive distribution. For binary, ordinal, and mixed (a combination of discrete and continuous)
-data, the values are first imputed for the latent data and then converted to the original scale."><meta property="og:image" content="https://donaldrwilliams.github.io/BGGM/reference/figures/hex.jpg"><meta name="twitter:card" content="summary"><meta name="twitter:creator" content="@wdonald_1985"><meta name="twitter:site" content="@wdonald_1985"></head><body>
+data, the values are first imputed for the latent data and then converted to the original scale."><meta property="og:image" content="https://donaldrwilliams.github.io/BGGM/reference/figures/hex.jpg"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -11,7 +11,7 @@ data, the values are first imputed for the latent data and then converted to the
 
     <a class="navbar-brand me-2" href="../index.html">BGGM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.3.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -96,7 +96,8 @@ The default is currently to treat all integer variables as ranks when
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Missing values are imputed with the approach described in hoff2009first;textualBGGM.
+    <p>Missing values are imputed with the approach described in Hoff (2009)
+.
 The basic idea is to impute the missing values with the respective posterior pedictive distribution,
 given the observed data, as the model is being estimated. Note that the default is <code>TRUE</code>,
 but this ignored when there are no missing values. If set to <code>FALSE</code>, and there are missing
@@ -104,7 +105,9 @@ values, list-wise deletion is performed with <code>na.omit</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p></p>
+    <p>Hoff PD (2009).
+<em>A first course in Bayesian statistical methods</em>, volume 580.
+Springer.</p>
     </div>
 
     <div class="section level2">
@@ -166,7 +169,7 @@ values, list-wise deletion is performed with <code>na.omit</code>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
     </footer></div>

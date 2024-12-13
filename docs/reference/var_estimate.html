@@ -3,11 +3,13 @@
 provides two graphical structures: (1) a network of undirected relations (the GGM, controlling for the
 lagged predictors) and (2) a network of directed relations (the lagged coefficients). Note that
 in the graphical modeling literature, this model is also known as a time series chain graphical model
-abegaz2013sparseBGGM."><meta property="og:description" content="Estimate VAR(1) models by efficiently sampling from the posterior distribution. This
+(Abegaz and Wit 2013)
+."><meta property="og:description" content="Estimate VAR(1) models by efficiently sampling from the posterior distribution. This
 provides two graphical structures: (1) a network of undirected relations (the GGM, controlling for the
 lagged predictors) and (2) a network of directed relations (the lagged coefficients). Note that
 in the graphical modeling literature, this model is also known as a time series chain graphical model
-abegaz2013sparseBGGM."><meta property="og:image" content="https://donaldrwilliams.github.io/BGGM/reference/figures/hex.jpg"><meta name="twitter:card" content="summary"><meta name="twitter:creator" content="@wdonald_1985"><meta name="twitter:site" content="@wdonald_1985"></head><body>
+(Abegaz and Wit 2013)
+."><meta property="og:image" content="https://donaldrwilliams.github.io/BGGM/reference/figures/hex.jpg"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -15,7 +17,7 @@ abegaz2013sparseBGGM."><meta property="og:image" content="https://donaldrwilliam
 
     <a class="navbar-brand me-2" href="../index.html">BGGM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.3.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,7 +48,8 @@ abegaz2013sparseBGGM."><meta property="og:image" content="https://donaldrwilliam
 provides two graphical structures: (1) a network of undirected relations (the GGM, controlling for the
 lagged predictors) and (2) a network of directed relations (the lagged coefficients). Note that
 in the graphical modeling literature, this model is also known as a time series chain graphical model
-abegaz2013sparseBGGM.</p>
+(Abegaz and Wit 2013)
+.</p>
     </div>
 
     <div class="section level2">
@@ -79,7 +82,7 @@ approximately the standard deviation of a beta distribution
 <dt id="arg-beta-sd">beta_sd<a class="anchor" aria-label="anchor" href="#arg-beta-sd"></a></dt>
 <dd><p>Numeric. Standard deviation of the prior distribution for the regression coefficients
 (defaults to 1). The prior is by default centered at zero and follows a normal distribution
-@Equation 9, @sinay2014bayesianBGGM</p></dd>
+(Equation 9, Sinay and Hsu 2014)</p></dd>
 
 
 <dt id="arg-iter">iter<a class="anchor" aria-label="anchor" href="#arg-iter"></a></dt>
@@ -120,7 +123,13 @@ useful objects:</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p></p>
+    <p>Abegaz F, Wit E (2013).
+“Sparse time series chain graphical models for reconstructing genetic networks.”
+<em>Biostatistics</em>, <b>14</b>(3), 586–599.
+<a href="https://doi.org/10.1093/biostatistics/kxt005" class="external-link">doi:10.1093/biostatistics/kxt005</a>
+.<br><br> Sinay MS, Hsu JS (2014).
+“Bayesian inference of a multivariate regression model.”
+<em>Journal of Probability and Statistics</em>, <b>2014</b>.</p>
     </div>
 
     <div class="section level2">
@@ -147,26 +156,26 @@ useful objects:</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Partial Correlations: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>               interested disinterested excited  upset strong stressed  steps</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> interested         0.000        -0.178   0.392 -0.203  0.328    0.281  0.081</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> disinterested     -0.178         0.000  -0.179 -0.042  0.106    0.159 -0.070</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> excited            0.392        -0.179   0.000 -0.121  0.479   -0.185 -0.008</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> upset             -0.203        -0.042  -0.121  0.000  0.104    0.357 -0.048</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> strong             0.328         0.106   0.479  0.104  0.000    0.001  0.179</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> stressed           0.281         0.159  -0.185  0.357  0.001    0.000 -0.028</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> steps              0.081        -0.070  -0.008 -0.048  0.179   -0.028  0.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> interested         0.000        -0.189   0.377 -0.208  0.326    0.286  0.077</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> disinterested     -0.189         0.000  -0.179 -0.045  0.109    0.159 -0.087</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> excited            0.377        -0.179   0.000 -0.125  0.493   -0.176 -0.002</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> upset             -0.208        -0.045  -0.125  0.000  0.111    0.362 -0.047</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> strong             0.326         0.109   0.493  0.111  0.000   -0.016  0.173</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> stressed           0.286         0.159  -0.176  0.362 -0.016    0.000 -0.014</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> steps              0.077        -0.087  -0.002 -0.047  0.173   -0.014  0.000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --- </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  interested disinterested excited  upset strong stressed  steps</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> interested.l1         0.223        -0.014   0.178 -0.096  0.175    0.016  0.109</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> disinterested.l1     -0.051        -0.004   0.054 -0.016  0.046    0.090 -0.027</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> excited.l1           -0.081        -0.186   0.005  0.048 -0.081    0.086  0.099</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> upset.l1             -0.150         0.256  -0.093  0.427  0.061    0.316 -0.089</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> strong.l1             0.026         0.177   0.027  0.049  0.181   -0.066 -0.185</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> stressed.l1          -0.022        -0.012  -0.033 -0.044 -0.075    0.150  0.130</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> steps.l1             -0.152         0.178  -0.206  0.149 -0.091    0.203  0.043</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> interested.l1         0.219        -0.012   0.176 -0.097  0.173    0.015  0.107</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> disinterested.l1     -0.052        -0.004   0.055 -0.021  0.051    0.088 -0.021</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> excited.l1           -0.081        -0.185   0.007  0.049 -0.080    0.086  0.101</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> upset.l1             -0.154         0.261  -0.096  0.431  0.055    0.320 -0.095</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> strong.l1             0.030         0.172   0.027  0.047  0.183   -0.067 -0.183</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> stressed.l1          -0.019        -0.010  -0.032 -0.043 -0.073    0.151  0.130</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> steps.l1             -0.155         0.181  -0.207  0.152 -0.091    0.206  0.041</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --- </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Date: Tue Dec  3 15:39:25 2024 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Date: Fri Dec 13 11:54:05 2024 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
@@ -180,7 +189,7 @@ useful objects:</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
     </footer></div>

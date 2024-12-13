@@ -62,7 +62,7 @@
 #' #########################
 #' # rank based parital correlations
 #'
-#' # estimate the model (following code commented due to CRAN checks) 
+#' # estimate the model 
 #' fit_est <-  bggm_missing(x,
 #'                          method = "estimate",
 #'                          type =  "mixed",

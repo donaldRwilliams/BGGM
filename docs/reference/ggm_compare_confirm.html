@@ -3,11 +3,13 @@
 and/or ineqaulity contraints on the partial correlations of interest. Here the focus is not
 on determining the graph (see explore) but testing specific hypotheses related to
 the conditional (in)dependence structure. These methods were introduced in
-Williams2019_bf;textualBGGM and in williams2020comparing;textualBGGM"><meta property="og:description" content="Confirmatory hypothesis testing for comparing GGMs. Hypotheses are expressed as equality
+Williams and Mulder (2019)
+ and in Williams et al. (2020)"><meta property="og:description" content="Confirmatory hypothesis testing for comparing GGMs. Hypotheses are expressed as equality
 and/or ineqaulity contraints on the partial correlations of interest. Here the focus is not
 on determining the graph (see explore) but testing specific hypotheses related to
 the conditional (in)dependence structure. These methods were introduced in
-Williams2019_bf;textualBGGM and in williams2020comparing;textualBGGM"><meta property="og:image" content="https://donaldrwilliams.github.io/BGGM/reference/figures/hex.jpg"><meta name="twitter:card" content="summary"><meta name="twitter:creator" content="@wdonald_1985"><meta name="twitter:site" content="@wdonald_1985"></head><body>
+Williams and Mulder (2019)
+ and in Williams et al. (2020)"><meta property="og:image" content="https://donaldrwilliams.github.io/BGGM/reference/figures/hex.jpg"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -15,7 +17,7 @@ Williams2019_bf;textualBGGM and in williams2020comparing;textualBGGM"><meta prop
 
     <a class="navbar-brand me-2" href="../index.html">BGGM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.3.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,7 +48,8 @@ Williams2019_bf;textualBGGM and in williams2020comparing;textualBGGM"><meta prop
 and/or ineqaulity contraints on the partial correlations of interest. Here the focus is <em>not</em>
 on determining the graph (see <code><a href="explore.html">explore</a></code>) but testing specific hypotheses related to
 the conditional (in)dependence structure. These methods were introduced in
-Williams2019_bf;textualBGGM and in williams2020comparing;textualBGGM</p>
+Williams and Mulder (2019)
+ and in Williams et al. (2020)</p>
     </div>
 
     <div class="section level2">
@@ -123,7 +126,7 @@ be imputed during model fitting (defaults to <code>TRUE</code>) ?</p></dd>
         are the useful objects:</p>
 <ul><li><p><code>out_hyp_prob</code> Posterior hypothesis probabilities.</p></li>
 <li><p><code>info</code> An object of class <code>BF</code> from the R package <strong>BFpack</strong>
-                  mulder2019bfpackBGGM</p></li>
+                  (Mulder et al. 2019)</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -169,7 +172,8 @@ that are included in <code>formula</code> are removed from <code>Y</code>. This 
 should be included in the GGM. An example is provided below.</p>
 <p><strong>Mixed Type</strong>:</p>
 <p>The term "mixed" is somewhat of a misnomer, because the method can be used for data including <em>only</em>
- continuous or <em>only</em> discrete variables hoff2007extendingBGGM. This is based on the
+ continuous or <em>only</em> discrete variables (Hoff 2007)
+. This is based on the
  ranked likelihood which requires sampling the ranks for each variable (i.e., the data is not merely
  transformed to ranks). This is computationally expensive when there are many levels. For example,
  with continuous data, there are as many ranks as data points!</p>
@@ -189,7 +193,8 @@ should be included in the GGM. An example is provided below.</p>
        that the index is out of bounds, this indicates that the first category is a zero. This is not allowed, as
        the first category must be one. This is addressed by adding one (e.g., <code>Y + 1</code>) to the data matrix.</p></li>
 </ul><p><strong>Imputing Missing Values</strong>:</p>
-<p>Missing values are imputed with the approach described in hoff2009first;textualBGGM.
+<p>Missing values are imputed with the approach described in Hoff (2009)
+.
 The basic idea is to impute the missing values with the respective posterior pedictive distribution,
 given the observed data, as the model is being estimated. Note that the default is <code>TRUE</code>,
 but this ignored when there are no missing values. If set to <code>FALSE</code>, and there are missing
@@ -199,22 +204,45 @@ values, list-wise deletion is performed with <code>na.omit</code>.</p>
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p><strong>"Default" Prior</strong>:</p>
 <p>In Bayesian statistics, a default Bayes factor needs to have several properties. I refer
- interested users to @section 2.2 in @dablander2020default;textualBGGM. In
- Williams2019_bf;textualBGGM, some of these propteries were investigated (e.g.,
+ interested users to section 2.2 in Dablander et al. (2020)
+. In
+ Williams and Mulder (2019)
+, some of these propteries were investigated (e.g.,
  model selection consistency). That said, we would not consider this a "default" or "automatic"
  Bayes factor and thus we encourage users to perform sensitivity analyses by varying the scale of
  the prior distribution (<code>prior_sd</code>).</p>
 <p>Furthermore, it is important to note there is no "correct" prior and, also, there is no need
  to entertain the possibility of a "true" model. Rather, the Bayes factor can be interpreted as
  which hypothesis best (relative to each other) predicts the observed data
- @Section 3.2 in @Kass1995BGGM.</p>
+ (Section 3.2 in Kass and Raftery 1995)
+.</p>
 <p><strong>Interpretation of Conditional (In)dependence Models for Latent Data</strong>:</p>
 <p>See <code><a href="BGGM-package.html">BGGM-package</a></code> for details about interpreting GGMs based on latent data
 (i.e, all data types besides <code>"continuous"</code>)</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p></p>
+    <p>Dablander F, Bergh Dvd, Ly A, Wagenmakers E (2020).
+“Default Bayes Factors for Testing the (In) equality of Several Population Variances.”
+<em>arXiv preprint arXiv:2003.06278</em>.<br><br> Hoff PD (2007).
+“Extending the rank likelihood for semiparametric copula estimation.”
+<em>The Annals of Applied Statistics</em>, <b>1</b>(1), 265–283.
+<a href="https://doi.org/10.1214/07-AOAS107" class="external-link">doi:10.1214/07-AOAS107</a>
+.<br><br> Hoff PD (2009).
+<em>A first course in Bayesian statistical methods</em>, volume 580.
+Springer.<br><br> Kass RE, Raftery AE (1995).
+“Bayes Factors.”
+<em>Journal of the American Statistical Association</em>, <b>90</b>(430), 773–795.<br><br> Mulder J, Gu X, Olsson-Collentine A, Tomarken A, Böing-Messing F, Hoijtink H, Meijerink M, Williams DR, Menke J, Fox J, others (2019).
+“BFpack: Flexible Bayes Factor Testing of Scientific Theories in R.”
+<em>arXiv preprint arXiv:1911.07728</em>.<br><br> Williams DR, Mulder J (2019).
+“Bayesian Hypothesis Testing for Gaussian Graphical Models: Conditional Independence and Order Constraints.”
+<em>PsyArXiv</em>.
+<a href="https://doi.org/10.31234/osf.io/ypxd8" class="external-link">doi:10.31234/osf.io/ypxd8</a>
+.<br><br> Williams DR, Rast P, Pericchi LR, Mulder J (2020).
+“Comparing Gaussian graphical models with the posterior predictive distribution and Bayesian model selection.”
+<em>Psychological Methods</em>.
+<a href="https://doi.org/10.1037/met0000254" class="external-link">doi:10.1037/met0000254</a>
+.</p>
     </div>
 
     <div class="section level2">
@@ -275,15 +303,15 @@ values, list-wise deletion is performed with <code>na.omit</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --- </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Posterior prob: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> p(H1|data) = 0.136</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> p(H2|data) = 0.016</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> p(H3|data) = 0.848</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> p(H1|data) = 0.131</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> p(H2|data) = 0.017</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> p(H3|data) = 0.852</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --- </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bayes factor matrix: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       H1     H2    H3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> H1 1.000  8.528 0.161</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> H2 0.117  1.000 0.019</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> H3 6.215 53.004 1.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> H1 1.000  7.488 0.154</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> H2 0.134  1.000 0.021</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> H3 6.507 48.728 1.000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --- </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> note: equal hypothesis prior probabilities</span>
 <span class="r-in"><span></span></span>
@@ -324,15 +352,15 @@ values, list-wise deletion is performed with <code>na.omit</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --- </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Posterior prob: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> p(H1|data) = 0.434</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> p(H2|data) = 0.046</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> p(H3|data) = 0.52</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> p(H1|data) = 0.396</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> p(H2|data) = 0.056</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> p(H3|data) = 0.548</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --- </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bayes factor matrix: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       H1     H2    H3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> H1 1.000  9.372 0.835</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> H2 0.107  1.000 0.089</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> H3 1.197 11.219 1.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       H1    H2    H3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> H1 1.000 7.090 0.723</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> H2 0.141 1.000 0.102</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> H3 1.383 9.808 1.000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --- </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> note: equal hypothesis prior probabilities</span>
 <span class="r-in"><span></span></span>
@@ -368,15 +396,15 @@ values, list-wise deletion is performed with <code>na.omit</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --- </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Posterior prob: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> p(H1|data) = 0.26</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> p(H2|data) = 0.03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> p(H3|data) = 0.71</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> p(H1|data) = 0.207</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> p(H2|data) = 0.037</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> p(H3|data) = 0.756</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --- </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bayes factor matrix: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       H1     H2    H3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> H1 1.000  8.730 0.367</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> H2 0.115  1.000 0.042</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> H3 2.728 23.818 1.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> H1 1.000  5.577 0.273</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> H2 0.179  1.000 0.049</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> H3 3.661 20.417 1.000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --- </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> note: equal hypothesis prior probabilities</span>
 <span class="r-in"><span></span></span>
@@ -422,15 +450,15 @@ values, list-wise deletion is performed with <code>na.omit</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --- </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Posterior prob: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> p(H1|data) = 0.028</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> p(H1|data) = 0.027</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> p(H2|data) = 0.091</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> p(H3|data) = 0.882</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --- </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bayes factor matrix: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        H1    H2    H3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> H1  1.000 0.307 0.032</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> H2  3.261 1.000 0.103</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> H3 31.734 9.732 1.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> H1  1.000 0.294 0.030</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> H2  3.400 1.000 0.103</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> H3 32.928 9.685 1.000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --- </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> note: equal hypothesis prior probabilities</span>
 <span class="r-in"><span></span></span>
@@ -481,15 +509,15 @@ values, list-wise deletion is performed with <code>na.omit</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --- </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Posterior prob: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> p(H1|data) = 0.025</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> p(H2|data) = 0.07</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> p(H3|data) = 0.905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> p(H1|data) = 0.024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> p(H2|data) = 0.085</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> p(H3|data) = 0.891</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --- </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bayes factor matrix: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        H1     H2    H3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> H1  1.000  0.360 0.028</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> H2  2.779  1.000 0.077</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> H3 36.044 12.972 1.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> H1  1.000  0.283 0.027</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> H2  3.530  1.000 0.095</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> H3 37.196 10.536 1.000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --- </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> note: equal hypothesis prior probabilities</span>
 <span class="r-in"><span></span></span>
@@ -546,17 +574,17 @@ values, list-wise deletion is performed with <code>na.omit</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --- </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Posterior prob: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> p(H1|data) = 0.118</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> p(H2|data) = 0.873</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> p(H3|data) = 0.006</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> p(H1|data) = 0.101</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> p(H2|data) = 0.889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> p(H3|data) = 0.007</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> p(H4|data) = 0.003</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --- </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bayes factor matrix: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       H1    H2      H3      H4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> H1 1.000 0.135  19.490  36.820</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> H2 7.414 1.000 144.499 272.984</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> H3 0.051 0.007   1.000   1.889</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> H4 0.027 0.004   0.529   1.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> H1 1.000 0.114  14.522  37.799</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> H2 8.798 1.000 127.772 332.566</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> H3 0.069 0.008   1.000   2.603</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> H4 0.026 0.003   0.384   1.000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --- </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> note: equal hypothesis prior probabilities</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
@@ -571,7 +599,7 @@ values, list-wise deletion is performed with <code>na.omit</code>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
     </footer></div>

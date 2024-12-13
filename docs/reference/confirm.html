@@ -3,11 +3,13 @@
 and/or ineqaulity contraints on the partial correlations of interest. Here the focus is not
 on determining the graph (see explore) but testing specific hypotheses related to
 the conditional (in)dependence structure. These methods were introduced in
-Williams2019_bf;textualBGGM."><meta property="og:description" content="Confirmatory hypothesis testing in GGMs. Hypotheses are expressed as equality
+Williams and Mulder (2019)
+."><meta property="og:description" content="Confirmatory hypothesis testing in GGMs. Hypotheses are expressed as equality
 and/or ineqaulity contraints on the partial correlations of interest. Here the focus is not
 on determining the graph (see explore) but testing specific hypotheses related to
 the conditional (in)dependence structure. These methods were introduced in
-Williams2019_bf;textualBGGM."><meta property="og:image" content="https://donaldrwilliams.github.io/BGGM/reference/figures/hex.jpg"><meta name="twitter:card" content="summary"><meta name="twitter:creator" content="@wdonald_1985"><meta name="twitter:site" content="@wdonald_1985"></head><body>
+Williams and Mulder (2019)
+."><meta property="og:image" content="https://donaldrwilliams.github.io/BGGM/reference/figures/hex.jpg"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -15,7 +17,7 @@ Williams2019_bf;textualBGGM."><meta property="og:image" content="https://donaldr
 
     <a class="navbar-brand me-2" href="../index.html">BGGM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.3.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,7 +48,8 @@ Williams2019_bf;textualBGGM."><meta property="og:image" content="https://donaldr
 and/or ineqaulity contraints on the partial correlations of interest. Here the focus is <em>not</em>
 on determining the graph (see <code><a href="explore.html">explore</a></code>) but testing specific hypotheses related to
 the conditional (in)dependence structure. These methods were introduced in
-Williams2019_bf;textualBGGM.</p>
+Williams and Mulder (2019)
+.</p>
     </div>
 
     <div class="section level2">
@@ -173,7 +176,8 @@ that are included in <code>formula</code> are removed from <code>Y</code>. This 
 should be included in the GGM. An example is provided below.</p>
 <p><strong>Mixed Type</strong>:</p>
 <p>The term "mixed" is somewhat of a misnomer, because the method can be used for data including <em>only</em>
- continuous or <em>only</em> discrete variables hoff2007extendingBGGM. This is based on the
+ continuous or <em>only</em> discrete variables (Hoff 2007)
+. This is based on the
  ranked likelihood which requires sampling the ranks for each variable (i.e., the data is not merely
  transformed to ranks). This is computationally expensive when there are many levels. For example,
  with continuous data, there are as many ranks as data points!</p>
@@ -197,22 +201,37 @@ should be included in the GGM. An example is provided below.</p>
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p><strong>"Default" Prior</strong>:</p>
 <p>In Bayesian statistics, a default Bayes factor needs to have several properties. I refer
- interested users to @section 2.2 in @dablander2020default;textualBGGM. In
- Williams2019_bf;textualBGGM, some of these propteries were investigated (e.g.,
+ interested users to section 2.2 in Dablander et al. (2020)
+. In
+ Williams and Mulder (2019)
+, some of these propteries were investigated (e.g.,
  model selection consistency). That said, we would not consider this a "default" or "automatic"
  Bayes factor and thus we encourage users to perform sensitivity analyses by varying the scale of the prior
  distribution.</p>
 <p>Furthermore, it is important to note there is no "correct" prior and, also, there is no need
  to entertain the possibility of a "true" model. Rather, the Bayes factor can be interpreted as
  which hypothesis best (relative to each other) predicts the observed data
- @Section 3.2 in @Kass1995BGGM.</p>
+ (Section 3.2 in Kass and Raftery 1995)
+.</p>
 <p><strong>Interpretation of Conditional (In)dependence Models for Latent Data</strong>:</p>
 <p>See <code><a href="BGGM-package.html">BGGM-package</a></code> for details about interpreting GGMs based on latent data
 (i.e, all data types besides <code>"continuous"</code>)</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p></p>
+    <p>Dablander F, Bergh Dvd, Ly A, Wagenmakers E (2020).
+“Default Bayes Factors for Testing the (In) equality of Several Population Variances.”
+<em>arXiv preprint arXiv:2003.06278</em>.<br><br> Hoff PD (2007).
+“Extending the rank likelihood for semiparametric copula estimation.”
+<em>The Annals of Applied Statistics</em>, <b>1</b>(1), 265–283.
+<a href="https://doi.org/10.1214/07-AOAS107" class="external-link">doi:10.1214/07-AOAS107</a>
+.<br><br> Kass RE, Raftery AE (1995).
+“Bayes Factors.”
+<em>Journal of the American Statistical Association</em>, <b>90</b>(430), 773–795.<br><br> Williams DR, Mulder J (2019).
+“Bayesian Hypothesis Testing for Gaussian Graphical Models: Conditional Independence and Order Constraints.”
+<em>PsyArXiv</em>.
+<a href="https://doi.org/10.31234/osf.io/ypxd8" class="external-link">doi:10.31234/osf.io/ypxd8</a>
+.</p>
     </div>
 
     <div class="section level2">
@@ -264,9 +283,9 @@ should be included in the GGM. An example is provided below.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> p(H2|data) = 0.004</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --- </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bayes factor matrix: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       H1      H2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> H1 1.000 243.205</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> H2 0.004   1.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       H1     H2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> H1 1.000 227.94</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> H2 0.004   1.00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --- </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> note: equal hypothesis prior probabilities</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
@@ -281,7 +300,7 @@ should be included in the GGM. An example is provided below.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
     </footer></div>

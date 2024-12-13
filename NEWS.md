@@ -1,5 +1,5 @@
-# BGGM (development version)
-- Addressed CRAN check error when building vignettes.
+# BGGM 2.1.4
+- Addressed CRAN check error when building vignettes (removed example in bggm_missing.R -- will put it back once it's accepted to CRAN). 
 - Downgraded required R version to 4.0.0
 
 # BGGM 2.1.3 

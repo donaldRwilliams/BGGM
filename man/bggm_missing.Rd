@@ -60,8 +60,8 @@ mat <- matrix(0, nrow = 221, ncol = 5)
 # indices
 indices <- which(mat == 0, arr.ind = TRUE)
 
-# Introduce NAs
-Y[indices[sample(1:nrow(indices), 10),]] <- NA
+# Introduce 50 NAs
+Y[indices[sample(1:nrow(indices), 50),]] <- NA
 
 # impute
 x <- mice(Y, m = 5, print = FALSE)
@@ -71,7 +71,7 @@ x <- mice(Y, m = 5, print = FALSE)
 #########################
 # rank based parital correlations
 
-# estimate the model
+# estimate the model 
 fit_est <-  bggm_missing(x,
                          method = "estimate",
                          type =  "mixed",
