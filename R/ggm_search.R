@@ -1,8 +1,26 @@
+##' .. content for \description{} (no empty lines) ..
+##'
+##' .. content for \details{} ..
+##' @title 
+##' @param x Data, either raw data or covariance matrix 
+##' @param n For x = covariance matrix, provide number of observations
+##' @param method mc3 defaults to MH sampling
+##' @param prior_prob Prior prbability of sparseness. 
+##' @param iter Number of iterations
+##' @param burn_in Burn in. Defaults to iter/2
+##' @param stop_early Default to 100. Stop MH algorithm if proposals keep being rejected (stopping by default after 100 rejections).
+##' @param bma_mean Compute Bayesian Model Averaged solution
+##' @param seed Set seed. Current default is to set R's random seed.
+##' @param progress Show progress bar, defaults to TRUE
+##' @param ... Not currently in use
+##' @return 
+##' @author Donny Williams and Philippe Rast
 ggm_search <- function(x, n = NULL,
                        method = "mc3",
-                       prior_prob = 0.1,
+                       prior_prob = 0.3,
                        iter = 5000,
-                       stop_early = 1000,
+                       burn_in = NULL,
+                       stop_early = 100,
                        bma_mean = TRUE,
                        seed = NULL,
                        progress = TRUE, ...){
@@ -75,8 +93,14 @@ ggm_search <- function(x, n = NULL,
     # first matrix (starting values)
     fit$adj[,,1] <- adj_start
 
+    ## Add a burnin unless defined by user
+    if(is.null(burn_in)) {
+      burn_in <- round(iter/2) 
+    }
+   
     # approximate marginal likelihood
     approx_marg_ll <- fit$bics
+
 
     # starting bic
     approx_marg_ll[1] <- bic_old
@@ -88,7 +112,8 @@ ggm_search <- function(x, n = NULL,
 
     adj_path <- fit$adj
 
-    selected <- which.min(approx_marg_ll)
+    # Find position of smallest bic
+    selected <-  which.min(approx_marg_ll)
 
     if(acc == 0){
       adj <- fit$adj[,,1]
@@ -112,9 +137,16 @@ ggm_search <- function(x, n = NULL,
 
   }
 
+    ## Keep samples after burn-in
+    valid_indices <- (burn_in + 1):length(approx_marg_ll)  
+    ## Filter BICs and adjacency matrices
+    approx_marg_ll <- approx_marg_ll[valid_indices]
+    adj_path <- adj_path[,, valid_indices]
+
+  
   if(bma_mean & acc > 0){
 
-    graph_ids <- which(duplicated(approx_marg_ll) == 0)[-1]
+    graph_ids <- which(duplicated(approx_marg_ll) == 0)#[-1]
 
     delta <- (approx_marg_ll[graph_ids] - min(approx_marg_ll[graph_ids])) * (6 / (2*sqrt(2*n)))
 
@@ -202,3 +234,6 @@ print_ggm_search <- function(x, ...){
 
   }
 }
+
+
+
