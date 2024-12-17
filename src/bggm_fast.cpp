@@ -6,9 +6,7 @@
 #include <truncnorm.h>
 #include <RcppArmadilloExtensions/sample.h>
 
-
 // [[Rcpp::depends(RcppArmadillo, RcppDist, RcppProgress)]]
-
 
 // mean of 3d array
 // [[Rcpp::export]]
@@ -2412,8 +2410,6 @@ Rcpp::List find_ids(arma::mat x){
   ret["nonzero"] = nonzero;
   ret["zero"] = zero;
   return ret;
-
-
 }
 
 // [[Rcpp::export]]
@@ -2440,15 +2436,16 @@ Rcpp::List search(arma::mat S,
   arma::uvec zeros = start["zero"];
   arma::uvec nonzeros = start["nonzero"];
 
-  arma::mat adj_mat(p,p);
-
-  arma::mat mat_old = adj_mat;
-
+  arma::mat mat_old = start_adj;  // Use adj_start from R
+  arma::mat adj_mat = mat_old;    // Initialize adj_mat to match mat_old
+  
   arma::vec bics(iter, arma::fill::zeros);
 
   arma::vec acc(1, arma::fill::zeros);
 
   arma::vec repeats(1, arma::fill::zeros);
+
+  int accepted = 0, rejected = 0; // debug acceptance rate
 
   for(int s = 0; s < iter; ++s){
 
@@ -2460,46 +2457,64 @@ Rcpp::List search(arma::mat S,
 
     adj_s = mat_old;
 
+    
     if (s % 2 == 0){
       arma::vec id_add = Rcpp::RcppArmadillo::sample(arma::conv_to<arma::vec>::from(zeros), 1, false);
       adj_s.elem(arma::conv_to<arma::uvec>::from(id_add)).fill(1);
-      adj_mat = symmatu(adj_s);
-      adj_mat.diag().fill(1);
-
     } else {
       arma::vec id_add = Rcpp::RcppArmadillo::sample(arma::conv_to<arma::vec>::from(nonzeros), 1, false);
       adj_s.elem(arma::conv_to<arma::uvec>::from(id_add)).fill(0);
-      adj_mat = symmatu(adj_s);
-      adj_mat.diag().fill(1);
     }
 
+    adj_mat = symmatu(adj_s);
+    adj_mat.diag().fill(1);
+    
+    // Run the hft_algorithm and compute the BIC
     Rcpp::List fit1 = hft_algorithm(S, adj_mat, 0.00001, 10);
     arma::mat  Theta = fit1["Theta"];
     double new_bic = bic_fast(Theta, S, n, gamma);
+    // Specifically compute delta to facilitate debugging
+    double delta =  new_bic - old_bic;
 
-    if(exp(-0.5 * (new_bic - old_bic)) > 1){
+    // Rcpp::Rcout << ", New BIC: " << new_bic 
+    // 		<< ", Old BIC: " << old_bic 
+    // 		<< ", Delta: " << delta << std::endl;
+    
+    // Generate a random uniform number for probabilistic acceptance
+    double random_uniform = arma::randu();
+    
+    // Metropolis-Hastings acceptance criterion
+    if(exp(-0.5 *  delta ) > random_uniform ){
       mat_old = adj_mat;
       adj.slice(s) = adj_mat;
       old_bic = new_bic;
-      acc(0) = acc(0) + 1;
-      Rcpp::List start =  find_ids(start_adj);
+      acc(0)++;
+      repeats(0) = 0;
+      accepted++; // for debugging
+      Rcpp::List start =  find_ids(adj_mat);
       arma::uvec zeros = start["zero"];
       arma::uvec nonzeros = start["nonzero"];
-
-      repeats(0) = 0;
-
     } else {
-
-      adj.slice(s) = adj_s;
-      repeats(0) = repeats(0) + 1;
-
+      // Explicitly revert adj_mat to mat_old for clarity
+      adj_mat = mat_old;
+      repeats(0)++;
+      rejected++; //for debugging
     }
 
     bics(s) = old_bic;
+    
 
     if(repeats(0) > stop_early){
+      Rcpp::Rcout << "Stopping early at iteration " << s << std::endl;
       break;
     }
+    
+    // // Debugging
+    // Rcpp::Rcout << "Iter: " << s
+    // 		<< ", Accepted: " << accepted
+    // 		<< ", Rejected: " << rejected
+    // 		<< ", Edge Count: " << arma::accu(arma::trimatu(adj_mat)) - p << std::endl;
+    
   }
 
   Rcpp::List ret;
