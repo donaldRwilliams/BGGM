@@ -1,20 +1,14 @@
 # BGGM 2.1.4.9000 (development version)
 ## Bug Fixes and Improvements
 
-### `ggm_search()`
-- Added `burn_in` to ensure that the Bayesian Model Averaged (BMA) solution is computed only across converged models.
-
 ### C++ `search` Function
 1. **Improved Initialization**  
    - The initial adjacency matrix now takes `start_adj` (the maximum likelihood solution) as the starting point to avoid inefficient sampling.
 
-2. **Corrected Metropolis-Hastings Acceptance**  
-   - Proposals are now probabilistically accepted using a uniform random value \( U(0,1) \) when \( \text{BIC}_{\text{new}} \leq \text{BIC}_{\text{old}} \).
-
-3. **Adaptive Sampling**  
+2. **Adaptive Sampling**  
    - The sampling of `zeros` and `nonzeros` is now adapted to the **newly accepted adjacency matrix** (`adj_s`) rather than the static `start_adj`.
 
-4. **Efficiency Enhancements**  
+3. **Efficiency Enhancements**  
    - Skip updates on rejection since the graph remains unchanged.  
    - Use `find_ids(adj_mat)` instead of `find_ids(start_adj)` to ensure edge modifications are correctly tracked after acceptance.
 
