@@ -1,14 +1,11 @@
-
-## With R 3.1.0 or later, you can uncomment the following line to tell R to
-## enable compilation with C++11 (where available)
-##
-## Also, OpenMP support in Armadillo prefers C++11 support. However, for wider
-## availability of the package we do not yet enforce this here.  It is however
-## recommended for client packages to set it.
-##
-## And with R 3.4.0, and RcppArmadillo 0.7.960.*, we turn C++11 on as OpenMP
-## support within Armadillo prefers / requires it
-## Move to C++17 for R >= 4.3.0
+# Specify the C++ standard to use. C++17 is required for compatibility with R >= 4.3.0
 CXX_STD = CXX17
+
+# Disables Armadillo's debug mode for faster execution.
+PKG_CPPFLAGS = -DARMA_NO_DEBUG
+
+# Use OpenMP flags provided by R and include custom headers located in inst/include
 PKG_CXXFLAGS = @OPENMP_FLAG@ -I../inst/include
+
+# Link against OpenMP and required numerical libraries (LAPACK, BLAS, and Fortran libraries)
 PKG_LIBS= @OPENMP_FLAG@ $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
