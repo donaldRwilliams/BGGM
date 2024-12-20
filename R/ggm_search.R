@@ -1,4 +1,4 @@
-##' @title Perform Bayesian Graph Search and Optional Model Averaging
+##' Perform Bayesian Graph Search and Optional Model Averaging
 ##'
 ##' The `ggm_search` function performs a Bayesian graph search to identify the 
 ##' most probable graph structure (MAP solution) using the Metropolis-Hastings 

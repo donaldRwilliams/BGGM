@@ -1,4 +1,4 @@
-#' @title Compute Posterior Distributions from Graph Search Results
+#' Compute Posterior Distributions from Graph Search Results
 #'
 #' The `bma_posterior` function samples posterior distributions of graph 
 #' parameters (e.g., partial correlations or precision matrices) based on the 

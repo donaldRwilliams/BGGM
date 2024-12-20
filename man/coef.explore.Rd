@@ -46,7 +46,8 @@ Y <- ptsd[,1:4]
 fit <- explore(Y + 1,
                type = "ordinal",
                iter = 250,
-               progress = FALSE)
+               progress = FALSE,
+               seed = 1234)
 
 # summarize the partial correlations
 reg <- coef(fit, progress = FALSE)
