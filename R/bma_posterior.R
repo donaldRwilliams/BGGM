@@ -15,10 +15,10 @@
 #'         parameter estimates.
 #'
 #' @seealso \code{\link{ggm_search}}
-#' @param object 
-#' @param param 
-#' @param iter 
-#' @param progress 
+##' @param object A ggm_search object
+##' @param param Compute BMA on either partial correlations "pcor" (default) or on precision matrix "Theta". 
+##' @param iter Number of samples to be drawn, defaults to 5,000
+##' @param progress Show progress bar, defaults to TRUE
 bma_posterior <- function(object,
                           param = "pcor",
                           iter = 5000,
