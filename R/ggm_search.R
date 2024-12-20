@@ -1,26 +1,40 @@
-##' .. content for \description{} (no empty lines) ..
+##' @title Perform Bayesian Graph Search and Optional Model Averaging
 ##'
-##' .. content for \details{} ..
-##' @title 
+##' The `ggm_search` function performs a Bayesian graph search to identify the 
+##' most probable graph structure (MAP solution) using the Metropolis-Hastings 
+##' algorithm. It also computes an optional Bayesian Model Averaged (BMA) solution 
+##' across the graph structures sampled during the search. 
+##'
+##' This function is ideal for exploring the graph space and obtaining an initial 
+##' estimate of the graph structure or adjacency matrix. 
+##'
+##' To refine the results or compute posterior distributions of graph parameters 
+##' (e.g., partial correlations), use the \code{\link{bma_posterior}} function, 
+##' which builds on the output of `ggm_search` to account for parameter uncertainty.
+##'
+##' @return A list containing the MAP graph structure, BMA solution (if specified),
+##'         and posterior probabilities of the sampled graphs.
+##'
+##' @seealso \code{\link{bma_posterior}}
+##'  
 ##' @param x Data, either raw data or covariance matrix 
 ##' @param n For x = covariance matrix, provide number of observations
 ##' @param method mc3 defaults to MH sampling
 ##' @param prior_prob Prior prbability of sparseness. 
 ##' @param iter Number of iterations
-##' @param burn_in Burn in. Defaults to iter/2
-##' @param stop_early Default to 100. Stop MH algorithm if proposals keep being rejected (stopping by default after 100 rejections).
+##' #@param burn_in Burn in. Defaults to iter/2
+##' @param stop_early Default to 1000. Stop MH algorithm if proposals keep being rejected (stopping by default after 1000 rejections).
 ##' @param bma_mean Compute Bayesian Model Averaged solution
 ##' @param seed Set seed. Current default is to set R's random seed.
 ##' @param progress Show progress bar, defaults to TRUE
 ##' @param ... Not currently in use
-##' @return 
 ##' @author Donny Williams and Philippe Rast
 ggm_search <- function(x, n = NULL,
                        method = "mc3",
                        prior_prob = 0.3,
                        iter = 5000,
-                       burn_in = NULL,
-                       stop_early = 100,
+                       #burn_in = NULL, 
+                       stop_early = 1000,
                        bma_mean = TRUE,
                        seed = NULL,
                        progress = TRUE, ...){
@@ -30,8 +44,6 @@ ggm_search <- function(x, n = NULL,
   if(!is.null(seed) ) {
     set.seed(seed)
   }
-
-  x <- Y
 
   if (base::isSymmetric(as.matrix(x))) {
     S <- x
@@ -49,14 +61,16 @@ ggm_search <- function(x, n = NULL,
       stop_early <- iter
 
     }
-
+    
     pcors <- -cov2cor( solve(S) ) + diag(2, p)
 
     # test full vs missing one edge
     BF_01 <- exp(-0.5 *  (tstat(r = pcors, n = n, p - 2)^2 - log(n)))
     BF_10 <- 1/BF_01
-
+ 
+    ## Create starting adjacency matrix, based on the BF_10
     adj_start <- ifelse(BF_10 > 1, 1, 0)
+
 
     old <- hft_algorithm(Sigma = S,
                          adj = adj_start,
@@ -94,13 +108,13 @@ ggm_search <- function(x, n = NULL,
     fit$adj[,,1] <- adj_start
 
     ## Add a burnin unless defined by user
+    burn_in = 0 # Drop this line once we found solution to creeping BIC in ggm_search MH algo
     if(is.null(burn_in)) {
       burn_in <- round(iter/2) 
     }
    
     # approximate marginal likelihood
     approx_marg_ll <- fit$bics
-
 
     # starting bic
     approx_marg_ll[1] <- bic_old
@@ -115,38 +129,43 @@ ggm_search <- function(x, n = NULL,
     # Find position of smallest bic
     selected <-  which.min(approx_marg_ll)
 
+    ## acc are accepted proposals
     if(acc == 0){
       adj <- fit$adj[,,1]
     } else {
       adj <-  fit$adj[,,selected]
     }
 
-    # BFs vs mpm
+    ## BFs vs Most Probably Model (mpm)
+    ## Comute delta of all models compared to best model
     delta <- approx_marg_ll - min(approx_marg_ll)
 
+    ## Convert differences in marginal log-likelihoods into posterior probabilities for each model
     probs <- exp(-0.5 * delta) / sum( exp(-0.5 * delta) )
 
+    ## MPM:
     Theta_map <- hft_algorithm(
       Sigma = S,
       adj = adj,
       tol = 1e-10,
-      max_iter = 100
+      max_iter = 1000
     )
 
-      pcor_adj <- -cov2cor(Theta_map$Theta) + diag(2, p)
+    ## Partial Correlation for the MPM model
+    pcor_adj <- -cov2cor(Theta_map$Theta) + diag(2, p)
 
   }
 
-    ## Keep samples after burn-in
-    valid_indices <- (burn_in + 1):length(approx_marg_ll)  
-    ## Filter BICs and adjacency matrices
-    approx_marg_ll <- approx_marg_ll[valid_indices]
-    adj_path <- adj_path[,, valid_indices]
+    ## ## Keep samples after burn-in
+    ## valid_indices <- (burn_in + 1):length(approx_marg_ll)  
+    ## ## Filter BICs and adjacency matrices
+    ## approx_marg_ll <- approx_marg_ll[valid_indices]
+    ## adj_path <- adj_path[,, valid_indices]
 
   
   if(bma_mean & acc > 0){
 
-    graph_ids <- which(duplicated(approx_marg_ll) == 0)#[-1]
+    graph_ids <-  which(duplicated(approx_marg_ll) == 0)[-1]
 
     delta <- (approx_marg_ll[graph_ids] - min(approx_marg_ll[graph_ids])) * (6 / (2*sqrt(2*n)))
 

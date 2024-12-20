@@ -2394,6 +2394,7 @@ double bic_fast(arma::mat Theta, arma::mat S, double n, float prior_prob){
   double neg_ll =  -2 * ((n*0.5) * (log(det(Theta)) - trace(S * Theta)));
 
   double bic = neg_ll + (nonzero.n_elem * log(n) - (nonzero.n_elem * log(prior_prob / (1 - prior_prob))));
+
   return bic;
 }
 
@@ -2412,6 +2413,9 @@ Rcpp::List find_ids(arma::mat x){
   return ret;
 }
 
+// Search for possible graphs, accepting if BIC_new is better than BIC_old
+// MH algo does not work probabilistically - accept only better, never worse.
+// Revisit this function 
 // [[Rcpp::export]]
 Rcpp::List search(arma::mat S,
                   float iter,
@@ -2422,42 +2426,45 @@ Rcpp::List search(arma::mat S,
                   int stop_early,
                   bool progress){
 
-
   Progress  pr(iter, progress);
 
   int p = S.n_cols;
 
   arma::cube adj(p, p, iter);
+  
+  // Copy start_adj to adj_s
+  arma::mat adj_s = start_adj; 
 
-  arma::mat adj_s = start_adj;
-
-  Rcpp::List start =  find_ids(start_adj);
-
+  // Create start object containing position of zero and nonzeros
+  Rcpp::List start = find_ids(start_adj);
+  
   arma::uvec zeros = start["zero"];
   arma::uvec nonzeros = start["nonzero"];
 
-  arma::mat mat_old = start_adj;  // Use adj_start from R
-  arma::mat adj_mat = mat_old;    // Initialize adj_mat to match mat_old
+  // Use adj_start from R
+  arma::mat mat_old = start_adj;
+  // Initialize adj_mat to match mat_old
+  arma::mat adj_mat = mat_old;    
   
+  // initialize vectors
   arma::vec bics(iter, arma::fill::zeros);
-
   arma::vec acc(1, arma::fill::zeros);
-
   arma::vec repeats(1, arma::fill::zeros);
-
-  int accepted = 0, rejected = 0; // debug acceptance rate
-
+ 
+  // Loop through iterations
   for(int s = 0; s < iter; ++s){
 
+    // Incrementing progress bar
     pr.increment();
 
+    // Catch user abort key
     if (s % 250 == 0){
       Rcpp::checkUserInterrupt();
     }
-
+    
     adj_s = mat_old;
 
-    
+    // Flip one edge at a time
     if (s % 2 == 0){
       arma::vec id_add = Rcpp::RcppArmadillo::sample(arma::conv_to<arma::vec>::from(zeros), 1, false);
       adj_s.elem(arma::conv_to<arma::uvec>::from(id_add)).fill(1);
@@ -2466,6 +2473,7 @@ Rcpp::List search(arma::mat S,
       adj_s.elem(arma::conv_to<arma::uvec>::from(id_add)).fill(0);
     }
 
+    // Ensure that adj_mat is symmetric
     adj_mat = symmatu(adj_s);
     adj_mat.diag().fill(1);
     
@@ -2473,47 +2481,35 @@ Rcpp::List search(arma::mat S,
     Rcpp::List fit1 = hft_algorithm(S, adj_mat, 0.00001, 10);
     arma::mat  Theta = fit1["Theta"];
     double new_bic = bic_fast(Theta, S, n, gamma);
+    
     // Specifically compute delta to facilitate debugging
     double delta =  new_bic - old_bic;
 
-    // Rcpp::Rcout << ", New BIC: " << new_bic 
-    // 		<< ", Old BIC: " << old_bic 
-    // 		<< ", Delta: " << delta << std::endl;
-    
     // Generate a random uniform number for probabilistic acceptance
     double random_uniform = arma::randu();
-    
+
     // Metropolis-Hastings acceptance criterion
-    if(exp(-0.5 *  delta ) > random_uniform ){
+    if(exp(-0.5 *  delta ) >= 1) { //random_uniform ){
+      // go back to >=1, as accepting probabilistically has BIC creep up for unknown reason
       mat_old = adj_mat;
       adj.slice(s) = adj_mat;
       old_bic = new_bic;
       acc(0)++;
       repeats(0) = 0;
-      accepted++; // for debugging
       Rcpp::List start =  find_ids(adj_mat);
       arma::uvec zeros = start["zero"];
       arma::uvec nonzeros = start["nonzero"];
     } else {
-      // Explicitly revert adj_mat to mat_old for clarity
-      adj_mat = mat_old;
+      adj.slice(s) = mat_old;
       repeats(0)++;
-      rejected++; //for debugging
     }
-
-    bics(s) = old_bic;
     
+    bics(s) = old_bic;
 
     if(repeats(0) > stop_early){
       Rcpp::Rcout << "Stopping early at iteration " << s << std::endl;
       break;
-    }
-    
-    // // Debugging
-    // Rcpp::Rcout << "Iter: " << s
-    // 		<< ", Accepted: " << accepted
-    // 		<< ", Rejected: " << rejected
-    // 		<< ", Edge Count: " << arma::accu(arma::trimatu(adj_mat)) - p << std::endl;
+    } 
     
   }
 
