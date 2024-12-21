@@ -1161,8 +1161,8 @@ Rcpp::List mv_ordinal_cowles(arma::mat Y,
   // starting thresholds
   for(int i = 0; i < max(Y.col(0)) - 1; ++i){
     for(int j = 0; j < k; ++j){
-      thresh_mat(j, i + 2, 0) = R::qnorm5(sum(Y.col(j) <= thresh_sampled[i]) / n,
-                 -R::qnorm5(sum(Y.col(j) == 1) / n, 0, 1, TRUE, FALSE), 1, TRUE, FALSE);
+      thresh_mat(j, i + 2, 0) = R::qnorm(sum(Y.col(j) <= thresh_sampled[i]) / n,
+                 -R::qnorm(sum(Y.col(j) == 1) / n, 0, 1, TRUE, FALSE), 1, TRUE, FALSE);
     }
   }
 
@@ -1202,7 +1202,7 @@ Rcpp::List mv_ordinal_cowles(arma::mat Y,
     for(int i = 0; i < max(Y.col(0)) - 1; ++i){
       for(int j = 0; j < k ; ++j){
         arma::mat slice_c_thresh = thresh_mat.slice(0);
-        c_thresh_mat(j, i+2, 0) = R::qnorm5(R::runif(R::pnorm(0,  slice_c_thresh(j , thresh_sampled[i]), MH, TRUE, FALSE), 1),
+        c_thresh_mat(j, i+2, 0) = R::qnorm(R::runif(R::pnorm(0,  slice_c_thresh(j , thresh_sampled[i]), MH, TRUE, FALSE), 1),
                      slice_c_thresh(j , thresh_sampled[i]), MH, TRUE, FALSE);
       }
     }
@@ -1210,11 +1210,11 @@ Rcpp::List mv_ordinal_cowles(arma::mat Y,
     for(int j = 0; j < n; ++j){
       for(int i = 0; i < k; ++i){
 
-        R_numer(j, i) =  (R::pnorm5(c_thresh_mat(i , Y.col(i)[j], 0) - mm(j), 0, 1, TRUE, FALSE) -
-          R::pnorm5(c_thresh_mat(i , Y.col(i)[j]-1 , 0) - mm(j), 0, 1, TRUE, FALSE));
+        R_numer(j, i) =  (R::pnorm(c_thresh_mat(i , Y.col(i)[j], 0) - mm(j), 0, 1, TRUE, FALSE) -
+          R::pnorm(c_thresh_mat(i , Y.col(i)[j]-1 , 0) - mm(j), 0, 1, TRUE, FALSE));
 
-        R_denom(j, i) = (R::pnorm5(thresh_mat(i , Y.col(i)[j], 0) - mm(j), 0, 1, TRUE, FALSE) -
-          R::pnorm5(thresh_mat(i , Y.col(i)[j]-1, 0) - mm(j), 0, 1, TRUE, FALSE));
+        R_denom(j, i) = (R::pnorm(thresh_mat(i , Y.col(i)[j], 0) - mm(j), 0, 1, TRUE, FALSE) -
+          R::pnorm(thresh_mat(i , Y.col(i)[j]-1, 0) - mm(j), 0, 1, TRUE, FALSE));
       }
     }
 
@@ -2486,7 +2486,7 @@ Rcpp::List search(arma::mat S,
     double delta =  new_bic - old_bic;
 
     // Generate a random uniform number for probabilistic acceptance
-    double random_uniform = arma::randu();
+    // double random_uniform = arma::randu();
 
     // Metropolis-Hastings acceptance criterion
     if(exp(-0.5 *  delta ) >= 1) { //random_uniform ){
