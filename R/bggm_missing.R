@@ -67,7 +67,8 @@
 #'                          method = "estimate",
 #'                          type =  "mixed",
 #'                          iter = 250,
-#'                          progress = FALSE)
+#'                          progress = FALSE,
+#'                          seed = 1234)
 #'
 #' # select edge set
 #' E <- select(fit_est)

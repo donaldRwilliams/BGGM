@@ -1,3 +1,7 @@
+# Version 2.1.5
+## Addressing CRAN errors
+- Adjusted autoconf.ac to avoid openMP comments and build comments
+
 # Version 2.1.4
 ## Addressing CRAN submission errors
 - CRAN server running example in bggm_missing returned `Error: inv(): matrix is singular`
