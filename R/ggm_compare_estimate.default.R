@@ -198,10 +198,16 @@ ggm_compare_estimate <- function(...,
                                  progress = TRUE,
                                  seed = 1){
 
-  # temporary warning until missing data is fully implemented
-  if(type != "continuous"){
-    warning(paste0("imputation during model fitting is\n",
-                   "currently only implemented for 'continuous' data."))
+  # Temporarily, if the type is not in an allowed set.
+  if (!type %in% c("continuous")) {
+    # And the user wants to impute.
+    if (impute) {
+        # Warn them politely.
+        warning(paste0(
+            "imputation during model fitting is\n",
+            "currently only implemented for 'continuous' data."
+        ))
+    }
   }
 
   # combine data

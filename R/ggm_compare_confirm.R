@@ -342,12 +342,16 @@ ggm_compare_confirm <- function(...,
                                 progress = TRUE,
                                 seed = NULL){
 
-
-
-  # temporary warning until missing data is fully implemented
-  if(type != "continuous"){
-    warning(paste0("imputation during model fitting is\n",
-                   "currently only implemented for 'continuous' data."))
+  # Temporarily, if the type is not in an allowed set.
+  if (!type %in% c("continuous")) {
+    # And the user wants to impute.
+    if (impute) {
+        # Warn them politely.
+        warning(paste0(
+            "imputation during model fitting is\n",
+            "currently only implemented for 'continuous' data."
+        ))
+    }
   }
 
   set.seed(seed)
@@ -1082,4 +1086,3 @@ plot.confirm <- function(x, ...){
   plt
 
 }
-
