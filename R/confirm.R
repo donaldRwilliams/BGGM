@@ -222,13 +222,17 @@ confirm <- function(Y, hypothesis,
                     impute = TRUE,
                     seed = NULL, ...){
 
-
-  # temporary warning until missing data is fully implemented
-  if(type != "continuous"){
-    warning(paste0("imputation during model fitting is\n",
-                   "currently only implemented for 'continuous' data."))
+  # Temporarily, if the type is not in an allowed set.
+  if (!type %in% c("continuous")) {
+    # And the user wants to impute.
+    if (impute) {
+        # Warn them politely.
+        warning(paste0(
+            "imputation during model fitting is\n",
+            "currently only implemented for 'continuous' data."
+        ))
+    }
   }
-
 
   set.seed(seed)
   ## Random seed unless user provided
@@ -690,5 +694,3 @@ print_confirm <- function(x, ...){
 
   cat("note: equal hypothesis prior probabilities")
 }
-
-

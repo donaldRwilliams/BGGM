@@ -210,13 +210,15 @@ estimate  <- function(Y,
                       seed = NULL,
                       ...){
 
-  # temporary warning until missing data is fully implemented
-  if(!type %in% c("continuous", "mixed")){
-
-    if(impute){
-    warning(paste0("imputation during model fitting is\n",
-                   "currently only implemented for 'continuous'
-                    and 'mixed' data."))
+  # Temporarily, if the type is not in an allowed set.
+  if (!type %in% c("continuous", "mixed")) {
+    # And the user wants to impute.
+    if (impute) {
+        # Warn them politely.
+        warning(paste0(
+            "imputation during model fitting is\n",
+            "currently only implemented for 'continuous' and 'mixed' data."
+        ))
     }
   }
 
