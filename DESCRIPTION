@@ -1,11 +1,15 @@
 Package: BGGM
 Type: Package
 Title: Bayesian Gaussian Graphical Models
-Version: 2.1.4.9000
-Date: 2024-12-12
+Version: 2.1.5
+Date: 2024-12-22
 Authors@R: c(person("Donald", "Williams", email = "drwwilliams@ucdavis.edu", role = "aut"),
              person("Joris", "Mulder", email = "J.Mulder3@uvt.nl", role = "aut"),
 	     person("Philippe", "Rast", email = "rast.ph@gmail.com", role = c("aut", "cre")))
+Author: Donald Williams [aut],
+	Joris Mulder [aut],
+	Philippe Rast [aut, cre]
+Maintainer: Philippe Rast <rast.ph@gmail.com>	     
 Description: Fit Bayesian Gaussian graphical models. The methods are separated into 
     two Bayesian approaches for inference: hypothesis testing and estimation. There are 
     extensions for confirmatory hypothesis testing, comparing Gaussian graphical models, 
