@@ -14,10 +14,9 @@ The `R` package **BGGM** provides tools for making Bayesian inference in
 Gaussian graphical models (GGM). The methods are organized around two
 general approaches for Bayesian inference: (1) estimation and (2)
 hypothesis testing. The key distinction is that the former focuses on
-either the posterior or posterior predictive distribution (Gelman, Meng,
-and Stern 1996; see section 5 in Rubin 1984), whereas the latter focuses
-on model comparison with the Bayes factor (Jeffreys 1961; Kass and
-Raftery 1995).
+either the posterior or posterior predictive distribution (Gelman et al.
+1996; see section 5 in Rubin 1984), whereas the latter focuses on model
+comparison with the Bayes factor (Jeffreys 1961; Kass and Raftery 1995).
 
 ## What is a Gaussian Graphical Model ?
 
@@ -34,9 +33,9 @@ psychology (Rodriguez et al. 2020).
 
 ## Installation
 
-To install the latest release version (`2.1.4`) from CRAN use
+To install the latest release version (2.1.5) from CRAN use
 
-    install.packages("BGGM")    
+    install.packages("BGGM")
 
 The current developmental version can be installed with
 
@@ -54,67 +53,67 @@ extend those approaches:
 1.  Bayesian estimation with the novel matrix-F prior distribution
     (Mulder and Pericchi 2018)
 
-    -   [Estimation](#bayesian-estimation) (Williams 2018)
+    - [Estimation](#bayesian-estimation) (Williams 2018)
 
 2.  Bayesian hypothesis testing with the matrix-F prior distribution
     (Williams and Mulder 2019)
 
-    -   [Exploratory hypothesis testing](#Exploratory)
+    - [Exploratory hypothesis testing](#Exploratory)
 
-    -   [Confirmatory hypothesis testing](#Confirmatory)
+    - [Confirmatory hypothesis testing](#Confirmatory)
 
 3.  Comparing Gaussian graphical models (Williams 2018; Williams et al.
     2020)
 
-    -   [Partial correlation
-        differences](#partial-correlation-differences)
+    - [Partial correlation
+      differences](#partial-correlation-differences)
 
-    -   [Posterior predictive check](#posterior-predictive-check)
+    - [Posterior predictive check](#posterior-predictive-check)
 
-    -   [Exploratory hypothesis testing](#exploratory-groups)
+    - [Exploratory hypothesis testing](#exploratory-groups)
 
-    -   [Confirmatory hypothesis testing](#confirmatory-groups)
+    - [Confirmatory hypothesis testing](#confirmatory-groups)
 
 4.  Extending inference beyond the conditional (in)dependence structure
     (Williams 2018)
 
-    -   [Predictability](#Predictability)
+    - [Predictability](#Predictability)
 
-    -   [Posterior uncertainty
-        intervals](#partial-correlation-differences) for the partial
-        correlations
+    - [Posterior uncertainty
+      intervals](#partial-correlation-differences) for the partial
+      correlations
 
-    -   [Custom Network Statistics](#custom-network-statistics)
+    - [Custom Network Statistics](#custom-network-statistics)
 
 The computationally intensive tasks are written in `c++` via the `R`
 package **Rcpp** (Eddelbuettel et al. 2011) and the `c++` library
 **Armadillo** (Sanderson and Curtin 2016). The Bayes factors are
-computed with the `R` package **BFpack** (Mulder et al. 2019).
-Furthermore, there are [plotting](#example-network-plot) functions for
-each method, control variables can be included in the model (e.g.,
-`~ gender`), and there is support for missing values (see
-`bggm_missing`).
+computed with the `R` package **BFpack** (<span class="nocase">Mulder et
+al.</span> 2019). Furthermore, there are
+[plotting](#example-network-plot) functions for each method, control
+variables can be included in the model (e.g., `~ gender`), and there is
+support for missing values (see `bggm_missing`).
 
 ## Supported Data Types
 
--   **Continuous**: The continuous method was described in Williams
-    (2018). Note that this is based on the customary [Wishart
-    distribution](https://en.wikipedia.org/wiki/Wishart_distribution).
+- **Continuous**: The continuous method was described in Williams
+  (2018). Note that this is based on the customary [Wishart
+  distribution](https://en.wikipedia.org/wiki/Wishart_distribution).
 
--   **Binary**: The binary method builds directly upon Talhouk, Doucet,
-    and Murphy (2012) that, in turn, built upon the approaches of
-    Lawrence et al. (2008) and Webb and Forster (2008) (to name a few).
+- **Binary**: The binary method builds directly upon Talhouk et
+  al. (2012) that, in turn, built upon the approaches of Lawrence et
+  al. (2008) and Webb and Forster (2008) (to name a few).
 
--   **Ordinal**: The ordinal methods require sampling thresholds. There
-    are two approach included in **BGGM**. The customary approach
-    described in Albert and Chib (1993) (the default) and the ‘Cowles’
-    algorithm described in Cowles (1996).
+- **Ordinal**: The ordinal methods require sampling thresholds. There
+  are two approach included in **BGGM**. The customary approach
+  described in Albert and Chib (1993) (the default) and the ‘Cowles’
+  algorithm described in Cowles (1996).
 
--   **Mixed**: The mixed data (a combination of discrete and continuous)
-    method was introduced in Hoff (2007). This is a semi-parametric
-    copula model (i.e., a copula GGM) based on the ranked likelihood.
-    Note that this can be used for *only* ordinal data (not restricted
-    to “mixed” data).
+- **Mixed**: The mixed data (a combination of discrete and continuous)
+  method was introduced in Hoff (2007). This is a semi-parametric copula
+  model (i.e., a copula GGM) based on the ranked likelihood. Note that
+  this can be used for *only* ordinal data (not restricted to “mixed”
+  data).
 
 ## Illustrative Examples
 
@@ -712,8 +711,8 @@ See [Partial Correlation Differences](#partial-correlation-differences)
 A new feature to **BGGM** allows for computing user defined network
 statistics, given a partial correlation or weighted adjacency matrix.
 
-Here is an example for bridge centrality (Jones, Ma, and McNally 2019).
-The first step is to define the function
+Here is an example for bridge centrality (Jones et al. 2019). The first
+step is to define the function
 
     # need this package 
     library(networktools)
@@ -1045,9 +1044,9 @@ Cowles, Mary Kathryn. 1996. “Accelerating Monte Carlo Markov Chain
 Convergence for Cumulative-Link Generalized Linear Models.” *Statistics
 and Computing* 6 (2): 101–11. <https://doi.org/10.1007/bf00162520>.
 
-Eddelbuettel, Dirk, Romain François, J Allaire, Kevin Ushey, Qiang Kou,
-N Russel, John Chambers, and D Bates. 2011. “Rcpp: Seamless r and c++
-Integration.” *Journal of Statistical Software* 40 (8): 1–18.
+Eddelbuettel, Dirk, Romain François, J Allaire, et al. 2011. “Rcpp:
+Seamless r and c++ Integration.” *Journal of Statistical Software* 40
+(8): 1–18.
 
 Gelman, Andrew, Ben Goodrich, Jonah Gabry, and Aki Vehtari. 2019.
 “<span class="nocase">R-squared for Bayesian Regression Models</span>.”
@@ -1071,7 +1070,7 @@ and practice for behavioral and social scientists</span>*. Chapman;
 Hall/CRC.
 
 Jeffreys, Harold. 1961. *<span class="nocase">The theory of
-probability</span>*. Oxford: Oxford University Press.
+probability</span>*. Oxford University Press.
 
 Jones, Payton J, Ruofan Ma, and Richard J McNally. 2019. “Bridge
 Centrality: A Network Approach to Understanding Comorbidity.”
@@ -1092,10 +1091,9 @@ Mohammadi, Reza, and Ernst C Wit. 2015. “BDgraph: An r Package for
 Bayesian Structure Learning in Graphical Models.” *Journal of
 Statistical Software* 89 (3). <https://doi.org/10.18637/jss.v089.i03>.
 
-Mulder, Joris, Xin Gu, Anton Olsson-Collentine, Andrew Tomarken, Florian
-Böing-Messing, Herbert Hoijtink, Marlyne Meijerink, et al. 2019.
-“BFpack: Flexible Bayes Factor Testing of Scientific Theories in r.”
-*arXiv Preprint arXiv:1911.07728*.
+<span class="nocase">Mulder, Joris, Xin Gu, Anton Olsson-Collentine, et
+al.</span> 2019. “BFpack: Flexible Bayes Factor Testing of Scientific
+Theories in r.” *arXiv Preprint arXiv:1911.07728*.
 
 Mulder, Joris, and Luis Pericchi. 2018. “<span class="nocase">The
 Matrix-F Prior for Estimating and Testing Covariance Matrices</span>.”
@@ -1103,8 +1101,8 @@ Matrix-F Prior for Estimating and Testing Covariance Matrices</span>.”
 
 Rodriguez, Josue E, Donald R Williams, Philippe Rast, and Joris Mulder.
 2020. “On Formalizing Theoretical Expectations: Bayesian Testing of
-Central Structures in Psychological Networks.” *PsyArXiv*.
-<https://doi.org/10.31234/osf.io/zw7pf>.
+Central Structures in Psychological Networks.” *PsyArXiv*, ahead of
+print. <https://doi.org/10.31234/osf.io/zw7pf>.
 
 Rubin, Donald B. 1984. “Bayesianly Justifiable and Relevant Frequency
 Calculations for the Applied Statistician.” *The Annals of Statistics*,
@@ -1126,18 +1124,18 @@ Statistics & Data Analysis* 52 (5): 2632–49.
 
 Williams, Donald R. 2018. “<span class="nocase">Bayesian Estimation for
 Gaussian Graphical Models: Structure Learning, Predictability, and
-Network Comparisons</span>.” *arXiv*.
+Network Comparisons</span>.” *arXiv*, ahead of print.
 <https://doi.org/10.31234/OSF.IO/X8DPR>.
 
 Williams, Donald R, and Joris Mulder. 2019.
 “<span class="nocase">Bayesian Hypothesis Testing for Gaussian Graphical
 Models: Conditional Independence and Order Constraints</span>.”
-*PsyArXiv*. <https://doi.org/10.31234/osf.io/ypxd8>.
+*PsyArXiv*, ahead of print. <https://doi.org/10.31234/osf.io/ypxd8>.
 
 Williams, Donald R, Philippe Rast, Luis R Pericchi, and Joris Mulder.
 2020. “Comparing Gaussian Graphical Models with the Posterior Predictive
-Distribution and Bayesian Model Selection.” *Psychological Methods*.
-<https://doi.org/10.1037/met0000254>.
+Distribution and Bayesian Model Selection.” *Psychological Methods*,
+ahead of print. <https://doi.org/10.1037/met0000254>.
 
 Zerenner, Tanja, Petra Friederichs, Klaus Lehnertz, and Andreas Hense.
 2014. “A Gaussian Graphical Model Approach to Climate Networks.” *Chaos:
