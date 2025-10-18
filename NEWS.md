@@ -1,4 +1,19 @@
-# BGGM 2.1.4.9000 (development version)
+# BGGM 2.1.5.9000 (development version)
+### Major changes to ordinal sampler
+- **Stan-style latent centering for ordinal models**: Both the Albert and Cowles ordinals samplers have been refactored to improve numerical stability and mixing in the presence of skewed or ceiling/floor ordinal items:
+  - Thresholds are now initialized from the empirical category frequencies of each variable (i.e., cumulative proportions mapped to the probit scale), rather than arbitrary or equally spaced cut-points.
+  - Latent variable draws \(Z\) are initialized at the expected value of the truncated normal (conditional mean), rather than uniform draws across the truncation interval. This ensures that ceiling or floor items start in the correct region of the latent space.
+  - After each update/sweep of a latent column \(Z_j\), the column is recentered (mean ≈ 0) and the corresponding thresholds are shifted by the same offset, preserving the likelihood but aligning the latent origin. This mirrors the identification scheme used in Stan’s ordered-probit/ordered-logit models (latent mean fixed at 0, thresholds floating).
+  - Probit‐scale bounds (±8 on the standard normal scale) have been introduced to cap semi-infinite truncation regions (e.g., \((\tau_{K-1},∞)\)) to avoid numerical overflow and improve stability for extreme category distributions.
+
+### Bug fixes & improvements
+- Synchronized threshold matrices in the Cowles sampler: the `current_thresh`, `candidate_thresh`, `thresh_mat`, `c_thresh_mat`, and `thresh_mcmc` now begin from the same baseline after initialization to avoid drift in Metropolis proposals.
+- Improved sampler performance for ordinal variables with heavy tails or heavy ceiling/floor effects. This should lead to reduced shrinkage of partial-correlations toward zero when items are highly skewed.
+
+### Compatibility notes
+- The statistical model remains unchanged: you still get the same posterior for latent precision/correlation matrices. The changes are purely in parameterisation and initialization of the latent \(Z\) and threshold variables.
+
+# BGGM 2.1.4
 ## Bug Fixes and Improvements
 
 ### C++ `search` Function
@@ -15,7 +30,6 @@
 ## Minor Changes:
 - Example in bggm_missing.R reintroduced; Was removed due to irreproducible CRAN error.
 
-# BGGM 2.1.4
 - Addressed CRAN check error when building vignettes (removed example in bggm_missing.R -- will put it back once it's accepted to CRAN). 
 - Downgraded required R version to 4.0.0
 

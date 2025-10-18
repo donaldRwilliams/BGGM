@@ -5,8 +5,145 @@
 #include <progress_bar.hpp>
 #include <truncnorm.h>
 #include <RcppArmadilloExtensions/sample.h>
+#include <algorithm>
+#include <cmath>
+#include <limits>
 
 // [[Rcpp::depends(RcppArmadillo, RcppDist, RcppProgress)]]
+
+namespace {
+
+const double kProbitCap = 8.0;
+
+inline double Phi(double x) {
+  return R::pnorm(x, 0.0, 1.0, TRUE, FALSE);
+}
+
+inline double PhiInv(double p) {
+  return R::qnorm(p, 0.0, 1.0, TRUE, FALSE);
+}
+
+inline double StdNormPdf(double x) {
+  return R::dnorm(x, 0.0, 1.0, FALSE);
+}
+
+inline double clamp_probit_bound(double value) {
+  if (std::isfinite(value)) {
+    if (value > kProbitCap) {
+      return kProbitCap;
+    }
+    if (value < -kProbitCap) {
+      return -kProbitCap;
+    }
+    return value;
+  }
+  return value > 0 ? kProbitCap : -kProbitCap;
+}
+
+double etruncnorm(double mu, double sigma, double lower, double upper) {
+  double clipped_lower = clamp_probit_bound(lower);
+  double clipped_upper = clamp_probit_bound(upper);
+  double lower_bound = std::min(clipped_lower, clipped_upper);
+  double upper_bound = std::max(clipped_lower, clipped_upper);
+  double alpha = (clipped_lower - mu) / sigma;
+  double beta = (clipped_upper - mu) / sigma;
+  double Z = Phi(beta) - Phi(alpha);
+  if (Z < 1e-12) {
+    double midpoint = 0.5 * (clipped_lower + clipped_upper);
+    if (!std::isfinite(midpoint)) {
+      midpoint = mu;
+    }
+    return std::min(std::max(midpoint, lower_bound), upper_bound);
+  }
+  double numerator = StdNormPdf(alpha) - StdNormPdf(beta);
+  double mean = mu + sigma * numerator / Z;
+  mean = std::min(std::max(mean, lower_bound), upper_bound);
+  return mean;
+}
+
+double truncated_cdf_diff(double mu, double sigma, double lower, double upper) {
+  double clipped_lower = clamp_probit_bound(lower);
+  double clipped_upper = clamp_probit_bound(upper);
+  double lower_cdf = Phi((clipped_lower - mu) / sigma);
+  double upper_cdf = Phi((clipped_upper - mu) / sigma);
+  double diff = upper_cdf - lower_cdf;
+  return std::max(diff, 1e-12);
+}
+
+double rtnorm(double mu, double sigma, double lower, double upper) {
+  double clipped_lower = clamp_probit_bound(lower);
+  double clipped_upper = clamp_probit_bound(upper);
+  double lower_cdf = Phi((clipped_lower - mu) / sigma);
+  double upper_cdf = Phi((clipped_upper - mu) / sigma);
+  double diff = upper_cdf - lower_cdf;
+  if (diff < 1e-12) {
+    return etruncnorm(mu, sigma, clipped_lower, clipped_upper);
+  }
+  double u = R::runif(lower_cdf, upper_cdf);
+  return R::qnorm(u, mu, sigma, TRUE, FALSE);
+}
+
+arma::rowvec init_thresholds_from_data(const arma::vec& y, std::size_t num_levels) {
+  arma::rowvec thresholds(num_levels + 1, arma::fill::zeros);
+  thresholds[0] = -arma::datum::inf;
+  thresholds[num_levels] = arma::datum::inf;
+  double n = static_cast<double>(y.n_elem);
+  double min_step = 1e-6;
+  for (std::size_t c = 1; c < num_levels; ++c) {
+    double cum_prob = arma::accu(y <= static_cast<double>(c)) / n;
+    cum_prob = std::min(std::max(cum_prob, min_step), 1.0 - min_step);
+    double proposed = PhiInv(cum_prob);
+    if (c > 1 && proposed <= thresholds[c - 1]) {
+      thresholds[c] = thresholds[c - 1] + min_step;
+    } else {
+      thresholds[c] = proposed;
+    }
+  }
+  return thresholds;
+}
+
+void recenter_column_and_thresholds(arma::cube& Z,
+                                    int col_index,
+                                    arma::mat& thresholds,
+                                    arma::mat* candidate = NULL) {
+  arma::vec column = Z.slice(0).col(col_index);
+  double mean_val = arma::mean(column);
+  Z.slice(0).col(col_index) -= mean_val;
+  for (arma::uword idx = 0; idx < thresholds.n_cols; ++idx) {
+    double& value = thresholds(col_index, idx);
+    if (std::isfinite(value)) {
+      value -= mean_val;
+    }
+  }
+  if (candidate != NULL) {
+    for (arma::uword idx = 0; idx < candidate->n_cols; ++idx) {
+      double& value = (*candidate)(col_index, idx);
+      if (std::isfinite(value)) {
+        value -= mean_val;
+      }
+    }
+  }
+}
+
+void init_Z_from_trunc_means(const arma::mat& Y,
+                             arma::cube& Z,
+                             arma::mat& thresholds) {
+  int n = Y.n_rows;
+  int k = Y.n_cols;
+  for (int col = 0; col < k; ++col) {
+    for (int row = 0; row < n; ++row) {
+      int category = static_cast<int>(Y(row, col));
+      category = std::max(category, 1);
+      category = std::min(category, static_cast<int>(thresholds.n_cols) - 1);
+      double lower = thresholds(col, category - 1);
+      double upper = thresholds(col, category);
+      Z(row, col, 0) = etruncnorm(0.0, 1.0, lower, upper);
+    }
+    recenter_column_and_thresholds(Z, col, thresholds);
+  }
+}
+
+}  // namespace
 
 // mean of 3d array
 // [[Rcpp::export]]
@@ -1144,7 +1281,7 @@ Rcpp::List mv_ordinal_cowles(arma::mat Y,
   c_thresh_mat.slice(0).col(0).fill(-arma::datum::inf);
   c_thresh_mat.slice(0).col(n_levels.size()).fill(arma::datum::inf);
 
-  // story thresholds
+  // store thresholds
   arma::cube thresh_mcmc(k, n_levels.size() + 1, iter);
 
   // MH R ratio
@@ -1158,18 +1295,28 @@ Rcpp::List mv_ordinal_cowles(arma::mat Y,
   // draw coefs conditional on w
   arma::mat gamma(p, k, arma::fill::zeros);
 
+  arma::mat current_thresh = thresh_mat.slice(0);
+  arma::mat candidate_thresh = c_thresh_mat.slice(0);
+
   // starting thresholds
-  for(int i = 0; i < max(Y.col(0)) - 1; ++i){
-    for(int j = 0; j < k; ++j){
-      thresh_mat(j, i + 2, 0) = R::qnorm(sum(Y.col(j) <= thresh_sampled[i]) / n,
-                 -R::qnorm(sum(Y.col(j) == 1) / n, 0, 1, TRUE, FALSE), 1, TRUE, FALSE);
-    }
+  for (int j = 0; j < k; ++j) {
+    arma::rowvec tau = init_thresholds_from_data(Y.col(j), n_levels.size());
+    current_thresh.row(j) = tau;
   }
+  candidate_thresh = current_thresh;
+
+  init_Z_from_trunc_means(Y, z0, current_thresh);
+  candidate_thresh = current_thresh;
+  thresh_mat.slice(0) = current_thresh;
+  c_thresh_mat.slice(0) = candidate_thresh;
+  thresh_mcmc.slice(0) = current_thresh;
 
   // start sampling
   for(int s = 0; s < iter; ++s){
 
     Rcpp::checkUserInterrupt();
+
+    candidate_thresh = current_thresh;
 
     // multivariate data
     for(int i = 0; i < k; ++i){
@@ -1185,36 +1332,37 @@ Rcpp::List mv_ordinal_cowles(arma::mat Y,
         Sigma_i_not_i(R.slice(0), i).t();
 
       // generate latent data
+      double sd = std::sqrt(ss(0));
       for(int j = 0; j < n; ++j){
-
-        z0.slice(0).row(j).col(i) = R::qnorm(R::runif(
-          // minimum
-          R::pnorm(thresh_mat.slice(0)(i , (Y.col(i)[j] - 1)), mm(j), sqrt(ss(0)), TRUE, FALSE),
-
-          // maximum
-          R::pnorm(thresh_mat.slice(0)(i , Y.col(i)[j]), mm(j), sqrt(ss(0)), TRUE, FALSE)),
-
-          // location and scale
-          mm(j), sqrt(ss(0)), TRUE, FALSE);
+        int category = static_cast<int>(Y.col(i)[j]);
+        double lower = current_thresh(i , category - 1);
+        double upper = current_thresh(i , category);
+        z0.slice(0).row(j).col(i) = rtnorm(mm(j), sd, lower, upper);
       }
+
+      recenter_column_and_thresholds(z0, i, current_thresh);
+      candidate_thresh.row(i) = current_thresh.row(i);
     }
 
     for(int i = 0; i < max(Y.col(0)) - 1; ++i){
       for(int j = 0; j < k ; ++j){
-        arma::mat slice_c_thresh = thresh_mat.slice(0);
-        c_thresh_mat(j, i+2, 0) = R::qnorm(R::runif(R::pnorm(0,  slice_c_thresh(j , thresh_sampled[i]), MH, TRUE, FALSE), 1),
-                     slice_c_thresh(j , thresh_sampled[i]), MH, TRUE, FALSE);
+        double location = current_thresh(j , thresh_sampled[i]);
+        candidate_thresh(j, i+2) = rtnorm(location, MH, 0.0, arma::datum::inf);
       }
     }
 
     for(int j = 0; j < n; ++j){
       for(int i = 0; i < k; ++i){
+        int category = static_cast<int>(Y.col(i)[j]);
+        double mu = mm(j);
+        double sd = std::sqrt(ss(0));
+        R_numer(j, i) = truncated_cdf_diff(mu, sd,
+                                           candidate_thresh(i , category - 1),
+                                           candidate_thresh(i , category));
 
-        R_numer(j, i) =  (R::pnorm(c_thresh_mat(i , Y.col(i)[j], 0) - mm(j), 0, 1, TRUE, FALSE) -
-          R::pnorm(c_thresh_mat(i , Y.col(i)[j]-1 , 0) - mm(j), 0, 1, TRUE, FALSE));
-
-        R_denom(j, i) = (R::pnorm(thresh_mat(i , Y.col(i)[j], 0) - mm(j), 0, 1, TRUE, FALSE) -
-          R::pnorm(thresh_mat(i , Y.col(i)[j]-1, 0) - mm(j), 0, 1, TRUE, FALSE));
+        R_denom(j, i) = truncated_cdf_diff(mu, sd,
+                                           current_thresh(i , category - 1),
+                                           current_thresh(i , category));
       }
     }
 
@@ -1228,7 +1376,7 @@ Rcpp::List mv_ordinal_cowles(arma::mat Y,
         // acceptence
         acc(j) = acc(j) + 1;
         // block update
-        thresh_mat.slice(0).row(j) = c_thresh_mat.slice(0).row(j);
+        current_thresh.row(j) = candidate_thresh.row(j);
       }
     }
 
@@ -1292,7 +1440,9 @@ Rcpp::List mv_ordinal_cowles(arma::mat Y,
     cors_mcmc.slice(s) =  cors;
     Sigma_mcmc.slice(s) = Sigma.slice(0);
     Theta_mcmc.slice(s) = Theta.slice(0);
-    thresh_mcmc.slice(s) = thresh_mat.slice(0);
+    thresh_mat.slice(0) = current_thresh;
+    c_thresh_mat.slice(0) = candidate_thresh;
+    thresh_mcmc.slice(s) = current_thresh;
 
   }
 
@@ -1424,20 +1574,22 @@ Rcpp::List mv_ordinal_albert(arma::mat Y,
   arma::mat gamma(p, k, arma::fill::zeros);
 
   arma::cube thresh(iter, K+1, k, arma::fill::zeros);
+  arma::mat current_thresh(k, K+1, arma::fill::zeros);
 
-  for(int i = 0; i < k; ++i){
-    thresh.slice(i).col(0).fill(-arma::datum::inf);
-    thresh.slice(i).col(K).fill(arma::datum::inf);
+  for (int j = 0; j < k; ++j) {
+    current_thresh.row(j) = init_thresholds_from_data(Y.col(j), K);
+    current_thresh(j, 0) = -arma::datum::inf;
+    current_thresh(j, K) = arma::datum::inf;
+    thresh.slice(j).col(0).fill(-arma::datum::inf);
+    thresh.slice(j).col(K).fill(arma::datum::inf);
+    thresh.slice(j).row(0) = current_thresh.row(j);
   }
 
-  for(int i = 0; i < (K-2); ++i){
-    for(int j = 0; j < k; ++j){
-      thresh.slice(j).col(i+2).fill(i+1);
-    }
-  }
+  init_Z_from_trunc_means(Y, z0, current_thresh);
 
-  // store thresholds
-  arma::mat thresh_mcmc(K+1,iter, arma::fill::zeros);
+  for (int j = 0; j < k; ++j) {
+    thresh.slice(j).row(0) = current_thresh.row(j);
+  }
 
   arma::mat mm(n,1);
   arma::mat ss(1,1);
@@ -1462,50 +1614,50 @@ Rcpp::List mv_ordinal_albert(arma::mat Y,
         inv(remove_row(remove_col(R.slice(0), i), i)) *
         Sigma_i_not_i(R.slice(0), i).t();
 
-      if(s == 1){
-        // generate latent data
-        for(int j = 0; j < n; ++j){
+      double sd = std::sqrt(ss(0));
 
-          z0.slice(0).row(j).col(i) = R::qnorm(R::runif(
-            // minimum
-            R::pnorm(thresh.slice(i)(0 , (Y.col(i)[j] - 1)), mm(j), sqrt(ss(0)), TRUE, FALSE),
-
-            // maximum
-            R::pnorm(thresh.slice(i)(0 , Y.col(i)[j]), mm(j), sqrt(ss(0)), TRUE, FALSE)),
-
-            // location and scale
-            mm(j), sqrt(ss(0)), TRUE, FALSE);
-        }
-
-
-      } else{
-
-
-        for(int i = 0; i < k; ++i){
-
-          for(int j = 2; j < (K); ++j){
-            arma::vec lb = {select_col(z0.slice(0), i).elem(find(Y.col(i) == j)).max(), thresh.slice(i)(s-1, j-1) };
-            arma::vec ub = {select_col(z0.slice(0), i).elem(find(Y.col(i) == j+1)).min(), thresh.slice(i)(s-1, j+1) };
-            arma::vec v = Rcpp::runif(1,  lb.max(), ub.min());
-            thresh.slice(i).row(s).col(j) =  arma::as_scalar(v);
-
+      if (s > 1) {
+        for (int level = 2; level < K; ++level) {
+          double lower_candidate = current_thresh(i, level - 1);
+          double upper_candidate = current_thresh(i, level + 1);
+          arma::uvec lower_idx = arma::find(Y.col(i) == level);
+          if (!lower_idx.is_empty()) {
+            arma::vec z_col = z0.slice(0).col(i);
+            arma::vec lower_vals = z_col.elem(lower_idx);
+            lower_candidate = std::max(lower_candidate, lower_vals.max());
+          }
+          arma::uvec upper_idx = arma::find(Y.col(i) == (level + 1));
+          if (!upper_idx.is_empty()) {
+            arma::vec z_col = z0.slice(0).col(i);
+            arma::vec upper_vals = z_col.elem(upper_idx);
+            upper_candidate = std::min(upper_candidate, upper_vals.min());
+          }
+          double finite_lower = clamp_probit_bound(lower_candidate);
+          double finite_upper = clamp_probit_bound(upper_candidate);
+          if (finite_lower >= finite_upper) {
+            current_thresh(i, level) = 0.5 * (finite_lower + finite_upper);
+          } else {
+            current_thresh(i, level) = R::runif(finite_lower, finite_upper);
           }
         }
-
-        // generate latent data
-        for(int j = 0; j < n; ++j){
-
-          z0.slice(0).row(j).col(i) = R::qnorm(R::runif(
-            // minimum
-            R::pnorm(thresh.slice(i)(s , (Y.col(i)[j] - 1)), mm(j), sqrt(ss(0)), TRUE, FALSE),
-
-            // maximum
-            R::pnorm(thresh.slice(i)(s  , Y.col(i)[j]), mm(j), sqrt(ss(0)), TRUE, FALSE)),
-
-            // location and scale
-            mm(j), sqrt(ss(0)), TRUE, FALSE);
-        }
       }
+
+      for(int j = 0; j < n; ++j){
+        int category = static_cast<int>(Y.col(i)[j]);
+        category = std::max(category, 1);
+        category = std::min(category, K);
+        double lower = current_thresh(i , category - 1);
+        double upper = current_thresh(i , category);
+        z0.slice(0).row(j).col(i) = rtnorm(mm(j), sd, lower, upper);
+      }
+
+      recenter_column_and_thresholds(z0, i, current_thresh);
+      current_thresh(i, 0) = -arma::datum::inf;
+      current_thresh(i, K) = arma::datum::inf;
+    }
+
+    for (int j = 0; j < k; ++j) {
+      thresh.slice(j).row(s) = current_thresh.row(j);
     }
 
     for(int i = 0; i < k; ++i){
