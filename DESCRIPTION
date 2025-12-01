@@ -55,6 +55,6 @@ LinkingTo: Rcpp,
            RcppDist, 
            RcppProgress
 RdMacros: Rdpack
-BugReports: https://github.com/donaldRwilliams/BGGM/issues
+BugReports: https://github.com/rast-lab/BGGM/issues
 Config/testthat/edition: 3
-URL: https://donaldrwilliams.github.io/BGGM/
+URL: https://rast-lab.github.io/BGGM/

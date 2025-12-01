@@ -1,5 +1,6 @@
 # Version 2.1.6
-
+## R CMD check results
+0 errors ✔ | 0 warnings ✔ | 1 note ✖
 
 # Version 2.1.5
 ## Addressing CRAN errors

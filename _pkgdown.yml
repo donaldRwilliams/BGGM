@@ -4,7 +4,7 @@ home:
   - text: Ask a question about BGGM
     href: https://groups.google.com/forum/#!forum/bggm-users
 
-url: https://donaldrwilliams.github.io/BGGM/
+url: https://rast-lab.github.io/BGGM/
 template:
   bootstrap: 5
   bootswatch: flatly
