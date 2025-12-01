@@ -9,6 +9,7 @@ Version](https://www.r-pkg.org/badges/version/BGGM)](https://cran.r-project.org/
 [![Downloads](https://cranlogs.r-pkg.org/badges/BGGM)](https://cran.r-project.org/package=BGGM)
 [![build](https://github.com/donaldRwilliams/BGGM/actions/workflows/build.yml/badge.svg)](https://github.com/donaldRwilliams/BGGM/actions/workflows/build.yml)
 [![status](https://joss.theoj.org/papers/10.21105/joss.02111/status.svg)](https://joss.theoj.org/papers/10.21105/joss.02111)
+[![codecov](https://codecov.io/github/ph-rast/BGGM/graph/badge.svg?token=T0UZHEANLV)](https://codecov.io/github/ph-rast/BGGM)
 
 The `R` package **BGGM** provides tools for making Bayesian inference in
 Gaussian graphical models (GGM). The methods are organized around two
