@@ -1,4 +1,4 @@
-# BGGM 2.1.5.9000 (development version)
+# BGGM 2.1.6
 ### Major changes to ordinal sampler
 - **Stan-style latent centering for ordinal models**: Both the Albert and Cowles ordinals samplers have been refactored to improve numerical stability and mixing in the presence of skewed or ceiling/floor ordinal items:
   - Thresholds are now initialized from the empirical category frequencies of each variable (i.e., cumulative proportions mapped to the probit scale), rather than arbitrary or equally spaced cut-points.
@@ -12,6 +12,9 @@
 
 ### Compatibility notes
 - The statistical model remains unchanged: you still get the same posterior for latent precision/correlation matrices. The changes are purely in parameterisation and initialization of the latent \(Z\) and threshold variables.
+
+# BGGM 2.1.5
+Removed NPM library to avoid CRAN compiler errors 
 
 # BGGM 2.1.4
 ## Bug Fixes and Improvements

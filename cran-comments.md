@@ -1,3 +1,6 @@
+# Version 2.1.6
+
+
 # Version 2.1.5
 ## Addressing CRAN errors
 - Adjusted autoconf.ac, dropped refence to openMP as parallelization is not implemented in the c++ file
