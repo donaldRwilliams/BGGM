@@ -58,9 +58,15 @@
 <img src="logo.png" class="logo" alt=""><h1 id="bayesian-gaussian-graphical-models-">Bayesian Gaussian Graphical Models <a class="anchor" aria-label="anchor" href="#bayesian-gaussian-graphical-models-"></a>
 </h1>
 </div>
+<p><strong><a href="https://github.com/rast-lab/BGGM" class="external-link uri">https://github.com/rast-lab/BGGM</a></strong></p>
+<p>Please update your links accordingly.</p>
+<p>👉️ Project Has Moved <strong>BGGM is now maintained at <a href="https://github.com/rast-lab/BGGM" class="external-link uri">https://github.com/rast-lab/BGGM</a>.</strong></p>
+<p>This original repository (<a href="https://github.com/donaldRwilliams/BGGM" class="external-link uri">https://github.com/donaldRwilliams/BGGM</a>) is no longer actively developed. All new issues, pull requests, and development take place at:</p>
+<p>⚠<img src="readme_models/hex.jpg" width="250"></p>
+<p>#</p>
 <!-- badges: start -->
 
-<p>The <code>R</code> package <strong>BGGM</strong> provides tools for making Bayesian inference in Gaussian graphical models (GGM, Williams and Mulder 2020). The methods are organized around two general approaches for Bayesian inference: (1) estimation and (2) hypothesis testing. The key distinction is that the former focuses on either the posterior or posterior predictive distribution (Gelman, Meng, and Stern 1996; see section 5 in Rubin 1984), whereas the latter focuses on model comparison with the Bayes factor (Jeffreys 1961; Kass and Raftery 1995).</p>
+<p>The <code>R</code> package <strong>BGGM</strong> provides tools for making Bayesian inference in Gaussian graphical models (GGM, Williams and Mulder 2020). The methods are organized around two general approaches for Bayesian inference: (1) estimation and (2) hypothesis testing. The key distinction is that the former focuses on either the posterior or posterior predictive distribution (Gelman et al. 1996; see section 5 in Rubin 1984), whereas the latter focuses on model comparison with the Bayes factor (Jeffreys 1961; Kass and Raftery 1995).</p>
 <div class="section level2">
 <h2 id="id_-installation">
 <i class="fas fa-cog"></i> Installation<a class="anchor" aria-label="anchor" href="#id_-installation"></a>
@@ -71,7 +77,7 @@
 <div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">"remotes"</span>)) { </span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  <span class="fu">install.packages</span>(<span class="st">"remotes"</span>)   </span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>}   </span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"donaldRwilliams/BGGM"</span>)</span></code></pre></div>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"rast-lab/BGGM"</span>)</span></code></pre></div>
 <div class="section level3">
 <h3 id="id_-dealing-with-errors">
 <i class="fas fa-skull-crossbones"></i> Dealing with Errors<a class="anchor" aria-label="anchor" href="#id_-dealing-with-errors"></a>
@@ -99,7 +105,9 @@
 </ul>
 </li>
 <li>
-<p>Comparing Gaussian graphical models (Williams 2018; Williams et al. 2020)</p>
+<p>Comparing Gaussian graphical models (Williams 2018; Williams et al.</p>
+<ol start="2020" style="list-style-type: decimal"><li>
+</li></ol>
 <ul>
 <li><p><a href="https://github.com/donaldRwilliams/BGGM#partial-correlation-differences" class="external-link">Partial correlation differences</a></p></li>
 <li><p><a href="https://github.com/donaldRwilliams/BGGM#posterior-predictive-check" class="external-link">Posterior predictive check</a></p></li>
@@ -116,14 +124,14 @@
 </ul>
 </li>
 </ol>
-<p>The computationally intensive tasks are written in <code>c++</code> via the <code>R</code> package <strong>Rcpp</strong> (Eddelbuettel et al. 2011) and the <code>c++</code> library <strong>Armadillo</strong> (Sanderson and Curtin 2016). The Bayes factors are computed with the <code>R</code> package <strong>BFpack</strong> (Mulder et al. 2019). Furthermore, there are plotting functions for each method, control variables can be included in the model (e.g., <code>~ gender</code>), and there is support for missing values (see <code>bggm_missing</code>).</p>
+<p>The computationally intensive tasks are written in <code>c++</code> via the <code>R</code> package <strong>Rcpp</strong> (Eddelbuettel et al. 2011) and the <code>c++</code> library <strong>Armadillo</strong> (Sanderson and Curtin 2016). The Bayes factors are computed with the <code>R</code> package <strong>BFpack</strong> (<span class="nocase">Mulder et al.</span> 2019). Furthermore, there are plotting functions for each method, control variables can be included in the model (e.g., <code>~ gender</code>), and there is support for missing values (see <code>bggm_missing</code>).</p>
 </div>
 <div class="section level2">
 <h2 id="supported-data-types">Supported Data Types<a class="anchor" aria-label="anchor" href="#supported-data-types"></a>
 </h2>
 <ul>
 <li><p><strong>Continuous</strong>: The continuous method was described in Williams (2018). Note that this is based on the customary <a href="https://en.wikipedia.org/wiki/Wishart_distribution" class="external-link">Wishart distribution</a>.</p></li>
-<li><p><strong>Binary</strong>: The binary method builds directly upon Talhouk, Doucet, and Murphy (2012) that, in turn, built upon the approaches of Lawrence et al. (2008) and Webb and Forster (2008) (to name a few).</p></li>
+<li><p><strong>Binary</strong>: The binary method builds directly upon Talhouk et al. (2012) that, in turn, built upon the approaches of Lawrence et al. (2008) and Webb and Forster (2008) (to name a few).</p></li>
 <li><p><strong>Ordinal</strong>: The ordinal methods require sampling thresholds. There are two approach included in <strong>BGGM</strong>. The customary approach described in Albert and Chib (1993) (the default) and the ‘Cowles’ algorithm described in Cowles (1996).</p></li>
 <li><p><strong>Mixed</strong>: The mixed data (a combination of discrete and continuous) method was introduced in Hoff (2007). This is a semi-parametric copula model (i.e., a copula GGM) based on the ranked likelihood. Note that this can be used for <em>only</em> ordinal data (not restricted to “mixed” data).</p></li>
 </ul>
@@ -224,24 +232,24 @@
 <h2 id="id_-references">
 <i class="fas fa-pen-square"></i> References<a class="anchor" aria-label="anchor" href="#id_-references"></a>
 </h2>
-<p>Albert, James H, and Siddhartha Chib. 1993. “Bayesian Analysis of Binary and Polychotomous Response Data.” <em>Journal of the American Statistical Association</em> 88 (422): 669–79. <a href="https://doi.org/10.1080/01621459.1993.10476321" class="external-link uri">https://doi.org/10.1080/01621459.1993.10476321</a>.</p>
+<p>Albert, James H, and Siddhartha Chib. 1993. “Bayesian Analysis of Binary and Polychotomous Response Data.” <em>Journal of the American Statistical Association</em> 88 (422): 669–79.</p>
 <p>Cowles, Mary Kathryn. 1996. “Accelerating Monte Carlo Markov Chain Convergence for Cumulative-Link Generalized Linear Models.” <em>Statistics and Computing</em> 6 (2): 101–11. <a href="https://doi.org/10.1007/bf00162520" class="external-link uri">https://doi.org/10.1007/bf00162520</a>.</p>
-<p>Eddelbuettel, Dirk, Romain François, J Allaire, Kevin Ushey, Qiang Kou, N Russel, John Chambers, and D Bates. 2011. “Rcpp: Seamless R and C++ Integration.” <em>Journal of Statistical Software</em> 40 (8): 1–18.</p>
+<p>Eddelbuettel, Dirk, Romain François, J Allaire, et al. 2011. “Rcpp: Seamless r and c++ Integration.” <em>Journal of Statistical Software</em> 40 (8): 1–18.</p>
 <p>Gelman, Andrew, Xiao-Li Meng, and Hal Stern. 1996. “Posterior Predictive Assessment of Model Fitness via Realized Discrepancies.” <em>Statistica Sinica</em> 6 (4): 733–807.</p>
 <p>Hoff, Peter D. 2007. “Extending the Rank Likelihood for Semiparametric Copula Estimation.” <em>The Annals of Applied Statistics</em> 1 (1): 265–83. <a href="https://doi.org/10.1214/07-AOAS107" class="external-link uri">https://doi.org/10.1214/07-AOAS107</a>.</p>
-<p>Jeffreys, Harold. 1961. <em>The theory of probability</em>. Oxford: Oxford University Press.</p>
+<p>Jeffreys, Harold. 1961. <em><span class="nocase">The theory of probability</span></em>. Oxford University Press.</p>
 <p>Kass, Robert E, and Adrian E Raftery. 1995. “Bayes Factors.” <em>Journal of the American Statistical Association</em> 90 (430): 773–95.</p>
-<p>Lawrence, Earl, Derek Bingham, Chuanhai Liu, and Vijayan N Nair. 2008. “Bayesian Inference for Multivariate Ordinal Data Using Parameter Expansion.” <em>Technometrics</em> 50 (2): 182–91. <a href="https://doi.org/10.1198/004017008000000064" class="external-link uri">https://doi.org/10.1198/004017008000000064</a>.</p>
-<p>Mulder, Joris, Xin Gu, Anton Olsson-Collentine, Andrew Tomarken, Florian Böing-Messing, Herbert Hoijtink, Marlyne Meijerink, et al. 2019. “BFpack: Flexible Bayes Factor Testing of Scientific Theories in R.” <em>arXiv Preprint arXiv:1911.07728</em>.</p>
-<p>Mulder, Joris, and Luis Pericchi. 2018. “The Matrix-F Prior for Estimating and Testing Covariance Matrices.” <em>Bayesian Analysis</em>, no. 4: 1–22. <a href="https://doi.org/10.1214/17-BA1092" class="external-link uri">https://doi.org/10.1214/17-BA1092</a>.</p>
+<p>Lawrence, Earl, Derek Bingham, Chuanhai Liu, and Vijayan N Nair. 2008. “Bayesian Inference for Multivariate Ordinal Data Using Parameter Expansion.” <em>Technometrics</em> 50 (2): 182–91.</p>
+<p><span class="nocase">Mulder, Joris, Xin Gu, Anton Olsson-Collentine, et al.</span> 2019. “BFpack: Flexible Bayes Factor Testing of Scientific Theories in r.” <em>arXiv Preprint arXiv:1911.07728</em>.</p>
+<p>Mulder, Joris, and Luis Pericchi. 2018. “<span class="nocase">The Matrix-F Prior for Estimating and Testing Covariance Matrices</span>.” <em>Bayesian Analysis</em>, no. 4: 1–22. <a href="https://doi.org/10.1214/17-BA1092" class="external-link uri">https://doi.org/10.1214/17-BA1092</a>.</p>
 <p>Rubin, Donald B. 1984. “Bayesianly Justifiable and Relevant Frequency Calculations for the Applied Statistician.” <em>The Annals of Statistics</em>, 1151–72. <a href="https://doi.org/10.1214/aos/1176346785" class="external-link uri">https://doi.org/10.1214/aos/1176346785</a>.</p>
-<p>Sanderson, Conrad, and Ryan Curtin. 2016. “Armadillo: A Template-Based C++ Library for Linear Algebra.” <em>Journal of Open Source Software</em> 1 (2): 26. <a href="https://doi.org/10.21105/joss.00026" class="external-link uri">https://doi.org/10.21105/joss.00026</a>.</p>
-<p>Talhouk, Aline, Arnaud Doucet, and Kevin Murphy. 2012. “Efficient Bayesian Inference for Multivariate Probit Models with Sparse Inverse Correlation Matrices.” <em>Journal of Computational and Graphical Statistics</em> 21 (3): 739–57. <a href="https://doi.org/10.1080/10618600.2012.679239" class="external-link uri">https://doi.org/10.1080/10618600.2012.679239</a>.</p>
+<p>Sanderson, Conrad, and Ryan Curtin. 2016. “Armadillo: A Template-Based c++ Library for Linear Algebra.” <em>Journal of Open Source Software</em> 1 (2): 26. <a href="https://doi.org/10.21105/joss.00026" class="external-link uri">https://doi.org/10.21105/joss.00026</a>.</p>
+<p>Talhouk, Aline, Arnaud Doucet, and Kevin Murphy. 2012. “Efficient Bayesian Inference for Multivariate Probit Models with Sparse Inverse Correlation Matrices.” <em>Journal of Computational and Graphical Statistics</em> 21 (3): 739–57.</p>
 <p>Webb, Emily L, and Jonathan J Forster. 2008. “Bayesian Model Determination for Multivariate Ordinal and Binary Data.” <em>Computational Statistics &amp; Data Analysis</em> 52 (5): 2632–49. <a href="https://doi.org/10.1016/j.csda.2007.09.008" class="external-link uri">https://doi.org/10.1016/j.csda.2007.09.008</a>.</p>
-<p>Williams, Donald R. 2018. “Bayesian Estimation for Gaussian Graphical Models: Structure Learning, Predictability, and Network Comparisons.” <em>arXiv</em>. <a href="https://doi.org/10.31234/OSF.IO/X8DPR" class="external-link uri">https://doi.org/10.31234/OSF.IO/X8DPR</a>.</p>
-<p>Williams, Donald R, and Joris Mulder. 2019. “Bayesian Hypothesis Testing for Gaussian Graphical Models: Conditional Independence and Order Constraints.” <em>PsyArXiv</em>. <a href="https://doi.org/10.31234/osf.io/ypxd8" class="external-link uri">https://doi.org/10.31234/osf.io/ypxd8</a>.</p>
-<p>———. 2020. “BGGM: Bayesian Gaussian Graphical Models in R.” <em>PsyArXiv</em>.</p>
-<p>Williams, Donald R, Philippe Rast, Luis R Pericchi, and Joris Mulder. 2020. “Comparing Gaussian Graphical Models with the Posterior Predictive Distribution and Bayesian Model Selection.” <em>Psychological Methods</em>. <a href="https://doi.org/10.1037/met0000254" class="external-link uri">https://doi.org/10.1037/met0000254</a>.</p>
+<p>Williams, Donald R. 2018. “<span class="nocase">Bayesian Estimation for Gaussian Graphical Models: Structure Learning, Predictability, and Network Comparisons</span>.” <em>arXiv</em>, ahead of print. <a href="https://doi.org/10.31234/OSF.IO/X8DPR" class="external-link uri">https://doi.org/10.31234/OSF.IO/X8DPR</a>.</p>
+<p>Williams, Donald R, and Joris Mulder. 2019. “<span class="nocase">Bayesian Hypothesis Testing for Gaussian Graphical Models: Conditional Independence and Order Constraints</span>.” <em>PsyArXiv</em>, ahead of print. <a href="https://doi.org/10.31234/osf.io/ypxd8" class="external-link uri">https://doi.org/10.31234/osf.io/ypxd8</a>.</p>
+<p>Williams, Donald R, and Joris Mulder. 2020. “BGGM: Bayesian Gaussian Graphical Models in r.” <em>PsyArXiv</em>.</p>
+<p>Williams, Donald R, Philippe Rast, Luis R Pericchi, and Joris Mulder. 2020. “Comparing Gaussian Graphical Models with the Posterior Predictive Distribution and Bayesian Model Selection.” <em>Psychological Methods</em>, ahead of print. <a href="https://doi.org/10.1037/met0000254" class="external-link uri">https://doi.org/10.1037/met0000254</a>.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">

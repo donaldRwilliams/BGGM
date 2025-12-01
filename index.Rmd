@@ -20,6 +20,26 @@ library(BGGM)
 # Bayesian Gaussian Graphical Models <img src="man/figures/logo.png" align="right" alt="" width="150" />
 
 
+
+ **https://github.com/rast-lab/BGGM**
+
+ Please update your links accordingly.
+ 
+--- 
+---
+👉️ Project Has Moved
+ **BGGM is now maintained at <https://github.com/rast-lab/BGGM>.**  
+ 
+ This original repository (<https://github.com/donaldRwilliams/BGGM>) is no longer actively developed.
+ All new issues, pull requests, and development take place at:
+
+ ⚠<img src="readme_models/hex.jpg" width = 250 />
+
+ # 
+ 
+---
+---
+
 <!-- badges: start -->
 [![CRAN Version](http://www.r-pkg.org/badges/version/BGGM)](https://cran.r-project.org/package=BGGM)
 [![Downloads](https://cranlogs.r-pkg.org/badges/BGGM)](https://cran.r-project.org/package=BGGM)
@@ -46,7 +66,7 @@ The current developmental version can be installed with
 if (!requireNamespace("remotes")) {	
   install.packages("remotes")	
 }	
-remotes::install_github("donaldRwilliams/BGGM")
+remotes::install_github("rast-lab/BGGM")
 ```
 
 
