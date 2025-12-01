@@ -6,16 +6,15 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Custom Network Comparisons • BGGM</title>
-<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
-<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
-<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
-<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="icon" sizes="any" href="../favicon.ico">
+<link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Custom Network Comparisons">
 </head>
 <body>
@@ -26,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BGGM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.5.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +42,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/donaldRwilliams/BGGM/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/rast-lab/BGGM/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -62,7 +61,7 @@ Williams</h4>
             
             <h4 data-toc-skip class="date">5/19/2020</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/donaldRwilliams/BGGM/blob/HEAD/vignettes/ppc_custom.Rmd" class="external-link"><code>vignettes/ppc_custom.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/rast-lab/BGGM/blob/HEAD/vignettes/ppc_custom.Rmd" class="external-link"><code>vignettes/ppc_custom.Rmd</code></a></small>
       <div class="d-none name"><code>ppc_custom.Rmd</code></div>
     </div>
 
@@ -139,7 +138,7 @@ normal data is generated with that <em>exact</em> correlation structure
 via the <code>R</code> package <strong>MASS</strong>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># need these packages</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://donaldrwilliams.github.io/BGGM/">BGGM</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rast-lab.github.io/BGGM/">BGGM</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">assortnet</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://CRAN.R-project.org/package=networktools" class="external-link">networktools</a></span><span class="op">)</span></span>
@@ -526,10 +525,9 @@ distribution).</p>
 <h3 id="expected-influence">Expected Influence<a class="anchor" aria-label="anchor" href="#expected-influence"></a>
 </h3>
 <p>This last example looks at the expected influence for the network
-<span class="citation">(Robinaugh, Millner, and McNally 2016)</span>. In
-this case, the sum of squared error is the test statistic. This is
-computed from the squared error for each draw from the predictive
-distribution.</p>
+<span class="citation">(Robinaugh et al. 2016)</span>. In this case, the
+sum of squared error is the test statistic. This is computed from the
+squared error for each draw from the predictive distribution.</p>
 <div class="section level4">
 <h4 id="step-1-define-custom-function-4">Step 1: Define Custom Function<a class="anchor" aria-label="anchor" href="#step-1-define-custom-function-4"></a>
 </h4>
@@ -609,10 +607,9 @@ exceeds what would be expected, assuming the null model were true.</p>
 <li><p>Note that only the default in <strong>BGGM</strong> have been
 shown to have nominal error rates. However, there is a proof that
 suggests the error rate cannot be larger than
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>α</mi></mrow><annotation encoding="application/x-tex">2\alpha</annotation></semantics></math><span class="citation">(Meng et al. 1994)</span>, and, further, a
-predictive check is typically below
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math><span class="citation">(i.e., a tendency to be conservative, Gelman et
-al. 2013)</span>.</p></li>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>α</mi></mrow><annotation encoding="application/x-tex">2\alpha</annotation></semantics></math><span class="citation">(<span class="nocase">Meng et al.</span>
+1994)</span>, and, further, a predictive check is typically below
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math><span class="citation">(i.e., a tendency to be conservative, <span class="nocase">Gelman et al.</span> 2013)</span>.</p></li>
 <li><p>Failing to reject the null model does not indicate the groups are
 the same! To test for equality see <code>ggm_compare_explore</code> and
 <code>ggm_compare_confirm</code>.</p></li>
@@ -627,28 +624,29 @@ comparison to answer specific research questions.</p>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-fried2018replicability" class="csl-entry">
-Fried, Eiko I, Marloes B Eidhof, Sabina Palic, Giulio Costantini, Hilde
-M Huisman-van Dijk, Claudi LH Bockting, Iris Engelhard, Cherie Armour,
-Anni BS Nielsen, and Karen-Inge Karstoft. 2018. <span>“Replicability and
-Generalizability of Posttraumatic Stress Disorder (PTSD) Networks: A
-Cross-Cultural Multisite Study of PTSD Symptoms in Four Trauma Patient
-Samples.”</span> <em>Clinical Psychological Science</em> 6 (3): 335–51.
+Fried, Eiko I, Marloes B Eidhof, Sabina Palic, et al. 2018.
+<span>“Replicability and Generalizability of Posttraumatic Stress
+Disorder (PTSD) Networks: A Cross-Cultural Multisite Study of PTSD
+Symptoms in Four Trauma Patient Samples.”</span> <em>Clinical
+Psychological Science</em> 6 (3): 335–51.
 </div>
 <div id="ref-gelman2013two" class="csl-entry">
-Gelman, Andrew et al. 2013. <span>“Two Simple Examples for Understanding
-Posterior p-Values Whose Distributions Are Far from Uniform.”</span>
-<em>Electronic Journal of Statistics</em> 7: 2595–2602. <a href="https://doi.org/10.1214/13-ejs854" class="external-link">https://doi.org/10.1214/13-ejs854</a>.
+<span class="nocase">Gelman, Andrew et al.</span> 2013. <span>“Two
+Simple Examples for Understanding Posterior p-Values Whose Distributions
+Are Far from Uniform.”</span> <em>Electronic Journal of Statistics</em>
+7: 2595–602. <a href="https://doi.org/10.1214/13-ejs854" class="external-link">https://doi.org/10.1214/13-ejs854</a>.
 </div>
 <div id="ref-herdin2005correlation" class="csl-entry">
 Herdin, Markus, Nicolai Czink, Hüseyin Ozcelik, and Ernst Bonek. 2005.
 <span>“Correlation Matrix Distance, a Meaningful Measure for Evaluation
-of Non-Stationary MIMO Channels.”</span> In <em>2005 IEEE 61st Vehicular
-Technology Conference</em>, 1:136–40. IEEE. <a href="https://doi.org/10.1109/vetecs.2005.1543265" class="external-link">https://doi.org/10.1109/vetecs.2005.1543265</a>.
+of Non-Stationary MIMO Channels.”</span> <em>2005 IEEE 61st Vehicular
+Technology Conference</em> 1: 136–40. <a href="https://doi.org/10.1109/vetecs.2005.1543265" class="external-link">https://doi.org/10.1109/vetecs.2005.1543265</a>.
 </div>
 <div id="ref-meng1994posterior" class="csl-entry">
-Meng, Xiao-Li et al. 1994. <span>“Posterior Predictive
+<span class="nocase">Meng, Xiao-Li et al.</span> 1994. <span>“Posterior
+Predictive
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-Values.”</span>
 <em>The Annals of Statistics</em> 22 (3): 1142–60.
 </div>
@@ -665,7 +663,7 @@ Network.”</span> <em>Journal of Abnormal Psychology</em> 125 (6): 747.
 Williams, Donald R, Philippe Rast, Luis R Pericchi, and Joris Mulder.
 2020. <span>“Comparing Gaussian Graphical Models with the Posterior
 Predictive Distribution and Bayesian Model Selection.”</span>
-<em>Psychological Methods</em>. <a href="https://doi.org/10.1037/met0000254" class="external-link">https://doi.org/10.1037/met0000254</a>.
+<em>Psychological Methods</em>, ahead of print. <a href="https://doi.org/10.1037/met0000254" class="external-link">https://doi.org/10.1037/met0000254</a>.
 </div>
 </div>
 </div>
@@ -680,7 +678,7 @@ Predictive Distribution and Bayesian Model Selection.”</span>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
 </div>
 
     </footer>

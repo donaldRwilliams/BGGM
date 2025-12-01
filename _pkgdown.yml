@@ -205,4 +205,5 @@ reference:
       - prior_belief_ggm
       - prior_belief_var
       - select
-
+      - bma_posterior
+      - ggm_search
