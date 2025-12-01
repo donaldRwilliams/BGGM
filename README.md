@@ -1,8 +1,10 @@
 <!-- knit with rmarkdown::render("README.Rmd", output_format = "md_document") -->
 
-<img src="readme_models/hex.jpg" width = 250 />
+<img src="readme_models/hex.jpg" width = 150 />
 
-# ⚠️ Project Has Moved 
+------------------------------------------------------------------------
+
+# ⚠️ Project Has Moved ⚠️ 
 **BGGM is now maintained at <https://github.com/rast-lab/BGGM>.**
 
 This original repository (<https://github.com/donaldRwilliams/BGGM>) is
