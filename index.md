@@ -1,19 +1,21 @@
 # Bayesian Gaussian Graphical Models <img src="man/figures/logo.png" align="right" alt="" width="150" />
 
-**<https://github.com/rast-lab/BGGM>**
 
-Please update your links accordingly.
 
-👉️ Project Has Moved **BGGM is now maintained at
-<https://github.com/rast-lab/BGGM>.**
+------------------------------------------------------------------------
+
+# ⚠️ Project Has Moved ⚠️ 
+**BGGM is now maintained at <https://github.com/rast-lab/BGGM>.**
 
 This original repository (<https://github.com/donaldRwilliams/BGGM>) is
 no longer actively developed. All new issues, pull requests, and
 development take place at:
 
-⚠<img src="readme_models/hex.jpg" width = 250 />
+👉 **<https://github.com/rast-lab/BGGM>**
 
-\#
+Please update your links accordingly.
+
+------------------------------------------------------------------------
 
 <!-- badges: start -->
 
